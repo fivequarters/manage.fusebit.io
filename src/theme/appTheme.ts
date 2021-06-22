@@ -4,6 +4,11 @@ export const lightTheme: Theme = createMuiTheme({
     palette: {
         type: "light"
     },
+    typography: {
+        button: {
+          textTransform: "none",
+        }
+      }
 });
 
 export const darkTheme: Theme = createMuiTheme({

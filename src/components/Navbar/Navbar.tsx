@@ -17,11 +17,11 @@ const Navbar: React.FC = () => {
                         <SC.Link href="/support">Support</SC.Link>
                         <SC.Link href="/docs">Docs</SC.Link>
                     </SC.LinksContainer>
-                    <SC.Button>
-                        <Button size="large" startIcon={<SC.User src={client} />} endIcon={<ExpandMoreIcon />} variant="outlined" color="inherit">
+                    <SC.ButtonWrapper>
+                        <Button size="large" startIcon={<SC.User src={client} />} endIcon={<ExpandMoreIcon />} variant="text" color="inherit">
                             Stage
                         </Button>
-                    </SC.Button>
+                    </SC.ButtonWrapper>
                 </SC.Nav>
             </Container>
         </SC.Background>

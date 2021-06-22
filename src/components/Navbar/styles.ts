@@ -66,8 +66,10 @@ export const Link = styled.a`
     margin-right: 72px;
 `;
 
-export const Button = styled.div`
+export const ButtonWrapper = styled.div`
     color: white;
+    border: 1px solid rgba(215, 229, 255, 0.4);
+    border-radius: 4px;
 `;
 
 export const User = styled.img`
