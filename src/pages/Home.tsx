@@ -1,9 +1,13 @@
 import React, { FC, ReactElement } from "react";
-import Portal from "../components/Portal";
+import Connectors from "../components/Connectors";
+import Navbar from "../components/Navbar";
 
 const Home: FC<{}> = (): ReactElement => {
   return (
-    <Portal />
+    <>
+      <Navbar />
+      <Connectors />
+    </>
   );
 };
 
