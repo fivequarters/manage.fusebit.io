@@ -7,7 +7,7 @@ const useStyles = makeStyles(_ =>
     root: {
       flex: 1,
       display: "flex",
-      flexDirection: "column",
+      flexDirection: "column"
     }
   })
 );
