@@ -4,8 +4,9 @@ import { Container, Button } from "@material-ui/core";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import client from "../../assets/client.jpg";
 import {Props} from "../../interfaces/Navbar";
+import arrow from "../../assets/down-arrow-white.svg";
 
-const Navbar: React.FC<Props> = ({sectionName}) => {
+const Navbar: React.FC<Props> = ({sectionName, dropdown}) => {
     return (
         <SC.Background>
             <Container maxWidth="lg" >
@@ -14,6 +15,9 @@ const Navbar: React.FC<Props> = ({sectionName}) => {
                     <SC.CompanyName>ACME CORP</SC.CompanyName>
                     <SC.Arrow />
                     <SC.SectionName>{sectionName}</SC.SectionName>
+                    {
+                        dropdown && <img src={arrow} alt="arrow" />
+                    }
                     <SC.LinksContainer>
                         <SC.Link href="/support">Support</SC.Link>
                         <SC.Link href="/docs">Docs</SC.Link>

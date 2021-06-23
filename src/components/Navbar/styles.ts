@@ -48,6 +48,7 @@ export const SectionName = styled.h3`
     font-size: 20px;
     line-height: 22px;
     font-weight: 600;
+    margin-right: 10px;
     color: white;
 `;
 
