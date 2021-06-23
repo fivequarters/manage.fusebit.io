@@ -31,7 +31,7 @@ export const CompanyName = styled.h3`
     font-size: 20px;
     line-height: 22px;
     font-weight: 600;
-    color: #F83420;
+    color: var(--primary-color);
     margin-right: 8px;
 `;
 
