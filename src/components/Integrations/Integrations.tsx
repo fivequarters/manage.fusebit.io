@@ -36,13 +36,13 @@ const a11yProps = (index: number) => {
     };
   }
 
-  const createOverviewData = (href: string, name: string, id: string, type: string, identities: number, created: string) => {
-    return { href, name, id, type, identities, created };
+  const createOverviewData = (href: string, name: string, id: string, instances: number, created: string, deployed: string) => {
+    return { href, name, id, instances, created, deployed };
   }
   
   const overviewRows = [
-    createOverviewData("/", "Slack 1", "Conn - 123579", "Slack", 4, new Date().toISOString().slice(0, 10)),
-    createOverviewData("/", "Jira 1", "Conn - 23789", "Jira", 23, new Date().toISOString().slice(0, 10)),
+    createOverviewData("/integration-detail", "Slack Bot 1", "Int - 357892", 55, new Date().toISOString().slice(0, 10), new Date().toISOString().slice(0, 10)),
+    createOverviewData("/integration-detail", "Jira Issue Sync 1", "Int - 123549", 3, new Date().toISOString().slice(0, 10), new Date().toISOString().slice(0, 10)),
   ];
 
 const Integrations: React.FC = () => {
@@ -72,9 +72,9 @@ const Integrations: React.FC = () => {
                                     </SC.Flex>
                                 </TableCell>
                                 <TableCell align="left">ID</TableCell>
-                                <TableCell align="left">Type</TableCell>
-                                <TableCell align="left">Identities</TableCell>
+                                <TableCell align="left">Instances</TableCell>
                                 <TableCell align="left">Created</TableCell>
+                                <TableCell align="left">Deployed</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -86,16 +86,16 @@ const Integrations: React.FC = () => {
                                         </SC.CellName>
                                     </TableCell>
                                     <TableCell align="left">{row.id}</TableCell>
-                                    <TableCell align="left">{row.type}</TableCell>
-                                    <TableCell align="left">{row.identities}</TableCell>
+                                    <TableCell align="left">{row.instances}</TableCell>
                                     <TableCell align="left">{row.created}</TableCell>
+                                    <TableCell align="left">{row.deployed}</TableCell>
                                 </SC.Row>
                             ))}
                         </TableBody>
                     </Table>
                     <SC.ButtonContainer>
                         <SC.ButtonMargin>
-                            <Button startIcon={<AddIcon />} variant="outlined" color="primary" size="large">New Connector</Button>
+                            <Button startIcon={<AddIcon />} variant="outlined" color="primary" size="large">New Integration</Button>
                         </SC.ButtonMargin>
                     </SC.ButtonContainer>
                 </TabPanel>
