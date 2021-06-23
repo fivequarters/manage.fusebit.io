@@ -55,6 +55,7 @@ export const Card = styled.div`
     width: 389px;
     min-height: 392px;
     z-index: 1;
+    margin-bottom: 40px;
 `;
 
 export const CardTitle = styled.h4`
@@ -148,5 +149,45 @@ export const CardConnectorSeeMore = styled.div<{expanded: boolean}>`
 
     &:hover {
         cursor: pointer;
+    }
+`;
+
+export const Bullet = styled.div`
+    height: 4px;
+    width: 4px;
+    border-radius: 50%;
+    background-color: var(--black);
+    margin-right: 10px;
+    transition: all .25s linear;
+
+`;
+
+export const Link = styled.a`
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    line-height: 16px;
+    color: var(--black);
+    text-decoration: none;
+    width: max-content;
+    margin-bottom: 16px;
+    margin-left: 5px;
+    transition: all .25s linear;
+
+    &:hover {
+        color: var(--primary-color);
+        text-decoration: underline;
+
+        > div {
+            background-color: var(--primary-color);
+        }
+    }
+
+    &:visited {
+        color: #959595;
+
+        > div {
+            background-color: #959595;
+        }
     }
 `;

@@ -71,6 +71,14 @@ const IntegrationDetail: React.FC = () => {
                                     <Button startIcon={<AddIcon />} style={{width: "200px"}} size="large" variant="outlined" color="primary" >Connect</Button>
                                 </SC.CardButtonWrapper>
                             </SC.Card>
+                            <SC.Link href="/test">
+                                <SC.Bullet />
+                                Provision integration from your application
+                            </SC.Link>
+                            <SC.Link href="/test2">
+                                <SC.Bullet />
+                                Invoke application from your backend
+                            </SC.Link>
                         </SC.FlexDown>
                         <SC.FlexDown>
                             <SC.Card>
@@ -83,6 +91,22 @@ const IntegrationDetail: React.FC = () => {
                                     <Button style={{width: "200px"}} size="large" variant="contained" color="primary" >Connect</Button>
                                 </SC.CardButtonWrapper>
                             </SC.Card>
+                            <SC.Link href="/test3">
+                                <SC.Bullet />
+                                Edit and publish your integration
+                            </SC.Link>
+                            <SC.Link href="/test4">
+                                <SC.Bullet />
+                                Test your integration
+                            </SC.Link>
+                            <SC.Link href="/test5">
+                                <SC.Bullet />
+                                Debug with real-time logs
+                            </SC.Link>
+                            <SC.Link href="/test6">
+                                <SC.Bullet />
+                                Slack SDK reference
+                            </SC.Link>
                         </SC.FlexDown>
                         <SC.FlexDown>
                             <SC.Card>
@@ -125,6 +149,14 @@ const IntegrationDetail: React.FC = () => {
                                     <Button startIcon={<AddIcon />} style={{width: "160px"}} size="large" variant="outlined" color="primary" >Link Existing</Button>
                                 </SC.CardConnectorButtonsWrapper>
                             </SC.Card>
+                            <SC.Link href="/test7">
+                                <SC.Bullet />
+                                Improve your own backend API
+                            </SC.Link>
+                            <SC.Link href="/test8">
+                                <SC.Bullet />
+                                Switch to your own Slack App
+                            </SC.Link>
                         </SC.FlexDown>
                     </SC.Flex>
                 </SC.Background>
