@@ -81,6 +81,12 @@ export const CardIntegration = styled.div`
     }
 `;
 
+export const CardConnectorWrapper = styled.div<{expanded: boolean}>`
+    height: ${props => props.expanded ? "100%" : "184px"};
+    overflow: hidden;
+    transition: height .5s linear;
+`;
+
 export const CardConnector = styled.div`
     display: flex;
     align-items: center;
@@ -123,7 +129,7 @@ export const CardConnectorButtonsWrapper = styled.div`
     width: 100%;
 `;
 
-export const CardConnectorSeeMore = styled.div`
+export const CardConnectorSeeMore = styled.div<{expanded: boolean}>`
     display: flex;
     align-items: center;
     font-size: 12px;
@@ -136,6 +142,8 @@ export const CardConnectorSeeMore = styled.div`
 
     > img {
         margin-left: 7.25px;
+        transform: ${props => props.expanded && "rotate(180deg)"};
+        transition: all .25s linear;
     }
 
     &:hover {

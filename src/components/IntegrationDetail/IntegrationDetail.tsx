@@ -42,6 +42,7 @@ const a11yProps = (index: number) => {
 
 const IntegrationDetail: React.FC = () => {
     const [value, setValue] = React.useState(0);
+    const [connectorsExpanded, setConnectorsExpanded] = React.useState(false);
 
     const handleChange = (event: any, newValue: number) => {
         setValue(newValue);
@@ -86,23 +87,37 @@ const IntegrationDetail: React.FC = () => {
                         <SC.FlexDown>
                             <SC.Card>
                                 <SC.CardTitle>Connectors</SC.CardTitle>
-                                <SC.CardConnector>
-                                    <SC.CardConnectorImage src={slack} alt="slack" height="20" width="20" />
-                                    <SC.CardConnectorText>Slack 1 Connector</SC.CardConnectorText>
-                                    <SC.CardConnectorCross src={cross} alt="close" height="8" width="8" />
-                                </SC.CardConnector>
-                                <SC.CardConnector>
-                                    <SC.CardConnectorImage src={slack} alt="slack" height="20" width="20" />
-                                    <SC.CardConnectorText>Slack 2 Connector</SC.CardConnectorText>
-                                    <SC.CardConnectorCross src={cross} alt="close" height="8" width="8" />
-                                </SC.CardConnector>
-                                <SC.CardConnector>
-                                    <SC.CardConnectorImage src={slack} alt="slack" height="20" width="20" />
-                                    <SC.CardConnectorText>Slack 3 Connector</SC.CardConnectorText>
-                                    <SC.CardConnectorCross src={cross} alt="close" height="8" width="8" />
-                                </SC.CardConnector>
-                                <SC.CardConnectorSeeMore>
-                                    See More
+                                <SC.CardConnectorWrapper expanded={connectorsExpanded}>
+                                    <SC.CardConnector>
+                                        <SC.CardConnectorImage src={slack} alt="slack" height="20" width="20" />
+                                        <SC.CardConnectorText>Slack 1 Connector</SC.CardConnectorText>
+                                        <SC.CardConnectorCross src={cross} alt="close" height="8" width="8" />
+                                    </SC.CardConnector>
+                                    <SC.CardConnector>
+                                        <SC.CardConnectorImage src={slack} alt="slack" height="20" width="20" />
+                                        <SC.CardConnectorText>Slack 2 Connector</SC.CardConnectorText>
+                                        <SC.CardConnectorCross src={cross} alt="close" height="8" width="8" />
+                                    </SC.CardConnector>
+                                    <SC.CardConnector>
+                                        <SC.CardConnectorImage src={slack} alt="slack" height="20" width="20" />
+                                        <SC.CardConnectorText>Slack 3 Connector</SC.CardConnectorText>
+                                        <SC.CardConnectorCross src={cross} alt="close" height="8" width="8" />
+                                    </SC.CardConnector>
+                                    <SC.CardConnector>
+                                        <SC.CardConnectorImage src={slack} alt="slack" height="20" width="20" />
+                                        <SC.CardConnectorText>Slack 4 Connector</SC.CardConnectorText>
+                                        <SC.CardConnectorCross src={cross} alt="close" height="8" width="8" />
+                                    </SC.CardConnector>
+                                    <SC.CardConnector>
+                                        <SC.CardConnectorImage src={slack} alt="slack" height="20" width="20" />
+                                        <SC.CardConnectorText>Slack 5 Connector</SC.CardConnectorText>
+                                        <SC.CardConnectorCross src={cross} alt="close" height="8" width="8" />
+                                    </SC.CardConnector>
+                                </SC.CardConnectorWrapper>
+                                <SC.CardConnectorSeeMore expanded={connectorsExpanded} onClick={() => setConnectorsExpanded(!connectorsExpanded)}> 
+                                {// Reminder: This should NOT display when there are 3 or less connectors.
+                                }
+                                    {connectorsExpanded ? "See Less" : "See More"}
                                     <img src={arrowDown} alt="see more" height="10" width="10" />
                                 </SC.CardConnectorSeeMore>
                                 <SC.CardConnectorButtonsWrapper>
