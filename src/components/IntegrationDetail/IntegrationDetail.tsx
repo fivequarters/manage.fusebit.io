@@ -1,8 +1,12 @@
 import React from "react";
 import * as SC from "./styles";
 import PropTypes from 'prop-types';
-import { Container, Tabs, Tab } from "@material-ui/core";
-
+import { Container, Tabs, Tab, Button } from "@material-ui/core";
+import AddIcon from '@material-ui/icons/Add';
+import arrow from "../../assets/arrow-right-black.svg";
+import arrowDown from "../../assets/arrow-down-black.svg";
+import slack from "../../assets/slack.svg";
+import cross from "../../assets/cross.svg";
 
 const TabPanel = (props: any) => {
     const { children, value, index, ...other } = props;
@@ -56,7 +60,59 @@ const IntegrationDetail: React.FC = () => {
                 </Tabs>
             </SC.Content>
             <TabPanel value={value} index={0}>
-                Overview
+                <SC.Background>
+                    <SC.Flex>
+                        <SC.CardSeparator />
+                        <SC.FlexDown>
+                            <SC.Card>
+                                <SC.CardTitle>Your Application</SC.CardTitle>
+                                <SC.CardButtonWrapper>
+                                    <Button startIcon={<AddIcon />} style={{width: "200px"}} size="large" variant="outlined" color="primary" >Connect</Button>
+                                </SC.CardButtonWrapper>
+                            </SC.Card>
+                        </SC.FlexDown>
+                        <SC.FlexDown>
+                            <SC.Card>
+                                <SC.CardTitle>Fusebit</SC.CardTitle>
+                                <SC.CardIntegration>
+                                    <img src={arrow} alt="arrow" />
+                                    Slack Bot 1
+                                </SC.CardIntegration>
+                                <SC.CardButtonWrapper>
+                                    <Button style={{width: "200px"}} size="large" variant="contained" color="primary" >Connect</Button>
+                                </SC.CardButtonWrapper>
+                            </SC.Card>
+                        </SC.FlexDown>
+                        <SC.FlexDown>
+                            <SC.Card>
+                                <SC.CardTitle>Connectors</SC.CardTitle>
+                                <SC.CardConnector>
+                                    <SC.CardConnectorImage src={slack} alt="slack" height="20" width="20" />
+                                    <SC.CardConnectorText>Slack 1 Connector</SC.CardConnectorText>
+                                    <SC.CardConnectorCross src={cross} alt="close" height="8" width="8" />
+                                </SC.CardConnector>
+                                <SC.CardConnector>
+                                    <SC.CardConnectorImage src={slack} alt="slack" height="20" width="20" />
+                                    <SC.CardConnectorText>Slack 2 Connector</SC.CardConnectorText>
+                                    <SC.CardConnectorCross src={cross} alt="close" height="8" width="8" />
+                                </SC.CardConnector>
+                                <SC.CardConnector>
+                                    <SC.CardConnectorImage src={slack} alt="slack" height="20" width="20" />
+                                    <SC.CardConnectorText>Slack 3 Connector</SC.CardConnectorText>
+                                    <SC.CardConnectorCross src={cross} alt="close" height="8" width="8" />
+                                </SC.CardConnector>
+                                <SC.CardConnectorSeeMore>
+                                    See More
+                                    <img src={arrowDown} alt="see more" height="10" width="10" />
+                                </SC.CardConnectorSeeMore>
+                                <SC.CardConnectorButtonsWrapper>
+                                    <Button startIcon={<AddIcon />} style={{width: "160px"}} size="large" variant="outlined" color="primary" >Add New</Button>
+                                    <Button startIcon={<AddIcon />} style={{width: "160px"}} size="large" variant="outlined" color="primary" >Link Existing</Button>
+                                </SC.CardConnectorButtonsWrapper>
+                            </SC.Card>
+                        </SC.FlexDown>
+                    </SC.Flex>
+                </SC.Background>
             </TabPanel>
             <TabPanel value={value} index={1}>
                 Installs
