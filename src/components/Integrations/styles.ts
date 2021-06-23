@@ -34,7 +34,7 @@ export const Flex = styled.div`
 `;
 
 export const CellName = styled.p`
-    color: #FF6422;
+    color: #F83420;
     font-weight: 500;
 `;
 
