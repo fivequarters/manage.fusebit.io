@@ -2,13 +2,13 @@ import React, { FC, ReactElement } from "react";
 import Connectors from "../components/Connectors";
 import Navbar from "../components/Navbar";
 
-const Home: FC<{}> = (): ReactElement => {
+const ConnectorsPage: FC<{}> = (): ReactElement => {
   return (
     <>
-      <Navbar />
+      <Navbar sectionName="Connectors" />
       <Connectors />
     </>
   );
 };
 
-export default Home;
+export default ConnectorsPage;
