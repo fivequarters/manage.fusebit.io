@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { Container, Tabs, Tab, Button } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import arrow from "../../assets/arrow-right-black.svg";
-import arrowDown from "../../assets/arrow-down-black.svg";
 import slack from "../../assets/slack.svg";
 import cross from "../../assets/cross.svg";
 
@@ -39,10 +38,27 @@ const a11yProps = (index: number) => {
     };
   }
 
+const connectors =  [ 
+    {
+        icon: slack,
+        alt: "Slack",
+        name: "Slack 1 Connector"
+    },
+    {
+        icon: slack,
+        alt: "Slack",
+        name: "Slack 2 Connector"
+    },
+    {
+        icon: slack,
+        alt: "Slack",
+        name: "Slack 3 Connector"
+    }
+]
+
 
 const IntegrationDetail: React.FC = () => {
     const [value, setValue] = React.useState(0);
-    const [connectorsExpanded, setConnectorsExpanded] = React.useState(false);
 
     const handleChange = (event: any, newValue: number) => {
         setValue(newValue);
@@ -111,42 +127,34 @@ const IntegrationDetail: React.FC = () => {
                         <SC.FlexDown>
                             <SC.Card>
                                 <SC.CardTitle>Connectors</SC.CardTitle>
-                                <SC.CardConnectorWrapper expanded={connectorsExpanded}>
-                                    <SC.CardConnector>
-                                        <SC.CardConnectorImage src={slack} alt="slack" height="20" width="20" />
-                                        <SC.CardConnectorText>Slack 1 Connector</SC.CardConnectorText>
-                                        <SC.CardConnectorCross src={cross} alt="close" height="8" width="8" />
-                                    </SC.CardConnector>
-                                    <SC.CardConnector>
-                                        <SC.CardConnectorImage src={slack} alt="slack" height="20" width="20" />
-                                        <SC.CardConnectorText>Slack 2 Connector</SC.CardConnectorText>
-                                        <SC.CardConnectorCross src={cross} alt="close" height="8" width="8" />
-                                    </SC.CardConnector>
-                                    <SC.CardConnector>
-                                        <SC.CardConnectorImage src={slack} alt="slack" height="20" width="20" />
-                                        <SC.CardConnectorText>Slack 3 Connector</SC.CardConnectorText>
-                                        <SC.CardConnectorCross src={cross} alt="close" height="8" width="8" />
-                                    </SC.CardConnector>
-                                    <SC.CardConnector>
-                                        <SC.CardConnectorImage src={slack} alt="slack" height="20" width="20" />
-                                        <SC.CardConnectorText>Slack 4 Connector</SC.CardConnectorText>
-                                        <SC.CardConnectorCross src={cross} alt="close" height="8" width="8" />
-                                    </SC.CardConnector>
-                                    <SC.CardConnector>
-                                        <SC.CardConnectorImage src={slack} alt="slack" height="20" width="20" />
-                                        <SC.CardConnectorText>Slack 5 Connector</SC.CardConnectorText>
-                                        <SC.CardConnectorCross src={cross} alt="close" height="8" width="8" />
-                                    </SC.CardConnector>
+                                <SC.CardConnectorWrapper>
+                                    {
+                                        connectors.map((connector, index) => {
+                                            if (index < 5) {
+                                                return (
+                                                    <SC.CardConnector>
+                                                        <SC.CardConnectorImage src={connector.icon} alt={connector.alt} height="20" width="20" />
+                                                        <SC.CardConnectorText>{connector.name}</SC.CardConnectorText>
+                                                        <SC.CardConnectorCross src={cross} alt="close" height="8" width="8" />
+                                                    </SC.CardConnector>
+                                                )
+                                            }
+                                            return null;
+                                        })
+                                    }
                                 </SC.CardConnectorWrapper>
-                                <SC.CardConnectorSeeMore expanded={connectorsExpanded} onClick={() => setConnectorsExpanded(!connectorsExpanded)}> 
-                                {// Reminder: This should NOT display when there are 3 or less connectors.
+                                {
+                                    connectors.length >= 5 && (
+                                        <SC.CardConnectorSeeMore href="/connectors"> 
+                                            See all
+                                            <img src={arrow} alt="see more" height="10" width="10" />
+                                        </SC.CardConnectorSeeMore>
+                                    )
                                 }
-                                    {connectorsExpanded ? "See Less" : "See More"}
-                                    <img src={arrowDown} alt="see more" height="10" width="10" />
-                                </SC.CardConnectorSeeMore>
+                                
                                 <SC.CardConnectorButtonsWrapper>
-                                    <Button startIcon={<AddIcon />} style={{width: "160px"}} size="large" variant="outlined" color="primary" >Add New</Button>
-                                    <Button startIcon={<AddIcon />} style={{width: "160px"}} size="large" variant="outlined" color="primary" >Link Existing</Button>
+                                    <Button startIcon={<AddIcon />} style={{width: "160px", marginTop: "24px"}} size="large" variant="outlined" color="primary" >Add New</Button>
+                                    <Button startIcon={<AddIcon />} style={{width: "160px", marginTop: "24px"}} size="large" variant="outlined" color="primary" >Link Existing</Button>
                                 </SC.CardConnectorButtonsWrapper>
                             </SC.Card>
                             <SC.Link href="/test7">
