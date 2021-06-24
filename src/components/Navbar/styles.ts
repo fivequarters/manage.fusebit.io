@@ -44,12 +44,17 @@ export const Arrow = styled.div`
     background-repeat: no-repeat;
 `;
 
-export const SectionDropdown = styled.div`
+export const SectionDropdown = styled.div<{active: boolean}>`
     display: flex;
     align-items: center;
 
     &:hover {
         cursor: pointer;
+    }
+
+    & > img {
+        transform: ${props => props.active && "rotate(180deg)"};
+        transition: all .25s linear;
     }
 `;
 

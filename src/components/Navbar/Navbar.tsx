@@ -29,61 +29,59 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown}) => {
                     {
                         dropdown ? (
                             <>
-                                <SC.SectionDropdown aria-controls="simple-menu" aria-haspopup="true" onClick={handleSectionDropdownClick}>
+                                <SC.SectionDropdown active={Boolean(anchorEl)} aria-controls="simple-menu" aria-haspopup="true" onClick={handleSectionDropdownClick}>
                                     <SC.SectionName>{sectionName}</SC.SectionName>
                                     <img src={arrow} alt="arrow" />
                                 </SC.SectionDropdown>
-                                <SC.SectionDropdown>
-                                    <Menu
-                                    style={{top: "90px"}}
-                                    id="simple-menu"
-                                    anchorEl={anchorEl}
-                                    keepMounted
-                                    open={Boolean(anchorEl)}
-                                    onClose={handleSectionDropdownClose}
-                                    >
-                                        <SC.SectionDropdownMenu>
-                                            <SC.Flex>
-                                                <SC.SectionDropdownTitle>Integrations</SC.SectionDropdownTitle>
-                                                <SC.SectionDropdownSeeMore href="/integrations">
-                                                    See all
-                                                    <img src={rightArrow} alt="See all" height="8" width="8" />
-                                                </SC.SectionDropdownSeeMore>
-                                            </SC.Flex>
-                                            <SC.SectionDropdownIntegration active={true} href="/integration-detail">
-                                                Slack Bot 1
-                                                <img src={check} alt="check" height="16" width="16" />
-                                            </SC.SectionDropdownIntegration>
-                                            <SC.SectionDropdownIntegration active={false} href="/integration-detail">
-                                                Slack Bot 2
-                                                <img src={check} alt="check" height="16" width="16" />
-                                            </SC.SectionDropdownIntegration>
-                                            <SC.SectionDropdownIntegration active={false} href="/integration-detail">
-                                                Slack Bot 3
-                                                <img src={check} alt="check" height="16" width="16" />
-                                            </SC.SectionDropdownIntegration>
-                                            <SC.Flex>
-                                                <SC.SectionDropdownTitle>Connectors</SC.SectionDropdownTitle>
-                                                <SC.SectionDropdownSeeMore href="/">
-                                                    See all
-                                                    <img src={rightArrow} alt="See all" height="8" width="8" />
-                                                </SC.SectionDropdownSeeMore>
-                                            </SC.Flex>
-                                            <SC.SectionDropdownIntegration active={false} href="/integration-detail">
-                                                Slack 1
-                                                <img src={check} alt="check" height="16" width="16" />
-                                            </SC.SectionDropdownIntegration>
-                                            <SC.SectionDropdownIntegration active={false} href="/integration-detail">
-                                                Quickbooks 1
-                                                <img src={check} alt="check" height="16" width="16" />
-                                            </SC.SectionDropdownIntegration>
-                                            <SC.SectionDropdownIntegration active={false} href="/integration-detail">
-                                                Salesforce 1
-                                                <img src={check} alt="check" height="16" width="16" />
-                                            </SC.SectionDropdownIntegration>
-                                        </SC.SectionDropdownMenu>
-                                    </Menu>
-                                </SC.SectionDropdown>
+                                <Menu
+                                style={{top: "90px"}}
+                                id="simple-menu"
+                                anchorEl={anchorEl}
+                                keepMounted
+                                open={Boolean(anchorEl)}
+                                onClose={handleSectionDropdownClose}
+                                >
+                                    <SC.SectionDropdownMenu>
+                                        <SC.Flex>
+                                            <SC.SectionDropdownTitle>Integrations</SC.SectionDropdownTitle>
+                                            <SC.SectionDropdownSeeMore href="/integrations">
+                                                See all
+                                                <img src={rightArrow} alt="See all" height="8" width="8" />
+                                            </SC.SectionDropdownSeeMore>
+                                        </SC.Flex>
+                                        <SC.SectionDropdownIntegration active={true} href="/integration-detail">
+                                            Slack Bot 1
+                                            <img src={check} alt="check" height="16" width="16" />
+                                        </SC.SectionDropdownIntegration>
+                                        <SC.SectionDropdownIntegration active={false} href="/integration-detail">
+                                            Slack Bot 2
+                                            <img src={check} alt="check" height="16" width="16" />
+                                        </SC.SectionDropdownIntegration>
+                                        <SC.SectionDropdownIntegration active={false} href="/integration-detail">
+                                            Slack Bot 3
+                                            <img src={check} alt="check" height="16" width="16" />
+                                        </SC.SectionDropdownIntegration>
+                                        <SC.Flex>
+                                            <SC.SectionDropdownTitle>Connectors</SC.SectionDropdownTitle>
+                                            <SC.SectionDropdownSeeMore href="/">
+                                                See all
+                                                <img src={rightArrow} alt="See all" height="8" width="8" />
+                                            </SC.SectionDropdownSeeMore>
+                                        </SC.Flex>
+                                        <SC.SectionDropdownIntegration active={false} href="/integration-detail">
+                                            Slack 1
+                                            <img src={check} alt="check" height="16" width="16" />
+                                        </SC.SectionDropdownIntegration>
+                                        <SC.SectionDropdownIntegration active={false} href="/integration-detail">
+                                            Quickbooks 1
+                                            <img src={check} alt="check" height="16" width="16" />
+                                        </SC.SectionDropdownIntegration>
+                                        <SC.SectionDropdownIntegration active={false} href="/integration-detail">
+                                            Salesforce 1
+                                            <img src={check} alt="check" height="16" width="16" />
+                                        </SC.SectionDropdownIntegration>
+                                    </SC.SectionDropdownMenu>
+                                </Menu>
                           </>
                         ) : (
                             <SC.SectionName>{sectionName}</SC.SectionName>
