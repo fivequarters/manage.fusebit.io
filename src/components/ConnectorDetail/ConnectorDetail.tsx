@@ -2,6 +2,7 @@ import React from "react";
 import * as SC from "./styles";
 import { Container, Tabs, Tab } from "@material-ui/core";
 import PropTypes from 'prop-types';
+import Configure from "./Configure";
 
 const TabPanel = (props: any) => {
     const { children, value, index, ...other } = props;
@@ -44,18 +45,22 @@ const ConnectorDetail: React.FC = () => {
         <Container maxWidth="lg">
             <SC.Content>
                 <Tabs indicatorColor="primary" value={value} onChange={handleChange} aria-label="Tab Selector">
-                    <Tab label={<SC.TabLabel active={value === 0}>Overview</SC.TabLabel>} {...a11yProps(0)}/>
-                    <Tab label={<SC.TabLabel active={value === 1}>Health</SC.TabLabel>} {...a11yProps(1)}/>
+                    <Tab label={<SC.TabLabel active={value === 0}>Configure</SC.TabLabel>} {...a11yProps(0)}/>
+                    <Tab label={<SC.TabLabel active={value === 1}>Identities</SC.TabLabel>} {...a11yProps(1)}/>
                     <Tab label={<SC.TabLabel active={value === 2}>Analytics</SC.TabLabel>} {...a11yProps(2)}/>
+                    <Tab label={<SC.TabLabel active={value === 3}>Deployments</SC.TabLabel>} {...a11yProps(3)}/>
                 </Tabs>
             </SC.Content>
             <TabPanel value={value} index={0}>
-                Health
+                <Configure />
             </TabPanel>
             <TabPanel value={value} index={1}>
                 Health
             </TabPanel>
             <TabPanel value={value} index={2}>
+                Analytics
+            </TabPanel>
+            <TabPanel value={value} index={3}>
                 Analytics
             </TabPanel>
         </Container>
