@@ -157,15 +157,15 @@ const Integrations: React.FC = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.map((row, index) => (
+                            {rows.map((row) => (
                                 <SC.Row key={row.id} onClick={(e) => handleRowClick(e, row.href)}>
-                                    <TableCell style={{cursor: "default"}} padding="checkbox" id={`enhanced-table-cell-checkbox-${index}`}>
+                                    <TableCell style={{cursor: "default"}} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
                                         <Checkbox
                                         color="primary"
                                         onClick={(event) => handleCheck(event, row.id)}
                                         checked={isSelected(row.id)}
-                                        inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${index}` }}
-                                        id={`enhanced-table-checkbox-${index}`}
+                                        inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${row.id}` }}
+                                        id={`enhanced-table-checkbox-${row.id}`}
                                         />
                                     </TableCell>
                                     <TableCell component="th" scope="row">
