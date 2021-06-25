@@ -141,7 +141,7 @@ const Integrations: React.FC = () => {
                                         color="primary"
                                         checked={rows.length > 0 && selected.length === rows.length}
                                         onChange={handleSelectAllCheck}
-                                        inputProps={{ 'aria-label': 'select all desserts' }}
+                                        inputProps={{ 'aria-label': 'select all integrations' }}
                                     />
                                 </TableCell>
                                 <TableCell>
