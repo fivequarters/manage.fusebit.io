@@ -75,6 +75,10 @@ export const CardConnector = styled.div`
     border-radius: 4px;
     margin-bottom: 8px;
     background-color: var(--secondary-color);
+
+    &:hover { 
+        cursor: pointer;
+    }
 `;
 
 export const CardConnectorImage = styled.img`

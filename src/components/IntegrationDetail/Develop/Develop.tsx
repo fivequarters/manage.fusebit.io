@@ -30,6 +30,12 @@ const Develop: React.FC = () => {
     const handleConnectorDelete = (name: string) => {
         setConnectors(connectors.filter(connector => connector.name !== name))
     }
+
+    const handleCardConnectorClick = (e: any) => {
+        if (!e.target.id) {
+            window.location.href = "/connector-detail";
+        }
+    }
     
     return (
         <SC.Background>
@@ -87,10 +93,10 @@ const Develop: React.FC = () => {
                                 connectors.map((connector, index) => {
                                     if (index < 5) {
                                         return (
-                                            <SC.CardConnector>
+                                            <SC.CardConnector onClick={(e) => handleCardConnectorClick(e)}>
                                                 <SC.CardConnectorImage src={connector.icon} alt={connector.alt} height="20" width="20" />
                                                 <SC.CardConnectorText>{connector.name}</SC.CardConnectorText>
-                                                <SC.CardConnectorCross src={cross} alt="close" height="8" width="8" onClick={() => handleConnectorDelete(connector.name)} />
+                                                <SC.CardConnectorCross id="close" src={cross} alt="close" height="8" width="8" onClick={() => handleConnectorDelete(connector.name)} />
                                             </SC.CardConnector>
                                         )
                                     }
