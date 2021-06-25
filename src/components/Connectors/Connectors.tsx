@@ -41,8 +41,8 @@ const a11yProps = (index: number) => {
   }
   
   const overviewRows = [
-    createOverviewData("/integration-detail", "Slack 1", "Conn - 123579", "Slack", 4, new Date().toISOString().slice(0, 10)),
-    createOverviewData("/integration-detail", "Jira 1", "Conn - 23789", "Jira", 23, new Date().toISOString().slice(0, 10)),
+    createOverviewData("/connector-detail", "Slack 1", "Conn - 123579", "Slack", 4, new Date().toISOString().slice(0, 10)),
+    createOverviewData("/connector-detail", "Jira 1", "Conn - 23789", "Jira", 23, new Date().toISOString().slice(0, 10)),
   ];
 
 const Connectors: React.FC = () => {
