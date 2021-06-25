@@ -9,7 +9,31 @@ import arrow from "../../assets/down-arrow-white.svg";
 import rightArrow from "../../assets/arrow-right-black.svg";
 import check from "../../assets/check.svg";
 
-const Navbar: React.FC<Props> = ({sectionName, dropdown}) => {
+const connectors = [
+    {
+        name: "Slack Bot 1",
+    },
+    {
+        name: "Slack Bot 2",
+    },
+    {
+        name: "Slack Bot 3",
+    },
+];
+
+const integrations = [
+    {
+        name: "Slack 1",
+    },
+    {
+        name: "Quickbooks 1",
+    },
+    {
+        name: "Salesforce 1",
+    },
+]
+
+const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector}) => {
     const [anchorSectionDropdown, setAnchorSectionDropdown] = React.useState(null);
     const [anchorUserDropdown, setAnchorUserDropdown] = React.useState(null);
 
@@ -40,7 +64,7 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown}) => {
                         dropdown ? (
                             <>
                                 <SC.SectionDropdown active={Boolean(anchorSectionDropdown)} aria-controls="simple-menu" aria-haspopup="true" onClick={handleSectionDropdownClick}>
-                                    <SC.SectionName>{sectionName}</SC.SectionName>
+                                    <SC.SectionName>{integration ? sectionName + " Integration" : connector ? sectionName + " Connector" : sectionName}</SC.SectionName>
                                     <img src={arrow} alt="arrow" />
                                 </SC.SectionDropdown>
                                 <Menu
@@ -59,18 +83,14 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown}) => {
                                                 <img src={rightArrow} alt="See all" height="8" width="8" />
                                             </SC.SectionDropdownSeeMore>
                                         </SC.Flex>
-                                        <SC.SectionDropdownIntegration active={true} href="/integration-detail">
-                                            Slack Bot 1
-                                            <img src={check} alt="check" height="16" width="16" />
-                                        </SC.SectionDropdownIntegration>
-                                        <SC.SectionDropdownIntegration active={false} href="/integration-detail">
-                                            Slack Bot 2
-                                            <img src={check} alt="check" height="16" width="16" />
-                                        </SC.SectionDropdownIntegration>
-                                        <SC.SectionDropdownIntegration active={false} href="/integration-detail">
-                                            Slack Bot 3
-                                            <img src={check} alt="check" height="16" width="16" />
-                                        </SC.SectionDropdownIntegration>
+                                        {
+                                            integrations.map(integration => (
+                                                <SC.SectionDropdownIntegration active={sectionName === integration.name} href="/integration-detail">
+                                                    {integration.name}
+                                                    <img src={check} alt="check" height="16" width="16" />
+                                                </SC.SectionDropdownIntegration>
+                                            ))
+                                        }
                                         <SC.Flex>
                                             <SC.SectionDropdownTitle>Connectors</SC.SectionDropdownTitle>
                                             <SC.SectionDropdownSeeMore href="/">
@@ -78,18 +98,14 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown}) => {
                                                 <img src={rightArrow} alt="See all" height="8" width="8" />
                                             </SC.SectionDropdownSeeMore>
                                         </SC.Flex>
-                                        <SC.SectionDropdownIntegration active={false} href="/integration-detail">
-                                            Slack 1
-                                            <img src={check} alt="check" height="16" width="16" />
-                                        </SC.SectionDropdownIntegration>
-                                        <SC.SectionDropdownIntegration active={false} href="/integration-detail">
-                                            Quickbooks 1
-                                            <img src={check} alt="check" height="16" width="16" />
-                                        </SC.SectionDropdownIntegration>
-                                        <SC.SectionDropdownIntegration active={false} href="/integration-detail">
-                                            Salesforce 1
-                                            <img src={check} alt="check" height="16" width="16" />
-                                        </SC.SectionDropdownIntegration>
+                                        {
+                                            connectors.map(connector => (
+                                                <SC.SectionDropdownIntegration active={sectionName === connector.name} href="/connector-detail">
+                                                    {connector.name}
+                                                    <img src={check} alt="check" height="16" width="16" />
+                                                </SC.SectionDropdownIntegration>
+                                            ))
+                                        }
                                     </SC.SectionDropdownMenu>
                                 </Menu>
                           </>

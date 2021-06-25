@@ -5,7 +5,7 @@ import Navbar from "../components/Navbar";
 const ConnectorDetailPage: FC<{}> = (): ReactElement => {
   return (
     <>
-      <Navbar sectionName="Slack 1 Connector" dropdown={true} />
+      <Navbar sectionName="Slack Bot 1" dropdown={true} connector={true} />
       <ConnectorDetail />
     </>
   );

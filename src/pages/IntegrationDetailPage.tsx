@@ -5,7 +5,7 @@ import Navbar from "../components/Navbar";
 const IntegrationDetailPage: FC<{}> = (): ReactElement => {
   return (
     <>
-      <Navbar sectionName="Slack Bot 1 Integration" dropdown={true} />
+      <Navbar sectionName="Slack 1" dropdown={true} integration={true} />
       <IntegrationDetail />
     </>
   );
