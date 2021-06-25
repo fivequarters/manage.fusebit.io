@@ -1,9 +1,9 @@
 import React from "react";
 import * as SC from "./styles";
 import PropTypes from 'prop-types';
-import { Container, Tabs, Tab, Table, TableBody, TableCell, TableHead, TableRow, Button } from "@material-ui/core";
+import { Container, Tabs, Tab, Table, TableBody, TableCell, TableHead, TableRow, Button, Checkbox, IconButton, Tooltip } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
-
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const TabPanel = (props: any) => {
     const { children, value, index, ...other } = props;
@@ -47,11 +47,61 @@ const a11yProps = (index: number) => {
 
 const Integrations: React.FC = () => {
     const [value, setValue] = React.useState(0);
+    const [selected, setSelected] = React.useState<string[]>([]);
+    const [rows, setRows] = React.useState(overviewRows);
 
     const handleChange = (event: any, newValue: number) => {
         setValue(newValue);
       };
-      
+
+    const handleSelectAllCheck = (event: any) => {
+        if (event.target.checked) {
+        const newSelecteds = rows.map((row) => row.id);
+        setSelected(newSelecteds);
+        return;
+        }
+        setSelected([]);
+    };
+
+    const handleCheck = (event: any, id: string) => {
+        const selectedIndex = selected.indexOf(id);
+        let newSelected: string[] = [];
+    
+        if (selectedIndex === -1) {
+          newSelected = newSelected.concat(selected, id);
+        } else if (selectedIndex === 0) {
+          newSelected = newSelected.concat(selected.slice(1));
+        } else if (selectedIndex === selected.length - 1) {
+          newSelected = newSelected.concat(selected.slice(0, -1));
+        } else if (selectedIndex > 0) {
+          newSelected = newSelected.concat(
+            selected.slice(0, selectedIndex),
+            selected.slice(selectedIndex + 1),
+          );
+        }
+    
+        setSelected(newSelected);
+      };
+
+
+    const isSelected = (name: string) => selected.indexOf(name) !== -1;
+
+    const handleRowDelete = () => {
+       setRows(rows.filter((row, index) => row.id !== selected[index]));
+       const fakeEvent = {
+           target: {
+               checked: false,
+           }
+       }
+       handleSelectAllCheck(fakeEvent);
+    }
+
+    const handleRowClick = (event: any, href: string) => {
+        if (!event.target.id) {
+            window.location.href = href;
+        }
+    }
+
     return (
         <Container maxWidth="lg" >
             <SC.Content>
@@ -62,9 +112,38 @@ const Integrations: React.FC = () => {
                 </Tabs>
             </SC.Content>
                 <TabPanel value={value} index={0}>
+                    <SC.ButtonContainer>
+                        <SC.ButtonMargin>
+                            <Button startIcon={<AddIcon />} variant="outlined" color="primary" size="large">New Integration</Button>
+                        </SC.ButtonMargin>
+                    </SC.ButtonContainer>
+                    <SC.DeleteWrapper active={selected.length > 0}>
+                        {
+                            selected.length > 0 && (
+                            <>
+                                {selected.length} selected
+                                <SC.DeleteIconWrapper>
+                                    <Tooltip title="Delete">
+                                        <IconButton onClick={handleRowDelete}>
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                </SC.DeleteIconWrapper>
+                            </>
+                            )
+                        }
+                    </SC.DeleteWrapper>
                     <Table size="small" aria-label="Overview Table">
                         <TableHead>
                             <TableRow>
+                                <TableCell padding="checkbox">
+                                    <Checkbox
+                                        color="primary"
+                                        checked={rows.length > 0 && selected.length === rows.length}
+                                        onChange={handleSelectAllCheck}
+                                        inputProps={{ 'aria-label': 'select all desserts' }}
+                                    />
+                                </TableCell>
                                 <TableCell>
                                     <SC.Flex>
                                         <SC.ArrowUp />
@@ -78,8 +157,17 @@ const Integrations: React.FC = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {overviewRows.map((row) => (
-                                <SC.Row key={row.id} href={row.href}>
+                            {rows.map((row, index) => (
+                                <SC.Row key={row.id} onClick={(e) => handleRowClick(e, row.href)}>
+                                    <TableCell style={{cursor: "default"}} padding="checkbox" id={`enhanced-table-cell-checkbox-${index}`}>
+                                        <Checkbox
+                                        color="primary"
+                                        onClick={(event) => handleCheck(event, row.id)}
+                                        checked={isSelected(row.id)}
+                                        inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${index}` }}
+                                        id={`enhanced-table-checkbox-${index}`}
+                                        />
+                                    </TableCell>
                                     <TableCell component="th" scope="row">
                                         <SC.CellName>
                                             {row.name}
@@ -93,11 +181,6 @@ const Integrations: React.FC = () => {
                             ))}
                         </TableBody>
                     </Table>
-                    <SC.ButtonContainer>
-                        <SC.ButtonMargin>
-                            <Button startIcon={<AddIcon />} variant="outlined" color="primary" size="large">New Integration</Button>
-                        </SC.ButtonMargin>
-                    </SC.ButtonContainer>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                     Health

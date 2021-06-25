@@ -10,6 +10,26 @@ export const Content = styled.div`
     margin-bottom: 72px;
 `;
 
+export const DeleteWrapper = styled.div<{active: boolean}>`
+    display: flex;
+    align-items: center;
+    opacity: ${props => props.active ? 1 : 0};
+    font-size: 18px;
+    line-height: 22px;
+    font-weight: 400;
+    padding: 4px 18px;
+    min-height: 57px;
+    width: 100%;
+    color: ${props => props.active ? "var(--primary-color)" : "var(--black)"};
+    background-color: ${props => props.active && "rgba(248, 52, 32, .1)"};
+    margin-bottom: 12px;
+    transition: all .25s linear;
+`;
+
+export const DeleteIconWrapper = styled.div`
+    margin-left: auto;
+`;
+
 export const TabLabel = styled.div<{active: boolean}>`
     font-size: 14px;
     line-height: 16px;
@@ -38,12 +58,16 @@ export const CellName = styled.p`
     font-weight: 500;
 `;
 
-export const Row = styled.a`
+export const Row = styled.div`
     display: table-row;
     outline: 0;
     vertical-align: middle;
     color: inherit;
     text-decoration: none;
+
+    &:hover {
+        cursor: pointer;
+    }
 `;
 
 export const ButtonContainer = styled.div`
@@ -54,4 +78,5 @@ export const ButtonContainer = styled.div`
 
 export const ButtonMargin = styled.div`
     margin-left: auto;
+    margin-bottom: 12px;
 `;
