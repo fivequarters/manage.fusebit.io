@@ -38,7 +38,7 @@ const a11yProps = (index: number) => {
     };
   }
 
-const connectors =  [ 
+const connectorsList =  [ 
     {
         icon: slack,
         alt: "Slack",
@@ -59,10 +59,15 @@ const connectors =  [
 
 const IntegrationDetail: React.FC = () => {
     const [value, setValue] = React.useState(0);
+    const [connectors, setConnectors] = React.useState(connectorsList);
 
     const handleChange = (event: any, newValue: number) => {
         setValue(newValue);
       };
+
+    const handleConnectorDelete = (name: string) => {
+        setConnectors(connectors.filter(connector => connector.name !== name))
+    }
       
     return (
         <Container maxWidth="lg" >
@@ -135,7 +140,7 @@ const IntegrationDetail: React.FC = () => {
                                                     <SC.CardConnector>
                                                         <SC.CardConnectorImage src={connector.icon} alt={connector.alt} height="20" width="20" />
                                                         <SC.CardConnectorText>{connector.name}</SC.CardConnectorText>
-                                                        <SC.CardConnectorCross src={cross} alt="close" height="8" width="8" />
+                                                        <SC.CardConnectorCross src={cross} alt="close" height="8" width="8" onClick={() => handleConnectorDelete(connector.name)} />
                                                     </SC.CardConnector>
                                                 )
                                             }
