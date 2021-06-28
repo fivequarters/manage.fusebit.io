@@ -96,6 +96,19 @@ export const CardConnectorText = styled.h4`
     margin-right: auto;
 `;
 
+export const CardConnectorCrossContainer = styled.div`
+    height: 30px;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .25s linear;
+
+    &:hover {
+        transform: rotate(90deg);
+    }
+`;
+
 export const CardConnectorCross = styled.img`
     height: 8px;
     width: 8px;

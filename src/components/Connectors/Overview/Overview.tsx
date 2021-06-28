@@ -50,12 +50,23 @@ const Overview: React.FC = () => {
     const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
     const handleRowDelete = () => {
-       setRows(rows.filter((row, index) => row.id !== selected[index]));
-       const fakeEvent = {
-           target: {
-               checked: false,
-           }
-       }
+        const newArray = rows.filter((row) => {
+            let found = false; 
+            selected.forEach((id) => {
+                if (id === row.id) {
+                    found = true;
+                }
+            });
+            return !found;
+        });
+        setRows(newArray);
+
+        const fakeEvent = {
+            target: {
+                checked: false,
+            }
+        }
+       
        handleSelectAllCheck(fakeEvent);
     }
 

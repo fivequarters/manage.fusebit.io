@@ -47,14 +47,14 @@ const TabComponent: React.FC<Props> = ({tabNames, tabObjects}) => {
                 <Tabs indicatorColor="primary" value={value} onChange={handleChange} aria-label="Tab Selector">
                     {
                         tabNames.map((name, index) => (
-                            <Tab label={<SC.TabLabel active={value === index}>{name}</SC.TabLabel>} {...a11yProps(index)}/>
+                            <Tab key={index} label={<SC.TabLabel active={value === index}>{name}</SC.TabLabel>} {...a11yProps(index)}/>
                         ))
                     }
                 </Tabs>
             </SC.Content>
             {
                 tabObjects.map((obj, index) => (
-                    <TabPanel value={value} index={index}>
+                    <TabPanel key={index} value={value} index={index}>
                         {obj}
                     </TabPanel>
                 ))

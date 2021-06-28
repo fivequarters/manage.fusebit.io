@@ -1,10 +1,11 @@
 import React from "react";
 import * as SC from "./styles";
-import { Button } from "@material-ui/core";
+import { Button, Modal, Backdrop, Fade } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import arrow from "../../../assets/arrow-right-black.svg";
 import slack from "../../../assets/slack.svg";
 import cross from "../../../assets/cross.svg";
+import Connect from "./Connect";
 
 const connectorsList =  [ 
     {
@@ -26,6 +27,15 @@ const connectorsList =  [
 
 const Develop: React.FC = () => {
     const [connectors, setConnectors] = React.useState(connectorsList);
+    const [connectOpen, setConnectOpen] = React.useState(false);
+
+    const handleConnectOpen = () => {
+        setConnectOpen(true);
+    };
+
+    const handleConnectClose = () => {
+        setConnectOpen(false);
+    };
 
     const handleConnectorDelete = (name: string) => {
         setConnectors(connectors.filter(connector => connector.name !== name))
@@ -39,13 +49,25 @@ const Develop: React.FC = () => {
     
     return (
         <SC.Background>
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                open={connectOpen}
+                onClose={handleConnectClose}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+            >
+                <Fade in={connectOpen}>
+                    <Connect open={connectOpen} onClose={handleConnectClose} />
+                </Fade>
+            </Modal>
             <SC.Flex>
                 <SC.CardSeparator />
                 <SC.FlexDown>
                     <SC.Card>
                         <SC.CardTitle>Your Application</SC.CardTitle>
                         <SC.CardButtonWrapper>
-                            <Button startIcon={<AddIcon />} style={{width: "200px"}} size="large" variant="outlined" color="primary" >Connect</Button>
+                            <Button onClick={handleConnectOpen} startIcon={<AddIcon />} style={{width: "200px"}} size="large" variant="outlined" color="primary" >Connect</Button>
                         </SC.CardButtonWrapper>
                     </SC.Card>
                     <SC.Link href="/test">
@@ -93,10 +115,12 @@ const Develop: React.FC = () => {
                                 connectors.map((connector, index) => {
                                     if (index < 5) {
                                         return (
-                                            <SC.CardConnector onClick={(e) => handleCardConnectorClick(e)}>
+                                            <SC.CardConnector key={index} onClick={(e) => handleCardConnectorClick(e)}>
                                                 <SC.CardConnectorImage src={connector.icon} alt={connector.alt} height="20" width="20" />
                                                 <SC.CardConnectorText>{connector.name}</SC.CardConnectorText>
-                                                <SC.CardConnectorCross id="close" src={cross} alt="close" height="8" width="8" onClick={() => handleConnectorDelete(connector.name)} />
+                                                <SC.CardConnectorCrossContainer id="closeWrapper" onClick={() => handleConnectorDelete(connector.name)}>
+                                                    <SC.CardConnectorCross id="close" src={cross} alt="close" height="8" width="8" />
+                                                </SC.CardConnectorCrossContainer>
                                             </SC.CardConnector>
                                         )
                                     }

@@ -39,22 +39,6 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector}
     const [anchorUserDropdown, setAnchorUserDropdown] = React.useState(null);
     const { userData } = useContext();
 
-    const handleSectionDropdownClick = (event: any) => {
-        setAnchorSectionDropdown(event.currentTarget);
-    };
-
-    const handleSectionDropdownClose = () => {
-        setAnchorSectionDropdown(null);
-    };
-
-    const handleUserDropdownClick = (event: any) => {
-        setAnchorUserDropdown(event.currentTarget);
-    };
-
-    const handleUserDropdownClose = () => {
-        setAnchorUserDropdown(null);
-    };
-
     return (
         <SC.Background>
             <Container maxWidth="lg" >
@@ -65,7 +49,7 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector}
                     {
                         dropdown ? (
                             <>
-                                <SC.SectionDropdown active={Boolean(anchorSectionDropdown)} aria-controls="simple-menu" aria-haspopup="true" onClick={handleSectionDropdownClick}>
+                                <SC.SectionDropdown active={Boolean(anchorSectionDropdown)} aria-controls="simple-menu" aria-haspopup="true" onClick={(event: any) => setAnchorSectionDropdown(event.currentTarget)}>
                                     <SC.SectionName>{integration ? sectionName + " Integration" : connector ? sectionName + " Connector" : sectionName}</SC.SectionName>
                                     <img src={arrow} alt="arrow" />
                                 </SC.SectionDropdown>
@@ -75,7 +59,7 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector}
                                 anchorEl={anchorSectionDropdown}
                                 keepMounted
                                 open={Boolean(anchorSectionDropdown)}
-                                onClose={handleSectionDropdownClose}
+                                onClose={() => setAnchorSectionDropdown(null)}
                                 >
                                     <SC.SectionDropdownMenu>
                                         <SC.Flex>
@@ -86,8 +70,8 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector}
                                             </SC.SectionDropdownSeeMore>
                                         </SC.Flex>
                                         {
-                                            integrations.map(integration => (
-                                                <SC.SectionDropdownIntegration active={sectionName === integration.name} href="/integration-detail">
+                                            integrations.map((integration, index) => (
+                                                <SC.SectionDropdownIntegration key={index} active={sectionName === integration.name} href="/integration-detail">
                                                     {integration.name}
                                                     <img src={check} alt="check" height="16" width="16" />
                                                 </SC.SectionDropdownIntegration>
@@ -101,8 +85,8 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector}
                                             </SC.SectionDropdownSeeMore>
                                         </SC.Flex>
                                         {
-                                            connectors.map(connector => (
-                                                <SC.SectionDropdownIntegration active={sectionName === connector.name} href="/connector-detail">
+                                            connectors.map((connector, index) => (
+                                                <SC.SectionDropdownIntegration key={index} active={sectionName === connector.name} href="/connector-detail">
                                                     {connector.name}
                                                     <img src={check} alt="check" height="16" width="16" />
                                                 </SC.SectionDropdownIntegration>
@@ -120,7 +104,7 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector}
                         <SC.Link href="/docs">Docs</SC.Link>
                     </SC.LinksContainer>
                     <SC.ButtonWrapper active={Boolean(anchorUserDropdown)}>
-                        <Button style={{backgroundColor: Boolean(anchorUserDropdown) ? "#D7E5FF66" : ""}} aria-controls="simple-menu" aria-haspopup="true" onClick={handleUserDropdownClick} size="large" startIcon={<SC.User src={client} />} endIcon={Boolean(anchorUserDropdown) ? <ExpandLessIcon /> : <ExpandMoreIcon />} variant="text" color="inherit">
+                        <Button style={{backgroundColor: Boolean(anchorUserDropdown) ? "#D7E5FF66" : ""}} aria-controls="simple-menu" aria-haspopup="true" onClick={(event: any) => setAnchorUserDropdown(event.currentTarget)} size="large" startIcon={<SC.User src={client} />} endIcon={Boolean(anchorUserDropdown) ? <ExpandLessIcon /> : <ExpandMoreIcon />} variant="text" color="inherit">
                             Stage
                         </Button>
                         <Menu
@@ -129,7 +113,7 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector}
                         anchorEl={anchorUserDropdown}
                         keepMounted
                         open={Boolean(anchorUserDropdown)}
-                        onClose={handleUserDropdownClose}
+                        onClose={() => setAnchorUserDropdown(null)}
                         >
                             <SC.UserDropdown>
                                 <SC.UserDropdownCompany>ACME CORP</SC.UserDropdownCompany>
