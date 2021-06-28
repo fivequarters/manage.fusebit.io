@@ -3,8 +3,9 @@ import * as SC from "./styles";
 import { Container, Button } from "@material-ui/core";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import client from "../../assets/client.jpg";
+import {Props} from "../../interfaces/Navbar";
 
-const Navbar: React.FC = () => {
+const Navbar: React.FC<Props> = ({sectionName}) => {
     return (
         <SC.Background>
             <Container maxWidth="lg" >
@@ -12,7 +13,7 @@ const Navbar: React.FC = () => {
                     <SC.CompanyImg />
                     <SC.CompanyName>ACME CORP</SC.CompanyName>
                     <SC.Arrow />
-                    <SC.SectionName>Connectors</SC.SectionName>
+                    <SC.SectionName>{sectionName}</SC.SectionName>
                     <SC.LinksContainer>
                         <SC.Link href="/support">Support</SC.Link>
                         <SC.Link href="/docs">Docs</SC.Link>

@@ -4,7 +4,8 @@ export const lightTheme: Theme = createMuiTheme({
     palette: {
         type: "light",
         primary: {
-            main: "#FF6422"
+            main: "#F83420"
+
         },
         secondary: {
             main: "rgba(215, 229, 255, 0.4)"
