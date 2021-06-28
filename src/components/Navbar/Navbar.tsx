@@ -8,6 +8,7 @@ import {Props} from "../../interfaces/Navbar";
 import arrow from "../../assets/down-arrow-white.svg";
 import rightArrow from "../../assets/arrow-right-black.svg";
 import check from "../../assets/check.svg";
+import { useContext } from "../../hooks/useContext";
 
 const connectors = [
     {
@@ -36,6 +37,7 @@ const integrations = [
 const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector}) => {
     const [anchorSectionDropdown, setAnchorSectionDropdown] = React.useState(null);
     const [anchorUserDropdown, setAnchorUserDropdown] = React.useState(null);
+    const { userData } = useContext();
 
     const handleSectionDropdownClick = (event: any) => {
         setAnchorSectionDropdown(event.currentTarget);
@@ -134,14 +136,14 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector}
                                 <SC.UserDropdownInfo>
                                     <SC.UserDropdownInfoImage src={client} alt="user" height="38" width="38" />
                                     <SC.UserDropdownPersonalInfo>
-                                        <SC.UserDropdownInfoName>Susan Doe</SC.UserDropdownInfoName>
-                                        <SC.UserDropdownInfoEmail>sdoe@acme.com</SC.UserDropdownInfoEmail>
+                                        <SC.UserDropdownInfoName>{userData.firstName} {userData.lastName}</SC.UserDropdownInfoName>
+                                        <SC.UserDropdownInfoEmail>{userData.primaryEmail}</SC.UserDropdownInfoEmail>
                                     </SC.UserDropdownPersonalInfo>
                                 </SC.UserDropdownInfo>
                                 <SC.UserDropdownStatus href="/">
                                     <div>
                                         <SC.UserDropdownStatusTitle>Stage</SC.UserDropdownStatusTitle>
-                                        <SC.UserDropdownStatusId>Sub - 12345678</SC.UserDropdownStatusId>
+                                        <SC.UserDropdownStatusId>{userData.subscriptionId}</SC.UserDropdownStatusId>
                                     </div>
                                     <SC.UserDropdownStatusArrow src={rightArrow} alt="right arrow" height="12" width="12" />
                                 </SC.UserDropdownStatus>
@@ -157,6 +159,7 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector}
                         </Menu>
                     </SC.ButtonWrapper>
                 </SC.Nav>
+                {!userData.id && <SC.FloatingLogin href={'https://fusebit.auth0.com/authorize?response_type=token&client_id=hSgWIXmbluQMADuWhDnRTpWyKptJe6LB&audience=https://stage.us-west-2.fusebit.io&redirect_uri=http://localhost:3000/callback&scope=openid profile email'}>Temp Login</SC.FloatingLogin>}
             </Container>
         </SC.Background>
     )

@@ -274,3 +274,15 @@ export const User = styled.img`
     border-radius: 50%;
     object-fit: contain;
 `;
+
+// TODO: Remove me
+export const FloatingLogin = styled.a`
+    position: fixed;
+    bottom: 0;
+    right: 20px;
+    background: #ef3221;
+    color: white;
+    font-weight: bold;
+    padding: 5px 10px;
+    text-decoration: none;
+`
