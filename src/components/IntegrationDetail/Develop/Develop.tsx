@@ -96,7 +96,9 @@ const Develop: React.FC = () => {
                                             <SC.CardConnector onClick={(e) => handleCardConnectorClick(e)}>
                                                 <SC.CardConnectorImage src={connector.icon} alt={connector.alt} height="20" width="20" />
                                                 <SC.CardConnectorText>{connector.name}</SC.CardConnectorText>
-                                                <SC.CardConnectorCross id="close" src={cross} alt="close" height="8" width="8" onClick={() => handleConnectorDelete(connector.name)} />
+                                                <SC.CardConnectorCrossContainer id="closeWrapper" onClick={() => handleConnectorDelete(connector.name)}>
+                                                    <SC.CardConnectorCross id="close" src={cross} alt="close" height="8" width="8" />
+                                                </SC.CardConnectorCrossContainer>
                                             </SC.CardConnector>
                                         )
                                     }
