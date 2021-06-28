@@ -22,13 +22,13 @@ const Configure: React.FC = () => {
                 <SC.FlexDown>
                     <SC.FormWrapper>
                         <SC.FormInputWrapper>
-                            <TextField style={{width: "316px"}} color="primary" id="outlined-basic" label="Client ID" variant="outlined" />
+                            <TextField style={{width: "316px"}} color="primary" id="clientId" label="Client ID" variant="outlined" />
                         </SC.FormInputWrapper>
                         <SC.FormInputWrapper>
-                            <TextField style={{width: "316px"}} type="password" color="primary" id="outlined-basic" label="Client Secret" variant="outlined" />
+                            <TextField style={{width: "316px"}} type="password" color="primary" id="clientSecret" label="Client Secret" variant="outlined" />
                         </SC.FormInputWrapper>
                         <SC.FormInputWrapper>
-                            <TextField style={{width: "316px"}} type="password" color="primary" id="outlined-basic" label="Signing Secret" variant="outlined" />
+                            <TextField style={{width: "316px"}} type="password" color="primary" id="signingSecret" label="Signing Secret" variant="outlined" />
                         </SC.FormInputWrapper>
                         <Button style={{width: "200px"}} fullWidth={false} size="large" color="primary" variant="contained">Save</Button>
                     </SC.FormWrapper>

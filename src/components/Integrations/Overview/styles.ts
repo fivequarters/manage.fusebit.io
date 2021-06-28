@@ -40,7 +40,7 @@ export const CellName = styled.p`
     font-weight: 500;
 `;
 
-export const Row = styled.div`
+export const Row = styled.tr`
     display: table-row;
     outline: 0;
     vertical-align: middle;

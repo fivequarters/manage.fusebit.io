@@ -115,7 +115,7 @@ const Develop: React.FC = () => {
                                 connectors.map((connector, index) => {
                                     if (index < 5) {
                                         return (
-                                            <SC.CardConnector onClick={(e) => handleCardConnectorClick(e)}>
+                                            <SC.CardConnector key={index} onClick={(e) => handleCardConnectorClick(e)}>
                                                 <SC.CardConnectorImage src={connector.icon} alt={connector.alt} height="20" width="20" />
                                                 <SC.CardConnectorText>{connector.name}</SC.CardConnectorText>
                                                 <SC.CardConnectorCrossContainer id="closeWrapper" onClick={() => handleConnectorDelete(connector.name)}>
