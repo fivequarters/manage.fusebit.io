@@ -3,19 +3,22 @@ import * as SC from "./styles";
 import { Table, TableBody, TableCell, TableHead, TableRow, Button, Checkbox, IconButton, Tooltip } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
-
-const createOverviewData = (href: string, name: string, id: string, type: string, identities: number, created: string) => {
-    return { href, name, id, type, identities, created };
-  }
-  
-  const overviewRows = [
-    createOverviewData("/connector-detail", "Slack 1", "Conn - 123579", "Slack", 4, new Date().toISOString().slice(0, 10)),
-    createOverviewData("/connector-detail", "Jira 1", "Conn - 23789", "Jira", 23, new Date().toISOString().slice(0, 10)),
-  ];
+import { useContext } from "../../../hooks/useContext";
+import { useAccountIntegrationsGetAll} from "../../../hooks/api/v2/account/integration/useGetAll";
+import {Connector} from "../../../interfaces/connector";
 
 const Overview: React.FC = () => {
     const [selected, setSelected] = React.useState<string[]>([]);
-    const [rows, setRows] = React.useState(overviewRows);
+    const [rows, setRows] = React.useState<Connector[]>([]);
+    const { userData } = useContext();
+    const { data: connectors } = useAccountIntegrationsGetAll<{items: Connector[]}>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+
+    React.useEffect(() => {
+        if (connectors) {
+            const items = connectors.data.items;
+            setRows(items);
+        }
+    }, [connectors]);
 
     const handleSelectAllCheck = (event: any) => {
         if (event.target.checked) {
@@ -124,7 +127,7 @@ const Overview: React.FC = () => {
                 </TableHead>
                 <TableBody>
                     {rows.map((row) => (
-                        <SC.Row key={row.id} onClick={(e) => handleRowClick(e, row.href)}>
+                        <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/connector-detail")}>
                             <TableCell style={{cursor: "default"}} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
                                 <Checkbox
                                 color="primary"
@@ -136,13 +139,27 @@ const Overview: React.FC = () => {
                             </TableCell>
                             <TableCell component="th" scope="row">
                                 <SC.CellName>
-                                    {row.name}
+                                    Slack 1
+                                    {// TODO: Replace placeholder with real data
+                                    } 
                                 </SC.CellName>
                             </TableCell>
                             <TableCell align="left">{row.id}</TableCell>
-                            <TableCell align="left">{row.type}</TableCell>
-                            <TableCell align="left">{row.identities}</TableCell>
-                            <TableCell align="left">{row.created}</TableCell>
+                            <TableCell align="left">    
+                                Slack
+                                {// TODO: Replace placeholder with real data
+                                } 
+                            </TableCell>
+                            <TableCell align="left">
+                                5
+                                {// TODO: Replace placeholder with real data
+                                }
+                            </TableCell>
+                            <TableCell align="left">
+                                {new Date().toISOString().slice(0, 10)}
+                                {// TODO: Replace placeholder with real data
+                                } 
+                            </TableCell>
                         </SC.Row>
                     ))}
                 </TableBody>

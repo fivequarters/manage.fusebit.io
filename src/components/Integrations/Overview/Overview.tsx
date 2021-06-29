@@ -141,7 +141,7 @@ const Overview: React.FC = () => {
                             </TableCell>
                             <TableCell component="th" scope="row">
                                 <SC.CellName>
-                                Slack
+                                Slack Bot
                                 {// TODO: Replace placeholder with real data
                                 } 
                                 </SC.CellName>
