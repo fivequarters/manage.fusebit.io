@@ -5,6 +5,7 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useContext } from "../../../hooks/useContext";
 import { useAccountIntegrationsGetAll} from "../../../hooks/api/v2/account/integration/useGetAll";
+import { useAccountIntegrationCreateIntegration} from "../../../hooks/api/v2/account/integration/useCreateOne";
 import {Integration} from "../../../interfaces/integration";
 
 const Overview: React.FC = () => {
@@ -12,11 +13,11 @@ const Overview: React.FC = () => {
     const [rows, setRows] = React.useState<Integration[]>([]);
     const { userData } = useContext();
     const { data: integrations } = useAccountIntegrationsGetAll<{items: Integration[]}>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+    const {mutate} = useAccountIntegrationCreateIntegration({accountId: userData.accountId, subscriptionId: userData.subscriptionId});
 
     React.useEffect(() => {
         if (integrations) {
             const items = integrations.data.items;
-            setRows(items);
         }
     }, [integrations]);
 
@@ -139,7 +140,7 @@ const Overview: React.FC = () => {
                             </TableCell>
                             <TableCell component="th" scope="row">
                                 <SC.CellName>
-                                    {row.data.configuration.connectors.connectorName.connector}
+                                    {row?.data.configuration.connectors.connectorName.connector}
                                 </SC.CellName>
                             </TableCell>
                             <TableCell align="left">{row.id}</TableCell>
