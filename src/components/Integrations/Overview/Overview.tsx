@@ -4,16 +4,19 @@ import { Table, TableBody, TableCell, TableHead, TableRow, Button, Checkbox, Ico
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useContext } from "../../../hooks/useContext";
+import { useLoader } from "../../../hooks/useLoader";
 import { useAccountIntegrationsGetAll } from "../../../hooks/api/v2/account/integration/useGetAll";
 import { useAccountIntegrationCreateIntegration } from "../../../hooks/api/v2/account/integration/useCreateOne";
 import { Integration } from "../../../interfaces/integration";
+import { Operation } from "../../../interfaces/operation";
 
 const Overview: React.FC = () => {
     const [selected, setSelected] = React.useState<string[]>([]);
     const [rows, setRows] = React.useState<Integration[]>([]);
     const { userData } = useContext();
-    const { data: integrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
-    const createIntegration = useAccountIntegrationCreateIntegration();
+    const { data: integrations, refetch: reloadIntegrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+    const createIntegration = useAccountIntegrationCreateIntegration<Operation>();
+    const { waitForOperation } = useLoader();
 
     useEffect(() => {
         if (integrations) {
@@ -82,7 +85,9 @@ const Overview: React.FC = () => {
     }
 
     const _createIntegration = async () => {
-        createIntegration.mutate({ id: String(new Date().getTime()), accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+        const response = await createIntegration.mutateAsync({ id: String(new Date().getTime()), accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+        await waitForOperation(response.data.operationId);
+        reloadIntegrations();
     }
 
     return (
