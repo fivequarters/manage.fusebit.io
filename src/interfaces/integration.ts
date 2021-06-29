@@ -3,7 +3,7 @@ export interface Integration {
     data: {
         configuration: {
             connectors: {
-                connectorName: {
+                [key: string]: {
                     package: string;
                     connector: string;
                 }

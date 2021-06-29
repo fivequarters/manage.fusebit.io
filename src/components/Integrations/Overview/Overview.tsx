@@ -18,6 +18,7 @@ const Overview: React.FC = () => {
     React.useEffect(() => {
         if (integrations) {
             const items = integrations.data.items;
+            setRows(items);
         }
     }, [integrations]);
 
@@ -140,7 +141,9 @@ const Overview: React.FC = () => {
                             </TableCell>
                             <TableCell component="th" scope="row">
                                 <SC.CellName>
-                                    {row?.data.configuration.connectors.connectorName.connector}
+                                Slack
+                                {// TODO: Replace placeholder with real data
+                                } 
                                 </SC.CellName>
                             </TableCell>
                             <TableCell align="left">{row.id}</TableCell>
