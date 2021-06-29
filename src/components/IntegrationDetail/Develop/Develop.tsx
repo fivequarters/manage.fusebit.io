@@ -1,32 +1,21 @@
 import React from "react";
+import { useParams } from "react-router-dom";
 import * as SC from "./styles";
 import { Button, Modal, Backdrop, Fade } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
+import { useAccountIntegrationsGetOne } from "../../../hooks/api/v2/account/integration/useGetOne";
+import { useContext } from "../../../hooks/useContext";
+import { Integration, InnerConnector } from "../../../interfaces/integration";
 import arrow from "../../../assets/arrow-right-black.svg";
 import slack from "../../../assets/slack.svg";
 import cross from "../../../assets/cross.svg";
 import Connect from "./Connect";
 
-const connectorsList =  [ 
-    {
-        icon: slack,
-        alt: "Slack",
-        name: "Slack 1 Connector"
-    },
-    {
-        icon: slack,
-        alt: "Slack",
-        name: "Slack 2 Connector"
-    },
-    {
-        icon: slack,
-        alt: "Slack",
-        name: "Slack 3 Connector"
-    }
-]
-
 const Develop: React.FC = () => {
-    const [connectors, setConnectors] = React.useState(connectorsList);
+    const { id } = useParams<{ id: string }>();
+    const { userData } = useContext();
+    const { data: integrationData } = useAccountIntegrationsGetOne<Integration>({ enabled: userData.token, id, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+
     const [connectOpen, setConnectOpen] = React.useState(false);
 
     const handleConnectOpen = () => {
@@ -37,8 +26,8 @@ const Develop: React.FC = () => {
         setConnectOpen(false);
     };
 
-    const handleConnectorDelete = (name: string) => {
-        setConnectors(connectors.filter(connector => connector.name !== name))
+    const handleConnectorDelete = (key: string) => {
+        console.log(key);
     }
 
     const handleCardConnectorClick = (e: any) => {
@@ -84,7 +73,7 @@ const Develop: React.FC = () => {
                         <SC.CardTitle>Fusebit</SC.CardTitle>
                         <SC.CardIntegration>
                             <img src={arrow} alt="arrow" />
-                            Slack Bot 1
+                            {integrationData?.data.id}
                         </SC.CardIntegration>
                         <SC.CardButtonWrapper>
                             <Button style={{width: "200px"}} size="large" variant="contained" color="primary" >Connect</Button>
@@ -112,13 +101,16 @@ const Develop: React.FC = () => {
                         <SC.CardTitle>Connectors</SC.CardTitle>
                         <SC.CardConnectorWrapper>
                             {
-                                connectors.map((connector, index) => {
+                                Object.keys(integrationData?.data.data.configuration.connectors ?? {}).map((key: string, index) => {
+                                    const connector = (integrationData?.data.data.configuration.connectors ?? {} as InnerConnector)[key];
                                     if (index < 5) {
                                         return (
                                             <SC.CardConnector key={index} onClick={(e) => handleCardConnectorClick(e)}>
-                                                <SC.CardConnectorImage src={connector.icon} alt={connector.alt} height="20" width="20" />
-                                                <SC.CardConnectorText>{connector.name}</SC.CardConnectorText>
-                                                <SC.CardConnectorCrossContainer id="closeWrapper" onClick={() => handleConnectorDelete(connector.name)}>
+                                                {// TODO: Replace placeholder with real data 
+                                                } 
+                                                <SC.CardConnectorImage src={slack} alt={key} height="20" width="20" />
+                                                <SC.CardConnectorText>{connector.connector}</SC.CardConnectorText>
+                                                <SC.CardConnectorCrossContainer id="closeWrapper" onClick={() => handleConnectorDelete(key)}>
                                                     <SC.CardConnectorCross id="close" src={cross} alt="close" height="8" width="8" />
                                                 </SC.CardConnectorCrossContainer>
                                             </SC.CardConnector>
@@ -129,8 +121,8 @@ const Develop: React.FC = () => {
                             }
                         </SC.CardConnectorWrapper>
                         {
-                            connectors.length >= 5 && (
-                                <SC.CardConnectorSeeMore href="/connectors"> 
+                            Object.keys(integrationData?.data.data.configuration.connectors ?? {}).length >= 5 && (
+                                <SC.CardConnectorSeeMore href="/"> 
                                     See all
                                     <img src={arrow} alt="see more" height="10" width="10" />
                                 </SC.CardConnectorSeeMore>

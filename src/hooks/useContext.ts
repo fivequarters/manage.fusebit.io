@@ -17,9 +17,16 @@ const _useContext = () => {
         localStorage.setItem(LS_KEY, JSON.stringify(__userData));
     }
 
+    const logout = () => {
+        setUserData({});
+        localStorage.setItem(LS_KEY, JSON.stringify({}));
+        window.location.reload();
+    }
+
     return {
         userData,
-        auth
+        auth,
+        logout
     };
 };
 
