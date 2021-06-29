@@ -1,12 +1,17 @@
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { Params } from '../../../../../interfaces/api';
 import { useAxios } from '../../../../useAxios';
 
-export const useAccountIntegrationCreateIntegration = <T>(params: Params) => {
+export const useAccountIntegrationCreateIntegration = <T>() => {
     const { axios } = useAxios();
-    
-    return useMutation(
-        ["accountIntegrationCreateIntegration", params], 
-        () => axios<T>(`/v2/account/${params.accountId}/subscription/${params.subscriptionId}/integration`, 'post', params)
-    );
+    const queryClient = useQueryClient();
+
+    return useMutation((params: Params) => {
+        const { accountId, subscriptionId, ...data } = params;
+        return axios<T>(`/v2/account/${accountId}/subscription/${subscriptionId}/integration`, 'post', data);
+    }, {
+        onMutate: (_: Params) => () => {},
+        onError: (_, __, rollback) => rollback?.(),
+        onSettled: () => queryClient.invalidateQueries('accountIntegrationsGetAll'),
+    });
 }

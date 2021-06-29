@@ -37,7 +37,7 @@ const integrations = [
 const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector}) => {
     const [anchorSectionDropdown, setAnchorSectionDropdown] = React.useState(null);
     const [anchorUserDropdown, setAnchorUserDropdown] = React.useState(null);
-    const { userData } = useContext();
+    const { userData, logout } = useContext();
 
     return (
         <SC.Background>
@@ -137,7 +137,7 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector}
                                     <SC.UserDropdownLink href="/settings">Settings</SC.UserDropdownLink>
                                 </SC.UserDropdownLinksWrapper>
                                 <SC.UserButtonWrapper>
-                                    <Button style={{marginLeft: "auto"}} variant="outlined" size="medium" color="primary">Log Out</Button>
+                                    <Button onClick={logout} style={{marginLeft: "auto"}} variant="outlined" size="medium" color="primary">Log Out</Button>
                                 </SC.UserButtonWrapper>
                             </SC.UserDropdown>
                         </Menu>

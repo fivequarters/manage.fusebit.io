@@ -13,11 +13,12 @@ const Overview: React.FC = () => {
     const [rows, setRows] = React.useState<Integration[]>([]);
     const { userData } = useContext();
     const { data: integrations } = useAccountIntegrationsGetAll<{items: Integration[]}>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
-    const {mutate} = useAccountIntegrationCreateIntegration({accountId: userData.accountId, subscriptionId: userData.subscriptionId});
+    const { mutate: createIntegration } = useAccountIntegrationCreateIntegration();
 
     React.useEffect(() => {
         if (integrations) {
             const items = integrations.data.items;
+            console.log(items);
         }
     }, [integrations]);
 
@@ -84,7 +85,7 @@ const Overview: React.FC = () => {
         <>
             <SC.ButtonContainer>
                 <SC.ButtonMargin>
-                    <Button startIcon={<AddIcon />} variant="outlined" color="primary" size="large">New Integration</Button>
+                    <Button onClick={() => createIntegration({accountId: userData.accountId, subscriptionId: userData.subscriptionId})} startIcon={<AddIcon />} variant="outlined" color="primary" size="large">New Integration</Button>
                 </SC.ButtonMargin>
             </SC.ButtonContainer>
             <SC.DeleteWrapper active={selected.length > 0}>
