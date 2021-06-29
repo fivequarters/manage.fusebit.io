@@ -3,19 +3,22 @@ import * as SC from "./styles";
 import { Table, TableBody, TableCell, TableHead, TableRow, Button, Checkbox, IconButton, Tooltip } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
-
-const createOverviewData = (href: string, name: string, id: string, instances: number, created: string, deployed: string) => {
-    return { href, name, id, instances, created, deployed };
-  }
-  
-  const overviewRows = [
-    createOverviewData("/integration-detail", "Slack Bot 1", "Int - 357892", 55, new Date().toISOString().slice(0, 10), new Date().toISOString().slice(0, 10)),
-    createOverviewData("/integration-detail", "Jira Issue Sync 1", "Int - 123549", 3, new Date().toISOString().slice(0, 10), new Date().toISOString().slice(0, 10)),
-  ];
+import { useContext } from "../../../hooks/useContext";
+import { useAccountIntegrationsGetAll} from "../../../hooks/api/v2/account/integration/useGetAll";
+import {Integration} from "../../../interfaces/integration";
 
 const Overview: React.FC = () => {
     const [selected, setSelected] = React.useState<string[]>([]);
-    const [rows, setRows] = React.useState(overviewRows);
+    const [rows, setRows] = React.useState<Integration[]>([]);
+    const { userData } = useContext();
+    const { data: integrations } = useAccountIntegrationsGetAll<{items: Integration[]}>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+
+    React.useEffect(() => {
+        if (integrations) {
+            const items = integrations.data.items;
+            setRows(items);
+        }
+    }, [integrations]);
 
     const handleSelectAllCheck = (event: any) => {
         if (event.target.checked) {
@@ -124,7 +127,7 @@ const Overview: React.FC = () => {
                 </TableHead>
                 <TableBody>
                     {rows.map((row) => (
-                        <SC.Row key={row.id} onClick={(e) => handleRowClick(e, row.href)}>
+                        <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/integration-detail")}>
                             <TableCell style={{cursor: "default"}} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
                                 <Checkbox
                                 color="primary"
@@ -136,13 +139,25 @@ const Overview: React.FC = () => {
                             </TableCell>
                             <TableCell component="th" scope="row">
                                 <SC.CellName>
-                                    {row.name}
+                                    {row.data.configuration.connectors.connectorName.connector}
                                 </SC.CellName>
                             </TableCell>
                             <TableCell align="left">{row.id}</TableCell>
-                            <TableCell align="left">{row.instances}</TableCell>
-                            <TableCell align="left">{row.created}</TableCell>
-                            <TableCell align="left">{row.deployed}</TableCell>
+                            <TableCell align="left">
+                                10 
+                                {// TODO: Replace placeholder with real data
+                                } 
+                            </TableCell>
+                            <TableCell align="left">
+                                {new Date().toISOString().slice(0, 10)}
+                                {// TODO: Replace placeholder with real data
+                                } 
+                            </TableCell>
+                            <TableCell align="left">
+                                {new Date().toISOString().slice(0, 10)}
+                                {// TODO: Replace placeholder with real data
+                                } 
+                            </TableCell>
                         </SC.Row>
                     ))}
                 </TableBody>
