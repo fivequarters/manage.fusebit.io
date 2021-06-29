@@ -6,9 +6,6 @@ import arrow from "../../../assets/arrow-right-black.svg";
 import slack from "../../../assets/slack.svg";
 import cross from "../../../assets/cross.svg";
 import Connect from "./Connect";
-import {useAccountIntegrationsGetAll} from "../../../hooks/api/v2/account/integration/useGetAll";
-import {Integration} from "../../../interfaces/integration";
-import { useContext } from "../../../hooks/useContext";
 
 const connectorsList =  [ 
     {
@@ -31,17 +28,6 @@ const connectorsList =  [
 const Develop: React.FC = () => {
     const [connectors, setConnectors] = React.useState(connectorsList);
     const [connectOpen, setConnectOpen] = React.useState(false);
-    const [integrations, setIntegrations] = React.useState<Integration[]>([]);
-    const { userData } = useContext();
-    const { data: integrationsItems } = useAccountIntegrationsGetAll<{items: Integration[]}>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
-
-    React.useEffect(() => {
-        if (integrationsItems) {
-            console.log(userData);
-            const items = integrationsItems.data.items;
-            setIntegrations(items);
-        }
-    }, [integrationsItems, userData]);
 
     const handleConnectOpen = () => {
         setConnectOpen(true);
@@ -96,16 +82,12 @@ const Develop: React.FC = () => {
                 <SC.FlexDown>
                     <SC.Card>
                         <SC.CardTitle>Fusebit</SC.CardTitle>
-                        {
-                            integrations.map(integration => (
-                                <SC.CardIntegration id={integration.id}>
-                                    <img src={arrow} alt="arrow" />
-                                    Slack Bot 1
-                                    {// TODO: Replace placeholder with real data
-                                    } 
-                                </SC.CardIntegration>
-                            ))
-                        }
+                        <SC.CardIntegration>
+                            <img src={arrow} alt="arrow" />
+                            Slack Bot 1
+                            {// TODO: Replace placeholder with real data
+                            } 
+                        </SC.CardIntegration>
                         <SC.CardButtonWrapper>
                             <Button style={{width: "200px"}} size="large" variant="contained" color="primary" >Connect</Button>
                         </SC.CardButtonWrapper>
