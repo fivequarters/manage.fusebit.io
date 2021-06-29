@@ -9,35 +9,18 @@ import arrow from "../../assets/down-arrow-white.svg";
 import rightArrow from "../../assets/arrow-right-black.svg";
 import check from "../../assets/check.svg";
 import { useContext } from "../../hooks/useContext";
-
-const connectors = [
-    {
-        name: "Slack Bot 1",
-    },
-    {
-        name: "Slack Bot 2",
-    },
-    {
-        name: "Slack Bot 3",
-    },
-];
-
-const integrations = [
-    {
-        name: "Slack 1",
-    },
-    {
-        name: "Quickbooks 1",
-    },
-    {
-        name: "Salesforce 1",
-    },
-]
+import { useAccountIntegrationsGetAll } from "../../hooks/api/v2/account/integration/useGetAll";
+import { useAccountConnectorsGetAll } from "../../hooks/api/v2/account/connector/useGetAll";
+import { Integration } from "../../interfaces/integration";
+import { Connector } from "../../interfaces/connector";
 
 const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector}) => {
     const [anchorSectionDropdown, setAnchorSectionDropdown] = React.useState(null);
     const [anchorUserDropdown, setAnchorUserDropdown] = React.useState(null);
     const { userData, logout } = useContext();
+
+    const { data: integrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+    const { data: connectors } = useAccountConnectorsGetAll<{ items: Connector[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
 
     return (
         <SC.Background>
@@ -70,9 +53,9 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector}
                                             </SC.SectionDropdownSeeMore>
                                         </SC.Flex>
                                         {
-                                            integrations.map((integration, index) => (
-                                                <SC.SectionDropdownIntegration key={index} active={sectionName === integration.name} href="/integration-detail">
-                                                    {integration.name}
+                                            integrations?.data.items.map((integration, index) => (
+                                                <SC.SectionDropdownIntegration key={index} active={sectionName === integration.id} href={"/integration/" + integration.id}>
+                                                    {integration.id}
                                                     <img src={check} alt="check" height="16" width="16" />
                                                 </SC.SectionDropdownIntegration>
                                             ))
@@ -85,9 +68,9 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector}
                                             </SC.SectionDropdownSeeMore>
                                         </SC.Flex>
                                         {
-                                            connectors.map((connector, index) => (
-                                                <SC.SectionDropdownIntegration key={index} active={sectionName === connector.name} href="/connector-detail">
-                                                    {connector.name}
+                                            connectors?.data.items.map((connector, index) => (
+                                                <SC.SectionDropdownIntegration key={index} active={sectionName === connector.id} href={"/connector/" + connector.id}>
+                                                    {connector.id}
                                                     <img src={check} alt="check" height="16" width="16" />
                                                 </SC.SectionDropdownIntegration>
                                             ))

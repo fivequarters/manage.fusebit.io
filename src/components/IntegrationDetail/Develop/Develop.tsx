@@ -1,7 +1,11 @@
 import React from "react";
+import { useParams } from "react-router-dom";
 import * as SC from "./styles";
 import { Button, Modal, Backdrop, Fade } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
+import { useAccountIntegrationsGetOne } from "../../../hooks/api/v2/account/integration/useGetOne";
+import { useContext } from "../../../hooks/useContext";
+import { Integration } from "../../../interfaces/integration";
 import arrow from "../../../assets/arrow-right-black.svg";
 import slack from "../../../assets/slack.svg";
 import cross from "../../../assets/cross.svg";
@@ -26,6 +30,10 @@ const connectorsList =  [
 ]
 
 const Develop: React.FC = () => {
+    const { id } = useParams<{ id: string }>();
+    const { userData } = useContext();
+    const { data: integrationData } = useAccountIntegrationsGetOne<Integration>({ enabled: userData.token, id, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+
     const [connectors, setConnectors] = React.useState(connectorsList);
     const [connectOpen, setConnectOpen] = React.useState(false);
 
@@ -65,7 +73,7 @@ const Develop: React.FC = () => {
                 <SC.CardSeparator />
                 <SC.FlexDown>
                     <SC.Card>
-                        <SC.CardTitle>Your Application</SC.CardTitle>
+                        <SC.CardTitle key={integrationData?.data.id}>Your Application</SC.CardTitle>
                         <SC.CardButtonWrapper>
                             <Button onClick={handleConnectOpen} startIcon={<AddIcon />} style={{width: "200px"}} size="large" variant="outlined" color="primary" >Connect</Button>
                         </SC.CardButtonWrapper>

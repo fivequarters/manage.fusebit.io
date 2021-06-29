@@ -4,15 +4,15 @@ import { Table, TableBody, TableCell, TableHead, TableRow, Button, Checkbox, Ico
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useContext } from "../../../hooks/useContext";
-import { useAccountIntegrationsGetAll} from "../../../hooks/api/v2/account/integration/useGetAll";
-import { useAccountIntegrationCreateIntegration} from "../../../hooks/api/v2/account/integration/useCreateOne";
-import {Integration} from "../../../interfaces/integration";
+import { useAccountIntegrationsGetAll } from "../../../hooks/api/v2/account/integration/useGetAll";
+import { useAccountIntegrationCreateIntegration } from "../../../hooks/api/v2/account/integration/useCreateOne";
+import { Integration } from "../../../interfaces/integration";
 
 const Overview: React.FC = () => {
     const [selected, setSelected] = React.useState<string[]>([]);
     const [rows, setRows] = React.useState<Integration[]>([]);
     const { userData } = useContext();
-    const { data: integrations } = useAccountIntegrationsGetAll<{items: Integration[]}>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+    const { data: integrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
     const { mutate: createIntegration } = useAccountIntegrationCreateIntegration();
 
     React.useEffect(() => {
@@ -24,9 +24,9 @@ const Overview: React.FC = () => {
 
     const handleSelectAllCheck = (event: any) => {
         if (event.target.checked) {
-        const newSelecteds = rows.map((row) => row.id);
-        setSelected(newSelecteds);
-        return;
+            const newSelecteds = rows.map((row) => row.id);
+            setSelected(newSelecteds);
+            return;
         }
         setSelected([]);
     };
@@ -34,29 +34,29 @@ const Overview: React.FC = () => {
     const handleCheck = (event: any, id: string) => {
         const selectedIndex = selected.indexOf(id);
         let newSelected: string[] = [];
-    
+
         if (selectedIndex === -1) {
-          newSelected = newSelected.concat(selected, id);
+            newSelected = newSelected.concat(selected, id);
         } else if (selectedIndex === 0) {
-          newSelected = newSelected.concat(selected.slice(1));
+            newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
-          newSelected = newSelected.concat(selected.slice(0, -1));
+            newSelected = newSelected.concat(selected.slice(0, -1));
         } else if (selectedIndex > 0) {
-          newSelected = newSelected.concat(
-            selected.slice(0, selectedIndex),
-            selected.slice(selectedIndex + 1),
-          );
+            newSelected = newSelected.concat(
+                selected.slice(0, selectedIndex),
+                selected.slice(selectedIndex + 1),
+            );
         }
-    
+
         setSelected(newSelected);
-      };
+    };
 
 
     const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
     const handleRowDelete = () => {
         const newArray = rows.filter((row) => {
-            let found = false; 
+            let found = false;
             selected.forEach((id) => {
                 if (id === row.id) {
                     found = true;
@@ -71,8 +71,8 @@ const Overview: React.FC = () => {
                 checked: false,
             }
         }
-       
-       handleSelectAllCheck(fakeEvent);
+
+        handleSelectAllCheck(fakeEvent);
     }
 
     const handleRowClick = (event: any, href: string) => {
@@ -85,22 +85,22 @@ const Overview: React.FC = () => {
         <>
             <SC.ButtonContainer>
                 <SC.ButtonMargin>
-                    <Button onClick={() => createIntegration({accountId: userData.accountId, subscriptionId: userData.subscriptionId})} startIcon={<AddIcon />} variant="outlined" color="primary" size="large">New Integration</Button>
+                    <Button onClick={() => createIntegration({ accountId: userData.accountId, subscriptionId: userData.subscriptionId })} startIcon={<AddIcon />} variant="outlined" color="primary" size="large">New Integration</Button>
                 </SC.ButtonMargin>
             </SC.ButtonContainer>
             <SC.DeleteWrapper active={selected.length > 0}>
                 {
                     selected.length > 0 && (
-                    <>
-                        {selected.length} selected
-                        <SC.DeleteIconWrapper>
-                            <Tooltip title="Delete">
-                                <IconButton onClick={handleRowDelete}>
-                                    <DeleteIcon />
-                                </IconButton>
-                            </Tooltip>
-                        </SC.DeleteIconWrapper>
-                    </>
+                        <>
+                            {selected.length} selected
+                            <SC.DeleteIconWrapper>
+                                <Tooltip title="Delete">
+                                    <IconButton onClick={handleRowDelete}>
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </Tooltip>
+                            </SC.DeleteIconWrapper>
+                        </>
                     )
                 }
             </SC.DeleteWrapper>
@@ -129,38 +129,38 @@ const Overview: React.FC = () => {
                 </TableHead>
                 <TableBody>
                     {rows.map((row) => (
-                        <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/integration-detail")}>
-                            <TableCell style={{cursor: "default"}} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
+                        <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/integration/" + row.id)}>
+                            <TableCell style={{ cursor: "default" }} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
                                 <Checkbox
-                                color="primary"
-                                onClick={(event) => handleCheck(event, row.id)}
-                                checked={isSelected(row.id)}
-                                inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${row.id}` }}
-                                id={`enhanced-table-checkbox-${row.id}`}
+                                    color="primary"
+                                    onClick={(event) => handleCheck(event, row.id)}
+                                    checked={isSelected(row.id)}
+                                    inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${row.id}` }}
+                                    id={`enhanced-table-checkbox-${row.id}`}
                                 />
                             </TableCell>
                             <TableCell component="th" scope="row">
                                 <SC.CellName>
-                                Slack Bot
-                                {// TODO: Replace placeholder with real data
-                                } 
+                                    Slack Bot
+                                    {// TODO: Replace placeholder with real data
+                                    }
                                 </SC.CellName>
                             </TableCell>
                             <TableCell align="left">{row.id}</TableCell>
                             <TableCell align="left">
-                                10 
+                                10
                                 {// TODO: Replace placeholder with real data
-                                } 
+                                }
                             </TableCell>
                             <TableCell align="left">
                                 {new Date().toISOString().slice(0, 10)}
                                 {// TODO: Replace placeholder with real data
-                                } 
+                                }
                             </TableCell>
                             <TableCell align="left">
                                 {new Date().toISOString().slice(0, 10)}
                                 {// TODO: Replace placeholder with real data
-                                } 
+                                }
                             </TableCell>
                         </SC.Row>
                     ))}
