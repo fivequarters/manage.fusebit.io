@@ -6,7 +6,7 @@ export const useAccountConnectorsGetOne = <T>(params: Params) => {
     const { axios } = useAxios();
     
     return useQuery(
-        ["accountConnectorsGetOne", params], 
+        "accountConnectorsGetOne", 
         () => axios<T>(`/v2/account/${params.accountId}/subscription/${params.subscriptionId}/connector/${params.id}`, 'get', params), 
         { enabled: !!params.enabled }
     );

@@ -12,6 +12,6 @@ export const useAccountIntegrationCreateIntegration = <T>() => {
     }, {
         onMutate: (_: Params) => () => {},
         onError: (_, __, rollback) => rollback?.(),
-        onSettled: () => queryClient.invalidateQueries('accountIntegrationsGetAll'),
+        onSuccess: () => queryClient.removeQueries('accountIntegrationsGetAll'),
     });
 }

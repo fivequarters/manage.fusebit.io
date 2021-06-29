@@ -4,14 +4,14 @@ import { Table, TableBody, TableCell, TableHead, TableRow, Button, Checkbox, Ico
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useContext } from "../../../hooks/useContext";
-import { useAccountIntegrationsGetAll} from "../../../hooks/api/v2/account/integration/useGetAll";
+import { useAccountConnectorsGetAll} from "../../../hooks/api/v2/account/connector/useGetAll";
 import {Connector} from "../../../interfaces/connector";
 
 const Overview: React.FC = () => {
     const [selected, setSelected] = React.useState<string[]>([]);
     const [rows, setRows] = React.useState<Connector[]>([]);
     const { userData } = useContext();
-    const { data: connectors } = useAccountIntegrationsGetAll<{items: Connector[]}>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+    const { data: connectors } = useAccountConnectorsGetAll<{items: Connector[]}>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
 
     React.useEffect(() => {
         if (connectors) {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as SC from "./styles";
 import { Table, TableBody, TableCell, TableHead, TableRow, Button, Checkbox, IconButton, Tooltip } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
@@ -13,9 +13,9 @@ const Overview: React.FC = () => {
     const [rows, setRows] = React.useState<Integration[]>([]);
     const { userData } = useContext();
     const { data: integrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
-    const { mutate: createIntegration } = useAccountIntegrationCreateIntegration();
+    const createIntegration = useAccountIntegrationCreateIntegration();
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (integrations) {
             const items = integrations.data.items;
             setRows(items);
@@ -81,11 +81,15 @@ const Overview: React.FC = () => {
         }
     }
 
+    const _createIntegration = async () => {
+        createIntegration.mutate({ id: String(new Date().getTime()), accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+    }
+
     return (
         <>
             <SC.ButtonContainer>
                 <SC.ButtonMargin>
-                    <Button onClick={() => createIntegration({ accountId: userData.accountId, subscriptionId: userData.subscriptionId })} startIcon={<AddIcon />} variant="outlined" color="primary" size="large">New Integration</Button>
+                    <Button onClick={_createIntegration} startIcon={<AddIcon />} variant="outlined" color="primary" size="large">New Integration</Button>
                 </SC.ButtonMargin>
             </SC.ButtonContainer>
             <SC.DeleteWrapper active={selected.length > 0}>

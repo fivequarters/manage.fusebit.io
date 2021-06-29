@@ -1,13 +1,15 @@
+export interface InnerConnector {
+    [key: string]: {
+        package: string;
+        connector: string;
+    }
+}
+
 export interface Integration {
     id: string;
     data: {
         configuration: {
-            connectors: {
-                [key: string]: {
-                    package: string;
-                    connector: string;
-                }
-            },
+            connectors: InnerConnector,
             creation: {
              tags: object,
              autoStep: boolean
