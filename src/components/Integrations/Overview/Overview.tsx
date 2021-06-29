@@ -17,10 +17,11 @@ const Overview: React.FC = () => {
 
     React.useEffect(() => {
         if (integrations) {
+            console.log(userData);
             const items = integrations.data.items;
             setRows(items);
         }
-    }, [integrations]);
+    }, [integrations, userData]);
 
     const handleSelectAllCheck = (event: any) => {
         if (event.target.checked) {
@@ -129,7 +130,7 @@ const Overview: React.FC = () => {
                 </TableHead>
                 <TableBody>
                     {rows.map((row) => (
-                        <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/integration-detail")}>
+                        <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/integration-detail?id=" + row.id)}>
                             <TableCell style={{cursor: "default"}} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
                                 <Checkbox
                                 color="primary"
