@@ -4,6 +4,7 @@ import * as SC from "./styles";
 import { Button, Modal, Backdrop, Fade } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import { useAccountIntegrationsGetOne } from "../../../hooks/api/v2/account/integration/useGetOne";
+import { useAccountUserCreateToken } from "../../../hooks/api/v1/account/user/useCreateToken";
 import { useContext } from "../../../hooks/useContext";
 import { Integration, InnerConnector } from "../../../interfaces/integration";
 import arrow from "../../../assets/arrow-right-black.svg";
@@ -11,13 +12,16 @@ import slack from "../../../assets/slack.svg";
 import cross from "../../../assets/cross.svg";
 import Connect from "./Connect";
 import Edit from "./Edit";
+import {FuseInitToken} from "../../../interfaces/fuseInitToken";
 
 const Develop: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const { userData } = useContext();
     const { data: integrationData } = useAccountIntegrationsGetOne<Integration>({ enabled: userData.token, id, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+    const createToken = useAccountUserCreateToken<FuseInitToken>();
     const [connectOpen, setConnectOpen] = React.useState(false);
     const [editOpen, setEditOpen] = React.useState(false);
+    const [editToken, setEditToken] = React.useState<string | FuseInitToken>();
 
     const handleConnectorDelete = (key: string) => {
         console.log(key);
@@ -26,6 +30,18 @@ const Develop: React.FC = () => {
     const handleCardConnectorClick = (e: any) => {
         if (!e.target.id) {
             window.location.href = "/connector-detail";
+        }
+    }
+
+    const handleEditOpen = async () => {
+        setEditOpen(true);
+        if (!editToken) {
+            try {
+                const response = await createToken.mutateAsync({ accountId: userData.accountId, userId: userData.userId });
+                setEditToken(response.data);
+            } catch(e) {
+                console.log(e);
+            }
         }
     }
     
@@ -52,7 +68,7 @@ const Develop: React.FC = () => {
                 BackdropComponent={Backdrop}
             >
                 <Fade in={editOpen}>
-                    <Edit open={editOpen} onClose={() => setEditOpen(false)} integration={integrationData?.data.id || ""} />
+                    <Edit open={editOpen} onClose={() => setEditOpen(false)} integration={integrationData?.data.id || ""} token={editToken || ""} />
                 </Fade>
             </Modal>
             <SC.Flex>
@@ -81,7 +97,7 @@ const Develop: React.FC = () => {
                             {integrationData?.data.id}
                         </SC.CardIntegration>
                         <SC.CardButtonWrapper>
-                            <Button onClick={() => setEditOpen(true)} style={{width: "200px"}} size="large" variant="contained" color="primary" >Connect</Button>
+                            <Button onClick={handleEditOpen} style={{width: "200px"}} size="large" variant="contained" color="primary" >Connect</Button>
                         </SC.CardButtonWrapper>
                     </SC.Card>
                     <SC.Link href="/test3">

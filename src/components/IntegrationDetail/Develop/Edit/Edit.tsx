@@ -5,7 +5,7 @@ import { Button } from "@material-ui/core";
 import CheckIcon from '@material-ui/icons/Check';
 import {Props} from "../../../../interfaces/edit";
 
-const Edit: React.FC<Props> = ({open, onClose, integration}) => {
+const Edit: React.FC<Props> = ({open, onClose, integration, token}) => {
     const [copy, setCopy] = React.useState(false);
     let timeout: NodeJS.Timeout;
 
@@ -37,10 +37,10 @@ const Edit: React.FC<Props> = ({open, onClose, integration}) => {
             </SC.LineInstructionWrapper>
 
             <SC.LineTitle>2. Initialize the CLI by running</SC.LineTitle>
-            <SC.LineInstructionWrapper onClick={() => handleCopy(`fuse init eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm90b2NvbCI6InBraSIsImFnZW50SWQiOiJ1c3ItOWViNDUzMGNkMWViNGNlZiIsInByb2ZpbGUi`)}>
+            <SC.LineInstructionWrapper onClick={() => handleCopy(`fuse init ${token}`)}>
             <SC.LineInstructionCopy>Copy</SC.LineInstructionCopy>
                 <SC.LineInstructionFade />
-                <SC.LineInstruction><span className="unselectable">$</span> fuse <strong>init</strong> eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm90b2NvbCI6InBraSIsImFnZW50SWQiOiJ1c3ItOWViNDUzMGNkMWViNGNlZiIsInByb2ZpbGUi</SC.LineInstruction>
+                <SC.LineInstruction><span className="unselectable">$</span> fuse <strong>init</strong> {token}</SC.LineInstruction>
             </SC.LineInstructionWrapper>
 
             <SC.LineTitle>3. Download the integration code</SC.LineTitle>
