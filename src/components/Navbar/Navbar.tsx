@@ -13,14 +13,21 @@ import { useAccountIntegrationsGetAll } from "../../hooks/api/v2/account/integra
 import { useAccountConnectorsGetAll } from "../../hooks/api/v2/account/connector/useGetAll";
 import { Integration } from "../../interfaces/integration";
 import { Connector } from "../../interfaces/connector";
+import { useState } from "react";
+import { useEffect } from "react";
 
 const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector}) => {
     const [anchorSectionDropdown, setAnchorSectionDropdown] = React.useState(null);
     const [anchorUserDropdown, setAnchorUserDropdown] = React.useState(null);
     const { userData, logout } = useContext();
+    const [loginUrl, setLoginUrl] = useState("");
 
     const { data: integrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
     const { data: connectors } = useAccountConnectorsGetAll<{ items: Connector[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+
+    useEffect(() => {
+        setLoginUrl(`https://fusebit.auth0.com/authorize?response_type=token&client_id=hSgWIXmbluQMADuWhDnRTpWyKptJe6LB&audience=https://stage.us-west-2.fusebit.io&redirect_uri=${window.location.origin}/callback&scope=openid profile email`);
+    }, [])
 
     return (
         <SC.Background>
@@ -126,7 +133,7 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector}
                         </Menu>
                     </SC.ButtonWrapper>
                 </SC.Nav>
-                {!userData.id && <SC.FloatingLogin href={'https://fusebit.auth0.com/authorize?response_type=token&client_id=hSgWIXmbluQMADuWhDnRTpWyKptJe6LB&audience=https://stage.us-west-2.fusebit.io&redirect_uri=http://localhost:3000/callback&scope=openid profile email'}>Temp Login</SC.FloatingLogin>}
+                {!userData.id && <SC.FloatingLogin href={loginUrl}>Temp Login</SC.FloatingLogin>}
             </Container>
         </SC.Background>
     )
