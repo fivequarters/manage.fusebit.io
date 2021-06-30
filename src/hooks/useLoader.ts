@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Operation } from '../interfaces/operation';
 import { useAxios } from './useAxios';
 import { useContext } from './useContext';
@@ -22,23 +21,31 @@ export const  useLoader = () => {
         document.body.appendChild(loader);
     }
 
-    const waitForOperation = async (operationId: string) => {
-        return new Promise((accept: Function) => {
-            removeLoader();
-            createLoader();
-            const intervalId = setInterval(() => {
-                axios<Operation>(`/v2/account/${userData.accountId}/subscription/${userData.subscriptionId}/operation/${operationId}`, 'get').then(response => {
-                    if (response.data.code === 200) {
-                        clearInterval(intervalId);
-                        removeLoader();
-                        accept({});
-                    }
-                });
-            }, 1000);
-        })
+    const waitForOperations = async (operationIds: string[]) => {
+        const intervalIds: { [key: string]: number } = {};
+        const promises = operationIds.map((operationId: string) => {
+            return new Promise((accept: Function) => {    
+                intervalIds[operationId] = Number(setInterval(() => {
+                    axios<Operation>(`/v2/account/${userData.accountId}/subscription/${userData.subscriptionId}/operation/${operationId}`, 'get').then(response => {
+                        if (response.data.code === 200) {
+                            accept({});
+                        }
+                    });
+                }, 1000));
+            })
+        });
+        return new Promise((globalAccept: Function) => {
+            Promise.all(promises).then(_ => {
+                Object.keys(intervalIds).forEach((operationId: string) => clearInterval(intervalIds[operationId]));
+                
+                globalAccept({});
+            });
+        });
     }
 
     return {
-        waitForOperation
+        createLoader,
+        waitForOperations,
+        removeLoader
     };
 };

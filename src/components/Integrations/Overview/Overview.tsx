@@ -7,6 +7,7 @@ import { useContext } from "../../../hooks/useContext";
 import { useLoader } from "../../../hooks/useLoader";
 import { useAccountIntegrationsGetAll } from "../../../hooks/api/v2/account/integration/useGetAll";
 import { useAccountIntegrationCreateIntegration } from "../../../hooks/api/v2/account/integration/useCreateOne";
+import { useAccountIntegrationDeleteIntegration } from "../../../hooks/api/v2/account/integration/useDeleteOne";
 import { Integration } from "../../../interfaces/integration";
 import { Operation } from "../../../interfaces/operation";
 
@@ -16,7 +17,8 @@ const Overview: React.FC = () => {
     const { userData } = useContext();
     const { data: integrations, refetch: reloadIntegrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
     const createIntegration = useAccountIntegrationCreateIntegration<Operation>();
-    const { waitForOperation } = useLoader();
+    const deleteIntegration = useAccountIntegrationDeleteIntegration<Operation>();
+    const { waitForOperations, createLoader, removeLoader } = useLoader();
 
     useEffect(() => {
         if (integrations) {
@@ -57,25 +59,17 @@ const Overview: React.FC = () => {
 
     const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
-    const handleRowDelete = () => {
-        const newArray = rows.filter((row) => {
-            let found = false;
-            selected.forEach((id) => {
-                if (id === row.id) {
-                    found = true;
-                }
-            });
-            return !found;
-        });
-        setRows(newArray);
-
-        const fakeEvent = {
-            target: {
-                checked: false,
-            }
+    const handleRowDelete = async () => {
+        createLoader();
+        let operationIds: string[] = [];
+        for (let i = 0; i < selected.length; i++) {
+            const response = await deleteIntegration.mutateAsync({ id: selected[i], accountId: userData.accountId, subscriptionId: userData.subscriptionId });    
+            operationIds.push(response.data.operationId);
         }
-
-        handleSelectAllCheck(fakeEvent);
+        await waitForOperations(operationIds);
+        reloadIntegrations();
+        setSelected([]);
+        removeLoader();
     }
 
     const handleRowClick = (event: any, href: string) => {
@@ -85,9 +79,11 @@ const Overview: React.FC = () => {
     }
 
     const _createIntegration = async () => {
+        createLoader();
         const response = await createIntegration.mutateAsync({ id: String(new Date().getTime()), accountId: userData.accountId, subscriptionId: userData.subscriptionId });
-        await waitForOperation(response.data.operationId);
+        await waitForOperations([response.data.operationId]);
         reloadIntegrations();
+        removeLoader();
     }
 
     return (
