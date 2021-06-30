@@ -2,9 +2,9 @@ import styled from "styled-components";
 import arrow from "../../../assets/table-arrow.svg";
 
 export const DeleteWrapper = styled.div<{active: boolean}>`
-    display: flex;
     align-items: center;
     opacity: ${props => props.active ? 1 : 0};
+    display: ${props => props.active ? "flex" : "none"};
     font-size: 18px;
     line-height: 22px;
     font-weight: 400;
@@ -60,5 +60,5 @@ export const ButtonContainer = styled.div`
 
 export const ButtonMargin = styled.div`
     margin-left: auto;
-    margin-bottom: 12px;
+    margin-bottom: 32px;
 `;
