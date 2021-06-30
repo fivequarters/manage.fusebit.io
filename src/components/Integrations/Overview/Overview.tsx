@@ -60,16 +60,21 @@ const Overview: React.FC = () => {
     const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
     const handleRowDelete = async () => {
-        createLoader();
-        let operationIds: string[] = [];
-        for (let i = 0; i < selected.length; i++) {
-            const response = await deleteIntegration.mutateAsync({ id: selected[i], accountId: userData.accountId, subscriptionId: userData.subscriptionId });    
-            operationIds.push(response.data.operationId);
+        try {
+            createLoader();
+            let operationIds: string[] = [];
+            for (let i = 0; i < selected.length; i++) {
+                const response = await deleteIntegration.mutateAsync({ id: selected[i], accountId: userData.accountId, subscriptionId: userData.subscriptionId });    
+                operationIds.push(response.data.operationId);
+            }
+            await waitForOperations(operationIds);
+            reloadIntegrations();
+            setSelected([]);
+        } catch (e) {
+            console.log(e);
+        } finally {
+            removeLoader();
         }
-        await waitForOperations(operationIds);
-        reloadIntegrations();
-        setSelected([]);
-        removeLoader();
     }
 
     const handleRowClick = (event: any, href: string) => {
@@ -79,11 +84,16 @@ const Overview: React.FC = () => {
     }
 
     const _createIntegration = async () => {
-        createLoader();
-        const response = await createIntegration.mutateAsync({ id: String(new Date().getTime()), accountId: userData.accountId, subscriptionId: userData.subscriptionId });
-        await waitForOperations([response.data.operationId]);
-        reloadIntegrations();
-        removeLoader();
+        try {
+            createLoader();
+            const response = await createIntegration.mutateAsync({ id: String(new Date().getTime()), accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+            await waitForOperations([response.data.operationId]);
+            reloadIntegrations();
+        } catch (e) {
+            console.log(e);
+        } finally {
+            removeLoader();
+        }
     }
 
     return (
