@@ -9,6 +9,7 @@ import cross from "../../../assets/cross.svg";
 import Connect from "./Connect";
 import { useLoader } from "../../../hooks/useLoader";
 import { useContext } from "../../../hooks/useContext";
+import { useAccountUserCreateToken } from "../../../hooks/api/v1/account/user/useCreateToken";
 import { useAccountIntegrationUpdateIntegration } from "../../../hooks/api/v2/account/integration/useUpdateOne";
 import { useAccountIntegrationsGetOne } from "../../../hooks/api/v2/account/integration/useGetOne";
 import { useAccountConnectorsGetAll} from "../../../hooks/api/v2/account/connector/useGetAll";
@@ -16,6 +17,8 @@ import { useAccountConnectorCreateConnector } from "../../../hooks/api/v2/accoun
 import { Operation } from "../../../interfaces/operation";
 import {Connector} from "../../../interfaces/connector";
 import { Integration, InnerConnector } from "../../../interfaces/integration";
+import Edit from "./Edit";
+import {FuseInitToken} from "../../../interfaces/fuseInitToken";
 
 const Develop: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -26,7 +29,10 @@ const Develop: React.FC = () => {
     const createConnector = useAccountConnectorCreateConnector<Operation>();
     const updateIntegration = useAccountIntegrationUpdateIntegration<Operation>();
     const { waitForOperations, createLoader, removeLoader } = useLoader();
+    const createToken = useAccountUserCreateToken<FuseInitToken>();
 
+    const [editOpen, setEditOpen] = React.useState(false);
+    const [editToken, setEditToken] = React.useState<string | FuseInitToken>();
     const [connectOpen, setConnectOpen] = React.useState(false);
     const [connectorListOpen, setConnectorListOpen] = React.useState(false);
 
@@ -100,6 +106,22 @@ const Develop: React.FC = () => {
             removeLoader();
         }
     }
+
+    const handleEditOpen = async () => {
+        if (!editToken) {
+            try {
+                createLoader();
+                const response = await createToken.mutateAsync({ accountId: userData.accountId, userId: userData.userId });
+                setEditToken(response.data);
+                setEditOpen(true);
+                removeLoader();
+            } catch(e) {
+                console.log(e);
+            }
+        } else {
+            setEditOpen(true);
+        }
+    }
     
     return (
         <SC.Background>
@@ -141,6 +163,18 @@ const Develop: React.FC = () => {
                     </SC.ConnectorList>
                 </Fade>
             </Modal>
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                open={editOpen}
+                onClose={() => setEditOpen(false)}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+            >
+                <Fade in={editOpen}>
+                    <Edit open={editOpen} onClose={() => setEditOpen(false)} integration={integrationData?.data.id || ""} token={editToken || ""} />
+                </Fade>
+            </Modal>
             <SC.Flex>
                 <SC.CardSeparator />
                 <SC.FlexDown>
@@ -167,7 +201,7 @@ const Develop: React.FC = () => {
                             {integrationData?.data.id}
                         </SC.CardIntegration>
                         <SC.CardButtonWrapper>
-                            <Button style={{width: "200px"}} size="large" variant="contained" color="primary" >Connect</Button>
+                            <Button onClick={handleEditOpen} style={{width: "200px"}} size="large" variant="contained" color="primary" >Edit</Button>
                         </SC.CardButtonWrapper>
                     </SC.Card>
                     <SC.Link href="/test3">
