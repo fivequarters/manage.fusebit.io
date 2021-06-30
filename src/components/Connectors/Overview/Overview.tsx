@@ -136,7 +136,6 @@ const Overview: React.FC = () => {
                                 Name
                             </SC.Flex>
                         </TableCell>
-                        <TableCell align="left">ID</TableCell>
                         <TableCell align="left">Type</TableCell>
                         <TableCell align="left">Identities</TableCell>
                         <TableCell align="left">Created</TableCell>
@@ -156,12 +155,9 @@ const Overview: React.FC = () => {
                             </TableCell>
                             <TableCell component="th" scope="row">
                                 <SC.CellName>
-                                    Slack 1
-                                    {// TODO: Replace placeholder with real data
-                                    } 
+                                    {row.id}
                                 </SC.CellName>
                             </TableCell>
-                            <TableCell align="left">{row.id}</TableCell>
                             <TableCell align="left">    
                                 Slack
                                 {// TODO: Replace placeholder with real data

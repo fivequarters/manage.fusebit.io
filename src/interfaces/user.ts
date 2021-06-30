@@ -7,4 +7,5 @@ export interface User {
     subscriptionId?: string; 
     userId?: string;
     token?: string;
+    company?: string;
 }

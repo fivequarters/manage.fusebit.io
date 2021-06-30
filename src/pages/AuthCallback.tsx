@@ -4,7 +4,9 @@ import { useHistory, useLocation } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { useContext } from "../hooks/useContext";
 import { useAccountUserGetOne } from "../hooks/api/v1/account/user/useGetOne";
+import { useAccountGetOne } from "../hooks/api/v1/account/useGetOne";
 import { User } from "../interfaces/user";
+import { Account } from "../interfaces/account";
 
 const IntegrationsPage: FC<{}> = (): ReactElement => {
 
@@ -12,19 +14,21 @@ const IntegrationsPage: FC<{}> = (): ReactElement => {
   const history = useHistory();
   const { auth, userData } = useContext();
   const { data: user } = useAccountUserGetOne<User>({ enabled: userData.token, accountId: userData.accountId, userId: userData.userId });
+  const { data: account } = useAccountGetOne<Account>({ enabled: userData.token, accountId: userData.accountId });
 
   useEffect(() => {
-    if (user) {
+    if (user && account) {
       auth({ 
         ...userData, 
         id: user?.data.id, 
         firstName: user?.data.firstName, 
         lastName: user?.data.lastName, 
-        primaryEmail: user?.data.primaryEmail 
+        primaryEmail: user?.data.primaryEmail,
+        company: account.data.displayName
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [user, account]);
 
   useEffect(() => {
     if (userData.id) history.push('/');
