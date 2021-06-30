@@ -1,3 +1,14 @@
+export interface IntegrationData {
+    configuration: {
+        connectors: InnerConnector,
+        creation: {
+         tags: object,
+         autoStep: boolean
+        }
+    },
+    files: object
+}
+
 export interface InnerConnector {
     [key: string]: {
         package: string;
@@ -7,14 +18,5 @@ export interface InnerConnector {
 
 export interface Integration {
     id: string;
-    data: {
-        configuration: {
-            connectors: InnerConnector,
-            creation: {
-             tags: object,
-             autoStep: boolean
-            }
-        },
-        files: object
-    }
+    data: IntegrationData
 }

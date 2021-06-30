@@ -7,7 +7,7 @@ export const useAccountUserGetOne = <T>(params: Params) => {
     
     return useQuery(
         "accountUserGetOne", 
-        () => axios<T>(`/v1/account/${params.accountId}/user/${params.userId}`, 'get', params), 
+        () => axios<T>(`/v1/account/${params.accountId}/user/${params.userId}`, 'get'), 
         { enabled: !!params.enabled }
     );
 }

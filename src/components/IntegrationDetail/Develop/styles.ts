@@ -187,3 +187,24 @@ export const Link = styled.a`
         }
     }
 `;
+
+export const ConnectorList = styled.div`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    padding: 0 32px 12px;
+    border-radius: 8px;
+    box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
+    width: fit-content;
+    transition: all 1s linear;
+    > div {
+        max-height: 350px;
+        overflow: auto;
+    }
+`;

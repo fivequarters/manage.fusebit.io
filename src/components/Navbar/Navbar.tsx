@@ -34,7 +34,7 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector}
             <Container maxWidth="lg" >
                 <SC.Nav>
                     <SC.CompanyImg />
-                    <SC.CompanyName>ACME CORP</SC.CompanyName>
+                    <SC.CompanyName>{userData.company}</SC.CompanyName>
                     <SC.Arrow />
                     {
                         dropdown ? (
@@ -106,7 +106,7 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector}
                         onClose={() => setAnchorUserDropdown(null)}
                         >
                             <SC.UserDropdown>
-                                <SC.UserDropdownCompany>ACME CORP</SC.UserDropdownCompany>
+                                <SC.UserDropdownCompany>{userData.company}</SC.UserDropdownCompany>
                                 <SC.UserDropdownInfo>
                                     <SC.UserDropdownInfoImage src={client} alt="user" height="38" width="38" />
                                     <SC.UserDropdownPersonalInfo>
