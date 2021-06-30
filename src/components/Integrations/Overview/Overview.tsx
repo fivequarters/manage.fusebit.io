@@ -22,11 +22,10 @@ const Overview: React.FC = () => {
 
     useEffect(() => {
         if (integrations) {
-            console.log(userData);
             const items = integrations.data.items;
             setRows(items);
         }
-    }, [integrations, userData]);
+    }, [integrations]);
 
     const handleSelectAllCheck = (event: any) => {
         if (event.target.checked) {
