@@ -36,8 +36,7 @@ export const  useLoader = () => {
         });
         return new Promise((globalAccept: Function) => {
             Promise.all(promises).then(_ => {
-                Object.keys(intervalIds).forEach((operationId: string) => clearInterval(intervalIds[operationId]));
-                
+                Object.keys(intervalIds).forEach((operationId: string) => clearInterval(intervalIds[operationId]));         
                 globalAccept({});
             });
         });
