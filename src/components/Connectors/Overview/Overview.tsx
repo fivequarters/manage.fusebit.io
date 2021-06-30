@@ -4,14 +4,21 @@ import { Table, TableBody, TableCell, TableHead, TableRow, Button, Checkbox, Ico
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useContext } from "../../../hooks/useContext";
-import { useAccountIntegrationsGetAll} from "../../../hooks/api/v2/account/integration/useGetAll";
+import { useLoader } from "../../../hooks/useLoader";
+import { useAccountConnectorsGetAll} from "../../../hooks/api/v2/account/connector/useGetAll";
+import { useAccountConnectorCreateConnector } from "../../../hooks/api/v2/account/connector/useCreateOne";
+import { useAccountConnectorDeleteConnector } from "../../../hooks/api/v2/account/connector/useDeleteOne";
+import { Operation } from "../../../interfaces/operation";
 import {Connector} from "../../../interfaces/connector";
 
 const Overview: React.FC = () => {
     const [selected, setSelected] = React.useState<string[]>([]);
     const [rows, setRows] = React.useState<Connector[]>([]);
     const { userData } = useContext();
-    const { data: connectors } = useAccountIntegrationsGetAll<{items: Connector[]}>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+    const { data: connectors, refetch: reloadConnectors } = useAccountConnectorsGetAll<{items: Connector[]}>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+    const createConnector = useAccountConnectorCreateConnector<Operation>();
+    const deleteConnector = useAccountConnectorDeleteConnector<Operation>();
+    const { waitForOperations, createLoader, removeLoader } = useLoader();
 
     React.useEffect(() => {
         if (connectors) {
@@ -52,25 +59,22 @@ const Overview: React.FC = () => {
 
     const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
-    const handleRowDelete = () => {
-        const newArray = rows.filter((row) => {
-            let found = false; 
-            selected.forEach((id) => {
-                if (id === row.id) {
-                    found = true;
-                }
-            });
-            return !found;
-        });
-        setRows(newArray);
-
-        const fakeEvent = {
-            target: {
-                checked: false,
+    const handleRowDelete = async () => {
+        try {
+            createLoader();
+            let operationIds: string[] = [];
+            for (let i = 0; i < selected.length; i++) {
+                const response = await deleteConnector.mutateAsync({ id: selected[i], accountId: userData.accountId, subscriptionId: userData.subscriptionId });    
+                operationIds.push(response.data.operationId);
             }
+            await waitForOperations(operationIds);
+            reloadConnectors();
+            setSelected([]);
+        } catch (e) {
+            console.log(e);
+        } finally {
+            removeLoader();
         }
-       
-       handleSelectAllCheck(fakeEvent);
     }
 
     const handleRowClick = (event: any, href: string) => {
@@ -79,11 +83,24 @@ const Overview: React.FC = () => {
         }
     }
 
+    const _createConnector = async () => {
+        try {
+            createLoader();
+            const response = await createConnector.mutateAsync({ id: String(new Date().getTime()), accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+            await waitForOperations([response.data.operationId]);
+            reloadConnectors();
+        } catch (e) {
+            console.log(e);
+        } finally {
+            removeLoader();
+        }
+    }
+
     return (
         <>
             <SC.ButtonContainer>
                 <SC.ButtonMargin>
-                    <Button startIcon={<AddIcon />} variant="outlined" color="primary" size="large">New Connector</Button>
+                    <Button onClick={_createConnector} startIcon={<AddIcon />} variant="outlined" color="primary" size="large">New Connector</Button>
                 </SC.ButtonMargin>
             </SC.ButtonContainer>
             <SC.DeleteWrapper active={selected.length > 0}>
@@ -127,7 +144,7 @@ const Overview: React.FC = () => {
                 </TableHead>
                 <TableBody>
                     {rows.map((row) => (
-                        <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/connector-detail")}>
+                        <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/connector/" + row.id)}>
                             <TableCell style={{cursor: "default"}} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
                                 <Checkbox
                                 color="primary"

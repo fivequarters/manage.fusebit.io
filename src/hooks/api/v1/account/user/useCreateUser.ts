@@ -1,12 +1,16 @@
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { Params } from '../../../../../interfaces/api';
 import { useAxios } from '../../../../useAxios';
 
-export const useAccountCreateUser = <T>(params: Params) => {
+export const useAccountIntegrationCreateIntegration = <T>() => {
     const { axios } = useAxios();
     
-    return useMutation(
-        ["useAccountCreateUser", params], 
-        () => axios<T>(`/v1/account/${params.accountId}/user`, 'post', params)
-    );
+    return useMutation((params: Params) => {
+        const { accountId, ...data } = params;
+        return axios<T>(`/v1/account/${accountId}/user`, 'post', data);
+    }, {
+        onMutate: (_: Params) => () => {},
+        onError: (_, __, rollback) => rollback?.(),
+        onSettled: () => {},
+    });
 }

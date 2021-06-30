@@ -1,15 +1,24 @@
 import React from "react";
+import { useParams } from "react-router-dom";
 import * as SC from "./styles";
+import { useAccountConnectorsGetOne } from "../../../hooks/api/v2/account/connector/useGetOne";
+import { useContext } from "../../../hooks/useContext";
+import { Connector } from "../../../interfaces/connector";
+
 import { TextField, Button } from "@material-ui/core";
 import arrow from "../../../assets/arrow-primary.svg";
 
 const Configure: React.FC = () => {
+    const { id } = useParams<{ id: string }>();
+    const { userData } = useContext();
+    const { data: connectorData } = useAccountConnectorsGetOne<Connector>({ enabled: userData.token, id, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+
     return (
            <SC.Flex>
                 <SC.FlexDown>
                     <SC.InfoWrapper>
                         <SC.InfoTitle>ID:</SC.InfoTitle>
-                        <SC.InfoDescription>con - 1234567</SC.InfoDescription>
+                        <SC.InfoDescription>{connectorData?.data.id}</SC.InfoDescription>
                     </SC.InfoWrapper>
                     <SC.InfoWrapper>
                         <SC.InfoTitle>Slack app:</SC.InfoTitle>

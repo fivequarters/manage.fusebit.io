@@ -6,7 +6,7 @@ export const useAccountIntegrationsGetAll = <T>(params: Params) => {
     const { axios } = useAxios();
     
     return useQuery(
-        ["accountIntegrationsGetAll", params], 
+        "accountIntegrationsGetAll", 
         () => axios<T>(`/v2/account/${params.accountId}/subscription/${params.subscriptionId}/integration`, 'get', params), 
         { enabled: !!params.enabled }
     );

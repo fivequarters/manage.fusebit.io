@@ -19,12 +19,12 @@ export const routes: Array<RouteItem> = [
     },
     {
         key: "router-integration-detail",
-        path: "/integration-detail",
+        path: "/integration/:id",
         component: IntegrationDetailPage,
     },
     {
         key: "router-connector-detail",
-        path: "/connector-detail",
+        path: "/connector/:id",
         component: ConnectorDetailPage,
     },
     {
