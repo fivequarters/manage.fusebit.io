@@ -2,13 +2,13 @@ import styled from "styled-components";
 import arrow from "../../../assets/table-arrow.svg";
 
 export const DeleteWrapper = styled.div<{active: boolean}>`
+    display: ${props => props.active ? "flex" : "none"};
     align-items: center;
     opacity: ${props => props.active ? 1 : 0};
-    display: ${props => props.active ? "flex" : "none"};
     font-size: 18px;
     line-height: 22px;
     font-weight: 400;
-    padding: 4px 18px;
+    padding: 0 18px;
     min-height: 57px;
     width: 100%;
     color: ${props => props.active ? "var(--primary-color)" : "var(--black)"};
@@ -60,5 +60,5 @@ export const ButtonContainer = styled.div`
 
 export const ButtonMargin = styled.div`
     margin-left: auto;
-    margin-bottom: 32px;
+    margin-bottom: 36px;
 `;

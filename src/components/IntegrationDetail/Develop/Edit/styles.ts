@@ -66,7 +66,7 @@ export const LineInstructionWrapper = styled.div`
 
         & > div {
             opacity: 1;
-        }
+        } 
     }
 `;
 
@@ -109,14 +109,15 @@ export const LineInstruction = styled.div`
     }
 `;
 
-export const LineInstructionFade = styled.div`
+export const LineInstructionFade = styled.div<{change: boolean}>`
     position: absolute;
     right: 0;
     top: 0;
     height: 50px;
-    width: 200px;
-    background-image: linear-gradient(to left, #FFFFFF 12%, rgba(255, 255, 255, 0) 100%);
+    width: ${props => props.change ? "300px": "100px"};
+    background-image: linear-gradient(to left, #EFF5FF 20%, rgba(255, 255, 255, 0) 100%);
     z-index: 1;
+    transition: all .25s linear;
 `;
 
 export const LineInstructionCopy = styled.div`

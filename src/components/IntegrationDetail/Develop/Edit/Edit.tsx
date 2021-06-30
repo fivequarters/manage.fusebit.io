@@ -7,6 +7,7 @@ import {Props} from "../../../../interfaces/edit";
 
 const Edit: React.FC<Props> = ({open, onClose, integration, token}) => {
     const [copy, setCopy] = React.useState(false);
+    const [fadeChange, setFadeChange] = React.useState(false);
     let timeout: NodeJS.Timeout;
 
     const handleCopy = (text: string) => {
@@ -37,9 +38,9 @@ const Edit: React.FC<Props> = ({open, onClose, integration, token}) => {
             </SC.LineInstructionWrapper>
 
             <SC.LineTitle>2. Initialize the CLI by running</SC.LineTitle>
-            <SC.LineInstructionWrapper onClick={() => handleCopy(`fuse init ${token}`)}>
-            <SC.LineInstructionCopy>Copy</SC.LineInstructionCopy>
-                <SC.LineInstructionFade />
+            <SC.LineInstructionWrapper onMouseLeave={() => setFadeChange(false)} onMouseEnter={() => setFadeChange(true)} onClick={() => handleCopy(`fuse init ${token}`)}>
+                <SC.LineInstructionCopy>Copy</SC.LineInstructionCopy>
+                <SC.LineInstructionFade change={fadeChange} />
                 <SC.LineInstruction><span className="unselectable">$</span> fuse <strong>init</strong> {token}</SC.LineInstruction>
             </SC.LineInstructionWrapper>
 
