@@ -10,21 +10,14 @@ import arrow from "../../../assets/arrow-right-black.svg";
 import slack from "../../../assets/slack.svg";
 import cross from "../../../assets/cross.svg";
 import Connect from "./Connect";
+import Edit from "./Edit";
 
 const Develop: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const { userData } = useContext();
     const { data: integrationData } = useAccountIntegrationsGetOne<Integration>({ enabled: userData.token, id, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
-
     const [connectOpen, setConnectOpen] = React.useState(false);
-
-    const handleConnectOpen = () => {
-        setConnectOpen(true);
-    };
-
-    const handleConnectClose = () => {
-        setConnectOpen(false);
-    };
+    const [editOpen, setEditOpen] = React.useState(false);
 
     const handleConnectorDelete = (key: string) => {
         console.log(key);
@@ -42,12 +35,24 @@ const Develop: React.FC = () => {
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
                 open={connectOpen}
-                onClose={handleConnectClose}
+                onClose={() => setConnectOpen(false)}
                 closeAfterTransition
                 BackdropComponent={Backdrop}
             >
                 <Fade in={connectOpen}>
-                    <Connect open={connectOpen} onClose={handleConnectClose} />
+                    <Connect open={connectOpen} onClose={() => setConnectOpen(false)} />
+                </Fade>
+            </Modal>
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                open={editOpen}
+                onClose={() => setEditOpen(false)}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+            >
+                <Fade in={editOpen}>
+                    <Edit open={editOpen} onClose={() => setEditOpen(false)} integration={integrationData?.data.id || ""} />
                 </Fade>
             </Modal>
             <SC.Flex>
@@ -56,7 +61,7 @@ const Develop: React.FC = () => {
                     <SC.Card>
                         <SC.CardTitle>Your Application</SC.CardTitle>
                         <SC.CardButtonWrapper>
-                            <Button onClick={handleConnectOpen} startIcon={<AddIcon />} style={{width: "200px"}} size="large" variant="outlined" color="primary" >Connect</Button>
+                            <Button onClick={() => setConnectOpen(true)} startIcon={<AddIcon />} style={{width: "200px"}} size="large" variant="outlined" color="primary" >Connect</Button>
                         </SC.CardButtonWrapper>
                     </SC.Card>
                     <SC.Link href="/test">
@@ -76,7 +81,7 @@ const Develop: React.FC = () => {
                             {integrationData?.data.id}
                         </SC.CardIntegration>
                         <SC.CardButtonWrapper>
-                            <Button style={{width: "200px"}} size="large" variant="contained" color="primary" >Connect</Button>
+                            <Button onClick={() => setEditOpen(true)} style={{width: "200px"}} size="large" variant="contained" color="primary" >Connect</Button>
                         </SC.CardButtonWrapper>
                     </SC.Card>
                     <SC.Link href="/test3">
