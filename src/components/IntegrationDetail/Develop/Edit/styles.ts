@@ -76,6 +76,7 @@ export const LineInstruction = styled.div`
     height: 50px;
     padding: 16px;
     border: 0;
+    margin: 0; 
     outline: rgba(255,255,255,0);
     border-radius: 4px;
     background-color: var(--secondary-color);
@@ -87,6 +88,25 @@ export const LineInstruction = styled.div`
     line-height: 18px;
     color: var(--black);
     display: flex;
+    
+    & > span {
+        color: var(--primary-color);
+        font-weight: 400;
+        margin: 0 10px;
+    }
+
+    & > strong {
+        color: var(--primary-color);
+        font-weight: 400;
+        margin: 0 10px;
+    }
+
+    .unselectable {
+        -webkit-user-select: none; /* Safari */        
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* IE10+/Edge */
+        user-select: none; /* Standard */
+    }
 `;
 
 export const LineInstructionFade = styled.div`

@@ -31,28 +31,28 @@ const Edit: React.FC<Props> = ({open, onClose, integration}) => {
             <SC.Title>Edit {integration}</SC.Title>
 
             <SC.LineTitle>1. Install the Fusebit CLI</SC.LineTitle>
-            <SC.LineInstructionWrapper onClick={() => handleCopy("[npm install @fusebit/cli -g]")}>
+            <SC.LineInstructionWrapper onClick={() => handleCopy(`npm install @fusebit/cli -g`)}>
                 <SC.LineInstructionCopy>Copy</SC.LineInstructionCopy>
-                <SC.LineInstruction>[npm install @fusebit/cli -g]</SC.LineInstruction>
+                <SC.LineInstruction><span className="unselectable">$</span> npm <strong>install</strong> @fusebit/cli <span>-g</span></SC.LineInstruction>
             </SC.LineInstructionWrapper>
 
             <SC.LineTitle>2. Initialize the CLI by running</SC.LineTitle>
-            <SC.LineInstructionWrapper onClick={() => handleCopy("[fuse init eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm90b2NvbCI6InBraSIsImFnZW50SWQiOiJ1c3ItOWViNDUzMGNkMWViNGNlZiIsInByb2ZpbGUi")}>
+            <SC.LineInstructionWrapper onClick={() => handleCopy(`fuse init eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm90b2NvbCI6InBraSIsImFnZW50SWQiOiJ1c3ItOWViNDUzMGNkMWViNGNlZiIsInByb2ZpbGUi`)}>
             <SC.LineInstructionCopy>Copy</SC.LineInstructionCopy>
                 <SC.LineInstructionFade />
-                <SC.LineInstruction>[fuse init eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm90b2NvbCI6InBraSIsImFnZW50SWQiOiJ1c3ItOWViNDUzMGNkMWViNGNlZiIsInByb2ZpbGUi</SC.LineInstruction>
+                <SC.LineInstruction><span className="unselectable">$</span> fuse <strong>init</strong> eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm90b2NvbCI6InBraSIsImFnZW50SWQiOiJ1c3ItOWViNDUzMGNkMWViNGNlZiIsInByb2ZpbGUi</SC.LineInstruction>
             </SC.LineInstructionWrapper>
 
             <SC.LineTitle>3. Download the integration code</SC.LineTitle>
-            <SC.LineInstructionWrapper onClick={() => handleCopy("[fuse integration get slack-bot-1 -d]")}>
+            <SC.LineInstructionWrapper onClick={() => handleCopy(`fuse integration get ${integration} -d`)}>
                 <SC.LineInstructionCopy>Copy</SC.LineInstructionCopy>
-                <SC.LineInstruction>[fuse integration get {integration} -d]</SC.LineInstruction>
+                <SC.LineInstruction><span className="unselectable">$</span> fuse integration <strong>get</strong> {integration} <span>-d</span></SC.LineInstruction>
             </SC.LineInstructionWrapper>
 
             <SC.LineTitle>4. After making your code changes run</SC.LineTitle>
-            <SC.LineInstructionWrapper onClick={() => handleCopy("[fuse integration deploy slack-bot-1 -d]")}>
+            <SC.LineInstructionWrapper onClick={() => handleCopy(`fuse integration deploy ${integration} -d`)}>
                 <SC.LineInstructionCopy>Copy</SC.LineInstructionCopy>
-                <SC.LineInstruction>[fuse integration deploy {integration} -d]</SC.LineInstruction>
+                <SC.LineInstruction><span className="unselectable">$</span> fuse integration <strong>deploy</strong> {integration} <span>-d</span></SC.LineInstruction>
             </SC.LineInstructionWrapper>
 
             <SC.ButtonsWrapper>

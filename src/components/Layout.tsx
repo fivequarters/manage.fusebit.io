@@ -23,6 +23,7 @@ const Layout: FC<Props> = ({ children }) => {
 
   return (
     <div className={classes.root}>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atelier-cave-dark.min.css" />
       <CssBaseline />
       <GlobalStyle />
       <main>
