@@ -2,7 +2,6 @@ import React from "react";
 import * as SC from "./styles";
 import cross from "../../../../assets/cross.svg";
 import { Button } from "@material-ui/core";
-import CheckIcon from '@material-ui/icons/Check';
 import {Props} from "../../../../interfaces/edit";
 import copyIcon from "../../../../assets/copy.svg";
 
