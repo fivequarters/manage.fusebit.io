@@ -21,7 +21,7 @@ const Overview: React.FC = () => {
     const { waitForOperations, createLoader, removeLoader } = useLoader();
 
     useEffect(() => {
-        if (integrations) {
+        if (integrations && integrations.data.items) {
             const items = integrations.data.items;
             setRows(items);
         }

@@ -307,3 +307,16 @@ export const FloatingLogin = styled.a`
     padding: 5px 10px;
     text-decoration: none;
 `
+
+// TODO: Remove me
+export const FloatingInput = styled.input`
+    position: fixed;
+    bottom: 0;
+    left: 20px;
+    border: 1px solid #ccc;
+    border-bottom: 0;
+    background: white;
+    font-weight: bold;
+    padding: 5px 10px;
+    text-decoration: none;
+`

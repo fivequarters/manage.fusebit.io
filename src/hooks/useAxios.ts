@@ -8,8 +8,14 @@ interface ApiResponse<T> {
 }
 
 export const useAxios = () => {
-  const BASE_URL = `https://stage.us-west-2.fusebit.io`;
   const { userData } = useContext();
+
+  const getBaseUrl = () => localStorage.getItem('FUSEBIT_API_BASE_URL') || `https://stage.us-west-2.fusebit.io`;
+
+  const setBaseUrl = (value: string) => {
+    localStorage.setItem('FUSEBIT_API_BASE_URL', value);
+    window.location.reload();
+  }
 
   const _axios = async <T extends {}>(
     endpoint: string,
@@ -20,7 +26,7 @@ export const useAxios = () => {
     try {
       const config: AxiosRequestConfig = {
         method,
-        url: `${BASE_URL}${endpoint}`,
+        url: `${getBaseUrl()}${endpoint}`,
         data: params,
         headers
       };
@@ -33,6 +39,8 @@ export const useAxios = () => {
   }
 
   return {
-    axios: _axios
+    axios: _axios,
+    getBaseUrl,
+    setBaseUrl
   }
 }
