@@ -15,12 +15,15 @@ import { Integration } from "../../interfaces/integration";
 import { Connector } from "../../interfaces/connector";
 import { useState } from "react";
 import { useEffect } from "react";
+import { useAxios } from "../../hooks/useAxios";
 
 const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector}) => {
     const [anchorSectionDropdown, setAnchorSectionDropdown] = React.useState(null);
     const [anchorUserDropdown, setAnchorUserDropdown] = React.useState(null);
     const { userData, logout } = useContext();
     const [loginUrl, setLoginUrl] = useState("");
+    const { getBaseUrl, setBaseUrl } = useAxios();
+    const [url, setUrl] = useState(getBaseUrl());
 
     const { data: integrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
     const { data: connectors } = useAccountConnectorsGetAll<{ items: Connector[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
@@ -134,6 +137,7 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector}
                     </SC.ButtonWrapper>
                 </SC.Nav>
                 {!userData.id && <SC.FloatingLogin href={loginUrl}>Temp Login</SC.FloatingLogin>}
+                <SC.FloatingInput value={url} onChange={(e: any) => setUrl(e.target.value)} onKeyDown={(e: any) => { if (e.keyCode === 13) setBaseUrl(url) }} />
             </Container>
         </SC.Background>
     )
