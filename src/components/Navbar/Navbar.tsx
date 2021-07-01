@@ -29,7 +29,7 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector}
     const { data: connectors } = useAccountConnectorsGetAll<{ items: Connector[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
 
     useEffect(() => {
-        setLoginUrl(`https://fusebit.auth0.com/authorize?response_type=token&client_id=hSgWIXmbluQMADuWhDnRTpWyKptJe6LB&audience=https://stage.us-west-2.fusebit.io&redirect_uri=${window.location.origin}/callback&scope=openid profile email`);
+        setLoginUrl(`https://fusebit.auth0.com/authorize?response_type=token&client_id=hSgWIXmbluQMADuWhDnRTpWyKptJe6LB&audience=${url}&redirect_uri=${window.location.origin}/callback&scope=openid profile email`);
     }, [])
 
     return (
