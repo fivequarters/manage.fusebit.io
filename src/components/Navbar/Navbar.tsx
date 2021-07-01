@@ -30,7 +30,7 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector}
 
     useEffect(() => {
         setLoginUrl(`https://fusebit.auth0.com/authorize?response_type=token&client_id=hSgWIXmbluQMADuWhDnRTpWyKptJe6LB&audience=${url}&redirect_uri=${window.location.origin}/callback&scope=openid profile email`);
-    }, [])
+    }, [url])
 
     return (
         <SC.Background>
