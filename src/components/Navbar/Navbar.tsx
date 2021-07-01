@@ -97,7 +97,7 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector}
                         <SC.Link href="/docs">Docs</SC.Link>
                     </SC.LinksContainer>
                     <SC.ButtonWrapper active={Boolean(anchorUserDropdown)}>
-                        <Button style={{backgroundColor: Boolean(anchorUserDropdown) ? "#D7E5FF66" : ""}} aria-controls="simple-menu" aria-haspopup="true" onClick={(event: any) => setAnchorUserDropdown(event.currentTarget)} size="large" startIcon={<SC.User src={client} />} endIcon={Boolean(anchorUserDropdown) ? <ExpandLessIcon /> : <ExpandMoreIcon />} variant="text" color="inherit">
+                        <Button style={{backgroundColor: Boolean(anchorUserDropdown) ? "#D7E5FF66" : ""}} aria-controls="simple-menu" aria-haspopup="true" onClick={(event: any) => setAnchorUserDropdown(event.currentTarget)} size="large" startIcon={<SC.User src={userData.picture || client} />} endIcon={Boolean(anchorUserDropdown) ? <ExpandLessIcon /> : <ExpandMoreIcon />} variant="text" color="inherit">
                             Stage
                         </Button>
                         <Menu
@@ -111,7 +111,7 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector}
                             <SC.UserDropdown>
                                 <SC.UserDropdownCompany>{userData.company}</SC.UserDropdownCompany>
                                 <SC.UserDropdownInfo>
-                                    <SC.UserDropdownInfoImage src={client} alt="user" height="38" width="38" />
+                                    <SC.UserDropdownInfoImage src={userData.picture || client} alt="user" height="38" width="38" />
                                     <SC.UserDropdownPersonalInfo>
                                         <SC.UserDropdownInfoName>{userData.firstName} {userData.lastName}</SC.UserDropdownInfoName>
                                         <SC.UserDropdownInfoEmail>{userData.primaryEmail}</SC.UserDropdownInfoEmail>

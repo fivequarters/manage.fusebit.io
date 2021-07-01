@@ -7,6 +7,7 @@ import { useAccountUserGetOne } from "../hooks/api/v1/account/user/useGetOne";
 import { useAccountGetOne } from "../hooks/api/v1/account/useGetOne";
 import { User } from "../interfaces/user";
 import { Account } from "../interfaces/account";
+import axios from "axios";
 
 const IntegrationsPage: FC<{}> = (): ReactElement => {
 
@@ -16,15 +17,27 @@ const IntegrationsPage: FC<{}> = (): ReactElement => {
   const { data: user } = useAccountUserGetOne<User>({ enabled: userData.token, accountId: userData.accountId, userId: userData.userId });
   const { data: account } = useAccountGetOne<Account>({ enabled: userData.token, accountId: userData.accountId });
 
+  const getPicture = async () => {
+    let picture = '';
+    try {
+      const response = await axios.get('https://fusebit.auth0.com/userinfo', { headers: { Authorization: `Bearer ${userData.token}` } });
+      return response.data.picture;
+    } catch (e) {}
+    return picture;
+  }
+
   useEffect(() => {
     if (user && account) {
-      auth({ 
-        ...userData, 
-        id: user?.data.id, 
-        firstName: user?.data.firstName, 
-        lastName: user?.data.lastName, 
-        primaryEmail: user?.data.primaryEmail,
-        company: account.data.displayName
+      getPicture().then(picture => {
+        auth({ 
+          ...userData, 
+          id: user?.data.id, 
+          firstName: user?.data.firstName, 
+          lastName: user?.data.lastName, 
+          primaryEmail: user?.data.primaryEmail,
+          company: account.data.displayName,
+          picture
+        });
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
