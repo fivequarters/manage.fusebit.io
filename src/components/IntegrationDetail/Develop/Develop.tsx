@@ -39,7 +39,7 @@ const Develop: React.FC = () => {
     const handleConnectorDelete = async (connectorId: string) => {
         try {
             createLoader();
-            const data = { ...integrationData?.data } as Integration;
+            const data = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
             delete data.data.configuration.connectors[connectorId];
              const response2 = await updateIntegration.mutateAsync({ 
                 accountId: userData.accountId, 
@@ -60,7 +60,7 @@ const Develop: React.FC = () => {
     const addConnector = async (connectorId: string) => {
         try {
             createLoader();
-            const data = { ...integrationData?.data } as Integration;
+            const data = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
             data.data.configuration.connectors[connectorId] = {
                 connector: connectorId,
                 package: "@fusebit-int/pkg-oauth-integration"
@@ -87,7 +87,7 @@ const Develop: React.FC = () => {
             const connectorId = String(new Date().getTime());
             const response = await createConnector.mutateAsync({ id: connectorId, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
             await waitForOperations([response.data.operationId]);
-            const data = { ...integrationData?.data } as Integration;
+            const data = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
             data.data.configuration.connectors[connectorId] = {
                 connector: connectorId,
                 package: "@fusebit-int/pkg-oauth-integration"
@@ -230,11 +230,11 @@ const Develop: React.FC = () => {
                                     const connector = (integrationData?.data.data.configuration.connectors ?? {} as InnerConnector)[key];
                                     if (index < 5) {
                                         return (
-                                            <SC.CardConnector key={index} onClick={(e) => history.push(`/connector/${connector.connector}`)}>
+                                            <SC.CardConnector key={index}>
                                                 {// TODO: Replace placeholder with real data 
                                                 } 
-                                                <SC.CardConnectorImage src={slack} alt={key} height="20" width="20" />
-                                                <SC.CardConnectorText>{connector.connector}</SC.CardConnectorText>
+                                                <SC.CardConnectorImage  onClick={(e) => history.push(`/connector/${connector.connector}`)} src={slack} alt={key} height="20" width="20" />
+                                                <SC.CardConnectorText  onClick={(e) => history.push(`/connector/${connector.connector}`)}>{connector.connector}</SC.CardConnectorText>
                                                 <SC.CardConnectorCrossContainer id="closeWrapper" onClick={() => handleConnectorDelete(connector.connector)}>
                                                     <SC.CardConnectorCross id="close" src={cross} alt="close" height="8" width="8" />
                                                 </SC.CardConnectorCrossContainer>

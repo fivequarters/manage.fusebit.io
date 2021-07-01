@@ -5,7 +5,7 @@ import Navbar from "../components/Navbar";
 const ConnectorsPage: FC<{}> = (): ReactElement => {
   return (
     <>
-      <Navbar sectionName="Connectors" connector={true} />
+      <Navbar sectionName="Connectors" dropdown={true} connector={true} />
       <Connectors />
     </>
   );

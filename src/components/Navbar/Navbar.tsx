@@ -45,12 +45,13 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector,
                         dropdown ? (
                             <>
                                 <SC.Flex>
-                                    <SC.Flex>
+                                    {sectionName !== 'Integrations' && sectionName !== 'Connectors' && <SC.Flex>
                                         <SC.SectionLink href={integrationsLink ? "/integrations" : "/"}>{integrationsLink ? "Integrations" : "Connectors"}</SC.SectionLink>
                                         <SC.Arrow />
-                                    </SC.Flex>
+                                    </SC.Flex>}
                                     <SC.SectionDropdown active={Boolean(anchorSectionDropdown)} aria-controls="simple-menu" aria-haspopup="true" onClick={(event: any) => setAnchorSectionDropdown(event.currentTarget)}>
-                                        <SC.SectionName>{integration ? sectionName + " Integration" : connector ? sectionName + " Connector" : sectionName}</SC.SectionName>
+                                        {sectionName !== 'Integrations' && sectionName !== 'Connectors' && <SC.SectionName>{integration ? sectionName + " Integration" : connector ? sectionName + " Connector" : sectionName}</SC.SectionName>}
+                                        {(sectionName === 'Integrations' || sectionName === 'Connectors') && <SC.SectionName>{sectionName}</SC.SectionName>}
                                         <img src={arrow} alt="arrow" />
                                     </SC.SectionDropdown>
                                 </SC.Flex>

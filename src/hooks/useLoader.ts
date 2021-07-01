@@ -2,7 +2,7 @@ import { Operation } from '../interfaces/operation';
 import { useAxios } from './useAxios';
 import { useContext } from './useContext';
 
-const css = `position: fixed;top: 0;left: 0;height: 100vh;width: 100%;background: rgba(255,255,255,.8);display: flex;align-items: center;justify-content: center;z-index: 99;`;
+const css = `position: fixed;top: 0;left: 0;height: 100vh;width: 100%;background: rgba(255,255,255,.8);display: flex;align-items: center;justify-content: center;z-index: 9999;`;
 
 export const  useLoader = () => {
     const { axios } = useAxios();
