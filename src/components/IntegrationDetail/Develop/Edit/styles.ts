@@ -15,6 +15,12 @@ export const Card = styled.div<{open: boolean}>`
     transition: all 1s linear;
 `;
 
+export const Flex = styled.div`
+    display: flex;
+    align-items: center;
+    width: 100%;
+`;
+
 export const CardClose = styled.div`
     height: 20px;
     width: 20px;
@@ -66,7 +72,7 @@ export const LineInstructionWrapper = styled.div`
 
         & > div {
             opacity: 1;
-        }
+        } 
     }
 `;
 
@@ -80,8 +86,7 @@ export const LineInstruction = styled.div`
     outline: rgba(255,255,255,0);
     border-radius: 4px;
     background-color: var(--secondary-color);
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow: hidden;
     white-space: nowrap;
     font-family: "Courier";
     font-size: 16px;
@@ -109,14 +114,15 @@ export const LineInstruction = styled.div`
     }
 `;
 
-export const LineInstructionFade = styled.div`
+export const LineInstructionFade = styled.div<{change: boolean}>`
     position: absolute;
     right: 0;
     top: 0;
     height: 50px;
-    width: 200px;
-    background-image: linear-gradient(to left, #FFFFFF 12%, rgba(255, 255, 255, 0) 100%);
+    width: ${props => props.change ? "300px": "60px"};
+    background-image: linear-gradient(to left, #EFF5FF 10%, rgba(255, 255, 255, 0) 100%);
     z-index: 1;
+    transition: all .25s linear;
 `;
 
 export const LineInstructionCopy = styled.div`
@@ -146,13 +152,13 @@ export const ButtonsWrapper = styled.div`
     margin-top: 16px;
 `;
 
-export const ContainerButtonWrapper = styled.div<{active: boolean}>`
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    opacity: ${props => props.active ? 1 : 0};
-    visibility: ${props => props.active ? "visible" : "hidden"};
+export const CopySuccess = styled.p<{copy: boolean}>`
+    font-size: 14px;
+    line-height: 16px;
+    color: var(--primary-color);
+    opacity: ${props => props.copy ? 1 : 0};
+    visibility: ${props => props.copy ? "visible" : "hidden"};
+    margin-left: auto;
     transition: all .5s linear;
 `;
 

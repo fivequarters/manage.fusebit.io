@@ -3,4 +3,5 @@ export interface Props {
     dropdown?: boolean;
     integration?: boolean;
     connector?: boolean;
+    integrationsLink?: boolean;
 }

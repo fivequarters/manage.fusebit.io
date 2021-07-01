@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import navbarBg from "../../assets/navbar.svg";
 import user from "../../assets/company-logo.svg";
-import arrow from "../../assets/right-arrow-nav.svg";
+import arrow from "../../assets/right-arrow-white.svg";
 
 export const Background = styled.div`
     width: 100vw;
@@ -19,6 +19,11 @@ export const Nav = styled.div`
     width: 100%;
 `;
 
+export const FlexDown = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
 export const CompanyImg = styled.div`
     height: 56px;
     width: 56px;
@@ -27,18 +32,20 @@ export const CompanyImg = styled.div`
     margin-right: 24px;
 `;
 
-export const CompanyName = styled.h3`
-    font-size: 20px;
-    line-height: 22px;
+export const CompanyName = styled.h4`
+    font-size: 16px;
+    line-height: 18px;
     font-weight: 600;
     color: var(--primary-color);
-    margin-right: 8px;
+    text-transform: uppercase;
+    margin: 0 10px 0 0;
 `;
 
 export const Arrow = styled.div`
-    height: 10.5px;
-    width: 8px;
+    height: 14px;
+    width: 14px;
     margin-right: 16px;
+    margin-bottom: -10px;
     background-size: contain;
     background-image: url(${arrow});
     background-repeat: no-repeat;
@@ -53,6 +60,7 @@ export const SectionDropdown = styled.div<{active: boolean}>`
     }
 
     & > img {
+        margin-bottom: -10px;
         transform: ${props => props.active && "rotate(180deg)"};
         transition: all .25s linear;
     }
@@ -77,6 +85,8 @@ export const SectionDropdownSeeMore = styled.a`
     line-height: 14px;
     font-weight: 300;
     text-decoration: none;
+    margin-bottom: -4px;
+    margin-left: auto;
     color: var(--black);
 
     & > img {
@@ -235,7 +245,17 @@ export const UserButtonMargin = styled.div`
 export const Flex = styled.div`
     display: flex;
     align-items: center;
-    width: 100%;
+`;
+
+export const SectionLink = styled.a`
+    font-size: 20px;
+    line-height: 22px;
+    font-weight: 300;
+    width: max-content;
+    text-decoration: none;
+    margin-right: 10px;
+    margin: 8px 10px 0 0;
+    color: white;
 `;
 
 export const SectionName = styled.h3`
@@ -243,6 +263,7 @@ export const SectionName = styled.h3`
     line-height: 22px;
     font-weight: 600;
     margin-right: 10px;
+    margin: 8px 10px 0 0;
     color: white;
 `;
 
