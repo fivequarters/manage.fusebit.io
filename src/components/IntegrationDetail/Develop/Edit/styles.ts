@@ -80,8 +80,7 @@ export const LineInstruction = styled.div`
     outline: rgba(255,255,255,0);
     border-radius: 4px;
     background-color: var(--secondary-color);
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow: hidden;
     white-space: nowrap;
     font-family: "Courier";
     font-size: 16px;
@@ -114,8 +113,8 @@ export const LineInstructionFade = styled.div<{change: boolean}>`
     right: 0;
     top: 0;
     height: 50px;
-    width: ${props => props.change ? "300px": "100px"};
-    background-image: linear-gradient(to left, #EFF5FF 20%, rgba(255, 255, 255, 0) 100%);
+    width: ${props => props.change ? "300px": "60px"};
+    background-image: linear-gradient(to left, #EFF5FF 10%, rgba(255, 255, 255, 0) 100%);
     z-index: 1;
     transition: all .25s linear;
 `;
