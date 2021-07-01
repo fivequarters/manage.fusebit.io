@@ -21,7 +21,7 @@ const Overview: React.FC = () => {
     const { waitForOperations, createLoader, removeLoader } = useLoader();
 
     React.useEffect(() => {
-        if (connectors) {
+        if (connectors && connectors.data.items) {
             const items = connectors.data.items;
             setRows(items);
         }
