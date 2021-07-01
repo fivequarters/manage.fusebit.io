@@ -15,6 +15,12 @@ export const Card = styled.div<{open: boolean}>`
     transition: all 1s linear;
 `;
 
+export const Flex = styled.div`
+    display: flex;
+    align-items: center;
+    width: 100%;
+`;
+
 export const CardClose = styled.div`
     height: 20px;
     width: 20px;
@@ -146,13 +152,13 @@ export const ButtonsWrapper = styled.div`
     margin-top: 16px;
 `;
 
-export const ContainerButtonWrapper = styled.div<{active: boolean}>`
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    opacity: ${props => props.active ? 1 : 0};
-    visibility: ${props => props.active ? "visible" : "hidden"};
+export const CopySuccess = styled.p<{copy: boolean}>`
+    font-size: 14px;
+    line-height: 16px;
+    color: var(--primary-color);
+    opacity: ${props => props.copy ? 1 : 0};
+    visibility: ${props => props.copy ? "visible" : "hidden"};
+    margin-left: auto;
     transition: all .5s linear;
 `;
 
