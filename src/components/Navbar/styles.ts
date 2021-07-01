@@ -77,6 +77,7 @@ export const SectionDropdownSeeMore = styled.a`
     line-height: 14px;
     font-weight: 300;
     text-decoration: none;
+    margin-bottom: -4px;
     color: var(--black);
 
     & > img {
