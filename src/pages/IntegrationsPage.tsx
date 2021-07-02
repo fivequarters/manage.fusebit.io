@@ -5,7 +5,7 @@ import Navbar from "../components/Navbar";
 const IntegrationsPage: FC<{}> = (): ReactElement => {
   return (
     <>
-      <Navbar sectionName="Integrations" integration={true} />
+      <Navbar dropdown={true} sectionName="Integrations" integration={true} />
       <Integrations />
     </>
   );

@@ -8,4 +8,5 @@ export interface User {
     userId?: string;
     token?: string;
     company?: string;
+    picture?: string;
 }
