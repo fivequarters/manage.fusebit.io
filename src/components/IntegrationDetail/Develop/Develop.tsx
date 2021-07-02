@@ -232,7 +232,9 @@ const Develop: React.FC = () => {
                                     const connector = (integrationData?.data.data.configuration.connectors ?? {} as InnerConnector)[key];
                                     if (index < 5) {
                                         return (
-                                            <SC.CardConnector key={index} onClick={(e) => history.push(`/connector/${connector.connector}`)}>
+                                            <SC.CardConnector key={index} onClick={(e: any) => {
+                                                if (!e.target.id) history.push(`/connector/${connector.connector}`);
+                                                }}>
                                                 {// TODO: Replace placeholder with real data 
                                                 } 
                                                 <SC.CardConnectorImage src={slack} alt={key} height="20" width="20" />
