@@ -8,6 +8,7 @@ import slack from "../../../assets/slack.svg";
 import cross from "../../../assets/cross.svg";
 import Connect from "./Connect";
 import { useLoader } from "../../../hooks/useLoader";
+import { useError } from "../../../hooks/useError";
 import { useContext } from "../../../hooks/useContext";
 import { useAccountUserCreateToken } from "../../../hooks/api/v1/account/user/useCreateToken";
 import { useAccountIntegrationUpdateIntegration } from "../../../hooks/api/v2/account/integration/useUpdateOne";
@@ -29,6 +30,7 @@ const Develop: React.FC = () => {
     const createConnector = useAccountConnectorCreateConnector<Operation>();
     const updateIntegration = useAccountIntegrationUpdateIntegration<Operation>();
     const { waitForOperations, createLoader, removeLoader } = useLoader();
+    const {createError} = useError();
     const createToken = useAccountUserCreateToken<FuseInitToken>();
 
     const [editOpen, setEditOpen] = React.useState(false);
@@ -116,7 +118,7 @@ const Develop: React.FC = () => {
                 setEditOpen(true);
                 removeLoader();
             } catch(e) {
-                console.log(e);
+                createError(e.message);
             }
         } else {
             setEditOpen(true);

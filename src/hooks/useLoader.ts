@@ -45,6 +45,6 @@ export const  useLoader = () => {
     return {
         createLoader,
         waitForOperations,
-        removeLoader
+        removeLoader,
     };
 };
