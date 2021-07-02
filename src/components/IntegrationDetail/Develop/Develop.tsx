@@ -52,7 +52,7 @@ const Develop: React.FC = () => {
             reloadIntegration();
             reloadConnectors();
         } catch (e) {
-            console.log(e);
+            createError(e.message);
         } finally {
             removeLoader();
             setConnectorListOpen(false);
@@ -76,7 +76,7 @@ const Develop: React.FC = () => {
             reloadIntegration();
             reloadConnectors();
         } catch (e) {
-            console.log(e);
+            createError(e.message);
         } finally {
             removeLoader();
             setConnectorListOpen(false);
@@ -103,7 +103,7 @@ const Develop: React.FC = () => {
             reloadIntegration();
             reloadConnectors();
         } catch (e) {
-            console.log(e);
+            createError(e.message);
         } finally {
             removeLoader();
         }

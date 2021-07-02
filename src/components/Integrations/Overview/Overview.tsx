@@ -10,6 +10,7 @@ import { useAccountIntegrationCreateIntegration } from "../../../hooks/api/v2/ac
 import { useAccountIntegrationDeleteIntegration } from "../../../hooks/api/v2/account/integration/useDeleteOne";
 import { Integration } from "../../../interfaces/integration";
 import { Operation } from "../../../interfaces/operation";
+import { useError } from "../../../hooks/useError";
 
 const Overview: React.FC = () => {
     const [selected, setSelected] = React.useState<string[]>([]);
@@ -19,6 +20,7 @@ const Overview: React.FC = () => {
     const createIntegration = useAccountIntegrationCreateIntegration<Operation>();
     const deleteIntegration = useAccountIntegrationDeleteIntegration<Operation>();
     const { waitForOperations, createLoader, removeLoader } = useLoader();
+    const { createError } = useError();
 
     useEffect(() => {
         if (integrations && integrations.data.items) {
@@ -71,7 +73,7 @@ const Overview: React.FC = () => {
             reloadIntegrations();
             setSelected([]);
         } catch (e) {
-            console.log(e);
+            createError(e.message);
         } finally {
             removeLoader();
         }
@@ -90,7 +92,7 @@ const Overview: React.FC = () => {
             await waitForOperations([response.data.operationId]);
             reloadIntegrations();
         } catch (e) {
-            console.log(e);
+            createError(e.message);
         } finally {
             removeLoader();
         }
