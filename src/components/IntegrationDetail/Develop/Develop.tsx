@@ -113,7 +113,13 @@ const Develop: React.FC = () => {
         if (!editToken) {
             try {
                 createLoader();
-                const response = await createToken.mutateAsync({ accountId: userData.accountId, userId: userData.userId });
+                const data = {
+                    "protocol": "pki",
+                    "profile": {
+                        "subscription": userData.subscriptionId,
+                    }
+                }
+                const response = await createToken.mutateAsync({ accountId: userData.accountId, userId: userData.userId, data: data });                
                 setEditToken(response.data);
                 setEditOpen(true);
                 removeLoader();
