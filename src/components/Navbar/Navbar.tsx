@@ -72,7 +72,7 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector,
                                             </SC.SectionDropdownSeeMore>
                                         </SC.Flex>
                                         {
-                                            integrations?.data.items.map((integration, index) => (
+                                            integrations !== undefined && integrations?.data.items.map((integration, index) => (
                                                 <SC.SectionDropdownIntegration key={index} active={sectionName === integration.id} href={"/integration/" + integration.id}>
                                                     {integration.id}
                                                     <img src={check} alt="check" height="16" width="16" />
@@ -87,7 +87,7 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector,
                                             </SC.SectionDropdownSeeMore>
                                         </SC.Flex>
                                         {
-                                            connectors?.data.items.map((connector, index) => (
+                                            connectors !== undefined && connectors?.data.items.map((connector, index) => (
                                                 <SC.SectionDropdownIntegration key={index} active={sectionName === connector.id} href={"/connector/" + connector.id}>
                                                     {connector.id}
                                                     <img src={check} alt="check" height="16" width="16" />
