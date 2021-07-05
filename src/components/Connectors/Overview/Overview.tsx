@@ -10,6 +10,7 @@ import { useAccountConnectorCreateConnector } from "../../../hooks/api/v2/accoun
 import { useAccountConnectorDeleteConnector } from "../../../hooks/api/v2/account/connector/useDeleteOne";
 import { Operation } from "../../../interfaces/operation";
 import {Connector} from "../../../interfaces/connector";
+import { useError } from "../../../hooks/useError";
 
 const Overview: React.FC = () => {
     const [selected, setSelected] = React.useState<string[]>([]);
@@ -19,6 +20,8 @@ const Overview: React.FC = () => {
     const createConnector = useAccountConnectorCreateConnector<Operation>();
     const deleteConnector = useAccountConnectorDeleteConnector<Operation>();
     const { waitForOperations, createLoader, removeLoader } = useLoader();
+    const { createError } = useError();
+
 
     React.useEffect(() => {
         if (connectors && connectors.data.items) {
@@ -71,7 +74,7 @@ const Overview: React.FC = () => {
             reloadConnectors();
             setSelected([]);
         } catch (e) {
-            console.log(e);
+            createError(e.message);
         } finally {
             removeLoader();
         }
@@ -90,7 +93,7 @@ const Overview: React.FC = () => {
             await waitForOperations([response.data.operationId]);
             reloadConnectors();
         } catch (e) {
-            console.log(e);
+            createError(e.message);
         } finally {
             removeLoader();
         }

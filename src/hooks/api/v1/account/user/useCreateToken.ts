@@ -6,7 +6,7 @@ export const useAccountUserCreateToken = <T>() => {
     const { axios } = useAxios();
     
     return useMutation((params: Params) => {
-        const { accountId, userId, ...data } = params;
+        const { accountId, userId, data } = params;
         return axios<T>(`/v1/account/${accountId}/user/${userId}/init`, 'post', data);
     }, {
         onMutate: (_: Params) => () => {},

@@ -8,6 +8,7 @@ import slack from "../../../assets/slack.svg";
 import cross from "../../../assets/cross.svg";
 import Connect from "./Connect";
 import { useLoader } from "../../../hooks/useLoader";
+import { useError } from "../../../hooks/useError";
 import { useContext } from "../../../hooks/useContext";
 import { useAccountUserCreateToken } from "../../../hooks/api/v1/account/user/useCreateToken";
 import { useAccountIntegrationUpdateIntegration } from "../../../hooks/api/v2/account/integration/useUpdateOne";
@@ -29,6 +30,7 @@ const Develop: React.FC = () => {
     const createConnector = useAccountConnectorCreateConnector<Operation>();
     const updateIntegration = useAccountIntegrationUpdateIntegration<Operation>();
     const { waitForOperations, createLoader, removeLoader } = useLoader();
+    const {createError} = useError();
     const createToken = useAccountUserCreateToken<FuseInitToken>();
 
     const [editOpen, setEditOpen] = React.useState(false);
@@ -50,7 +52,7 @@ const Develop: React.FC = () => {
             reloadIntegration();
             reloadConnectors();
         } catch (e) {
-            console.log(e);
+            createError(e.message);
         } finally {
             removeLoader();
             setConnectorListOpen(false);
@@ -74,7 +76,7 @@ const Develop: React.FC = () => {
             reloadIntegration();
             reloadConnectors();
         } catch (e) {
-            console.log(e);
+            createError(e.message);
         } finally {
             removeLoader();
             setConnectorListOpen(false);
@@ -101,7 +103,7 @@ const Develop: React.FC = () => {
             reloadIntegration();
             reloadConnectors();
         } catch (e) {
-            console.log(e);
+            createError(e.message);
         } finally {
             removeLoader();
         }
@@ -111,12 +113,18 @@ const Develop: React.FC = () => {
         if (!editToken) {
             try {
                 createLoader();
-                const response = await createToken.mutateAsync({ accountId: userData.accountId, userId: userData.userId });
+                const data = {
+                    "protocol": "pki",
+                    "profile": {
+                        "subscription": userData.subscriptionId,
+                    }
+                }
+                const response = await createToken.mutateAsync({ accountId: userData.accountId, userId: userData.userId, data: data });                
                 setEditToken(response.data);
                 setEditOpen(true);
                 removeLoader();
             } catch(e) {
-                console.log(e);
+                createError(e.message);
             }
         } else {
             setEditOpen(true);
@@ -230,11 +238,13 @@ const Develop: React.FC = () => {
                                     const connector = (integrationData?.data.data.configuration.connectors ?? {} as InnerConnector)[key];
                                     if (index < 5) {
                                         return (
-                                            <SC.CardConnector key={index}>
+                                            <SC.CardConnector key={index} onClick={(e: any) => {
+                                                    if(!e.target.id) history.push(`/connector/${connector.connector}`)
+                                                }}>
                                                 {// TODO: Replace placeholder with real data 
                                                 } 
-                                                <SC.CardConnectorImage  onClick={(e) => history.push(`/connector/${connector.connector}`)} src={slack} alt={key} height="20" width="20" />
-                                                <SC.CardConnectorText  onClick={(e) => history.push(`/connector/${connector.connector}`)}>{connector.connector}</SC.CardConnectorText>
+                                                <SC.CardConnectorImage src={slack} alt={key} height="20" width="20" />
+                                                <SC.CardConnectorText>{connector.connector}</SC.CardConnectorText>
                                                 <SC.CardConnectorCrossContainer id="closeWrapper" onClick={() => handleConnectorDelete(connector.connector)}>
                                                     <SC.CardConnectorCross id="close" src={cross} alt="close" height="8" width="8" />
                                                 </SC.CardConnectorCrossContainer>
