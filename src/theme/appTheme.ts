@@ -21,7 +21,7 @@ export const lightTheme: Theme = createMuiTheme({
             variant: "outlined",
           }
         }
-      },
+    },
     typography: {
         button: {
           textTransform: "none",
