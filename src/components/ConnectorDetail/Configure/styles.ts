@@ -46,6 +46,7 @@ export const InfoLink = styled.a`
 export const FormWrapper = styled.form`
     display: flex;
     flex-direction: column;
+    width: 316px;
     margin-left: 150px;
     margin-top: 20px;
 `;
