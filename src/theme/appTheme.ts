@@ -14,6 +14,14 @@ export const lightTheme: Theme = createMuiTheme({
             default: "white"
         }
     },
+    overrides: {
+        MuiFormControl: {
+          root: {
+            marginBottom: "49px",
+            variant: "outlined",
+          }
+        }
+    },
     typography: {
         button: {
           textTransform: "none",
