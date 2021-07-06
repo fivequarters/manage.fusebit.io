@@ -27,6 +27,7 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector,
     const { getBaseUrl, setBaseUrl } = useAxios();
     const [url, setUrl] = useState(getBaseUrl());
     const [drawerOpen, setDrawerOpen] = useState(false);
+    const [drawerBottomOpen, setDrawerBottomOpen] = useState(false);
 
     const { data: integrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
     const { data: connectors } = useAccountConnectorsGetAll<{ items: Connector[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
@@ -48,7 +49,7 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector,
                         dropdown ? (
                             <>
                                 <SC.Flex>
-                                    {sectionName !== 'Integrations' && sectionName !== 'Connectors' && <SC.Flex>
+                                    {sectionName !== 'Integrations' && sectionName !== 'Connectors' && <SC.Flex mobileHidden={true}>
                                         <SC.SectionLink href={integrationsLink ? "/integrations" : "/"}>{integrationsLink ? "Integrations" : "Connectors"}</SC.SectionLink>
                                         <SC.Arrow />
                                     </SC.Flex>}
@@ -57,7 +58,13 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector,
                                         {(sectionName === 'Integrations' || sectionName === 'Connectors') && <SC.SectionName>{sectionName}</SC.SectionName>}
                                         <img src={arrow} alt="arrow" />
                                     </SC.SectionDropdown>
+                                    <SC.SectionDropdownMobile active={drawerBottomOpen} aria-controls="simple-menu" aria-haspopup="true" onClick={() => setDrawerBottomOpen(true)} >
+                                        {sectionName !== 'Integrations' && sectionName !== 'Connectors' && <SC.SectionName>{integration ? sectionName + " Integration" : connector ? sectionName + " Connector" : sectionName}</SC.SectionName>}
+                                        {(sectionName === 'Integrations' || sectionName === 'Connectors') && <SC.SectionName>{sectionName}</SC.SectionName>}
+                                        <img src={arrow} alt="arrow" />
+                                    </SC.SectionDropdownMobile>
                                 </SC.Flex>
+                                <SC.MenuWrapper>
                                 <Menu
                                 style={{top: "100px"}}
                                 id="simple-menu"
@@ -99,6 +106,41 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector,
                                         }
                                     </SC.SectionDropdownMenu>
                                 </Menu>
+                                <Drawer anchor={"bottom"} open={drawerBottomOpen} onClose={() => setDrawerBottomOpen(false)}>
+                                <SC.SectionDropdownMenu>
+                                        <SC.Flex>
+                                            <SC.SectionDropdownTitle>Integrations</SC.SectionDropdownTitle>
+                                            <SC.SectionDropdownSeeMore href="/integrations">
+                                                See all
+                                                <img src={rightArrow} alt="See all" height="8" width="8" />
+                                            </SC.SectionDropdownSeeMore>
+                                        </SC.Flex>
+                                        {
+                                            integrations?.data.items.map((integration, index) => (
+                                                <SC.SectionDropdownIntegration key={index} active={sectionName === integration.id} href={"/integration/" + integration.id}>
+                                                    {integration.id}
+                                                    <img src={check} alt="check" height="16" width="16" />
+                                                </SC.SectionDropdownIntegration>
+                                            ))
+                                        }
+                                        <SC.Flex>
+                                            <SC.SectionDropdownTitle>Connectors</SC.SectionDropdownTitle>
+                                            <SC.SectionDropdownSeeMore href="/">
+                                                See all
+                                                <img src={rightArrow} alt="See all" height="8" width="8" />
+                                            </SC.SectionDropdownSeeMore>
+                                        </SC.Flex>
+                                        {
+                                            connectors?.data.items.map((connector, index) => (
+                                                <SC.SectionDropdownIntegration key={index} active={sectionName === connector.id} href={"/connector/" + connector.id}>
+                                                    {connector.id}
+                                                    <img src={check} alt="check" height="16" width="16" />
+                                                </SC.SectionDropdownIntegration>
+                                            ))
+                                        }
+                                    </SC.SectionDropdownMenu>
+                                </Drawer>
+                                </SC.MenuWrapper>
                           </>
                         ) : (
                             <SC.SectionLink href={integration ? "/integration" : "/"}>{sectionName}</SC.SectionLink>

@@ -86,11 +86,39 @@ export const SectionDropdown = styled.div<{active: boolean}>`
         transform: ${props => props.active && "rotate(180deg)"};
         transition: all .25s linear;
     }
+
+    @media only screen and (max-width: 880px) {
+        display: none;
+    }
+`;
+
+export const SectionDropdownMobile = styled.div<{active: boolean}>`
+    display: none;
+    align-items: center;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    & > img {
+        margin-bottom: -10px;
+        transform: ${props => props.active && "rotate(180deg)"};
+        transition: all .25s linear;
+    }
+
+    @media only screen and (max-width: 880px) {
+        display: flex;
+    }
 `;
 
 export const SectionDropdownMenu = styled.div`
     padding: 0px 32px 12px;
     width: 317px;
+
+    @media only screen and (max-width: 880px) {
+        width: 100%;
+        padding: 24px;
+    }
 `;
 
 export const SectionDropdownTitle = styled.h4`
@@ -148,7 +176,6 @@ export const SectionDropdownIntegration = styled.a<{active: boolean}>`
 
 export const UserDropdown = styled.div`
     padding: 0px 32px 24px;
-    width: 302px;
 `;
 
 export const UserDropdownCompany = styled.h5`
@@ -279,9 +306,13 @@ export const UserButtonMargin = styled.div`
 `;
 
 
-export const Flex = styled.div`
+export const Flex = styled.div<{mobileHidden?: boolean}>`
     display: flex;
     align-items: center;
+
+    @media only screen and (max-width: 880px) {
+        display: ${props => props.mobileHidden && "none"};
+    }
 `;
 
 export const SectionLink = styled.a`
@@ -293,12 +324,6 @@ export const SectionLink = styled.a`
     margin-right: 10px;
     margin: 8px 10px 0 0;
     color: white;
-
-    @media only screen and (max-width: 880px) {
-        font-size: 16px;
-        line-height: 18px;
-        font-weight: 600;
-    }
 `;
 
 export const SectionName = styled.h3`
@@ -404,4 +429,10 @@ export const FloatingInput = styled.input`
     font-weight: bold;
     padding: 5px 10px;
     text-decoration: none;
+`;
+
+export const MenuWrapper = styled.div`
+    @media only screen and (max-width: 880px) {
+        display: none;
+    }
 `;
