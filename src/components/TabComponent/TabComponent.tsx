@@ -44,7 +44,7 @@ const TabComponent: React.FC<Props> = ({tabNames, tabObjects}) => {
     return (
         <Container maxWidth="lg">
             <SC.Content>
-                <Tabs indicatorColor="primary" value={value} onChange={handleChange} aria-label="Tab Selector">
+                <Tabs indicatorColor="primary" value={value} onChange={handleChange} aria-label="Tab Selector" scrollButtons="auto">
                     {
                         tabNames.map((name, index) => (
                             <Tab key={index} label={<SC.TabLabel active={value === index}>{name}</SC.TabLabel>} {...a11yProps(index)}/>

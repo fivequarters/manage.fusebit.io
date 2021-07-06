@@ -1,6 +1,6 @@
 import React from "react";
 import * as SC from "./styles";
-import { Container, Button, Menu } from "@material-ui/core";
+import { Container, Button, Menu, Drawer } from "@material-ui/core";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import client from "../../assets/client.jpg";
@@ -16,6 +16,8 @@ import { Connector } from "../../interfaces/connector";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useAxios } from "../../hooks/useAxios";
+import burguer from "../../assets/burguer.svg";
+import cross from "../../assets/cross.svg"
 
 const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector, integrationsLink}) => {
     const [anchorSectionDropdown, setAnchorSectionDropdown] = React.useState(null);
@@ -24,6 +26,7 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector,
     const [loginUrl, setLoginUrl] = useState("");
     const { getBaseUrl, setBaseUrl } = useAxios();
     const [url, setUrl] = useState(getBaseUrl());
+    const [drawerOpen, setDrawerOpen] = useState(false);
 
     const { data: integrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
     const { data: connectors } = useAccountConnectorsGetAll<{ items: Connector[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
@@ -145,6 +148,47 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector,
                             </SC.UserDropdown>
                         </Menu>
                     </SC.ButtonWrapper>
+                    <SC.Menu onClick={() => setDrawerOpen(true)} src={burguer} alt="menu-opener" height="10" width="20" />
+                    <Drawer anchor={"right"} open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+                        <SC.DrawerWrapper>
+                            <SC.Flex>
+                                <SC.CompanyName>{userData.company}</SC.CompanyName>
+                                <SC.Cross onClick={() => setDrawerOpen(false)} src={cross} alt="close" height="10" width="10" />
+                            </SC.Flex>
+
+                            <SC.UserDropdownInfo>
+                                <SC.UserDropdownInfoImage src={userData.picture || client} alt="user" height="38" width="38" />
+                                <SC.UserDropdownPersonalInfo>
+                                    <SC.UserDropdownInfoName>{userData.firstName} {userData.lastName}</SC.UserDropdownInfoName>
+                                    <SC.UserDropdownInfoEmail>{userData.primaryEmail}</SC.UserDropdownInfoEmail>
+                                </SC.UserDropdownPersonalInfo>
+                            </SC.UserDropdownInfo>
+
+                            <SC.UserDropdownStatus href="/">
+                                <div>
+                                    <SC.UserDropdownStatusTitle>Stage</SC.UserDropdownStatusTitle>
+                                    <SC.UserDropdownStatusId>{userData.subscriptionId}</SC.UserDropdownStatusId>
+                                </div>
+                                <SC.UserDropdownStatusArrow src={rightArrow} alt="right arrow" height="12" width="12" />
+                            </SC.UserDropdownStatus>
+                            <SC.UserDropdownLinksWrapper>
+                                <SC.UserDropdownLink href="/authentication">Authentication</SC.UserDropdownLink>
+                                <SC.UserDropdownLink href="/billing">Billing</SC.UserDropdownLink>
+                                <SC.UserDropdownLink href="/settings">Settings</SC.UserDropdownLink>
+                            </SC.UserDropdownLinksWrapper>
+                            
+                            <SC.Br />
+
+                            <SC.UserDropdownLinksWrapper>
+                                <SC.UserDropdownLink href="/support">Support</SC.UserDropdownLink>
+                                <SC.UserDropdownLink href="/docs">Docs</SC.UserDropdownLink>
+                            </SC.UserDropdownLinksWrapper>
+
+                            <SC.UserButtonWrapper>
+                                    <Button onClick={logout} style={{marginLeft: "auto", marginTop: "80px"}} variant="outlined" size="medium" color="primary">Log Out</Button>
+                            </SC.UserButtonWrapper>
+                        </SC.DrawerWrapper>
+                    </Drawer>
                 </SC.Nav>
                 {!userData.id && <SC.FloatingLogin href={loginUrl}>Temp Login</SC.FloatingLogin>}
                 <SC.FloatingInput value={url} onChange={(e: any) => setUrl(e.target.value)} onKeyDown={(e: any) => { if (e.keyCode === 13) setBaseUrl(url) }} />
