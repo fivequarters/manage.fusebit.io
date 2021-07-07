@@ -45,7 +45,6 @@ const TabComponent: React.FC<Props> = ({tabNames, tabObjects}) => {
         <>
         <SC.ContentMobile>
             <SC.Fade />
-            <SC.FadeLeft />
                 <Tabs indicatorColor="primary" value={value} onChange={handleChange} aria-label="Tab Selector" scrollButtons="auto">
                     {
                         tabNames.map((name, index) => (

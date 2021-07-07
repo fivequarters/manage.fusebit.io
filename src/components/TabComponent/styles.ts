@@ -38,7 +38,7 @@ export const TabLabel = styled.div<{active: boolean}>`
     margin-top: 30px;
 
     @media only screen and (max-width: 600px) {
-        padding: 0 5px;
+        padding: 0px;
     }
 
     @media only screen and (max-width: 330px) {

@@ -46,7 +46,7 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector,
                         <SC.CompanyName>{userData.company}</SC.CompanyName>
                     </SC.Flex>
                     {
-                        dropdown ? (
+                        dropdown && integrations && connectors ? (
                             <>
                                 <SC.Flex>
                                     {sectionName !== 'Integrations' && sectionName !== 'Connectors' && <SC.Flex mobileHidden={true}>
