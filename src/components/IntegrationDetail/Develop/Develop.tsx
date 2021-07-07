@@ -268,6 +268,11 @@ const Develop: React.FC = () => {
                             <Button onClick={addNewConnector} startIcon={<AddIcon />} style={{width: "160px", marginTop: "24px"}} size="large" variant="outlined" color="primary" >Add New</Button>
                             <Button onClick={() => setConnectorListOpen(true)} startIcon={<AddIcon />} style={{width: "160px", marginTop: "24px"}} size="large" variant="outlined" color="primary" >Link Existing</Button>
                         </SC.CardConnectorButtonsWrapper>
+
+                        <SC.CardConnectorButtonsWrapperMobile>
+                            <Button onClick={addNewConnector} startIcon={<AddIcon />} style={{width: "100px", marginTop: "24px"}} size="large" variant="outlined" color="primary" >Add New</Button>
+                            <Button onClick={() => setConnectorListOpen(true)} startIcon={<AddIcon />} style={{width: "100px", marginTop: "24px"}} size="large" variant="outlined" color="primary" >Link Existing</Button>
+                        </SC.CardConnectorButtonsWrapperMobile>
                     </SC.Card>
                     <SC.Link href="/test7">
                         <SC.Bullet />
