@@ -1,5 +1,12 @@
 export interface User {
-    fistname: string;
-    lastname: string;
-    email: string;
+    id?: string;
+    firstName?: string;
+    lastName?: string;
+    primaryEmail?: string;
+    accountId?: string; 
+    subscriptionId?: string; 
+    userId?: string;
+    token?: string;
+    company?: string;
+    picture?: string;
 }
