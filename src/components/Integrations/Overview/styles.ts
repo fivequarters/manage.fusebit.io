@@ -86,6 +86,7 @@ export const TableCellMobile = styled.div`
 
     p {
         width: 90px;
+        margin: 0;
 
         @media only screen and (max-width: 345px) {
             width: 70px;

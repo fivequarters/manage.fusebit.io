@@ -11,6 +11,14 @@ import { useAccountConnectorDeleteConnector } from "../../../hooks/api/v2/accoun
 import { Operation } from "../../../interfaces/operation";
 import {Connector} from "../../../interfaces/connector";
 import { useError } from "../../../hooks/useError";
+import arrowRight from "../../../assets/arrow-right.svg";
+import arrowLeft from "../../../assets/arrow-left.svg";
+
+enum cells {
+    TYPE = "Type",
+    IDENTITIES = "Identities",
+    CREATED = "Created",
+}
 
 const Overview: React.FC = () => {
     const [selected, setSelected] = React.useState<string[]>([]);
@@ -21,7 +29,7 @@ const Overview: React.FC = () => {
     const deleteConnector = useAccountConnectorDeleteConnector<Operation>();
     const { waitForOperations, createLoader, removeLoader } = useLoader();
     const { createError } = useError();
-
+    const [selectedCell, setSelectedCell] = React.useState<cells>(cells.TYPE);
 
     React.useEffect(() => {
         if (connectors && connectors.data.items) {
@@ -99,6 +107,26 @@ const Overview: React.FC = () => {
         }
     }
 
+    const handlePreviousCellSelect = () => {
+        if (selectedCell === cells.TYPE) {
+            setSelectedCell(cells.CREATED);
+        } else if (selectedCell === cells.CREATED) {
+            setSelectedCell(cells.IDENTITIES);
+        } else {
+            setSelectedCell(cells.TYPE);
+        }
+    }
+
+    const handleNextCellSelect = () => {
+        if (selectedCell === cells.TYPE) {
+            setSelectedCell(cells.IDENTITIES);
+        } else if (selectedCell === cells.IDENTITIES) {
+            setSelectedCell(cells.CREATED);
+        } else {
+            setSelectedCell(cells.TYPE);
+        }
+    }
+
     return (
         <>
             <SC.ButtonContainer>
@@ -122,64 +150,120 @@ const Overview: React.FC = () => {
                     )
                 }
             </SC.DeleteWrapper>
-            <Table size="small" aria-label="Overview Table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell padding="checkbox">
-                            <Checkbox
-                                color="primary"
-                                checked={rows.length > 0 && selected.length === rows.length}
-                                onChange={handleSelectAllCheck}
-                                inputProps={{ 'aria-label': 'select all connectors' }}
-                            />
-                        </TableCell>
-                        <TableCell>
-                            <SC.Flex>
-                                <SC.ArrowUp />
-                                Name
-                            </SC.Flex>
-                        </TableCell>
-                        <TableCell align="left">Type</TableCell>
-                        <TableCell align="left">Identities</TableCell>
-                        <TableCell align="left">Created</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {rows.map((row) => (
-                        <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/connector/" + row.id)}>
-                            <TableCell style={{cursor: "default"}} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
+            <SC.Table>
+                <Table size="small" aria-label="Overview Table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell padding="checkbox">
                                 <Checkbox
-                                color="primary"
-                                onClick={(event) => handleCheck(event, row.id)}
-                                checked={isSelected(row.id)}
-                                inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${row.id}` }}
-                                id={`enhanced-table-checkbox-${row.id}`}
+                                    color="primary"
+                                    checked={rows.length > 0 && selected.length === rows.length}
+                                    onChange={handleSelectAllCheck}
+                                    inputProps={{ 'aria-label': 'select all connectors' }}
                                 />
                             </TableCell>
-                            <TableCell component="th" scope="row">
-                                <SC.CellName>
-                                    {row.id}
-                                </SC.CellName>
+                            <TableCell>
+                                <SC.Flex>
+                                    <SC.ArrowUp />
+                                    Name
+                                </SC.Flex>
                             </TableCell>
-                            <TableCell align="left">    
-                                Slack
-                                {// TODO: Replace placeholder with real data
-                                } 
+                            <TableCell align="left">Type</TableCell>
+                            <TableCell align="left">Identities</TableCell>
+                            <TableCell align="left">Created</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {rows.map((row) => (
+                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/connector/" + row.id)}>
+                                <TableCell style={{cursor: "default"}} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
+                                    <Checkbox
+                                    color="primary"
+                                    onClick={(event) => handleCheck(event, row.id)}
+                                    checked={isSelected(row.id)}
+                                    inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${row.id}` }}
+                                    id={`enhanced-table-checkbox-${row.id}`}
+                                    />
+                                </TableCell>
+                                <TableCell component="th" scope="row">
+                                    <SC.CellName>
+                                        {row.id}
+                                    </SC.CellName>
+                                </TableCell>
+                                <TableCell align="left">    
+                                    Slack
+                                    {// TODO: Replace placeholder with real data
+                                    } 
+                                </TableCell>
+                                <TableCell align="left">
+                                    5
+                                    {// TODO: Replace placeholder with real data
+                                    }
+                                </TableCell>
+                                <TableCell align="left">
+                                    {new Date().toISOString().slice(0, 10)}
+                                    {// TODO: Replace placeholder with real data
+                                    } 
+                                </TableCell>
+                            </SC.Row>
+                        ))}
+                    </TableBody>
+                </Table>
+            </SC.Table>
+            <SC.TableMobile>
+            <Table size="small" aria-label="Overview Table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell padding="checkbox">
+                                <Checkbox
+                                    color="primary"
+                                    checked={rows.length > 0 && selected.length === rows.length}
+                                    onChange={handleSelectAllCheck}
+                                    inputProps={{ 'aria-label': 'select all connectors' }}
+                                />
+                            </TableCell>
+                            <TableCell>
+                                <SC.Flex>
+                                    <SC.ArrowUp />
+                                    Name
+                                </SC.Flex>
                             </TableCell>
                             <TableCell align="left">
-                                5
-                                {// TODO: Replace placeholder with real data
-                                }
+                                <SC.TableCellMobile>
+                                    <p>{selectedCell}</p>
+                                    <SC.LeftArrow onClick={handlePreviousCellSelect} src={arrowLeft} alt="previous-cell" height="16" width="16" />
+                                    <SC.RightArrow onClick={handleNextCellSelect} src={arrowRight} alt="next-cell" height="16" width="16" />
+                                </SC.TableCellMobile>
                             </TableCell>
-                            <TableCell align="left">
-                                {new Date().toISOString().slice(0, 10)}
-                                {// TODO: Replace placeholder with real data
-                                } 
-                            </TableCell>
-                        </SC.Row>
-                    ))}
-                </TableBody>
-            </Table>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {rows.map((row) => (
+                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/connector/" + row.id)}>
+                                <TableCell style={{cursor: "default"}} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
+                                    <Checkbox
+                                    color="primary"
+                                    onClick={(event) => handleCheck(event, row.id)}
+                                    checked={isSelected(row.id)}
+                                    inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${row.id}` }}
+                                    id={`enhanced-table-checkbox-${row.id}`}
+                                    />
+                                </TableCell>
+                                <TableCell component="th" scope="row">
+                                    <SC.CellName>
+                                        {row.id}
+                                    </SC.CellName>
+                                </TableCell>
+                                <TableCell align="left">    
+                                    {selectedCell === cells.TYPE ? "Slack" : selectedCell === cells.IDENTITIES ? 10 : new Date().toISOString().slice(0, 10)}
+                                    {// TODO: Replace placeholder with real data
+                                    } 
+                                </TableCell>
+                            </SC.Row>
+                        ))}
+                    </TableBody>
+                </Table>
+            </SC.TableMobile>
             </>
     )
 }
