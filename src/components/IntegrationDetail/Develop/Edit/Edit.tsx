@@ -51,19 +51,19 @@ const Edit: React.FC<Props> = ({open, onClose, integration, token}) => {
             </SC.LineInstructionWrapper>
 
             <SC.LineTitle>3. Download the integration code</SC.LineTitle>
-            <SC.LineInstructionWrapper onClick={() => handleCopy(`fuse integration get -d ${integration}`)}>
+            <SC.LineInstructionWrapper onClick={() => handleCopy(`fuse integration get ${integration} -d ${integration}`)}>
                 <SC.LineInstructionCopy>
                     <img src={copyIcon} alt="copy" height="16" width="16" />
                 </SC.LineInstructionCopy>
-                <SC.LineInstruction><span className="unselectable">$</span> fuse integration <strong>get -d</strong> {integration}</SC.LineInstruction>
+                <SC.LineInstruction><span className="unselectable">$</span> fuse integration <strong>get</strong> {integration} <strong>-d</strong> {integration}</SC.LineInstruction>
             </SC.LineInstructionWrapper>
 
             <SC.LineTitle>4. After making your code changes run</SC.LineTitle>
-            <SC.LineInstructionWrapper onClick={() => handleCopy(`fuse integration deploy -d ${integration}`)}>
+            <SC.LineInstructionWrapper onClick={() => handleCopy(`fuse integration deploy ${integration} -d ${integration}`)}>
                 <SC.LineInstructionCopy>
                     <img src={copyIcon} alt="copy" height="16" width="16" />
                 </SC.LineInstructionCopy>
-                <SC.LineInstruction><span className="unselectable">$</span> fuse integration <strong>deploy -d</strong> {integration}</SC.LineInstruction>
+                <SC.LineInstruction><span className="unselectable">$</span> fuse integration <strong>deploy</strong> {integration} <strong>-d</strong> {integration}</SC.LineInstruction>
             </SC.LineInstructionWrapper>
 
             <SC.ButtonsWrapper>
