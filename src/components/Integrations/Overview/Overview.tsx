@@ -11,6 +11,14 @@ import { useAccountIntegrationDeleteIntegration } from "../../../hooks/api/v2/ac
 import { Integration } from "../../../interfaces/integration";
 import { Operation } from "../../../interfaces/operation";
 import { useError } from "../../../hooks/useError";
+import arrowRight from "../../../assets/arrow-right.svg";
+import arrowLeft from "../../../assets/arrow-left.svg";
+
+enum cells {
+    INSTANCES = "Instances",
+    CREATED = "Created",
+    DEPLOYED = "Deployed",
+}
 
 const Overview: React.FC = () => {
     const [selected, setSelected] = React.useState<string[]>([]);
@@ -21,6 +29,7 @@ const Overview: React.FC = () => {
     const deleteIntegration = useAccountIntegrationDeleteIntegration<Operation>();
     const { waitForOperations, createLoader, removeLoader } = useLoader();
     const { createError } = useError();
+    const [selectedCell, setSelectedCell] = React.useState<cells>(cells.INSTANCES);
 
     useEffect(() => {
         if (integrations && integrations.data.items) {
@@ -98,6 +107,26 @@ const Overview: React.FC = () => {
         }
     }
 
+    const handlePreviousCellSelect = () => {
+        if (selectedCell === cells.INSTANCES) {
+            setSelectedCell(cells.DEPLOYED);
+        } else if (selectedCell === cells.CREATED) {
+            setSelectedCell(cells.INSTANCES);
+        } else {
+            setSelectedCell(cells.CREATED);
+        }
+    }
+
+    const handleNextCellSelect = () => {
+        if (selectedCell === cells.INSTANCES) {
+            setSelectedCell(cells.CREATED);
+        } else if (selectedCell === cells.CREATED) {
+            setSelectedCell(cells.DEPLOYED);
+        } else {
+            setSelectedCell(cells.INSTANCES);
+        }
+    }
+
     return (
         <>
             <SC.ButtonContainer>
@@ -121,64 +150,121 @@ const Overview: React.FC = () => {
                     )
                 }
             </SC.DeleteWrapper>
-            <Table size="small" aria-label="Overview Table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell padding="checkbox">
-                            <Checkbox
-                                color="primary"
-                                checked={rows.length > 0 && selected.length === rows.length}
-                                onChange={handleSelectAllCheck}
-                                inputProps={{ 'aria-label': 'select all integrations' }}
-                            />
-                        </TableCell>
-                        <TableCell>
-                            <SC.Flex>
-                                <SC.ArrowUp />
-                                Name
-                            </SC.Flex>
-                        </TableCell>
-                        <TableCell align="left">Instances</TableCell>
-                        <TableCell align="left">Created</TableCell>
-                        <TableCell align="left">Deployed</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {rows.map((row) => (
-                        <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/integration/" + row.id)}>
-                            <TableCell style={{ cursor: "default" }} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
+            <SC.Table>
+                <Table size="small" aria-label="Overview Table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell padding="checkbox">
                                 <Checkbox
                                     color="primary"
-                                    onClick={(event) => handleCheck(event, row.id)}
-                                    checked={isSelected(row.id)}
-                                    inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${row.id}` }}
-                                    id={`enhanced-table-checkbox-${row.id}`}
+                                    checked={rows.length > 0 && selected.length === rows.length}
+                                    onChange={handleSelectAllCheck}
+                                    inputProps={{ 'aria-label': 'select all integrations' }}
                                 />
                             </TableCell>
-                            <TableCell component="th" scope="row">
-                                <SC.CellName>
-                                    {row.id}
-                                </SC.CellName>
+                            <TableCell>
+                                <SC.Flex>
+                                    <SC.ArrowUp />
+                                    Name
+                                </SC.Flex>
+                            </TableCell>
+                            <TableCell align="left">Instances</TableCell>
+                            <TableCell align="left">Created</TableCell>
+                            <TableCell align="left">Deployed</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {rows.map((row) => (
+                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/integration/" + row.id)}>
+                                <TableCell style={{ cursor: "default" }} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
+                                    <Checkbox
+                                        color="primary"
+                                        onClick={(event) => handleCheck(event, row.id)}
+                                        checked={isSelected(row.id)}
+                                        inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${row.id}` }}
+                                        id={`enhanced-table-checkbox-${row.id}`}
+                                    />
+                                </TableCell>
+                                <TableCell component="th" scope="row">
+                                    <SC.CellName>
+                                        {row.id}
+                                    </SC.CellName>
+                                </TableCell>
+                                <TableCell align="left">
+                                    10
+                                    {// TODO: Replace placeholder with real data
+                                    }
+                                </TableCell>
+                                <TableCell align="left">
+                                    {new Date().toISOString().slice(0, 10)}
+                                    {// TODO: Replace placeholder with real data
+                                    }
+                                </TableCell>
+                                <TableCell align="left">
+                                    {new Date().toISOString().slice(0, 10)}
+                                    {// TODO: Replace placeholder with real data
+                                    }
+                                </TableCell>
+                            </SC.Row>
+                        ))}
+                    </TableBody>
+                </Table>
+            </SC.Table>
+            <SC.TableMobile>
+                <Table size="small" aria-label="Overview Table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell padding="checkbox">
+                                <Checkbox
+                                    color="primary"
+                                    checked={rows.length > 0 && selected.length === rows.length}
+                                    onChange={handleSelectAllCheck}
+                                    inputProps={{ 'aria-label': 'select all integrations' }}
+                                />
+                            </TableCell>
+                            <TableCell>
+                                <SC.Flex>
+                                    <SC.ArrowUp />
+                                    Name
+                                </SC.Flex>
                             </TableCell>
                             <TableCell align="left">
-                                10
-                                {// TODO: Replace placeholder with real data
-                                }
+                                <SC.TableCellMobile>
+                                <p>{selectedCell}</p>
+                                    <SC.LeftArrow onClick={handlePreviousCellSelect} src={arrowLeft} alt="previous-cell" height="16" width="16" />
+                                    
+                                    <SC.RightArrow onClick={handleNextCellSelect} src={arrowRight} alt="next-cell" height="16" width="16" />
+                                </SC.TableCellMobile>
                             </TableCell>
-                            <TableCell align="left">
-                                {new Date().toISOString().slice(0, 10)}
-                                {// TODO: Replace placeholder with real data
-                                }
-                            </TableCell>
-                            <TableCell align="left">
-                                {new Date().toISOString().slice(0, 10)}
-                                {// TODO: Replace placeholder with real data
-                                }
-                            </TableCell>
-                        </SC.Row>
-                    ))}
-                </TableBody>
-            </Table>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {rows.map((row) => (
+                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/integration/" + row.id)}>
+                                <TableCell style={{ cursor: "default" }} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
+                                    <Checkbox
+                                        color="primary"
+                                        onClick={(event) => handleCheck(event, row.id)}
+                                        checked={isSelected(row.id)}
+                                        inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${row.id}` }}
+                                        id={`enhanced-table-checkbox-${row.id}`}
+                                    />
+                                </TableCell>
+                                <TableCell component="th" scope="row">
+                                    <SC.CellName>
+                                        {row.id}
+                                    </SC.CellName>
+                                </TableCell>
+                                <TableCell align="left">
+                                    {selectedCell === cells.INSTANCES ? 10 : selectedCell === cells.DEPLOYED ? new Date().toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10)}
+                                    {// TODO: Replace placeholder with real data
+                                    }
+                                </TableCell>
+                            </SC.Row>
+                        ))}
+                    </TableBody>
+                </Table>
+            </SC.TableMobile>
         </>
     )
 }
