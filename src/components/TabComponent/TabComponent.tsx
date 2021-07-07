@@ -42,6 +42,18 @@ const TabComponent: React.FC<Props> = ({tabNames, tabObjects}) => {
       };
 
     return (
+        <>
+        <SC.ContentMobile>
+            <SC.Fade />
+            <SC.FadeLeft />
+                <Tabs indicatorColor="primary" value={value} onChange={handleChange} aria-label="Tab Selector" scrollButtons="auto">
+                    {
+                        tabNames.map((name, index) => (
+                            <Tab key={index} label={<SC.TabLabel active={value === index}>{name}</SC.TabLabel>} {...a11yProps(index)}/>
+                        ))
+                    }
+                </Tabs>
+        </SC.ContentMobile>
         <Container maxWidth="lg">
             <SC.Content>
                 <Tabs indicatorColor="primary" value={value} onChange={handleChange} aria-label="Tab Selector" scrollButtons="auto">
@@ -60,6 +72,7 @@ const TabComponent: React.FC<Props> = ({tabNames, tabObjects}) => {
                 ))
             }
         </Container>
+        </>
     )
 }
 
