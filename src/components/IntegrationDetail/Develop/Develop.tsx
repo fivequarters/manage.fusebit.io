@@ -270,8 +270,8 @@ const Develop: React.FC = () => {
                         </SC.CardConnectorButtonsWrapper>
 
                         <SC.CardConnectorButtonsWrapperMobile>
-                            <Button onClick={addNewConnector} startIcon={<AddIcon />} style={{width: "100px", marginTop: "24px"}} size="large" variant="outlined" color="primary" >Add New</Button>
-                            <Button onClick={() => setConnectorListOpen(true)} startIcon={<AddIcon />} style={{width: "100px", marginTop: "24px"}} size="large" variant="outlined" color="primary" >Link Existing</Button>
+                            <Button onClick={addNewConnector} startIcon={<AddIcon />} style={{width: "135px", marginTop: "10px"}} size="medium" variant="outlined" color="primary" >Add New</Button>
+                            <Button onClick={() => setConnectorListOpen(true)} startIcon={<AddIcon />} style={{width: "135px", marginTop: "10px"}} size="medium" variant="outlined" color="primary" >Link Existing</Button>
                         </SC.CardConnectorButtonsWrapperMobile>
                     </SC.Card>
                     <SC.Link href="/test7">
