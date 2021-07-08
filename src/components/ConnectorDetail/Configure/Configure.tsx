@@ -122,7 +122,9 @@ const Configure: React.FC = () => {
                     }}
                     validationMode={validationMode}
                     />
-                    <Button onClick={handleSubmit} style={{width: "200px"}} fullWidth={false} size="large" color="primary" variant="contained">Save</Button>
+                    <SC.FormInputWrapper>
+                        <Button onClick={handleSubmit} style={{width: "200px"}} fullWidth={false} size="large" color="primary" variant="contained">Save</Button>
+                    </SC.FormInputWrapper>
                 </SC.FormWrapper>
                 </SC.FlexDown>
            </SC.Flex>

@@ -11,6 +11,11 @@ export const Background = styled.div`
     background-repeat: no-repeat;
     background-size: cover;
     padding-top: 50px;
+
+    @media only screen and (max-width: 880px) {
+        height: 164px;
+        padding-top: 41px;
+    }
 `;
 
 export const Nav = styled.div`
@@ -29,7 +34,14 @@ export const CompanyImg = styled.div`
     width: 56px;
     background-size: contain;
     background-image: url(${user});
+    background-repeat: no-repeat;
     margin-right: 24px;
+
+    @media only screen and (max-width: 880px) {
+        height: 40px;
+        width: 40px;
+        margin-right: 16px;
+    }
 `;
 
 export const CompanyName = styled.h4`
@@ -39,6 +51,16 @@ export const CompanyName = styled.h4`
     color: var(--primary-color);
     text-transform: uppercase;
     margin: 0 10px 0 0;
+
+    @media only screen and (max-width: 880px) {
+        font-size: 14px;
+        line-height: 16px;
+        font-weight: 500;
+        width: 100px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
 `;
 
 export const Arrow = styled.div`
@@ -64,11 +86,39 @@ export const SectionDropdown = styled.div<{active: boolean}>`
         transform: ${props => props.active && "rotate(180deg)"};
         transition: all .25s linear;
     }
+
+    @media only screen and (max-width: 880px) {
+        display: none;
+    }
+`;
+
+export const SectionDropdownMobile = styled.div<{active: boolean}>`
+    display: none;
+    align-items: center;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    & > img {
+        margin-bottom: -10px;
+        transform: ${props => props.active && "rotate(180deg)"};
+        transition: all .25s linear;
+    }
+
+    @media only screen and (max-width: 880px) {
+        display: flex;
+    }
 `;
 
 export const SectionDropdownMenu = styled.div`
     padding: 0px 32px 12px;
     width: 317px;
+
+    @media only screen and (max-width: 880px) {
+        width: 100%;
+        padding: 24px;
+    }
 `;
 
 export const SectionDropdownTitle = styled.h4`
@@ -126,7 +176,6 @@ export const SectionDropdownIntegration = styled.a<{active: boolean}>`
 
 export const UserDropdown = styled.div`
     padding: 0px 32px 24px;
-    width: 302px;
 `;
 
 export const UserDropdownCompany = styled.h5`
@@ -142,6 +191,10 @@ export const UserDropdownInfo = styled.div`
     display: flex;
     align-items: center;
     margin-bottom: 24px;
+
+    @media only screen and (max-width: 880px) {
+        margin-top: 48px;
+    }
 `;
 
 export const UserDropdownInfoImage = styled.img`
@@ -186,6 +239,10 @@ export const UserDropdownStatus = styled.a`
     &:hover {
         cursor: pointer;
     }
+
+    @media only screen and (max-width: 880px) {
+        width: 238px;
+    }
 `;
 
 export const UserDropdownStatusTitle = styled.div`
@@ -200,6 +257,13 @@ export const UserDropdownStatusId = styled.div`
     font-size: 14px;
     line-height: 16px;
     color: var(--black);
+
+    @media only screen and (max-width: 880px) {
+        width: 155px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
 `;
 
 export const UserDropdownStatusArrow = styled.img`
@@ -242,9 +306,13 @@ export const UserButtonMargin = styled.div`
 `;
 
 
-export const Flex = styled.div`
+export const Flex = styled.div<{mobileHidden?: boolean}>`
     display: flex;
     align-items: center;
+
+    @media only screen and (max-width: 880px) {
+        display: ${props => props.mobileHidden && "none"};
+    }
 `;
 
 export const SectionLink = styled.a`
@@ -280,6 +348,10 @@ export const Link = styled.a`
     text-decoration: none;
     color: white;
     margin-right: 72px;
+
+    @media only screen and (max-width: 880px) {
+        display: none;
+    }
 `;
 
 export const ButtonWrapper = styled.div<{active: boolean}>`
@@ -287,6 +359,10 @@ export const ButtonWrapper = styled.div<{active: boolean}>`
     border: 1px solid ${props => props.active ? "rgba(215, 229, 255, 0)" : "#D7E5FF66"};
     border-radius: 4px;
     transition: all .25s linear;
+
+    @media only screen and (max-width: 880px) {
+        display: none;
+    }
 `;
 
 export const User = styled.img`
@@ -294,6 +370,40 @@ export const User = styled.img`
     width: 24px;
     border-radius: 50%;
     object-fit: contain;
+`;
+
+export const Menu = styled.img`
+    display: none;
+    height: 10px;
+    width: 20px;
+    object-fit: contain;
+    background-repeat: no-repeat;
+    margin-left: auto;
+    
+    @media only screen and (max-width: 880px) {
+        display: block;
+    }
+`;
+
+export const Cross = styled.img`
+    height: 10px;
+    width: 10px;
+    object-fit: contain;
+    background-repeat: no-repeat;
+    margin-left: auto;
+`;
+
+export const DrawerWrapper = styled.div`
+    position: relative;
+    padding: 50px 24px 50px 32px;
+    border-radius: 8px 0 0 8px;
+`;
+
+export const Br = styled.div`
+    height: 1px;
+    width: 152px;
+    background-color: #959595;
+    margin: 32px 0;
 `;
 
 // TODO: Remove me
@@ -306,7 +416,7 @@ export const FloatingLogin = styled.a`
     font-weight: bold;
     padding: 5px 10px;
     text-decoration: none;
-`
+`;
 
 // TODO: Remove me
 export const FloatingInput = styled.input`
@@ -319,4 +429,10 @@ export const FloatingInput = styled.input`
     font-weight: bold;
     padding: 5px 10px;
     text-decoration: none;
-`
+`;
+
+export const MenuWrapper = styled.div`
+    @media only screen and (max-width: 880px) {
+        display: none;
+    }
+`;

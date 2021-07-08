@@ -9,12 +9,22 @@ export const FlexDown = styled.div`
     flex-direction: column;
     &:not(:last-child) {
         margin-right: auto;
+
+        @media only screen and (max-width: 1250px) {
+            margin-right: 0;
+        }
     }
 `;
 
 export const Flex = styled.div`
     position: relative;
     display: flex;
+
+    @media only screen and (max-width: 1250px) {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
 `;
 
 export const CardSeparator = styled.div`
@@ -24,6 +34,13 @@ export const CardSeparator = styled.div`
     height: 1px;
     width: 100%;
     background-color: var(--black);
+
+    @media only screen and (max-width: 1250px) {
+        height: calc(100% - 320px);
+        width: 1px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
 `;
 
 export const Card = styled.div`
@@ -38,6 +55,10 @@ export const Card = styled.div`
     min-height: 392px;
     z-index: 1;
     margin-bottom: 40px;
+
+    @media only screen and (max-width: 450px) {
+        width: 327px;
+    }
 `;
 
 export const CardTitle = styled.h4`
@@ -125,6 +146,23 @@ export const CardConnectorButtonsWrapper = styled.div`
     justify-content: space-between;
     margin-top: auto;
     width: 100%;
+
+    @media only screen and (max-width: 450px) {
+        display: none;
+    }
+`;
+
+
+export const CardConnectorButtonsWrapperMobile = styled.div`
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    width: 100%;
+
+    @media only screen and (max-width: 450px) {
+        display: flex;
+    }
 `;
 
 export const CardConnectorSeeMore = styled.a`
@@ -155,7 +193,6 @@ export const Bullet = styled.div`
     background-color: var(--black);
     margin-right: 10px;
     transition: all .25s linear;
-
 `;
 
 export const Link = styled.a`
@@ -185,6 +222,10 @@ export const Link = styled.a`
         > div {
             background-color: #959595;
         }
+    }
+
+    @media only screen and (max-width: 1250px) {
+        display: none;
     }
 `;
 

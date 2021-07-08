@@ -1,6 +1,6 @@
 import React from "react";
 import * as SC from "./styles";
-import { Container, Button, Menu } from "@material-ui/core";
+import { Container, Button, Menu, Drawer } from "@material-ui/core";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import client from "../../assets/client.jpg";
@@ -16,6 +16,8 @@ import { Connector } from "../../interfaces/connector";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useAxios } from "../../hooks/useAxios";
+import burguer from "../../assets/burguer.svg";
+import cross from "../../assets/cross.svg"
 
 const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector, integrationsLink}) => {
     const [anchorSectionDropdown, setAnchorSectionDropdown] = React.useState(null);
@@ -24,6 +26,8 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector,
     const [loginUrl, setLoginUrl] = useState("");
     const { getBaseUrl, setBaseUrl } = useAxios();
     const [url, setUrl] = useState(getBaseUrl());
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [drawerBottomOpen, setDrawerBottomOpen] = useState(false);
 
     const { data: integrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
     const { data: connectors } = useAccountConnectorsGetAll<{ items: Connector[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
@@ -42,10 +46,10 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector,
                         <SC.CompanyName>{userData.company}</SC.CompanyName>
                     </SC.Flex>
                     {
-                        dropdown ? (
+                        dropdown && integrations && connectors ? (
                             <>
                                 <SC.Flex>
-                                    {sectionName !== 'Integrations' && sectionName !== 'Connectors' && <SC.Flex>
+                                    {sectionName !== 'Integrations' && sectionName !== 'Connectors' && <SC.Flex mobileHidden={true}>
                                         <SC.SectionLink href={integrationsLink ? "/integrations" : "/"}>{integrationsLink ? "Integrations" : "Connectors"}</SC.SectionLink>
                                         <SC.Arrow />
                                     </SC.Flex>}
@@ -54,7 +58,13 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector,
                                         {(sectionName === 'Integrations' || sectionName === 'Connectors') && <SC.SectionName>{sectionName}</SC.SectionName>}
                                         <img src={arrow} alt="arrow" />
                                     </SC.SectionDropdown>
+                                    <SC.SectionDropdownMobile active={drawerBottomOpen} aria-controls="simple-menu" aria-haspopup="true" onClick={() => setDrawerBottomOpen(true)} >
+                                        {sectionName !== 'Integrations' && sectionName !== 'Connectors' && <SC.SectionName>{integration ? sectionName + " Integration" : connector ? sectionName + " Connector" : sectionName}</SC.SectionName>}
+                                        {(sectionName === 'Integrations' || sectionName === 'Connectors') && <SC.SectionName>{sectionName}</SC.SectionName>}
+                                        <img src={arrow} alt="arrow" />
+                                    </SC.SectionDropdownMobile>
                                 </SC.Flex>
+                                <SC.MenuWrapper>
                                 <Menu
                                 style={{top: "100px"}}
                                 id="simple-menu"
@@ -96,6 +106,41 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector,
                                         }
                                     </SC.SectionDropdownMenu>
                                 </Menu>
+                                <Drawer anchor={"bottom"} open={drawerBottomOpen} onClose={() => setDrawerBottomOpen(false)}>
+                                <SC.SectionDropdownMenu>
+                                        <SC.Flex>
+                                            <SC.SectionDropdownTitle>Integrations</SC.SectionDropdownTitle>
+                                            <SC.SectionDropdownSeeMore href="/integrations">
+                                                See all
+                                                <img src={rightArrow} alt="See all" height="8" width="8" />
+                                            </SC.SectionDropdownSeeMore>
+                                        </SC.Flex>
+                                        {
+                                            integrations?.data.items.map((integration, index) => (
+                                                <SC.SectionDropdownIntegration key={index} active={sectionName === integration.id} href={"/integration/" + integration.id}>
+                                                    {integration.id}
+                                                    <img src={check} alt="check" height="16" width="16" />
+                                                </SC.SectionDropdownIntegration>
+                                            ))
+                                        }
+                                        <SC.Flex>
+                                            <SC.SectionDropdownTitle>Connectors</SC.SectionDropdownTitle>
+                                            <SC.SectionDropdownSeeMore href="/">
+                                                See all
+                                                <img src={rightArrow} alt="See all" height="8" width="8" />
+                                            </SC.SectionDropdownSeeMore>
+                                        </SC.Flex>
+                                        {
+                                            connectors?.data.items.map((connector, index) => (
+                                                <SC.SectionDropdownIntegration key={index} active={sectionName === connector.id} href={"/connector/" + connector.id}>
+                                                    {connector.id}
+                                                    <img src={check} alt="check" height="16" width="16" />
+                                                </SC.SectionDropdownIntegration>
+                                            ))
+                                        }
+                                    </SC.SectionDropdownMenu>
+                                </Drawer>
+                                </SC.MenuWrapper>
                           </>
                         ) : (
                             <SC.SectionLink href={integration ? "/integration" : "/"}>{sectionName}</SC.SectionLink>
@@ -145,6 +190,47 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector,
                             </SC.UserDropdown>
                         </Menu>
                     </SC.ButtonWrapper>
+                    <SC.Menu onClick={() => setDrawerOpen(true)} src={burguer} alt="menu-opener" height="10" width="20" />
+                    <Drawer anchor={"right"} open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+                        <SC.DrawerWrapper>
+                            <SC.Flex>
+                                <SC.CompanyName>{userData.company}</SC.CompanyName>
+                                <SC.Cross onClick={() => setDrawerOpen(false)} src={cross} alt="close" height="10" width="10" />
+                            </SC.Flex>
+
+                            <SC.UserDropdownInfo>
+                                <SC.UserDropdownInfoImage src={userData.picture || client} alt="user" height="38" width="38" />
+                                <SC.UserDropdownPersonalInfo>
+                                    <SC.UserDropdownInfoName>{userData.firstName} {userData.lastName}</SC.UserDropdownInfoName>
+                                    <SC.UserDropdownInfoEmail>{userData.primaryEmail}</SC.UserDropdownInfoEmail>
+                                </SC.UserDropdownPersonalInfo>
+                            </SC.UserDropdownInfo>
+
+                            <SC.UserDropdownStatus href="/">
+                                <div>
+                                    <SC.UserDropdownStatusTitle>Stage</SC.UserDropdownStatusTitle>
+                                    <SC.UserDropdownStatusId>{userData.subscriptionId}</SC.UserDropdownStatusId>
+                                </div>
+                                <SC.UserDropdownStatusArrow src={rightArrow} alt="right arrow" height="12" width="12" />
+                            </SC.UserDropdownStatus>
+                            <SC.UserDropdownLinksWrapper>
+                                <SC.UserDropdownLink href="/authentication">Authentication</SC.UserDropdownLink>
+                                <SC.UserDropdownLink href="/billing">Billing</SC.UserDropdownLink>
+                                <SC.UserDropdownLink href="/settings">Settings</SC.UserDropdownLink>
+                            </SC.UserDropdownLinksWrapper>
+                            
+                            <SC.Br />
+
+                            <SC.UserDropdownLinksWrapper>
+                                <SC.UserDropdownLink href="/support">Support</SC.UserDropdownLink>
+                                <SC.UserDropdownLink href="/docs">Docs</SC.UserDropdownLink>
+                            </SC.UserDropdownLinksWrapper>
+
+                            <SC.UserButtonWrapper>
+                                    <Button onClick={logout} style={{marginLeft: "auto", marginTop: "80px"}} variant="outlined" size="medium" color="primary">Log Out</Button>
+                            </SC.UserButtonWrapper>
+                        </SC.DrawerWrapper>
+                    </Drawer>
                 </SC.Nav>
                 {!userData.id && <SC.FloatingLogin href={loginUrl}>Temp Login</SC.FloatingLogin>}
                 <SC.FloatingInput value={url} onChange={(e: any) => setUrl(e.target.value)} onKeyDown={(e: any) => { if (e.keyCode === 13) setBaseUrl(url) }} />
