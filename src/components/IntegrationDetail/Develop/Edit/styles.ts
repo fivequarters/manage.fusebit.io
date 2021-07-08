@@ -13,6 +13,16 @@ export const Card = styled.div<{open: boolean}>`
     border-radius: 8px;
     box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
     transition: all 1s linear;
+
+    @media only screen and (max-width: 1250px) {
+        width: 100%;
+        left: 0;
+        top: auto;
+        bottom: 0;
+        transform: translate(0, 0);
+        overflow: auto;
+        padding: 32px 24px;
+    }
 `;
 
 export const Flex = styled.div`
@@ -53,6 +63,11 @@ export const Title = styled.h2`
     font-weight: 600;
     color: var(--black);
     margin-bottom: 32px;
+
+    @media only screen and (max-width: 1250px) {
+        font-size: 20px;
+        line-height: 22px;
+    }
 `;
 
 export const LineTitle = styled.h4`
@@ -61,6 +76,12 @@ export const LineTitle = styled.h4`
     font-weight: 600;
     color: var(--black);
     margin-bottom: 16px;
+
+    @media only screen and (max-width: 1250px) {
+        font-size: 14px;
+        line-height: 16px;
+        font-weight: 500;
+    }
 `;
 
 export const LineInstructionWrapper = styled.div`
@@ -112,9 +133,16 @@ export const LineInstruction = styled.div`
         -ms-user-select: none; /* IE10+/Edge */
         user-select: none; /* Standard */
     }
+
+    @media only screen and (max-width: 1250px) {
+        font-size: 14px;
+        line-height: 16px;
+        width: 100%;
+    }
 `;
 
-export const LineInstructionFade = styled.div<{change: boolean}>`
+export const LineInstructionFade = styled.div<{change: boolean, onlyMobileVisible?: boolean}>`
+    display: ${props => props.onlyMobileVisible && "none"};
     position: absolute;
     right: 0;
     top: 0;
@@ -123,6 +151,12 @@ export const LineInstructionFade = styled.div<{change: boolean}>`
     background-image: linear-gradient(to left, #EFF5FF 10%, rgba(255, 255, 255, 0) 100%);
     z-index: 1;
     transition: all .25s linear;
+
+    @media only screen and (max-width: 1250px) {
+        right: -2px;
+        display: ${props => props.onlyMobileVisible && "block"};
+        width: 60px;
+    }
 `;
 
 export const LineInstructionCopy = styled.div`
@@ -142,6 +176,10 @@ export const LineInstructionCopy = styled.div`
     z-index: 2;
     opacity: 0;
     transition: all .25s linear;
+
+    @media only screen and (max-width: 1250px) {
+        display: none;
+    }
 `;
 
 export const ButtonsWrapper = styled.div`
@@ -160,8 +198,38 @@ export const CopySuccess = styled.p<{copy: boolean}>`
     visibility: ${props => props.copy ? "visible" : "hidden"};
     margin-left: auto;
     transition: all .5s linear;
+
+    @media only screen and (max-width: 1250px) {
+        display: none;
+    }
+`;
+
+export const CopySuccessMobile = styled(CopySuccess)`
+    display: none;
+    @media only screen and (max-width: 1250px) {
+        display: block;
+        position: absolute; 
+        right: 0;
+        bottom: -35px;
+    }
 `;
 
 export const OutlinedButtonWrapper = styled.div`
     margin-left: auto;
+
+    @media only screen and (max-width: 1250px) {
+        margin: 0 auto;
+    }
+`;
+
+export const CopyMobile = styled.img`
+    display: none;
+    height: 16px;
+    width: 16px;
+    object-fit: contain;
+    margin-left: auto;
+
+    @media only screen and (max-width: 1250px) {
+        display: block;
+    }
 `;
