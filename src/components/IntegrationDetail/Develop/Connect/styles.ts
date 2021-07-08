@@ -16,6 +16,14 @@ export const Card = styled.div<{open: boolean}>`
     box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
     width: 492px;
     transition: all 1s linear;
+
+    @media only screen and (max-width: 550px) {
+        width: 100%;
+        left: 0;
+        top: auto;
+        bottom: 0;
+        transform: translate(0, 0);
+    }
 `;
 
 export const CardClose = styled.div`

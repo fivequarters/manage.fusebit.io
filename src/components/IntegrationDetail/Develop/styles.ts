@@ -57,7 +57,7 @@ export const Card = styled.div`
     margin-bottom: 40px;
 
     @media only screen and (max-width: 450px) {
-        width: 327px;
+        width: 340px;
     }
 `;
 
