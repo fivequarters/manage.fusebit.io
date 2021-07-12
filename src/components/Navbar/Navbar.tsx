@@ -50,7 +50,7 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector,
                             <>
                                 <SC.Flex>
                                     {sectionName !== 'Integrations' && sectionName !== 'Connectors' && <SC.Flex mobileHidden={true}>
-                                        <SC.SectionLink href={integrationsLink ? "/integrations" : "/"}>{integrationsLink ? "Integrations" : "Connectors"}</SC.SectionLink>
+                                        <SC.SectionLink href={integrationsLink ? "/" : "/connectors"}>{integrationsLink ? "Integrations" : "Connectors"}</SC.SectionLink>
                                         <SC.Arrow />
                                     </SC.Flex>}
                                     <SC.SectionDropdown active={Boolean(anchorSectionDropdown)} aria-controls="simple-menu" aria-haspopup="true" onClick={(event: any) => setAnchorSectionDropdown(event.currentTarget)}>
@@ -76,7 +76,7 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector,
                                     <SC.SectionDropdownMenu>
                                         <SC.Flex>
                                             <SC.SectionDropdownTitle>Integrations</SC.SectionDropdownTitle>
-                                            <SC.SectionDropdownSeeMore href="/integrations">
+                                            <SC.SectionDropdownSeeMore href="/">
                                                 See all
                                                 <img src={rightArrow} alt="See all" height="8" width="8" />
                                             </SC.SectionDropdownSeeMore>
@@ -91,7 +91,7 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector,
                                         }
                                         <SC.Flex>
                                             <SC.SectionDropdownTitle>Connectors</SC.SectionDropdownTitle>
-                                            <SC.SectionDropdownSeeMore href="/">
+                                            <SC.SectionDropdownSeeMore href="/connectors">
                                                 See all
                                                 <img src={rightArrow} alt="See all" height="8" width="8" />
                                             </SC.SectionDropdownSeeMore>
@@ -110,7 +110,7 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector,
                                 <SC.SectionDropdownMenu>
                                         <SC.Flex>
                                             <SC.SectionDropdownTitle>Integrations</SC.SectionDropdownTitle>
-                                            <SC.SectionDropdownSeeMore href="/integrations">
+                                            <SC.SectionDropdownSeeMore href="/">
                                                 See all
                                                 <img src={rightArrow} alt="See all" height="8" width="8" />
                                             </SC.SectionDropdownSeeMore>
@@ -125,7 +125,7 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector,
                                         }
                                         <SC.Flex>
                                             <SC.SectionDropdownTitle>Connectors</SC.SectionDropdownTitle>
-                                            <SC.SectionDropdownSeeMore href="/">
+                                            <SC.SectionDropdownSeeMore href="/connectors">
                                                 See all
                                                 <img src={rightArrow} alt="See all" height="8" width="8" />
                                             </SC.SectionDropdownSeeMore>
@@ -143,7 +143,7 @@ const Navbar: React.FC<Props> = ({sectionName, dropdown, integration, connector,
                                 </SC.MenuWrapper>
                           </>
                         ) : (
-                            <SC.SectionLink href={integration ? "/integration" : "/"}>{sectionName}</SC.SectionLink>
+                            <SC.SectionLink href={integration ? "/" : "/connectors"}>{sectionName}</SC.SectionLink>
                         )
                     }
                     </SC.FlexDown>

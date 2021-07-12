@@ -9,12 +9,12 @@ import { RouteItem } from "../interfaces/router";
 export const routes: Array<RouteItem> = [
     {
         key: "router-home",
-        path: "/",
+        path: "/connectors",
         component: ConnectorsPage
     },
     {
         key: "router-integrations",
-        path: "/integrations",
+        path: "/",
         component: IntegrationsPage,
     },
     {
