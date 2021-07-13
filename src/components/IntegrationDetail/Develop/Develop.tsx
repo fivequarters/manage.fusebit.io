@@ -101,29 +101,37 @@ const Develop: React.FC = () => {
     }
 
     const addNewConnector = async () => {
-        // try {
-        //     createLoader();
-        //     const connectorId = String(new Date().getTime());
-        //     const response = await createConnector.mutateAsync({ id: connectorId, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
-        //     await waitForOperations([response.data.operationId]);
-        //     const data = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
-        //     data.data.configuration.connectors[connectorId] = {
-        //         connector: connectorId,
-        //         package: "@fusebit-int/pkg-oauth-integration"
-        //     }
-        //     const response2 = await updateIntegration.mutateAsync({ 
-        //         accountId: userData.accountId, 
-        //         subscriptionId: userData.subscriptionId,
-        //         ...data
-        //     });
-        //     await waitForOperations([response2.data.operationId]);
-        //     reloadIntegration();
-        //     reloadConnectors();
-        // } catch (e) {
-        //     createError(e.message);
-        // } finally {
-        //     removeLoader();
-        // }
+        try {
+            createLoader();
+            const connectorId = String(new Date().getTime());
+            const response = await createConnector.mutateAsync({ id: connectorId, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+            await waitForOperations([response.data.operationId]);
+            const data = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
+            const newData = data;
+            const newConnector: InnerConnector = {
+                name: connectorId,
+                entityType: "connector",
+                entityId: connectorId,
+                skip: true,
+                path: "proident ut tempor in ut",
+                dependsOn: [],
+                package: "@fusebit-int/pkg-oauth-integration",
+            }
+            newData.data.components.push(newConnector);
+            const response2 = await updateIntegration.mutateAsync({ 
+                accountId: userData.accountId, 
+                subscriptionId: userData.subscriptionId,
+                integrationId: integrationData?.data.id,
+                data: newData,
+            });
+            await waitForOperations([response2.data.operationId]);
+            reloadIntegration();
+            reloadConnectors();
+        } catch (e) {
+            createError(e.message);
+        } finally {
+            removeLoader();
+        }
     }
 
     const handleEditOpen = async () => {
