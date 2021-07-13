@@ -89,6 +89,14 @@ const Overview: React.FC = () => {
     }
 
     const handleRowClick = (event: any, href: string) => {
+        // TODO: check if the user has auth to edit this row before sending him there, and if not send this error
+        // if (has auth) {
+        //     if (!event.target.id) {
+        //         window.location.href = href;
+        //     }
+        // } else {
+        //     createError("You don't have sufficient permissions to edit integration {integration}.  Please contact an account administrator.");
+        // }
         if (!event.target.id) {
             window.location.href = href;
         }
