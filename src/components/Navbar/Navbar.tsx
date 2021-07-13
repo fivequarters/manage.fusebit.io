@@ -14,7 +14,6 @@ import { useAccountConnectorsGetAll } from "../../hooks/api/v2/account/connector
 import { Integration } from "../../interfaces/integration";
 import { Connector } from "../../interfaces/connector";
 import { useState } from "react";
-import { useEffect } from "react";
 import { useAxios } from "../../hooks/useAxios";
 import burguer from "../../assets/burguer.svg";
 import cross from "../../assets/cross.svg"
@@ -30,12 +29,6 @@ const Navbar: React.FC<Props> = ({ sectionName, dropdown, integration, connector
 
     const { data: integrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
     const { data: connectors } = useAccountConnectorsGetAll<{ items: Connector[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
-
-    useEffect(() => {
-        if (!userData.id) {
-            window.location.href = `https://fusebit.auth0.com/authorize?response_type=token&client_id=hSgWIXmbluQMADuWhDnRTpWyKptJe6LB&audience=${url}&redirect_uri=${window.location.origin}/callback&scope=openid profile email`;
-        }
-    }, [url, userData]);
 
     return (
         <SC.Background>
