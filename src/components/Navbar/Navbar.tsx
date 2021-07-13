@@ -23,7 +23,6 @@ const Navbar: React.FC<Props> = ({ sectionName, dropdown, integration, connector
     const [anchorSectionDropdown, setAnchorSectionDropdown] = React.useState(null);
     const [anchorUserDropdown, setAnchorUserDropdown] = React.useState(null);
     const { userData, logout } = useContext();
-    const [loginUrl, setLoginUrl] = useState("");
     const { getBaseUrl, setBaseUrl } = useAxios();
     const [url, setUrl] = useState(getBaseUrl());
     const [drawerOpen, setDrawerOpen] = useState(false);
