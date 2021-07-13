@@ -39,38 +39,48 @@ const Develop: React.FC = () => {
     const [connectorListOpen, setConnectorListOpen] = React.useState(false);
 
     const handleConnectorDelete = async (connectorId: string) => {
-        try {
-            createLoader();
-            const data = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
-            delete data.data.configuration.connectors[connectorId];
-             const response2 = await updateIntegration.mutateAsync({ 
-                accountId: userData.accountId, 
-                subscriptionId: userData.subscriptionId,
-                ...data
-            });
-            await waitForOperations([response2.data.operationId]);
-            reloadIntegration();
-            reloadConnectors();
-        } catch (e) {
-            createError(e.message);
-        } finally {
-            removeLoader();
-            setConnectorListOpen(false);
-        }
+        // try {
+        //     createLoader();
+        //     const data = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
+        //     delete data.data.configuration.connectors[connectorId];
+        //      const response2 = await updateIntegration.mutateAsync({ 
+        //         accountId: userData.accountId, 
+        //         subscriptionId: userData.subscriptionId,
+        //         ...data
+        //     });
+        //     await waitForOperations([response2.data.operationId]);
+        //     reloadIntegration();
+        //     reloadConnectors();
+        // } catch (e) {
+        //     createError(e.message);
+        // } finally {
+        //     removeLoader();
+        //     setConnectorListOpen(false);
+        // }
     }
 
     const addConnector = async (connectorId: string) => {
         try {
             createLoader();
             const data = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
-            data.data.configuration.connectors[connectorId] = {
-                connector: connectorId,
-                package: "@fusebit-int/pkg-oauth-integration"
+            const newData = data;
+            console.log(newData.data.components);
+            const newConnector: InnerConnector = {
+                name: connectorId,
+                entityType: "connector",
+                entityId: connectorId,
+                skip: true,
+                path: "proident ut tempor in ut",
+                dependsOn: [],
+                package: "@fusebit-int/pkg-oauth-integration",
             }
+            newData.data.components.push(newConnector);
+            console.log(newData.data.components);
             const response2 = await updateIntegration.mutateAsync({ 
                 accountId: userData.accountId, 
                 subscriptionId: userData.subscriptionId,
-                ...data
+                integrationId: connectorId,
+                data: newData
             });
             await waitForOperations([response2.data.operationId]);
             reloadIntegration();
@@ -84,29 +94,29 @@ const Develop: React.FC = () => {
     }
 
     const addNewConnector = async () => {
-        try {
-            createLoader();
-            const connectorId = String(new Date().getTime());
-            const response = await createConnector.mutateAsync({ id: connectorId, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
-            await waitForOperations([response.data.operationId]);
-            const data = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
-            data.data.configuration.connectors[connectorId] = {
-                connector: connectorId,
-                package: "@fusebit-int/pkg-oauth-integration"
-            }
-            const response2 = await updateIntegration.mutateAsync({ 
-                accountId: userData.accountId, 
-                subscriptionId: userData.subscriptionId,
-                ...data
-            });
-            await waitForOperations([response2.data.operationId]);
-            reloadIntegration();
-            reloadConnectors();
-        } catch (e) {
-            createError(e.message);
-        } finally {
-            removeLoader();
-        }
+        // try {
+        //     createLoader();
+        //     const connectorId = String(new Date().getTime());
+        //     const response = await createConnector.mutateAsync({ id: connectorId, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+        //     await waitForOperations([response.data.operationId]);
+        //     const data = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
+        //     data.data.configuration.connectors[connectorId] = {
+        //         connector: connectorId,
+        //         package: "@fusebit-int/pkg-oauth-integration"
+        //     }
+        //     const response2 = await updateIntegration.mutateAsync({ 
+        //         accountId: userData.accountId, 
+        //         subscriptionId: userData.subscriptionId,
+        //         ...data
+        //     });
+        //     await waitForOperations([response2.data.operationId]);
+        //     reloadIntegration();
+        //     reloadConnectors();
+        // } catch (e) {
+        //     createError(e.message);
+        // } finally {
+        //     removeLoader();
+        // }
     }
 
     const handleEditOpen = async () => {
@@ -158,7 +168,16 @@ const Develop: React.FC = () => {
                         <SC.CardTitle>Connectors</SC.CardTitle>
                         <div>
                             {connectors?.data.items
-                                .filter((item: Connector) => !Object.keys(integrationData?.data.data.configuration.connectors ?? {}).some((key: string) => (integrationData?.data.data.configuration.connectors ?? {} as InnerConnector)[key].connector === item.id))
+                                .filter((item: Connector, index: number) => {
+                                    //return integrationData?.data.data.components[index].entityId !== item.id;
+                                    let returnItem = true;
+                                    integrationData?.data.data.components.forEach((connector: InnerConnector) => {
+                                        if (connector.entityId === item.id) {
+                                            returnItem = false;
+                                        }
+                                    });
+                                    return returnItem;
+                                })
                                 .map((item: Connector, index: number) => {
                                 return <SC.CardConnector key={index} onClick={(e) => addConnector(item.id)}>
                                     {// TODO: Replace placeholder with real data 
@@ -234,18 +253,17 @@ const Develop: React.FC = () => {
                         <SC.CardTitle>Connectors</SC.CardTitle>
                         <SC.CardConnectorWrapper>
                             {
-                                Object.keys(integrationData?.data.data.configuration.connectors ?? {}).map((key: string, index) => {
-                                    const connector = (integrationData?.data.data.configuration.connectors ?? {} as InnerConnector)[key];
+                                integrationData?.data.data.components.map((connector: InnerConnector, index) => {
                                     if (index < 5) {
                                         return (
                                             <SC.CardConnector key={index} onClick={(e: any) => {
-                                                    if(!e.target.id) history.push(`/connector/${connector.connector}`)
+                                                    if(!e.target.id) history.push(`/connector/${connector.entityId}`)
                                                 }}>
                                                 {// TODO: Replace placeholder with real data 
                                                 } 
-                                                <SC.CardConnectorImage src={slack} alt={key} height="20" width="20" />
-                                                <SC.CardConnectorText>{connector.connector}</SC.CardConnectorText>
-                                                <SC.CardConnectorCrossContainer id="closeWrapper" onClick={() => handleConnectorDelete(connector.connector)}>
+                                                <SC.CardConnectorImage src={slack} alt={"connector image"} height="20" width="20" />
+                                                <SC.CardConnectorText>{connector.entityId}</SC.CardConnectorText>
+                                                <SC.CardConnectorCrossContainer id="closeWrapper" onClick={() => handleConnectorDelete(connector.entityId)}>
                                                     <SC.CardConnectorCross id="close" src={cross} alt="close" height="8" width="8" />
                                                 </SC.CardConnectorCrossContainer>
                                             </SC.CardConnector>
@@ -256,12 +274,13 @@ const Develop: React.FC = () => {
                             }
                         </SC.CardConnectorWrapper>
                         {
-                            Object.keys(integrationData?.data.data.configuration.connectors ?? {}).length >= 5 && (
+                            integrationData?.data.data.components.length ? 
+                            integrationData?.data.data.components.length >= 5 && (
                                 <SC.CardConnectorSeeMore href="/"> 
                                     See all
                                     <img src={arrow} alt="see more" height="10" width="10" />
                                 </SC.CardConnectorSeeMore>
-                            )
+                            ) : null
                         }
                         
                         <SC.CardConnectorButtonsWrapper>
