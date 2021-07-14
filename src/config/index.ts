@@ -3,9 +3,10 @@ import IntegrationsPage from '../pages/IntegrationsPage';
 import IntegrationDetailPage from "../pages/IntegrationDetailPage";
 import ConnectorDetailPage from "../pages/ConnectorDetailPage";
 import LoggedOutErrorPage from "../pages/LoggedOutErrorPage";
+import FatalErrorPage from "../pages/FatalErrorPage";
 import AuthCallback from "../pages/AuthCallback";
 import { RouteItem } from "../interfaces/router";
- 
+
 // define app routes
 export const routes: Array<RouteItem> = [
     {
@@ -38,4 +39,9 @@ export const routes: Array<RouteItem> = [
         path: "/logged-out-error",
         component: LoggedOutErrorPage,
     },
+    {
+        key: "fatal-error",
+        path: "/fatal-error",
+        component: FatalErrorPage,
+    }
 ]

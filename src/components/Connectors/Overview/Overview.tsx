@@ -5,11 +5,11 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useContext } from "../../../hooks/useContext";
 import { useLoader } from "../../../hooks/useLoader";
-import { useAccountConnectorsGetAll} from "../../../hooks/api/v2/account/connector/useGetAll";
+import { useAccountConnectorsGetAll } from "../../../hooks/api/v2/account/connector/useGetAll";
 import { useAccountConnectorCreateConnector } from "../../../hooks/api/v2/account/connector/useCreateOne";
 import { useAccountConnectorDeleteConnector } from "../../../hooks/api/v2/account/connector/useDeleteOne";
 import { Operation } from "../../../interfaces/operation";
-import {Connector} from "../../../interfaces/connector";
+import { Connector } from "../../../interfaces/connector";
 import { useError } from "../../../hooks/useError";
 import arrowRight from "../../../assets/arrow-right.svg";
 import arrowLeft from "../../../assets/arrow-left.svg";
@@ -24,7 +24,7 @@ const Overview: React.FC = () => {
     const [selected, setSelected] = React.useState<string[]>([]);
     const [rows, setRows] = React.useState<Connector[]>([]);
     const { userData } = useContext();
-    const { data: connectors, refetch: reloadConnectors } = useAccountConnectorsGetAll<{items: Connector[]}>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+    const { data: connectors, refetch: reloadConnectors } = useAccountConnectorsGetAll<{ items: Connector[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
     const createConnector = useAccountConnectorCreateConnector<Operation>();
     const deleteConnector = useAccountConnectorDeleteConnector<Operation>();
     const { waitForOperations, createLoader, removeLoader } = useLoader();
@@ -40,9 +40,9 @@ const Overview: React.FC = () => {
 
     const handleSelectAllCheck = (event: any) => {
         if (event.target.checked) {
-        const newSelecteds = rows.map((row) => row.id);
-        setSelected(newSelecteds);
-        return;
+            const newSelecteds = rows.map((row) => row.id);
+            setSelected(newSelecteds);
+            return;
         }
         setSelected([]);
     };
@@ -50,22 +50,22 @@ const Overview: React.FC = () => {
     const handleCheck = (event: any, id: string) => {
         const selectedIndex = selected.indexOf(id);
         let newSelected: string[] = [];
-    
+
         if (selectedIndex === -1) {
-          newSelected = newSelected.concat(selected, id);
+            newSelected = newSelected.concat(selected, id);
         } else if (selectedIndex === 0) {
-          newSelected = newSelected.concat(selected.slice(1));
+            newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
-          newSelected = newSelected.concat(selected.slice(0, -1));
+            newSelected = newSelected.concat(selected.slice(0, -1));
         } else if (selectedIndex > 0) {
-          newSelected = newSelected.concat(
-            selected.slice(0, selectedIndex),
-            selected.slice(selectedIndex + 1),
-          );
+            newSelected = newSelected.concat(
+                selected.slice(0, selectedIndex),
+                selected.slice(selectedIndex + 1),
+            );
         }
-    
+
         setSelected(newSelected);
-      };
+    };
 
 
     const isSelected = (name: string) => selected.indexOf(name) !== -1;
@@ -75,7 +75,7 @@ const Overview: React.FC = () => {
             createLoader();
             let operationIds: string[] = [];
             for (let i = 0; i < selected.length; i++) {
-                const response = await deleteConnector.mutateAsync({ id: selected[i], accountId: userData.accountId, subscriptionId: userData.subscriptionId });    
+                const response = await deleteConnector.mutateAsync({ id: selected[i], accountId: userData.accountId, subscriptionId: userData.subscriptionId });
                 operationIds.push(response.data.operationId);
             }
             await waitForOperations(operationIds);
@@ -145,16 +145,16 @@ const Overview: React.FC = () => {
             <SC.DeleteWrapper active={selected.length > 0}>
                 {
                     selected.length > 0 && (
-                    <>
-                        {selected.length} selected
-                        <SC.DeleteIconWrapper>
-                            <Tooltip title="Delete">
-                                <IconButton onClick={handleRowDelete}>
-                                    <DeleteIcon />
-                                </IconButton>
-                            </Tooltip>
-                        </SC.DeleteIconWrapper>
-                    </>
+                        <>
+                            {selected.length} selected
+                            <SC.DeleteIconWrapper>
+                                <Tooltip title="Delete">
+                                    <IconButton onClick={handleRowDelete}>
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </Tooltip>
+                            </SC.DeleteIconWrapper>
+                        </>
                     )
                 }
             </SC.DeleteWrapper>
@@ -184,13 +184,13 @@ const Overview: React.FC = () => {
                     <TableBody>
                         {rows.map((row) => (
                             <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/connector/" + row.id)}>
-                                <TableCell style={{cursor: "default"}} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
+                                <TableCell style={{ cursor: "default" }} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
                                     <Checkbox
-                                    color="primary"
-                                    onClick={(event) => handleCheck(event, row.id)}
-                                    checked={isSelected(row.id)}
-                                    inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${row.id}` }}
-                                    id={`enhanced-table-checkbox-${row.id}`}
+                                        color="primary"
+                                        onClick={(event) => handleCheck(event, row.id)}
+                                        checked={isSelected(row.id)}
+                                        inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${row.id}` }}
+                                        id={`enhanced-table-checkbox-${row.id}`}
                                     />
                                 </TableCell>
                                 <TableCell component="th" scope="row">
@@ -198,10 +198,10 @@ const Overview: React.FC = () => {
                                         {row.id}
                                     </SC.CellName>
                                 </TableCell>
-                                <TableCell align="left">    
+                                <TableCell align="left">
                                     Slack
                                     {// TODO: Replace placeholder with real data
-                                    } 
+                                    }
                                 </TableCell>
                                 <TableCell align="left">
                                     5
@@ -211,7 +211,7 @@ const Overview: React.FC = () => {
                                 <TableCell align="left">
                                     {new Date().toISOString().slice(0, 10)}
                                     {// TODO: Replace placeholder with real data
-                                    } 
+                                    }
                                 </TableCell>
                             </SC.Row>
                         ))}
@@ -219,7 +219,7 @@ const Overview: React.FC = () => {
                 </Table>
             </SC.Table>
             <SC.TableMobile>
-            <Table size="small" aria-label="Overview Table">
+                <Table size="small" aria-label="Overview Table">
                     <TableHead>
                         <TableRow>
                             <TableCell padding="checkbox">
@@ -248,13 +248,13 @@ const Overview: React.FC = () => {
                     <TableBody>
                         {rows.map((row) => (
                             <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/connector/" + row.id)}>
-                                <TableCell style={{cursor: "default"}} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
+                                <TableCell style={{ cursor: "default" }} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
                                     <Checkbox
-                                    color="primary"
-                                    onClick={(event) => handleCheck(event, row.id)}
-                                    checked={isSelected(row.id)}
-                                    inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${row.id}` }}
-                                    id={`enhanced-table-checkbox-${row.id}`}
+                                        color="primary"
+                                        onClick={(event) => handleCheck(event, row.id)}
+                                        checked={isSelected(row.id)}
+                                        inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${row.id}` }}
+                                        id={`enhanced-table-checkbox-${row.id}`}
                                     />
                                 </TableCell>
                                 <TableCell component="th" scope="row">
@@ -262,17 +262,17 @@ const Overview: React.FC = () => {
                                         {row.id}
                                     </SC.CellName>
                                 </TableCell>
-                                <TableCell align="left">    
+                                <TableCell align="left">
                                     {selectedCell === cells.TYPE ? "Slack" : selectedCell === cells.IDENTITIES ? 10 : new Date().toISOString().slice(0, 10)}
                                     {// TODO: Replace placeholder with real data
-                                    } 
+                                    }
                                 </TableCell>
                             </SC.Row>
                         ))}
                     </TableBody>
                 </Table>
             </SC.TableMobile>
-            </>
+        </>
     )
 }
 
