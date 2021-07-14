@@ -2,6 +2,7 @@ import ConnectorsPage from '../pages/ConnectorsPage';
 import IntegrationsPage from '../pages/IntegrationsPage';
 import IntegrationDetailPage from "../pages/IntegrationDetailPage";
 import ConnectorDetailPage from "../pages/ConnectorDetailPage";
+import LoggedOutErrorPage from "../pages/LoggedOutErrorPage";
 import AuthCallback from "../pages/AuthCallback";
 import { RouteItem } from "../interfaces/router";
  
@@ -9,12 +10,12 @@ import { RouteItem } from "../interfaces/router";
 export const routes: Array<RouteItem> = [
     {
         key: "router-home",
-        path: "/",
+        path: "/connectors",
         component: ConnectorsPage
     },
     {
         key: "router-integrations",
-        path: "/integrations",
+        path: "/",
         component: IntegrationsPage,
     },
     {
@@ -31,5 +32,10 @@ export const routes: Array<RouteItem> = [
         key: "router-auth-callback",
         path: "/callback",
         component: AuthCallback,
+    },
+    {
+        key: "logged-out-error",
+        path: "/logged-out-error",
+        component: LoggedOutErrorPage,
     },
 ]
