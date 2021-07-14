@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
-import { useContext } from "./useContext";
+import { readLocalData, useContext } from "./useContext";
 
 interface ApiResponse<T> {
   error?: string;
@@ -8,6 +8,21 @@ interface ApiResponse<T> {
 }
 
 export const INITIAL_API_URL = localStorage.getItem('FUSEBIT_API_BASE_URL') || `https://stage.us-west-2.fusebit.io`;
+
+axios.interceptors.response.use(response => response, error => {
+  const statusCode = Number(error.response.status);
+  if (statusCode === 404) {
+    const __userData = readLocalData();
+    let toUrl = "/logged-out-error";
+    if (__userData.token) {
+      if (window.location.href.indexOf('connector') >= 0) toUrl = '/connectors';
+      else if (window.location.href.indexOf('integration') >= 0) toUrl = '/';
+      else toUrl = '/';
+    }
+    window.location.href = toUrl;
+  }
+  return Promise.reject(error);
+});
 
 export const useAxios = () => {
   const { userData } = useContext();
