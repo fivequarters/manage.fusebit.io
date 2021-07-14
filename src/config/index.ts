@@ -3,6 +3,7 @@ import IntegrationsPage from '../pages/IntegrationsPage';
 import IntegrationDetailPage from "../pages/IntegrationDetailPage";
 import ConnectorDetailPage from "../pages/ConnectorDetailPage";
 import LoggedOutErrorPage from "../pages/LoggedOutErrorPage";
+import AuthenticationPage from "../pages/AuthenticationPage";
 import AuthCallback from "../pages/AuthCallback";
 import { RouteItem } from "../interfaces/router";
  
@@ -34,8 +35,13 @@ export const routes: Array<RouteItem> = [
         component: AuthCallback,
     },
     {
-        key: "logged-out-error",
+        key: "router-logged-out-error",
         path: "/logged-out-error",
         component: LoggedOutErrorPage,
+    },
+    {
+        key: "router-authentication",
+        path: "/authentication",
+        component: AuthenticationPage,
     },
 ]
