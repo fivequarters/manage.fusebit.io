@@ -1,13 +1,14 @@
 import React, { FC, ReactElement } from "react";
+import Layout from "../components/Layout";
 import FatalError from "../components/FatalError";
 import Navbar from "../components/Navbar";
 
 const LoggedOutErrorPage: FC<{}> = (): ReactElement => {
   return (
-    <>
+    <Layout>
       <Navbar sectionName={""} dropdown={true} integrationsLink={true} />
       <FatalError />
-    </>
+    </Layout>
   );
 };
 

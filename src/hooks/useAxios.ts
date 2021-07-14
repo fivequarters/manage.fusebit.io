@@ -15,8 +15,8 @@ axios.interceptors.response.use(response => response, error => {
     const __userData = readLocalData();
     let toUrl = "/logged-out-error";
     if (__userData.token) {
-      if (window.location.href.indexOf('connector') >= 0) toUrl = '/connector';
-      else if (window.location.href.indexOf('integration') >= 0) toUrl = '/integration';
+      if (window.location.href.indexOf('connector') >= 0) toUrl = '/connectors';
+      else if (window.location.href.indexOf('integration') >= 0) toUrl = '/';
       else toUrl = '/';
     }
     window.location.href = toUrl;

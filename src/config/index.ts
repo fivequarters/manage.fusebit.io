@@ -5,6 +5,7 @@ import ConnectorDetailPage from "../pages/ConnectorDetailPage";
 import LoggedOutErrorPage from "../pages/LoggedOutErrorPage";
 import FatalErrorPage from "../pages/FatalErrorPage";
 import AuthCallback from "../pages/AuthCallback";
+import NotFoundPage from "../pages/NotFoundPage";
 import { RouteItem } from "../interfaces/router";
 
 // define app routes
@@ -43,5 +44,10 @@ export const routes: Array<RouteItem> = [
         key: "fatal-error",
         path: "/fatal-error",
         component: FatalErrorPage,
+    },
+    {
+        key: "404",
+        path: "*",
+        component: NotFoundPage
     }
 ]
