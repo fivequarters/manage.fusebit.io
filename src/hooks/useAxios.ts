@@ -7,6 +7,8 @@ interface ApiResponse<T> {
   success?: boolean;
 }
 
+export const INITIAL_API_URL = localStorage.getItem('FUSEBIT_API_BASE_URL') || `https://stage.us-west-2.fusebit.io`;
+
 export const useAxios = () => {
   const { userData } = useContext();
 
