@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import * as SC from "./styles";
-import { Table, TableBody, TableCell, TableHead, TableRow, Button, Checkbox, IconButton, Tooltip } from "@material-ui/core";
+import { Table, TableBody, TableCell, TableHead, TableRow, Button, Checkbox, IconButton, Tooltip, Modal, Backdrop, Fade } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useContext } from "../../../hooks/useContext";
@@ -13,6 +13,7 @@ import { Operation } from "../../../interfaces/operation";
 import { useError } from "../../../hooks/useError";
 import arrowRight from "../../../assets/arrow-right.svg";
 import arrowLeft from "../../../assets/arrow-left.svg";
+import AddIntegration from "./AddIntegration";
 
 enum cells {
     INSTANCES = "Instances",
@@ -30,6 +31,7 @@ const Overview: React.FC = () => {
     const { waitForOperations, createLoader, removeLoader } = useLoader();
     const { createError } = useError();
     const [selectedCell, setSelectedCell] = React.useState<cells>(cells.INSTANCES);
+    const [addIntegrationOpen, setAddIntegrationOpen] = React.useState(false);
 
     useEffect(() => {
         if (integrations && integrations.data.items) {
@@ -137,11 +139,22 @@ const Overview: React.FC = () => {
 
     return (
         <>
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                open={addIntegrationOpen}
+                onClose={() => setAddIntegrationOpen(false)}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+            >
+                <AddIntegration open={addIntegrationOpen} onClose={() => setAddIntegrationOpen(false)} />
+            </Modal>
             <SC.ButtonContainer>
                 <SC.ButtonMargin>
-                    <Button onClick={_createIntegration} startIcon={<AddIcon />} variant="outlined" color="primary" size="large">New Integration</Button>
+                    <Button onClick={() => setAddIntegrationOpen(true)} startIcon={<AddIcon />} variant="outlined" color="primary" size="large">New Integration</Button>
                 </SC.ButtonMargin>
             </SC.ButtonContainer>
+            
             <SC.DeleteWrapper active={selected.length > 0}>
                 {
                     selected.length > 0 && (
