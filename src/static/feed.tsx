@@ -1,4 +1,4 @@
-export const feed = 
+export const integrationsFeed = 
     {
       id: "as23w63age",
       name: "A Slack Bot",
@@ -21,7 +21,6 @@ export const feed =
                 slackName: {
                   type: "string",
                   minLength: 3,
-                  description: "Please enter the name for the slack connector",
                 },
               },
             },
@@ -31,18 +30,16 @@ export const feed =
         uischema: {
           type: "Group",
           label: "Slack Connector Details",
-          elements: [
-            {
-              type: "HorizontalLayout",
+          elements: {
+              type: "VerticalLayout",
               elements: [
                 {
                   type: "Control",
-                  scope: "#/properties/slackConnector/slackName",
-                  label: "Name of the connector for Slack",
+                  scope: "#/properties/slackName",
+                  label: "Slack Connector name",
                 },
               ],
             },
-          ],
         },
         data: {
           slackConnector: {

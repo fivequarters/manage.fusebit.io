@@ -8,9 +8,9 @@ export const Card = styled.div<{open: boolean}>`
     transform: translate(-50%, -50%);
     background-color: white;
     opacity: ${props => props.open ? 1 : 0};
-    padding: 32px;
-    width: 900px;
-    height: 500px;
+    padding: 64px;
+    width: 1140px;
+    height: 671px;
     border-radius: 8px;
     box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
     transition: all 1s linear;
@@ -25,11 +25,12 @@ export const Card = styled.div<{open: boolean}>`
 `;
 
 export const Title = styled.h2`
-    font-size: 26px;
-    line-height: 22px;
+    font-size: 24px;
+    line-height: 26px;
     color: var(--black);
     font-weight: 600;
-    margin-bottom: 24px;
+    margin: 0;
+    margin-bottom: 49px;
 `;
 
 export const Flex = styled.div<{alignItems?: boolean}>`
@@ -40,19 +41,21 @@ export const Flex = styled.div<{alignItems?: boolean}>`
 export const Column = styled.div<{border?: boolean}>`
     display: flex;
     flex-direction: column;
-    width: 215px;
+    height: 490px;
 `;
 
 export const ColumnItem = styled.div<{active: boolean}>`
     display: flex;
     align-items: center;
-    padding: 12px;
+    padding: 11px 16px;
     font-size: 16px;
     line-height: 18px;
     background-color: ${props => props.active && "var(--secondary-color)"};
     font-weight: ${props => props.active ? 600 : 400};
-    width: 180px;
+    width: 254px;
     transition: all .2s linear;
+    margin-bottom: 8px;
+    border-radius: 4px;
 
     &:hover {
         cursor: pointer;
@@ -61,26 +64,53 @@ export const ColumnItem = styled.div<{active: boolean}>`
 `;
 
 export const ColumnItemImage = styled.img`
-    height: 20px;
-    width: 20px;
+    height: 18px;
+    width: 18px;
     object-fit: contain;
     margin-right: 16px;
 `;
 
+export const ColumnBr = styled.div`
+    width: 1px;
+    height: 321px;
+    background-color: #959595;
+    opacity: 0.3;
+    margin: 0 32px;
+`;
+
+export const ColumnSearchWrapper = styled.div`
+    position: relative;
+    margin-bottom: 32px;
+`;
+
 export const ColumnSearch = styled.input`
-    padding: 12px;
-    font-size: 16px;
-    line-height: 18px;
+    font-family: "Poppins";
+    padding: 7px 0;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--black);
     border: none;
+    border-bottom: 1px solid var(--black);
     outline: rgba(355,355,355,0);
     width: 100%;
     transition: all .2s linear;
 
     &::placeholder {
         font-family: "Poppins";
-        font-size: 16px;
-        line-height: 18px;
+        font-size: 14px;
+        line-height: 20px;
+        color: #959595;
     }
+`;
+
+export const ColumnSearchIcon = styled.img`
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 24px;
+    width: 24px;
+    object-fit: contain;
 `;
 
 export const ConnectorInfo = styled.div`
@@ -90,11 +120,18 @@ export const ConnectorInfo = styled.div`
     width: 100%;
 `;
 
+export const ConnectorImage = styled.img`
+    height: 28px;
+    width: 28px;
+    object-fit: contain;
+    margin-right: 16px;
+`;
+
 export const ConnectorTitle = styled.h3`
-    font-size: 18px;
-    line-height: 18px;
-    margin: 0;
+    font-size: 20px;
+    line-height: 26px;
     color: var(--black);
+    margin: 0;
 `;
 
 export const ConnectorTitleWrapper = styled.div`
@@ -104,17 +141,23 @@ export const ConnectorTitleWrapper = styled.div`
 `;
 
 export const ConnectorVersion = styled.div`
-    font-size: 16px;
-    line-height: 18px;
+    font-size: 12px;
+    line-height: 14px;
+    font-weight: 300;
     color: var(--black);
     margin-left: auto;
 `;
 
 export const ConnectorDescription = styled(ReactMarkdown)`
     font-size: 14px;
-    line-height: 18px;
+    line-height: 20px;
     color: var(--black);
-    margin-top: 12px;
+    max-width: 300px;
+    
+    p {
+        margin: 0;
+        margin-top: 16px;
+    }
 `;
 
 export const ConnectorCustomize = styled.div`
@@ -122,16 +165,15 @@ export const ConnectorCustomize = styled.div`
     align-items: center;
     font-size: 16px;
     line-height: 18px;
-    margin-top: 12px;
     font-weight: 600;
-    margin-right: 20px;
+    margin-right: 24px;
 `;
 
 export const FormWrapper = styled.form`
     display: flex;
     flex-direction: column;
     width: 316px;
-    margin-top: 20px;
+    margin-top: 38px;
 `;
 
 export const FormInputWrapper = styled.div`
@@ -143,5 +185,20 @@ export const FormInputWrapper = styled.div`
         flex-direction: column;
         align-items: center;
         justify-content: center;
+    }
+`;
+
+export const Close = styled.img`
+    height: 12px;
+    width: 12px;
+    object-fit: contain;
+    position: absolute;
+    top: 32px;
+    right: 32px;
+    transition: all .25s linear;
+
+    &:hover {
+        cursor: pointer;
+        transform: rotate(90deg);
     }
 `;
