@@ -13,11 +13,22 @@ import {
   import search from "../../../../assets/search.svg";
   import cross from "../../../../assets/cross.svg";
 
+  enum Filters {
+      ALL = "All",
+      MESSAGGING = "Messaging",
+      PRODUCTIVITY = "Productivity",
+      CRM = "CRM",
+      CALENDAR = "Calendar",
+  }
+
 const AddIntegration: React.FC<Props> = ({open, onClose}) => {
     const [data, setData] = React.useState();
     const [errors, setErrors] = React.useState<object[]>([]);
     const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
     const [customize, setCustomize] = React.useState(false);
+    const [activeFilter, setActiveFilter] = React.useState<Filters>(Filters.ALL);
+    const [activeIntegration, setActiveIntegration] = React.useState(integrationsFeed[0]);
+    const [searchFilter, setSearchFilter] = React.useState("");
 
     const handleSubmit = () => {
         if (errors.length > 0) {
@@ -27,41 +38,57 @@ const AddIntegration: React.FC<Props> = ({open, onClose}) => {
         }
     }
 
+    const handleFilterChange = (filter: Filters) => {
+        setActiveFilter(filter);
+    }
+
     return (
         <SC.Card open={open}>
             <SC.Close onClick={() => onClose()} src={cross} alt="close" height="12" width="12" />
             <SC.Title>New Integration</SC.Title>
             <SC.Flex>
                 <SC.Column>
-                    <SC.ColumnItem active={true}>All</SC.ColumnItem>
-                    <SC.ColumnItem active={false}>Messaging</SC.ColumnItem>
-                    <SC.ColumnItem active={false}>Productivity</SC.ColumnItem>
-                    <SC.ColumnItem active={false}>CRM</SC.ColumnItem>
-                    <SC.ColumnItem active={false}>Calendar</SC.ColumnItem>
+                    <SC.ColumnItem onClick={() => handleFilterChange(Filters.ALL)} active={activeFilter === Filters.ALL}>{Filters.ALL}</SC.ColumnItem>
+                    <SC.ColumnItem onClick={() => handleFilterChange(Filters.MESSAGGING)} active={activeFilter === Filters.MESSAGGING}>{Filters.MESSAGGING}</SC.ColumnItem>
+                    <SC.ColumnItem onClick={() => handleFilterChange(Filters.PRODUCTIVITY)} active={activeFilter === Filters.PRODUCTIVITY}>{Filters.PRODUCTIVITY}</SC.ColumnItem>
+                    <SC.ColumnItem onClick={() => handleFilterChange(Filters.CRM)} active={activeFilter === Filters.CRM}>{Filters.CRM}</SC.ColumnItem>
+                    <SC.ColumnItem onClick={() => handleFilterChange(Filters.CALENDAR)} active={activeFilter === Filters.CALENDAR}>{Filters.CALENDAR}</SC.ColumnItem>
                 </SC.Column>
                 <SC.ColumnBr />
                 <SC.Column border={true}>
                     <SC.ColumnSearchWrapper>
-                        <SC.ColumnSearch placeholder="Search" />
+                        <SC.ColumnSearch onChange={(e: any) => setSearchFilter(e.target.value)} placeholder="Search" />
                         <SC.ColumnSearchIcon src={search} alt="Search Integration" height="24" width="24" />
                     </SC.ColumnSearchWrapper>
-                    <SC.ColumnItem active={true}>
-                        <SC.ColumnItemImage src={slack} alt="slack" height="18" width="18" />
-                        Slack
-                    </SC.ColumnItem>
-                    <SC.ColumnItem active={false}>
-                        <SC.ColumnItemImage src={slack} alt="slack" height="18" width="18" />
-                        Discord
-                    </SC.ColumnItem>
+                    {
+                            integrationsFeed.map((integration) => {
+                                const tags = integration.tags.catalog.split(", ");
+                                let tagIsActive = false;
+                                tags.forEach(tag => {
+                                    if (activeFilter.toUpperCase().match(tag.toUpperCase()) || activeFilter === Filters.ALL) {
+                                        tagIsActive = true;
+                                    }
+                                });
+                                if (tagIsActive && integration.name.toUpperCase().includes(searchFilter.toUpperCase())) {
+                                    return (
+                                        <SC.ColumnItem key={integration.id} onClick={() => setActiveIntegration(integration)} active={integration.id === activeIntegration.id}>
+                                            <SC.ColumnItemImage src={integration.smallIcon} alt="slack" height="18" width="18" />
+                                            {integration.name}
+                                        </SC.ColumnItem>
+                                    )
+                                }
+                                return null;
+                            })
+                    }
                 </SC.Column>
                 <SC.ColumnBr />
                 <SC.ConnectorInfo>
                     <SC.ConnectorTitleWrapper>
-                        <SC.ConnectorImage src={slack} alt="slack" height="28" width="28" />
-                        <SC.ConnectorTitle>Slack Connector</SC.ConnectorTitle>
-                        <SC.ConnectorVersion>V1.0.0</SC.ConnectorVersion>
+                        <SC.ConnectorImage src={activeIntegration.smallIcon} alt="slack" height="28" width="28" />
+                        <SC.ConnectorTitle>{activeIntegration.name}</SC.ConnectorTitle>
+                        <SC.ConnectorVersion>{activeIntegration.version}</SC.ConnectorVersion>
                     </SC.ConnectorTitleWrapper>
-                    <SC.ConnectorDescription children={"This is a slack bot that _uses_ slack **and** Fusebit."} />
+                    <SC.ConnectorDescription children={activeIntegration.description} />
                     <TextField id="name" label="Name" style={{margin: "27px 0", width: "320px"}} />
                     <SC.ConnectorCustomize>
                         Customize
@@ -71,8 +98,8 @@ const AddIntegration: React.FC<Props> = ({open, onClose}) => {
                         customize && (
                             <SC.FormWrapper>
                                 <JsonForms
-                                schema={integrationsFeed.configuration.schema.properties.slackConnector}
-                                uischema={integrationsFeed.configuration.uischema.elements}
+                                schema={activeIntegration.configuration.schema.properties.slackConnector}
+                                uischema={activeIntegration.configuration.uischema.elements}
                                 data={data}
                                 renderers={materialRenderers}
                                 cells={materialCells}
@@ -85,8 +112,7 @@ const AddIntegration: React.FC<Props> = ({open, onClose}) => {
                             </SC.FormWrapper>
                         )
                     }
-                    
-                        <Button onClick={handleSubmit} style={{width: "200px", marginTop: "auto", marginLeft: "auto"}} fullWidth={false} size="large" color="primary" variant="contained">Create</Button>
+                    <Button onClick={handleSubmit} style={{width: "200px", marginTop: "auto", marginLeft: "auto"}} fullWidth={false} size="large" color="primary" variant="contained">Create</Button>
                 </SC.ConnectorInfo>
             </SC.Flex>
         </SC.Card>

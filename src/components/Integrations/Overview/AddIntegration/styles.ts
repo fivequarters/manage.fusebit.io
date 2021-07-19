@@ -53,7 +53,7 @@ export const ColumnItem = styled.div<{active: boolean}>`
     background-color: ${props => props.active && "var(--secondary-color)"};
     font-weight: ${props => props.active ? 600 : 400};
     width: 254px;
-    transition: all .2s linear;
+    transition: background-color .2s linear;
     margin-bottom: 8px;
     border-radius: 4px;
 
@@ -92,7 +92,7 @@ export const ColumnSearch = styled.input`
     border: none;
     border-bottom: 1px solid var(--black);
     outline: rgba(355,355,355,0);
-    width: 100%;
+    width: 254px;
     transition: all .2s linear;
 
     &::placeholder {
