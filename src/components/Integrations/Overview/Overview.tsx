@@ -104,18 +104,18 @@ const Overview: React.FC = () => {
         }
     }
 
-    const _createIntegration = async () => {
-        try {
-            createLoader();
-            const response = await createIntegration.mutateAsync({ id: String(new Date().getTime()), accountId: userData.accountId, subscriptionId: userData.subscriptionId });
-            await waitForOperations([response.data.operationId]);
-            reloadIntegrations();
-        } catch (e) {
-            createError(e.message);
-        } finally {
-            removeLoader();
-        }
-    }
+    // const _createIntegration = async () => {
+    //     try {
+    //         createLoader();
+    //         const response = await createIntegration.mutateAsync({ id: String(new Date().getTime()), accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+    //         await waitForOperations([response.data.operationId]);
+    //         reloadIntegrations();
+    //     } catch (e) {
+    //         createError(e.message);
+    //     } finally {
+    //         removeLoader();
+    //     }
+    // }
 
     const handlePreviousCellSelect = () => {
         if (selectedCell === cells.INSTANCES) {

@@ -1,6 +1,6 @@
 import React from "react";
 import * as SC from "./styles";
-import { Table, TableBody, TableCell, TableHead, TableRow, Button, Checkbox, IconButton, Tooltip } from "@material-ui/core";
+import { Table, TableBody, TableCell, TableHead, TableRow, Button, Checkbox, IconButton, Tooltip, Modal, Backdrop } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useContext } from "../../../hooks/useContext";
@@ -13,6 +13,7 @@ import { Connector } from "../../../interfaces/connector";
 import { useError } from "../../../hooks/useError";
 import arrowRight from "../../../assets/arrow-right.svg";
 import arrowLeft from "../../../assets/arrow-left.svg";
+import AddConnector from "./AddConnector";
 
 enum cells {
     TYPE = "Type",
@@ -30,6 +31,7 @@ const Overview: React.FC = () => {
     const { waitForOperations, createLoader, removeLoader } = useLoader();
     const { createError } = useError();
     const [selectedCell, setSelectedCell] = React.useState<cells>(cells.TYPE);
+    const [addConnectorOpen, setAddConnectorOpen] = React.useState(false);
 
     React.useEffect(() => {
         if (connectors && connectors.data.items) {
@@ -102,18 +104,18 @@ const Overview: React.FC = () => {
         }
     }
 
-    const _createConnector = async () => {
-        try {
-            createLoader();
-            const response = await createConnector.mutateAsync({ id: String(new Date().getTime()), accountId: userData.accountId, subscriptionId: userData.subscriptionId });
-            await waitForOperations([response.data.operationId]);
-            reloadConnectors();
-        } catch (e) {
-            createError(e.message);
-        } finally {
-            removeLoader();
-        }
-    }
+    // const _createConnector = async () => {
+    //     try {
+    //         createLoader();
+    //         const response = await createConnector.mutateAsync({ id: String(new Date().getTime()), accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+    //         await waitForOperations([response.data.operationId]);
+    //         reloadConnectors();
+    //     } catch (e) {
+    //         createError(e.message);
+    //     } finally {
+    //         removeLoader();
+    //     }
+    // }
 
     const handlePreviousCellSelect = () => {
         if (selectedCell === cells.TYPE) {
@@ -137,9 +139,19 @@ const Overview: React.FC = () => {
 
     return (
         <>
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                open={addConnectorOpen}
+                onClose={() => setAddConnectorOpen(false)}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+            >
+                <AddConnector open={addConnectorOpen} onClose={() => setAddConnectorOpen(false)} />
+            </Modal>
             <SC.ButtonContainer>
                 <SC.ButtonMargin>
-                    <Button onClick={_createConnector} startIcon={<AddIcon />} variant="outlined" color="primary" size="large">New Connector</Button>
+                    <Button onClick={() => setAddConnectorOpen(true)} startIcon={<AddIcon />} variant="outlined" color="primary" size="large">New Connector</Button>
                 </SC.ButtonMargin>
             </SC.ButtonContainer>
             <SC.DeleteWrapper active={selected.length > 0}>

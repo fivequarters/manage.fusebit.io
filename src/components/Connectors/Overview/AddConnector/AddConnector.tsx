@@ -8,7 +8,7 @@ import {
   import { JsonForms } from '@jsonforms/react';
   import { ValidationMode } from "@jsonforms/core";
   import { Button, Switch, TextField } from "@material-ui/core";
-  import {integrationsFeed} from "../../../../static/feed";
+  import {connectorsFeed} from "../../../../static/feed";
   import search from "../../../../assets/search.svg";
   import cross from "../../../../assets/cross.svg";
 
@@ -20,13 +20,13 @@ import {
       CALENDAR = "Calendar",
   }
 
-const AddIntegration: React.FC<Props> = ({open, onClose}) => {
+const AddConnector: React.FC<Props> = ({open, onClose}) => {
     const [data, setData] = React.useState();
     const [errors, setErrors] = React.useState<object[]>([]);
     const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
     const [customize, setCustomize] = React.useState(false);
     const [activeFilter, setActiveFilter] = React.useState<Filters>(Filters.ALL);
-    const [activeIntegration, setActiveIntegration] = React.useState(integrationsFeed[0]);
+    const [activeIntegration, setActiveIntegration] = React.useState(connectorsFeed[0]);
     const [searchFilter, setSearchFilter] = React.useState("");
 
     const handleSubmit = () => {
@@ -44,7 +44,7 @@ const AddIntegration: React.FC<Props> = ({open, onClose}) => {
     return (
         <SC.Card open={open}>
             <SC.Close onClick={() => onClose()} src={cross} alt="close" height="12" width="12" />
-            <SC.Title>New Integration</SC.Title>
+            <SC.Title>New Connector</SC.Title>
             <SC.Flex>
                 <SC.Column>
                     <SC.ColumnItem onClick={() => handleFilterChange(Filters.ALL)} active={activeFilter === Filters.ALL}>{Filters.ALL}</SC.ColumnItem>
@@ -57,10 +57,10 @@ const AddIntegration: React.FC<Props> = ({open, onClose}) => {
                 <SC.Column border={true}>
                     <SC.ColumnSearchWrapper>
                         <SC.ColumnSearch onChange={(e: any) => setSearchFilter(e.target.value)} placeholder="Search" />
-                        <SC.ColumnSearchIcon src={search} alt="Search Integration" height="24" width="24" />
+                        <SC.ColumnSearchIcon src={search} alt="Search Connector" height="24" width="24" />
                     </SC.ColumnSearchWrapper>
                     {
-                            integrationsFeed.map((integration) => {
+                            connectorsFeed.map((integration) => {
                                 const tags = integration.tags.catalog.split(", ");
                                 let tagIsActive = false;
                                 tags.forEach(tag => {
@@ -97,7 +97,7 @@ const AddIntegration: React.FC<Props> = ({open, onClose}) => {
                         customize && (
                             <SC.FormWrapper>
                                 <JsonForms
-                                schema={activeIntegration.configuration.schema.properties.slackConnector}
+                                schema={activeIntegration.configuration.schema.properties.connector}
                                 uischema={activeIntegration.configuration.uischema.elements}
                                 data={data}
                                 renderers={materialRenderers}
@@ -118,4 +118,4 @@ const AddIntegration: React.FC<Props> = ({open, onClose}) => {
     )
 }
 
-export default AddIntegration;
+export default AddConnector;

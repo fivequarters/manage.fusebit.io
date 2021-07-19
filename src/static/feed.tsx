@@ -1,4 +1,6 @@
 import slack from "../assets/slack.svg";
+import discord from "../assets/discord.svg";
+import asana from "../assets/asana.svg";
 
 export const integrationsFeed = [
     {
@@ -245,6 +247,354 @@ export const integrationsFeed = [
                   type: "Control",
                   scope: "#/properties/slackName",
                   label: "Slack Connector name",
+                },
+              ],
+            },
+        },
+        data: {
+          slackConnector: {
+            slackName: "slack-connector",
+          },
+        },
+  
+        entities: [
+          {
+            name: "slackConnector",
+            entityType: "connector",
+            id: "{{this.slackName}}",
+            data: {
+              files: {
+                "package.json": "{...}",
+              },
+              handler: "@fusebit-int/pkg-oauth-connector",
+              configuration: {
+                clientSecret: "foobar",
+              },
+            },
+            tags: {
+              "catalog.entry": "slack-connector",
+            },
+          },
+          {
+            name: "slackIntegration",
+            entityType: "integration",
+            id: "{{this.slackName}}",
+            data: {
+              id: "foo",
+              data: {
+                files: {
+                  "package.json": "{...}",
+                  "./integration.js": "...",
+                },
+                handler: "./integration",
+                components: [
+                  {
+                    name: "slackConnector",
+                    entityType: "connector",
+                    entityId: "{{global.slackConnector.slackName}}",
+                    dependsOn: [],
+                    package: "@fusebit-int/slack-integration",
+                  },
+                ],
+                componentTags: {
+                  foo: "bar2",
+                  some: "another",
+                  other: "tag",
+                  monkey: "banana",
+                },
+                configuration: {},
+              },
+            },
+            tags: {
+              "catalog.entry": "slack-connector",
+            },
+          },
+        ],
+      },
+    }
+  ];
+
+  export const connectorsFeed = [
+    {
+      id: "slackkksksksk",
+      name: "Slack",
+      description: "Slack",
+      smallIcon: slack,
+      largeIcon: "http://some.icon/large.ico",
+      version: "2.3.0",
+      tags: {
+        service: "slack",
+        catalog: "messaging",
+      },
+      configuration: {
+        title: "Configure your slack integration", // Title and various other text fields for the form.
+        schema: {
+          type: "object",
+          properties: {
+            connector: {
+              type: "object",
+              properties: {
+                clientId: {
+                  type: "string",
+                },
+                clientSecret: {
+                  type: "string",
+                },
+              },
+            },
+          },
+        },
+  
+        uischema: {
+          type: "Group",
+          label: "Slack Connector Details",
+          elements: {
+              type: "VerticalLayout",
+              elements: [
+                {
+                  type: "Control",
+                  scope: "#/properties/clientId",
+                  label: "Client ID",
+                  options: {
+                    format: "password",
+                  }
+                },{
+                  type: "Control",
+                  scope: "#/properties/clientSecret",
+                  label: "Client Secret",
+                  options: {
+                    format: "password",
+                  }
+                },
+              ],
+            },
+        },
+        data: {
+          slackConnector: {
+            slackName: "slack-connector",
+          },
+        },
+  
+        entities: [
+          {
+            name: "slackConnector",
+            entityType: "connector",
+            id: "{{this.slackName}}",
+            data: {
+              files: {
+                "package.json": "{...}",
+              },
+              handler: "@fusebit-int/pkg-oauth-connector",
+              configuration: {
+                clientSecret: "foobar",
+              },
+            },
+            tags: {
+              "catalog.entry": "slack-connector",
+            },
+          },
+          {
+            name: "slackIntegration",
+            entityType: "integration",
+            id: "{{this.slackName}}",
+            data: {
+              id: "foo",
+              data: {
+                files: {
+                  "package.json": "{...}",
+                  "./integration.js": "...",
+                },
+                handler: "./integration",
+                components: [
+                  {
+                    name: "slackConnector",
+                    entityType: "connector",
+                    entityId: "{{global.slackConnector.slackName}}",
+                    dependsOn: [],
+                    package: "@fusebit-int/slack-integration",
+                  },
+                ],
+                componentTags: {
+                  foo: "bar2",
+                  some: "another",
+                  other: "tag",
+                  monkey: "banana",
+                },
+                configuration: {},
+              },
+            },
+            tags: {
+              "catalog.entry": "slack-connector",
+            },
+          },
+        ],
+      },
+    },
+    {
+      id: "discord23322",
+      name: "Discord",
+      description: "Discord",
+      smallIcon: discord,
+      largeIcon: "http://some.icon/large.ico",
+      version: "2.3.0",
+      tags: {
+        service: "slack",
+        catalog: "messaging, productivity, crm",
+      },
+      configuration: {
+        title: "Configure your slack integration", // Title and various other text fields for the form.
+        schema: {
+          type: "object",
+          properties: {
+            connector: {
+              type: "object",
+              properties: {
+                clientId: {
+                  type: "string",
+                },
+                clientSecret: {
+                  type: "string",
+                },
+              },
+            },
+          },
+        },
+  
+        uischema: {
+          type: "Group",
+          label: "Slack Connector Details",
+          elements: {
+              type: "VerticalLayout",
+              elements: [
+                {
+                  type: "Control",
+                  scope: "#/properties/clientId",
+                  label: "Client ID",
+                  options: {
+                    format: "password",
+                  }
+                },{
+                  type: "Control",
+                  scope: "#/properties/clientSecret",
+                  label: "Client Secret",
+                  options: {
+                    format: "password",
+                  }
+                },
+              ],
+            },
+        },
+        data: {
+          slackConnector: {
+            slackName: "slack-connector",
+          },
+        },
+  
+        entities: [
+          {
+            name: "slackConnector",
+            entityType: "connector",
+            id: "{{this.slackName}}",
+            data: {
+              files: {
+                "package.json": "{...}",
+              },
+              handler: "@fusebit-int/pkg-oauth-connector",
+              configuration: {
+                clientSecret: "foobar",
+              },
+            },
+            tags: {
+              "catalog.entry": "slack-connector",
+            },
+          },
+          {
+            name: "slackIntegration",
+            entityType: "integration",
+            id: "{{this.slackName}}",
+            data: {
+              id: "foo",
+              data: {
+                files: {
+                  "package.json": "{...}",
+                  "./integration.js": "...",
+                },
+                handler: "./integration",
+                components: [
+                  {
+                    name: "slackConnector",
+                    entityType: "connector",
+                    entityId: "{{global.slackConnector.slackName}}",
+                    dependsOn: [],
+                    package: "@fusebit-int/slack-integration",
+                  },
+                ],
+                componentTags: {
+                  foo: "bar2",
+                  some: "another",
+                  other: "tag",
+                  monkey: "banana",
+                },
+                configuration: {},
+              },
+            },
+            tags: {
+              "catalog.entry": "slack-connector",
+            },
+          },
+        ],
+      },
+    },
+    {
+      id: "as23r333age",
+      name: "Asana",
+      description: "Asana",
+      smallIcon: asana,
+      largeIcon: "http://some.icon/large.ico",
+      version: "2.3.0",
+      tags: {
+        service: "slack",
+        catalog: "crm, calendar",
+      },
+      configuration: {
+        title: "Configure your slack integration", // Title and various other text fields for the form.
+        schema: {
+          type: "object",
+          properties: {
+            connector: {
+              type: "object",
+              properties: {
+                clientId: {
+                  type: "string",
+                },
+                clientSecret: {
+                  type: "string",
+                },
+              },
+            },
+          },
+        },
+  
+        uischema: {
+          type: "Group",
+          label: "Slack Connector Details",
+          elements: {
+              type: "VerticalLayout",
+              elements: [
+                {
+                  type: "Control",
+                  scope: "#/properties/clientId",
+                  label: "Client ID",
+                  options: {
+                    format: "password",
+                  }
+                },{
+                  type: "Control",
+                  scope: "#/properties/clientSecret",
+                  label: "Client Secret",
+                  options: {
+                    format: "password",
+                  }
                 },
               ],
             },
