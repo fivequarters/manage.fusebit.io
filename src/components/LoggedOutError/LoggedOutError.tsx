@@ -9,7 +9,7 @@ const LoggedOutError: React.FC = () => {
     const { getBaseUrl } = useAxios();
 
     const handleAuth = () => {
-        window.location.href = `https://fusebit.auth0.com/authorize?response_type=token&client_id=hSgWIXmbluQMADuWhDnRTpWyKptJe6LB&audience=${getBaseUrl()}&redirect_uri=${window.location.origin}/callback&scope=openid profile email`;
+        window.location.href = `https://fusebit.auth0.com/authorize?response_type=token&client_id=dimuls6VLYgXpD7UYCo6yPdKAXPXjQng&audience=${getBaseUrl()}&redirect_uri=${window.location.origin}/callback&scope=openid profile email`;
     }
 
     return (
