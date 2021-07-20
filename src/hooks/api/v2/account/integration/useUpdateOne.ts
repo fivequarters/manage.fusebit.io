@@ -7,8 +7,8 @@ export const useAccountIntegrationUpdateIntegration = <T>() => {
     const queryClient = useQueryClient();
 
     return useMutation((params: Params) => {
-        const { accountId, subscriptionId, ...data } = params;
-        return axios<T>(`/v2/account/${accountId}/subscription/${subscriptionId}/integration/${data.id}`, 'put', data);
+        const { accountId, subscriptionId, integrationId, data } = params;
+        return axios<T>(`/v2/account/${accountId}/subscription/${subscriptionId}/integration/${integrationId}`, 'put', data);
     }, {
         onMutate: (_: Params) => () => {},
         onError: (_, __, rollback) => rollback?.(),

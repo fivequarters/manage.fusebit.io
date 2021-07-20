@@ -61,4 +61,50 @@ export const ButtonContainer = styled.div`
 export const ButtonMargin = styled.div`
     margin-left: auto;
     margin-bottom: 36px;
+
+    @media only screen and (max-width: 880px) {
+        margin: 0 auto 36px;
+    }
+`;
+
+export const Table = styled.div`
+    @media only screen and (max-width: 880px) {
+        display: none;
+    }
+`;
+
+export const TableMobile = styled.div`
+    display: none;
+    @media only screen and (max-width: 880px) {
+        display: block;
+    }
+`;
+
+export const TableCellMobile = styled.div`
+    position: relative;
+    width: 100%;
+
+    p {
+        width: 90px;
+        margin: 0;
+
+        @media only screen and (max-width: 345px) {
+            width: 70px;
+        }
+    }
+`;
+
+export const RightArrow = styled.img`
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 16px;
+    width: 16px;
+    object-fit: contain;
+    background-repeat: no-repeat;
+`;
+
+export const LeftArrow = styled(RightArrow)`
+    left: -25px;
 `;

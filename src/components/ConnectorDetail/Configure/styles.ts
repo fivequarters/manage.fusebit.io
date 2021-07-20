@@ -3,6 +3,11 @@ import styled from "styled-components";
 export const Flex = styled.div`
     display: flex;
     padding-bottom: 100px;
+
+    @media only screen and (max-width: 880px) {
+        flex-direction: column;
+        align-items: center;
+    }
 `;
 
 export const FlexDown = styled.div`
@@ -14,6 +19,10 @@ export const InfoWrapper = styled.div`
     display: flex;
     align-items: center;
     width: max-content;
+
+    @media only screen and (max-width: 880px) {
+        margin-left: -82px;
+    }
 `;
 
 export const InfoTitle = styled.h4`
@@ -49,8 +58,19 @@ export const FormWrapper = styled.form`
     width: 316px;
     margin-left: 150px;
     margin-top: 20px;
+
+    @media only screen and (max-width: 880px) {
+        margin-left: 0;
+    }
 `;
 
 export const FormInputWrapper = styled.div`
     margin-bottom: 49px;
+
+    @media only screen and (max-width: 880px) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
 `;

@@ -1,22 +1,19 @@
 export interface IntegrationData {
-    configuration: {
-        connectors: InnerConnector,
-        creation: {
-         tags: object,
-         autoStep: boolean
-        }
-    },
+    components: InnerConnector[],
     files: object
 }
 
 export interface InnerConnector {
-    [key: string]: {
-        package: string;
-        connector: string;
-    }
+    name: string;
+    entityType: string;
+    entityId: string;
+    skip: boolean;
+    path: string;
+    dependsOn: [];
+    package: string;
 }
 
 export interface Integration {
     id: string;
-    data: IntegrationData
+    data: IntegrationData;
 }
