@@ -21,19 +21,26 @@ import {
   }
 
 const AddIntegration: React.FC<Props> = ({open, onClose}) => {
-    const [data, setData] = React.useState();
+    const [data, setData] = React.useState<any>();
     const [errors, setErrors] = React.useState<object[]>([]);
     const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
     const [customize, setCustomize] = React.useState(false);
     const [activeFilter, setActiveFilter] = React.useState<Filters>(Filters.ALL);
     const [activeIntegration, setActiveIntegration] = React.useState(integrationsFeed[0]);
     const [searchFilter, setSearchFilter] = React.useState("");
+    const [newIntegrationName, setNewIntergationName] = React.useState("");
+    const [newIntegrationNameErr, setNewIntegrationNameErr] = React.useState("");
 
     const handleSubmit = () => {
-        if (errors.length > 0) {
+        if (errors.length > 0 || newIntegrationName === "") {
             setValidationMode("ValidateAndShow");
+            newIntegrationName === "" && setNewIntegrationNameErr("This field is required");
+        } else if (customize) {
+            if (data.name !== "") {
+                //send data with customized form
+            }
         } else {
-            alert("good");
+            //send data with normal form
         }
     }
 
@@ -88,7 +95,17 @@ const AddIntegration: React.FC<Props> = ({open, onClose}) => {
                         <SC.ConnectorVersion>{activeIntegration.version}</SC.ConnectorVersion>
                     </SC.ConnectorTitleWrapper>
                     <SC.ConnectorDescription children={activeIntegration.description} />
-                    <TextField id="name" label="Name" style={{margin: "27px 0", width: "320px"}} />
+                    <SC.TextFielWrapper>
+                        <TextField onChange={(e: any) => {
+                            setNewIntergationName(e.target.value);
+                            setNewIntegrationNameErr("");
+                            }} 
+                            id="name" 
+                            label="Name" 
+                            style={{margin: "27px 0", width: "320px"}} 
+                        />
+                        {newIntegrationNameErr !== "" && <SC.Error>{newIntegrationNameErr}</SC.Error>}
+                    </SC.TextFielWrapper>
                     <SC.ConnectorCustomize>
                         Customize
                         <Switch checked={customize} onChange={() => setCustomize(!customize)} color="primary" inputProps={{ 'aria-label': 'customize' }} />

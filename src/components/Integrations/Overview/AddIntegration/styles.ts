@@ -202,3 +202,16 @@ export const Close = styled.img`
         transform: rotate(90deg);
     }
 `;
+
+export const TextFielWrapper = styled.div`
+    position: relative;
+`;
+
+export const Error = styled.p`
+    color: var(--primary-color);
+    margin: 0;
+    position: absolute;
+    left: 0;
+    bottom: 5px;
+    font-size: 0.75rem;
+`;

@@ -22,7 +22,7 @@ export const integrationsFeed = [
             slackConnector: {
               type: "object",
               properties: {
-                slackName: {
+                name: {
                   type: "string",
                   minLength: 3,
                 },
@@ -39,8 +39,8 @@ export const integrationsFeed = [
               elements: [
                 {
                   type: "Control",
-                  scope: "#/properties/slackName",
-                  label: "Slack Connector name",
+                  scope: "#/properties/name",
+                  label: "Name",
                 },
               ],
             },
@@ -125,7 +125,7 @@ export const integrationsFeed = [
             slackConnector: {
               type: "object",
               properties: {
-                slackName: {
+                name: {
                   type: "string",
                   minLength: 3,
                 },
@@ -142,8 +142,8 @@ export const integrationsFeed = [
               elements: [
                 {
                   type: "Control",
-                  scope: "#/properties/slackName",
-                  label: "Slack Connector name",
+                  scope: "#/properties/name",
+                  label: "Name",
                 },
               ],
             },
@@ -228,7 +228,7 @@ export const integrationsFeed = [
             slackConnector: {
               type: "object",
               properties: {
-                slackName: {
+                name: {
                   type: "string",
                   minLength: 3,
                 },
@@ -245,8 +245,8 @@ export const integrationsFeed = [
               elements: [
                 {
                   type: "Control",
-                  scope: "#/properties/slackName",
-                  label: "Slack Connector name",
+                  scope: "#/properties/name",
+                  label: "Name",
                 },
               ],
             },
