@@ -336,9 +336,11 @@ export const integrationsFeed = [
               properties: {
                 clientId: {
                   type: "string",
+                  minLength: 6,
                 },
                 clientSecret: {
                   type: "string",
+                  minLength: 6,
                 },
                 requestUserToken: {
                   type: "boolean",
@@ -459,9 +461,11 @@ export const integrationsFeed = [
               properties: {
                 clientId: {
                   type: "string",
+                  minLength: 6,
                 },
                 clientSecret: {
                   type: "string",
+                  minLength: 6,
                 },
                 requestUserToken: {
                   type: "boolean",
@@ -582,9 +586,11 @@ export const integrationsFeed = [
               properties: {
                 clientId: {
                   type: "string",
+                  minLength: 6,
                 },
                 clientSecret: {
                   type: "string",
+                  minLength: 6,
                 },
                 requestUserToken: {
                   type: "boolean",

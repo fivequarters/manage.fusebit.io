@@ -21,19 +21,26 @@ import {
   }
 
 const AddConnector: React.FC<Props> = ({open, onClose}) => {
-    const [data, setData] = React.useState();
+    const [data, setData] = React.useState<any>();
     const [errors, setErrors] = React.useState<object[]>([]);
     const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
     const [customize, setCustomize] = React.useState(false);
     const [activeFilter, setActiveFilter] = React.useState<Filters>(Filters.ALL);
-    const [activeIntegration, setActiveIntegration] = React.useState(connectorsFeed[0]);
+    const [activeConnector, setActiveConnector] = React.useState(connectorsFeed[0]);
     const [searchFilter, setSearchFilter] = React.useState("");
+    const [newConnectorName, setNewConnectorName] = React.useState("");
+    const [newConnectorNameErr, setNewConnectorNameErr] = React.useState("");
 
     const handleSubmit = () => {
-        if (errors.length > 0) {
+        if (errors.length > 0 || newConnectorName === "") {
             setValidationMode("ValidateAndShow");
+            newConnectorName === "" && setNewConnectorNameErr("This field is required");
+        } else if (customize) {
+            if (data.clientId !== "" && data.clientSecret !== "") {
+                //send data with customized form
+            }
         } else {
-            alert("good");
+            //send data with normal form
         }
     }
 
@@ -60,19 +67,19 @@ const AddConnector: React.FC<Props> = ({open, onClose}) => {
                         <SC.ColumnSearchIcon src={search} alt="Search Connector" height="24" width="24" />
                     </SC.ColumnSearchWrapper>
                     {
-                            connectorsFeed.map((integration) => {
-                                const tags = integration.tags.catalog.split(", ");
+                            connectorsFeed.map((Connector) => {
+                                const tags = Connector.tags.catalog.split(", ");
                                 let tagIsActive = false;
                                 tags.forEach(tag => {
                                     if (activeFilter.toUpperCase().match(tag.toUpperCase()) || activeFilter === Filters.ALL) {
                                         tagIsActive = true;
                                     }
                                 });
-                                if (tagIsActive && integration.name.toUpperCase().includes(searchFilter.toUpperCase())) {
+                                if (tagIsActive && Connector.name.toUpperCase().includes(searchFilter.toUpperCase())) {
                                     return (
-                                        <SC.ColumnItem key={integration.id} onClick={() => setActiveIntegration(integration)} active={integration.id === activeIntegration.id}>
-                                            <SC.ColumnItemImage src={integration.smallIcon} alt="slack" height="18" width="18" />
-                                            {integration.name}
+                                        <SC.ColumnItem key={Connector.id} onClick={() => setActiveConnector(Connector)} active={Connector.id === activeConnector.id}>
+                                            <SC.ColumnItemImage src={Connector.smallIcon} alt="slack" height="18" width="18" />
+                                            {Connector.name}
                                         </SC.ColumnItem>
                                     )
                                 }
@@ -83,12 +90,23 @@ const AddConnector: React.FC<Props> = ({open, onClose}) => {
                 <SC.ColumnBr />
                 <SC.ConnectorInfo>
                     <SC.ConnectorTitleWrapper>
-                        <SC.ConnectorImage src={activeIntegration.smallIcon} alt="slack" height="28" width="28" />
-                        <SC.ConnectorTitle>{activeIntegration.name}</SC.ConnectorTitle>
-                        <SC.ConnectorVersion>{activeIntegration.version}</SC.ConnectorVersion>
+                        <SC.ConnectorImage src={activeConnector.smallIcon} alt="slack" height="28" width="28" />
+                        <SC.ConnectorTitle>{activeConnector.name}</SC.ConnectorTitle>
+                        <SC.ConnectorVersion>{activeConnector.version}</SC.ConnectorVersion>
                     </SC.ConnectorTitleWrapper>
-                    <SC.ConnectorDescription children={activeIntegration.description} />
-                    <TextField id="name" label="Name" style={{margin: "27px 0", width: "320px"}} />
+                    <SC.ConnectorDescription children={activeConnector.description} />
+                    <SC.TextFielWrapper>
+                        <TextField 
+                        onChange={(e: any) => {
+                            setNewConnectorName(e.target.value);
+                            setNewConnectorNameErr("");
+                        }}  
+                        id="name" 
+                        label="Name" 
+                        style={{margin: "27px 0", width: "320px"}} 
+                        />
+                        {newConnectorNameErr !== "" && <SC.Error>{newConnectorNameErr}</SC.Error>}
+                    </SC.TextFielWrapper>
                     <SC.ConnectorCustomize>
                         Customize
                         <Switch checked={customize} onChange={() => setCustomize(!customize)} color="primary" inputProps={{ 'aria-label': 'customize' }} />
@@ -97,8 +115,8 @@ const AddConnector: React.FC<Props> = ({open, onClose}) => {
                         customize && (
                             <SC.FormWrapper>
                                 <JsonForms
-                                schema={activeIntegration.configuration.schema.properties.connector}
-                                uischema={activeIntegration.configuration.uischema.elements}
+                                schema={activeConnector.configuration.schema.properties.connector}
+                                uischema={activeConnector.configuration.uischema.elements}
                                 data={data}
                                 renderers={materialRenderers}
                                 cells={materialCells}
