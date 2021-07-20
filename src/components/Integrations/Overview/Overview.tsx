@@ -6,7 +6,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { useContext } from "../../../hooks/useContext";
 import { useLoader } from "../../../hooks/useLoader";
 import { useAccountIntegrationsGetAll } from "../../../hooks/api/v2/account/integration/useGetAll";
-import { useAccountIntegrationCreateIntegration } from "../../../hooks/api/v2/account/integration/useCreateOne";
+// import { useAccountIntegrationCreateIntegration } from "../../../hooks/api/v2/account/integration/useCreateOne";
 import { useAccountIntegrationDeleteIntegration } from "../../../hooks/api/v2/account/integration/useDeleteOne";
 import { Integration } from "../../../interfaces/integration";
 import { Operation } from "../../../interfaces/operation";
@@ -26,7 +26,7 @@ const Overview: React.FC = () => {
     const [rows, setRows] = React.useState<Integration[]>([]);
     const { userData } = useContext();
     const { data: integrations, refetch: reloadIntegrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
-    const createIntegration = useAccountIntegrationCreateIntegration<Operation>();
+    // const createIntegration = useAccountIntegrationCreateIntegration<Operation>();
     const deleteIntegration = useAccountIntegrationDeleteIntegration<Operation>();
     const { waitForOperations, createLoader, removeLoader } = useLoader();
     const { createError } = useError();
@@ -104,18 +104,18 @@ const Overview: React.FC = () => {
         }
     }
 
-    // const _createIntegration = async () => {
-    //     try {
-    //         createLoader();
-    //         const response = await createIntegration.mutateAsync({ id: String(new Date().getTime()), accountId: userData.accountId, subscriptionId: userData.subscriptionId });
-    //         await waitForOperations([response.data.operationId]);
-    //         reloadIntegrations();
-    //     } catch (e) {
-    //         createError(e.message);
-    //     } finally {
-    //         removeLoader();
-    //     }
-    // }
+    const _createIntegration = async (data: any) => {
+        // try {
+        //     createLoader();
+        //     const response = await createIntegration.mutateAsync({ id: String(new Date().getTime()), accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+        //     await waitForOperations([response.data.operationId]);
+        //     reloadIntegrations();
+        // } catch (e) {
+        //     createError(e.message);
+        // } finally {
+        //     removeLoader();
+        // }
+    }
 
     const handlePreviousCellSelect = () => {
         if (selectedCell === cells.INSTANCES) {
@@ -147,7 +147,7 @@ const Overview: React.FC = () => {
                 closeAfterTransition
                 BackdropComponent={Backdrop}
             >
-                <AddIntegration open={addIntegrationOpen} onClose={() => setAddIntegrationOpen(false)} />
+                <AddIntegration onSubmit={(data: any) => _createIntegration(data)} open={addIntegrationOpen} onClose={() => setAddIntegrationOpen(false)} />
             </Modal>
             <SC.ButtonContainer>
                 <SC.ButtonMargin>

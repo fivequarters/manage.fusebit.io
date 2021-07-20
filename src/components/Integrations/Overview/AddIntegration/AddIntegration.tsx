@@ -20,7 +20,7 @@ import {
       CALENDAR = "Calendar",
   }
 
-const AddIntegration: React.FC<Props> = ({open, onClose}) => {
+const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
     const [data, setData] = React.useState<any>();
     const [errors, setErrors] = React.useState<object[]>([]);
     const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
@@ -38,9 +38,11 @@ const AddIntegration: React.FC<Props> = ({open, onClose}) => {
         } else if (customize) {
             if (data.name !== "") {
                 //send data with customized form
+                onSubmit(...data, newIntegrationName);
             }
         } else {
             //send data with normal form
+                onSubmit(...data, newIntegrationName);
         }
     }
 

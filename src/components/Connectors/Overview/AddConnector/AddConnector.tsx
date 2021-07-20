@@ -20,7 +20,7 @@ import {
       CALENDAR = "Calendar",
   }
 
-const AddConnector: React.FC<Props> = ({open, onClose}) => {
+const AddConnector: React.FC<Props> = ({open, onClose, onSubmit}) => {
     const [data, setData] = React.useState<any>();
     const [errors, setErrors] = React.useState<object[]>([]);
     const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
@@ -38,9 +38,11 @@ const AddConnector: React.FC<Props> = ({open, onClose}) => {
         } else if (customize) {
             if (data.clientId !== "" && data.clientSecret !== "") {
                 //send data with customized form
+                onSubmit(...data, newConnectorName);
             }
         } else {
             //send data with normal form
+            onSubmit(...data, newConnectorName);
         }
     }
 

@@ -6,7 +6,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { useContext } from "../../../hooks/useContext";
 import { useLoader } from "../../../hooks/useLoader";
 import { useAccountConnectorsGetAll } from "../../../hooks/api/v2/account/connector/useGetAll";
-import { useAccountConnectorCreateConnector } from "../../../hooks/api/v2/account/connector/useCreateOne";
+// import { useAccountConnectorCreateConnector } from "../../../hooks/api/v2/account/connector/useCreateOne";
 import { useAccountConnectorDeleteConnector } from "../../../hooks/api/v2/account/connector/useDeleteOne";
 import { Operation } from "../../../interfaces/operation";
 import { Connector } from "../../../interfaces/connector";
@@ -26,7 +26,7 @@ const Overview: React.FC = () => {
     const [rows, setRows] = React.useState<Connector[]>([]);
     const { userData } = useContext();
     const { data: connectors, refetch: reloadConnectors } = useAccountConnectorsGetAll<{ items: Connector[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
-    const createConnector = useAccountConnectorCreateConnector<Operation>();
+    // const createConnector = useAccountConnectorCreateConnector<Operation>();
     const deleteConnector = useAccountConnectorDeleteConnector<Operation>();
     const { waitForOperations, createLoader, removeLoader } = useLoader();
     const { createError } = useError();
@@ -104,18 +104,18 @@ const Overview: React.FC = () => {
         }
     }
 
-    // const _createConnector = async () => {
-    //     try {
-    //         createLoader();
-    //         const response = await createConnector.mutateAsync({ id: String(new Date().getTime()), accountId: userData.accountId, subscriptionId: userData.subscriptionId });
-    //         await waitForOperations([response.data.operationId]);
-    //         reloadConnectors();
-    //     } catch (e) {
-    //         createError(e.message);
-    //     } finally {
-    //         removeLoader();
-    //     }
-    // }
+    const _createConnector = async (data: any) => {
+        // try {
+        //     createLoader();
+        //     const response = await createConnector.mutateAsync({ id: String(new Date().getTime()), accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+        //     await waitForOperations([response.data.operationId]);
+        //     reloadConnectors();
+        // } catch (e) {
+        //     createError(e.message);
+        // } finally {
+        //     removeLoader();
+        // }
+    }
 
     const handlePreviousCellSelect = () => {
         if (selectedCell === cells.TYPE) {
@@ -147,7 +147,7 @@ const Overview: React.FC = () => {
                 closeAfterTransition
                 BackdropComponent={Backdrop}
             >
-                <AddConnector open={addConnectorOpen} onClose={() => setAddConnectorOpen(false)} />
+                <AddConnector onSubmit={(data: any) => _createConnector(data)} open={addConnectorOpen} onClose={() => setAddConnectorOpen(false)} />
             </Modal>
             <SC.ButtonContainer>
                 <SC.ButtonMargin>
