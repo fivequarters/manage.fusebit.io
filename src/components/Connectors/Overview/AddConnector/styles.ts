@@ -8,7 +8,7 @@ export const Card = styled.div<{open: boolean}>`
     transform: translate(-50%, -50%);
     background-color: white;
     opacity: ${props => props.open ? 1 : 0};
-    padding: 64px;
+    padding: 32px 64px;
     width: 1140px;
     height: 671px;
     border-radius: 8px;
@@ -41,7 +41,7 @@ export const Flex = styled.div<{alignItems?: boolean}>`
 export const Column = styled.div<{border?: boolean}>`
     display: flex;
     flex-direction: column;
-    height: 490px;
+    height: 520px;
 `;
 
 export const ColumnItem = styled.div<{active: boolean}>`

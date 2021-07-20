@@ -17,10 +17,14 @@ export const lightTheme: Theme = createMuiTheme({
     overrides: {
         MuiFormControl: {
           root: {
-            marginBottom: "49px",
-            variant: "outlined",
+            marginBottom: "20px",
           }
         }
+    },
+    props: {
+        MuiCheckbox: {
+            color: 'primary',
+        },
     },
     typography: {
         button: {

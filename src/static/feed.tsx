@@ -340,6 +340,9 @@ export const integrationsFeed = [
                 clientSecret: {
                   type: "string",
                 },
+                requestUserToken: {
+                  type: "boolean",
+                }
               },
             },
           },
@@ -365,6 +368,11 @@ export const integrationsFeed = [
                   options: {
                     format: "password",
                   }
+                },
+                {
+                  type: "Control",
+                  scope: "#/properties/requestUserToken",
+                  label: "Request user token",
                 },
               ],
             },
@@ -455,6 +463,9 @@ export const integrationsFeed = [
                 clientSecret: {
                   type: "string",
                 },
+                requestUserToken: {
+                  type: "boolean",
+                }
               },
             },
           },
@@ -480,6 +491,11 @@ export const integrationsFeed = [
                   options: {
                     format: "password",
                   }
+                },
+                {
+                  type: "Control",
+                  scope: "#/properties/requestUserToken",
+                  label: "Request user token",
                 },
               ],
             },
@@ -570,6 +586,9 @@ export const integrationsFeed = [
                 clientSecret: {
                   type: "string",
                 },
+                requestUserToken: {
+                  type: "boolean",
+                }
               },
             },
           },
@@ -595,6 +614,11 @@ export const integrationsFeed = [
                   options: {
                     format: "password",
                   }
+                },
+                {
+                  type: "Control",
+                  scope: "#/properties/requestUserToken",
+                  label: "Request user token",
                 },
               ],
             },
