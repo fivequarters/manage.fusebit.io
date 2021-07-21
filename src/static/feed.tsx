@@ -40,7 +40,7 @@ export const integrationsFeed = [
                 {
                   type: "Control",
                   scope: "#/properties/name",
-                  label: "Name",
+                  label: "Slack Connector name",
                 },
               ],
             },
@@ -143,7 +143,7 @@ export const integrationsFeed = [
                 {
                   type: "Control",
                   scope: "#/properties/name",
-                  label: "Name",
+                  label: "Slack Connector name",
                 },
               ],
             },
@@ -246,7 +246,7 @@ export const integrationsFeed = [
                 {
                   type: "Control",
                   scope: "#/properties/name",
-                  label: "Name",
+                  label: "Slack Connector name",
                 },
               ],
             },

@@ -37,8 +37,8 @@ export const routes: Array<RouteItem> = [
         component: AuthCallback,
     },
     {
-        key: "router-logged-out-error",
-        path: "/logged-out-error",
+        key: "router-logged-out",
+        path: "/logged-out",
         component: LoggedOutErrorPage,
     },
     {
