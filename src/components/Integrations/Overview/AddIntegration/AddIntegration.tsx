@@ -22,7 +22,7 @@ import { Feed } from "../../../../interfaces/feed";
   }
 
 const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
-    const [data, setData] = React.useState<any>();
+    const [data, setData] = React.useState<any>({});
     const [errors, setErrors] = React.useState<object[]>([]);
     const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
     const [customize, setCustomize] = React.useState(false);
@@ -37,13 +37,12 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
             setValidationMode("ValidateAndShow");
             newIntegrationName === "" && setNewIntegrationNameErr("This field is required");
         } else if (customize) {
-            if (data.name !== "") {
-                //send data with customized form
-                onSubmit(activeIntegration, {...data, newIntegrationName});
-            }
+            //send data with customized form
+            onSubmit(activeIntegration, {...data, newIntegrationName});
+            
         } else {
-            //send data with normal form
-                onSubmit(activeIntegration, newIntegrationName);
+            //send data with default form
+            onSubmit(activeIntegration, newIntegrationName);
         }
     }
 

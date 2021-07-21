@@ -26,6 +26,7 @@ export const integrationsFeed: Feed[] = [
               minLength: 3,
             },
           },
+          required: ["slackName"],
         },
   
         uischema: {
@@ -124,6 +125,7 @@ export const integrationsFeed: Feed[] = [
               minLength: 3,
             },
           },
+          required: ["slackName"],
         },
   
         uischema: {
@@ -222,6 +224,7 @@ export const integrationsFeed: Feed[] = [
               minLength: 3,
             },
           },
+          required: ["slackName"],
         },
   
         uischema: {
@@ -330,6 +333,7 @@ export const integrationsFeed: Feed[] = [
               type: "boolean",
             }
           },
+          required: ["clientId", "clientSecret"],
         },
   
         uischema: {
@@ -450,6 +454,7 @@ export const integrationsFeed: Feed[] = [
               type: "boolean",
             }
           },
+          required: ["clientId", "clientSecret"],
         },
   
         uischema: {
@@ -570,6 +575,7 @@ export const integrationsFeed: Feed[] = [
               type: "boolean",
             }
           },
+          required: ["clientId", "clientSecret"],
         },
   
         uischema: {

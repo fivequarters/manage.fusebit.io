@@ -22,8 +22,8 @@ import { Feed } from "../../../../interfaces/feed";
   }
 
 const AddConnector: React.FC<Props> = ({open, onClose, onSubmit}) => {
-    const [data, setData] = React.useState<any>();
-    const [errors, setErrors] = React.useState<object[]>([]);
+    const [data, setData] = React.useState<any>({});
+    const [errors, setErrors] = React.useState<any[]>([]);
     const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
     const [customize, setCustomize] = React.useState(false);
     const [activeFilter, setActiveFilter] = React.useState<Filters>(Filters.ALL);
@@ -37,12 +37,10 @@ const AddConnector: React.FC<Props> = ({open, onClose, onSubmit}) => {
             setValidationMode("ValidateAndShow");
             newConnectorName === "" && setNewConnectorNameErr("This field is required");
         } else if (customize) {
-            if (data.clientId !== "" && data.clientSecret !== "") {
-                //send data with customized form
-                onSubmit(activeConnector, {...data, newConnectorName});
-            }
+            //send data with customized form
+            onSubmit(activeConnector, {...data, newConnectorName});
         } else {
-            //send data with normal form
+            //send data with default form
             onSubmit(activeConnector, newConnectorName);
         }
     }
@@ -125,6 +123,7 @@ const AddConnector: React.FC<Props> = ({open, onClose, onSubmit}) => {
                                 cells={materialCells}
                                 onChange={({ errors, data }) => {
                                     errors && setErrors(errors);
+                                    console.log(errors);
                                     setData(data);
                                 }}
                                 validationMode={validationMode}

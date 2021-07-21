@@ -68,6 +68,7 @@ export interface Feed {
             properties: {
                 [key: string]: schemaElement;
             }
+            required?: string[];
         }
         uischema: {
             type: string;
