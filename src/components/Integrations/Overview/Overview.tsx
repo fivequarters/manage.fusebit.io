@@ -77,7 +77,7 @@ const Overview: React.FC = () => {
             createLoader();
             let operationIds: string[] = [];
             for (let i = 0; i < selected.length; i++) {
-                const response = await deleteIntegration.mutateAsync({ id: selected[i], accountId: userData.accountId, subscriptionId: userData.subscriptionId });    
+                const response = await deleteIntegration.mutateAsync({ id: selected[i], accountId: userData.accountId, subscriptionId: userData.subscriptionId });
                 operationIds.push(response.data.operationId);
             }
             await waitForOperations(operationIds);
@@ -154,7 +154,7 @@ const Overview: React.FC = () => {
                     <Button onClick={() => setAddIntegrationOpen(true)} startIcon={<AddIcon />} variant="outlined" color="primary" size="large">New Integration</Button>
                 </SC.ButtonMargin>
             </SC.ButtonContainer>
-            
+
             <SC.DeleteWrapper active={selected.length > 0}>
                 {
                     selected.length > 0 && (
@@ -251,9 +251,9 @@ const Overview: React.FC = () => {
                             </TableCell>
                             <TableCell align="left">
                                 <SC.TableCellMobile>
-                                <p>{selectedCell}</p>
+                                    <p>{selectedCell}</p>
                                     <SC.LeftArrow onClick={handlePreviousCellSelect} src={arrowLeft} alt="previous-cell" height="16" width="16" />
-                                    
+
                                     <SC.RightArrow onClick={handleNextCellSelect} src={arrowRight} alt="next-cell" height="16" width="16" />
                                 </SC.TableCellMobile>
                             </TableCell>

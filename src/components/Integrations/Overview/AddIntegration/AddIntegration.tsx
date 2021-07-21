@@ -1,26 +1,26 @@
 import React from "react";
 import * as SC from "./styles";
-import {Props} from "../../../../interfaces/addIntegration";
+import { Props } from "../../../../interfaces/addIntegration";
 import {
     materialRenderers,
     materialCells
-  } from '@jsonforms/material-renderers';
-  import { JsonForms } from '@jsonforms/react';
-  import { ValidationMode } from "@jsonforms/core";
-  import { Button, Switch, TextField } from "@material-ui/core";
-  import {integrationsFeed} from "../../../../static/feed";
-  import search from "../../../../assets/search.svg";
-  import cross from "../../../../assets/cross.svg";
+} from '@jsonforms/material-renderers';
+import { JsonForms } from '@jsonforms/react';
+import { ValidationMode } from "@jsonforms/core";
+import { Button, Switch, TextField } from "@material-ui/core";
+import { integrationsFeed } from "../../../../static/feed";
+import search from "../../../../assets/search.svg";
+import cross from "../../../../assets/cross.svg";
 
-  enum Filters {
-      ALL = "All",
-      MESSAGGING = "Messaging",
-      PRODUCTIVITY = "Productivity",
-      CRM = "CRM",
-      CALENDAR = "Calendar",
-  }
+enum Filters {
+    ALL = "All",
+    MESSAGGING = "Messaging",
+    PRODUCTIVITY = "Productivity",
+    CRM = "CRM",
+    CALENDAR = "Calendar",
+}
 
-const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
+const AddIntegration: React.FC<Props> = ({ open, onClose, onSubmit }) => {
     const [data, setData] = React.useState<any>();
     const [errors, setErrors] = React.useState<object[]>([]);
     const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
@@ -42,7 +42,7 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
             }
         } else {
             //send data with normal form
-                onSubmit(...data, newIntegrationName);
+            onSubmit(...data, newIntegrationName);
         }
     }
 
@@ -69,24 +69,25 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
                         <SC.ColumnSearchIcon src={search} alt="Search Integration" height="24" width="24" />
                     </SC.ColumnSearchWrapper>
                     {
-                            integrationsFeed.map((integration) => {
-                                const tags = integration.tags.catalog.split(", ");
-                                let tagIsActive = false;
-                                tags.forEach(tag => {
-                                    if (activeFilter.toUpperCase().match(tag.toUpperCase()) || activeFilter === Filters.ALL) {
-                                        tagIsActive = true;
-                                    }
-                                });
-                                if (tagIsActive && integration.name.toUpperCase().includes(searchFilter.toUpperCase())) {
-                                    return (
-                                        <SC.ColumnItem key={integration.id} onClick={() => setActiveIntegration(integration)} active={integration.id === activeIntegration.id}>
-                                            <SC.ColumnItemImage src={integration.smallIcon} alt="slack" height="18" width="18" />
-                                            {integration.name}
-                                        </SC.ColumnItem>
-                                    )
+                        // TODO: Type this
+                        integrationsFeed.map((integration: any) => {
+                            const tags = integration.tags.catalog.split(", ");
+                            let tagIsActive = false;
+                            tags.forEach((tag: any) => {
+                                if (activeFilter.toUpperCase().match(tag.toUpperCase()) || activeFilter === Filters.ALL) {
+                                    tagIsActive = true;
                                 }
-                                return null;
-                            })
+                            });
+                            if (tagIsActive && integration.name.toUpperCase().includes(searchFilter.toUpperCase())) {
+                                return (
+                                    <SC.ColumnItem key={integration.id} onClick={() => setActiveIntegration(integration)} active={integration.id === activeIntegration.id}>
+                                        <SC.ColumnItemImage src={integration.smallIcon} alt="slack" height="18" width="18" />
+                                        {integration.name}
+                                    </SC.ColumnItem>
+                                )
+                            }
+                            return null;
+                        })
                     }
                 </SC.Column>
                 <SC.ColumnBr />
@@ -101,10 +102,10 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
                         <TextField onChange={(e: any) => {
                             setNewIntergationName(e.target.value);
                             setNewIntegrationNameErr("");
-                            }} 
-                            id="name" 
-                            label="Name" 
-                            style={{margin: "27px 0", width: "320px"}} 
+                        }}
+                            id="name"
+                            label="Name"
+                            style={{ margin: "27px 0", width: "320px" }}
                         />
                         {newIntegrationNameErr !== "" && <SC.Error>{newIntegrationNameErr}</SC.Error>}
                     </SC.TextFielWrapper>
@@ -116,21 +117,21 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
                         customize && (
                             <SC.FormWrapper>
                                 <JsonForms
-                                schema={activeIntegration.configuration.schema.properties.slackConnector}
-                                uischema={activeIntegration.configuration.uischema.elements}
-                                data={data}
-                                renderers={materialRenderers}
-                                cells={materialCells}
-                                onChange={({ errors, data }) => {
-                                    errors && setErrors(errors);
-                                    setData(data);
-                                }}
-                                validationMode={validationMode}
+                                    schema={activeIntegration.configuration.schema.properties.slackConnector}
+                                    uischema={activeIntegration.configuration.uischema.elements}
+                                    data={data}
+                                    renderers={materialRenderers}
+                                    cells={materialCells}
+                                    onChange={({ errors, data }) => {
+                                        errors && setErrors(errors);
+                                        setData(data);
+                                    }}
+                                    validationMode={validationMode}
                                 />
                             </SC.FormWrapper>
                         )
                     }
-                    <Button onClick={handleSubmit} style={{width: "200px", marginTop: "auto", marginLeft: "auto"}} fullWidth={false} size="large" color="primary" variant="contained">Create</Button>
+                    <Button onClick={handleSubmit} style={{ width: "200px", marginTop: "auto", marginLeft: "auto" }} fullWidth={false} size="large" color="primary" variant="contained">Create</Button>
                 </SC.ConnectorInfo>
             </SC.Flex>
         </SC.Card>
