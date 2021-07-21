@@ -1,8 +1,9 @@
 import slack from "../assets/slack.svg";
 import discord from "../assets/discord.svg";
 import asana from "../assets/asana.svg";
+import { Feed }  from "../interfaces/feed";
 
-export const integrationsFeed = [
+export const integrationsFeed: Feed[] = [
     {
       id: "as23w63ag32525e",
       name: "Slack Chatbot",
@@ -14,19 +15,15 @@ export const integrationsFeed = [
         service: "slack",
         catalog: "messaging, productivity, crm, calendar",
       },
+
       configuration: {
         title: "Configure your slack integration", // Title and various other text fields for the form.
         schema: {
           type: "object",
           properties: {
-            slackConnector: {
-              type: "object",
-              properties: {
-                name: {
-                  type: "string",
-                  minLength: 3,
-                },
-              },
+            slackName: {
+              type: "string",
+              minLength: 3,
             },
           },
         },
@@ -39,7 +36,7 @@ export const integrationsFeed = [
               elements: [
                 {
                   type: "Control",
-                  scope: "#/properties/name",
+                  scope: "#/properties/slackName",
                   label: "Slack Connector name",
                 },
               ],
@@ -122,14 +119,9 @@ export const integrationsFeed = [
         schema: {
           type: "object",
           properties: {
-            slackConnector: {
-              type: "object",
-              properties: {
-                name: {
-                  type: "string",
-                  minLength: 3,
-                },
-              },
+            slackName: {
+              type: "string",
+              minLength: 3,
             },
           },
         },
@@ -142,7 +134,7 @@ export const integrationsFeed = [
               elements: [
                 {
                   type: "Control",
-                  scope: "#/properties/name",
+                  scope: "#/properties/slackName",
                   label: "Slack Connector name",
                 },
               ],
@@ -225,14 +217,9 @@ export const integrationsFeed = [
         schema: {
           type: "object",
           properties: {
-            slackConnector: {
-              type: "object",
-              properties: {
-                name: {
-                  type: "string",
-                  minLength: 3,
-                },
-              },
+            slackName: {
+              type: "string",
+              minLength: 3,
             },
           },
         },
@@ -245,7 +232,7 @@ export const integrationsFeed = [
               elements: [
                 {
                   type: "Control",
-                  scope: "#/properties/name",
+                  scope: "#/properties/slackName",
                   label: "Slack Connector name",
                 },
               ],
@@ -314,7 +301,7 @@ export const integrationsFeed = [
     }
   ];
 
-  export const connectorsFeed = [
+  export const connectorsFeed: Feed[] = [
     {
       id: "slackkksksksk",
       name: "Slack",
@@ -331,22 +318,17 @@ export const integrationsFeed = [
         schema: {
           type: "object",
           properties: {
-            connector: {
-              type: "object",
-              properties: {
-                clientId: {
-                  type: "string",
-                  minLength: 6,
-                },
-                clientSecret: {
-                  type: "string",
-                  minLength: 6,
-                },
-                requestUserToken: {
-                  type: "boolean",
-                }
-              },
+            clientId: {
+              type: "string",
+              minLength: 6,
             },
+            clientSecret: {
+              type: "string",
+              minLength: 6,
+            },
+            requestUserToken: {
+              type: "boolean",
+            }
           },
         },
   
@@ -456,22 +438,17 @@ export const integrationsFeed = [
         schema: {
           type: "object",
           properties: {
-            connector: {
-              type: "object",
-              properties: {
-                clientId: {
-                  type: "string",
-                  minLength: 6,
-                },
-                clientSecret: {
-                  type: "string",
-                  minLength: 6,
-                },
-                requestUserToken: {
-                  type: "boolean",
-                }
-              },
+            clientId: {
+              type: "string",
+              minLength: 6,
             },
+            clientSecret: {
+              type: "string",
+              minLength: 6,
+            },
+            requestUserToken: {
+              type: "boolean",
+            }
           },
         },
   
@@ -581,22 +558,17 @@ export const integrationsFeed = [
         schema: {
           type: "object",
           properties: {
-            connector: {
-              type: "object",
-              properties: {
-                clientId: {
-                  type: "string",
-                  minLength: 6,
-                },
-                clientSecret: {
-                  type: "string",
-                  minLength: 6,
-                },
-                requestUserToken: {
-                  type: "boolean",
-                }
-              },
+            clientId: {
+              type: "string",
+              minLength: 6,
             },
+            clientSecret: {
+              type: "string",
+              minLength: 6,
+            },
+            requestUserToken: {
+              type: "boolean",
+            }
           },
         },
   

@@ -11,6 +11,7 @@ import {
   import {connectorsFeed} from "../../../../static/feed";
   import search from "../../../../assets/search.svg";
   import cross from "../../../../assets/cross.svg";
+import { Feed } from "../../../../interfaces/feed";
 
   enum Filters {
       ALL = "All",
@@ -26,7 +27,7 @@ const AddConnector: React.FC<Props> = ({open, onClose, onSubmit}) => {
     const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
     const [customize, setCustomize] = React.useState(false);
     const [activeFilter, setActiveFilter] = React.useState<Filters>(Filters.ALL);
-    const [activeConnector, setActiveConnector] = React.useState(connectorsFeed[0]);
+    const [activeConnector, setActiveConnector] = React.useState<Feed>(connectorsFeed[0]);
     const [searchFilter, setSearchFilter] = React.useState("");
     const [newConnectorName, setNewConnectorName] = React.useState("");
     const [newConnectorNameErr, setNewConnectorNameErr] = React.useState("");
@@ -38,11 +39,11 @@ const AddConnector: React.FC<Props> = ({open, onClose, onSubmit}) => {
         } else if (customize) {
             if (data.clientId !== "" && data.clientSecret !== "") {
                 //send data with customized form
-                onSubmit(...data, newConnectorName);
+                onSubmit(activeConnector, {...data, newConnectorName});
             }
         } else {
             //send data with normal form
-            onSubmit(...data, newConnectorName);
+            onSubmit(activeConnector, newConnectorName);
         }
     }
 
@@ -65,14 +66,14 @@ const AddConnector: React.FC<Props> = ({open, onClose, onSubmit}) => {
                 <SC.ColumnBr />
                 <SC.Column border={true}>
                     <SC.ColumnSearchWrapper>
-                        <SC.ColumnSearch onChange={(e: any) => setSearchFilter(e.target.value)} placeholder="Search" />
+                        <SC.ColumnSearch onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchFilter(e.target.value)} placeholder="Search" />
                         <SC.ColumnSearchIcon src={search} alt="Search Connector" height="24" width="24" />
                     </SC.ColumnSearchWrapper>
                     {
-                            connectorsFeed.map((Connector) => {
+                            connectorsFeed.map((Connector: Feed) => {
                                 const tags = Connector.tags.catalog.split(", ");
                                 let tagIsActive = false;
-                                tags.forEach(tag => {
+                                tags.forEach((tag: string) => {
                                     if (activeFilter.toUpperCase().match(tag.toUpperCase()) || activeFilter === Filters.ALL) {
                                         tagIsActive = true;
                                     }
@@ -99,7 +100,7 @@ const AddConnector: React.FC<Props> = ({open, onClose, onSubmit}) => {
                     <SC.ConnectorDescription children={activeConnector.description} />
                     <SC.TextFielWrapper>
                         <TextField 
-                        onChange={(e: any) => {
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                             setNewConnectorName(e.target.value);
                             setNewConnectorNameErr("");
                         }}  
@@ -117,7 +118,7 @@ const AddConnector: React.FC<Props> = ({open, onClose, onSubmit}) => {
                         customize && (
                             <SC.FormWrapper>
                                 <JsonForms
-                                schema={activeConnector.configuration.schema.properties.connector}
+                                schema={activeConnector.configuration.schema}
                                 uischema={activeConnector.configuration.uischema.elements}
                                 data={data}
                                 renderers={materialRenderers}

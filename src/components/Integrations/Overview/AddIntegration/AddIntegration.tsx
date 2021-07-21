@@ -11,6 +11,7 @@ import {
   import {integrationsFeed} from "../../../../static/feed";
   import search from "../../../../assets/search.svg";
   import cross from "../../../../assets/cross.svg";
+import { Feed } from "../../../../interfaces/feed";
 
   enum Filters {
       ALL = "All",
@@ -26,7 +27,7 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
     const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
     const [customize, setCustomize] = React.useState(false);
     const [activeFilter, setActiveFilter] = React.useState<Filters>(Filters.ALL);
-    const [activeIntegration, setActiveIntegration] = React.useState(integrationsFeed[0]);
+    const [activeIntegration, setActiveIntegration] = React.useState<Feed>(integrationsFeed[0]);
     const [searchFilter, setSearchFilter] = React.useState("");
     const [newIntegrationName, setNewIntergationName] = React.useState("");
     const [newIntegrationNameErr, setNewIntegrationNameErr] = React.useState("");
@@ -38,11 +39,11 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
         } else if (customize) {
             if (data.name !== "") {
                 //send data with customized form
-                onSubmit({...data, newIntegrationName});
+                onSubmit(activeIntegration, {...data, newIntegrationName});
             }
         } else {
             //send data with normal form
-                onSubmit({...data, newIntegrationName});
+                onSubmit(activeIntegration, newIntegrationName);
         }
     }
 
@@ -65,14 +66,14 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
                 <SC.ColumnBr />
                 <SC.Column border={true}>
                     <SC.ColumnSearchWrapper>
-                        <SC.ColumnSearch onChange={(e: any) => setSearchFilter(e.target.value)} placeholder="Search" />
+                        <SC.ColumnSearch onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchFilter(e.target.value)} placeholder="Search" />
                         <SC.ColumnSearchIcon src={search} alt="Search Integration" height="24" width="24" />
                     </SC.ColumnSearchWrapper>
                     {
-                            integrationsFeed.map((integration) => {
+                            integrationsFeed.map((integration: Feed) => {
                                 const tags = integration.tags.catalog.split(", ");
                                 let tagIsActive = false;
-                                tags.forEach(tag => {
+                                tags.forEach((tag: string) => {
                                     if (activeFilter.toUpperCase().match(tag.toUpperCase()) || activeFilter === Filters.ALL) {
                                         tagIsActive = true;
                                     }
@@ -98,7 +99,7 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
                     </SC.ConnectorTitleWrapper>
                     <SC.ConnectorDescription children={activeIntegration.description} />
                     <SC.TextFielWrapper>
-                        <TextField onChange={(e: any) => {
+                        <TextField onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                             setNewIntergationName(e.target.value);
                             setNewIntegrationNameErr("");
                             }} 
@@ -116,7 +117,7 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
                         customize && (
                             <SC.FormWrapper>
                                 <JsonForms
-                                schema={activeIntegration.configuration.schema.properties.slackConnector}
+                                schema={activeIntegration.configuration.schema}
                                 uischema={activeIntegration.configuration.uischema.elements}
                                 data={data}
                                 renderers={materialRenderers}
