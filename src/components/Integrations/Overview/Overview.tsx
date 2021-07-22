@@ -8,6 +8,7 @@ import { useLoader } from "../../../hooks/useLoader";
 import { useAccountIntegrationsGetAll } from "../../../hooks/api/v2/account/integration/useGetAll";
 import { useAccountIntegrationCreateIntegration } from "../../../hooks/api/v2/account/integration/useCreateOne";
 import { useAccountIntegrationDeleteIntegration } from "../../../hooks/api/v2/account/integration/useDeleteOne";
+import { useAccountConnectorCreateConnector } from "../../../hooks/api/v2/account/connector/useCreateOne";
 import { Integration } from "../../../interfaces/integration";
 import { Operation } from "../../../interfaces/operation";
 import { useError } from "../../../hooks/useError";
@@ -15,7 +16,7 @@ import arrowRight from "../../../assets/arrow-right.svg";
 import arrowLeft from "../../../assets/arrow-left.svg";
 import AddIntegration from "./AddIntegration";
 import { Entity, Feed } from "../../../interfaces/feed";
-import Mustache from "mustache";
+import Mustache, {  } from "mustache";
 
 enum cells {
     INSTANCES = "Instances",
@@ -24,7 +25,7 @@ enum cells {
 }
 
 interface IntegrationData {
-    newIntegrationName: string;
+    newName: string;
     [key: string]: string | boolean | number;
 }
 
@@ -35,6 +36,7 @@ const Overview: React.FC = () => {
     const { data: integrations, refetch: reloadIntegrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
     const createIntegration = useAccountIntegrationCreateIntegration<Operation>();
     const deleteIntegration = useAccountIntegrationDeleteIntegration<Operation>();
+    const createConnector = useAccountConnectorCreateConnector<Operation>();
     const { waitForOperations, createLoader, removeLoader } = useLoader();
     const { createError } = useError();
     const [selectedCell, setSelectedCell] = React.useState<cells>(cells.INSTANCES);
@@ -111,35 +113,44 @@ const Overview: React.FC = () => {
         }
     }
 
+    
+    
+
     const replaceMustache = async (data: IntegrationData, entity: Entity) => {
-        console.log(await Mustache.render(entity.toString(), {id: "pepito"}));
-        return entity;
+        const customTags: any = [ '<%', '%>' ];
+        const view = {
+            slackName: data.newName
+        }
+        const newEntity = Mustache.render(JSON.stringify(entity), view, {}, customTags);
+        const parsedEntity: Entity = JSON.parse(newEntity);
+        return parsedEntity;
     }
 
     const _createIntegration = async (activeIntegration: Feed, data: IntegrationData) => {
-        let currentIntegrationData: Entity | undefined;
-        let connectors: Entity[] = [];
-        for (let i = 0; i < activeIntegration.configuration.entities.length; i++) {
-            const entity: Entity = activeIntegration.configuration.entities[i];
-            if (entity.entityType === "connector") {
-                connectors.push(await replaceMustache(data, entity));
-            } else {
-                currentIntegrationData = await replaceMustache(data, entity);
+        try {
+            createLoader();
+            let currentIntegrationData: Entity | undefined;
+            let connectors: Entity[] = [];
+            for (let i = 0; i < activeIntegration.configuration.entities.length; i++) {
+                const entity: Entity = activeIntegration.configuration.entities[i];
+                if (entity.entityType === "connector") {
+                    connectors.push(await replaceMustache(data, entity));
+                } else {
+                    currentIntegrationData = await replaceMustache(data, entity);
+                }
             }
+            const response = await createIntegration.mutateAsync({id: currentIntegrationData?.id, accountId: userData.accountId, subscriptionId: userData.subscriptionId});
+            await waitForOperations([response.data.operationId]);
+            for (let i = 0; i < connectors.length; i++) {
+                const response = await createConnector.mutateAsync({ id: connectors[i].id, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+                await waitForOperations([response.data.operationId]);
+            }
+            reloadIntegrations();
+        } catch (e) {
+            createError(e.message);
+        } finally {
+            removeLoader();
         }
-        // console.log(currentIntegrationData);
-        // console.log(connectors);
-
-        // try {
-        //     createLoader();
-        //     const response = await createIntegration.mutateAsync({ id: String(new Date().getTime()), accountId: userData.accountId, subscriptionId: userData.subscriptionId });
-        //     await waitForOperations([response.data.operationId]);
-        //     reloadIntegrations();
-        // } catch (e) {
-        //     createError(e.message);
-        // } finally {
-        //     removeLoader();
-        // }
     }
 
     const handlePreviousCellSelect = () => {

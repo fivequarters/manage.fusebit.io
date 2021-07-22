@@ -29,7 +29,7 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
     const [activeFilter, setActiveFilter] = React.useState<Filters>(Filters.ALL);
     const [activeIntegration, setActiveIntegration] = React.useState<Feed>(integrationsFeed[0]);
     const [searchFilter, setSearchFilter] = React.useState("");
-    const [newIntegrationName, setNewIntergationName] = React.useState("");
+    const [newIntegrationName, setNewIntegrationName] = React.useState("");
     const [newIntegrationNameErr, setNewIntegrationNameErr] = React.useState("");
 
     const handleSubmit = () => {
@@ -38,10 +38,10 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
             newIntegrationName === "" && setNewIntegrationNameErr("This field is required");
         } else if (customize) {
             //send data with customized form
-            onSubmit(activeIntegration, {...data, newIntegrationName});
+            onSubmit(activeIntegration, {...data, newName: newIntegrationName});
         } else {
             //send data with default form
-            onSubmit(activeIntegration, {newIntegrationName});
+            onSubmit(activeIntegration, {newName: newIntegrationName});
         }
     }
 
@@ -98,7 +98,7 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
                     <SC.ConnectorDescription children={activeIntegration.description} />
                     <SC.TextFielWrapper>
                         <TextField onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            setNewIntergationName(e.target.value);
+                            setNewIntegrationName(e.target.value);
                             setNewIntegrationNameErr("");
                             }} 
                             id="name" 

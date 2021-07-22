@@ -106,9 +106,9 @@ const Overview: React.FC = () => {
 
     const _createConnector = async (data: any) => {
         // try {
-        //     createLoader();
-        //     const response = await createConnector.mutateAsync({ id: String(new Date().getTime()), accountId: userData.accountId, subscriptionId: userData.subscriptionId });
-        //     await waitForOperations([response.data.operationId]);
+            // createLoader();
+            // const response = await createConnector.mutateAsync({ id: String(new Date().getTime()), accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+            // await waitForOperations([response.data.operationId]);
         //     reloadConnectors();
         // } catch (e) {
         //     createError(e.message);

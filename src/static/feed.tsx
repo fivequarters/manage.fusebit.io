@@ -21,12 +21,12 @@ export const integrationsFeed: Feed[] = [
         schema: {
           type: "object",
           properties: {
-            slackName: {
+            slackConnectorName: {
               type: "string",
               minLength: 3,
             },
           },
-          required: ["slackName"],
+          required: ["slackConnectorName"],
         },
   
         uischema: {
@@ -37,7 +37,7 @@ export const integrationsFeed: Feed[] = [
               elements: [
                 {
                   type: "Control",
-                  scope: "#/properties/slackName",
+                  scope: "#/properties/slackConnectorName",
                   label: "Slack Connector name",
                 },
               ],
@@ -53,7 +53,7 @@ export const integrationsFeed: Feed[] = [
           {
             name: "slackConnector",
             entityType: "connector",
-            id: "{{this.slackName}}",
+            id: "<%slackName%>",
             data: {
               files: {
                 "package.json": "{...}",
@@ -70,7 +70,7 @@ export const integrationsFeed: Feed[] = [
           {
             name: "slackIntegration",
             entityType: "integration",
-            id: "{{this.slackName}}",
+            id: "<%slackName%>",
             data: {
               id: "foo",
               data: {
@@ -83,7 +83,7 @@ export const integrationsFeed: Feed[] = [
                   {
                     name: "slackConnector",
                     entityType: "connector",
-                    entityId: "{{global.slackConnector.slackName}}",
+                    entityId: "<%slackName%>",
                     dependsOn: [],
                     package: "@fusebit-int/slack-integration",
                   },
@@ -120,12 +120,12 @@ export const integrationsFeed: Feed[] = [
         schema: {
           type: "object",
           properties: {
-            slackName: {
+            slackConnectorName: {
               type: "string",
               minLength: 3,
             },
           },
-          required: ["slackName"],
+          required: ["slackConnectorName"],
         },
   
         uischema: {
@@ -136,7 +136,7 @@ export const integrationsFeed: Feed[] = [
               elements: [
                 {
                   type: "Control",
-                  scope: "#/properties/slackName",
+                  scope: "#/properties/slackConnectorName",
                   label: "Slack Connector name",
                 },
               ],
@@ -152,7 +152,7 @@ export const integrationsFeed: Feed[] = [
           {
             name: "slackConnector",
             entityType: "connector",
-            id: "{{this.slackName}}",
+            id: "<%slackName%>",
             data: {
               files: {
                 "package.json": "{...}",
@@ -169,7 +169,7 @@ export const integrationsFeed: Feed[] = [
           {
             name: "slackIntegration",
             entityType: "integration",
-            id: "{{this.slackName}}",
+            id: "<%slackName%>",
             data: {
               id: "foo",
               data: {
@@ -182,7 +182,7 @@ export const integrationsFeed: Feed[] = [
                   {
                     name: "slackConnector",
                     entityType: "connector",
-                    entityId: "{{global.slackConnector.slackName}}",
+                    entityId: "<%slackName%>",
                     dependsOn: [],
                     package: "@fusebit-int/slack-integration",
                   },
@@ -219,12 +219,12 @@ export const integrationsFeed: Feed[] = [
         schema: {
           type: "object",
           properties: {
-            slackName: {
+            slackConnectorName: {
               type: "string",
               minLength: 3,
             },
           },
-          required: ["slackName"],
+          required: ["slackConnectorName"],
         },
   
         uischema: {
@@ -235,7 +235,7 @@ export const integrationsFeed: Feed[] = [
               elements: [
                 {
                   type: "Control",
-                  scope: "#/properties/slackName",
+                  scope: "#/properties/slackConnectorName",
                   label: "Slack Connector name",
                 },
               ],
@@ -251,7 +251,7 @@ export const integrationsFeed: Feed[] = [
           {
             name: "slackConnector",
             entityType: "connector",
-            id: "{{this.slackName}}",
+            id: "<%slackName%>",
             data: {
               files: {
                 "package.json": "{...}",
@@ -268,7 +268,7 @@ export const integrationsFeed: Feed[] = [
           {
             name: "slackIntegration",
             entityType: "integration",
-            id: "{{this.slackName}}",
+            id: "<%slackName%>",
             data: {
               id: "foo",
               data: {
@@ -281,7 +281,7 @@ export const integrationsFeed: Feed[] = [
                   {
                     name: "slackConnector",
                     entityType: "connector",
-                    entityId: "{{global.slackConnector.slackName}}",
+                    entityId: "<%slackName%>",
                     dependsOn: [],
                     package: "@fusebit-int/slack-integration",
                   },
@@ -375,7 +375,7 @@ export const integrationsFeed: Feed[] = [
           {
             name: "slackConnector",
             entityType: "connector",
-            id: "{{this.slackName}}",
+            id: "<%slackName%>",
             data: {
               files: {
                 "package.json": "{...}",
@@ -392,7 +392,7 @@ export const integrationsFeed: Feed[] = [
           {
             name: "slackIntegration",
             entityType: "integration",
-            id: "{{this.slackName}}",
+            id: "<%slackName%>",
             data: {
               id: "foo",
               data: {
@@ -405,7 +405,7 @@ export const integrationsFeed: Feed[] = [
                   {
                     name: "slackConnector",
                     entityType: "connector",
-                    entityId: "{{global.slackConnector.slackName}}",
+                    entityId: "<%slackName%>",
                     dependsOn: [],
                     package: "@fusebit-int/slack-integration",
                   },
@@ -496,7 +496,7 @@ export const integrationsFeed: Feed[] = [
           {
             name: "slackConnector",
             entityType: "connector",
-            id: "{{this.slackName}}",
+            id: "<%slackName%>",
             data: {
               files: {
                 "package.json": "{...}",
@@ -513,7 +513,7 @@ export const integrationsFeed: Feed[] = [
           {
             name: "slackIntegration",
             entityType: "integration",
-            id: "{{this.slackName}}",
+            id: "<%slackName%>",
             data: {
               id: "foo",
               data: {
@@ -526,7 +526,7 @@ export const integrationsFeed: Feed[] = [
                   {
                     name: "slackConnector",
                     entityType: "connector",
-                    entityId: "{{global.slackConnector.slackName}}",
+                    entityId: "<%slackName%>",
                     dependsOn: [],
                     package: "@fusebit-int/slack-integration",
                   },
@@ -617,7 +617,7 @@ export const integrationsFeed: Feed[] = [
           {
             name: "slackConnector",
             entityType: "connector",
-            id: "{{this.slackName}}",
+            id: "<%slackName%>",
             data: {
               files: {
                 "package.json": "{...}",
@@ -634,7 +634,7 @@ export const integrationsFeed: Feed[] = [
           {
             name: "slackIntegration",
             entityType: "integration",
-            id: "{{this.slackName}}",
+            id: "<%slackName%>",
             data: {
               id: "foo",
               data: {
@@ -647,7 +647,7 @@ export const integrationsFeed: Feed[] = [
                   {
                     name: "slackConnector",
                     entityType: "connector",
-                    entityId: "{{global.slackConnector.slackName}}",
+                    entityId: "<%slackName%>",
                     dependsOn: [],
                     package: "@fusebit-int/slack-integration",
                   },
