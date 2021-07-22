@@ -6,14 +6,17 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { useContext } from "../../../hooks/useContext";
 import { useLoader } from "../../../hooks/useLoader";
 import { useAccountConnectorsGetAll } from "../../../hooks/api/v2/account/connector/useGetAll";
-// import { useAccountConnectorCreateConnector } from "../../../hooks/api/v2/account/connector/useCreateOne";
+import { useAccountConnectorCreateConnector } from "../../../hooks/api/v2/account/connector/useCreateOne";
 import { useAccountConnectorDeleteConnector } from "../../../hooks/api/v2/account/connector/useDeleteOne";
+import { useAccountIntegrationCreateIntegration } from "../../../hooks/api/v2/account/integration/useCreateOne";
 import { Operation } from "../../../interfaces/operation";
 import { Connector } from "../../../interfaces/connector";
 import { useError } from "../../../hooks/useError";
 import arrowRight from "../../../assets/arrow-right.svg";
 import arrowLeft from "../../../assets/arrow-left.svg";
 import AddConnector from "./AddConnector";
+import { Entity, Feed } from "../../../interfaces/feed";
+import Mustache from "mustache";
 
 enum cells {
     TYPE = "Type",
@@ -21,13 +24,19 @@ enum cells {
     CREATED = "Created",
 }
 
+interface IntegrationData {
+    newName: string;
+    [key: string]: string | boolean | number;
+}
+
 const Overview: React.FC = () => {
     const [selected, setSelected] = React.useState<string[]>([]);
     const [rows, setRows] = React.useState<Connector[]>([]);
     const { userData } = useContext();
     const { data: connectors, refetch: reloadConnectors } = useAccountConnectorsGetAll<{ items: Connector[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
-    // const createConnector = useAccountConnectorCreateConnector<Operation>();
+    const createConnector = useAccountConnectorCreateConnector<Operation>();
     const deleteConnector = useAccountConnectorDeleteConnector<Operation>();
+    const createIntegration = useAccountIntegrationCreateIntegration<Operation>();
     const { waitForOperations, createLoader, removeLoader } = useLoader();
     const { createError } = useError();
     const [selectedCell, setSelectedCell] = React.useState<cells>(cells.TYPE);
@@ -104,17 +113,41 @@ const Overview: React.FC = () => {
         }
     }
 
-    const _createConnector = async (data: any) => {
-        // try {
-            // createLoader();
-            // const response = await createConnector.mutateAsync({ id: String(new Date().getTime()), accountId: userData.accountId, subscriptionId: userData.subscriptionId });
-            // await waitForOperations([response.data.operationId]);
-        //     reloadConnectors();
-        // } catch (e) {
-        //     createError(e.message);
-        // } finally {
-        //     removeLoader();
-        // }
+    const replaceMustache = async (data: IntegrationData, entity: Entity) => {
+        const customTags: any = [ '<%', '%>' ];
+        const view = {
+            slackName: data.newName
+        }
+        const newEntity = Mustache.render(JSON.stringify(entity), view, {}, customTags);
+        const parsedEntity: Entity = JSON.parse(newEntity);
+        return parsedEntity;
+    }
+
+    const _createConnector = async (activeIntegration: Feed, data: IntegrationData) => {
+        try {
+            createLoader();
+            let currentIntegrationData: Entity | undefined;
+            let connectors: Entity[] = [];
+            for (let i = 0; i < activeIntegration.configuration.entities.length; i++) {
+                const entity: Entity = activeIntegration.configuration.entities[i];
+                if (entity.entityType === "connector") {
+                    connectors.push(await replaceMustache(data, entity));
+                } else {
+                    currentIntegrationData = await replaceMustache(data, entity);
+                }
+            }
+            const response = await createIntegration.mutateAsync({id: currentIntegrationData?.id, accountId: userData.accountId, subscriptionId: userData.subscriptionId});
+            await waitForOperations([response.data.operationId]);
+            for (let i = 0; i < connectors.length; i++) {
+                const response = await createConnector.mutateAsync({ id: connectors[i].id, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+                await waitForOperations([response.data.operationId]);
+            }
+            reloadConnectors();
+        } catch (e) {
+            createError(e.message);
+        } finally {
+            removeLoader();
+        }
     }
 
     const handlePreviousCellSelect = () => {
@@ -147,7 +180,7 @@ const Overview: React.FC = () => {
                 closeAfterTransition
                 BackdropComponent={Backdrop}
             >
-                <AddConnector onSubmit={(data: any) => _createConnector(data)} open={addConnectorOpen} onClose={() => setAddConnectorOpen(false)} />
+                <AddConnector onSubmit={(activeIntegration: Feed, data: IntegrationData) => _createConnector(activeIntegration, data)} open={addConnectorOpen} onClose={() => setAddConnectorOpen(false)} />
             </Modal>
             <SC.ButtonContainer>
                 <SC.ButtonMargin>

@@ -38,10 +38,10 @@ const AddConnector: React.FC<Props> = ({open, onClose, onSubmit}) => {
             newConnectorName === "" && setNewConnectorNameErr("This field is required");
         } else if (customize) {
             //send data with customized form
-            onSubmit(activeConnector, {...data, newConnectorName});
+            onSubmit(activeConnector, {...data, newName: newConnectorName});
         } else {
             //send data with default form
-            onSubmit(activeConnector, newConnectorName);
+            onSubmit(activeConnector, {newName: newConnectorName});
         }
     }
 

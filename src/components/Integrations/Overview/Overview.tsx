@@ -16,7 +16,7 @@ import arrowRight from "../../../assets/arrow-right.svg";
 import arrowLeft from "../../../assets/arrow-left.svg";
 import AddIntegration from "./AddIntegration";
 import { Entity, Feed } from "../../../interfaces/feed";
-import Mustache, {  } from "mustache";
+import Mustache from "mustache";
 
 enum cells {
     INSTANCES = "Instances",
@@ -112,9 +112,6 @@ const Overview: React.FC = () => {
             window.location.href = href;
         }
     }
-
-    
-    
 
     const replaceMustache = async (data: IntegrationData, entity: Entity) => {
         const customTags: any = [ '<%', '%>' ];
