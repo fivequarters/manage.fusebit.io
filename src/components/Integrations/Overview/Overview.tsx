@@ -14,11 +14,18 @@ import { useError } from "../../../hooks/useError";
 import arrowRight from "../../../assets/arrow-right.svg";
 import arrowLeft from "../../../assets/arrow-left.svg";
 import AddIntegration from "./AddIntegration";
+import { Entity, Feed } from "../../../interfaces/feed";
+import Mustache from "mustache";
 
 enum cells {
     INSTANCES = "Instances",
     CREATED = "Created",
     DEPLOYED = "Deployed",
+}
+
+interface IntegrationData {
+    newIntegrationName: string;
+    [key: string]: string | boolean | number;
 }
 
 const Overview: React.FC = () => {
@@ -104,17 +111,35 @@ const Overview: React.FC = () => {
         }
     }
 
-    const _createIntegration = async (data: any) => {
-        try {
-            createLoader();
-            const response = await createIntegration.mutateAsync({ id: String(new Date().getTime()), accountId: userData.accountId, subscriptionId: userData.subscriptionId });
-            await waitForOperations([response.data.operationId]);
-            reloadIntegrations();
-        } catch (e) {
-            createError(e.message);
-        } finally {
-            removeLoader();
+    const replaceMustache = async (data: IntegrationData, entity: Entity) => {
+        console.log(await Mustache.render(entity.toString(), {id: "pepito"}));
+        return entity;
+    }
+
+    const _createIntegration = async (activeIntegration: Feed, data: IntegrationData) => {
+        let currentIntegrationData: Entity | undefined;
+        let connectors: Entity[] = [];
+        for (let i = 0; i < activeIntegration.configuration.entities.length; i++) {
+            const entity: Entity = activeIntegration.configuration.entities[i];
+            if (entity.entityType === "connector") {
+                connectors.push(await replaceMustache(data, entity));
+            } else {
+                currentIntegrationData = await replaceMustache(data, entity);
+            }
         }
+        // console.log(currentIntegrationData);
+        // console.log(connectors);
+
+        // try {
+        //     createLoader();
+        //     const response = await createIntegration.mutateAsync({ id: String(new Date().getTime()), accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+        //     await waitForOperations([response.data.operationId]);
+        //     reloadIntegrations();
+        // } catch (e) {
+        //     createError(e.message);
+        // } finally {
+        //     removeLoader();
+        // }
     }
 
     const handlePreviousCellSelect = () => {
@@ -147,7 +172,7 @@ const Overview: React.FC = () => {
                 closeAfterTransition
                 BackdropComponent={Backdrop}
             >
-                <AddIntegration onSubmit={(data: any) => _createIntegration(data)} open={addIntegrationOpen} onClose={() => setAddIntegrationOpen(false)} />
+                <AddIntegration onSubmit={(activeIntegration: Feed, data: IntegrationData) => _createIntegration(activeIntegration, data)} open={addIntegrationOpen} onClose={() => setAddIntegrationOpen(false)} />
             </Modal>
             <SC.ButtonContainer>
                 <SC.ButtonMargin>

@@ -39,10 +39,9 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
         } else if (customize) {
             //send data with customized form
             onSubmit(activeIntegration, {...data, newIntegrationName});
-            
         } else {
             //send data with default form
-            onSubmit(activeIntegration, newIntegrationName);
+            onSubmit(activeIntegration, {newIntegrationName});
         }
     }
 

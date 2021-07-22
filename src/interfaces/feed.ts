@@ -20,7 +20,7 @@ interface EntityComponent {
     package: string,
 }
 
-interface Entity {
+export interface Entity {
     name: string;
     entityType: string;
     id: string;
@@ -41,7 +41,7 @@ interface Entity {
                 [key: string]: any;
             },
             configuration: {
-                [key: string]: any
+                [key: string]: any;
             };
         }
     },
