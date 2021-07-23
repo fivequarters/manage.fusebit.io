@@ -25,7 +25,6 @@ enum cells {
 }
 
 interface IntegrationData {
-    newName: string;
     [key: string]: string | boolean | number;
 }
 
@@ -116,7 +115,7 @@ const Overview: React.FC = () => {
     const replaceMustache = async (data: IntegrationData, entity: Entity) => {
         const customTags: any = [ '<%', '%>' ];
         const view = {
-            slackName: data.newName
+            slackName: data.slackName
         }
         const newEntity = Mustache.render(JSON.stringify(entity), view, {}, customTags);
         const parsedEntity: Entity = JSON.parse(newEntity);

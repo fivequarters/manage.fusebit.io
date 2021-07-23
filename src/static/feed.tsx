@@ -21,12 +21,16 @@ export const integrationsFeed: Feed[] = [
         schema: {
           type: "object",
           properties: {
+            slackName: {
+              type: "string",
+              minLength: 3,
+            },
             slackConnectorName: {
               type: "string",
               minLength: 3,
             },
           },
-          required: ["slackConnectorName"],
+          required: ["slackName", "slackConnectorName"],
         },
   
         uischema: {
@@ -37,12 +41,18 @@ export const integrationsFeed: Feed[] = [
               elements: [
                 {
                   type: "Control",
+                  scope: "#/properties/slackName",
+                  label: "Name",
+                },
+                {
+                  type: "Control",
                   scope: "#/properties/slackConnectorName",
                   label: "Slack Connector name",
                 },
               ],
             },
         },
+
         data: {
           slackConnector: {
             slackName: "slack-connector",
@@ -115,17 +125,22 @@ export const integrationsFeed: Feed[] = [
         service: "slack",
         catalog: "crm, calendar",
       },
+
       configuration: {
         title: "Configure your slack integration", // Title and various other text fields for the form.
         schema: {
           type: "object",
           properties: {
+            slackName: {
+              type: "string",
+              minLength: 3,
+            },
             slackConnectorName: {
               type: "string",
               minLength: 3,
             },
           },
-          required: ["slackConnectorName"],
+          required: ["slackName", "slackConnectorName"],
         },
   
         uischema: {
@@ -136,12 +151,18 @@ export const integrationsFeed: Feed[] = [
               elements: [
                 {
                   type: "Control",
+                  scope: "#/properties/slackName",
+                  label: "Name",
+                },
+                {
+                  type: "Control",
                   scope: "#/properties/slackConnectorName",
                   label: "Slack Connector name",
                 },
               ],
             },
         },
+
         data: {
           slackConnector: {
             slackName: "slack-connector",
@@ -214,17 +235,22 @@ export const integrationsFeed: Feed[] = [
         service: "slack",
         catalog: "messaging",
       },
+
       configuration: {
         title: "Configure your slack integration", // Title and various other text fields for the form.
         schema: {
           type: "object",
           properties: {
+            slackName: {
+              type: "string",
+              minLength: 3,
+            },
             slackConnectorName: {
               type: "string",
               minLength: 3,
             },
           },
-          required: ["slackConnectorName"],
+          required: ["slackName", "slackConnectorName"],
         },
   
         uischema: {
@@ -235,12 +261,18 @@ export const integrationsFeed: Feed[] = [
               elements: [
                 {
                   type: "Control",
+                  scope: "#/properties/slackName",
+                  label: "Name",
+                },
+                {
+                  type: "Control",
                   scope: "#/properties/slackConnectorName",
                   label: "Slack Connector name",
                 },
               ],
             },
         },
+
         data: {
           slackConnector: {
             slackName: "slack-connector",
@@ -316,11 +348,20 @@ export const integrationsFeed: Feed[] = [
         service: "slack",
         catalog: "messaging",
       },
+
       configuration: {
         title: "Configure your slack integration", // Title and various other text fields for the form.
         schema: {
           type: "object",
           properties: {
+            slackName: {
+              type: "string",
+              minLength: 3,
+            },
+            slackConnectorName: {
+              type: "string",
+              minLength: 3,
+            },
             clientId: {
               type: "string",
               minLength: 6,
@@ -333,7 +374,7 @@ export const integrationsFeed: Feed[] = [
               type: "boolean",
             }
           },
-          required: ["clientId", "clientSecret"],
+          required: ["slackName", "slackConnectorName"],
         },
   
         uischema: {
@@ -344,12 +385,23 @@ export const integrationsFeed: Feed[] = [
               elements: [
                 {
                   type: "Control",
+                  scope: "#/properties/slackName",
+                  label: "Slack Integration Name",
+                },
+                {
+                  type: "Control",
+                  scope: "#/properties/slackConnectorName",
+                  label: "Slack Connector Name",
+                },
+                {
+                  type: "Control",
                   scope: "#/properties/clientId",
                   label: "Client ID",
                   options: {
                     format: "password",
                   }
-                },{
+                },
+                {
                   type: "Control",
                   scope: "#/properties/clientSecret",
                   label: "Client Secret",
@@ -365,6 +417,7 @@ export const integrationsFeed: Feed[] = [
               ],
             },
         },
+
         data: {
           slackConnector: {
             slackName: "slack-connector",
@@ -437,11 +490,20 @@ export const integrationsFeed: Feed[] = [
         service: "slack",
         catalog: "messaging, productivity, crm",
       },
+
       configuration: {
         title: "Configure your slack integration", // Title and various other text fields for the form.
         schema: {
           type: "object",
           properties: {
+            slackName: {
+              type: "string",
+              minLength: 3,
+            },
+            slackConnectorName: {
+              type: "string",
+              minLength: 3,
+            },
             clientId: {
               type: "string",
               minLength: 6,
@@ -454,7 +516,7 @@ export const integrationsFeed: Feed[] = [
               type: "boolean",
             }
           },
-          required: ["clientId", "clientSecret"],
+          required: ["slackName", "slackConnectorName"],
         },
   
         uischema: {
@@ -465,12 +527,23 @@ export const integrationsFeed: Feed[] = [
               elements: [
                 {
                   type: "Control",
+                  scope: "#/properties/slackName",
+                  label: "Slack Integration Name",
+                },
+                {
+                  type: "Control",
+                  scope: "#/properties/slackConnectorName",
+                  label: "Slack Connector Name",
+                },
+                {
+                  type: "Control",
                   scope: "#/properties/clientId",
                   label: "Client ID",
                   options: {
                     format: "password",
                   }
-                },{
+                },
+                {
                   type: "Control",
                   scope: "#/properties/clientSecret",
                   label: "Client Secret",
@@ -486,6 +559,7 @@ export const integrationsFeed: Feed[] = [
               ],
             },
         },
+
         data: {
           slackConnector: {
             slackName: "slack-connector",
@@ -558,11 +632,20 @@ export const integrationsFeed: Feed[] = [
         service: "slack",
         catalog: "crm, calendar",
       },
+
       configuration: {
         title: "Configure your slack integration", // Title and various other text fields for the form.
         schema: {
           type: "object",
           properties: {
+            slackName: {
+              type: "string",
+              minLength: 3,
+            },
+            slackConnectorName: {
+              type: "string",
+              minLength: 3,
+            },
             clientId: {
               type: "string",
               minLength: 6,
@@ -575,7 +658,7 @@ export const integrationsFeed: Feed[] = [
               type: "boolean",
             }
           },
-          required: ["clientId", "clientSecret"],
+          required: ["slackName", "slackConnectorName"],
         },
   
         uischema: {
@@ -586,12 +669,23 @@ export const integrationsFeed: Feed[] = [
               elements: [
                 {
                   type: "Control",
+                  scope: "#/properties/slackName",
+                  label: "Slack Integration Name",
+                },
+                {
+                  type: "Control",
+                  scope: "#/properties/slackConnectorName",
+                  label: "Slack Connector Name",
+                },
+                {
+                  type: "Control",
                   scope: "#/properties/clientId",
                   label: "Client ID",
                   options: {
                     format: "password",
                   }
-                },{
+                },
+                {
                   type: "Control",
                   scope: "#/properties/clientSecret",
                   label: "Client Secret",
@@ -607,6 +701,7 @@ export const integrationsFeed: Feed[] = [
               ],
             },
         },
+        
         data: {
           slackConnector: {
             slackName: "slack-connector",

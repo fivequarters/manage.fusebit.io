@@ -7,7 +7,7 @@ import {
   } from '@jsonforms/material-renderers';
   import { JsonForms } from '@jsonforms/react';
   import { ValidationMode } from "@jsonforms/core";
-  import { Button, Switch, TextField } from "@material-ui/core";
+  import { Button } from "@material-ui/core";
   import {integrationsFeed} from "../../../../static/feed";
   import search from "../../../../assets/search.svg";
   import cross from "../../../../assets/cross.svg";
@@ -25,23 +25,16 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
     const [data, setData] = React.useState<any>({});
     const [errors, setErrors] = React.useState<object[]>([]);
     const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
-    const [customize, setCustomize] = React.useState(false);
     const [activeFilter, setActiveFilter] = React.useState<Filters>(Filters.ALL);
     const [activeIntegration, setActiveIntegration] = React.useState<Feed>(integrationsFeed[0]);
     const [searchFilter, setSearchFilter] = React.useState("");
-    const [newIntegrationName, setNewIntegrationName] = React.useState("");
-    const [newIntegrationNameErr, setNewIntegrationNameErr] = React.useState("");
 
     const handleSubmit = () => {
-        if (errors.length > 0 || newIntegrationName === "") {
+        if (errors.length > 0) {
             setValidationMode("ValidateAndShow");
-            newIntegrationName === "" && setNewIntegrationNameErr("This field is required");
-        } else if (customize) {
-            //send data with customized form
-            onSubmit(activeIntegration, {...data, newName: newIntegrationName});
         } else {
-            //send data with default form
-            onSubmit(activeIntegration, {newName: newIntegrationName});
+            //send data with customized form
+            onSubmit(activeIntegration, {...data});
         }
     }
 
@@ -96,39 +89,20 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
                         <SC.ConnectorVersion>{activeIntegration.version}</SC.ConnectorVersion>
                     </SC.ConnectorTitleWrapper>
                     <SC.ConnectorDescription children={activeIntegration.description} />
-                    <SC.TextFielWrapper>
-                        <TextField onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            setNewIntegrationName(e.target.value);
-                            setNewIntegrationNameErr("");
-                            }} 
-                            id="name" 
-                            label="Name" 
-                            style={{margin: "27px 0", width: "320px"}} 
-                        />
-                        {newIntegrationNameErr !== "" && <SC.Error>{newIntegrationNameErr}</SC.Error>}
-                    </SC.TextFielWrapper>
-                    <SC.ConnectorCustomize>
-                        Customize
-                        <Switch checked={customize} onChange={() => setCustomize(!customize)} color="primary" inputProps={{ 'aria-label': 'customize' }} />
-                    </SC.ConnectorCustomize>
-                    {
-                        customize && (
-                            <SC.FormWrapper>
-                                <JsonForms
-                                schema={activeIntegration.configuration.schema}
-                                uischema={activeIntegration.configuration.uischema.elements}
-                                data={data}
-                                renderers={materialRenderers}
-                                cells={materialCells}
-                                onChange={({ errors, data }) => {
-                                    errors && setErrors(errors);
-                                    setData(data);
-                                }}
-                                validationMode={validationMode}
-                                />
-                            </SC.FormWrapper>
-                        )
-                    }
+                        <SC.FormWrapper>
+                            <JsonForms
+                            schema={activeIntegration.configuration.schema}
+                            uischema={activeIntegration.configuration.uischema.elements}
+                            data={data}
+                            renderers={materialRenderers}
+                            cells={materialCells}
+                            onChange={({ errors, data }) => {
+                                errors && setErrors(errors);
+                                setData(data);
+                            }}
+                            validationMode={validationMode}
+                            />
+                        </SC.FormWrapper>
                     <Button onClick={handleSubmit} style={{width: "200px", marginTop: "auto", marginLeft: "auto"}} fullWidth={false} size="large" color="primary" variant="contained">Create</Button>
                 </SC.ConnectorInfo>
             </SC.Flex>

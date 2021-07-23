@@ -3,7 +3,7 @@ interface uischemaElement {
     scope: string;
     label: string;
     options?: {
-        [key: string]: string;
+        [key: string]: string | boolean;
     }
 }
 

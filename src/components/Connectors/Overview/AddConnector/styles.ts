@@ -173,7 +173,7 @@ export const FormWrapper = styled.form`
     display: flex;
     flex-direction: column;
     width: 316px;
-    margin-top: 38px;
+    margin-top: 15px;
 `;
 
 export const FormInputWrapper = styled.div`

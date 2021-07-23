@@ -7,7 +7,7 @@ import {
   } from '@jsonforms/material-renderers';
   import { JsonForms } from '@jsonforms/react';
   import { ValidationMode } from "@jsonforms/core";
-  import { Button, Switch, TextField } from "@material-ui/core";
+  import { Button } from "@material-ui/core";
   import {connectorsFeed} from "../../../../static/feed";
   import search from "../../../../assets/search.svg";
   import cross from "../../../../assets/cross.svg";
@@ -25,23 +25,16 @@ const AddConnector: React.FC<Props> = ({open, onClose, onSubmit}) => {
     const [data, setData] = React.useState<any>({});
     const [errors, setErrors] = React.useState<any[]>([]);
     const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
-    const [customize, setCustomize] = React.useState(false);
     const [activeFilter, setActiveFilter] = React.useState<Filters>(Filters.ALL);
     const [activeConnector, setActiveConnector] = React.useState<Feed>(connectorsFeed[0]);
     const [searchFilter, setSearchFilter] = React.useState("");
-    const [newConnectorName, setNewConnectorName] = React.useState("");
-    const [newConnectorNameErr, setNewConnectorNameErr] = React.useState("");
 
     const handleSubmit = () => {
-        if (errors.length > 0 || newConnectorName === "") {
+        if (errors.length > 0) {
             setValidationMode("ValidateAndShow");
-            newConnectorName === "" && setNewConnectorNameErr("This field is required");
-        } else if (customize) {
-            //send data with customized form
-            onSubmit(activeConnector, {...data, newName: newConnectorName});
         } else {
-            //send data with default form
-            onSubmit(activeConnector, {newName: newConnectorName});
+            //send data with customized form
+            onSubmit(activeConnector, {...data});
         }
     }
 
@@ -96,41 +89,21 @@ const AddConnector: React.FC<Props> = ({open, onClose, onSubmit}) => {
                         <SC.ConnectorVersion>{activeConnector.version}</SC.ConnectorVersion>
                     </SC.ConnectorTitleWrapper>
                     <SC.ConnectorDescription children={activeConnector.description} />
-                    <SC.TextFielWrapper>
-                        <TextField 
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            setNewConnectorName(e.target.value);
-                            setNewConnectorNameErr("");
-                        }}  
-                        id="name" 
-                        label="Name" 
-                        style={{margin: "27px 0", width: "320px"}} 
+                    <SC.FormWrapper>
+                        <JsonForms
+                        schema={activeConnector.configuration.schema}
+                        uischema={activeConnector.configuration.uischema.elements}
+                        data={data}
+                        renderers={materialRenderers}
+                        cells={materialCells}
+                        onChange={({ errors, data }) => {
+                            errors && setErrors(errors);
+                            console.log(errors);
+                            setData(data);
+                        }}
+                        validationMode={validationMode}
                         />
-                        {newConnectorNameErr !== "" && <SC.Error>{newConnectorNameErr}</SC.Error>}
-                    </SC.TextFielWrapper>
-                    <SC.ConnectorCustomize>
-                        Customize
-                        <Switch checked={customize} onChange={() => setCustomize(!customize)} color="primary" inputProps={{ 'aria-label': 'customize' }} />
-                    </SC.ConnectorCustomize>
-                    {
-                        customize && (
-                            <SC.FormWrapper>
-                                <JsonForms
-                                schema={activeConnector.configuration.schema}
-                                uischema={activeConnector.configuration.uischema.elements}
-                                data={data}
-                                renderers={materialRenderers}
-                                cells={materialCells}
-                                onChange={({ errors, data }) => {
-                                    errors && setErrors(errors);
-                                    console.log(errors);
-                                    setData(data);
-                                }}
-                                validationMode={validationMode}
-                                />
-                            </SC.FormWrapper>
-                        )
-                    }
+                    </SC.FormWrapper>
                     <Button onClick={handleSubmit} style={{width: "200px", marginTop: "auto", marginLeft: "auto"}} fullWidth={false} size="large" color="primary" variant="contained">Create</Button>
                 </SC.ConnectorInfo>
             </SC.Flex>
