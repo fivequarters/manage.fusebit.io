@@ -139,7 +139,7 @@ const Overview: React.FC = () => {
             const response = await createIntegration.mutateAsync({...currentIntegrationData?.data, accountId: userData.accountId, subscriptionId: userData.subscriptionId});
             await waitForOperations([response.data.operationId]);
             for (let i = 0; i < connectors.length; i++) {
-                const response = await createConnector.mutateAsync({data: connectors[i].data ,id: connectors[i].id, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+                const response = await createConnector.mutateAsync({data: connectors[i].data, id: connectors[i].id, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
                 await waitForOperations([response.data.operationId]);
             }
             reloadIntegrations();
