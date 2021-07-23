@@ -56,7 +56,7 @@ export const integrationsFeed: Feed[] = [
             id: "<%slackName%>",
             data: {
               files: {
-                "package.json": "{...}",
+                "package.json": "{\"scripts\":{\"deploy\":\"fuse connector deploy {{this.name}} -d .\",\"get\":\"fuse connector get {{this.name}} -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\",\"@fusebit-int/pkg-oauth-connector\":\"*\"}}",
               },
               handler: "@fusebit-int/pkg-oauth-connector",
               configuration: {
@@ -72,11 +72,11 @@ export const integrationsFeed: Feed[] = [
             entityType: "integration",
             id: "<%slackName%>",
             data: {
-              id: "foo",
+              id: "<%slackName%>",
               data: {
                 files: {
-                  "package.json": "{...}",
-                  "./integration.js": "...",
+                  "package.json": "{\"scripts\":{\"deploy\":\"fuse integration deploy {{this.name}} -d .\",\"get\":\"fuse integration get {{this.name}} -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\"},\"files\":[\"./integration.js\"]}",
+                  "./integration.js": "const { Router } = require(\"@fusebit-int/framework\");\nconst router = new Router();\nrouter.get(\"/api/\", async (ctx) => {\n  ctx.body = \"Hello World\";\n});\nmodule.exports = router;\n"
                 },
                 handler: "./integration",
                 components: [
@@ -85,7 +85,7 @@ export const integrationsFeed: Feed[] = [
                     entityType: "connector",
                     entityId: "<%slackName%>",
                     dependsOn: [],
-                    package: "@fusebit-int/slack-integration",
+                    package: "@fusebit-int/pkg-oauth-integration",
                   },
                 ],
                 componentTags: {
@@ -174,8 +174,17 @@ export const integrationsFeed: Feed[] = [
               id: "foo",
               data: {
                 files: {
-                  "package.json": "{...}",
-                  "./integration.js": "...",
+                  "package.json": {
+                    "scripts": {
+                      "deploy": "\"fuse integration deploy some-integration -d .\"",
+                      "get": "\"fuse integration get some-integration -d .\""
+                    },
+                    "dependencies": {
+                      "@fusebit-int/framework": "*"
+                    },
+                    "files": ["./integration.js"]
+                  },
+                  "./integration.js": "const { Router } = require(`@fusebit-int/framework`); const router = new Router(); router.get(`/api/`, async (ctx) => { ctx.body = `hello World`; }); module.exports = router;",
                 },
                 handler: "./integration",
                 components: [
