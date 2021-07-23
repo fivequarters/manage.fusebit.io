@@ -114,8 +114,19 @@ const Overview: React.FC = () => {
 
     const replaceMustache = async (data: IntegrationData, entity: Entity) => {
         const customTags: any = [ '<%', '%>' ];
+        const keys = Object.keys(data);
+        let connectorId;
+        let integrationId;
+        keys.forEach((key: any) => {
+            if (key.match("Connector")) {
+                connectorId = data[key];
+            } else if (key.match("Integration")) {
+                integrationId = data[key];
+            }
+        });
         const view = {
-            slackName: data.slackName
+            integrationId: integrationId,
+            connectorId: connectorId,
         }
         const newEntity = Mustache.render(JSON.stringify(entity), view, {}, customTags);
         const parsedEntity: Entity = JSON.parse(newEntity);

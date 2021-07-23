@@ -21,16 +21,16 @@ export const integrationsFeed: Feed[] = [
         schema: {
           type: "object",
           properties: {
-            slackName: {
+            slackIntegration: {
               type: "string",
               minLength: 3,
             },
-            slackConnectorName: {
+            slackConnector: {
               type: "string",
               minLength: 3,
             },
           },
-          required: ["slackName", "slackConnectorName"],
+          required: ["slackIntegration", "slackConnector"],
         },
   
         uischema: {
@@ -41,12 +41,12 @@ export const integrationsFeed: Feed[] = [
               elements: [
                 {
                   type: "Control",
-                  scope: "#/properties/slackName",
+                  scope: "#/properties/slackIntegration",
                   label: "Name",
                 },
                 {
                   type: "Control",
-                  scope: "#/properties/slackConnectorName",
+                  scope: "#/properties/slackConnector",
                   label: "Slack Connector name",
                 },
               ],
@@ -63,7 +63,7 @@ export const integrationsFeed: Feed[] = [
           {
             name: "slackConnector",
             entityType: "connector",
-            id: "<%slackName%>",
+            id: "<%connectorId%>",
             data: {
               files: {
                 "package.json": "{\"scripts\":{\"deploy\":\"fuse connector deploy {{this.name}} -d .\",\"get\":\"fuse connector get {{this.name}} -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\",\"@fusebit-int/pkg-oauth-connector\":\"*\"}}",
@@ -80,9 +80,9 @@ export const integrationsFeed: Feed[] = [
           {
             name: "slackIntegration",
             entityType: "integration",
-            id: "<%slackName%>",
+            id: "<%integrationId%>",
             data: {
-              id: "<%slackName%>",
+              id: "<%integrationId%>",
               data: {
                 files: {
                   "package.json": "{\"scripts\":{\"deploy\":\"fuse integration deploy {{this.name}} -d .\",\"get\":\"fuse integration get {{this.name}} -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\"},\"files\":[\"./integration.js\"]}",
@@ -93,7 +93,7 @@ export const integrationsFeed: Feed[] = [
                   {
                     name: "slackConnector",
                     entityType: "connector",
-                    entityId: "<%slackName%>",
+                    entityId: "<%connectorId%>",
                     dependsOn: [],
                     package: "@fusebit-int/pkg-oauth-integration",
                   },
@@ -131,16 +131,16 @@ export const integrationsFeed: Feed[] = [
         schema: {
           type: "object",
           properties: {
-            slackName: {
+            slackIntegration: {
               type: "string",
               minLength: 3,
             },
-            slackConnectorName: {
+            slackConnector: {
               type: "string",
               minLength: 3,
             },
           },
-          required: ["slackName", "slackConnectorName"],
+          required: ["slackIntegration", "slackConnector"],
         },
   
         uischema: {
@@ -151,12 +151,12 @@ export const integrationsFeed: Feed[] = [
               elements: [
                 {
                   type: "Control",
-                  scope: "#/properties/slackName",
+                  scope: "#/properties/slackIntegration",
                   label: "Name",
                 },
                 {
                   type: "Control",
-                  scope: "#/properties/slackConnectorName",
+                  scope: "#/properties/slackConnector",
                   label: "Slack Connector name",
                 },
               ],
@@ -173,7 +173,7 @@ export const integrationsFeed: Feed[] = [
           {
             name: "slackConnector",
             entityType: "connector",
-            id: "<%slackName%>",
+            id: "<%connectorId%>",
             data: {
               files: {
                 "package.json": "{\"scripts\":{\"deploy\":\"fuse connector deploy {{this.name}} -d .\",\"get\":\"fuse connector get {{this.name}} -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\",\"@fusebit-int/pkg-oauth-connector\":\"*\"}}",
@@ -190,9 +190,9 @@ export const integrationsFeed: Feed[] = [
           {
             name: "slackIntegration",
             entityType: "integration",
-            id: "<%slackName%>",
+            id: "<%integrationId%>",
             data: {
-              id: "<%slackName%>",
+              id: "<%integrationId%>",
               data: {
                 files: {
                   "package.json": "{\"scripts\":{\"deploy\":\"fuse integration deploy {{this.name}} -d .\",\"get\":\"fuse integration get {{this.name}} -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\"},\"files\":[\"./integration.js\"]}",
@@ -203,7 +203,7 @@ export const integrationsFeed: Feed[] = [
                   {
                     name: "slackConnector",
                     entityType: "connector",
-                    entityId: "<%slackName%>",
+                    entityId: "<%connectorId%>",
                     dependsOn: [],
                     package: "@fusebit-int/pkg-oauth-integration",
                   },
@@ -241,16 +241,16 @@ export const integrationsFeed: Feed[] = [
         schema: {
           type: "object",
           properties: {
-            slackName: {
+            slackIntegration: {
               type: "string",
               minLength: 3,
             },
-            slackConnectorName: {
+            slackConnector: {
               type: "string",
               minLength: 3,
             },
           },
-          required: ["slackName", "slackConnectorName"],
+          required: ["slackIntegration", "slackConnector"],
         },
   
         uischema: {
@@ -261,12 +261,12 @@ export const integrationsFeed: Feed[] = [
               elements: [
                 {
                   type: "Control",
-                  scope: "#/properties/slackName",
+                  scope: "#/properties/slackIntegration",
                   label: "Name",
                 },
                 {
                   type: "Control",
-                  scope: "#/properties/slackConnectorName",
+                  scope: "#/properties/slackConnector",
                   label: "Slack Connector name",
                 },
               ],
@@ -283,7 +283,7 @@ export const integrationsFeed: Feed[] = [
           {
             name: "slackConnector",
             entityType: "connector",
-            id: "<%slackName%>",
+            id: "<%connectorId%>",
             data: {
               files: {
                 "package.json": "{\"scripts\":{\"deploy\":\"fuse connector deploy {{this.name}} -d .\",\"get\":\"fuse connector get {{this.name}} -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\",\"@fusebit-int/pkg-oauth-connector\":\"*\"}}",
@@ -300,9 +300,9 @@ export const integrationsFeed: Feed[] = [
           {
             name: "slackIntegration",
             entityType: "integration",
-            id: "<%slackName%>",
+            id: "<%integrationId%>",
             data: {
-              id: "<%slackName%>",
+              id: "<%integrationId%>",
               data: {
                 files: {
                   "package.json": "{\"scripts\":{\"deploy\":\"fuse integration deploy {{this.name}} -d .\",\"get\":\"fuse integration get {{this.name}} -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\"},\"files\":[\"./integration.js\"]}",
@@ -313,7 +313,7 @@ export const integrationsFeed: Feed[] = [
                   {
                     name: "slackConnector",
                     entityType: "connector",
-                    entityId: "<%slackName%>",
+                    entityId: "<%connectorId%>",
                     dependsOn: [],
                     package: "@fusebit-int/pkg-oauth-integration",
                   },
@@ -354,11 +354,11 @@ export const integrationsFeed: Feed[] = [
         schema: {
           type: "object",
           properties: {
-            slackName: {
+            slackIntegration: {
               type: "string",
               minLength: 3,
             },
-            slackConnectorName: {
+            slackConnector: {
               type: "string",
               minLength: 3,
             },
@@ -374,7 +374,7 @@ export const integrationsFeed: Feed[] = [
               type: "boolean",
             }
           },
-          required: ["slackName", "slackConnectorName"],
+          required: ["slackIntegration", "slackConnector"],
         },
   
         uischema: {
@@ -385,12 +385,12 @@ export const integrationsFeed: Feed[] = [
               elements: [
                 {
                   type: "Control",
-                  scope: "#/properties/slackName",
+                  scope: "#/properties/slackIntegration",
                   label: "Slack Integration Name",
                 },
                 {
                   type: "Control",
-                  scope: "#/properties/slackConnectorName",
+                  scope: "#/properties/slackConnector",
                   label: "Slack Connector Name",
                 },
                 {
@@ -428,7 +428,7 @@ export const integrationsFeed: Feed[] = [
           {
             name: "slackConnector",
             entityType: "connector",
-            id: "<%slackName%>",
+            id: "<%connectorId%>",
             data: {
               files: {
                 "package.json": "{\"scripts\":{\"deploy\":\"fuse connector deploy {{this.name}} -d .\",\"get\":\"fuse connector get {{this.name}} -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\",\"@fusebit-int/pkg-oauth-connector\":\"*\"}}",
@@ -445,9 +445,9 @@ export const integrationsFeed: Feed[] = [
           {
             name: "slackIntegration",
             entityType: "integration",
-            id: "<%slackName%>",
+            id: "<%integrationId%>",
             data: {
-              id: "<%slackName%>",
+              id: "<%integrationId%>",
               data: {
                 files: {
                   "package.json": "{\"scripts\":{\"deploy\":\"fuse integration deploy {{this.name}} -d .\",\"get\":\"fuse integration get {{this.name}} -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\"},\"files\":[\"./integration.js\"]}",
@@ -458,7 +458,7 @@ export const integrationsFeed: Feed[] = [
                   {
                     name: "slackConnector",
                     entityType: "connector",
-                    entityId: "<%slackName%>",
+                    entityId: "<%connectorId%>",
                     dependsOn: [],
                     package: "@fusebit-int/pkg-oauth-integration",
                   },
@@ -496,11 +496,11 @@ export const integrationsFeed: Feed[] = [
         schema: {
           type: "object",
           properties: {
-            slackName: {
+            slackIntegration: {
               type: "string",
               minLength: 3,
             },
-            slackConnectorName: {
+            slackConnector: {
               type: "string",
               minLength: 3,
             },
@@ -516,7 +516,7 @@ export const integrationsFeed: Feed[] = [
               type: "boolean",
             }
           },
-          required: ["slackName", "slackConnectorName"],
+          required: ["slackIntegration", "slackConnector"],
         },
   
         uischema: {
@@ -527,12 +527,12 @@ export const integrationsFeed: Feed[] = [
               elements: [
                 {
                   type: "Control",
-                  scope: "#/properties/slackName",
+                  scope: "#/properties/slackIntegration",
                   label: "Slack Integration Name",
                 },
                 {
                   type: "Control",
-                  scope: "#/properties/slackConnectorName",
+                  scope: "#/properties/slackConnector",
                   label: "Slack Connector Name",
                 },
                 {
@@ -570,7 +570,7 @@ export const integrationsFeed: Feed[] = [
           {
             name: "slackConnector",
             entityType: "connector",
-            id: "<%slackName%>",
+            id: "<%connectorId%>",
             data: {
               files: {
                 "package.json": "{\"scripts\":{\"deploy\":\"fuse connector deploy {{this.name}} -d .\",\"get\":\"fuse connector get {{this.name}} -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\",\"@fusebit-int/pkg-oauth-connector\":\"*\"}}",
@@ -587,9 +587,9 @@ export const integrationsFeed: Feed[] = [
           {
             name: "slackIntegration",
             entityType: "integration",
-            id: "<%slackName%>",
+            id: "<%integrationId%>",
             data: {
-              id: "<%slackName%>",
+              id: "<%integrationId%>",
               data: {
                 files: {
                   "package.json": "{\"scripts\":{\"deploy\":\"fuse integration deploy {{this.name}} -d .\",\"get\":\"fuse integration get {{this.name}} -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\"},\"files\":[\"./integration.js\"]}",
@@ -600,7 +600,7 @@ export const integrationsFeed: Feed[] = [
                   {
                     name: "slackConnector",
                     entityType: "connector",
-                    entityId: "<%slackName%>",
+                    entityId: "<%connectorId%>",
                     dependsOn: [],
                     package: "@fusebit-int/pkg-oauth-integration",
                   },
@@ -638,11 +638,11 @@ export const integrationsFeed: Feed[] = [
         schema: {
           type: "object",
           properties: {
-            slackName: {
+            slackIntegration: {
               type: "string",
               minLength: 3,
             },
-            slackConnectorName: {
+            slackConnector: {
               type: "string",
               minLength: 3,
             },
@@ -658,7 +658,7 @@ export const integrationsFeed: Feed[] = [
               type: "boolean",
             }
           },
-          required: ["slackName", "slackConnectorName"],
+          required: ["slackIntegration", "slackConnector"],
         },
   
         uischema: {
@@ -669,12 +669,12 @@ export const integrationsFeed: Feed[] = [
               elements: [
                 {
                   type: "Control",
-                  scope: "#/properties/slackName",
+                  scope: "#/properties/slackIntegration",
                   label: "Slack Integration Name",
                 },
                 {
                   type: "Control",
-                  scope: "#/properties/slackConnectorName",
+                  scope: "#/properties/slackConnector",
                   label: "Slack Connector Name",
                 },
                 {
@@ -701,7 +701,7 @@ export const integrationsFeed: Feed[] = [
               ],
             },
         },
-        
+
         data: {
           slackConnector: {
             slackName: "slack-connector",
@@ -712,7 +712,7 @@ export const integrationsFeed: Feed[] = [
           {
             name: "slackConnector",
             entityType: "connector",
-            id: "<%slackName%>",
+            id: "<%connectorId%>",
             data: {
               files: {
                 "package.json": "{\"scripts\":{\"deploy\":\"fuse connector deploy {{this.name}} -d .\",\"get\":\"fuse connector get {{this.name}} -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\",\"@fusebit-int/pkg-oauth-connector\":\"*\"}}",
@@ -729,9 +729,9 @@ export const integrationsFeed: Feed[] = [
           {
             name: "slackIntegration",
             entityType: "integration",
-            id: "<%slackName%>",
+            id: "<%integrationId%>",
             data: {
-              id: "<%slackName%>",
+              id: "<%integrationId%>",
               data: {
                 files: {
                   "package.json": "{\"scripts\":{\"deploy\":\"fuse integration deploy {{this.name}} -d .\",\"get\":\"fuse integration get {{this.name}} -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\"},\"files\":[\"./integration.js\"]}",
@@ -742,7 +742,7 @@ export const integrationsFeed: Feed[] = [
                   {
                     name: "slackConnector",
                     entityType: "connector",
-                    entityId: "<%slackName%>",
+                    entityId: "<%connectorId%>",
                     dependsOn: [],
                     package: "@fusebit-int/pkg-oauth-integration",
                   },
