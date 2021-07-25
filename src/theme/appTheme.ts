@@ -17,10 +17,14 @@ export const lightTheme: Theme = createMuiTheme({
     overrides: {
         MuiFormControl: {
           root: {
-            marginBottom: "49px",
-            variant: "outlined",
+            marginBottom: "20px",
           }
         }
+    },
+    props: {
+        MuiCheckbox: {
+            color: 'primary',
+        },
     },
     typography: {
         button: {
@@ -30,14 +34,14 @@ export const lightTheme: Theme = createMuiTheme({
             'Poppins',
             '-apple-system',
             'BlinkMacSystemFont',
-            '"Segoe UI"',
+            'Segoe UI',
             'Roboto',
-            '"Helvetica Neue"',
+            'Helvetica Neue',
             'Arial',
             'sans-serif',
-            '"Apple Color Emoji"',
-            '"Segoe UI Emoji"',
-            '"Segoe UI Symbol"',
+            'Apple Color Emoji',
+            'Segoe UI Emoji',
+            'Segoe UI Symbol',
           ].join(','),
       }
 });
