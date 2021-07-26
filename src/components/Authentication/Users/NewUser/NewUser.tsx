@@ -95,6 +95,7 @@ const NewUser: React.FC<Props> = ({open, onClose}) => {
             setCopy(false);
         }, 3000);
     }
+    
     return (
         <SC.Card open={open}>
             <SC.Close onClick={() => onClose()} src={cross} alt="close" height="12" width="12" />
