@@ -20,7 +20,7 @@ import cross from "../../assets/cross.svg";
 import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
-const Navbar: React.FC<Props> = ({ sectionName, dropdown, integration, connector, integrationsLink }) => {
+const Navbar: React.FC<Props> = ({ sectionName, dropdown, integration, connector, authentication, authenticationLink, integrationsLink }) => {
     const history = useHistory();
     const [anchorSectionDropdown, setAnchorSectionDropdown] = React.useState(null);
     const [anchorUserDropdown, setAnchorUserDropdown] = React.useState(null);
@@ -51,7 +51,7 @@ const Navbar: React.FC<Props> = ({ sectionName, dropdown, integration, connector
                                 <>
                                     <SC.Flex>
                                         {sectionName !== 'Integrations' && sectionName !== 'Connectors' && <SC.Flex mobileHidden={true}>
-                                            <SC.SectionLink href={integrationsLink ? "/" : "/connectors"}>{integrationsLink ? "Integrations" : "Connectors"}</SC.SectionLink>
+                                            <SC.SectionLink href={integrationsLink ? "/" : authenticationLink ? "/authentication" : "/connectors"}>{integrationsLink ? "Integrations" : authenticationLink ? "Authentication" : "Connectors"}</SC.SectionLink>
                                             <SC.Arrow />
                                         </SC.Flex>}
                                         <SC.SectionDropdown active={Boolean(anchorSectionDropdown)} aria-controls="simple-menu" aria-haspopup="true" onClick={(event: any) => setAnchorSectionDropdown(event.currentTarget)}>
@@ -65,83 +65,127 @@ const Navbar: React.FC<Props> = ({ sectionName, dropdown, integration, connector
                                             <img src={arrow} alt="arrow" />
                                         </SC.SectionDropdownMobile>
                                     </SC.Flex>
-                                    <SC.MenuWrapper>
-                                        <Menu
-                                            style={{ top: "100px" }}
-                                            id="simple-menu"
-                                            anchorEl={anchorSectionDropdown}
-                                            keepMounted
-                                            open={Boolean(anchorSectionDropdown)}
-                                            onClose={() => setAnchorSectionDropdown(null)}
-                                        >
-                                            <SC.SectionDropdownMenu>
-                                                <SC.Flex>
-                                                    <SC.SectionDropdownTitle>Integrations</SC.SectionDropdownTitle>
-                                                    <SC.SectionDropdownSeeMore href="/">
-                                                        See all
-                                                        <img src={rightArrow} alt="See all" height="8" width="8" />
-                                                    </SC.SectionDropdownSeeMore>
-                                                </SC.Flex>
-                                                {
-                                                    integrations?.data?.items?.map((integration, index) => (
-                                                        <SC.SectionDropdownIntegration key={index} active={sectionName === integration.id} href={"/integration/" + integration.id}>
-                                                            {integration.id}
-                                                            <img src={check} alt="check" height="16" width="16" />
-                                                        </SC.SectionDropdownIntegration>
-                                                    ))
-                                                }
-                                                <SC.Flex>
-                                                    <SC.SectionDropdownTitle>Connectors</SC.SectionDropdownTitle>
-                                                    <SC.SectionDropdownSeeMore href="/connectors">
-                                                        See all
-                                                        <img src={rightArrow} alt="See all" height="8" width="8" />
-                                                    </SC.SectionDropdownSeeMore>
-                                                </SC.Flex>
-                                                {
-                                                    connectors?.data?.items?.map((connector, index) => (
-                                                        <SC.SectionDropdownIntegration key={index} active={sectionName === connector.id} href={"/connector/" + connector.id}>
-                                                            {connector.id}
-                                                            <img src={check} alt="check" height="16" width="16" />
-                                                        </SC.SectionDropdownIntegration>
-                                                    ))
-                                                }
-                                            </SC.SectionDropdownMenu>
-                                        </Menu>
-                                        <Drawer anchor={"bottom"} open={drawerBottomOpen} onClose={() => setDrawerBottomOpen(false)}>
-                                            <SC.SectionDropdownMenu>
-                                                <SC.Flex>
-                                                    <SC.SectionDropdownTitle>Integrations</SC.SectionDropdownTitle>
-                                                    <SC.SectionDropdownSeeMore href="/">
-                                                        See all
-                                                        <img src={rightArrow} alt="See all" height="8" width="8" />
-                                                    </SC.SectionDropdownSeeMore>
-                                                </SC.Flex>
-                                                {
-                                                    integrations?.data?.items?.map((integration, index) => (
-                                                        <SC.SectionDropdownIntegration key={index} active={sectionName === integration.id} href={"/integration/" + integration.id}>
-                                                            {integration.id}
-                                                            <img src={check} alt="check" height="16" width="16" />
-                                                        </SC.SectionDropdownIntegration>
-                                                    ))
-                                                }
-                                                <SC.Flex>
-                                                    <SC.SectionDropdownTitle>Connectors</SC.SectionDropdownTitle>
-                                                    <SC.SectionDropdownSeeMore href="/connectors">
-                                                        See all
-                                                        <img src={rightArrow} alt="See all" height="8" width="8" />
-                                                    </SC.SectionDropdownSeeMore>
-                                                </SC.Flex>
-                                                {
-                                                    connectors?.data?.items?.map((connector, index) => (
-                                                        <SC.SectionDropdownIntegration key={index} active={sectionName === connector.id} href={"/connector/" + connector.id}>
-                                                            {connector.id}
-                                                            <img src={check} alt="check" height="16" width="16" />
-                                                        </SC.SectionDropdownIntegration>
-                                                    ))
-                                                }
-                                            </SC.SectionDropdownMenu>
-                                        </Drawer>
-                                    </SC.MenuWrapper>
+                                    {
+                                        !authentication ? (
+                                        <SC.MenuWrapper>
+                                            <Menu
+                                                style={{ top: "100px" }}
+                                                id="simple-menu"
+                                                anchorEl={anchorSectionDropdown}
+                                                keepMounted
+                                                open={Boolean(anchorSectionDropdown)}
+                                                onClose={() => setAnchorSectionDropdown(null)}
+                                            >
+                                                <SC.SectionDropdownMenu>
+                                                    <SC.Flex>
+                                                        <SC.SectionDropdownTitle>Integrations</SC.SectionDropdownTitle>
+                                                        <SC.SectionDropdownSeeMore href="/">
+                                                            See all
+                                                            <img src={rightArrow} alt="See all" height="8" width="8" />
+                                                        </SC.SectionDropdownSeeMore>
+                                                    </SC.Flex>
+                                                    {
+                                                        integrations?.data?.items?.map((integration, index) => (
+                                                            <SC.SectionDropdownIntegration key={index} active={sectionName === integration.id} href={"/integration/" + integration.id}>
+                                                                {integration.id}
+                                                                <img src={check} alt="check" height="16" width="16" />
+                                                            </SC.SectionDropdownIntegration>
+                                                        ))
+                                                    }
+                                                    <SC.Flex>
+                                                        <SC.SectionDropdownTitle>Connectors</SC.SectionDropdownTitle>
+                                                        <SC.SectionDropdownSeeMore href="/connectors">
+                                                            See all
+                                                            <img src={rightArrow} alt="See all" height="8" width="8" />
+                                                        </SC.SectionDropdownSeeMore>
+                                                    </SC.Flex>
+                                                    {
+                                                        connectors?.data?.items?.map((connector, index) => (
+                                                            <SC.SectionDropdownIntegration key={index} active={sectionName === connector.id} href={"/connector/" + connector.id}>
+                                                                {connector.id}
+                                                                <img src={check} alt="check" height="16" width="16" />
+                                                            </SC.SectionDropdownIntegration>
+                                                        ))
+                                                    }
+                                                </SC.SectionDropdownMenu>
+                                            </Menu>
+                                            <Drawer anchor={"bottom"} open={drawerBottomOpen} onClose={() => setDrawerBottomOpen(false)}>
+                                                <SC.SectionDropdownMenu>
+                                                    <SC.Flex>
+                                                        <SC.SectionDropdownTitle>Integrations</SC.SectionDropdownTitle>
+                                                        <SC.SectionDropdownSeeMore href="/">
+                                                            See all
+                                                            <img src={rightArrow} alt="See all" height="8" width="8" />
+                                                        </SC.SectionDropdownSeeMore>
+                                                    </SC.Flex>
+                                                    {
+                                                        integrations?.data?.items?.map((integration, index) => (
+                                                            <SC.SectionDropdownIntegration key={index} active={sectionName === integration.id} href={"/integration/" + integration.id}>
+                                                                {integration.id}
+                                                                <img src={check} alt="check" height="16" width="16" />
+                                                            </SC.SectionDropdownIntegration>
+                                                        ))
+                                                    }
+                                                    <SC.Flex>
+                                                        <SC.SectionDropdownTitle>Connectors</SC.SectionDropdownTitle>
+                                                        <SC.SectionDropdownSeeMore href="/connectors">
+                                                            See all
+                                                            <img src={rightArrow} alt="See all" height="8" width="8" />
+                                                        </SC.SectionDropdownSeeMore>
+                                                    </SC.Flex>
+                                                    {
+                                                        connectors?.data?.items?.map((connector, index) => (
+                                                            <SC.SectionDropdownIntegration key={index} active={sectionName === connector.id} href={"/connector/" + connector.id}>
+                                                                {connector.id}
+                                                                <img src={check} alt="check" height="16" width="16" />
+                                                            </SC.SectionDropdownIntegration>
+                                                        ))
+                                                    }
+                                                </SC.SectionDropdownMenu>
+                                            </Drawer>
+                                        </SC.MenuWrapper>
+                                        ) : (
+                                            <SC.MenuWrapper>
+                                            <Menu
+                                                style={{ top: "100px" }}
+                                                id="simple-menu"
+                                                anchorEl={anchorSectionDropdown}
+                                                keepMounted
+                                                open={Boolean(anchorSectionDropdown)}
+                                                onClose={() => setAnchorSectionDropdown(null)}
+                                            >
+                                                <SC.SectionDropdownMenu>
+                                                    <SC.Flex>
+                                                        <SC.SectionDropdownTitle>Accounts</SC.SectionDropdownTitle>
+                                                        <SC.SectionDropdownSeeMore href="/authentication">
+                                                            See all
+                                                            <img src={rightArrow} alt="See all" height="8" width="8" />
+                                                        </SC.SectionDropdownSeeMore>
+                                                    </SC.Flex>
+                                                    <SC.SectionDropdownIntegration active={true} href={"/authentication-detail"}>
+                                                        {userData.primaryEmail}
+                                                        <img src={check} alt="check" height="16" width="16" />
+                                                    </SC.SectionDropdownIntegration>
+                                                </SC.SectionDropdownMenu>
+                                            </Menu>
+                                            <Drawer anchor={"bottom"} open={drawerBottomOpen} onClose={() => setDrawerBottomOpen(false)}>
+                                                <SC.SectionDropdownMenu>
+                                                    <SC.Flex>
+                                                        <SC.SectionDropdownTitle>Accounts</SC.SectionDropdownTitle>
+                                                        <SC.SectionDropdownSeeMore href="/authentication">
+                                                            See all
+                                                            <img src={rightArrow} alt="See all" height="8" width="8" />
+                                                        </SC.SectionDropdownSeeMore>
+                                                    </SC.Flex>
+                                                    <SC.SectionDropdownIntegration active={true} href={"/authentication-detail"}>
+                                                        {userData.primaryEmail}
+                                                        <img src={check} alt="check" height="16" width="16" />
+                                                    </SC.SectionDropdownIntegration>
+                                                </SC.SectionDropdownMenu>
+                                            </Drawer>
+                                        </SC.MenuWrapper>
+                                        )
+                                    }
                                 </>
                             ) : (
                                 <SC.SectionLink href={integration ? "/" : "/connectors"}>{sectionName}</SC.SectionLink>

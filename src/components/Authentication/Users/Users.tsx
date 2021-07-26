@@ -195,7 +195,7 @@ const Authentication: React.FC = () => {
                                         //TODO: Replace placeholder with real data (currently using the integrations)
                                     }
                                     <SC.Flex>
-                                        <SC.CellImage src={client} alt="user" height="38" width="38" />
+                                        <SC.CellImage src={userData.picture} alt="user" height="38" width="38" />
                                         <SC.CellName>
                                         {row.id}
                                         </SC.CellName>
