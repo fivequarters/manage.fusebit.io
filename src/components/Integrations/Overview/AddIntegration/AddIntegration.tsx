@@ -1,6 +1,6 @@
 import React from "react";
 import * as SC from "./styles";
-import {Props} from "../../../../interfaces/addIntegration";
+import { Props } from "../../../../interfaces/addIntegration";
 import {
     materialRenderers,
     materialCells
@@ -13,13 +13,13 @@ import {
   import cross from "../../../../assets/cross.svg";
 import { Feed } from "../../../../interfaces/feed";
 
-  enum Filters {
-      ALL = "All",
-      MESSAGGING = "Messaging",
-      PRODUCTIVITY = "Productivity",
-      CRM = "CRM",
-      CALENDAR = "Calendar",
-  }
+enum Filters {
+    ALL = "All",
+    MESSAGGING = "Messaging",
+    PRODUCTIVITY = "Productivity",
+    CRM = "CRM",
+    CALENDAR = "Calendar",
+}
 
 const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
     const [data, setData] = React.useState<any>({});
@@ -76,8 +76,9 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
                                             {integration.name}
                                         </SC.ColumnItem>
                                     )
+                                } else {
+                                    return <></>
                                 }
-                                return null;
                             })
                     }
                 </SC.Column>
