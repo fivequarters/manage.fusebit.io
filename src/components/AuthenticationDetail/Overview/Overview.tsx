@@ -3,7 +3,7 @@ import * as SC from "./styles";
 import { useContext } from "../../../hooks/useContext";
 import copy from "../../../assets/copy.svg";
 import dots from "../../../assets/dots.svg";
-import { Button } from "@material-ui/core";
+import { Button, Modal, Backdrop  } from "@material-ui/core";
 import { JsonForms } from '@jsonforms/react';
 import { ValidationMode } from "@jsonforms/core";
 import {
@@ -11,6 +11,7 @@ import {
     materialCells
   } from '@jsonforms/material-renderers';
 import { useEffect } from "react";
+import CliAccess from "./CliAccess";
 
 const schema = {
     type: "object",
@@ -68,10 +69,11 @@ const Overview: React.FC = () => {
     const [errors, setErrors] = React.useState<object[]>([]);
     const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
     const [isSubmitting, setIsSubmitting] = React.useState(false);
+    const [cliOpen, setCliOpen] = React.useState(false);
 
     useEffect(() => {
         setData({firstName: userData.firstName, lastName: userData.lastName, email: userData.primaryEmail});
-    }, [userData])
+    }, [userData]);
 
     const handleSubmit = () => {
         if (errors.length > 0) {
@@ -104,9 +106,21 @@ const Overview: React.FC = () => {
 
     return (
         <SC.Overview>
+            <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    open={cliOpen}
+                    onClose={() => setCliOpen(false)}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                >
+                <CliAccess open={cliOpen} onClose={() => setCliOpen(false)} />
+            </Modal>
             <SC.UserCard>
                 <SC.UserInfoContainer>
-                    <SC.Dots src={dots} alt="options" height="20" width="4" />
+                    <SC.DotsWrapper>
+                        <SC.Dots src={dots} alt="options" height="20" width="4" />
+                    </SC.DotsWrapper>
                     <SC.UserImage alt="user" src={userData.picture} height="88" width="88" />
                     <SC.FlexDown>
                         <SC.UserName>{data.firstName} {data.lastName}</SC.UserName>
@@ -157,7 +171,7 @@ const Overview: React.FC = () => {
             </SC.UserCard>
             <SC.CLIAccesWrapper>
                 <SC.CLIAccess>Command Line (CLI) Access</SC.CLIAccess>
-                <Button style={{width: "200px"}} fullWidth={false} size="large" color="primary" variant="contained">Edit information</Button>
+                <Button onClick={() => setCliOpen(true)} style={{width: "200px"}} fullWidth={false} size="large" color="primary" variant="contained">Edit information</Button>
             </SC.CLIAccesWrapper>
         </SC.Overview>
     )

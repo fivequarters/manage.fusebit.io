@@ -29,17 +29,21 @@ export const UserInfoContainer = styled.div`
     margin-bottom: 54px;
 `;
 
-export const Dots = styled.img`
+export const DotsWrapper = styled.div`
     position: absolute;
     right: 0;
     top: 12px;
-    height: 20px;
-    width: 4px;
-    object-fit: contain;
+    padding: 0 10px;
 
     &:hover {
         cursor: pointer;
     }
+`;
+
+export const Dots = styled.img`
+    height: 20px;
+    width: 4px;
+    object-fit: contain;
 `;
 
 export const UserImage = styled.img`
