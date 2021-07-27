@@ -4,10 +4,94 @@ import { useContext } from "../../../hooks/useContext";
 import copy from "../../../assets/copy.svg";
 import dots from "../../../assets/dots.svg";
 import { Button } from "@material-ui/core";
+import { JsonForms } from '@jsonforms/react';
+import { ValidationMode } from "@jsonforms/core";
+import {
+    materialRenderers,
+    materialCells
+  } from '@jsonforms/material-renderers';
+import { useEffect } from "react";
+
+const schema = {
+    type: "object",
+    properties: {
+        firstName: {
+            type: "string",
+            minLength: 2,
+        },
+        lastName: {
+            type: "string",
+            minLength: 2,
+        },
+        email: {
+            type: "string",
+            format: "email",
+            pattern: "^\\S+@\\S+\\.\\S+$",
+            minLength: 6,
+            maxLength: 127
+        },
+    },
+    required: ["firstName", "lastName", "email"]
+  }
+
+  const uischema = {
+    type: "VerticalLayout",
+    elements: [
+      {
+        type: "Control",
+        scope: "#/properties/firstName",
+        options: {
+            hideRequiredAsterisk: true,
+        }
+      },
+      {
+        type: "Control",
+        scope: "#/properties/lastName",
+        options: {
+            hideRequiredAsterisk: true,
+        }
+      },
+      {
+        type: "Control",
+        scope: "#/properties/email",
+        options: {
+            hideRequiredAsterisk: true,
+        }
+      },
+    ]
+  }
 
 const Overview: React.FC = () => {
     const { userData } = useContext();
     const [editInformation, setEditInformation] = React.useState(false);
+    const [data, setData] = React.useState({firstName: userData.firstName, lastName: userData.lastName, email: userData.primaryEmail});
+    const [errors, setErrors] = React.useState<object[]>([]);
+    const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
+    const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+    useEffect(() => {
+        setData({firstName: userData.firstName, lastName: userData.lastName, email: userData.primaryEmail});
+    }, [userData])
+
+    const handleSubmit = () => {
+        if (errors.length > 0) {
+            setValidationMode("ValidateAndShow");
+        } else {
+            //update the user info
+            setIsSubmitting(true);
+            setTimeout(() => {
+                setEditInformation(false);
+                setIsSubmitting(false);
+                setValidationMode("ValidateAndHide");
+            }, 1000);
+        }
+    }
+
+    const handleCancel = () => {
+        setEditInformation(false);
+        setIsSubmitting(false);
+        setData({firstName: userData.firstName, lastName: userData.lastName, email: userData.primaryEmail});
+    }
 
     const handleCopy = (text: string) => {
         const textarea = document.createElement('textarea');
@@ -25,8 +109,8 @@ const Overview: React.FC = () => {
                     <SC.Dots src={dots} alt="options" height="20" width="4" />
                     <SC.UserImage alt="user" src={userData.picture} height="88" width="88" />
                     <SC.FlexDown>
-                        <SC.UserName>{userData.firstName} {userData.lastName}</SC.UserName>
-                        <SC.UserCompany>{userData.company} </SC.UserCompany>
+                        <SC.UserName>{data.firstName} {data.lastName}</SC.UserName>
+                        <SC.UserCompany>{data.email} </SC.UserCompany>
                         <SC.UserId><strong>User-ID:</strong> {userData.id} <img onClick={() => handleCopy(userData.id || "")} src={copy} alt="copy" height="12" width="12" /></SC.UserId>
                     </SC.FlexDown>
                 </SC.UserInfoContainer>
@@ -35,21 +119,40 @@ const Overview: React.FC = () => {
                 <>
                     <SC.InfoFieldWrapper>
                         <SC.InfoFieldPlaceholder>First Name</SC.InfoFieldPlaceholder>
-                        <SC.InfoField>{userData.firstName}</SC.InfoField>
+                        <SC.InfoField>{data.firstName}</SC.InfoField>
                     </SC.InfoFieldWrapper>
                     <SC.InfoFieldWrapper>
                         <SC.InfoFieldPlaceholder>Last Name</SC.InfoFieldPlaceholder>
-                        <SC.InfoField>{userData.lastName}</SC.InfoField>
+                        <SC.InfoField>{data.lastName}</SC.InfoField>
                     </SC.InfoFieldWrapper>
                     <SC.InfoFieldWrapper>
                         <SC.InfoFieldPlaceholder>E-mail</SC.InfoFieldPlaceholder>
-                        <SC.InfoField>{userData.primaryEmail}</SC.InfoField>
+                        <SC.InfoField>{data.email}</SC.InfoField>
                     </SC.InfoFieldWrapper>
                     <SC.EditButtonWrapper>
                         <Button onClick={() => setEditInformation(true)} fullWidth={false} size="medium" color="primary" variant="outlined">Edit information</Button>
                     </SC.EditButtonWrapper>
                 </>
-                    ) : null
+                    ) : (
+                        <SC.FormWrapper>
+                            <JsonForms
+                            schema={schema}
+                            uischema={uischema}
+                            data={data}
+                            renderers={materialRenderers}
+                            cells={materialCells}
+                            onChange={({ errors, data }) => {
+                                errors && setErrors(errors);
+                                setData(data);
+                            }}
+                            validationMode={validationMode}
+                            />
+                            <SC.FormInputWrapper>
+                                <Button disabled={isSubmitting} onClick={handleSubmit} style={{marginRight: "16px"}} fullWidth={false} size="small" color="primary" variant="contained">{isSubmitting ? "Saving..." : "Save"}</Button>
+                                <Button onClick={handleCancel} fullWidth={false} size="small" color="primary" variant="outlined">Cancel</Button>
+                            </SC.FormInputWrapper>
+                        </SC.FormWrapper>
+                    )
                 }
             </SC.UserCard>
             <SC.CLIAccesWrapper>

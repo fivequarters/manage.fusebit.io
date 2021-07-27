@@ -15,7 +15,7 @@ export const UserCard = styled.div`
     display: flex;
     flex-direction: column;
     padding: 42px;
-    height: 520px;
+    height: 550px;
     width: 520px;
     box-shadow: 0px 1px 30px -1px rgba(52, 72, 123, 0.1);
     z-index: 0;
@@ -132,4 +132,16 @@ export const CLIAccess = styled.h4`
     color: var(--black);
     margin: 0;
     margin-bottom: 40px;
+`;
+
+export const FormWrapper = styled.form`
+    display: flex;
+    flex-direction: column;
+    width: 316px;
+`;
+
+export const FormInputWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
 `;
