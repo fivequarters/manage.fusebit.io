@@ -1,52 +1,41 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as SC from "./styles";
-import { Table, TableBody, TableCell, TableHead, TableRow, Button, Checkbox, IconButton, Tooltip, Modal, Backdrop } from "@material-ui/core";
+import { Table, TableBody, TableCell, TableHead, TableRow, Button, Checkbox, IconButton, Tooltip } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useContext } from "../../../hooks/useContext";
 import { useLoader } from "../../../hooks/useLoader";
-import { useAccountConnectorsGetAll } from "../../../hooks/api/v2/account/connector/useGetAll";
-import { useAccountConnectorCreateConnector } from "../../../hooks/api/v2/account/connector/useCreateOne";
-import { useAccountConnectorDeleteConnector } from "../../../hooks/api/v2/account/connector/useDeleteOne";
-import { useAccountIntegrationCreateIntegration } from "../../../hooks/api/v2/account/integration/useCreateOne";
+import { useAccountIntegrationsGetAll } from "../../../hooks/api/v2/account/integration/useGetAll";
+import { useAccountIntegrationDeleteIntegration } from "../../../hooks/api/v2/account/integration/useDeleteOne";
+import { Integration } from "../../../interfaces/integration";
 import { Operation } from "../../../interfaces/operation";
-import { Connector } from "../../../interfaces/connector";
 import { useError } from "../../../hooks/useError";
 import arrowRight from "../../../assets/arrow-right.svg";
 import arrowLeft from "../../../assets/arrow-left.svg";
-import AddConnector from "./AddConnector";
-import { Entity, Feed } from "../../../interfaces/feed";
-import Mustache from "mustache";
+import client from "../../../assets/client.jpg";
 
 enum cells {
-    TYPE = "Type",
-    IDENTITIES = "Identities",
-    CREATED = "Created",
+    NAME = "Name",
+    EMAIL = "Email",
+    USER_ID = "User-ID",
 }
 
-interface IntegrationData {
-    [key: string]: string | boolean | number;
-}
-
-const Overview: React.FC = () => {
+const Authentication: React.FC = () => {
     const [selected, setSelected] = React.useState<string[]>([]);
-    const [rows, setRows] = React.useState<Connector[]>([]);
+    const [rows, setRows] = React.useState<Integration[]>([]);
     const { userData } = useContext();
-    const { data: connectors, refetch: reloadConnectors } = useAccountConnectorsGetAll<{ items: Connector[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
-    const createConnector = useAccountConnectorCreateConnector<Operation>();
-    const deleteConnector = useAccountConnectorDeleteConnector<Operation>();
-    const createIntegration = useAccountIntegrationCreateIntegration<Operation>();
+    const { data: integrations, refetch: reloadIntegrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+    const deleteIntegration = useAccountIntegrationDeleteIntegration<Operation>();
     const { waitForOperations, createLoader, removeLoader } = useLoader();
     const { createError } = useError();
-    const [selectedCell, setSelectedCell] = React.useState<cells>(cells.TYPE);
-    const [addConnectorOpen, setAddConnectorOpen] = React.useState(false);
+    const [selectedCell, setSelectedCell] = React.useState<cells>(cells.NAME);
 
-    React.useEffect(() => {
-        if (connectors && connectors.data.items) {
-            const items = connectors.data.items;
+    useEffect(() => {
+        if (integrations && integrations.data.items) {
+            const items = integrations.data.items;
             setRows(items);
         }
-    }, [connectors]);
+    }, [integrations]);
 
     const handleSelectAllCheck = (event: any) => {
         if (event.target.checked) {
@@ -85,11 +74,11 @@ const Overview: React.FC = () => {
             createLoader();
             let operationIds: string[] = [];
             for (let i = 0; i < selected.length; i++) {
-                const response = await deleteConnector.mutateAsync({ id: selected[i], accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+                const response = await deleteIntegration.mutateAsync({ id: selected[i], accountId: userData.accountId, subscriptionId: userData.subscriptionId });    
                 operationIds.push(response.data.operationId);
             }
             await waitForOperations(operationIds);
-            reloadConnectors();
+            reloadIntegrations();
             setSelected([]);
         } catch (e) {
             createError(e.message);
@@ -105,96 +94,38 @@ const Overview: React.FC = () => {
         //         window.location.href = href;
         //     }
         // } else {
-        //     createError("You don't have sufficient permissions to edit connector {connector}.  Please contact an account administrator.");
+        //     createError("You don't have sufficient permissions to edit integration {integration}.  Please contact an account administrator.");
         // }
         if (!event.target.id) {
             window.location.href = href;
         }
     }
 
-    const replaceMustache = async (data: IntegrationData, entity: Entity) => {
-        const customTags: any = [ '<%', '%>' ];
-        const keys = Object.keys(data);
-        let connectorId;
-        let integrationId;
-        keys.forEach((key: any) => {
-            if (key.match("Connector")) {
-                connectorId = data[key];
-            } else if (key.match("Integration")) {
-                integrationId = data[key];
-            }
-        });
-        const view = {
-            integrationId: integrationId,
-            connectorId: connectorId,
-        }
-        const newEntity = Mustache.render(JSON.stringify(entity), view, {}, customTags);
-        const parsedEntity: Entity = JSON.parse(newEntity);
-        return parsedEntity;
-    }
-
-    const _createConnector = async (activeIntegration: Feed, data: IntegrationData) => {
-        try {
-            createLoader();
-            let currentIntegrationData: Entity | undefined;
-            let connectors: Entity[] = [];
-            for (let i = 0; i < activeIntegration.configuration.entities.length; i++) {
-                const entity: Entity = activeIntegration.configuration.entities[i];
-                if (entity.entityType === "connector") {
-                    connectors.push(await replaceMustache(data, entity));
-                } else {
-                    currentIntegrationData = await replaceMustache(data, entity);
-                }
-            }
-            const response = await createIntegration.mutateAsync({...currentIntegrationData?.data, accountId: userData.accountId, subscriptionId: userData.subscriptionId});
-            await waitForOperations([response.data.operationId]);
-            for (let i = 0; i < connectors.length; i++) {
-                const response = await createConnector.mutateAsync({data: connectors[i].data, id: connectors[i].id, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
-                await waitForOperations([response.data.operationId]);
-            }
-            reloadConnectors();
-        } catch (e) {
-            createError(e.message);
-        } finally {
-            removeLoader();
-        }
-    }
-
     const handlePreviousCellSelect = () => {
-        if (selectedCell === cells.TYPE) {
-            setSelectedCell(cells.CREATED);
-        } else if (selectedCell === cells.CREATED) {
-            setSelectedCell(cells.IDENTITIES);
+        if (selectedCell === cells.NAME) {
+            setSelectedCell(cells.USER_ID);
+        } else if (selectedCell === cells.EMAIL){
+            setSelectedCell(cells.NAME);
         } else {
-            setSelectedCell(cells.TYPE);
+            setSelectedCell(cells.EMAIL);
         }
     }
 
     const handleNextCellSelect = () => {
-        if (selectedCell === cells.TYPE) {
-            setSelectedCell(cells.IDENTITIES);
-        } else if (selectedCell === cells.IDENTITIES) {
-            setSelectedCell(cells.CREATED);
+        if (selectedCell === cells.NAME) {
+            setSelectedCell(cells.EMAIL);
+        } else if (selectedCell === cells.EMAIL) {
+            setSelectedCell(cells.USER_ID);
         } else {
-            setSelectedCell(cells.TYPE);
+            setSelectedCell(cells.NAME);
         }
     }
 
     return (
         <>
-            <Modal
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
-                open={addConnectorOpen}
-                onClose={() => setAddConnectorOpen(false)}
-                closeAfterTransition
-                BackdropComponent={Backdrop}
-            >
-                <AddConnector onSubmit={(activeIntegration: Feed, data: IntegrationData) => _createConnector(activeIntegration, data)} open={addConnectorOpen} onClose={() => setAddConnectorOpen(false)} />
-            </Modal>
             <SC.ButtonContainer>
                 <SC.ButtonMargin>
-                    <Button onClick={() => setAddConnectorOpen(true)} startIcon={<AddIcon />} variant="outlined" color="primary" size="large">New Connector</Button>
+                    <Button startIcon={<AddIcon />} variant="outlined" color="primary" size="large">New User</Button>
                 </SC.ButtonMargin>
             </SC.ButtonContainer>
             <SC.DeleteWrapper active={selected.length > 0}>
@@ -214,7 +145,7 @@ const Overview: React.FC = () => {
                 }
             </SC.DeleteWrapper>
             <SC.Table>
-                <Table size="small" aria-label="Overview Table">
+                <Table size="small" aria-label="Authentication Table">
                     <TableHead>
                         <TableRow>
                             <TableCell padding="checkbox">
@@ -222,7 +153,7 @@ const Overview: React.FC = () => {
                                     color="primary"
                                     checked={rows.length > 0 && selected.length === rows.length}
                                     onChange={handleSelectAllCheck}
-                                    inputProps={{ 'aria-label': 'select all connectors' }}
+                                    inputProps={{ 'aria-label': 'select all integrations' }}
                                 />
                             </TableCell>
                             <TableCell>
@@ -231,14 +162,13 @@ const Overview: React.FC = () => {
                                     Name
                                 </SC.Flex>
                             </TableCell>
-                            <TableCell align="left">Type</TableCell>
-                            <TableCell align="left">Identities</TableCell>
-                            <TableCell align="left">Created</TableCell>
+                            <TableCell align="left">Email</TableCell>
+                            <TableCell align="left">User-ID</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {rows.map((row) => (
-                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/connector/" + row.id)}>
+                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/integration/" + row.id)}>
                                 <TableCell style={{ cursor: "default" }} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
                                     <Checkbox
                                         color="primary"
@@ -249,22 +179,24 @@ const Overview: React.FC = () => {
                                     />
                                 </TableCell>
                                 <TableCell component="th" scope="row">
-                                    <SC.CellName>
+                                    {
+                                        //TODO: Replace placeholder with real data (currently using the integrations)
+                                    }
+                                    <SC.Flex>
+                                        <SC.CellImage src={client} alt="user" height="38" width="38" />
+                                        <SC.CellName>
                                         {row.id}
-                                    </SC.CellName>
+                                        </SC.CellName>
+                                        {userData.userId === row.id && <SC.CellNameDetail>[me]</SC.CellNameDetail>}
+                                    </SC.Flex>
                                 </TableCell>
                                 <TableCell align="left">
-                                    Slack
+                                    wstewart@acme.com
                                     {// TODO: Replace placeholder with real data
                                     }
                                 </TableCell>
                                 <TableCell align="left">
-                                    5
-                                    {// TODO: Replace placeholder with real data
-                                    }
-                                </TableCell>
-                                <TableCell align="left">
-                                    {new Date().toISOString().slice(0, 10)}
+                                    usr-9e72bb1d49ee4a59
                                     {// TODO: Replace placeholder with real data
                                     }
                                 </TableCell>
@@ -274,7 +206,7 @@ const Overview: React.FC = () => {
                 </Table>
             </SC.Table>
             <SC.TableMobile>
-                <Table size="small" aria-label="Overview Table">
+                <Table size="small" aria-label="Authentication Table">
                     <TableHead>
                         <TableRow>
                             <TableCell padding="checkbox">
@@ -282,19 +214,14 @@ const Overview: React.FC = () => {
                                     color="primary"
                                     checked={rows.length > 0 && selected.length === rows.length}
                                     onChange={handleSelectAllCheck}
-                                    inputProps={{ 'aria-label': 'select all connectors' }}
+                                    inputProps={{ 'aria-label': 'select all integrations' }}
                                 />
-                            </TableCell>
-                            <TableCell>
-                                <SC.Flex>
-                                    <SC.ArrowUp />
-                                    Name
-                                </SC.Flex>
                             </TableCell>
                             <TableCell align="left">
                                 <SC.TableCellMobile>
-                                    <p>{selectedCell}</p>
+                                <p>{selectedCell}</p>
                                     <SC.LeftArrow onClick={handlePreviousCellSelect} src={arrowLeft} alt="previous-cell" height="16" width="16" />
+                                    
                                     <SC.RightArrow onClick={handleNextCellSelect} src={arrowRight} alt="next-cell" height="16" width="16" />
                                 </SC.TableCellMobile>
                             </TableCell>
@@ -302,7 +229,7 @@ const Overview: React.FC = () => {
                     </TableHead>
                     <TableBody>
                         {rows.map((row) => (
-                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/connector/" + row.id)}>
+                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/integration/" + row.id)}>
                                 <TableCell style={{ cursor: "default" }} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
                                     <Checkbox
                                         color="primary"
@@ -312,13 +239,16 @@ const Overview: React.FC = () => {
                                         id={`enhanced-table-checkbox-${row.id}`}
                                     />
                                 </TableCell>
-                                <TableCell component="th" scope="row">
-                                    <SC.CellName>
-                                        {row.id}
-                                    </SC.CellName>
-                                </TableCell>
                                 <TableCell align="left">
-                                    {selectedCell === cells.TYPE ? "Slack" : selectedCell === cells.IDENTITIES ? 10 : new Date().toISOString().slice(0, 10)}
+                                    {selectedCell === cells.EMAIL ? "wstewart@acme.com" : 
+                                    selectedCell === cells.NAME ? (
+                                    <SC.Flex>
+                                        <SC.CellImage src={client} alt="user" height="38" width="38" />
+                                        <SC.CellName>
+                                            {row.id}
+                                        </SC.CellName>
+                                    </SC.Flex>) : 
+                                    "usr-9e72bb1d49ee4a59"}
                                     {// TODO: Replace placeholder with real data
                                     }
                                 </TableCell>
@@ -331,4 +261,4 @@ const Overview: React.FC = () => {
     )
 }
 
-export default Overview;
+export default Authentication;

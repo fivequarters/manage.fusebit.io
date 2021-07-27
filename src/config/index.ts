@@ -3,6 +3,7 @@ import IntegrationsPage from '../pages/IntegrationsPage';
 import IntegrationDetailPage from "../pages/IntegrationDetailPage";
 import ConnectorDetailPage from "../pages/ConnectorDetailPage";
 import LoggedOutErrorPage from "../pages/LoggedOutErrorPage";
+import AuthenticationPage from "../pages/AuthenticationPage";
 import FatalErrorPage from "../pages/FatalErrorPage";
 import AuthCallback from "../pages/AuthCallback";
 import NotFoundPage from "../pages/NotFoundPage";
@@ -36,9 +37,14 @@ export const routes: Array<RouteItem> = [
         component: AuthCallback,
     },
     {
-        key: "logged-out-error",
-        path: "/logged-out-error",
+        key: "router-logged-out",
+        path: "/logged-out",
         component: LoggedOutErrorPage,
+    },
+    {
+        key: "router-authentication",
+        path: "/authentication",
+        component: AuthenticationPage,
     },
     {
         key: "fatal-error",

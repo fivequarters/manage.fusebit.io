@@ -13,7 +13,7 @@ axios.interceptors.response.use(response => response, error => {
   const statusCode = Number(error.response.status);
   if (statusCode === 404) {
     const __userData = readLocalData();
-    let toUrl = "/logged-out-error";
+    let toUrl = "/logged-out";
     if (__userData.token) {
       if (window.location.href.indexOf('connector') >= 0) toUrl = '/connectors';
       else if (window.location.href.indexOf('integration') >= 0) toUrl = '/';

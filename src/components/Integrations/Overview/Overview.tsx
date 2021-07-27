@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import * as SC from "./styles";
-import { Table, TableBody, TableCell, TableHead, TableRow, Button, Checkbox, IconButton, Tooltip } from "@material-ui/core";
+import { Table, TableBody, TableCell, TableHead, TableRow, Button, Checkbox, IconButton, Tooltip, Modal, Backdrop } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useContext } from "../../../hooks/useContext";
@@ -8,16 +8,24 @@ import { useLoader } from "../../../hooks/useLoader";
 import { useAccountIntegrationsGetAll } from "../../../hooks/api/v2/account/integration/useGetAll";
 import { useAccountIntegrationCreateIntegration } from "../../../hooks/api/v2/account/integration/useCreateOne";
 import { useAccountIntegrationDeleteIntegration } from "../../../hooks/api/v2/account/integration/useDeleteOne";
+import { useAccountConnectorCreateConnector } from "../../../hooks/api/v2/account/connector/useCreateOne";
 import { Integration } from "../../../interfaces/integration";
 import { Operation } from "../../../interfaces/operation";
 import { useError } from "../../../hooks/useError";
 import arrowRight from "../../../assets/arrow-right.svg";
 import arrowLeft from "../../../assets/arrow-left.svg";
+import AddIntegration from "./AddIntegration";
+import { Entity, Feed } from "../../../interfaces/feed";
+import Mustache from "mustache";
 
 enum cells {
     INSTANCES = "Instances",
     CREATED = "Created",
     DEPLOYED = "Deployed",
+}
+
+interface IntegrationData {
+    [key: string]: string | boolean | number;
 }
 
 const Overview: React.FC = () => {
@@ -27,9 +35,11 @@ const Overview: React.FC = () => {
     const { data: integrations, refetch: reloadIntegrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
     const createIntegration = useAccountIntegrationCreateIntegration<Operation>();
     const deleteIntegration = useAccountIntegrationDeleteIntegration<Operation>();
+    const createConnector = useAccountConnectorCreateConnector<Operation>();
     const { waitForOperations, createLoader, removeLoader } = useLoader();
     const { createError } = useError();
     const [selectedCell, setSelectedCell] = React.useState<cells>(cells.INSTANCES);
+    const [addIntegrationOpen, setAddIntegrationOpen] = React.useState(false);
 
     useEffect(() => {
         if (integrations && integrations.data.items) {
@@ -75,7 +85,7 @@ const Overview: React.FC = () => {
             createLoader();
             let operationIds: string[] = [];
             for (let i = 0; i < selected.length; i++) {
-                const response = await deleteIntegration.mutateAsync({ id: selected[i], accountId: userData.accountId, subscriptionId: userData.subscriptionId });    
+                const response = await deleteIntegration.mutateAsync({ id: selected[i], accountId: userData.accountId, subscriptionId: userData.subscriptionId });
                 operationIds.push(response.data.operationId);
             }
             await waitForOperations(operationIds);
@@ -102,11 +112,46 @@ const Overview: React.FC = () => {
         }
     }
 
-    const _createIntegration = async () => {
+    const replaceMustache = async (data: IntegrationData, entity: Entity) => {
+        const customTags: any = [ '<%', '%>' ];
+        const keys = Object.keys(data);
+        let connectorId;
+        let integrationId;
+        keys.forEach((key: any) => {
+            if (key.match("Connector")) {
+                connectorId = data[key];
+            } else if (key.match("Integration")) {
+                integrationId = data[key];
+            }
+        });
+        const view = {
+            integrationId: integrationId,
+            connectorId: connectorId,
+        }
+        const newEntity = Mustache.render(JSON.stringify(entity), view, {}, customTags);
+        const parsedEntity: Entity = JSON.parse(newEntity);
+        return parsedEntity;
+    }
+
+    const _createIntegration = async (activeIntegration: Feed, data: IntegrationData) => {
         try {
             createLoader();
-            const response = await createIntegration.mutateAsync({ id: String(new Date().getTime()), accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+            let currentIntegrationData: Entity | undefined;
+            let connectors: Entity[] = [];
+            for (let i = 0; i < activeIntegration.configuration.entities.length; i++) {
+                const entity: Entity = activeIntegration.configuration.entities[i];
+                if (entity.entityType === "connector") {
+                    connectors.push(await replaceMustache(data, entity));
+                } else {
+                    currentIntegrationData = await replaceMustache(data, entity);
+                }
+            }
+            const response = await createIntegration.mutateAsync({...currentIntegrationData?.data, accountId: userData.accountId, subscriptionId: userData.subscriptionId});
             await waitForOperations([response.data.operationId]);
+            for (let i = 0; i < connectors.length; i++) {
+                const response = await createConnector.mutateAsync({data: connectors[i].data, id: connectors[i].id, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+                await waitForOperations([response.data.operationId]);
+            }
             reloadIntegrations();
         } catch (e) {
             createError(e.message);
@@ -137,11 +182,22 @@ const Overview: React.FC = () => {
 
     return (
         <>
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                open={addIntegrationOpen}
+                onClose={() => setAddIntegrationOpen(false)}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+            >
+                <AddIntegration onSubmit={(activeIntegration: Feed, data: IntegrationData) => _createIntegration(activeIntegration, data)} open={addIntegrationOpen} onClose={() => setAddIntegrationOpen(false)} />
+            </Modal>
             <SC.ButtonContainer>
                 <SC.ButtonMargin>
-                    <Button onClick={_createIntegration} startIcon={<AddIcon />} variant="outlined" color="primary" size="large">New Integration</Button>
+                    <Button onClick={() => setAddIntegrationOpen(true)} startIcon={<AddIcon />} variant="outlined" color="primary" size="large">New Integration</Button>
                 </SC.ButtonMargin>
             </SC.ButtonContainer>
+
             <SC.DeleteWrapper active={selected.length > 0}>
                 {
                     selected.length > 0 && (
@@ -238,9 +294,9 @@ const Overview: React.FC = () => {
                             </TableCell>
                             <TableCell align="left">
                                 <SC.TableCellMobile>
-                                <p>{selectedCell}</p>
+                                    <p>{selectedCell}</p>
                                     <SC.LeftArrow onClick={handlePreviousCellSelect} src={arrowLeft} alt="previous-cell" height="16" width="16" />
-                                    
+
                                     <SC.RightArrow onClick={handleNextCellSelect} src={arrowRight} alt="next-cell" height="16" width="16" />
                                 </SC.TableCellMobile>
                             </TableCell>
