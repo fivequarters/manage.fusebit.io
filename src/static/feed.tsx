@@ -480,7 +480,7 @@ export const integrationsFeed: Feed[] = [
       },
     },
     {
-      id: "discord23322",
+      id: "discord",
       name: "Discord",
       description: "Discord",
       smallIcon: discord,
