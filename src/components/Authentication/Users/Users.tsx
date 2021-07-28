@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import * as SC from "./styles";
-import { Table, TableBody, TableCell, TableHead, TableRow, Button, Checkbox, IconButton, Tooltip } from "@material-ui/core";
+import { Table, TableBody, TableCell, TableHead, TableRow, Button, Checkbox, IconButton, Tooltip, Modal, Backdrop } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useContext } from "../../../hooks/useContext";
@@ -13,6 +13,7 @@ import { useError } from "../../../hooks/useError";
 import arrowRight from "../../../assets/arrow-right.svg";
 import arrowLeft from "../../../assets/arrow-left.svg";
 import client from "../../../assets/client.jpg";
+import NewUser from "./NewUser";
 
 enum cells {
     NAME = "Name",
@@ -29,6 +30,7 @@ const Authentication: React.FC = () => {
     const { waitForOperations, createLoader, removeLoader } = useLoader();
     const { createError } = useError();
     const [selectedCell, setSelectedCell] = React.useState<cells>(cells.NAME);
+    const [newUserOpen, setNewUserOpen] = React.useState(false);
 
     useEffect(() => {
         if (integrations && integrations.data.items) {
@@ -123,9 +125,19 @@ const Authentication: React.FC = () => {
 
     return (
         <>
+            <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    open={newUserOpen}
+                    onClose={() => setNewUserOpen(false)}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                >
+                <NewUser open={newUserOpen} onClose={() => setNewUserOpen(false)} />
+            </Modal>
             <SC.ButtonContainer>
                 <SC.ButtonMargin>
-                    <Button startIcon={<AddIcon />} variant="outlined" color="primary" size="large">New User</Button>
+                    <Button onClick={() => setNewUserOpen(true)} startIcon={<AddIcon />} variant="outlined" color="primary" size="large">New User</Button>
                 </SC.ButtonMargin>
             </SC.ButtonContainer>
             <SC.DeleteWrapper active={selected.length > 0}>
@@ -168,7 +180,7 @@ const Authentication: React.FC = () => {
                     </TableHead>
                     <TableBody>
                         {rows.map((row) => (
-                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/integration/" + row.id)}>
+                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "authentication-detail")}>
                                 <TableCell style={{ cursor: "default" }} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
                                     <Checkbox
                                         color="primary"
@@ -183,7 +195,7 @@ const Authentication: React.FC = () => {
                                         //TODO: Replace placeholder with real data (currently using the integrations)
                                     }
                                     <SC.Flex>
-                                        <SC.CellImage src={client} alt="user" height="38" width="38" />
+                                        <SC.CellImage src={userData.picture} alt="user" height="38" width="38" />
                                         <SC.CellName>
                                         {row.id}
                                         </SC.CellName>
