@@ -19,7 +19,7 @@ export const routes: Array<RouteItem> = [
     },
     {
         key: "router-integrations",
-        path: "/",
+        path: "/:accountId/:subscriptionId/integrations",
         component: IntegrationsPage,
     },
     {
