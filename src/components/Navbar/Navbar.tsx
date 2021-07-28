@@ -51,7 +51,7 @@ const Navbar: React.FC<Props> = ({ sectionName, dropdown, integration, connector
                                 <>
                                     <SC.Flex>
                                         {sectionName !== 'Integrations' && sectionName !== 'Connectors' && <SC.Flex mobileHidden={true}>
-                                            <SC.SectionLink href={integrationsLink ? "/" + userData.accountId + "/" + userData.subscriptionId + "/integrations" : authenticationLink ? "/authentication" : "/" + userData.accountId + "/" + userData.subscriptionId + "/connectors"}>{integrationsLink ? "Integrations" : authenticationLink ? "Authentication" : "Connectors"}</SC.SectionLink>
+                                            <SC.SectionLink href={integrationsLink ? "/" + userData.accountId + "/" + userData.subscriptionId + "/integrations" : authenticationLink ? "/" + userData.accountId + "/" + userData.subscriptionId + "/authentication" : "/" + userData.accountId + "/" + userData.subscriptionId + "/connectors"}>{integrationsLink ? "Integrations" : authenticationLink ? "Authentication" : "Connectors"}</SC.SectionLink>
                                             <SC.Arrow />
                                         </SC.Flex>}
                                         <SC.SectionDropdown active={Boolean(anchorSectionDropdown)} aria-controls="simple-menu" aria-haspopup="true" onClick={(event: any) => setAnchorSectionDropdown(event.currentTarget)}>
