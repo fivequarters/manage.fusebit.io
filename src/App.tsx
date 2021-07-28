@@ -8,6 +8,7 @@ import { routes } from "./config";
 import { APP_TITLE } from "./utils/constants";
 import { RouteItem } from "./interfaces/router";
 import { ContextProvider } from "./hooks/useContext";
+import CookieConsent from "react-cookie-consent";
 
 function App() {
   const queryClient = new QueryClient();
@@ -21,6 +22,16 @@ function App() {
         <ContextProvider>
           <QueryClientProvider client={queryClient}>
             <ThemeProvider theme={responsiveFontSizes(createMuiTheme(lightTheme))}>
+            <CookieConsent
+              location="bottom"
+              buttonText="Accept"
+              cookieName="CookieConsent"
+              style={{ background: "rgba(215, 229, 255, 0.4)" }}
+              buttonStyle={{borderRadius: "4px", border: "1px solid #F83420", backgroundColor: "white", color: "#F83420", fontSize: "13px" }}
+              expires={150}
+            >
+              <p style={{color: "#333333", fontWeight: 500}}>This website uses cookies to enhance the user experience.</p>
+            </CookieConsent>
               <Router>
                 <Switch>
                   {routes.map((route: RouteItem) => <Route

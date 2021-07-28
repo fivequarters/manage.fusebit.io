@@ -106,7 +106,7 @@ export const ColumnSearch = styled.input`
 export const ColumnSearchIcon = styled.img`
     position: absolute;
     right: 0;
-    top: 50%;
+    top: 40%;
     transform: translateY(-50%);
     height: 24px;
     width: 24px;

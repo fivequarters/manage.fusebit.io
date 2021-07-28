@@ -84,7 +84,6 @@ export const ColumnSearchWrapper = styled.div`
 `;
 
 export const ColumnSearch = styled.input`
-    font-family: "Poppins";
     padding: 7px 0;
     font-size: 14px;
     line-height: 20px;
@@ -96,7 +95,6 @@ export const ColumnSearch = styled.input`
     transition: all .2s linear;
 
     &::placeholder {
-        font-family: "Poppins";
         font-size: 14px;
         line-height: 20px;
         color: #959595;
@@ -106,7 +104,7 @@ export const ColumnSearch = styled.input`
 export const ColumnSearchIcon = styled.img`
     position: absolute;
     right: 0;
-    top: 50%;
+    top: 40%;
     transform: translateY(-50%);
     height: 24px;
     width: 24px;

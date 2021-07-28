@@ -27,7 +27,7 @@ enum cells {
 }
 
 interface IntegrationData {
-    [key: string]: string | boolean | number;
+    [key: string]: any;
 }
 
 const Overview: React.FC = () => {
@@ -45,26 +45,39 @@ const Overview: React.FC = () => {
     const query = useQuery();
     let headless = useRef(true);
 
-    const replaceMustache = async (data: IntegrationData, entity: Entity) => {
+    const replaceMustache = React.useCallback(async (data: IntegrationData, entity: Entity) => {
         const customTags: any = [ '<%', '%>' ];
         const keys = Object.keys(data);
         let connectorId;
         let integrationId;
         keys.forEach((key: any) => {
             if (key.match("Connector")) {
-                connectorId = data[key];
+                connectorId = data[key].replace(/\s/g, '');
             } else if (key.match("Integration")) {
-                integrationId = data[key];
+                integrationId = data[key].replace(/\s/g, '');
             }
         });
         const view = {
-            integrationId: integrationId,
-            connectorId: connectorId,
+            this: {
+                connectorId,
+                integrationId 
+            },
+            global: {
+                userId: {
+                    id: userData.userId,
+                },
+                accountId: {
+                    id: userData.accountId,
+                },
+                subscriptionId: {
+                    id: userData.subscriptionId,
+                }
+            }
         }
         const newEntity = Mustache.render(JSON.stringify(entity), view, {}, customTags);
         const parsedEntity: Entity = JSON.parse(newEntity);
         return parsedEntity;
-    }
+    }, [userData]);
 
     const _createConnector = React.useCallback(async (activeIntegration: Feed, data: IntegrationData) => {
         try {
@@ -91,7 +104,7 @@ const Overview: React.FC = () => {
         } finally {
             removeLoader();
         }
-    }, [createConnector, createError, createIntegration, createLoader, reloadConnectors, removeLoader, userData, waitForOperations]);
+    }, [createConnector, createError, createIntegration, createLoader, reloadConnectors, removeLoader, userData, waitForOperations, replaceMustache]);
 
     React.useEffect(() => {
         if (connectors && connectors.data.items) {
@@ -100,6 +113,8 @@ const Overview: React.FC = () => {
                 setRows(items);
             } else if (headless.current) {
                 headless.current = false; // so we only do this once.
+                const items = connectors.data.items;
+                setRows(items); // otherwise if we delete and the connectors.data.items has 0 items the rows will display 1
                 const key = query.get("key");
                 let keyDoesntMatch = true;
                 for (let i = 0; i < connectorsFeed.length; i++) {
@@ -259,7 +274,7 @@ const Overview: React.FC = () => {
                     </TableHead>
                     <TableBody>
                         {rows.map((row) => (
-                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/connector/" + row.id)}>
+                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/" + userData.accountId + "/" + userData.subscriptionId + "/connector/" + row.id)}>
                                 <TableCell style={{ cursor: "default" }} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
                                     <Checkbox
                                         color="primary"
@@ -323,7 +338,7 @@ const Overview: React.FC = () => {
                     </TableHead>
                     <TableBody>
                         {rows.map((row) => (
-                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/connector/" + row.id)}>
+                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/" + userData.accountId + "/" + userData.subscriptionId + "/connector/" + row.id)}>
                                 <TableCell style={{ cursor: "default" }} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
                                     <Checkbox
                                         color="primary"

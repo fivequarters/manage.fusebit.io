@@ -14,22 +14,22 @@ import { RouteItem } from "../interfaces/router";
 export const routes: Array<RouteItem> = [
     {
         key: "router-home",
-        path: "/connectors",
+        path: "/:accountId/:subscriptionId/connectors",
         component: ConnectorsPage
     },
     {
         key: "router-integrations",
-        path: "/",
+        path: "/:accountId/:subscriptionId/integrations",
         component: IntegrationsPage,
     },
     {
         key: "router-integration-detail",
-        path: "/integration/:id",
+        path: "/:accountId/:subscriptionId/integration/:id",
         component: IntegrationDetailPage,
     },
     {
         key: "router-connector-detail",
-        path: "/connector/:id",
+        path: "/:accountId/:subscriptionId/connector/:id",
         component: ConnectorDetailPage,
     },
     {
@@ -44,12 +44,12 @@ export const routes: Array<RouteItem> = [
     },
     {
         key: "router-authentication",
-        path: "/authentication",
+        path: "/:accountId/:subscriptionId/authentication",
         component: AuthenticationPage,
     },
     {
         key: "router-authentication-detail",
-        path: "/authentication-detail",
+        path: "/:accountId/:subscriptionId/authentication/detail",
         component: AuthenticationDetailPage,
     },
     {
