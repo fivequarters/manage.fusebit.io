@@ -12,6 +12,7 @@ import {
   } from '@jsonforms/material-renderers';
 import { useEffect } from "react";
 import CliAccess from "./CliAccess";
+import Delete from "./Delete";
 
 const schema = {
     type: "object",
@@ -70,6 +71,7 @@ const Overview: React.FC = () => {
     const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
     const [isSubmitting, setIsSubmitting] = React.useState(false);
     const [cliOpen, setCliOpen] = React.useState(false);
+    const [deleteOpen, setDeleteOpen] = React.useState(false);
 
     useEffect(() => {
         setData({firstName: userData.firstName, lastName: userData.lastName, email: userData.primaryEmail});
@@ -109,6 +111,16 @@ const Overview: React.FC = () => {
             <Modal
                     aria-labelledby="transition-modal-title"
                     aria-describedby="transition-modal-description"
+                    open={deleteOpen}
+                    onClose={() => setDeleteOpen(false)}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                >
+                <Delete open={deleteOpen} onClose={() => setDeleteOpen(false)} />
+            </Modal>
+            <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
                     open={cliOpen}
                     onClose={() => setCliOpen(false)}
                     closeAfterTransition
@@ -118,7 +130,7 @@ const Overview: React.FC = () => {
             </Modal>
             <SC.UserCard>
                 <SC.UserInfoContainer>
-                    <SC.DotsWrapper>
+                    <SC.DotsWrapper onClick={() => setDeleteOpen(true)}>
                         <SC.Dots src={dots} alt="options" height="20" width="4" />
                     </SC.DotsWrapper>
                     <SC.UserImage alt="user" src={userData.picture} height="88" width="88" />
