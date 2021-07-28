@@ -14,7 +14,7 @@ import { RouteItem } from "../interfaces/router";
 export const routes: Array<RouteItem> = [
     {
         key: "router-home",
-        path: "/connectors",
+        path: "/:accountId/:subscriptionId/connectors",
         component: ConnectorsPage
     },
     {
