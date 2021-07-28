@@ -66,7 +66,7 @@ export const integrationsFeed: Feed[] = [
             id: "<%this.connectorId%>",
             data: {
               files: {
-                "package.json": "{\"scripts\":{\"deploy\":\"fuse connector deploy {{this.name}} -d .\",\"get\":\"fuse connector get {{this.name}} -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\",\"@fusebit-int/pkg-oauth-connector\":\"*\"}}",
+                "package.json": "{\"scripts\":{\"deploy\":\"fuse connector deploy slack chatbot -d .\",\"get\":\"fuse connector get slack chatbot -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\",\"@fusebit-int/pkg-oauth-connector\":\"*\"}}",
               },
               handler: "@fusebit-int/pkg-oauth-connector",
               configuration: {
@@ -85,7 +85,7 @@ export const integrationsFeed: Feed[] = [
               id: "<%this.integrationId%>",
               data: {
                 files: {
-                  "package.json": "{\"scripts\":{\"deploy\":\"fuse integration deploy {{this.name}} -d .\",\"get\":\"fuse integration get {{this.name}} -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\"},\"files\":[\"./integration.js\"]}",
+                  "package.json": "{\"scripts\":{\"deploy\":\"fuse integration deploy slack chatbot -d .\",\"get\":\"fuse integration get slack chatbot -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\"},\"files\":[\"./integration.js\"]}",
                   "./integration.js": "const { Router } = require(\"@fusebit-int/framework\");\nconst router = new Router();\nrouter.get(\"/api/\", async (ctx) => {\n  ctx.body = \"Hello World\";\n});\nmodule.exports = router;\n"
                 },
                 handler: "./integration",
@@ -176,7 +176,7 @@ export const integrationsFeed: Feed[] = [
             id: "<%this.connectorId%>",
             data: {
               files: {
-                "package.json": "{\"scripts\":{\"deploy\":\"fuse connector deploy {{this.name}} -d .\",\"get\":\"fuse connector get {{this.name}} -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\",\"@fusebit-int/pkg-oauth-connector\":\"*\"}}",
+                "package.json": "{\"scripts\":{\"deploy\":\"fuse connector deploy slack chatbot -d .\",\"get\":\"fuse connector get slack chatbot -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\",\"@fusebit-int/pkg-oauth-connector\":\"*\"}}",
               },
               handler: "@fusebit-int/pkg-oauth-connector",
               configuration: {
@@ -195,7 +195,7 @@ export const integrationsFeed: Feed[] = [
               id: "<%this.integrationId%>",
               data: {
                 files: {
-                  "package.json": "{\"scripts\":{\"deploy\":\"fuse integration deploy {{this.name}} -d .\",\"get\":\"fuse integration get {{this.name}} -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\"},\"files\":[\"./integration.js\"]}",
+                  "package.json": "{\"scripts\":{\"deploy\":\"fuse integration deploy slack chatbot -d .\",\"get\":\"fuse integration get slack chatbot -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\"},\"files\":[\"./integration.js\"]}",
                   "./integration.js": "const { Router } = require(\"@fusebit-int/framework\");\nconst router = new Router();\nrouter.get(\"/api/\", async (ctx) => {\n  ctx.body = \"Hello World\";\n});\nmodule.exports = router;\n"
                 },
                 handler: "./integration",
@@ -286,7 +286,7 @@ export const integrationsFeed: Feed[] = [
             id: "<%this.connectorId%>",
             data: {
               files: {
-                "package.json": "{\"scripts\":{\"deploy\":\"fuse connector deploy {{this.name}} -d .\",\"get\":\"fuse connector get {{this.name}} -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\",\"@fusebit-int/pkg-oauth-connector\":\"*\"}}",
+                "package.json": "{\"scripts\":{\"deploy\":\"fuse connector deploy slack chatbot -d .\",\"get\":\"fuse connector get slack chatbot -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\",\"@fusebit-int/pkg-oauth-connector\":\"*\"}}",
               },
               handler: "@fusebit-int/pkg-oauth-connector",
               configuration: {
@@ -305,7 +305,7 @@ export const integrationsFeed: Feed[] = [
               id: "<%this.integrationId%>",
               data: {
                 files: {
-                  "package.json": "{\"scripts\":{\"deploy\":\"fuse integration deploy {{this.name}} -d .\",\"get\":\"fuse integration get {{this.name}} -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\"},\"files\":[\"./integration.js\"]}",
+                  "package.json": "{\"scripts\":{\"deploy\":\"fuse integration deploy slack chatbot -d .\",\"get\":\"fuse integration get slack chatbot -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\"},\"files\":[\"./integration.js\"]}",
                   "./integration.js": "const { Router } = require(\"@fusebit-int/framework\");\nconst router = new Router();\nrouter.get(\"/api/\", async (ctx) => {\n  ctx.body = \"Hello World\";\n});\nmodule.exports = router;\n"
                 },
                 handler: "./integration",
@@ -431,7 +431,7 @@ export const integrationsFeed: Feed[] = [
             id: "<%this.connectorId%>",
             data: {
               files: {
-                "package.json": "{\"scripts\":{\"deploy\":\"fuse connector deploy {{this.name}} -d .\",\"get\":\"fuse connector get {{this.name}} -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\",\"@fusebit-int/pkg-oauth-connector\":\"*\"}}",
+                "package.json": "{\"scripts\":{\"deploy\":\"fuse connector deploy slack chatbot -d .\",\"get\":\"fuse connector get slack chatbot -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\",\"@fusebit-int/pkg-oauth-connector\":\"*\"}}",
               },
               handler: "@fusebit-int/pkg-oauth-connector",
               configuration: {
@@ -450,7 +450,7 @@ export const integrationsFeed: Feed[] = [
               id: "<%this.integrationId%>",
               data: {
                 files: {
-                  "package.json": "{\"scripts\":{\"deploy\":\"fuse integration deploy {{this.name}} -d .\",\"get\":\"fuse integration get {{this.name}} -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\"},\"files\":[\"./integration.js\"]}",
+                  "package.json": "{\"scripts\":{\"deploy\":\"fuse integration deploy slack chatbot -d .\",\"get\":\"fuse integration get slack chatbot -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\"},\"files\":[\"./integration.js\"]}",
                   "./integration.js": "const { Router } = require(\"@fusebit-int/framework\");\nconst router = new Router();\nrouter.get(\"/api/\", async (ctx) => {\n  ctx.body = \"Hello World\";\n});\nmodule.exports = router;\n"
                 },
                 handler: "./integration",
@@ -573,7 +573,7 @@ export const integrationsFeed: Feed[] = [
             id: "<%this.connectorId%>",
             data: {
               files: {
-                "package.json": "{\"scripts\":{\"deploy\":\"fuse connector deploy {{this.name}} -d .\",\"get\":\"fuse connector get {{this.name}} -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\",\"@fusebit-int/pkg-oauth-connector\":\"*\"}}",
+                "package.json": "{\"scripts\":{\"deploy\":\"fuse connector deploy slack chatbot -d .\",\"get\":\"fuse connector get slack chatbot -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\",\"@fusebit-int/pkg-oauth-connector\":\"*\"}}",
               },
               handler: "@fusebit-int/pkg-oauth-connector",
               configuration: {
@@ -592,7 +592,7 @@ export const integrationsFeed: Feed[] = [
               id: "<%this.integrationId%>",
               data: {
                 files: {
-                  "package.json": "{\"scripts\":{\"deploy\":\"fuse integration deploy {{this.name}} -d .\",\"get\":\"fuse integration get {{this.name}} -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\"},\"files\":[\"./integration.js\"]}",
+                  "package.json": "{\"scripts\":{\"deploy\":\"fuse integration deploy slack chatbot -d .\",\"get\":\"fuse integration get slack chatbot -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\"},\"files\":[\"./integration.js\"]}",
                   "./integration.js": "const { Router } = require(\"@fusebit-int/framework\");\nconst router = new Router();\nrouter.get(\"/api/\", async (ctx) => {\n  ctx.body = \"Hello World\";\n});\nmodule.exports = router;\n"
                 },
                 handler: "./integration",
@@ -715,7 +715,7 @@ export const integrationsFeed: Feed[] = [
             id: "<%this.connectorId%>",
             data: {
               files: {
-                "package.json": "{\"scripts\":{\"deploy\":\"fuse connector deploy {{this.name}} -d .\",\"get\":\"fuse connector get {{this.name}} -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\",\"@fusebit-int/pkg-oauth-connector\":\"*\"}}",
+                "package.json": "{\"scripts\":{\"deploy\":\"fuse connector deploy slack chatbot -d .\",\"get\":\"fuse connector get slack chatbot -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\",\"@fusebit-int/pkg-oauth-connector\":\"*\"}}",
               },
               handler: "@fusebit-int/pkg-oauth-connector",
               configuration: {
@@ -734,7 +734,7 @@ export const integrationsFeed: Feed[] = [
               id: "<%this.integrationId%>",
               data: {
                 files: {
-                  "package.json": "{\"scripts\":{\"deploy\":\"fuse integration deploy {{this.name}} -d .\",\"get\":\"fuse integration get {{this.name}} -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\"},\"files\":[\"./integration.js\"]}",
+                  "package.json": "{\"scripts\":{\"deploy\":\"fuse integration deploy slack chatbot -d .\",\"get\":\"fuse integration get slack chatbot -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\"},\"files\":[\"./integration.js\"]}",
                   "./integration.js": "const { Router } = require(\"@fusebit-int/framework\");\nconst router = new Router();\nrouter.get(\"/api/\", async (ctx) => {\n  ctx.body = \"Hello World\";\n});\nmodule.exports = router;\n"
                 },
                 handler: "./integration",
