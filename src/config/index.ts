@@ -24,7 +24,7 @@ export const routes: Array<RouteItem> = [
     },
     {
         key: "router-integration-detail",
-        path: "/integration/:id",
+        path: "/:accountId/:subscriptionId/integration/:id",
         component: IntegrationDetailPage,
     },
     {

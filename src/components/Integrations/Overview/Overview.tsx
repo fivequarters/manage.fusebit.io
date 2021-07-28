@@ -275,7 +275,7 @@ const Overview: React.FC = () => {
                     </TableHead>
                     <TableBody>
                         {rows.map((row) => (
-                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/integration/" + row.id)}>
+                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/" + userData.accountId + "/" + userData.subscriptionId +  "/integration/" + row.id)}>
                                 <TableCell style={{ cursor: "default" }} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
                                     <Checkbox
                                         color="primary"
@@ -340,7 +340,7 @@ const Overview: React.FC = () => {
                     </TableHead>
                     <TableBody>
                         {rows.map((row) => (
-                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/integration/" + row.id)}>
+                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/" + userData.accountId + "/" + userData.subscriptionId +  "/integration/" + row.id)}>
                                 <TableCell style={{ cursor: "default" }} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
                                     <Checkbox
                                         color="primary"
