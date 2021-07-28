@@ -49,7 +49,7 @@ export const routes: Array<RouteItem> = [
     },
     {
         key: "router-authentication-detail",
-        path: "/authentication-detail",
+        path: "/:accountId/:subscriptionId/authentication/detail",
         component: AuthenticationDetailPage,
     },
     {

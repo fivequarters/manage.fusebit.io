@@ -157,12 +157,12 @@ const Navbar: React.FC<Props> = ({ sectionName, dropdown, integration, connector
                                                 <SC.SectionDropdownMenu>
                                                     <SC.Flex>
                                                         <SC.SectionDropdownTitle>Accounts</SC.SectionDropdownTitle>
-                                                        <SC.SectionDropdownSeeMore href="/authentication">
+                                                        <SC.SectionDropdownSeeMore href={"/" + userData.accountId + "/" + userData.subscriptionId + "/authentication"}>
                                                             See all
                                                             <img src={rightArrow} alt="See all" height="8" width="8" />
                                                         </SC.SectionDropdownSeeMore>
                                                     </SC.Flex>
-                                                    <SC.SectionDropdownIntegration active={true} href={"/authentication-detail"}>
+                                                    <SC.SectionDropdownIntegration active={true} href={"/" + userData.accountId + "/" + userData.subscriptionId + "/authentication/detail"}>
                                                         {userData.primaryEmail}
                                                         <img src={check} alt="check" height="16" width="16" />
                                                     </SC.SectionDropdownIntegration>
@@ -172,12 +172,12 @@ const Navbar: React.FC<Props> = ({ sectionName, dropdown, integration, connector
                                                 <SC.SectionDropdownMenu>
                                                     <SC.Flex>
                                                         <SC.SectionDropdownTitle>Accounts</SC.SectionDropdownTitle>
-                                                        <SC.SectionDropdownSeeMore href="/authentication">
+                                                        <SC.SectionDropdownSeeMore href={"/" + userData.accountId + "/" + userData.subscriptionId + "/authentication"}>
                                                             See all
                                                             <img src={rightArrow} alt="See all" height="8" width="8" />
                                                         </SC.SectionDropdownSeeMore>
                                                     </SC.Flex>
-                                                    <SC.SectionDropdownIntegration active={true} href={"/authentication-detail"}>
+                                                    <SC.SectionDropdownIntegration active={true} href={"/" + userData.accountId + "/" + userData.subscriptionId + "/authentication/detail"}>
                                                         {userData.primaryEmail}
                                                         <img src={check} alt="check" height="16" width="16" />
                                                     </SC.SectionDropdownIntegration>
@@ -188,7 +188,7 @@ const Navbar: React.FC<Props> = ({ sectionName, dropdown, integration, connector
                                     }
                                 </>
                             ) : (
-                                <SC.SectionLink href={integration ? "/" + userData.accountId + "/" + userData.subscriptionId + "/integrations" : "/" + userData.accountId + "/" + userData.subscriptionId + "/connectors"}>{sectionName}</SC.SectionLink>
+                                <SC.SectionLink href={integration ? "/" + userData.accountId + "/" + userData.subscriptionId + "/integrations" : authentication ? "/" + userData.accountId + "/" + userData.subscriptionId + "/authentication" : "/" + userData.accountId + "/" + userData.subscriptionId + "/connectors"}>{sectionName}</SC.SectionLink>
                             )
                         }
                     </SC.FlexDown>
