@@ -27,7 +27,7 @@ enum cells {
 }
 
 interface IntegrationData {
-    [key: string]: string | boolean | number;
+    [key: string]: any;
 }
 
 const Overview: React.FC = () => {
@@ -52,9 +52,9 @@ const Overview: React.FC = () => {
         let integrationId;
         keys.forEach((key: any) => {
             if (key.match("Connector")) {
-                connectorId = data[key];
+                connectorId = data[key].replace(/\s/g, '');
             } else if (key.match("Integration")) {
-                integrationId = data[key];
+                integrationId = data[key].replace(/\s/g, '');
             }
         });
         const view = {
