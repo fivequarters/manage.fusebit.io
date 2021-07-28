@@ -29,7 +29,7 @@ export const routes: Array<RouteItem> = [
     },
     {
         key: "router-connector-detail",
-        path: "/connector/:id",
+        path: "/:accountId/:subscriptionId/connector/:id",
         component: ConnectorDetailPage,
     },
     {
