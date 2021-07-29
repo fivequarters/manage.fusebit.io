@@ -225,7 +225,7 @@ const Navbar: React.FC<Props> = ({ sectionName, dropdown, integration, connector
                                     <SC.UserDropdownStatusArrow src={rightArrow} alt="right arrow" height="12" width="12" />
                                 </SC.UserDropdownStatus>
                                 <SC.UserDropdownLinksWrapper>
-                                    <SC.UserDropdownLink href="/authentication">Authentication</SC.UserDropdownLink>
+                                    <SC.UserDropdownLink href={"/" + userData.accountId + "/" + userData.subscriptionId + "/authentication"}>Authentication</SC.UserDropdownLink>
                                     <SC.UserDropdownLink href="/billing">Billing</SC.UserDropdownLink>
                                     <SC.UserDropdownLink href="/settings">Settings</SC.UserDropdownLink>
                                 </SC.UserDropdownLinksWrapper>
@@ -259,7 +259,7 @@ const Navbar: React.FC<Props> = ({ sectionName, dropdown, integration, connector
                                 <SC.UserDropdownStatusArrow src={rightArrow} alt="right arrow" height="12" width="12" />
                             </SC.UserDropdownStatus>
                             <SC.UserDropdownLinksWrapper>
-                                <SC.UserDropdownLink href="/authentication">Authentication</SC.UserDropdownLink>
+                                <SC.UserDropdownLink href={"/" + userData.accountId + "/" + userData.subscriptionId + "/authentication"}>Authentication</SC.UserDropdownLink>
                                 <SC.UserDropdownLink href="/billing">Billing</SC.UserDropdownLink>
                                 <SC.UserDropdownLink href="/settings">Settings</SC.UserDropdownLink>
                             </SC.UserDropdownLinksWrapper>
