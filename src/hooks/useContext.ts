@@ -1,19 +1,19 @@
 import constate from "constate";
 import { useEffect, useState } from "react";
 import { User } from "../interfaces/user";
-import { useAxios } from "../hooks/useAxios";
+import { useGetAuthLink } from "../hooks/useGetAuthLink";
 
 const LS_KEY = `T29M03eleloegehOxGtpEPel18JfM3djp5pUL4Jm`;
 export const readLocalData = () => JSON.parse(localStorage.getItem(LS_KEY) || "{}");
 
 const _useContext = () => {
     const [userData, setUserData] = useState<User>({});
-    const { getBaseUrl } = useAxios();
+    const { getAuthLink } = useGetAuthLink();
 
     useEffect(() => {
         const __userData = readLocalData();
         if (__userData.token) setUserData(__userData);
-        else if (window.location.href.indexOf('logged-out') < 0) window.location.href = `https://fusebit.auth0.com/authorize?response_type=token&client_id=dimuls6VLYgXpD7UYCo6yPdKAXPXjQng&audience=${getBaseUrl()}&redirect_uri=${window.location.origin}/callback&scope=openid profile email`;
+        else if (window.location.href.indexOf('logged-out') < 0) window.location.href = getAuthLink();;
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
