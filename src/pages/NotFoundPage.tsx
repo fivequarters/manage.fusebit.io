@@ -7,10 +7,15 @@ const NotFoundPage: FC<{}> = (): ReactElement => {
   const { userData } = useContext();
 
   useEffect(() => {
-    const res = localStorage.getItem("refreshToken"); //if the user refreshed the token it returns true
-    const url = localStorage.getItem("refreshTokenUrl"); //the url we should redirect to
-    if (res === "true" && url) {
-        history.push(url);
+    const firstLoginRedirect = localStorage.getItem("redirect"); //if there is something here it means that the user logged in for the first time and wants to go to this link, so we send him there
+    const refreshToken = localStorage.getItem("refreshToken"); //if the user refreshed the token it returns true
+    const refreshTokenUrl = localStorage.getItem("refreshTokenUrl"); //the refreshTokenUrl we should redirect to
+    console.log(firstLoginRedirect);
+    if (firstLoginRedirect !== null) {
+      localStorage.removeItem("redirect");
+      history.push(firstLoginRedirect);
+    } else if (refreshToken === "true" && refreshTokenUrl) {
+        history.push(refreshTokenUrl);
     } else if (userData.accountId !== undefined && userData.subscriptionId !== undefined) {
       history.push("/" + userData.accountId + "/" + userData.subscriptionId + "/integrations");
     }
