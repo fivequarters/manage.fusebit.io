@@ -9,13 +9,22 @@ import {Props} from "../../../../interfaces/connect";
 import {Decoded} from "../../../../interfaces/decoded";
 import { useContext } from "../../../../hooks/useContext";
 import jwt_decode from "jwt-decode";
+import { useAxios } from "../../../../hooks/useAxios";
 
 const Connect: React.FC<Props> = ({onClose, open}) => {
     const [copiedLine, setCopiedLine] = React.useState(0);
     const [fadeChange, setFadeChange] = React.useState(false);
     const { userData } = useContext();
+    const { getBaseUrl } = useAxios();
     const [expDate, setExpDate] = React.useState("");
     let timeout: NodeJS.Timeout;
+
+
+    const handleRefresh = () => {
+        localStorage.setItem("refreshToken", "true");
+        localStorage.setItem("refreshTokenUrl", window.location.pathname);
+        window.location.href = `https://fusebit.auth0.com/authorize?response_type=token&client_id=dimuls6VLYgXpD7UYCo6yPdKAXPXjQng&audience=${getBaseUrl()}&redirect_uri=${window.location.origin}/callback&scope=openid profile email`;
+    }
 
     React.useEffect(() => {
         if (userData) {
@@ -65,7 +74,7 @@ const Connect: React.FC<Props> = ({onClose, open}) => {
                 <SC.CopySuccess copy={copiedLine === 1}>Copied to clipboard!</SC.CopySuccess>
             </SC.LineInstructionWrapper>
             <SC.ButtonWrapper>
-                <Button style={{width: "200px"}} size="large" variant="contained" color="primary">Refresh Your Token</Button>
+                <Button onClick={handleRefresh} style={{width: "200px"}} size="large" variant="contained" color="primary">Refresh Your Token</Button>
             </SC.ButtonWrapper>
             {
                 false && (

@@ -7,7 +7,11 @@ const NotFoundPage: FC<{}> = (): ReactElement => {
   const { userData } = useContext();
 
   useEffect(() => {
-    if (userData.accountId !== undefined && userData.subscriptionId !== undefined) {
+    const res = localStorage.getItem("refreshToken"); //if the user refreshed the token it returns true
+    const url = localStorage.getItem("refreshTokenUrl"); //the url we should redirect to
+    if (res === "true" && url) {
+        history.push(url);
+    } else if (userData.accountId !== undefined && userData.subscriptionId !== undefined) {
       history.push("/" + userData.accountId + "/" + userData.subscriptionId + "/integrations");
     }
   }, [history, userData]);

@@ -38,6 +38,15 @@ const Develop: React.FC = () => {
     const [connectOpen, setConnectOpen] = React.useState(false);
     const [connectorListOpen, setConnectorListOpen] = React.useState(false);
 
+    React.useEffect(() => {
+        const res = localStorage.getItem("refreshToken");
+        if (res === "true") {
+            localStorage.removeItem("refreshToken");
+            localStorage.removeItem("refreshTokenUrl");
+            setConnectOpen(true);
+        }
+    }, []);
+
     const handleConnectorDelete = async (connectorId: string) => {
         try {
             createLoader();
