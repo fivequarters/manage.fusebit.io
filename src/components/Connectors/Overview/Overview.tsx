@@ -103,6 +103,7 @@ const Overview: React.FC = () => {
             createError(e.message);
         } finally {
             removeLoader();
+            setAddConnectorOpen(false);
         }
     }, [createConnector, createError, createIntegration, createLoader, reloadConnectors, removeLoader, userData, waitForOperations, replaceMustache]);
 
