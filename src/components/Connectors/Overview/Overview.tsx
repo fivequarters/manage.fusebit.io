@@ -98,14 +98,11 @@ const Overview: React.FC = () => {
                 const response = await createConnector.mutateAsync({data: connectors[i].data, id: connectors[i].id, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
                 await waitForOperations([response.data.operationId]);
             }
-            reloadConnectors();
+            window.location.href = "/" + userData.accountId + "/" + userData.subscriptionId +  "/integration/" + currentIntegrationData?.id;
         } catch (e) {
             createError(e.message);
-        } finally {
-            removeLoader();
-            setAddConnectorOpen(false);
         }
-    }, [createConnector, createError, createIntegration, createLoader, reloadConnectors, removeLoader, userData, waitForOperations, replaceMustache]);
+    }, [createConnector, createError, createIntegration, createLoader, userData, waitForOperations, replaceMustache]);
 
     React.useEffect(() => {
         if (connectors && connectors.data.items) {
