@@ -3,5 +3,7 @@ export interface Props {
     dropdown?: boolean;
     integration?: boolean;
     connector?: boolean;
+    authentication?: boolean;
+    authenticationLink?: boolean;
     integrationsLink?: boolean;
 }

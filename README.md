@@ -37,6 +37,32 @@ http-server -p 5000 build
 
 Browse to [http://localhost:5000](http://localhost:5000).
 
+## Deploy in S3
+
+1) Build the application
+
+```sh
+npm run build
+```
+
+or
+
+```sh
+yarn build
+```
+
+2) Upload `build` folder content into the bucket
+
+```sh
+aws s3 sync ./build s3://${bucket_name} --profile ${profile} --cache-control max-age=31536000
+```
+
+3) Refresh cloudfront (optional)
+```sh
+aws cloudfront create-invalidation --profile ${profile} --distribution-id ${cloudfront_id} --paths '/*'
+```
+
+
 ## Technologies used
 
 * [ReactJS](https://reactjs.org/)

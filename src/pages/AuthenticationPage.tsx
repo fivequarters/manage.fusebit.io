@@ -6,7 +6,7 @@ import Navbar from "../components/Navbar";
 const AuthenticationPage: FC<{}> = (): ReactElement => {
   return (
     <Layout>
-      <Navbar sectionName="Authentication" />
+      <Navbar sectionName="Authentication" authenticationLink={true} authentication={true} />
       <Authentication />
     </Layout>
   );

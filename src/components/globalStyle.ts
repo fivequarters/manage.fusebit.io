@@ -5,5 +5,6 @@ export default createGlobalStyle`
         --primary-color: #F83420;
         --secondary-color: rgba(215, 229, 255, 0.4);
         --black: #333333;
+        --grey: #959595;
     }
 `;

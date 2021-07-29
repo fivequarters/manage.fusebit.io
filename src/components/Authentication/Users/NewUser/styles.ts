@@ -5,14 +5,13 @@ export const Card = styled.div<{open: boolean}>`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    display: flex;
-    flex-direction: column;
     background-color: white;
     opacity: ${props => props.open ? 1 : 0};
-    padding: 64px 120px;
+    padding: 64px;
+    height: 544px;
+    width: 642px;
     border-radius: 8px;
     box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
-    width: 907px;
     transition: all 1s linear;
 
     @media only screen and (max-width: 550px) {
@@ -24,62 +23,62 @@ export const Card = styled.div<{open: boolean}>`
     }
 `;
 
-export const CardClose = styled.div`
-    height: 20px;
-    width: 20px;
+export const Close = styled.img`
+    height: 12px;
+    width: 12px;
+    object-fit: contain;
     position: absolute;
-    top: 25px;
-    right: 25px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    top: 32px;
+    right: 32px;
+    transition: all .25s linear;
 
     &:hover {
         cursor: pointer;
-
-        & > img {
-            transform: rotate(90deg);
-        }
-    }
-
-    & > img {
-        height: 10px;
-        width: 10px;
-        object-fit: contain;
-        transition: all .25s linear;
+        transform: rotate(90deg);
     }
 `;
 
-export const CardTitle = styled.h2`
+export const Title = styled.h2`
     font-size: 24px;
     line-height: 26px;
-    text-align: center;
     font-weight: 600;
     color: var(--black);
-    margin-bottom: 32px;
+    margin-bottom: 50px;
+    text-align: center;
 `;
 
-export const CardSubtitle = styled.h5`
-    font-size: 14px;
-    line-height: 16px;
-    font-weight: 500;
-    text-align: center;
+export const Description = styled.p`
+    font-size: 16px;
+    line-height: 22px;
     color: var(--black);
-    margin-bottom: 16px;
-    text-align: center;
-    width: 100%;
+    margin-top: 90px;
+    margin-bottom: 24px;
 `;
 
-export const CardButtonsContainer = styled.div`
+export const FormWrapper = styled.form`
     display: flex;
     flex-direction: column;
-    margin-bottom: 36px;
+    align-items: center;
+    justify-content: center;
+    margin: 0px auto;
+    width: 400px;
+
+    @media only screen and (max-width: 880px) {
+        margin-left: 0;
+    }
 `;
 
-export const CardActionButtons = styled.div`
+export const FormInputWrapper = styled.div`
     display: flex;
+    flex-direction: column;
     align-items: center;
-    margin-top: 16px;
+    justify-content: center;
+    position: absolute;
+    bottom: 64px;
+
+    @media only screen and (max-width: 880px) {
+        
+    }
 `;
 
 export const LineInstructionWrapper = styled.div`
@@ -97,9 +96,9 @@ export const LineInstructionWrapper = styled.div`
 
 export const LineInstruction = styled.div`
     position: relative;
+    width: 100%;
     height: 50px;
     padding: 16px;
-    width: 667px;
     border: 0;
     margin: 0; 
     outline: rgba(255,255,255,0);
@@ -176,11 +175,12 @@ export const LineInstructionCopy = styled.div`
     transition: all .25s linear;
 
     @media only screen and (max-width: 1250px) {
-        display: none;
+        opacity: 1;
     }
 `;
 
 export const CopySuccess = styled.p<{copy: boolean}>`
+    display: block;
     position: absolute; 
     right: 0;
     bottom: -35px;
@@ -193,53 +193,9 @@ export const CopySuccess = styled.p<{copy: boolean}>`
     transition: all .5s linear;
 `;
 
-export const CopyMobile = styled.img`
-    display: none;
-    height: 16px;
-    width: 16px;
-    object-fit: contain;
-    margin-left: auto;
-
-    @media only screen and (max-width: 1250px) {
-        display: block;
-    }
-`;
-
-export const Flex = styled.div`
+export const UserCreatedButtonWrapper = styled.div`
     display: flex;
     align-items: center;
-    width: 100%;
-`;
-
-export const LineTitle = styled.h4<{margin?: string}>`
-    font-size: 16px;
-    line-height: 18px;
-    font-weight: 600;
-    color: var(--black);
-    margin-bottom: ${props => props.margin ? props.margin : "16px"};
-
-    @media only screen and (max-width: 1250px) {
-        font-size: 14px;
-        line-height: 16px;
-        font-weight: 500;
-    }
-`;
-
-export const LineDescription = styled.p`
-    margin: 0;
-    font-size: 14px;
-    line-height: 20px;
-    color: var(--black);
-    margin-bottom: 18px;
-
-    @media only screen and (max-width: 1250px) {
-        font-size: 12px;
-        line-height: 14px;
-    }
-`;
-
-export const ButtonWrapper = styled.div`
-    width: 200px;
-    margin: 0 auto;
-    margin-top: 52px;
+    justify-content: center;
+    margin-top: 90px;
 `;

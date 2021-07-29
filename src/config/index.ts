@@ -4,6 +4,7 @@ import IntegrationDetailPage from "../pages/IntegrationDetailPage";
 import ConnectorDetailPage from "../pages/ConnectorDetailPage";
 import LoggedOutErrorPage from "../pages/LoggedOutErrorPage";
 import AuthenticationPage from "../pages/AuthenticationPage";
+import AuthenticationDetailPage from "../pages/AuthenticationDetailPage";
 import FatalErrorPage from "../pages/FatalErrorPage";
 import AuthCallback from "../pages/AuthCallback";
 import NotFoundPage from "../pages/NotFoundPage";
@@ -13,22 +14,22 @@ import { RouteItem } from "../interfaces/router";
 export const routes: Array<RouteItem> = [
     {
         key: "router-home",
-        path: "/connectors",
+        path: "/:accountId/:subscriptionId/connectors",
         component: ConnectorsPage
     },
     {
         key: "router-integrations",
-        path: "/",
+        path: "/:accountId/:subscriptionId/integrations",
         component: IntegrationsPage,
     },
     {
         key: "router-integration-detail",
-        path: "/integration/:id",
+        path: "/:accountId/:subscriptionId/integration/:id",
         component: IntegrationDetailPage,
     },
     {
         key: "router-connector-detail",
-        path: "/connector/:id",
+        path: "/:accountId/:subscriptionId/connector/:id",
         component: ConnectorDetailPage,
     },
     {
@@ -43,11 +44,16 @@ export const routes: Array<RouteItem> = [
     },
     {
         key: "router-authentication",
-        path: "/authentication",
+        path: "/:accountId/:subscriptionId/authentication",
         component: AuthenticationPage,
     },
     {
-        key: "fatal-error",
+        key: "router-authentication-detail",
+        path: "/:accountId/:subscriptionId/authentication/detail",
+        component: AuthenticationDetailPage,
+    },
+    {
+        key: "router-fatal-error",
         path: "/fatal-error",
         component: FatalErrorPage,
     },

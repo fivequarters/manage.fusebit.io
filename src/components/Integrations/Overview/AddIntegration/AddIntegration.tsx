@@ -7,7 +7,7 @@ import {
   } from '@jsonforms/material-renderers';
   import { JsonForms } from '@jsonforms/react';
   import { ValidationMode } from "@jsonforms/core";
-  import { Button } from "@material-ui/core";
+  import { Button, TextField } from "@material-ui/core";
   import {integrationsFeed} from "../../../../static/feed";
   import search from "../../../../assets/search.svg";
   import cross from "../../../../assets/cross.svg";
@@ -57,7 +57,7 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
                 <SC.ColumnBr />
                 <SC.Column border={true}>
                     <SC.ColumnSearchWrapper>
-                        <SC.ColumnSearch onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchFilter(e.target.value)} placeholder="Search" />
+                        <TextField style={{width: "254px"}} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchFilter(e.target.value)} label="Search" />
                         <SC.ColumnSearchIcon src={search} alt="Search Integration" height="24" width="24" />
                     </SC.ColumnSearchWrapper>
                     {
