@@ -13,7 +13,10 @@ const _useContext = () => {
     useEffect(() => {
         const __userData = readLocalData();
         if (__userData.token) setUserData(__userData);
-        else if (window.location.href.indexOf('logged-out') < 0) window.location.href = getAuthLink();;
+        else if (window.location.href.indexOf('logged-out') < 0) {
+            localStorage.setItem("redirect", window.location.pathname + window.location.search);
+            window.location.href = getAuthLink();
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
