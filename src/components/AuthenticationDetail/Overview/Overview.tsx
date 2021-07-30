@@ -183,7 +183,7 @@ const Overview: React.FC = () => {
             </SC.UserCard>
             <SC.CLIAccesWrapper>
                 <SC.CLIAccess>Command Line (CLI) Access</SC.CLIAccess>
-                <Button onClick={() => setCliOpen(true)} style={{width: "200px"}} fullWidth={false} size="large" color="primary" variant="contained">Edit information</Button>
+                <Button onClick={() => setCliOpen(true)} style={{width: "200px"}} fullWidth={false} size="large" color="primary" variant="contained">Grant CLI Access</Button>
             </SC.CLIAccesWrapper>
         </SC.Overview>
     )

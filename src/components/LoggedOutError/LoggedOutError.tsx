@@ -3,13 +3,13 @@ import * as SC from "./styles";
 import fusebit from "../../assets/fusebit-logo.svg";
 import warning from "../../assets/warning-red.svg";
 import { Button } from "@material-ui/core";
-import { useAxios } from "../../hooks/useAxios";
+import { useGetAuthLink } from "../../hooks/useGetAuthLink";
 
 const LoggedOutError: React.FC = () => {
-    const { getBaseUrl } = useAxios();
+    const { getAuthLink } = useGetAuthLink();
 
     const handleAuth = () => {
-        window.location.href = `https://fusebit.auth0.com/authorize?response_type=token&client_id=dimuls6VLYgXpD7UYCo6yPdKAXPXjQng&audience=${getBaseUrl()}&redirect_uri=${window.location.origin}/callback&scope=openid profile email`;
+        window.location.href = getAuthLink();
     }
 
     return (
