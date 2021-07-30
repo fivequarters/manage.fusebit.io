@@ -20,6 +20,7 @@ import {Connector} from "../../../interfaces/connector";
 import { Integration, InnerConnector } from "../../../interfaces/integration";
 import Edit from "./Edit";
 import {FuseInitToken} from "../../../interfaces/fuseInitToken";
+import { useGetRedirectLink } from "../../../hooks/useGetRedirectLink";
 
 const Develop: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -37,6 +38,7 @@ const Develop: React.FC = () => {
     const [editToken, setEditToken] = React.useState<string | FuseInitToken>();
     const [connectOpen, setConnectOpen] = React.useState(false);
     const [connectorListOpen, setConnectorListOpen] = React.useState(false);
+    const {getRedirectLink} = useGetRedirectLink();
 
     React.useEffect(() => {
         const res = localStorage.getItem("refreshToken");
@@ -280,7 +282,7 @@ const Develop: React.FC = () => {
                                     if (index < 5) {
                                         return (
                                             <SC.CardConnector key={index} onClick={(e: any) => {
-                                                    if(!e.target.id) history.push(`/connector/${connector.entityId}`)
+                                                    if(!e.target.id) history.push(getRedirectLink(`/connector/${connector.entityId}`))
                                                 }}>
                                                 {// TODO: Replace placeholder with real data 
                                                 } 
@@ -299,7 +301,7 @@ const Develop: React.FC = () => {
                         {
                             integrationData?.data.data.components.length ? 
                             integrationData?.data.data.components.length >= 5 && (
-                                <SC.CardConnectorSeeMore href="/"> 
+                                <SC.CardConnectorSeeMore href={getRedirectLink("/connectors")}> 
                                     See all
                                     <img src={arrow} alt="see more" height="10" width="10" />
                                 </SC.CardConnectorSeeMore>

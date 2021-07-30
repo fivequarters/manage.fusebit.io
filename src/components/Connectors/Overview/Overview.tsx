@@ -19,6 +19,7 @@ import { Entity, Feed } from "../../../interfaces/feed";
 import Mustache from "mustache";
 import { useQuery } from "../../../hooks/useQuery";
 import { connectorsFeed } from "../../../static/feed";
+import { useGetRedirectLink } from "../../../hooks/useGetRedirectLink";
 
 enum cells {
     TYPE = "Type",
@@ -43,6 +44,7 @@ const Overview: React.FC = () => {
     const [selectedCell, setSelectedCell] = React.useState<cells>(cells.TYPE);
     const [addConnectorOpen, setAddConnectorOpen] = React.useState(false);
     const query = useQuery();
+    const { getRedirectLink } = useGetRedirectLink();
     let headless = useRef(true);
 
     const replaceMustache = React.useCallback(async (data: IntegrationData, entity: Entity) => {
@@ -98,11 +100,11 @@ const Overview: React.FC = () => {
                 const response = await createConnector.mutateAsync({data: connectors[i].data, id: connectors[i].id, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
                 await waitForOperations([response.data.operationId]);
             }
-            window.location.href = "/" + userData.accountId + "/" + userData.subscriptionId +  "/integration/" + currentIntegrationData?.id;
+            window.location.href = getRedirectLink("/integration/" + currentIntegrationData?.id);
         } catch (e) {
             createError(e.message);
         }
-    }, [createConnector, createError, createIntegration, createLoader, userData, waitForOperations, replaceMustache]);
+    }, [createConnector, createError, createIntegration, createLoader, userData, waitForOperations, replaceMustache, getRedirectLink]);
 
     React.useEffect(() => {
         if (connectors && connectors.data.items) {
@@ -272,7 +274,7 @@ const Overview: React.FC = () => {
                     </TableHead>
                     <TableBody>
                         {rows.map((row) => (
-                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/" + userData.accountId + "/" + userData.subscriptionId + "/connector/" + row.id)}>
+                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, getRedirectLink("/connector/" + row.id))}>
                                 <TableCell style={{ cursor: "default" }} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
                                     <Checkbox
                                         color="primary"
@@ -336,7 +338,7 @@ const Overview: React.FC = () => {
                     </TableHead>
                     <TableBody>
                         {rows.map((row) => (
-                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/" + userData.accountId + "/" + userData.subscriptionId + "/connector/" + row.id)}>
+                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, getRedirectLink("/connector/" + row.id))}>
                                 <TableCell style={{ cursor: "default" }} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
                                     <Checkbox
                                         color="primary"
