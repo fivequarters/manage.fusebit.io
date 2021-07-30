@@ -21,6 +21,8 @@ import { Integration, InnerConnector } from "../../../interfaces/integration";
 import Edit from "./Edit";
 import {FuseInitToken} from "../../../interfaces/fuseInitToken";
 import { useGetRedirectLink } from "../../../hooks/useGetRedirectLink";
+import FeedPicker from "../../FeedPicker";
+import {useGetFeedArray} from "../../../hooks/useGetFeedArray";
 
 const Develop: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -33,12 +35,13 @@ const Develop: React.FC = () => {
     const { waitForOperations, createLoader, removeLoader } = useLoader();
     const {createError} = useError();
     const createToken = useAccountUserCreateToken<FuseInitToken>();
-
+    const {getConnectorsFeed} = useGetFeedArray();
     const [editOpen, setEditOpen] = React.useState(false);
     const [editToken, setEditToken] = React.useState<string | FuseInitToken>();
     const [connectOpen, setConnectOpen] = React.useState(false);
     const [connectorListOpen, setConnectorListOpen] = React.useState(false);
     const {getRedirectLink} = useGetRedirectLink();
+    const [connectorPickerOpen, setConnectorPickerOpen] = React.useState(false);
 
     React.useEffect(() => {
         const res = localStorage.getItem("refreshToken");
@@ -169,6 +172,18 @@ const Develop: React.FC = () => {
     
     return (
         <SC.Background>
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                open={connectorPickerOpen}
+                onClose={() => setConnectorPickerOpen(false)}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+            >
+                <Fade in={connectorPickerOpen}>
+                    <FeedPicker feed={getConnectorsFeed()} onSubmit={() => addNewConnector()} open={connectorPickerOpen} onClose={() => setConnectorPickerOpen(false)} />
+                </Fade>
+            </Modal>
             <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
@@ -309,12 +324,12 @@ const Develop: React.FC = () => {
                         }
                         
                         <SC.CardConnectorButtonsWrapper>
-                            <Button onClick={addNewConnector} startIcon={<AddIcon />} style={{width: "160px", marginTop: "24px"}} size="large" variant="outlined" color="primary" >Add New</Button>
+                            <Button onClick={() => setConnectorPickerOpen(true)} startIcon={<AddIcon />} style={{width: "160px", marginTop: "24px"}} size="large" variant="outlined" color="primary" >Add New</Button>
                             <Button onClick={() => setConnectorListOpen(true)} startIcon={<AddIcon />} style={{width: "160px", marginTop: "24px"}} size="large" variant="outlined" color="primary" >Link Existing</Button>
                         </SC.CardConnectorButtonsWrapper>
 
                         <SC.CardConnectorButtonsWrapperMobile>
-                            <Button onClick={addNewConnector} startIcon={<AddIcon />} style={{width: "135px", marginTop: "10px"}} size="medium" variant="outlined" color="primary" >Add New</Button>
+                            <Button onClick={() => setConnectorPickerOpen(true)} startIcon={<AddIcon />} style={{width: "135px", marginTop: "10px"}} size="medium" variant="outlined" color="primary" >Add New</Button>
                             <Button onClick={() => setConnectorListOpen(true)} startIcon={<AddIcon />} style={{width: "135px", marginTop: "10px"}} size="medium" variant="outlined" color="primary" >Link Existing</Button>
                         </SC.CardConnectorButtonsWrapperMobile>
                     </SC.Card>

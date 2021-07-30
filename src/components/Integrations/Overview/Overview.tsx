@@ -14,12 +14,12 @@ import { Operation } from "../../../interfaces/operation";
 import { useError } from "../../../hooks/useError";
 import arrowRight from "../../../assets/arrow-right.svg";
 import arrowLeft from "../../../assets/arrow-left.svg";
-import AddIntegration from "./AddIntegration";
 import { Entity, Feed } from "../../../interfaces/feed";
-import {integrationsFeed} from "../../../static/feed";
 import Mustache from "mustache";
 import { useQuery } from "../../../hooks/useQuery";
 import { useGetRedirectLink } from "../../../hooks/useGetRedirectLink";
+import FeedPicker from "../../FeedPicker";
+import { useGetFeedArray } from "../../../hooks/useGetFeedArray";
 
 enum cells {
     INSTANCES = "Instances",
@@ -45,6 +45,7 @@ const Overview: React.FC = () => {
     const [addIntegrationOpen, setAddIntegrationOpen] = React.useState(false);
     const query = useQuery();
     const { getRedirectLink } = useGetRedirectLink();
+    const { getIntegrationsFeed } = useGetFeedArray();
     let headless = useRef(true);
 
     const replaceMustache = React.useCallback(async (data: IntegrationData, entity: Entity) => {
@@ -117,6 +118,7 @@ const Overview: React.FC = () => {
                 setRows(items); // otherwise if we delete and the integration.data.items has 0 items the rows will display 1
                 const key = query.get("key");
                 let keyDoesntMatch = true;
+                const integrationsFeed = getIntegrationsFeed();
                 for (let i = 0; i < integrationsFeed.length; i++) {
                     if (integrationsFeed[i].id === key) {
                         keyDoesntMatch = false;
@@ -130,7 +132,7 @@ const Overview: React.FC = () => {
                 setAddIntegrationOpen(keyDoesntMatch);
             }
         } 
-    }, [integrations, query, _createIntegration]);
+    }, [integrations, query, _createIntegration, getIntegrationsFeed]);
 
     const handleSelectAllCheck = (event: any) => {
         if (event.target.checked) {
@@ -226,7 +228,7 @@ const Overview: React.FC = () => {
                 closeAfterTransition
                 BackdropComponent={Backdrop}
             >
-                <AddIntegration onSubmit={(activeIntegration: Feed, data: IntegrationData) => _createIntegration(activeIntegration, data)} open={addIntegrationOpen} onClose={() => setAddIntegrationOpen(false)} />
+                <FeedPicker isIntegration={true} feed={getIntegrationsFeed()} onSubmit={(activeIntegration: Feed, data: IntegrationData) => _createIntegration(activeIntegration, data)} open={addIntegrationOpen} onClose={() => setAddIntegrationOpen(false)} />
             </Modal>
             <SC.ButtonContainer>
                 <SC.ButtonMargin>
