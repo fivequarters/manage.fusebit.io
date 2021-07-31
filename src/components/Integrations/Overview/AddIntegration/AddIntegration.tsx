@@ -12,6 +12,8 @@ import {
   import search from "../../../../assets/search.svg";
   import cross from "../../../../assets/cross.svg";
 import { Feed } from "../../../../interfaces/feed";
+import { useState } from "react";
+import { useEffect } from "react";
 
 enum Filters {
     ALL = "All",
@@ -26,7 +28,8 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
     const [errors, setErrors] = React.useState<object[]>([]);
     const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
     const [activeFilter, setActiveFilter] = React.useState<Filters>(Filters.ALL);
-    const [activeIntegration, setActiveIntegration] = React.useState<Feed>(integrationsFeed[0]);
+    const [feed, setFeed] = useState<Feed[]>([]);
+    const [activeIntegration, setActiveIntegration] = React.useState<Feed>();
     const [searchFilter, setSearchFilter] = React.useState("");
 
     const handleSubmit = () => {
@@ -41,6 +44,13 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
     const handleFilterChange = (filter: Filters) => {
         setActiveFilter(filter);
     }
+
+    useEffect(() => {
+        integrationsFeed().then(feed => {
+            setFeed(feed);
+            setActiveIntegration(feed[0])
+        })
+    }, [])
 
     return (
         <SC.Card open={open}>
@@ -61,7 +71,7 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
                         <SC.ColumnSearchIcon src={search} alt="Search Integration" height="24" width="24" />
                     </SC.ColumnSearchWrapper>
                     {
-                            integrationsFeed.map((integration: Feed) => {
+                            feed.map((integration: Feed) => {
                                 const tags = integration.tags.catalog.split(", ");
                                 let tagIsActive = false;
                                 tags.forEach((tag: string) => {
@@ -71,7 +81,7 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
                                 });
                                 if (tagIsActive && integration.name.toUpperCase().includes(searchFilter.toUpperCase())) {
                                     return (
-                                        <SC.ColumnItem key={integration.id} onClick={() => setActiveIntegration(integration)} active={integration.id === activeIntegration.id}>
+                                        <SC.ColumnItem key={integration.id} onClick={() => setActiveIntegration(integration)} active={integration.id === activeIntegration?.id}>
                                             <SC.ColumnItemImage src={integration.smallIcon} alt="slack" height="18" width="18" />
                                             {integration.name}
                                         </SC.ColumnItem>
@@ -85,15 +95,15 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
                 <SC.ColumnBr />
                 <SC.ConnectorInfo>
                     <SC.ConnectorTitleWrapper>
-                        <SC.ConnectorImage src={activeIntegration.smallIcon} alt="slack" height="28" width="28" />
-                        <SC.ConnectorTitle>{activeIntegration.name}</SC.ConnectorTitle>
-                        <SC.ConnectorVersion>{activeIntegration.version}</SC.ConnectorVersion>
+                        <SC.ConnectorImage src={activeIntegration?.smallIcon} alt="slack" height="28" width="28" />
+                        <SC.ConnectorTitle>{activeIntegration?.name}</SC.ConnectorTitle>
+                        <SC.ConnectorVersion>{activeIntegration?.version}</SC.ConnectorVersion>
                     </SC.ConnectorTitleWrapper>
-                    <SC.ConnectorDescription children={activeIntegration.description} />
+                    <SC.ConnectorDescription children={activeIntegration?.description || ""} />
                         <SC.FormWrapper>
                             <JsonForms
-                            schema={activeIntegration.configuration.schema}
-                            uischema={activeIntegration.configuration.uischema.elements}
+                            schema={activeIntegration?.configuration.schema}
+                            uischema={activeIntegration?.configuration.uischema.elements}
                             data={data}
                             renderers={materialRenderers}
                             cells={materialCells}

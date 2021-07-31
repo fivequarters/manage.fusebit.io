@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import * as SC from "./styles";
 import {Props} from "../../../../interfaces/addIntegration";
 import {
@@ -26,7 +26,8 @@ const AddConnector: React.FC<Props> = ({open, onClose, onSubmit}) => {
     const [errors, setErrors] = React.useState<any[]>([]);
     const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
     const [activeFilter, setActiveFilter] = React.useState<Filters>(Filters.ALL);
-    const [activeConnector, setActiveConnector] = React.useState<Feed>(connectorsFeed[0]);
+    const [feed, setFeed] = useState<Feed[]>([]);
+    const [activeConnector, setActiveConnector] = React.useState<Feed>();
     const [searchFilter, setSearchFilter] = React.useState("");
 
     const handleSubmit = () => {
@@ -41,6 +42,13 @@ const AddConnector: React.FC<Props> = ({open, onClose, onSubmit}) => {
     const handleFilterChange = (filter: Filters) => {
         setActiveFilter(filter);
     }
+
+    useEffect(() => {
+        connectorsFeed().then(feed => {
+            setFeed(feed);
+            setActiveConnector(feed[0])
+        })
+    }, [])
 
     return (
         <SC.Card open={open}>
@@ -61,7 +69,7 @@ const AddConnector: React.FC<Props> = ({open, onClose, onSubmit}) => {
                         <SC.ColumnSearchIcon src={search} alt="Search Connector" height="24" width="24" />
                     </SC.ColumnSearchWrapper>
                     {
-                            connectorsFeed.map((Connector: Feed) => {
+                            feed.map((Connector: Feed) => {
                                 const tags = Connector.tags.catalog.split(", ");
                                 let tagIsActive = false;
                                 tags.forEach((tag: string) => {
@@ -71,7 +79,7 @@ const AddConnector: React.FC<Props> = ({open, onClose, onSubmit}) => {
                                 });
                                 if (tagIsActive && Connector.name.toUpperCase().includes(searchFilter.toUpperCase())) {
                                     return (
-                                        <SC.ColumnItem key={Connector.id} onClick={() => setActiveConnector(Connector)} active={Connector.id === activeConnector.id}>
+                                        <SC.ColumnItem key={Connector.id} onClick={() => setActiveConnector(Connector)} active={Connector.id === activeConnector?.id}>
                                             <SC.ColumnItemImage src={Connector.smallIcon} alt="slack" height="18" width="18" />
                                             {Connector.name}
                                         </SC.ColumnItem>
@@ -84,15 +92,15 @@ const AddConnector: React.FC<Props> = ({open, onClose, onSubmit}) => {
                 <SC.ColumnBr />
                 <SC.ConnectorInfo>
                     <SC.ConnectorTitleWrapper>
-                        <SC.ConnectorImage src={activeConnector.smallIcon} alt="slack" height="28" width="28" />
-                        <SC.ConnectorTitle>{activeConnector.name}</SC.ConnectorTitle>
-                        <SC.ConnectorVersion>{activeConnector.version}</SC.ConnectorVersion>
+                        <SC.ConnectorImage src={activeConnector?.smallIcon} alt="slack" height="28" width="28" />
+                        <SC.ConnectorTitle>{activeConnector?.name}</SC.ConnectorTitle>
+                        <SC.ConnectorVersion>{activeConnector?.version}</SC.ConnectorVersion>
                     </SC.ConnectorTitleWrapper>
-                    <SC.ConnectorDescription children={activeConnector.description} />
+                    <SC.ConnectorDescription children={activeConnector?.description || ""} />
                     <SC.FormWrapper>
                         <JsonForms
-                        schema={activeConnector.configuration.schema}
-                        uischema={activeConnector.configuration.uischema.elements}
+                        schema={activeConnector?.configuration.schema}
+                        uischema={activeConnector?.configuration.uischema.elements}
                         data={data}
                         renderers={materialRenderers}
                         cells={materialCells}
