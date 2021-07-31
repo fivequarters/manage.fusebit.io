@@ -3,8 +3,6 @@ import { Feed }  from "../interfaces/feed";
 
 const { REACT_APP_INTEGRATIONS_FEED_URL, REACT_APP_CONNECTORS_FEED_URL } = process.env;
 
-console.log(process.env);
-
 export const integrationsFeed = async (): Promise<Feed[]> => {
   return new Promise((accept) => {
     let req = http.get(REACT_APP_INTEGRATIONS_FEED_URL || "http://localhost:3000/feed/integrationsFeed.json", (res) => {
