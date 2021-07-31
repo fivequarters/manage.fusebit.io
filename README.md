@@ -4,6 +4,28 @@
 
 1. Clone or fork this repo
 2. `cd` into the project directory and run `npm install` or `yarn`
+3. Copy `.env.example` to `.env` and edit integration and connector feed url
+
+## Env file configuration
+
+### Localhost
+```
+REACT_APP_INTEGRATIONS_FEED_URL=http://localhost:3000/feed/integrationsFeed.json
+REACT_APP_CONNECTORS_FEED_URL=http://localhost:3000/feed/connectorsFeed.json
+```
+
+### Vercel
+
+```
+REACT_APP_INTEGRATIONS_FEED_URL=https://portal-fusebit-io.vercel.app/feed/connectorsFeed.json
+REACT_APP_CONNECTORS_FEED_URL=https://portal-fusebit-io.vercel.app/feed/connectorsFeed.json
+```
+
+### Production
+```
+REACT_APP_INTEGRATIONS_FEED_URL=https://manage.fusebit.io/feed/integrationsFeed.json
+REACT_APP_CONNECTORS_FEED_URL=https://manage.fusebit.io/feed/connectorsFeed.json
+```
 
 ## Running and serving a dev build
 
