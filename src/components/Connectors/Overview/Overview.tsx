@@ -115,17 +115,19 @@ const Overview: React.FC = () => {
                 setRows(items); // otherwise if we delete and the connectors.data.items has 0 items the rows will display 1
                 const key = query.get("key");
                 let keyDoesntMatch = true;
-                for (let i = 0; i < connectorsFeed.length; i++) {
-                    if (connectorsFeed[i].id === key) {
-                        keyDoesntMatch = false;
-                        const dummyData = {
-                            dummyIntegration: "randomIntegration",
-                            dummyConnector: "randomConnector",
+                connectorsFeed().then(feed => {
+                    for (let i = 0; i < feed.length; i++) {
+                        if (feed[i].id === key) {
+                            keyDoesntMatch = false;
+                            const dummyData = {
+                                dummyIntegration: "randomIntegration",
+                                dummyConnector: "randomConnector",
+                            }
+                            _createConnector(feed[i], dummyData);
                         }
-                        _createConnector(connectorsFeed[i], dummyData);
                     }
-                }
-                setAddConnectorOpen(keyDoesntMatch);
+                    setAddConnectorOpen(keyDoesntMatch);
+                });
             }
         }
     }, [connectors, query, _createConnector]);

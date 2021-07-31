@@ -115,16 +115,18 @@ const Overview: React.FC = () => {
                 setRows(items); // otherwise if we delete and the integration.data.items has 0 items the rows will display 1
                 const key = query.get("key");
                 let keyDoesntMatch = true;
-                for (let i = 0; i < integrationsFeed.length; i++) {
-                    if (integrationsFeed[i].id === key) {
-                        keyDoesntMatch = false;
-                        const dummyData = {
-                            dummyIntegration: "randomIntegration",
-                            dummyConnector: "randomConnector",
+                integrationsFeed().then(feed => {
+                    for (let i = 0; i < feed.length; i++) {
+                        if (feed[i].id === key) {
+                            keyDoesntMatch = false;
+                            const dummyData = {
+                                dummyIntegration: "randomIntegration",
+                                dummyConnector: "randomConnector",
+                            }
+                            _createIntegration(feed[i], dummyData);
                         }
-                        _createIntegration(integrationsFeed[i], dummyData);
                     }
-                }
+                });
                 setAddIntegrationOpen(keyDoesntMatch);
             }
         } 

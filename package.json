@@ -9,7 +9,7 @@
     "eject": "react-scripts eject"
   },
   "author": "Litebox",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
     "@jsonforms/core": "^2.5.2",
     "@jsonforms/material-renderers": "^2.5.2",
