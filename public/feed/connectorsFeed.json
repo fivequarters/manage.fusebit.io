@@ -1,0 +1,425 @@
+[
+    {
+        "id": "slackkksksksk",
+        "name": "Slack",
+        "description": "Slack",
+        "smallIcon": "/images/slack.svg",
+        "largeIcon": "http://some.icon/large.ico",
+        "version": "2.3.0",
+        "tags": {
+            "service": "slack",
+            "catalog": "messaging"
+        },
+        "configuration": {
+            "title": "Configure your slack integration",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "slackIntegration": {
+                        "type": "string",
+                        "minLength": 3
+                    },
+                    "slackConnector": {
+                        "type": "string",
+                        "minLength": 3
+                    },
+                    "clientId": {
+                        "type": "string",
+                        "minLength": 6
+                    },
+                    "clientSecret": {
+                        "type": "string",
+                        "minLength": 6
+                    },
+                    "requestUserToken": {
+                        "type": "boolean"
+                    }
+                },
+                "required": [
+                    "slackIntegration",
+                    "slackConnector"
+                ]
+            },
+            "uischema": {
+                "type": "Group",
+                "label": "Slack Connector Details",
+                "elements": {
+                    "type": "VerticalLayout",
+                    "elements": [
+                        {
+                            "type": "Control",
+                            "scope": "#/properties/slackIntegration",
+                            "label": "Slack Integration Name"
+                        },
+                        {
+                            "type": "Control",
+                            "scope": "#/properties/slackConnector",
+                            "label": "Slack Connector Name"
+                        },
+                        {
+                            "type": "Control",
+                            "scope": "#/properties/clientId",
+                            "label": "Client ID",
+                            "options": {
+                                "format": "password"
+                            }
+                        },
+                        {
+                            "type": "Control",
+                            "scope": "#/properties/clientSecret",
+                            "label": "Client Secret",
+                            "options": {
+                                "format": "password"
+                            }
+                        },
+                        {
+                            "type": "Control",
+                            "scope": "#/properties/requestUserToken",
+                            "label": "Request user token"
+                        }
+                    ]
+                }
+            },
+            "data": {
+                "slackConnector": {
+                    "slackName": "slack-connector"
+                }
+            },
+            "entities": [
+                {
+                    "name": "slackConnector",
+                    "entityType": "connector",
+                    "id": "<%this.connectorId%>",
+                    "data": {
+                        "files": {
+                            "package.json": "{\"scripts\":{\"deploy\":\"fuse connector deploy slack chatbot -d .\",\"get\":\"fuse connector get slack chatbot -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\",\"@fusebit-int/pkg-oauth-connector\":\"*\"}}"
+                        },
+                        "handler": "@fusebit-int/pkg-oauth-connector",
+                        "configuration": {
+                            "clientSecret": "foobar"
+                        }
+                    },
+                    "tags": {
+                        "catalog.entry": "slack-connector"
+                    }
+                },
+                {
+                    "name": "slackIntegration",
+                    "entityType": "integration",
+                    "id": "<%this.integrationId%>",
+                    "data": {
+                        "id": "<%this.integrationId%>",
+                        "data": {
+                            "files": {
+                                "package.json": "{\"scripts\":{\"deploy\":\"fuse integration deploy slack chatbot -d .\",\"get\":\"fuse integration get slack chatbot -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\"},\"files\":[\"./integration.js\"]}",
+                                "./integration.js": "const { Router } = require(\"@fusebit-int/framework\");nconst router = new Router();nrouter.get(\"/api/\", async (ctx) => {n  ctx.body = \"Hello World\";n});nmodule.exports = router;n"
+                            },
+                            "handler": "./integration",
+                            "components": [
+                                {
+                                    "name": "slackConnector",
+                                    "entityType": "connector",
+                                    "entityId": "<%this.connectorId%>",
+                                    "dependsOn": [],
+                                    "package": "@fusebit-int/pkg-oauth-integration"
+                                }
+                            ],
+                            "componentTags": {
+                                "foo": "bar2",
+                                "some": "another",
+                                "other": "tag",
+                                "monkey": "banana"
+                            },
+                            "configuration": {}
+                        }
+                    },
+                    "tags": {
+                        "catalog.entry": "slack-connector"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "id": "discord",
+        "name": "Discord",
+        "description": "Discord",
+        "smallIcon": "/images/discord.svg",
+        "largeIcon": "http://some.icon/large.ico",
+        "version": "2.3.0",
+        "tags": {
+            "service": "slack",
+            "catalog": "messaging, productivity, crm"
+        },
+        "configuration": {
+            "title": "Configure your slack integration",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "slackIntegration": {
+                        "type": "string",
+                        "minLength": 3
+                    },
+                    "slackConnector": {
+                        "type": "string",
+                        "minLength": 3
+                    },
+                    "clientId": {
+                        "type": "string",
+                        "minLength": 6
+                    },
+                    "clientSecret": {
+                        "type": "string",
+                        "minLength": 6
+                    },
+                    "requestUserToken": {
+                        "type": "boolean"
+                    }
+                },
+                "required": [
+                    "slackIntegration",
+                    "slackConnector"
+                ]
+            },
+            "uischema": {
+                "type": "Group",
+                "label": "Slack Connector Details",
+                "elements": {
+                    "type": "VerticalLayout",
+                    "elements": [
+                        {
+                            "type": "Control",
+                            "scope": "#/properties/slackIntegration",
+                            "label": "Slack Integration Name"
+                        },
+                        {
+                            "type": "Control",
+                            "scope": "#/properties/slackConnector",
+                            "label": "Slack Connector Name"
+                        },
+                        {
+                            "type": "Control",
+                            "scope": "#/properties/clientId",
+                            "label": "Client ID",
+                            "options": {
+                                "format": "password"
+                            }
+                        },
+                        {
+                            "type": "Control",
+                            "scope": "#/properties/clientSecret",
+                            "label": "Client Secret",
+                            "options": {
+                                "format": "password"
+                            }
+                        },
+                        {
+                            "type": "Control",
+                            "scope": "#/properties/requestUserToken",
+                            "label": "Request user token"
+                        }
+                    ]
+                }
+            },
+            "data": {
+                "slackConnector": {
+                    "slackName": "slack-connector"
+                }
+            },
+            "entities": [
+                {
+                    "name": "slackConnector",
+                    "entityType": "connector",
+                    "id": "<%this.connectorId%>",
+                    "data": {
+                        "files": {
+                            "package.json": "{\"scripts\":{\"deploy\":\"fuse connector deploy slack chatbot -d .\",\"get\":\"fuse connector get slack chatbot -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\",\"@fusebit-int/pkg-oauth-connector\":\"*\"}}"
+                        },
+                        "handler": "@fusebit-int/pkg-oauth-connector",
+                        "configuration": {
+                            "clientSecret": "foobar"
+                        }
+                    },
+                    "tags": {
+                        "catalog.entry": "slack-connector"
+                    }
+                },
+                {
+                    "name": "slackIntegration",
+                    "entityType": "integration",
+                    "id": "<%this.integrationId%>",
+                    "data": {
+                        "id": "<%this.integrationId%>",
+                        "data": {
+                            "files": {
+                                "package.json": "{\"scripts\":{\"deploy\":\"fuse integration deploy slack chatbot -d .\",\"get\":\"fuse integration get slack chatbot -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\"},\"files\":[\"./integration.js\"]}",
+                                "./integration.js": "const { Router } = require(\"@fusebit-int/framework\");nconst router = new Router();nrouter.get(\"/api/\", async (ctx) => {n  ctx.body = \"Hello World\";n});nmodule.exports = router;n"
+                            },
+                            "handler": "./integration",
+                            "components": [
+                                {
+                                    "name": "slackConnector",
+                                    "entityType": "connector",
+                                    "entityId": "<%this.connectorId%>",
+                                    "dependsOn": [],
+                                    "package": "@fusebit-int/pkg-oauth-integration"
+                                }
+                            ],
+                            "componentTags": {
+                                "foo": "bar2",
+                                "some": "another",
+                                "other": "tag",
+                                "monkey": "banana"
+                            },
+                            "configuration": {}
+                        }
+                    },
+                    "tags": {
+                        "catalog.entry": "slack-connector"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "id": "as23r333age",
+        "name": "Asana",
+        "description": "Asana",
+        "smallIcon": "/images/asana.svg",
+        "largeIcon": "http://some.icon/large.ico",
+        "version": "2.3.0",
+        "tags": {
+            "service": "slack",
+            "catalog": "crm, calendar"
+        },
+        "configuration": {
+            "title": "Configure your slack integration",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "slackIntegration": {
+                        "type": "string",
+                        "minLength": 3
+                    },
+                    "slackConnector": {
+                        "type": "string",
+                        "minLength": 3
+                    },
+                    "clientId": {
+                        "type": "string",
+                        "minLength": 6
+                    },
+                    "clientSecret": {
+                        "type": "string",
+                        "minLength": 6
+                    },
+                    "requestUserToken": {
+                        "type": "boolean"
+                    }
+                },
+                "required": [
+                    "slackIntegration",
+                    "slackConnector"
+                ]
+            },
+            "uischema": {
+                "type": "Group",
+                "label": "Slack Connector Details",
+                "elements": {
+                    "type": "VerticalLayout",
+                    "elements": [
+                        {
+                            "type": "Control",
+                            "scope": "#/properties/slackIntegration",
+                            "label": "Slack Integration Name"
+                        },
+                        {
+                            "type": "Control",
+                            "scope": "#/properties/slackConnector",
+                            "label": "Slack Connector Name"
+                        },
+                        {
+                            "type": "Control",
+                            "scope": "#/properties/clientId",
+                            "label": "Client ID",
+                            "options": {
+                                "format": "password"
+                            }
+                        },
+                        {
+                            "type": "Control",
+                            "scope": "#/properties/clientSecret",
+                            "label": "Client Secret",
+                            "options": {
+                                "format": "password"
+                            }
+                        },
+                        {
+                            "type": "Control",
+                            "scope": "#/properties/requestUserToken",
+                            "label": "Request user token"
+                        }
+                    ]
+                }
+            },
+            "data": {
+                "slackConnector": {
+                    "slackName": "slack-connector"
+                }
+            },
+            "entities": [
+                {
+                    "name": "slackConnector",
+                    "entityType": "connector",
+                    "id": "<%this.connectorId%>",
+                    "data": {
+                        "files": {
+                            "package.json": "{\"scripts\":{\"deploy\":\"fuse connector deploy slack chatbot -d .\",\"get\":\"fuse connector get slack chatbot -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\",\"@fusebit-int/pkg-oauth-connector\":\"*\"}}"
+                        },
+                        "handler": "@fusebit-int/pkg-oauth-connector",
+                        "configuration": {
+                            "clientSecret": "foobar"
+                        }
+                    },
+                    "tags": {
+                        "catalog.entry": "slack-connector"
+                    }
+                },
+                {
+                    "name": "slackIntegration",
+                    "entityType": "integration",
+                    "id": "<%this.integrationId%>",
+                    "data": {
+                        "id": "<%this.integrationId%>",
+                        "data": {
+                            "files": {
+                                "package.json": "{\"scripts\":{\"deploy\":\"fuse integration deploy slack chatbot -d .\",\"get\":\"fuse integration get slack chatbot -d .\"},\"dependencies\":{\"@fusebit-int/framework\":\"^2.0.0\"},\"files\":[\"./integration.js\"]}",
+                                "./integration.js": "const { Router } = require(\"@fusebit-int/framework\");nconst router = new Router();nrouter.get(\"/api/\", async (ctx) => {n  ctx.body = \"Hello World\";n});nmodule.exports = router;n"
+                            },
+                            "handler": "./integration",
+                            "components": [
+                                {
+                                    "name": "slackConnector",
+                                    "entityType": "connector",
+                                    "entityId": "<%this.connectorId%>",
+                                    "dependsOn": [],
+                                    "package": "@fusebit-int/pkg-oauth-integration"
+                                }
+                            ],
+                            "componentTags": {
+                                "foo": "bar2",
+                                "some": "another",
+                                "other": "tag",
+                                "monkey": "banana"
+                            },
+                            "configuration": {}
+                        }
+                    },
+                    "tags": {
+                        "catalog.entry": "slack-connector"
+                    }
+                }
+            ]
+        }
+    }
+]

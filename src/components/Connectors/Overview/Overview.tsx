@@ -20,6 +20,7 @@ import { useQuery } from "../../../hooks/useQuery";
 import { useGetRedirectLink } from "../../../hooks/useGetRedirectLink";
 import { useGetFeedArray } from "../../../hooks/useGetFeedArray";
 import FeedPicker from "../../FeedPicker";
+import {connectorsFeed} from "../../../static/feed";
 
 enum cells {
     TYPE = "Type",
@@ -118,18 +119,19 @@ const Overview: React.FC = () => {
                 setRows(items); // otherwise if we delete and the connectors.data.items has 0 items the rows will display 1
                 const key = query.get("key");
                 let keyDoesntMatch = true;
-                const connectorsFeed = getConnectorsFeed();
-                for (let i = 0; i < connectorsFeed.length; i++) {
-                    if (connectorsFeed[i].id === key) {
-                        keyDoesntMatch = false;
-                        const dummyData = {
-                            dummyIntegration: "randomIntegration",
-                            dummyConnector: "randomConnector",
+                connectorsFeed().then(feed => {
+                    for (let i = 0; i < feed.length; i++) {
+                        if (feed[i].id === key) {
+                            keyDoesntMatch = false;
+                            const dummyData = {
+                                dummyIntegration: "randomIntegration",
+                                dummyConnector: "randomConnector",
+                            }
+                            _createConnector(feed[i], dummyData);
                         }
-                        _createConnector(connectorsFeed[i], dummyData);
                     }
-                }
-                setAddConnectorOpen(keyDoesntMatch);
+                    setAddConnectorOpen(keyDoesntMatch);
+                });
             }
         }
     }, [connectors, query, _createConnector, getConnectorsFeed]);
@@ -228,7 +230,7 @@ const Overview: React.FC = () => {
                 closeAfterTransition
                 BackdropComponent={Backdrop}
             >
-                <FeedPicker feed={getConnectorsFeed()} onSubmit={(activeIntegration: Feed, data: IntegrationData) => _createConnector(activeIntegration, data)} open={addConnectorOpen} onClose={() => setAddConnectorOpen(false)} />
+                <FeedPicker onSubmit={(activeIntegration: Feed, data: IntegrationData) => _createConnector(activeIntegration, data)} open={addConnectorOpen} onClose={() => setAddConnectorOpen(false)} />
             </Modal>
             <SC.ButtonContainer>
                 <SC.ButtonMargin>

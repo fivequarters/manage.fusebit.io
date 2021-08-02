@@ -8,9 +8,12 @@ import {
   import { JsonForms } from '@jsonforms/react';
   import { ValidationMode } from "@jsonforms/core";
   import { Button, TextField } from "@material-ui/core";
+  import {integrationsFeed} from "../../static/feed";
   import search from "../../assets/search.svg";
   import cross from "../../assets/cross.svg";
 import { Feed } from "../../interfaces/feed";
+import { useState } from "react";
+import { useEffect } from "react";
 
 enum Filters {
     ALL = "All",
@@ -20,12 +23,13 @@ enum Filters {
     CALENDAR = "Calendar",
 }
 
-const FeedPicker: React.FC<Props> = ({open, onClose, onSubmit, feed, isIntegration}) => {
+const FeedPicker: React.FC<Props> = ({open, onClose, onSubmit, isIntegration}) => {
     const [data, setData] = React.useState<any>({});
     const [errors, setErrors] = React.useState<object[]>([]);
     const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
     const [activeFilter, setActiveFilter] = React.useState<Filters>(Filters.ALL);
-    const [activeIntegration, setActiveIntegration] = React.useState<Feed>(feed[0]);
+    const [feed, setFeed] = useState<Feed[]>([]);
+    const [activeIntegration, setActiveIntegration] = React.useState<Feed>();
     const [searchFilter, setSearchFilter] = React.useState("");
 
     const handleSubmit = () => {
@@ -40,6 +44,13 @@ const FeedPicker: React.FC<Props> = ({open, onClose, onSubmit, feed, isIntegrati
     const handleFilterChange = (filter: Filters) => {
         setActiveFilter(filter);
     }
+
+    useEffect(() => {
+        integrationsFeed().then(feed => {
+            setFeed(feed);
+            setActiveIntegration(feed[0])
+        })
+    }, [])
 
     return (
         <SC.Card open={open}>
@@ -70,7 +81,7 @@ const FeedPicker: React.FC<Props> = ({open, onClose, onSubmit, feed, isIntegrati
                                 });
                                 if (tagIsActive && integration.name.toUpperCase().includes(searchFilter.toUpperCase())) {
                                     return (
-                                        <SC.ColumnItem key={integration.id} onClick={() => setActiveIntegration(integration)} active={integration.id === activeIntegration.id}>
+                                        <SC.ColumnItem key={integration.id} onClick={() => setActiveIntegration(integration)} active={integration.id === activeIntegration?.id}>
                                             <SC.ColumnItemImage src={integration.smallIcon} alt="slack" height="18" width="18" />
                                             {integration.name}
                                         </SC.ColumnItem>
@@ -84,15 +95,15 @@ const FeedPicker: React.FC<Props> = ({open, onClose, onSubmit, feed, isIntegrati
                 <SC.ColumnBr />
                 <SC.ConnectorInfo>
                     <SC.ConnectorTitleWrapper>
-                        <SC.ConnectorImage src={activeIntegration.smallIcon} alt="slack" height="28" width="28" />
-                        <SC.ConnectorTitle>{activeIntegration.name}</SC.ConnectorTitle>
-                        <SC.ConnectorVersion>{activeIntegration.version}</SC.ConnectorVersion>
+                        <SC.ConnectorImage src={activeIntegration?.smallIcon} alt="slack" height="28" width="28" />
+                        <SC.ConnectorTitle>{activeIntegration?.name}</SC.ConnectorTitle>
+                        <SC.ConnectorVersion>{activeIntegration?.version}</SC.ConnectorVersion>
                     </SC.ConnectorTitleWrapper>
-                    <SC.ConnectorDescription children={activeIntegration.description} />
+                    <SC.ConnectorDescription children={activeIntegration?.description || ""} />
                         <SC.FormWrapper>
                             <JsonForms
-                            schema={activeIntegration.configuration.schema}
-                            uischema={activeIntegration.configuration.uischema.elements}
+                            schema={activeIntegration?.configuration.schema}
+                            uischema={activeIntegration?.configuration.uischema.elements}
                             data={data}
                             renderers={materialRenderers}
                             cells={materialCells}
