@@ -62,7 +62,8 @@ const Overview: React.FC<OverviewProps> = ({headless, setHeadless}) => {
         const view = {
             this: {
                 connectorId,
-                integrationId 
+                integrationId,
+                templateId: entity.id,
             },
             global: {
                 userId: {
