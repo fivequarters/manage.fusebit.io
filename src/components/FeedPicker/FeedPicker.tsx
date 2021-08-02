@@ -14,7 +14,6 @@ import {
 import { Feed } from "../../interfaces/feed";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useQuery } from "../../hooks/useQuery";
 
 enum Filters {
     ALL = "All",
@@ -32,7 +31,6 @@ const FeedPicker: React.FC<Props> = ({open, onClose, onSubmit, isIntegration}) =
     const [feed, setFeed] = useState<Feed[]>([]);
     const [activeTemplate, setActiveTemplate] = React.useState<Feed>();
     const [searchFilter, setSearchFilter] = React.useState("");
-    const query = useQuery();
 
     const handleSubmit = () => {
         if (errors.length > 0) {
@@ -51,31 +49,15 @@ const FeedPicker: React.FC<Props> = ({open, onClose, onSubmit, isIntegration}) =
         if (isIntegration) {
             integrationsFeed().then(feed => {
                 setFeed(feed);
-                const key = query.get("key");
-                let keyDoesntMatch = true;
-                for (let i = 0; i < feed.length; i++) {
-                    if (feed[i].id === key) {
-                        keyDoesntMatch = false;
-                        setActiveTemplate(feed[i]);
-                    }
-                }
-                keyDoesntMatch && setActiveTemplate(feed[0]);
+                setActiveTemplate(feed[0]);
             });
         } else {
             connectorsFeed().then(feed => {
                 setFeed(feed);
-                const key = query.get("key");
-                let keyDoesntMatch = true;
-                for (let i = 0; i < feed.length; i++) {
-                    if (feed[i].id === key) {
-                        keyDoesntMatch = false;
-                        setActiveTemplate(feed[i]);
-                    }
-                }
-                keyDoesntMatch && setActiveTemplate(feed[0]);
+                setActiveTemplate(feed[0]);
             });
         }
-    }, [isIntegration, query]);
+    }, [isIntegration]);
 
     return (
         <SC.Card open={open}>

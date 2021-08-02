@@ -77,7 +77,12 @@ const Overview: React.FC<OverviewProps> = ({headless, setHeadless}) => {
             }
         }
         const newEntity = Mustache.render(JSON.stringify(entity), view, {}, customTags);
-        const parsedEntity: Entity = JSON.parse(newEntity);
+        let parsedEntity: Entity = JSON.parse(newEntity);
+        parsedEntity.tags = {
+            ...parsedEntity.tags,
+            templateId: parsedEntity.id,
+        }
+        console.log(parsedEntity);
         return parsedEntity;
     }, [userData]);
 
