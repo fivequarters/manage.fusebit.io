@@ -18,7 +18,6 @@ import { Entity, Feed } from "../../../interfaces/feed";
 import Mustache from "mustache";
 import { useQuery } from "../../../hooks/useQuery";
 import { useGetRedirectLink } from "../../../hooks/useGetRedirectLink";
-import { useGetFeedArray } from "../../../hooks/useGetFeedArray";
 import FeedPicker from "../../FeedPicker";
 import {connectorsFeed} from "../../../static/feed";
 
@@ -46,7 +45,6 @@ const Overview: React.FC = () => {
     const [addConnectorOpen, setAddConnectorOpen] = React.useState(false);
     const query = useQuery();
     const { getRedirectLink } = useGetRedirectLink();
-    const { getConnectorsFeed } = useGetFeedArray();
     let headless = useRef(true);
 
     const replaceMustache = React.useCallback(async (data: IntegrationData, entity: Entity) => {
@@ -134,7 +132,7 @@ const Overview: React.FC = () => {
                 });
             }
         }
-    }, [connectors, query, _createConnector, getConnectorsFeed]);
+    }, [connectors, query, _createConnector]);
 
     const handleSelectAllCheck = (event: any) => {
         if (event.target.checked) {

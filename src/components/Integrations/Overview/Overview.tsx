@@ -19,7 +19,6 @@ import Mustache from "mustache";
 import { useQuery } from "../../../hooks/useQuery";
 import { useGetRedirectLink } from "../../../hooks/useGetRedirectLink";
 import FeedPicker from "../../FeedPicker";
-import { useGetFeedArray } from "../../../hooks/useGetFeedArray";
 import {integrationsFeed} from "../../../static/feed";
 
 enum cells {
@@ -46,7 +45,6 @@ const Overview: React.FC = () => {
     const [addIntegrationOpen, setAddIntegrationOpen] = React.useState(false);
     const query = useQuery();
     const { getRedirectLink } = useGetRedirectLink();
-    const { getIntegrationsFeed } = useGetFeedArray();
     let headless = useRef(true);
 
     const replaceMustache = React.useCallback(async (data: IntegrationData, entity: Entity) => {
@@ -134,7 +132,7 @@ const Overview: React.FC = () => {
                 setAddIntegrationOpen(keyDoesntMatch);
             }
         } 
-    }, [integrations, query, _createIntegration, getIntegrationsFeed]);
+    }, [integrations, query, _createIntegration]);
 
     const handleSelectAllCheck = (event: any) => {
         if (event.target.checked) {

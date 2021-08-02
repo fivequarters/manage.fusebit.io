@@ -8,7 +8,7 @@ import {
   import { JsonForms } from '@jsonforms/react';
   import { ValidationMode } from "@jsonforms/core";
   import { Button, TextField } from "@material-ui/core";
-  import {integrationsFeed} from "../../static/feed";
+  import {integrationsFeed, connectorsFeed} from "../../static/feed";
   import search from "../../assets/search.svg";
   import cross from "../../assets/cross.svg";
 import { Feed } from "../../interfaces/feed";
@@ -46,11 +46,18 @@ const FeedPicker: React.FC<Props> = ({open, onClose, onSubmit, isIntegration}) =
     }
 
     useEffect(() => {
-        integrationsFeed().then(feed => {
-            setFeed(feed);
-            setActiveIntegration(feed[0])
-        })
-    }, [])
+        if (isIntegration) {
+            integrationsFeed().then(feed => {
+                setFeed(feed);
+                setActiveIntegration(feed[0])
+            });
+        } else {
+            connectorsFeed().then(feed => {
+                setFeed(feed);
+                setActiveIntegration(feed[0])
+            });
+        }
+    }, [isIntegration]);
 
     return (
         <SC.Card open={open}>

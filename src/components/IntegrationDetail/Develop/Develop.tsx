@@ -22,7 +22,6 @@ import Edit from "./Edit";
 import {FuseInitToken} from "../../../interfaces/fuseInitToken";
 import { useGetRedirectLink } from "../../../hooks/useGetRedirectLink";
 import FeedPicker from "../../FeedPicker";
-import {useGetFeedArray} from "../../../hooks/useGetFeedArray";
 
 const Develop: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -35,7 +34,6 @@ const Develop: React.FC = () => {
     const { waitForOperations, createLoader, removeLoader } = useLoader();
     const {createError} = useError();
     const createToken = useAccountUserCreateToken<FuseInitToken>();
-    const {getConnectorsFeed} = useGetFeedArray();
     const [editOpen, setEditOpen] = React.useState(false);
     const [editToken, setEditToken] = React.useState<string | FuseInitToken>();
     const [connectOpen, setConnectOpen] = React.useState(false);
@@ -181,7 +179,7 @@ const Develop: React.FC = () => {
                 BackdropComponent={Backdrop}
             >
                 <Fade in={connectorPickerOpen}>
-                    <FeedPicker feed={getConnectorsFeed()} onSubmit={() => addNewConnector()} open={connectorPickerOpen} onClose={() => setConnectorPickerOpen(false)} />
+                    <FeedPicker onSubmit={() => addNewConnector()} open={connectorPickerOpen} onClose={() => setConnectorPickerOpen(false)} />
                 </Fade>
             </Modal>
             <Modal
