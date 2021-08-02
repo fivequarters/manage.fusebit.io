@@ -14,7 +14,11 @@ const _useContext = () => {
         const __userData = readLocalData();
         if (__userData.token) setUserData(__userData);
         else if (window.location.href.indexOf('logged-out') < 0) {
-            localStorage.setItem("redirect", window.location.pathname + window.location.search);
+            if (window.location.pathname === "/quickstart") {
+                localStorage.setItem("integrationsContract", window.location.search);
+            } else if (window.location.pathname === "/quickstart-connectors") {
+                localStorage.setItem("connectorsContract", window.location.search);
+            }
             window.location.href = getAuthLink();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -14,6 +14,7 @@ import {
 import { Feed } from "../../interfaces/feed";
 import { useState } from "react";
 import { useEffect } from "react";
+import { useQuery } from "../../hooks/useQuery";
 
 enum Filters {
     ALL = "All",
@@ -29,15 +30,16 @@ const FeedPicker: React.FC<Props> = ({open, onClose, onSubmit, isIntegration}) =
     const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
     const [activeFilter, setActiveFilter] = React.useState<Filters>(Filters.ALL);
     const [feed, setFeed] = useState<Feed[]>([]);
-    const [activeIntegration, setActiveIntegration] = React.useState<Feed>();
+    const [activeTemplate, setActiveTemplate] = React.useState<Feed>();
     const [searchFilter, setSearchFilter] = React.useState("");
+    const query = useQuery();
 
     const handleSubmit = () => {
         if (errors.length > 0) {
             setValidationMode("ValidateAndShow");
         } else {
             //send data with customized form
-            onSubmit(activeIntegration, {...data});
+            onSubmit(activeTemplate, {...data});
         }
     }
 
@@ -49,15 +51,31 @@ const FeedPicker: React.FC<Props> = ({open, onClose, onSubmit, isIntegration}) =
         if (isIntegration) {
             integrationsFeed().then(feed => {
                 setFeed(feed);
-                setActiveIntegration(feed[0])
+                const key = query.get("key");
+                let keyDoesntMatch = true;
+                for (let i = 0; i < feed.length; i++) {
+                    if (feed[i].id === key) {
+                        keyDoesntMatch = false;
+                        setActiveTemplate(feed[i]);
+                    }
+                }
+                keyDoesntMatch && setActiveTemplate(feed[0]);
             });
         } else {
             connectorsFeed().then(feed => {
                 setFeed(feed);
-                setActiveIntegration(feed[0])
+                const key = query.get("key");
+                let keyDoesntMatch = true;
+                for (let i = 0; i < feed.length; i++) {
+                    if (feed[i].id === key) {
+                        keyDoesntMatch = false;
+                        setActiveTemplate(feed[i]);
+                    }
+                }
+                keyDoesntMatch && setActiveTemplate(feed[0]);
             });
         }
-    }, [isIntegration]);
+    }, [isIntegration, query]);
 
     return (
         <SC.Card open={open}>
@@ -88,7 +106,7 @@ const FeedPicker: React.FC<Props> = ({open, onClose, onSubmit, isIntegration}) =
                                 });
                                 if (tagIsActive && integration.name.toUpperCase().includes(searchFilter.toUpperCase())) {
                                     return (
-                                        <SC.ColumnItem key={integration.id} onClick={() => setActiveIntegration(integration)} active={integration.id === activeIntegration?.id}>
+                                        <SC.ColumnItem key={integration.id} onClick={() => setActiveTemplate(integration)} active={integration.id === activeTemplate?.id}>
                                             <SC.ColumnItemImage src={integration.smallIcon} alt="slack" height="18" width="18" />
                                             {integration.name}
                                         </SC.ColumnItem>
@@ -102,15 +120,15 @@ const FeedPicker: React.FC<Props> = ({open, onClose, onSubmit, isIntegration}) =
                 <SC.ColumnBr />
                 <SC.ConnectorInfo>
                     <SC.ConnectorTitleWrapper>
-                        <SC.ConnectorImage src={activeIntegration?.smallIcon} alt="slack" height="28" width="28" />
-                        <SC.ConnectorTitle>{activeIntegration?.name}</SC.ConnectorTitle>
-                        <SC.ConnectorVersion>{activeIntegration?.version}</SC.ConnectorVersion>
+                        <SC.ConnectorImage src={activeTemplate?.smallIcon} alt="slack" height="28" width="28" />
+                        <SC.ConnectorTitle>{activeTemplate?.name}</SC.ConnectorTitle>
+                        <SC.ConnectorVersion>{activeTemplate?.version}</SC.ConnectorVersion>
                     </SC.ConnectorTitleWrapper>
-                    <SC.ConnectorDescription children={activeIntegration?.description || ""} />
+                    <SC.ConnectorDescription children={activeTemplate?.description || ""} />
                         <SC.FormWrapper>
                             <JsonForms
-                            schema={activeIntegration?.configuration.schema}
-                            uischema={activeIntegration?.configuration.uischema.elements}
+                            schema={activeTemplate?.configuration.schema}
+                            uischema={activeTemplate?.configuration.uischema.elements}
                             data={data}
                             renderers={materialRenderers}
                             cells={materialCells}

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import * as SC from "./styles";
 import { Table, TableBody, TableCell, TableHead, TableRow, Button, Checkbox, IconButton, Tooltip, Modal, Backdrop } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
@@ -20,6 +20,7 @@ import { useQuery } from "../../../hooks/useQuery";
 import { useGetRedirectLink } from "../../../hooks/useGetRedirectLink";
 import FeedPicker from "../../FeedPicker";
 import {connectorsFeed} from "../../../static/feed";
+import {OverviewProps} from "../../../interfaces/connectors";
 
 enum cells {
     TYPE = "Type",
@@ -31,7 +32,7 @@ interface IntegrationData {
     [key: string]: any;
 }
 
-const Overview: React.FC = () => {
+const Overview: React.FC<OverviewProps> = ({headless, setHeadless}) => {
     const [selected, setSelected] = React.useState<string[]>([]);
     const [rows, setRows] = React.useState<Connector[]>([]);
     const { userData } = useContext();
@@ -45,7 +46,6 @@ const Overview: React.FC = () => {
     const [addConnectorOpen, setAddConnectorOpen] = React.useState(false);
     const query = useQuery();
     const { getRedirectLink } = useGetRedirectLink();
-    let headless = useRef(true);
 
     const replaceMustache = React.useCallback(async (data: IntegrationData, entity: Entity) => {
         const customTags: any = [ '<%', '%>' ];
@@ -111,8 +111,15 @@ const Overview: React.FC = () => {
             if (connectors.data.items.length > 0) {
                 const items = connectors.data.items;
                 setRows(items);
+                if (headless.current) {
+                    setHeadless(false); // so we only do this once.
+                    const key = query.get("key");
+                    if (key !== null && key !== undefined) {
+                        setAddConnectorOpen(true);
+                    }
+                }
             } else if (headless.current) {
-                headless.current = false; // so we only do this once.
+                setHeadless(false); // so we only do this once.
                 const items = connectors.data.items;
                 setRows(items); // otherwise if we delete and the connectors.data.items has 0 items the rows will display 1
                 const key = query.get("key");
@@ -132,7 +139,7 @@ const Overview: React.FC = () => {
                 });
             }
         }
-    }, [connectors, query, _createConnector]);
+    }, [connectors, query, _createConnector, headless, setHeadless]);
 
     const handleSelectAllCheck = (event: any) => {
         if (event.target.checked) {
