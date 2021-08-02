@@ -9,6 +9,7 @@
 ## Env file configuration
 
 ### Localhost
+
 ```
 REACT_APP_INTEGRATIONS_FEED_URL=http://localhost:3000/feed/integrationsFeed.json
 REACT_APP_CONNECTORS_FEED_URL=http://localhost:3000/feed/connectorsFeed.json
@@ -22,6 +23,7 @@ REACT_APP_CONNECTORS_FEED_URL=https://portal-fusebit-io.vercel.app/feed/connecto
 ```
 
 ### Production
+
 ```
 REACT_APP_INTEGRATIONS_FEED_URL=https://manage.fusebit.io/feed/integrationsFeed.json
 REACT_APP_CONNECTORS_FEED_URL=https://manage.fusebit.io/feed/connectorsFeed.json
@@ -61,7 +63,7 @@ Browse to [http://localhost:5000](http://localhost:5000).
 
 ## Deploy in S3
 
-1) Build the application
+1. Build the application
 
 ```sh
 npm run build
@@ -73,27 +75,27 @@ or
 yarn build
 ```
 
-2) Upload `build` folder content into the bucket
+2. Upload `build` folder content into the bucket
 
 ```sh
 aws s3 sync ./build s3://${bucket_name} --profile ${profile} --cache-control max-age=31536000
 ```
 
-3) Refresh cloudfront (optional)
+3. Refresh cloudfront (optional)
+
 ```sh
 aws cloudfront create-invalidation --profile ${profile} --distribution-id ${cloudfront_id} --paths '/*'
 ```
 
-
 ## Technologies used
 
-* [ReactJS](https://reactjs.org/)
-* [MaterialUI](https://material-ui.com/)
-* [StyledComponents](https://styled-components.com/)
-* [Constate](https://github.com/diegohaz/constate)
-* [ReactQuery](https://react-query.tanstack.com/)
-* [TypeScript](https://www.typescriptlang.org/)
-* [ESLint](https://eslint.org/)
+- [ReactJS](https://reactjs.org/)
+- [MaterialUI](https://material-ui.com/)
+- [StyledComponents](https://styled-components.com/)
+- [Constate](https://github.com/diegohaz/constate)
+- [ReactQuery](https://react-query.tanstack.com/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [ESLint](https://eslint.org/)
 
 ## Project structure
 
@@ -117,3 +119,13 @@ src/
     Utility files
 Configuration and build files
 ```
+
+## Headless
+
+Pre-account-creation integrations template creation: `/quickstart?key={integrationTemplateKey}`
+
+Post-account-creation integrations template creation: `/account/{accountId}/subscription/{subscriptionId}/integrations?key={integrationTemplateKey}`
+
+Pre-account-creation connectors template creation: `/quickstart-connectors?key={integrationTemplateKey}`
+
+Post-account-creation connectors template creation: `/account/{accountId}/subscription/{subscriptionId}/integrations?key={integrationTemplateKey}`
