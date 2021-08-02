@@ -1,6 +1,6 @@
 import React from "react";
 import * as SC from "./styles";
-import { Props } from "../../../../interfaces/addIntegration";
+import { Props } from "../../interfaces/feedPicker";
 import {
     materialRenderers,
     materialCells
@@ -8,10 +8,10 @@ import {
   import { JsonForms } from '@jsonforms/react';
   import { ValidationMode } from "@jsonforms/core";
   import { Button, TextField } from "@material-ui/core";
-  import {integrationsFeed} from "../../../../static/feed";
-  import search from "../../../../assets/search.svg";
-  import cross from "../../../../assets/cross.svg";
-import { Feed } from "../../../../interfaces/feed";
+  import {integrationsFeed, connectorsFeed} from "../../static/feed";
+  import search from "../../assets/search.svg";
+  import cross from "../../assets/cross.svg";
+import { Feed } from "../../interfaces/feed";
 import { useState } from "react";
 import { useEffect } from "react";
 
@@ -23,13 +23,13 @@ enum Filters {
     CALENDAR = "Calendar",
 }
 
-const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
+const FeedPicker: React.FC<Props> = ({open, onClose, onSubmit, isIntegration}) => {
     const [data, setData] = React.useState<any>({});
     const [errors, setErrors] = React.useState<object[]>([]);
     const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
     const [activeFilter, setActiveFilter] = React.useState<Filters>(Filters.ALL);
     const [feed, setFeed] = useState<Feed[]>([]);
-    const [activeIntegration, setActiveIntegration] = React.useState<Feed>();
+    const [activeTemplate, setActiveTemplate] = React.useState<Feed>();
     const [searchFilter, setSearchFilter] = React.useState("");
 
     const handleSubmit = () => {
@@ -37,7 +37,7 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
             setValidationMode("ValidateAndShow");
         } else {
             //send data with customized form
-            onSubmit(activeIntegration, {...data});
+            onSubmit(activeTemplate, {...data});
         }
     }
 
@@ -46,16 +46,23 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
     }
 
     useEffect(() => {
-        integrationsFeed().then(feed => {
-            setFeed(feed);
-            setActiveIntegration(feed[0])
-        })
-    }, [])
+        if (isIntegration) {
+            integrationsFeed().then(feed => {
+                setFeed(feed);
+                setActiveTemplate(feed[0]);
+            });
+        } else {
+            connectorsFeed().then(feed => {
+                setFeed(feed);
+                setActiveTemplate(feed[0]);
+            });
+        }
+    }, [isIntegration]);
 
     return (
         <SC.Card open={open}>
             <SC.Close onClick={() => onClose()} src={cross} alt="close" height="12" width="12" />
-            <SC.Title>New Integration</SC.Title>
+            <SC.Title>{isIntegration ? "New Integration" : "New Connector"}</SC.Title>
             <SC.Flex>
                 <SC.Column>
                     <SC.ColumnItem onClick={() => handleFilterChange(Filters.ALL)} active={activeFilter === Filters.ALL}>{Filters.ALL}</SC.ColumnItem>
@@ -81,7 +88,7 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
                                 });
                                 if (tagIsActive && integration.name.toUpperCase().includes(searchFilter.toUpperCase())) {
                                     return (
-                                        <SC.ColumnItem key={integration.id} onClick={() => setActiveIntegration(integration)} active={integration.id === activeIntegration?.id}>
+                                        <SC.ColumnItem key={integration.id} onClick={() => setActiveTemplate(integration)} active={integration.id === activeTemplate?.id}>
                                             <SC.ColumnItemImage src={integration.smallIcon} alt="slack" height="18" width="18" />
                                             {integration.name}
                                         </SC.ColumnItem>
@@ -95,15 +102,15 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
                 <SC.ColumnBr />
                 <SC.ConnectorInfo>
                     <SC.ConnectorTitleWrapper>
-                        <SC.ConnectorImage src={activeIntegration?.smallIcon} alt="slack" height="28" width="28" />
-                        <SC.ConnectorTitle>{activeIntegration?.name}</SC.ConnectorTitle>
-                        <SC.ConnectorVersion>{activeIntegration?.version}</SC.ConnectorVersion>
+                        <SC.ConnectorImage src={activeTemplate?.smallIcon} alt="slack" height="28" width="28" />
+                        <SC.ConnectorTitle>{activeTemplate?.name}</SC.ConnectorTitle>
+                        <SC.ConnectorVersion>{activeTemplate?.version}</SC.ConnectorVersion>
                     </SC.ConnectorTitleWrapper>
-                    <SC.ConnectorDescription children={activeIntegration?.description || ""} />
+                    <SC.ConnectorDescription children={activeTemplate?.description || ""} />
                         <SC.FormWrapper>
                             <JsonForms
-                            schema={activeIntegration?.configuration.schema}
-                            uischema={activeIntegration?.configuration.uischema.elements}
+                            schema={activeTemplate?.configuration.schema}
+                            uischema={activeTemplate?.configuration.uischema.elements}
                             data={data}
                             renderers={materialRenderers}
                             cells={materialCells}
@@ -121,4 +128,4 @@ const AddIntegration: React.FC<Props> = ({open, onClose, onSubmit}) => {
     )
 }
 
-export default AddIntegration;
+export default FeedPicker;

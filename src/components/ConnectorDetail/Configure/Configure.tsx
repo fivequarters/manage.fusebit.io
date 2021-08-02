@@ -102,7 +102,7 @@ const Configure: React.FC = () => {
                     </SC.InfoWrapper>
                     <SC.InfoWrapper>
                         <SC.InfoTitle>Slack app:</SC.InfoTitle>
-                        <SC.InfoLink href="/">
+                        <SC.InfoLink href={"/"}>
                             Acme Chatbot
                             <img src={arrow} alt="arrow" height="16" width="16" />
                             </SC.InfoLink>
