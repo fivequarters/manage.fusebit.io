@@ -1,5 +1,8 @@
 export interface IntegrationData {
     components: InnerConnector[],
+    componentTags: {
+        [key: string]: any;
+    },
     files: object
 }
 

@@ -138,6 +138,9 @@ const Overview: React.FC<OverviewProps> = ({headless, setHeadless}) => {
                     }
                     setAddConnectorOpen(keyDoesntMatch);
                 });
+            } else {
+                const items = connectors.data.items;
+                setRows(items); // otherwise if we delete and the connectors.data.items has 0 items the rows will display 1
             }
         }
     }, [connectors, query, _createConnector, headless, setHeadless]);

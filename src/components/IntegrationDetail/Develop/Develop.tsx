@@ -22,6 +22,7 @@ import Edit from "./Edit";
 import {FuseInitToken} from "../../../interfaces/fuseInitToken";
 import { useGetRedirectLink } from "../../../hooks/useGetRedirectLink";
 import FeedPicker from "../../FeedPicker";
+import {integrationsFeed, connectorsFeed} from "../../../static/feed";
 
 const Develop: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -40,6 +41,7 @@ const Develop: React.FC = () => {
     const [connectorListOpen, setConnectorListOpen] = React.useState(false);
     const {getRedirectLink} = useGetRedirectLink();
     const [connectorPickerOpen, setConnectorPickerOpen] = React.useState(false);
+    const [connectorIcon, setConnectorIcon] = React.useState("");
 
     React.useEffect(() => {
         const res = localStorage.getItem("refreshToken");
@@ -49,6 +51,31 @@ const Develop: React.FC = () => {
             setConnectOpen(true);
         }
     }, []);
+
+    React.useEffect(() => {
+        const feedId = integrationData?.data.data.componentTags["fusebit.feedId"];
+        const feedtype = integrationData?.data.data.componentTags["fusebit.feedType"];
+
+        if (feedtype === "integration") {
+                integrationsFeed().then(feed => {
+                feed.forEach(item => {
+                    if (item.id === feedId) {
+                        setConnectorIcon(item.smallIcon);
+                    }
+                });
+            });
+        } else {
+            connectorsFeed().then(feed => {
+                console.log(feed);
+                feed.forEach(item => {
+                    if (item.id === feedId) {
+                        setConnectorIcon(item.smallIcon);
+                    }
+                });
+            });
+        }
+
+    }, [integrationData]);
 
     const handleConnectorDelete = async (connectorId: string) => {
         try {
@@ -290,21 +317,21 @@ const Develop: React.FC = () => {
                     <SC.Card>
                         <SC.CardTitle>Connectors</SC.CardTitle>
                         <SC.CardConnectorWrapper>
-                            {
+                            {   
                                 integrationData?.data.data.components.map((connector: InnerConnector, index) => {
                                     if (index < 5) {
                                         return (
                                             <SC.CardConnector key={index} onClick={(e: any) => {
-                                                    if(!e.target.id) history.push(getRedirectLink(`/connector/${connector.entityId}`))
-                                                }}>
-                                                {// TODO: Replace placeholder with real data 
-                                                } 
-                                                <SC.CardConnectorImage src={slack} alt={"connector image"} height="20" width="20" />
-                                                <SC.CardConnectorText>{connector.entityId}</SC.CardConnectorText>
-                                                <SC.CardConnectorCrossContainer id="closeWrapper" onClick={() => handleConnectorDelete(connector.entityId)}>
-                                                    <SC.CardConnectorCross id="close" src={cross} alt="close" height="8" width="8" />
-                                                </SC.CardConnectorCrossContainer>
-                                            </SC.CardConnector>
+                                                if(!e.target.id) history.push(getRedirectLink(`/connector/${connector.entityId}`))
+                                            }}>
+                                            {// TODO: Replace placeholder with real data 
+                                            } 
+                                            <SC.CardConnectorImage src={connectorIcon} alt={"connector image"} height="20" width="20" />
+                                            <SC.CardConnectorText>{connector.entityId}</SC.CardConnectorText>
+                                            <SC.CardConnectorCrossContainer id="closeWrapper" onClick={() => handleConnectorDelete(connector.entityId)}>
+                                                <SC.CardConnectorCross id="close" src={cross} alt="close" height="8" width="8" />
+                                            </SC.CardConnectorCrossContainer>
+                                        </SC.CardConnector>
                                         )
                                     }
                                     return null;

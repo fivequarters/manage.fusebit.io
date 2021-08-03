@@ -138,6 +138,9 @@ const Overview: React.FC<OverviewProps> = ({headless, setHeadless}) => {
                     }
                 });
                 setAddIntegrationOpen(keyDoesntMatch);
+            } else {
+                const items = integrations.data.items;
+                setRows(items);
             }
         } 
     }, [integrations, query, _createIntegration, headless, setHeadless]);

@@ -68,7 +68,8 @@
                         }
                     },
                     "tags": {
-                        "catalog.entry": "slack-connector"
+                        "catalog.entry": "slack-connector",
+                        "templateId": "as23w63ag32525e"
                     }
                 },
                 {
@@ -93,10 +94,9 @@
                                 }
                             ],
                             "componentTags": {
-                                "foo": "bar2",
-                                "some": "another",
-                                "other": "tag",
-                                "monkey": "banana"
+                                "fusebit.feedId": "as23w63ag32525e",
+                                "fusebit.feedVersion": "1.0.3",
+                                "fusebit.feedType": "integration"
                             },
                             "configuration": {}
                         }
@@ -177,7 +177,8 @@
                         }
                     },
                     "tags": {
-                        "catalog.entry": "slack-connector"
+                        "catalog.entry": "slack-connector",
+                        "templateId": "w6age"
                     }
                 },
                 {
@@ -202,10 +203,9 @@
                                 }
                             ],
                             "componentTags": {
-                                "foo": "bar2",
-                                "some": "another",
-                                "other": "tag",
-                                "monkey": "banana"
+                                "fusebit.feedId": "w6age",
+                                "fusebit.feedVersion": "1.0.3",
+                                "fusebit.feedType": "integration"
                             },
                             "configuration": {}
                         }
@@ -286,7 +286,8 @@
                         }
                     },
                     "tags": {
-                        "catalog.entry": "slack-connector"
+                        "catalog.entry": "slack-connector",
+                        "templateId": "as23age"
                     }
                 },
                 {
@@ -311,10 +312,9 @@
                                 }
                             ],
                             "componentTags": {
-                                "foo": "bar2",
-                                "some": "another",
-                                "other": "tag",
-                                "monkey": "banana"
+                                "fusebit.feedId": "as23age",
+                                "fusebit.feedVersion": "1.0.3",
+                                "fusebit.feedType": "integration"
                             },
                             "configuration": {}
                         }
