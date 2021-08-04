@@ -6,7 +6,7 @@ import { useHistory } from "react-router-dom";
 import { useGetRedirectLink } from "../../../../hooks/useGetRedirectLink";
 import {integrationsFeed, connectorsFeed} from "../../../../static/feed";
 
-const ConnectorComponent: React.FC<ConnectorComponentProps> = ({connector, onConnectorDelete}) => {
+const ConnectorComponent: React.FC<ConnectorComponentProps> = ({connector, onConnectorDelete, onLinkConnectorClick, linkConnector}) => {
     const history = useHistory();
     const {getRedirectLink} = useGetRedirectLink();
     const [icon, setIcon] = useState("");
@@ -36,15 +36,23 @@ const ConnectorComponent: React.FC<ConnectorComponentProps> = ({connector, onCon
 
     return (
     <SC.CardConnector onClick={(e: any) => {
-            if(!e.target.id) history.push(getRedirectLink(`/connector/${connector.id}`))
+            if (linkConnector) {
+                onLinkConnectorClick && onLinkConnectorClick(connector.id);
+            } else if (!e.target.id) {
+                history.push(getRedirectLink(`/connector/${connector.id}`));
+            }
         }}>
         {// TODO: Replace placeholder with real data 
         } 
         <SC.CardConnectorImage src={icon} alt={"connector image"} height="20" width="20" />
         <SC.CardConnectorText>{connector.id}</SC.CardConnectorText>
-        <SC.CardConnectorCrossContainer id="closeWrapper" onClick={() => onConnectorDelete(connector.id)}>
-            <SC.CardConnectorCross id="close" src={cross} alt="close" height="8" width="8" />
-        </SC.CardConnectorCrossContainer>
+        {
+            !linkConnector && (
+            <SC.CardConnectorCrossContainer id="closeWrapper" onClick={() => onConnectorDelete(connector.id)}>
+                <SC.CardConnectorCross id="close" src={cross} alt="close" height="8" width="8" />
+            </SC.CardConnectorCrossContainer>
+            )
+        }
     </SC.CardConnector>
     )
 }

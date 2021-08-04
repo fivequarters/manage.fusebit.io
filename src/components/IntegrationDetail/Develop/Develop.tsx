@@ -4,7 +4,6 @@ import * as SC from "./styles";
 import { Button, Modal, Backdrop, Fade } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import arrow from "../../../assets/arrow-right-black.svg";
-import slack from "../../../assets/slack.svg";
 import Connect from "./Connect";
 import { useLoader } from "../../../hooks/useLoader";
 import { useError } from "../../../hooks/useError";
@@ -215,13 +214,8 @@ const Develop: React.FC = () => {
                                     });
                                     return returnItem;
                                 })
-                                .map((item: Connector, index: number) => {            
-                                return <SC.CardConnector key={index} onClick={(e) => linkConnector(item.id)}>
-                                    {// TODO: Replace placeholder with real data 
-                                    } 
-                                    <SC.CardConnectorImage src={slack} alt={item.id} height="20" width="20" />
-                                    <SC.CardConnectorText>{item.id}</SC.CardConnectorText>
-                                </SC.CardConnector>
+                                .map((connector: Connector, index: number) => {            
+                                return <ConnectorComponent onLinkConnectorClick={(id: string) => linkConnector(id)} linkConnector={true} key={index} connector={connector} onConnectorDelete={(id: string) => handleConnectorDelete(id)}  />
                             })}
                         </div>
                     </SC.ConnectorList>
