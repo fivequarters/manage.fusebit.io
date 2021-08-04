@@ -1,11 +1,10 @@
 import React from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import * as SC from "./styles";
 import { Button, Modal, Backdrop, Fade } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import arrow from "../../../assets/arrow-right-black.svg";
 import slack from "../../../assets/slack.svg";
-import cross from "../../../assets/cross.svg";
 import Connect from "./Connect";
 import { useLoader } from "../../../hooks/useLoader";
 import { useError } from "../../../hooks/useError";
@@ -22,11 +21,10 @@ import Edit from "./Edit";
 import {FuseInitToken} from "../../../interfaces/fuseInitToken";
 import { useGetRedirectLink } from "../../../hooks/useGetRedirectLink";
 import FeedPicker from "../../FeedPicker";
-import {integrationsFeed, connectorsFeed} from "../../../static/feed";
+import ConnectorComponent from "./ConnectorComponent";
 
 const Develop: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const history = useHistory();
     const { userData } = useContext();
     const { data: connectors, refetch: reloadConnectors } = useAccountConnectorsGetAll<{items: Connector[]}>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
     const { data: integrationData, refetch: reloadIntegration } = useAccountIntegrationsGetOne<Integration>({ enabled: userData.token, id, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
@@ -41,7 +39,6 @@ const Develop: React.FC = () => {
     const [connectorListOpen, setConnectorListOpen] = React.useState(false);
     const {getRedirectLink} = useGetRedirectLink();
     const [connectorPickerOpen, setConnectorPickerOpen] = React.useState(false);
-    const [connectorIcon, setConnectorIcon] = React.useState("");
 
     React.useEffect(() => {
         const res = localStorage.getItem("refreshToken");
@@ -51,31 +48,6 @@ const Develop: React.FC = () => {
             setConnectOpen(true);
         }
     }, []);
-
-    React.useEffect(() => {
-        const feedId = integrationData?.data.data.componentTags["fusebit.feedId"];
-        const feedtype = integrationData?.data.data.componentTags["fusebit.feedType"];
-
-        if (feedtype === "integration") {
-                integrationsFeed().then(feed => {
-                feed.forEach(item => {
-                    if (item.id === feedId) {
-                        setConnectorIcon(item.smallIcon);
-                    }
-                });
-            });
-        } else {
-            connectorsFeed().then(feed => {
-                console.log(feed);
-                feed.forEach(item => {
-                    if (item.id === feedId) {
-                        setConnectorIcon(item.smallIcon);
-                    }
-                });
-            });
-        }
-
-    }, [integrationData]);
 
     const handleConnectorDelete = async (connectorId: string) => {
         try {
@@ -243,7 +215,7 @@ const Develop: React.FC = () => {
                                     });
                                     return returnItem;
                                 })
-                                .map((item: Connector, index: number) => {
+                                .map((item: Connector, index: number) => {            
                                 return <SC.CardConnector key={index} onClick={(e) => linkConnector(item.id)}>
                                     {// TODO: Replace placeholder with real data 
                                     } 
@@ -317,26 +289,24 @@ const Develop: React.FC = () => {
                     <SC.Card>
                         <SC.CardTitle>Connectors</SC.CardTitle>
                         <SC.CardConnectorWrapper>
-                            {   
-                                integrationData?.data.data.components.map((connector: InnerConnector, index) => {
+                        {connectors?.data.items
+                                .filter((item: Connector) => {
+                                    let returnItem = false;
+                                    integrationData?.data.data.components.forEach((connector: InnerConnector) => {
+                                        if (connector.entityId === item.id) {
+                                            returnItem = true;
+                                        }
+                                    });
+                                    return returnItem;
+                                })
+                                .map((connector: Connector, index: number) => {            
                                     if (index < 5) {
                                         return (
-                                            <SC.CardConnector key={index} onClick={(e: any) => {
-                                                if(!e.target.id) history.push(getRedirectLink(`/connector/${connector.entityId}`))
-                                            }}>
-                                            {// TODO: Replace placeholder with real data 
-                                            } 
-                                            <SC.CardConnectorImage src={connectorIcon} alt={"connector image"} height="20" width="20" />
-                                            <SC.CardConnectorText>{connector.entityId}</SC.CardConnectorText>
-                                            <SC.CardConnectorCrossContainer id="closeWrapper" onClick={() => handleConnectorDelete(connector.entityId)}>
-                                                <SC.CardConnectorCross id="close" src={cross} alt="close" height="8" width="8" />
-                                            </SC.CardConnectorCrossContainer>
-                                        </SC.CardConnector>
+                                            <ConnectorComponent key={index} connector={connector} onConnectorDelete={(id: string) => handleConnectorDelete(id)}  />
                                         )
                                     }
                                     return null;
-                                })
-                            }
+                            })}
                         </SC.CardConnectorWrapper>
                         {
                             integrationData?.data.data.components.length ? 

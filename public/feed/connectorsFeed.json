@@ -101,7 +101,9 @@
                     },
                     "tags": {
                         "catalog.entry": "slack-connector",
-                        "templateId": "slackkksksksk"
+                        "fusebit.feedId": "slackkksksksk",
+                        "fusebit.feedVersion": "1.0.3",
+                        "fusebit.feedType": "connector"
                     }
                 },
                 {
@@ -125,11 +127,7 @@
                                     "package": "@fusebit-int/pkg-oauth-integration"
                                 }
                             ],
-                            "componentTags": {
-                                "fusebit.feedId": "slackkksksksk",
-                                "fusebit.feedVersion": "1.0.3",
-                                "fusebit.feedType": "connector"
-                            },
+                            "componentTags": {},
                             "configuration": {}
                         }
                     },
@@ -242,7 +240,9 @@
                     },
                     "tags": {
                         "catalog.entry": "slack-connector",
-                        "templateId": "discord"
+                        "fusebit.feedId": "discord",
+                        "fusebit.feedVersion": "1.0.3",
+                        "fusebit.feedType": "connector"
                     }
                 },
                 {
@@ -266,11 +266,7 @@
                                     "package": "@fusebit-int/pkg-oauth-integration"
                                 }
                             ],
-                            "componentTags": {
-                                "fusebit.feedId": "discord",
-                                "fusebit.feedVersion": "1.0.3",
-                                "fusebit.feedType": "connector"
-                            },
+                            "componentTags": {},
                             "configuration": {}
                         }
                     },
@@ -383,7 +379,9 @@
                     },
                     "tags": {
                         "catalog.entry": "slack-connector",
-                        "templateId": "as23r333age"
+                        "fusebit.feedId": "as23r333age",
+                        "fusebit.feedVersion": "1.0.3",
+                        "fusebit.feedType": "connector"
                     }
                 },
                 {
@@ -407,11 +405,7 @@
                                     "package": "@fusebit-int/pkg-oauth-integration"
                                 }
                             ],
-                            "componentTags": {
-                                "fusebit.feedId": "as23r333age",
-                                "fusebit.feedVersion": "1.0.3",
-                                "fusebit.feedType": "connector"
-                            },
+                            "componentTags": {},
                             "configuration": {}
                         }
                     },

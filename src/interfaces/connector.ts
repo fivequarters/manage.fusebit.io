@@ -1,7 +1,9 @@
 export interface Connector {
     id: string;
     data: object;
-    tags: object;
+    tags: {
+        [key: string]: any;
+    };
     version: string;
     expires: string;
 }
