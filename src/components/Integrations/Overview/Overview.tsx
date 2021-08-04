@@ -15,21 +15,18 @@ import { useError } from "../../../hooks/useError";
 import arrowRight from "../../../assets/arrow-right.svg";
 import arrowLeft from "../../../assets/arrow-left.svg";
 import { Entity, Feed } from "../../../interfaces/feed";
-import Mustache from "mustache";
 import { useQuery } from "../../../hooks/useQuery";
 import { useGetRedirectLink } from "../../../hooks/useGetRedirectLink";
 import FeedPicker from "../../FeedPicker";
 import {integrationsFeed} from "../../../static/feed";
 import { OverviewProps } from "../../../interfaces/integrations";
+import { Data } from "../../../interfaces/feedPicker";
+import {useReplaceMustache} from "../../../hooks/useReplaceMustache";
 
 enum cells {
     INSTANCES = "Instances",
     CREATED = "Created",
     DEPLOYED = "Deployed",
-}
-
-interface IntegrationData {
-    [key: string]: any;
 }
 
 const Overview: React.FC<OverviewProps> = ({headless, setHeadless}) => {
@@ -46,43 +43,9 @@ const Overview: React.FC<OverviewProps> = ({headless, setHeadless}) => {
     const [addIntegrationOpen, setAddIntegrationOpen] = React.useState(false);
     const query = useQuery();
     const { getRedirectLink } = useGetRedirectLink();
+    const { replaceMustache } = useReplaceMustache();
 
-    const replaceMustache = React.useCallback(async (data: IntegrationData, entity: Entity) => {
-        const customTags: any = [ '<%', '%>' ];
-        const keys = Object.keys(data);
-        let connectorId;
-        let integrationId;
-        keys.forEach((key: any) => {
-            if (key.match("Connector")) {
-                connectorId = data[key].replace(/\s/g, '');
-            } else if (key.match("Integration")) {
-                integrationId = data[key].replace(/\s/g, '');
-            }
-        });
-        const view = {
-            this: {
-                connectorId,
-                integrationId,
-                templateId: entity.id,
-            },
-            global: {
-                userId: {
-                    id: userData.userId,
-                },
-                accountId: {
-                    id: userData.accountId,
-                },
-                subscriptionId: {
-                    id: userData.subscriptionId,
-                }
-            }
-        }
-        const newEntity = Mustache.render(JSON.stringify(entity), view, {}, customTags);
-        let parsedEntity: Entity = JSON.parse(newEntity);
-        return parsedEntity;
-    }, [userData]);
-
-    const _createIntegration = React.useCallback(async (activeIntegration: Feed, data: IntegrationData) => {
+    const _createIntegration = React.useCallback(async (activeIntegration: Feed, data: Data) => {
         try {
             createLoader();
             let currentIntegrationData: Entity | undefined;
@@ -239,7 +202,7 @@ const Overview: React.FC<OverviewProps> = ({headless, setHeadless}) => {
                 closeAfterTransition
                 BackdropComponent={Backdrop}
             >
-                <FeedPicker isIntegration={true} onSubmit={(activeIntegration: Feed, data: IntegrationData) => _createIntegration(activeIntegration, data)} open={addIntegrationOpen} onClose={() => setAddIntegrationOpen(false)} />
+                <FeedPicker isIntegration={true} onSubmit={(activeIntegration: Feed, data: Data) => _createIntegration(activeIntegration, data)} open={addIntegrationOpen} onClose={() => setAddIntegrationOpen(false)} />
             </Modal>
             <SC.ButtonContainer>
                 <SC.ButtonMargin>

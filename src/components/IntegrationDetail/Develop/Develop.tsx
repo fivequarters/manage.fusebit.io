@@ -21,6 +21,9 @@ import {FuseInitToken} from "../../../interfaces/fuseInitToken";
 import { useGetRedirectLink } from "../../../hooks/useGetRedirectLink";
 import FeedPicker from "../../FeedPicker";
 import ConnectorComponent from "./ConnectorComponent";
+import { Entity, Feed } from "../../../interfaces/feed";
+import { Data } from "../../../interfaces/feedPicker";
+import { useReplaceMustache } from "../../../hooks/useReplaceMustache";
 
 const Develop: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -38,6 +41,7 @@ const Develop: React.FC = () => {
     const [connectorListOpen, setConnectorListOpen] = React.useState(false);
     const {getRedirectLink} = useGetRedirectLink();
     const [connectorPickerOpen, setConnectorPickerOpen] = React.useState(false);
+    const { replaceMustache } = useReplaceMustache();
 
     React.useEffect(() => {
         const res = localStorage.getItem("refreshToken");
@@ -110,37 +114,46 @@ const Develop: React.FC = () => {
         }
     }
 
-    const addNewConnector = async () => {
+    const addNewConnector = async (activeIntegration: Feed, data: Data) => {
         try {
             createLoader();
-            const connectorId = String(new Date().getTime());
-            const response = await createConnector.mutateAsync({ id: connectorId, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
-            await waitForOperations([response.data.operationId]);
-            const data = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
-            const newData = data;
-            const newConnector: InnerConnector = {
-                name: connectorId,
-                entityType: "connector",
-                entityId: connectorId,
-                skip: true,
-                path: "proident ut tempor in ut",
-                dependsOn: [],
-                package: "@fusebit-int/pkg-oauth-integration",
+            let connectors: Entity[] = [];
+            for (let i = 0; i < activeIntegration.configuration.entities.length; i++) {
+                const entity: Entity = activeIntegration.configuration.entities[i];
+                if (entity.entityType === "connector") {
+                    connectors.push(await replaceMustache(data, entity));
+                }
             }
-            newData.data.components.push(newConnector);
-            const response2 = await updateIntegration.mutateAsync({ 
-                accountId: userData.accountId, 
-                subscriptionId: userData.subscriptionId,
-                integrationId: integrationData?.data.id,
-                data: newData,
-            });
-            await waitForOperations([response2.data.operationId]);
+            for (let i = 0; i < connectors.length; i++) {
+                const response = await createConnector.mutateAsync({data: connectors[i].data, id: connectors[i].id, tags: connectors[i].tags, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+                await waitForOperations([response.data.operationId]);
+                const currentData = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
+                const newData = currentData;
+                const newConnector: InnerConnector = {
+                    name: connectors[i].id,
+                    entityType: "connector",
+                    entityId: connectors[i].id,
+                    skip: true,
+                    path: "proident ut tempor in ut",
+                    dependsOn: [],
+                    package: "@fusebit-int/pkg-oauth-integration",
+                }
+                newData.data.components.push(newConnector);
+                const response2 = await updateIntegration.mutateAsync({ 
+                    accountId: userData.accountId, 
+                    subscriptionId: userData.subscriptionId,
+                    integrationId: integrationData?.data.id,
+                    data: newData,
+                });
+                await waitForOperations([response2.data.operationId]);
+            }
             reloadIntegration();
             reloadConnectors();
         } catch (e) {
             createError(e.message);
         } finally {
             removeLoader();
+            setConnectorPickerOpen(false);
         }
     }
 
@@ -177,7 +190,7 @@ const Develop: React.FC = () => {
                 BackdropComponent={Backdrop}
             >
                 <Fade in={connectorPickerOpen}>
-                    <FeedPicker onSubmit={() => addNewConnector()} open={connectorPickerOpen} onClose={() => setConnectorPickerOpen(false)} />
+                    <FeedPicker onSubmit={(activeIntegration: Feed, data: Data) => addNewConnector(activeIntegration, data)} open={connectorPickerOpen} onClose={() => setConnectorPickerOpen(false)} />
                 </Fade>
             </Modal>
             <Modal

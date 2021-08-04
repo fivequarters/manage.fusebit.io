@@ -71,7 +71,7 @@
                         "catalog.entry": "slack-connector",
                         "fusebit.feedId": "as23w63ag32525e",
                         "fusebit.feedVersion": "1.0.3",
-                        "fusebit.feedType": "connector"
+                        "fusebit.feedType": "integration"
                     }
                 },
                 {
@@ -178,7 +178,7 @@
                         "catalog.entry": "slack-connector",
                         "fusebit.feedId": "w6age",
                         "fusebit.feedVersion": "1.0.3",
-                        "fusebit.feedType": "connector"
+                        "fusebit.feedType": "integration"
                     }
                 },
                 {
@@ -285,7 +285,7 @@
                         "catalog.entry": "slack-connector",
                         "fusebit.feedId": "as23age",
                         "fusebit.feedVersion": "1.0.3",
-                        "fusebit.feedType": "connector"
+                        "fusebit.feedType": "integration"
                     }
                 },
                 {

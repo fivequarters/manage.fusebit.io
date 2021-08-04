@@ -4,3 +4,7 @@ export interface Props {
     onSubmit: Function;
     isIntegration?: boolean;
 }
+
+export interface Data {
+    [key: string]: any;
+}
