@@ -24,6 +24,7 @@ import ConnectorComponent from "./ConnectorComponent";
 import { Entity, Feed } from "../../../interfaces/feed";
 import { Data } from "../../../interfaces/feedPicker";
 import { useReplaceMustache } from "../../../hooks/useReplaceMustache";
+import { FinalConnector } from "../../../interfaces/integrationDetailDevelop";
 
 const Develop: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -178,6 +179,40 @@ const Develop: React.FC = () => {
             setEditOpen(true);
         }
     }
+
+    const filterConnectors = () => {
+        const filteredConnectors = connectors?.data.items.filter((item: Connector) => {
+            let returnItem = false;
+            integrationData?.data.data.components.forEach((connector: InnerConnector) => {
+                if (connector.entityId === item.id) {
+                    returnItem = true;
+                }
+            });
+            return returnItem;
+        });
+
+        let finalConnectorsList: FinalConnector[] | undefined = filteredConnectors;
+
+        if (integrationData && filteredConnectors && integrationData?.data.data.components.length > filteredConnectors.length) {
+            integrationData?.data.data.components.forEach((innerConnector: InnerConnector) => {
+                let foundInnerConnector = false;
+                filteredConnectors.forEach((connector: Connector) => {
+                    if (connector.id === innerConnector.entityId) {
+                        foundInnerConnector = true;
+                    }
+                });
+                if (!foundInnerConnector) {
+                    const missingConnector: FinalConnector = {
+                        missing: true,
+                        id: innerConnector.entityId
+                    }
+                    finalConnectorsList?.push(missingConnector);
+                }
+            })
+        }   
+
+        return filteredConnectors || [];
+    }
     
     return (
         <SC.Background>
@@ -296,21 +331,10 @@ const Develop: React.FC = () => {
                     <SC.Card>
                         <SC.CardTitle>Connectors</SC.CardTitle>
                         <SC.CardConnectorWrapper>
-                        {connectors?.data.items
-                                .filter((item: Connector) => {
-                                    let returnItem = false;
-                                    integrationData?.data.data.components.forEach((connector: InnerConnector) => {
-                                        if (connector.entityId === item.id) {
-                                            returnItem = true;
-                                        }
-                                    });
-                                    return returnItem;
-                                })
-                                .map((connector: Connector, index: number) => {            
+                        {       
+                                filterConnectors().map((connector: FinalConnector, index: number) => {
                                     if (index < 5) {
-                                        return (
-                                            <ConnectorComponent key={index} connector={connector} onConnectorDelete={(id: string) => handleConnectorDelete(id)}  />
-                                        )
+                                        return <ConnectorComponent key={index} connector={connector} onConnectorDelete={(id: string) => handleConnectorDelete(id)}  />
                                     }
                                     return null;
                             })}

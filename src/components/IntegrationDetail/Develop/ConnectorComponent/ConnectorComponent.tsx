@@ -12,25 +12,29 @@ const ConnectorComponent: React.FC<ConnectorComponentProps> = ({connector, onCon
     const [icon, setIcon] = useState("");
 
     useEffect(() => {
-        const feedtype = connector.tags["fusebit.feedType"];
-        const feedId = connector.tags["fusebit.feedId"];
-
-        if (feedtype === "integration") {
-                integrationsFeed().then(feed => {
-                feed.forEach(item => {
-                    if (item.id === feedId) {
-                        setIcon(item.smallIcon);
-                    }
+        if (connector.tags && !connector.missing) {
+            const feedtype = connector.tags["fusebit.feedType"];
+            const feedId = connector.tags["fusebit.feedId"];
+    
+            if (feedtype === "integration") {
+                    integrationsFeed().then(feed => {
+                    feed.forEach(item => {
+                        if (item.id === feedId) {
+                            setIcon(item.smallIcon);
+                        }
+                    });
                 });
-            });
+            } else {
+                connectorsFeed().then(feed => {
+                    feed.forEach(item => {
+                        if (item.id === feedId) {
+                            setIcon(item.smallIcon);
+                        }
+                    });
+                });
+            }
         } else {
-            connectorsFeed().then(feed => {
-                feed.forEach(item => {
-                    if (item.id === feedId) {
-                        setIcon(item.smallIcon);
-                    }
-                });
-            });
+            setIcon("/images/warning-red.svg");
         }
     }, [connector]);
 
@@ -45,7 +49,7 @@ const ConnectorComponent: React.FC<ConnectorComponentProps> = ({connector, onCon
         {// TODO: Replace placeholder with real data 
         } 
         <SC.CardConnectorImage src={icon} alt={"connector image"} height="20" width="20" />
-        <SC.CardConnectorText>{connector.id}</SC.CardConnectorText>
+        <SC.CardConnectorText>{connector.id} {connector.missing && "is not found"}</SC.CardConnectorText>
         {
             !linkConnector && (
             <SC.CardConnectorCrossContainer id="closeWrapper" onClick={() => onConnectorDelete(connector.id)}>
