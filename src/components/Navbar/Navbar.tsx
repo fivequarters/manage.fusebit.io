@@ -48,10 +48,10 @@ const Navbar: React.FC<Props> = ({ sectionName, dropdown, integration, connector
         <SC.Background>
             <Container maxWidth="lg" >
                 <SC.Nav>
-                    <SC.CompanyImg />
+                    <SC.CompanyImg href={getRedirectLink("/integrations")} />
                     <SC.FlexDown>
                         <SC.Flex>
-                            <SC.CompanyName>{userData.company}</SC.CompanyName>
+                            <SC.CompanyName href={getRedirectLink("/integrations")}>{userData.company}</SC.CompanyName>
                         </SC.Flex>
                         {
                             dropdown ? (

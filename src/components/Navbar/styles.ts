@@ -29,7 +29,7 @@ export const FlexDown = styled.div`
     flex-direction: column;
 `;
 
-export const CompanyImg = styled.div`
+export const CompanyImg = styled.a`
     height: 56px;
     width: 56px;
     background-size: contain;
@@ -44,13 +44,14 @@ export const CompanyImg = styled.div`
     }
 `;
 
-export const CompanyName = styled.h4`
+export const CompanyName = styled.a`
     font-size: 16px;
     line-height: 18px;
     font-weight: 600;
     color: var(--primary-color);
     text-transform: uppercase;
     margin: 0 10px 0 0;
+    text-decoration: none;
 
     @media only screen and (max-width: 880px) {
         font-size: 14px;

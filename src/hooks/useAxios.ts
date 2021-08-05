@@ -7,8 +7,6 @@ interface ApiResponse<T> {
   success?: boolean;
 }
 
-export const INITIAL_API_URL = localStorage.getItem('FUSEBIT_API_BASE_URL') || `https://stage.us-west-2.fusebit.io`;
-
 axios.interceptors.response.use(response => response, error => {
   const statusCode = Number(error.response.status);
   if (statusCode === 404) {

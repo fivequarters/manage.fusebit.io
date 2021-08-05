@@ -3,7 +3,7 @@ import * as SC from "./styles";
 import { useContext } from "../../../hooks/useContext";
 import copy from "../../../assets/copy.svg";
 import dots from "../../../assets/dots.svg";
-import { Button, Modal, Backdrop  } from "@material-ui/core";
+import { Button, Modal, Backdrop } from "@material-ui/core";
 import { JsonForms } from '@jsonforms/react';
 import { ValidationMode } from "@jsonforms/core";
 import {
@@ -67,14 +67,20 @@ const Overview: React.FC = () => {
     const { userData } = useContext();
     const [editInformation, setEditInformation] = React.useState(false);
     const [data, setData] = React.useState({firstName: userData.firstName, lastName: userData.lastName, email: userData.primaryEmail});
+    const [dataToRender, setDataToRender] = React.useState({firstName: userData.firstName, lastName: userData.lastName, email: userData.primaryEmail});
     const [errors, setErrors] = React.useState<object[]>([]);
     const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
     const [isSubmitting, setIsSubmitting] = React.useState(false);
     const [cliOpen, setCliOpen] = React.useState(false);
     const [deleteOpen, setDeleteOpen] = React.useState(false);
+    const [idCopied, setIdCopied] = React.useState(false);
+    const [popperOpen, setPopperOpen] = React.useState(false);
+    let timeout: NodeJS.Timeout;
 
     useEffect(() => {
-        setData({firstName: userData.firstName, lastName: userData.lastName, email: userData.primaryEmail});
+        const initData = {firstName: userData.firstName, lastName: userData.lastName, email: userData.primaryEmail};
+        setData(initData);
+        setDataToRender(initData);
     }, [userData]);
 
     const handleSubmit = () => {
@@ -84,6 +90,7 @@ const Overview: React.FC = () => {
             //update the user info
             setIsSubmitting(true);
             setTimeout(() => {
+                setDataToRender(data);
                 setEditInformation(false);
                 setIsSubmitting(false);
                 setValidationMode("ValidateAndHide");
@@ -98,16 +105,21 @@ const Overview: React.FC = () => {
     }
 
     const handleCopy = (text: string) => {
+        clearTimeout(timeout);
         const textarea = document.createElement('textarea');
         textarea.value = text;
         document.body.appendChild(textarea);
         textarea.select();
         document.execCommand('copy');
         document.body.removeChild(textarea);
+        setIdCopied(true);
+        timeout = setTimeout(() => {
+            setIdCopied(false);
+        }, 3000);
     }
 
     return (
-        <SC.Overview>
+        <SC.Overview onClick={(e: any) => (e.target.id !== "popper" && e.target.id !== "popperWrapper") && setPopperOpen(false)}>
             <Modal
                     aria-labelledby="transition-modal-title"
                     aria-describedby="transition-modal-description"
@@ -130,14 +142,20 @@ const Overview: React.FC = () => {
             </Modal>
             <SC.UserCard>
                 <SC.UserInfoContainer>
-                    <SC.DotsWrapper onClick={() => setDeleteOpen(true)}>
-                        <SC.Dots src={dots} alt="options" height="20" width="4" />
-                    </SC.DotsWrapper>
+                    <div>
+                        <SC.DotsWrapper id="popper" onClick={() => setPopperOpen(true)}>
+                            <SC.Dots src={dots} alt="options" height="20" width="4" />
+                        </SC.DotsWrapper>
+                        <SC.PopperOpen id="popperWrapper" active={popperOpen}>
+                            <SC.PopperElement onClick={() => setDeleteOpen(true)}>Delete User</SC.PopperElement>
+                        </SC.PopperOpen>
+                    </div>
                     <SC.UserImage alt="user" src={userData.picture} height="88" width="88" />
                     <SC.FlexDown>
-                        <SC.UserName>{data.firstName} {data.lastName}</SC.UserName>
-                        <SC.UserCompany>{data.email} </SC.UserCompany>
+                        <SC.UserName>{dataToRender.firstName} {dataToRender.lastName}</SC.UserName>
+                        <SC.UserCompany>{dataToRender.email} </SC.UserCompany>
                         <SC.UserId><strong>User-ID:</strong> {userData.id} <img onClick={() => handleCopy(userData.id || "")} src={copy} alt="copy" height="12" width="12" /></SC.UserId>
+                        <SC.CopySuccess copy={idCopied}>Copied to clipboard!</SC.CopySuccess>
                     </SC.FlexDown>
                 </SC.UserInfoContainer>
                 {

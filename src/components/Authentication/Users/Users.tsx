@@ -126,7 +126,7 @@ const Authentication: React.FC = () => {
     }
 
     return (
-        <>
+        <SC.Wrapper>
             <Modal
                     aria-labelledby="transition-modal-title"
                     aria-describedby="transition-modal-description"
@@ -271,7 +271,7 @@ const Authentication: React.FC = () => {
                     </TableBody>
                 </Table>
             </SC.TableMobile>
-        </>
+        </SC.Wrapper>
     )
 }
 

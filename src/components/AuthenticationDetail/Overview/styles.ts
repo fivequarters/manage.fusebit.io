@@ -8,6 +8,7 @@ export const Overview = styled.div`
 export const FlexDown = styled.div`
     display: flex;
     flex-direction: column;
+    width: 100%;
 `;
 
 export const UserCard = styled.div`
@@ -73,9 +74,12 @@ export const UserCompany = styled.div`
 `;
 
 export const UserId = styled.div`
+    display: flex;
+    align-items: center;
     font-size: 14px;
     line-height: 20px;
     color: var(--black);
+    width: 100%;
 
     strong {
         font-weight: 700;
@@ -84,13 +88,27 @@ export const UserId = styled.div`
     img {
         height: 12px;
         width: 12px;
+        margin-right: 6px;
         object-fit: contain;
-        margin-left: 16px;
+        margin-left: auto;
 
         &:hover{
             cursor: pointer;
         }
     }
+`;
+
+export const CopySuccess = styled.p<{copy: boolean}>`
+    position: absolute; 
+    left: 120px;
+    bottom: -35px;
+    font-size: 14px;
+    line-height: 16px;
+    color: var(--grey);
+    opacity: ${props => props.copy ? 1 : 0};
+    visibility: ${props => props.copy ? "visible" : "hidden"};
+    margin-left: auto;
+    transition: all .5s linear;
 `;
 
 export const InfoFieldWrapper = styled.div`
@@ -148,4 +166,52 @@ export const FormInputWrapper = styled.div`
     display: flex;
     align-items: center;
     margin-top: 20px;
+`;
+
+export const PopperOpen = styled.div<{active: boolean}>`
+    position: absolute;
+    right: 0;
+    width: 215px;
+    background-color: white;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
+    margin-left: -170px;
+    margin-top: 10px;
+    opacity: ${props => props.active ? 1 : 0};
+    visibility: ${props => props.active ? "visible" : "hidden"};
+    z-index: 100;
+    transition: all .2s linear;
+
+    &:hover{
+        cursor: default;
+    }
+`;
+
+export const PopperElement = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 10px 16px;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 14px;
+    line-height: 16px;
+    font-weight: 400;
+    text-decoration: none;
+    text-align: center;
+    color: var(--black);
+    margin-bottom: 5px;
+    transition: all .25s linear;
+
+    &:hover {
+        background-color: var(--secondary-color);
+        cursor: pointer;
+    }
+
+    & > img {
+        margin-left: auto;
+        display: none;
+    }
 `;
