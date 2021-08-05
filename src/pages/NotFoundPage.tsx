@@ -11,7 +11,7 @@ const NotFoundPage: FC<{}> = (): ReactElement => {
     const refreshToken = localStorage.getItem("refreshToken"); //if the user refreshed the token it returns true
     const refreshTokenUrl = localStorage.getItem("refreshTokenUrl"); //the refreshTokenUrl we should redirect to
     console.log(firstLoginRedirect);
-    if (firstLoginRedirect !== null) {
+    if (firstLoginRedirect && firstLoginRedirect.trim() !== "/") {
       localStorage.removeItem("redirect");
       history.push(firstLoginRedirect);
     } else if (refreshToken === "true" && refreshTokenUrl) {
