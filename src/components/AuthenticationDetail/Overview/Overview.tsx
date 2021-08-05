@@ -3,7 +3,7 @@ import * as SC from "./styles";
 import { useContext } from "../../../hooks/useContext";
 import copy from "../../../assets/copy.svg";
 import dots from "../../../assets/dots.svg";
-import { Button, Modal, Backdrop  } from "@material-ui/core";
+import { Button, Modal, Backdrop } from "@material-ui/core";
 import { JsonForms } from '@jsonforms/react';
 import { ValidationMode } from "@jsonforms/core";
 import {
@@ -74,6 +74,7 @@ const Overview: React.FC = () => {
     const [cliOpen, setCliOpen] = React.useState(false);
     const [deleteOpen, setDeleteOpen] = React.useState(false);
     const [idCopied, setIdCopied] = React.useState(false);
+    const [popperOpen, setPopperOpen] = React.useState(false);
     let timeout: NodeJS.Timeout;
 
     useEffect(() => {
@@ -118,7 +119,7 @@ const Overview: React.FC = () => {
     }
 
     return (
-        <SC.Overview>
+        <SC.Overview onClick={(e: any) => (e.target.id !== "popper" && e.target.id !== "popperWrapper") && setPopperOpen(false)}>
             <Modal
                     aria-labelledby="transition-modal-title"
                     aria-describedby="transition-modal-description"
@@ -141,9 +142,14 @@ const Overview: React.FC = () => {
             </Modal>
             <SC.UserCard>
                 <SC.UserInfoContainer>
-                    <SC.DotsWrapper onClick={() => setDeleteOpen(true)}>
-                        <SC.Dots src={dots} alt="options" height="20" width="4" />
-                    </SC.DotsWrapper>
+                    <div>
+                        <SC.DotsWrapper id="popper" onClick={() => setPopperOpen(true)}>
+                            <SC.Dots src={dots} alt="options" height="20" width="4" />
+                        </SC.DotsWrapper>
+                        <SC.PopperOpen id="popperWrapper" active={popperOpen}>
+                            <SC.PopperElement onClick={() => setDeleteOpen(true)}>Delete User</SC.PopperElement>
+                        </SC.PopperOpen>
+                    </div>
                     <SC.UserImage alt="user" src={userData.picture} height="88" width="88" />
                     <SC.FlexDown>
                         <SC.UserName>{dataToRender.firstName} {dataToRender.lastName}</SC.UserName>
