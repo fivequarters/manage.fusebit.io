@@ -1,6 +1,10 @@
 import styled from "styled-components";
 import arrow from "../../../assets/table-arrow.svg";
 
+export const Wrapper = styled.div`
+    padding-bottom: 80px;
+`;
+
 export const DeleteWrapper = styled.div<{active: boolean}>`
     display: ${props => props.active ? "flex" : "none"};
     align-items: center;

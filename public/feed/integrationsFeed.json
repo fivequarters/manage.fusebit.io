@@ -23,11 +23,7 @@
                         "type": "string",
                         "minLength": 3
                     }
-                },
-                "required": [
-                    "slackIntegration",
-                    "slackConnector"
-                ]
+                }
             },
             "uischema": {
                 "type": "Group",
@@ -130,11 +126,7 @@
                         "type": "string",
                         "minLength": 3
                     }
-                },
-                "required": [
-                    "slackIntegration",
-                    "slackConnector"
-                ]
+                }
             },
             "uischema": {
                 "type": "Group",
@@ -237,11 +229,7 @@
                         "type": "string",
                         "minLength": 3
                     }
-                },
-                "required": [
-                    "slackIntegration",
-                    "slackConnector"
-                ]
+                }
             },
             "uischema": {
                 "type": "Group",

@@ -45,17 +45,18 @@ const Overview: React.FC<OverviewProps> = ({headless, setHeadless}) => {
     const { getRedirectLink } = useGetRedirectLink();
     const { replaceMustache } = useReplaceMustache();
 
-    const _createConnector = React.useCallback(async (activeIntegration: Feed, data: Data) => {
+    const _createConnector = React.useCallback(async (activeFeed: Feed, data: Data) => {
         try {
             createLoader();
             let currentIntegrationData: Entity | undefined;
             let connectors: Entity[] = [];
-            for (let i = 0; i < activeIntegration.configuration.entities.length; i++) {
-                const entity: Entity = activeIntegration.configuration.entities[i];
+            const parsedFeed = await replaceMustache(data, activeFeed);
+            for (let i = 0; i < parsedFeed.configuration.entities.length; i++) {
+                const entity: Entity = parsedFeed.configuration.entities[i];
                 if (entity.entityType === "connector") {
-                    connectors.push(await replaceMustache(data, entity));
+                    connectors.push(entity);
                 } else {
-                    currentIntegrationData = await replaceMustache(data, entity);
+                    currentIntegrationData = entity;
                 }
             }
             const response = await createIntegration.mutateAsync({...currentIntegrationData?.data, accountId: userData.accountId, subscriptionId: userData.subscriptionId});
@@ -193,7 +194,7 @@ const Overview: React.FC<OverviewProps> = ({headless, setHeadless}) => {
     }
 
     return (
-        <>
+        <SC.Wrapper >
             <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
@@ -339,7 +340,7 @@ const Overview: React.FC<OverviewProps> = ({headless, setHeadless}) => {
                     </TableBody>
                 </Table>
             </SC.TableMobile>
-        </>
+        </SC.Wrapper>
     )
 }
 

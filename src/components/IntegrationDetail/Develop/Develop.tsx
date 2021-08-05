@@ -115,14 +115,15 @@ const Develop: React.FC = () => {
         }
     }
 
-    const addNewConnector = async (activeIntegration: Feed, data: Data) => {
+    const addNewConnector = async (activeFeed: Feed, data: Data) => {
         try {
             createLoader();
             let connectors: Entity[] = [];
-            for (let i = 0; i < activeIntegration.configuration.entities.length; i++) {
-                const entity: Entity = activeIntegration.configuration.entities[i];
+            const parsedFeed = await replaceMustache(data, activeFeed);
+            for (let i = 0; i < parsedFeed.configuration.entities.length; i++) {
+                const entity: Entity = parsedFeed.configuration.entities[i];
                 if (entity.entityType === "connector") {
-                    connectors.push(await replaceMustache(data, entity));
+                    connectors.push(entity);
                 }
             }
             for (let i = 0; i < connectors.length; i++) {

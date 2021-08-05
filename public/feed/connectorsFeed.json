@@ -34,11 +34,7 @@
                     "requestUserToken": {
                         "type": "boolean"
                     }
-                },
-                "required": [
-                    "slackIntegration",
-                    "slackConnector"
-                ]
+                }
             },
             "uischema": {
                 "type": "Group",
@@ -173,11 +169,7 @@
                     "requestUserToken": {
                         "type": "boolean"
                     }
-                },
-                "required": [
-                    "slackIntegration",
-                    "slackConnector"
-                ]
+                }
             },
             "uischema": {
                 "type": "Group",
@@ -312,11 +304,7 @@
                     "requestUserToken": {
                         "type": "boolean"
                     }
-                },
-                "required": [
-                    "slackIntegration",
-                    "slackConnector"
-                ]
+                }
             },
             "uischema": {
                 "type": "Group",
