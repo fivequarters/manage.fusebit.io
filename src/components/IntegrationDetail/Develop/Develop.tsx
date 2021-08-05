@@ -1,11 +1,9 @@
 import React from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import * as SC from "./styles";
 import { Button, Modal, Backdrop, Fade } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import arrow from "../../../assets/arrow-right-black.svg";
-import slack from "../../../assets/slack.svg";
-import cross from "../../../assets/cross.svg";
 import Connect from "./Connect";
 import { useLoader } from "../../../hooks/useLoader";
 import { useError } from "../../../hooks/useError";
@@ -20,10 +18,16 @@ import {Connector} from "../../../interfaces/connector";
 import { Integration, InnerConnector } from "../../../interfaces/integration";
 import Edit from "./Edit";
 import {FuseInitToken} from "../../../interfaces/fuseInitToken";
+import { useGetRedirectLink } from "../../../hooks/useGetRedirectLink";
+import FeedPicker from "../../FeedPicker";
+import ConnectorComponent from "./ConnectorComponent";
+import { Entity, Feed } from "../../../interfaces/feed";
+import { Data } from "../../../interfaces/feedPicker";
+import { useReplaceMustache } from "../../../hooks/useReplaceMustache";
+import { FinalConnector } from "../../../interfaces/integrationDetailDevelop";
 
 const Develop: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const history = useHistory();
     const { userData } = useContext();
     const { data: connectors, refetch: reloadConnectors } = useAccountConnectorsGetAll<{items: Connector[]}>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
     const { data: integrationData, refetch: reloadIntegration } = useAccountIntegrationsGetOne<Integration>({ enabled: userData.token, id, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
@@ -32,11 +36,13 @@ const Develop: React.FC = () => {
     const { waitForOperations, createLoader, removeLoader } = useLoader();
     const {createError} = useError();
     const createToken = useAccountUserCreateToken<FuseInitToken>();
-
     const [editOpen, setEditOpen] = React.useState(false);
     const [editToken, setEditToken] = React.useState<string | FuseInitToken>();
     const [connectOpen, setConnectOpen] = React.useState(false);
     const [connectorListOpen, setConnectorListOpen] = React.useState(false);
+    const {getRedirectLink} = useGetRedirectLink();
+    const [connectorPickerOpen, setConnectorPickerOpen] = React.useState(false);
+    const { replaceMustache } = useReplaceMustache();
 
     React.useEffect(() => {
         const res = localStorage.getItem("refreshToken");
@@ -109,37 +115,47 @@ const Develop: React.FC = () => {
         }
     }
 
-    const addNewConnector = async () => {
+    const addNewConnector = async (activeFeed: Feed, data: Data) => {
         try {
             createLoader();
-            const connectorId = String(new Date().getTime());
-            const response = await createConnector.mutateAsync({ id: connectorId, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
-            await waitForOperations([response.data.operationId]);
-            const data = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
-            const newData = data;
-            const newConnector: InnerConnector = {
-                name: connectorId,
-                entityType: "connector",
-                entityId: connectorId,
-                skip: true,
-                path: "proident ut tempor in ut",
-                dependsOn: [],
-                package: "@fusebit-int/pkg-oauth-integration",
+            let connectors: Entity[] = [];
+            const parsedFeed = await replaceMustache(data, activeFeed);
+            for (let i = 0; i < parsedFeed.configuration.entities.length; i++) {
+                const entity: Entity = parsedFeed.configuration.entities[i];
+                if (entity.entityType === "connector") {
+                    connectors.push(entity);
+                }
             }
-            newData.data.components.push(newConnector);
-            const response2 = await updateIntegration.mutateAsync({ 
-                accountId: userData.accountId, 
-                subscriptionId: userData.subscriptionId,
-                integrationId: integrationData?.data.id,
-                data: newData,
-            });
-            await waitForOperations([response2.data.operationId]);
+            for (let i = 0; i < connectors.length; i++) {
+                const response = await createConnector.mutateAsync({data: connectors[i].data, id: connectors[i].id, tags: connectors[i].tags, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+                await waitForOperations([response.data.operationId]);
+                const currentData = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
+                const newData = currentData;
+                const newConnector: InnerConnector = {
+                    name: connectors[i].id,
+                    entityType: "connector",
+                    entityId: connectors[i].id,
+                    skip: true,
+                    path: "proident ut tempor in ut",
+                    dependsOn: [],
+                    package: "@fusebit-int/pkg-oauth-integration",
+                }
+                newData.data.components.push(newConnector);
+                const response2 = await updateIntegration.mutateAsync({ 
+                    accountId: userData.accountId, 
+                    subscriptionId: userData.subscriptionId,
+                    integrationId: integrationData?.data.id,
+                    data: newData,
+                });
+                await waitForOperations([response2.data.operationId]);
+            }
             reloadIntegration();
             reloadConnectors();
         } catch (e) {
             createError(e.message);
         } finally {
             removeLoader();
+            setConnectorPickerOpen(false);
         }
     }
 
@@ -164,9 +180,55 @@ const Develop: React.FC = () => {
             setEditOpen(true);
         }
     }
+
+    const filterConnectors = () => {
+        const filteredConnectors = connectors?.data.items.filter((item: Connector) => {
+            let returnItem = false;
+            integrationData?.data.data.components.forEach((connector: InnerConnector) => {
+                if (connector.entityId === item.id) {
+                    returnItem = true;
+                }
+            });
+            return returnItem;
+        });
+
+        let finalConnectorsList: FinalConnector[] | undefined = filteredConnectors;
+
+        if (integrationData && filteredConnectors && integrationData?.data.data.components.length > filteredConnectors.length) {
+            integrationData?.data.data.components.forEach((innerConnector: InnerConnector) => {
+                let foundInnerConnector = false;
+                filteredConnectors.forEach((connector: Connector) => {
+                    if (connector.id === innerConnector.entityId) {
+                        foundInnerConnector = true;
+                    }
+                });
+                if (!foundInnerConnector) {
+                    const missingConnector: FinalConnector = {
+                        missing: true,
+                        id: innerConnector.entityId
+                    }
+                    finalConnectorsList?.push(missingConnector);
+                }
+            })
+        }   
+
+        return filteredConnectors || [];
+    }
     
     return (
         <SC.Background>
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                open={connectorPickerOpen}
+                onClose={() => setConnectorPickerOpen(false)}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+            >
+                <Fade in={connectorPickerOpen}>
+                    <FeedPicker onSubmit={(activeIntegration: Feed, data: Data) => addNewConnector(activeIntegration, data)} open={connectorPickerOpen} onClose={() => setConnectorPickerOpen(false)} />
+                </Fade>
+            </Modal>
             <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
@@ -201,13 +263,8 @@ const Develop: React.FC = () => {
                                     });
                                     return returnItem;
                                 })
-                                .map((item: Connector, index: number) => {
-                                return <SC.CardConnector key={index} onClick={(e) => linkConnector(item.id)}>
-                                    {// TODO: Replace placeholder with real data 
-                                    } 
-                                    <SC.CardConnectorImage src={slack} alt={item.id} height="20" width="20" />
-                                    <SC.CardConnectorText>{item.id}</SC.CardConnectorText>
-                                </SC.CardConnector>
+                                .map((connector: Connector, index: number) => {            
+                                return <ConnectorComponent onLinkConnectorClick={(id: string) => linkConnector(id)} linkConnector={true} key={index} connector={connector} onConnectorDelete={(id: string) => handleConnectorDelete(id)}  />
                             })}
                         </div>
                     </SC.ConnectorList>
@@ -275,31 +332,18 @@ const Develop: React.FC = () => {
                     <SC.Card>
                         <SC.CardTitle>Connectors</SC.CardTitle>
                         <SC.CardConnectorWrapper>
-                            {
-                                integrationData?.data.data.components.map((connector: InnerConnector, index) => {
+                        {       
+                                filterConnectors().map((connector: FinalConnector, index: number) => {
                                     if (index < 5) {
-                                        return (
-                                            <SC.CardConnector key={index} onClick={(e: any) => {
-                                                    if(!e.target.id) history.push(`/connector/${connector.entityId}`)
-                                                }}>
-                                                {// TODO: Replace placeholder with real data 
-                                                } 
-                                                <SC.CardConnectorImage src={slack} alt={"connector image"} height="20" width="20" />
-                                                <SC.CardConnectorText>{connector.entityId}</SC.CardConnectorText>
-                                                <SC.CardConnectorCrossContainer id="closeWrapper" onClick={() => handleConnectorDelete(connector.entityId)}>
-                                                    <SC.CardConnectorCross id="close" src={cross} alt="close" height="8" width="8" />
-                                                </SC.CardConnectorCrossContainer>
-                                            </SC.CardConnector>
-                                        )
+                                        return <ConnectorComponent key={index} connector={connector} onConnectorDelete={(id: string) => handleConnectorDelete(id)}  />
                                     }
                                     return null;
-                                })
-                            }
+                            })}
                         </SC.CardConnectorWrapper>
                         {
                             integrationData?.data.data.components.length ? 
                             integrationData?.data.data.components.length >= 5 && (
-                                <SC.CardConnectorSeeMore href="/"> 
+                                <SC.CardConnectorSeeMore href={getRedirectLink("/connectors")}> 
                                     See all
                                     <img src={arrow} alt="see more" height="10" width="10" />
                                 </SC.CardConnectorSeeMore>
@@ -307,12 +351,12 @@ const Develop: React.FC = () => {
                         }
                         
                         <SC.CardConnectorButtonsWrapper>
-                            <Button onClick={addNewConnector} startIcon={<AddIcon />} style={{width: "160px", marginTop: "24px"}} size="large" variant="outlined" color="primary" >Add New</Button>
+                            <Button onClick={() => setConnectorPickerOpen(true)} startIcon={<AddIcon />} style={{width: "160px", marginTop: "24px"}} size="large" variant="outlined" color="primary" >Add New</Button>
                             <Button onClick={() => setConnectorListOpen(true)} startIcon={<AddIcon />} style={{width: "160px", marginTop: "24px"}} size="large" variant="outlined" color="primary" >Link Existing</Button>
                         </SC.CardConnectorButtonsWrapper>
 
                         <SC.CardConnectorButtonsWrapperMobile>
-                            <Button onClick={addNewConnector} startIcon={<AddIcon />} style={{width: "135px", marginTop: "10px"}} size="medium" variant="outlined" color="primary" >Add New</Button>
+                            <Button onClick={() => setConnectorPickerOpen(true)} startIcon={<AddIcon />} style={{width: "135px", marginTop: "10px"}} size="medium" variant="outlined" color="primary" >Add New</Button>
                             <Button onClick={() => setConnectorListOpen(true)} startIcon={<AddIcon />} style={{width: "135px", marginTop: "10px"}} size="medium" variant="outlined" color="primary" >Link Existing</Button>
                         </SC.CardConnectorButtonsWrapperMobile>
                     </SC.Card>

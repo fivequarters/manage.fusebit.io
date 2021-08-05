@@ -14,6 +14,7 @@ import arrowRight from "../../../assets/arrow-right.svg";
 import arrowLeft from "../../../assets/arrow-left.svg";
 import client from "../../../assets/client.jpg";
 import NewUser from "./NewUser";
+import { useGetRedirectLink } from "../../../hooks/useGetRedirectLink";
 
 enum cells {
     NAME = "Name",
@@ -31,6 +32,7 @@ const Authentication: React.FC = () => {
     const { createError } = useError();
     const [selectedCell, setSelectedCell] = React.useState<cells>(cells.NAME);
     const [newUserOpen, setNewUserOpen] = React.useState(false);
+    const { getRedirectLink } = useGetRedirectLink();
 
     useEffect(() => {
         if (integrations && integrations.data.items) {
@@ -124,7 +126,7 @@ const Authentication: React.FC = () => {
     }
 
     return (
-        <>
+        <SC.Wrapper>
             <Modal
                     aria-labelledby="transition-modal-title"
                     aria-describedby="transition-modal-description"
@@ -180,7 +182,7 @@ const Authentication: React.FC = () => {
                     </TableHead>
                     <TableBody>
                         {rows.map((row) => (
-                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/" + userData.accountId + "/" + userData.subscriptionId + "/authentication/detail")}>
+                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, getRedirectLink("/authentication/detail"))}>
                                 <TableCell style={{ cursor: "default" }} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
                                     <Checkbox
                                         color="primary"
@@ -241,7 +243,7 @@ const Authentication: React.FC = () => {
                     </TableHead>
                     <TableBody>
                         {rows.map((row) => (
-                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/" + userData.accountId + "/" + userData.subscriptionId + "/authentication/detail")}>
+                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, getRedirectLink("/authentication/detail"))}>
                                 <TableCell style={{ cursor: "default" }} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
                                     <Checkbox
                                         color="primary"
@@ -269,7 +271,7 @@ const Authentication: React.FC = () => {
                     </TableBody>
                 </Table>
             </SC.TableMobile>
-        </>
+        </SC.Wrapper>
     )
 }
 

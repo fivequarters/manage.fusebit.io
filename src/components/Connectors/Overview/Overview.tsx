@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import * as SC from "./styles";
 import { Table, TableBody, TableCell, TableHead, TableRow, Button, Checkbox, IconButton, Tooltip, Modal, Backdrop } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
@@ -14,11 +14,14 @@ import { Connector } from "../../../interfaces/connector";
 import { useError } from "../../../hooks/useError";
 import arrowRight from "../../../assets/arrow-right.svg";
 import arrowLeft from "../../../assets/arrow-left.svg";
-import AddConnector from "./AddConnector";
 import { Entity, Feed } from "../../../interfaces/feed";
-import Mustache from "mustache";
 import { useQuery } from "../../../hooks/useQuery";
-import { connectorsFeed } from "../../../static/feed";
+import { useGetRedirectLink } from "../../../hooks/useGetRedirectLink";
+import FeedPicker from "../../FeedPicker";
+import {connectorsFeed} from "../../../static/feed";
+import {OverviewProps} from "../../../interfaces/connectors";
+import { Data } from "../../../interfaces/feedPicker";
+import {useReplaceMustache} from "../../../hooks/useReplaceMustache";
 
 enum cells {
     TYPE = "Type",
@@ -26,11 +29,7 @@ enum cells {
     CREATED = "Created",
 }
 
-interface IntegrationData {
-    [key: string]: any;
-}
-
-const Overview: React.FC = () => {
+const Overview: React.FC<OverviewProps> = ({headless, setHeadless}) => {
     const [selected, setSelected] = React.useState<string[]>([]);
     const [rows, setRows] = React.useState<Connector[]>([]);
     const { userData } = useContext();
@@ -43,74 +42,49 @@ const Overview: React.FC = () => {
     const [selectedCell, setSelectedCell] = React.useState<cells>(cells.TYPE);
     const [addConnectorOpen, setAddConnectorOpen] = React.useState(false);
     const query = useQuery();
-    let headless = useRef(true);
+    const { getRedirectLink } = useGetRedirectLink();
+    const { replaceMustache } = useReplaceMustache();
 
-    const replaceMustache = React.useCallback(async (data: IntegrationData, entity: Entity) => {
-        const customTags: any = [ '<%', '%>' ];
-        const keys = Object.keys(data);
-        let connectorId;
-        let integrationId;
-        keys.forEach((key: any) => {
-            if (key.match("Connector")) {
-                connectorId = data[key].replace(/\s/g, '');
-            } else if (key.match("Integration")) {
-                integrationId = data[key].replace(/\s/g, '');
-            }
-        });
-        const view = {
-            this: {
-                connectorId,
-                integrationId 
-            },
-            global: {
-                userId: {
-                    id: userData.userId,
-                },
-                accountId: {
-                    id: userData.accountId,
-                },
-                subscriptionId: {
-                    id: userData.subscriptionId,
-                }
-            }
-        }
-        const newEntity = Mustache.render(JSON.stringify(entity), view, {}, customTags);
-        const parsedEntity: Entity = JSON.parse(newEntity);
-        return parsedEntity;
-    }, [userData]);
-
-    const _createConnector = React.useCallback(async (activeIntegration: Feed, data: IntegrationData) => {
+    const _createConnector = React.useCallback(async (activeFeed: Feed, data: Data) => {
         try {
             createLoader();
             let currentIntegrationData: Entity | undefined;
             let connectors: Entity[] = [];
-            for (let i = 0; i < activeIntegration.configuration.entities.length; i++) {
-                const entity: Entity = activeIntegration.configuration.entities[i];
+            const parsedFeed = await replaceMustache(data, activeFeed);
+            for (let i = 0; i < parsedFeed.configuration.entities.length; i++) {
+                const entity: Entity = parsedFeed.configuration.entities[i];
                 if (entity.entityType === "connector") {
-                    connectors.push(await replaceMustache(data, entity));
+                    connectors.push(entity);
                 } else {
-                    currentIntegrationData = await replaceMustache(data, entity);
+                    currentIntegrationData = entity;
                 }
             }
             const response = await createIntegration.mutateAsync({...currentIntegrationData?.data, accountId: userData.accountId, subscriptionId: userData.subscriptionId});
             await waitForOperations([response.data.operationId]);
             for (let i = 0; i < connectors.length; i++) {
-                const response = await createConnector.mutateAsync({data: connectors[i].data, id: connectors[i].id, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+                const response = await createConnector.mutateAsync({data: connectors[i].data, id: connectors[i].id, tags: connectors[i].tags, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
                 await waitForOperations([response.data.operationId]);
             }
-            window.location.href = "/" + userData.accountId + "/" + userData.subscriptionId +  "/integration/" + currentIntegrationData?.id;
+            window.location.href = getRedirectLink("/integration/" + currentIntegrationData?.id);
         } catch (e) {
             createError(e.message);
         }
-    }, [createConnector, createError, createIntegration, createLoader, userData, waitForOperations, replaceMustache]);
+    }, [createConnector, createError, createIntegration, createLoader, userData, waitForOperations, replaceMustache, getRedirectLink]);
 
     React.useEffect(() => {
         if (connectors && connectors.data.items) {
             if (connectors.data.items.length > 0) {
                 const items = connectors.data.items;
                 setRows(items);
+                if (headless.current) {
+                    setHeadless(false); // so we only do this once.
+                    const key = query.get("key");
+                    if (key !== null && key !== undefined) {
+                        setAddConnectorOpen(true);
+                    }
+                }
             } else if (headless.current) {
-                headless.current = false; // so we only do this once.
+                setHeadless(false); // so we only do this once.
                 const items = connectors.data.items;
                 setRows(items); // otherwise if we delete and the connectors.data.items has 0 items the rows will display 1
                 const key = query.get("key");
@@ -128,9 +102,12 @@ const Overview: React.FC = () => {
                     }
                     setAddConnectorOpen(keyDoesntMatch);
                 });
+            } else {
+                const items = connectors.data.items;
+                setRows(items); // otherwise if we delete and the connectors.data.items has 0 items the rows will display 1
             }
         }
-    }, [connectors, query, _createConnector]);
+    }, [connectors, query, _createConnector, headless, setHeadless]);
 
     const handleSelectAllCheck = (event: any) => {
         if (event.target.checked) {
@@ -217,7 +194,7 @@ const Overview: React.FC = () => {
     }
 
     return (
-        <>
+        <SC.Wrapper >
             <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
@@ -226,7 +203,7 @@ const Overview: React.FC = () => {
                 closeAfterTransition
                 BackdropComponent={Backdrop}
             >
-                <AddConnector onSubmit={(activeIntegration: Feed, data: IntegrationData) => _createConnector(activeIntegration, data)} open={addConnectorOpen} onClose={() => setAddConnectorOpen(false)} />
+                <FeedPicker onSubmit={(activeIntegration: Feed, data: Data) => _createConnector(activeIntegration, data)} open={addConnectorOpen} onClose={() => setAddConnectorOpen(false)} />
             </Modal>
             <SC.ButtonContainer>
                 <SC.ButtonMargin>
@@ -274,7 +251,7 @@ const Overview: React.FC = () => {
                     </TableHead>
                     <TableBody>
                         {rows.map((row) => (
-                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/" + userData.accountId + "/" + userData.subscriptionId + "/connector/" + row.id)}>
+                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, getRedirectLink("/connector/" + row.id))}>
                                 <TableCell style={{ cursor: "default" }} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
                                     <Checkbox
                                         color="primary"
@@ -338,7 +315,7 @@ const Overview: React.FC = () => {
                     </TableHead>
                     <TableBody>
                         {rows.map((row) => (
-                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, "/" + userData.accountId + "/" + userData.subscriptionId + "/connector/" + row.id)}>
+                            <SC.Row key={row.id} onClick={(e) => handleRowClick(e, getRedirectLink("/connector/" + row.id))}>
                                 <TableCell style={{ cursor: "default" }} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
                                     <Checkbox
                                         color="primary"
@@ -363,7 +340,7 @@ const Overview: React.FC = () => {
                     </TableBody>
                 </Table>
             </SC.TableMobile>
-        </>
+        </SC.Wrapper>
     )
 }
 

@@ -105,7 +105,7 @@ export const CardConnector = styled.div`
 export const CardConnectorImage = styled.img`
     height: 20px;
     width: 20px;
-    object-fit: cover;
+    object-fit: contain;
     margin-right: 16px;
 `;
 

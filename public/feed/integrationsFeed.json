@@ -23,11 +23,7 @@
                         "type": "string",
                         "minLength": 3
                     }
-                },
-                "required": [
-                    "slackIntegration",
-                    "slackConnector"
-                ]
+                }
             },
             "uischema": {
                 "type": "Group",
@@ -68,7 +64,10 @@
                         }
                     },
                     "tags": {
-                        "catalog.entry": "slack-connector"
+                        "catalog.entry": "slack-connector",
+                        "fusebit.feedId": "as23w63ag32525e",
+                        "fusebit.feedVersion": "1.0.3",
+                        "fusebit.feedType": "integration"
                     }
                 },
                 {
@@ -92,12 +91,7 @@
                                     "package": "@fusebit-int/pkg-oauth-integration"
                                 }
                             ],
-                            "componentTags": {
-                                "foo": "bar2",
-                                "some": "another",
-                                "other": "tag",
-                                "monkey": "banana"
-                            },
+                            "componentTags": {},
                             "configuration": {}
                         }
                     },
@@ -132,11 +126,7 @@
                         "type": "string",
                         "minLength": 3
                     }
-                },
-                "required": [
-                    "slackIntegration",
-                    "slackConnector"
-                ]
+                }
             },
             "uischema": {
                 "type": "Group",
@@ -177,7 +167,10 @@
                         }
                     },
                     "tags": {
-                        "catalog.entry": "slack-connector"
+                        "catalog.entry": "slack-connector",
+                        "fusebit.feedId": "w6age",
+                        "fusebit.feedVersion": "1.0.3",
+                        "fusebit.feedType": "integration"
                     }
                 },
                 {
@@ -201,12 +194,7 @@
                                     "package": "@fusebit-int/pkg-oauth-integration"
                                 }
                             ],
-                            "componentTags": {
-                                "foo": "bar2",
-                                "some": "another",
-                                "other": "tag",
-                                "monkey": "banana"
-                            },
+                            "componentTags": {},
                             "configuration": {}
                         }
                     },
@@ -241,11 +229,7 @@
                         "type": "string",
                         "minLength": 3
                     }
-                },
-                "required": [
-                    "slackIntegration",
-                    "slackConnector"
-                ]
+                }
             },
             "uischema": {
                 "type": "Group",
@@ -286,7 +270,10 @@
                         }
                     },
                     "tags": {
-                        "catalog.entry": "slack-connector"
+                        "catalog.entry": "slack-connector",
+                        "fusebit.feedId": "as23age",
+                        "fusebit.feedVersion": "1.0.3",
+                        "fusebit.feedType": "integration"
                     }
                 },
                 {
@@ -310,12 +297,7 @@
                                     "package": "@fusebit-int/pkg-oauth-integration"
                                 }
                             ],
-                            "componentTags": {
-                                "foo": "bar2",
-                                "some": "another",
-                                "other": "tag",
-                                "monkey": "banana"
-                            },
+                            "componentTags": {},
                             "configuration": {}
                         }
                     },
