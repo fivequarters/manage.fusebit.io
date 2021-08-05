@@ -6,8 +6,8 @@ const Authentication: React.FC = () => {
     return (
         <>
             <TabComponent
-            tabNames={["Users", "Clients"]}
-            tabObjects={[<Users />, "Clients"]}
+            tabNames={["Users"]}
+            tabObjects={[<Users />]}
             />
         </>
     )

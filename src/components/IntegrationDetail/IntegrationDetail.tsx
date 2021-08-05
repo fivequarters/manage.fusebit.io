@@ -5,8 +5,8 @@ import Develop from "./Develop";
 const IntegrationDetail: React.FC = () => {
     return (
         <TabComponent 
-        tabNames={["Develop", "Installs", "Configuration", "Health", "Analytics", "Deployments"]}
-        tabObjects={[<Develop />, "Installs", "Configuration", "Health", "Analytics", "Deployments"]}
+        tabNames={["Develop", "Installs"]}
+        tabObjects={[<Develop />, "Installs"]}
         />
     )
 }

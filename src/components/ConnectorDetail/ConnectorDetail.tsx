@@ -5,8 +5,8 @@ import Configure from "./Configure";
 const ConnectorDetail: React.FC = () => {
     return (
         <TabComponent 
-        tabNames={["Configure", "Identities", "Analytics", "Deployments"]} 
-        tabObjects={[<Configure />, "Identities", "Analytics", "Deployments"]}
+        tabNames={["Configure"]} 
+        tabObjects={[<Configure />]}
         />
     )
 }
