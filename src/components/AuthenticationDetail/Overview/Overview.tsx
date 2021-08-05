@@ -67,6 +67,7 @@ const Overview: React.FC = () => {
     const { userData } = useContext();
     const [editInformation, setEditInformation] = React.useState(false);
     const [data, setData] = React.useState({firstName: userData.firstName, lastName: userData.lastName, email: userData.primaryEmail});
+    const [dataToRender, setDataToRender] = React.useState({firstName: userData.firstName, lastName: userData.lastName, email: userData.primaryEmail});
     const [errors, setErrors] = React.useState<object[]>([]);
     const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
     const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -84,6 +85,7 @@ const Overview: React.FC = () => {
             //update the user info
             setIsSubmitting(true);
             setTimeout(() => {
+                setDataToRender(data);
                 setEditInformation(false);
                 setIsSubmitting(false);
                 setValidationMode("ValidateAndHide");
@@ -135,8 +137,8 @@ const Overview: React.FC = () => {
                     </SC.DotsWrapper>
                     <SC.UserImage alt="user" src={userData.picture} height="88" width="88" />
                     <SC.FlexDown>
-                        <SC.UserName>{data.firstName} {data.lastName}</SC.UserName>
-                        <SC.UserCompany>{data.email} </SC.UserCompany>
+                        <SC.UserName>{dataToRender.firstName} {dataToRender.lastName}</SC.UserName>
+                        <SC.UserCompany>{dataToRender.email} </SC.UserCompany>
                         <SC.UserId><strong>User-ID:</strong> {userData.id} <img onClick={() => handleCopy(userData.id || "")} src={copy} alt="copy" height="12" width="12" /></SC.UserId>
                     </SC.FlexDown>
                 </SC.UserInfoContainer>
