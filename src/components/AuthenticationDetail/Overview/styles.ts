@@ -8,6 +8,7 @@ export const Overview = styled.div`
 export const FlexDown = styled.div`
     display: flex;
     flex-direction: column;
+    width: 100%;
 `;
 
 export const UserCard = styled.div`
@@ -73,9 +74,12 @@ export const UserCompany = styled.div`
 `;
 
 export const UserId = styled.div`
+    display: flex;
+    align-items: center;
     font-size: 14px;
     line-height: 20px;
     color: var(--black);
+    width: 100%;
 
     strong {
         font-weight: 700;
@@ -84,13 +88,27 @@ export const UserId = styled.div`
     img {
         height: 12px;
         width: 12px;
+        margin-right: 6px;
         object-fit: contain;
-        margin-left: 16px;
+        margin-left: auto;
 
         &:hover{
             cursor: pointer;
         }
     }
+`;
+
+export const CopySuccess = styled.p<{copy: boolean}>`
+    position: absolute; 
+    left: 120px;
+    bottom: -35px;
+    font-size: 14px;
+    line-height: 16px;
+    color: var(--grey);
+    opacity: ${props => props.copy ? 1 : 0};
+    visibility: ${props => props.copy ? "visible" : "hidden"};
+    margin-left: auto;
+    transition: all .5s linear;
 `;
 
 export const InfoFieldWrapper = styled.div`

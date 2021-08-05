@@ -73,9 +73,13 @@ const Overview: React.FC = () => {
     const [isSubmitting, setIsSubmitting] = React.useState(false);
     const [cliOpen, setCliOpen] = React.useState(false);
     const [deleteOpen, setDeleteOpen] = React.useState(false);
+    const [idCopied, setIdCopied] = React.useState(false);
+    let timeout: NodeJS.Timeout;
 
     useEffect(() => {
-        setData({firstName: userData.firstName, lastName: userData.lastName, email: userData.primaryEmail});
+        const initData = {firstName: userData.firstName, lastName: userData.lastName, email: userData.primaryEmail};
+        setData(initData);
+        setDataToRender(initData);
     }, [userData]);
 
     const handleSubmit = () => {
@@ -100,12 +104,17 @@ const Overview: React.FC = () => {
     }
 
     const handleCopy = (text: string) => {
+        clearTimeout(timeout);
         const textarea = document.createElement('textarea');
         textarea.value = text;
         document.body.appendChild(textarea);
         textarea.select();
         document.execCommand('copy');
         document.body.removeChild(textarea);
+        setIdCopied(true);
+        timeout = setTimeout(() => {
+            setIdCopied(false);
+        }, 3000);
     }
 
     return (
@@ -140,6 +149,7 @@ const Overview: React.FC = () => {
                         <SC.UserName>{dataToRender.firstName} {dataToRender.lastName}</SC.UserName>
                         <SC.UserCompany>{dataToRender.email} </SC.UserCompany>
                         <SC.UserId><strong>User-ID:</strong> {userData.id} <img onClick={() => handleCopy(userData.id || "")} src={copy} alt="copy" height="12" width="12" /></SC.UserId>
+                        <SC.CopySuccess copy={idCopied}>Copied to clipboard!</SC.CopySuccess>
                     </SC.FlexDown>
                 </SC.UserInfoContainer>
                 {
