@@ -24,7 +24,7 @@ enum Filters {
     CALENDAR = "Calendar",
 }
 
-const FeedPicker: React.FC<Props> = ({open, onClose, onSubmit, isIntegration}) => {
+const FeedPicker = React.forwardRef(({open, onClose, onSubmit, isIntegration}: Props, ref) => {
     const [data, setData] = React.useState<any>({});
     const [errors, setErrors] = React.useState<object[]>([]);
     const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
@@ -145,6 +145,6 @@ const FeedPicker: React.FC<Props> = ({open, onClose, onSubmit, isIntegration}) =
             </SC.Flex>
         </SC.Card>
     )
-}
+})
 
 export default FeedPicker;

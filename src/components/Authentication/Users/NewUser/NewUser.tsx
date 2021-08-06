@@ -60,7 +60,7 @@ const schema = {
     ]
   }
 
-const NewUser: React.FC<Props> = ({open, onClose}) => {
+const NewUser = React.forwardRef(({open, onClose}: Props, ref) => {
     const [data, setData] = React.useState({});
     const [errors, setErrors] = React.useState<object[]>([]);
     const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
@@ -141,6 +141,6 @@ const NewUser: React.FC<Props> = ({open, onClose}) => {
             }
         </SC.Card>
     )
-}
+})
 
 export default NewUser;

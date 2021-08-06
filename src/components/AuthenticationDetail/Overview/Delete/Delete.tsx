@@ -4,7 +4,7 @@ import cross from "../../../../assets/cross.svg";
 import {Props} from "../../../../interfaces/delete";
 import { Button } from "@material-ui/core";
 
-const Delete: React.FC<Props> = ({open, onClose}) => {
+const Delete = React.forwardRef(({open, onClose}: Props, ref) => {
     return (
         <SC.Card open={open}>
             <SC.Close onClick={() => onClose()} src={cross} alt="cross" height="12" width="12" />
@@ -16,6 +16,6 @@ const Delete: React.FC<Props> = ({open, onClose}) => {
             </SC.ButtonsWrapper>
         </SC.Card>
     )
-}
+})
 
 export default Delete;

@@ -5,7 +5,7 @@ import cross from "../../../../assets/cross.svg";
 import copyIcon from "../../../../assets/copy.svg";
 import { Button } from "@material-ui/core";
 
-const CliAccess: React.FC<Props> = ({open, onClose}) => {
+const CliAccess = React.forwardRef(({open, onClose}: Props, ref) => {
     const [copiedLine, setCopiedLine] = React.useState(0);
     let timeout: NodeJS.Timeout;
 
@@ -60,6 +60,6 @@ const CliAccess: React.FC<Props> = ({open, onClose}) => {
             </SC.ButtonsWrapper>
         </SC.Card>
     )
-}
+})
 
 export default CliAccess;
