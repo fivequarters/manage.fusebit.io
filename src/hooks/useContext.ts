@@ -30,8 +30,8 @@ const _useContext = () => {
     }
 
     const logout = () => {
-        setUserData({});
         localStorage.setItem(LS_KEY, JSON.stringify({}));
+        setUserData({picture: userData.picture});
         window.location.href = `https://fusebit.auth0.com/v2/logout?returnTo=http%3A%2F%2F${window.location.host}`;
     }
 
