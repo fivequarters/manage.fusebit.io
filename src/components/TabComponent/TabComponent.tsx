@@ -52,6 +52,8 @@ const TabComponent: React.FC<Props> = ({tabNames, tabObjects}) => {
             if (!foundTheTag) {
                 window.location.hash = tabNames[0];
             }
+        } else {
+            setValue(0);
         }
     }, [tabNames]);
 
