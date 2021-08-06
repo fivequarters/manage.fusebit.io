@@ -27,11 +27,13 @@ const Installs: React.FC = () => {
     const handleDelete = async () => {
         try {
             createLoader();
-            const data = JSON.parse(JSON.stringify(installsData?.data)) as Install;        
+            const data = JSON.parse(JSON.stringify(installsData?.data)) as Install;  
+            let operationIds: string[] = [];      
             for (let i = 0; i < data.items?.length; i++) {
                 const response = await deleteInstance.mutateAsync({data: data.items[i], id: id, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
-                await waitForOperations([response.data.operationId]);   
+                operationIds.push(response.data.operationId);
             }
+            await waitForOperations(operationIds);
             reloadInstalls();
         } catch (e) {
             createError(e.message);
