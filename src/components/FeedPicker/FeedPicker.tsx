@@ -113,7 +113,7 @@ const FeedPicker: React.FC<Props> = ({open, onClose, onSubmit, isIntegration}) =
                                         </SC.ColumnItem>
                                     )
                                 } else {
-                                    return <></>
+                                    return null;
                                 }
                             })
                     }
