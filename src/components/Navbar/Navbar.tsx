@@ -14,7 +14,6 @@ import { useAccountConnectorsGetAll } from "../../hooks/api/v2/account/connector
 import { Integration } from "../../interfaces/integration";
 import { Connector } from "../../interfaces/connector";
 import { useState } from "react";
-import { useAxios } from "../../hooks/useAxios";
 import burguer from "../../assets/burguer.svg";
 import cross from "../../assets/cross.svg";
 import { useEffect } from "react";
@@ -26,8 +25,6 @@ const Navbar: React.FC<Props> = ({ sectionName, dropdown, integration, connector
     const [anchorSectionDropdown, setAnchorSectionDropdown] = React.useState(null);
     const [anchorUserDropdown, setAnchorUserDropdown] = React.useState(null);
     const { userData, logout } = useContext();
-    const { getBaseUrl, setBaseUrl } = useAxios();
-    const [url, setUrl] = useState(getBaseUrl());
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [drawerBottomOpen, setDrawerBottomOpen] = useState(false);
     const [loggingOut, setLoggingOut] = useState(false);
@@ -293,7 +290,6 @@ const Navbar: React.FC<Props> = ({ sectionName, dropdown, integration, connector
                         </SC.DrawerWrapper>
                     </Drawer>
                 </SC.Nav>
-                <SC.FloatingInput value={url} onChange={(e: any) => setUrl(e.target.value)} onKeyDown={(e: any) => { if (e.keyCode === 13) setBaseUrl(url) }} />
             </Container>
         </SC.Background>
     )

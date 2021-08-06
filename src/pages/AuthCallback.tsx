@@ -9,6 +9,8 @@ import { User } from "../interfaces/user";
 import { Account } from "../interfaces/account";
 import axios from "axios";
 
+const { REACT_APP_AUTH0_DOMAIN } = process.env;
+
 const IntegrationsPage: FC<{}> = (): ReactElement => {
 
   const location = useLocation();
@@ -20,7 +22,7 @@ const IntegrationsPage: FC<{}> = (): ReactElement => {
   const getPicture = async () => {
     let picture = '';
     try {
-      const response = await axios.get('https://fusebit.auth0.com/userinfo', { headers: { Authorization: `Bearer ${userData.token}` } });
+      const response = await axios.get(`${REACT_APP_AUTH0_DOMAIN}/userinfo`, { headers: { Authorization: `Bearer ${userData.token}` } });
       return response.data.picture;
     } catch (e) {}
     return picture;

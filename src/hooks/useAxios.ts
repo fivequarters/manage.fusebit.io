@@ -1,6 +1,8 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { readLocalData, useContext } from "./useContext";
 
+const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
+
 interface ApiResponse<T> {
   error?: string;
   data: T;
@@ -25,13 +27,6 @@ axios.interceptors.response.use(response => response, error => {
 export const useAxios = () => {
   const { userData } = useContext();
 
-  const getBaseUrl = () => localStorage.getItem('FUSEBIT_API_BASE_URL') || `https://stage.us-west-2.fusebit.io`;
-
-  const setBaseUrl = (value: string) => {
-    localStorage.setItem('FUSEBIT_API_BASE_URL', value);
-    window.location.reload();
-  }
-
   const _axios = async <T extends {}>(
     endpoint: string,
     method: "post" | "delete" | "put" | "get",
@@ -41,7 +36,7 @@ export const useAxios = () => {
     try {
       const config: AxiosRequestConfig = {
         method,
-        url: `${getBaseUrl()}${endpoint}`,
+        url: `${REACT_APP_FUSEBIT_DEPLOYMENT}${endpoint}`,
         data: params,
         headers
       };
@@ -55,7 +50,5 @@ export const useAxios = () => {
 
   return {
     axios: _axios,
-    getBaseUrl,
-    setBaseUrl
   }
 }

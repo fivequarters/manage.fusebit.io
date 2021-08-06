@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { User } from "../interfaces/user";
 import { useGetAuthLink } from "../hooks/useGetAuthLink";
 
+const { REACT_APP_AUTH0_DOMAIN, REACT_APP_LOGOUT_REDIRECT_URL } = process.env;
+
 const LS_KEY = `T29M03eleloegehOxGtpEPel18JfM3djp5pUL4Jm`;
 export const readLocalData = () => JSON.parse(localStorage.getItem(LS_KEY) || "{}");
 
@@ -32,7 +34,7 @@ const _useContext = () => {
     const logout = () => {
         localStorage.setItem(LS_KEY, JSON.stringify({}));
         setUserData({picture: userData.picture});
-        window.location.href = `https://fusebit.auth0.com/v2/logout?returnTo=http%3A%2F%2F${window.location.host}`;
+        window.location.href = `${REACT_APP_AUTH0_DOMAIN}/v2/logout?returnTo=${REACT_APP_LOGOUT_REDIRECT_URL}`;
     }
 
     return {
