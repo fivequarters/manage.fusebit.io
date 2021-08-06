@@ -3,6 +3,7 @@ import * as SC from "./styles";
 import { Container, Tabs, Tab } from "@material-ui/core";
 import PropTypes from 'prop-types';
 import {Props} from "../../interfaces/TabComponent";
+import { useEffect } from "react";
 
 const TabPanel = (props: any) => {
     const { children, value, index, ...other } = props;
@@ -37,8 +38,26 @@ const a11yProps = (index: number) => {
 
 const TabComponent: React.FC<Props> = ({tabNames, tabObjects}) => {
     const [value, setValue] = React.useState(0);
+
+    useEffect(() => {
+        const hash = window.location.hash;
+        if (!hash.match(tabNames[0])) {
+            let foundTheTag = false;
+            tabNames.forEach((tab: string, index: number) => {
+                if (hash.match(tab)) {
+                    setValue(index);
+                    foundTheTag = true;
+                }
+            });
+            if (!foundTheTag) {
+                window.location.hash = tabNames[0];
+            }
+        }
+    }, [tabNames]);
+
     const handleChange = (event: any, newValue: number) => {
         setValue(newValue);
+        window.location.hash = tabNames[newValue];
       };
 
     return (

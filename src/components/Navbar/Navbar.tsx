@@ -30,6 +30,7 @@ const Navbar: React.FC<Props> = ({ sectionName, dropdown, integration, connector
     const [url, setUrl] = useState(getBaseUrl());
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [drawerBottomOpen, setDrawerBottomOpen] = useState(false);
+    const [loggingOut, setLoggingOut] = useState(false);
     const {getRedirectLink} = useGetRedirectLink();
 
     const { data: integrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({ enabled: userData.token, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
@@ -41,8 +42,16 @@ const Navbar: React.FC<Props> = ({ sectionName, dropdown, integration, connector
 
     useEffect(() => {
         console.log(userData);
-        
-    }, [userData])
+    }, [userData]);
+
+    const handleLogout = () => {
+        setLoggingOut(true);
+        setDrawerOpen(false);
+        setAnchorUserDropdown(null);
+        setTimeout(() => {
+            logout();
+        }, 250);
+    }
 
     return (
         <SC.Background>
@@ -203,8 +212,8 @@ const Navbar: React.FC<Props> = ({ sectionName, dropdown, integration, connector
                         <SC.Link href="/support">Support</SC.Link>
                         <SC.Link href="/docs">Docs</SC.Link>
                     </SC.LinksContainer>
-                    <SC.ButtonWrapper active={Boolean(anchorUserDropdown)}>
-                        <Button style={{ backgroundColor: Boolean(anchorUserDropdown) ? "#D7E5FF66" : "" }} aria-controls="simple-menu" aria-haspopup="true" onClick={(event: any) => setAnchorUserDropdown(event.currentTarget)} size="large" startIcon={<SC.User src={userData.picture || client} />} endIcon={Boolean(anchorUserDropdown) ? <ExpandLessIcon /> : <ExpandMoreIcon />} variant="text" color="inherit">
+                    <SC.ButtonWrapper active={Boolean(anchorUserDropdown) && !loggingOut}>
+                        <Button style={{ backgroundColor: (Boolean(anchorUserDropdown) && !loggingOut) ? "#D7E5FF66" : "" }} aria-controls="simple-menu" aria-haspopup="true" onClick={(event: any) => setAnchorUserDropdown(event.currentTarget)} size="large" startIcon={<SC.User src={userData.picture || client} />} endIcon={(Boolean(anchorUserDropdown) && !loggingOut) ? <ExpandLessIcon /> : <ExpandMoreIcon />} variant="text" color="inherit">
                             Stage
                         </Button>
                         <Menu
@@ -212,7 +221,7 @@ const Navbar: React.FC<Props> = ({ sectionName, dropdown, integration, connector
                             id="simple-menu"
                             anchorEl={anchorUserDropdown}
                             keepMounted
-                            open={Boolean(anchorUserDropdown)}
+                            open={Boolean(anchorUserDropdown) && !loggingOut}
                             onClose={() => setAnchorUserDropdown(null)}
                         >
                             <SC.UserDropdown>
@@ -237,13 +246,13 @@ const Navbar: React.FC<Props> = ({ sectionName, dropdown, integration, connector
                                     <SC.UserDropdownLink href="/settings">Settings</SC.UserDropdownLink>
                                 </SC.UserDropdownLinksWrapper>
                                 <SC.UserButtonWrapper>
-                                    <Button onClick={logout} style={{ marginLeft: "auto" }} variant="outlined" size="medium" color="primary">Log Out</Button>
+                                    <Button onClick={handleLogout} style={{ marginLeft: "auto" }} variant="outlined" size="medium" color="primary">Log Out</Button>
                                 </SC.UserButtonWrapper>
                             </SC.UserDropdown>
                         </Menu>
                     </SC.ButtonWrapper>
                     <SC.Menu onClick={() => setDrawerOpen(true)} src={burguer} alt="menu-opener" height="10" width="20" />
-                    <Drawer anchor={"right"} open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+                    <Drawer anchor={"right"} open={drawerOpen  && !loggingOut} onClose={() => setDrawerOpen(false)}>
                         <SC.DrawerWrapper>
                             <SC.Flex>
                                 <SC.CompanyName>{userData.company}</SC.CompanyName>
@@ -279,7 +288,7 @@ const Navbar: React.FC<Props> = ({ sectionName, dropdown, integration, connector
                             </SC.UserDropdownLinksWrapper>
 
                             <SC.UserButtonWrapper>
-                                <Button onClick={logout} style={{ marginLeft: "auto", marginTop: "80px" }} variant="outlined" size="medium" color="primary">Log Out</Button>
+                                <Button onClick={handleLogout} style={{ marginLeft: "auto", marginTop: "80px" }} variant="outlined" size="medium" color="primary">Log Out</Button>
                             </SC.UserButtonWrapper>
                         </SC.DrawerWrapper>
                     </Drawer>
