@@ -13,7 +13,7 @@ import { Operation } from "../../../interfaces/operation";
 const Installs: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const { userData } = useContext();
-    const { data: installsData, refetch: reloadInstalls } = useAccountIntegrationInstanceGetAll<Install>({ id, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
+    const { data: installsData, refetch: reloadInstalls } = useAccountIntegrationInstanceGetAll<Install>({enabled: userData.token, id, accountId: userData.accountId, subscriptionId: userData.subscriptionId });
     const deleteInstance = useAccountIntegrationInstanceDeleteOne<Operation>();
     const { waitForOperations, createLoader, removeLoader } = useLoader();
     const {createError} = useError();
