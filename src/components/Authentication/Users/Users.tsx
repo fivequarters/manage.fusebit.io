@@ -5,7 +5,7 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useContext } from "../../../hooks/useContext";
 import { useLoader } from "../../../hooks/useLoader";
-import { useAccountIntegrationDeleteIntegration } from "../../../hooks/api/v2/account/integration/useDeleteOne";
+import { useAccountUserDeleteOne } from "../../../hooks/api/v1/account/user/useDeleteOne";
 import { Operation } from "../../../interfaces/operation";
 import { useError } from "../../../hooks/useError";
 import arrowRight from "../../../assets/arrow-right.svg";
@@ -29,7 +29,7 @@ const Authentication: React.FC = () => {
     const [rows, setRows] = React.useState<Account[]>([]);
     const { userData } = useContext();
     const { data: users, refetch: reloadUsers } = useAccountUserGetAll<{ items: Account[]}>({enabled: userData.token, accountId: userData.accountId, params: "include=all" });
-    const deleteIntegration = useAccountIntegrationDeleteIntegration<Operation>();
+    const deleteAccount = useAccountUserDeleteOne<Operation>();
     const { waitForOperations, createLoader, removeLoader } = useLoader();
     const { createError } = useError();
     const [selectedCell, setSelectedCell] = React.useState<cells>(cells.NAME);
@@ -82,7 +82,7 @@ const Authentication: React.FC = () => {
             createLoader();
             let operationIds: string[] = [];
             for (let i = 0; i < selected.length; i++) {
-                const response = await deleteIntegration.mutateAsync({ id: selected[i], accountId: userData.accountId, subscriptionId: userData.subscriptionId });    
+                const response = await deleteAccount.mutateAsync({ userId: selected[i], accountId: userData.accountId});    
                 operationIds.push(response.data.operationId);
             }
             await waitForOperations(operationIds);
