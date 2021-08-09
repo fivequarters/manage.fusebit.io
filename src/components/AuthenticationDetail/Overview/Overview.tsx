@@ -13,6 +13,9 @@ import {
 import { useEffect } from "react";
 import CliAccess from "./CliAccess";
 import Delete from "./Delete";
+import { useParams } from "react-router-dom";
+import { useAccountUserGetOne } from "../../../hooks/api/v1/account/user/useGetOne";
+import client from "../../../assets/client.jpg";
 
 const schema = {
     type: "object",
@@ -25,7 +28,7 @@ const schema = {
             type: "string",
             minLength: 2,
         },
-        email: {
+        primaryEmail: {
             type: "string",
             format: "email",
             pattern: "^\\S+@\\S+\\.\\S+$",
@@ -33,7 +36,7 @@ const schema = {
             maxLength: 127
         },
     },
-    required: ["firstName", "lastName", "email"]
+    required: ["firstName", "lastName", "primaryEmail"]
   }
 
   const uischema = {
@@ -55,7 +58,7 @@ const schema = {
       },
       {
         type: "Control",
-        scope: "#/properties/email",
+        scope: "#/properties/primaryEmail",
         options: {
             hideRequiredAsterisk: true,
         }
@@ -64,10 +67,11 @@ const schema = {
   }
 
 const Overview: React.FC = () => {
+    const { userId } = useParams<{ userId: string }>();
     const { userData } = useContext();
     const [editInformation, setEditInformation] = React.useState(false);
-    const [data, setData] = React.useState({firstName: userData.firstName, lastName: userData.lastName, email: userData.primaryEmail});
-    const [dataToRender, setDataToRender] = React.useState({firstName: userData.firstName, lastName: userData.lastName, email: userData.primaryEmail});
+    const [data, setData] = React.useState({firstName: userData.firstName, lastName: userData.lastName, primaryEmail: userData.primaryEmail});
+    const { data: accountData, refetch: reloadAccount } = useAccountUserGetOne<any>({ enabled: userData.token, userId, accountId: userData.accountId });
     const [errors, setErrors] = React.useState<object[]>([]);
     const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
     const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -78,10 +82,10 @@ const Overview: React.FC = () => {
     let timeout: NodeJS.Timeout;
 
     useEffect(() => {
-        const initData = {firstName: userData.firstName, lastName: userData.lastName, email: userData.primaryEmail};
-        setData(initData);
-        setDataToRender(initData);
-    }, [userData]);
+        if (accountData && accountData.data) {
+            setData(accountData.data);
+        }
+    }, [accountData]);
 
     const handleSubmit = () => {
         if (errors.length > 0) {
@@ -90,7 +94,6 @@ const Overview: React.FC = () => {
             //update the user info
             setIsSubmitting(true);
             setTimeout(() => {
-                setDataToRender(data);
                 setEditInformation(false);
                 setIsSubmitting(false);
                 setValidationMode("ValidateAndHide");
@@ -101,7 +104,7 @@ const Overview: React.FC = () => {
     const handleCancel = () => {
         setEditInformation(false);
         setIsSubmitting(false);
-        setData({firstName: userData.firstName, lastName: userData.lastName, email: userData.primaryEmail});
+        setData(accountData?.data);
     }
 
     const handleCopy = (text: string) => {
@@ -150,11 +153,11 @@ const Overview: React.FC = () => {
                             <SC.PopperElement onClick={() => setDeleteOpen(true)}>Delete User</SC.PopperElement>
                         </SC.PopperOpen>
                     </div>
-                    <SC.UserImage alt="user" src={userData.picture} height="88" width="88" />
+                    <SC.UserImage alt="user" src={client} height="88" width="88" />
                     <SC.FlexDown>
-                        <SC.UserName>{dataToRender.firstName} {dataToRender.lastName}</SC.UserName>
-                        <SC.UserCompany>{dataToRender.email} </SC.UserCompany>
-                        <SC.UserId><strong>User-ID:</strong> {userData.id} <img onClick={() => handleCopy(userData.id || "")} src={copy} alt="copy" height="12" width="12" /></SC.UserId>
+                        <SC.UserName>{accountData?.data.firstName} {accountData?.data.lastName}</SC.UserName>
+                        <SC.UserCompany>{accountData?.data.primaryEmail} </SC.UserCompany>
+                        <SC.UserId><strong>User-ID:&nbsp;</strong> {accountData?.data.id} <img onClick={() => handleCopy(accountData?.data.id || "")} src={copy} alt="copy" height="12" width="12" /></SC.UserId>
                         <SC.CopySuccess copy={idCopied}>Copied to clipboard!</SC.CopySuccess>
                     </SC.FlexDown>
                 </SC.UserInfoContainer>
@@ -171,7 +174,7 @@ const Overview: React.FC = () => {
                     </SC.InfoFieldWrapper>
                     <SC.InfoFieldWrapper>
                         <SC.InfoFieldPlaceholder>E-mail</SC.InfoFieldPlaceholder>
-                        <SC.InfoField>{data.email}</SC.InfoField>
+                        <SC.InfoField>{data.primaryEmail}</SC.InfoField>
                     </SC.InfoFieldWrapper>
                     <SC.EditButtonWrapper>
                         <Button onClick={() => setEditInformation(true)} fullWidth={false} size="medium" color="primary" variant="outlined">Edit information</Button>
