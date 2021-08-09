@@ -2,7 +2,7 @@ import { useMutation } from 'react-query';
 import { Params } from '../../../../../interfaces/api';
 import { useAxios } from '../../../../useAxios';
 
-export const useAccountIntegrationCreateIntegration = <T>() => {
+export const useAccountUserCreateUser = <T>() => {
     const { axios } = useAxios();
     
     return useMutation((params: Params) => {

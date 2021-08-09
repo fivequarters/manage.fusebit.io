@@ -11,4 +11,5 @@ export type Operation = {
     verb: string,
     location: OperationLocation,
     operationId: string;
+    id?: string;
 }

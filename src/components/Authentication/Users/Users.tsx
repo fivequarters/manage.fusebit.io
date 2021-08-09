@@ -15,6 +15,8 @@ import NewUser from "./NewUser";
 import { useGetRedirectLink } from "../../../hooks/useGetRedirectLink";
 import { useAccountUserGetAll } from "../../../hooks/api/v1/account/user/useGetAll";
 import { Account } from "../../../interfaces/account";
+import { useAccountUserCreateUser } from "../../../hooks/api/v1/account/user/useCreateUser";
+import { useAccountUserCreateToken } from "../../../hooks/api/v1/account/user/useCreateToken";
 
 enum cells {
     NAME = "Name",
@@ -33,6 +35,8 @@ const Authentication: React.FC = () => {
     const [selectedCell, setSelectedCell] = React.useState<cells>(cells.NAME);
     const [newUserOpen, setNewUserOpen] = React.useState(false);
     const { getRedirectLink } = useGetRedirectLink();
+    const createUser = useAccountUserCreateUser<Operation>();
+    const createToken = useAccountUserCreateToken<Operation>();
 
     useEffect(() => {
         if (users && users.data.items) {
@@ -125,6 +129,32 @@ const Authentication: React.FC = () => {
         }
     }
 
+    const _createToken = async (userId: string) => {
+        const response = await createToken.mutateAsync({userId, accountId: userData.accountId});
+        await waitForOperations([response.data.operationId]);
+        return response.data;
+    }
+
+    const _createUser = async (data: Account) => {
+        try {
+            createLoader();
+            const response = await createUser.mutateAsync({...data, accountId: userData.accountId});
+            await waitForOperations([response.data.operationId]);
+            reloadUsers();
+            if (response.data.id) {
+                const token = await _createToken(response.data.id);
+                return token;
+            }
+        } catch (e) {
+            createError(e.message);
+            removeLoader();
+            setNewUserOpen(false);
+            return null;
+        } finally {
+            removeLoader();
+        }
+    }
+
     return (
         <SC.Wrapper>
             <Modal
@@ -135,7 +165,7 @@ const Authentication: React.FC = () => {
                     closeAfterTransition
                     BackdropComponent={Backdrop}
                 >
-                <NewUser open={newUserOpen} onClose={() => setNewUserOpen(false)} />
+                <NewUser createUser={(data: Account) => _createUser(data)} open={newUserOpen} onClose={() => setNewUserOpen(false)} />
             </Modal>
             <SC.ButtonContainer>
                 <SC.ButtonMargin>
