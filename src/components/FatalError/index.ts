@@ -1,1 +1,1 @@
-export { default } from "./FatalError";
+export { default } from './FatalError';

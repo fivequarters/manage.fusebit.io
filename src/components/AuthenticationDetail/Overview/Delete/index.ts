@@ -1,1 +1,1 @@
-export { default } from "./Delete";
+export { default } from './Delete';

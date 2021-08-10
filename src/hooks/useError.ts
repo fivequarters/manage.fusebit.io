@@ -1,5 +1,5 @@
-import warning from "../assets/warning.svg";
-import cross from "../assets/cross-warning.svg";
+import warning from '../assets/warning.svg';
+import cross from '../assets/cross-warning.svg';
 
 const errorCss = `
     display: flex;
@@ -33,15 +33,13 @@ const errorTitleCss = `
     font-weight: 700;
     `;
 
-const errorTextCss =
-    `
+const errorTextCss = `
     font-size: 14px;
     line-height: 16px;
     margin-left: 5px;
     `;
 
-const errorCross = 
-    `
+const errorCross = `
     height: 10px;
     width: 10px;
     background-image: url(${cross});
@@ -51,43 +49,42 @@ const errorCross =
     cursor: pointer;
     `;
 
-export const  useError = () => {
+export const useError = () => {
+  const removeError = () => {
+    const error = document.getElementById('error');
+    if (error) error.remove();
+  };
 
-    const removeError = () => {
-        const error = document.getElementById('error');
-        if (error) error.remove();
-    }
+  const createError = (errorMessage: string) => {
+    const error = document.createElement('div');
+    error.setAttribute('id', 'error');
+    error.setAttribute('style', errorCss);
 
-    const createError = (errorMessage: string) => {
-        const error = document.createElement("div");
-        error.setAttribute('id', 'error');
-        error.setAttribute('style', errorCss);
+    const warning = document.createElement('div');
+    warning.setAttribute('style', errorWarningImage);
+    error.appendChild(warning);
 
-        const warning = document.createElement("div");
-        warning.setAttribute('style', errorWarningImage);
-        error.appendChild(warning);
+    const title = document.createElement('div');
+    title.setAttribute('style', errorTitleCss);
+    title.innerHTML = 'Error:';
+    error.appendChild(title);
 
-        const title = document.createElement("div");
-        title.setAttribute('style', errorTitleCss);
-        title.innerHTML = "Error:"
-        error.appendChild(title);
+    const text = document.createElement('p');
+    text.setAttribute('style', errorTextCss);
+    text.innerHTML = errorMessage;
+    error.appendChild(text);
 
-        const text = document.createElement("p");
-        text.setAttribute('style', errorTextCss);
-        text.innerHTML = errorMessage;
-        error.appendChild(text);
+    const cross = document.createElement('div');
+    cross.setAttribute('id', 'errorCross');
+    cross.setAttribute('style', errorCross);
+    error.appendChild(cross);
 
-        const cross = document.createElement("div");
-        cross.setAttribute('id', 'errorCross');
-        cross.setAttribute('style', errorCross);
-        error.appendChild(cross);
+    cross.addEventListener('click', removeError);
 
-        cross.addEventListener("click", removeError);
+    document.body.appendChild(error);
+  };
 
-        document.body.appendChild(error);
-    }
-
-    return {
-        createError,
-    };
+  return {
+    createError,
+  };
 };

@@ -1,1 +1,1 @@
-export { default } from "./ConnectorDetail";
+export { default } from './ConnectorDetail';

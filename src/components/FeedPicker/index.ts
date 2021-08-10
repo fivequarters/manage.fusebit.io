@@ -1,1 +1,1 @@
-export { default } from "./FeedPicker";
+export { default } from './FeedPicker';

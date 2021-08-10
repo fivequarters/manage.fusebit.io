@@ -1,7 +1,7 @@
-import { FC } from "react";
+import { FC } from 'react';
 
 export interface RouteItem {
-    key: string;
-    path: string;
-    component: FC
+  key: string;
+  path: string;
+  component: FC;
 }

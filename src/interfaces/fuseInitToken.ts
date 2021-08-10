@@ -1,3 +1,3 @@
 export interface FuseInitToken {
-    data: string;
+  data: string;
 }

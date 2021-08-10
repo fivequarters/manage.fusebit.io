@@ -1,5 +1,5 @@
-import axios, { AxiosRequestConfig } from "axios";
-import { readLocalData, useContext } from "./useContext";
+import axios, { AxiosRequestConfig } from 'axios';
+import { readLocalData, useContext } from './useContext';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
@@ -9,27 +9,30 @@ interface ApiResponse<T> {
   success?: boolean;
 }
 
-axios.interceptors.response.use(response => response, error => {
-  const statusCode = Number(error.response.status);
-  if (statusCode === 404) {
-    const __userData = readLocalData();
-    let toUrl = "/logged-out";
-    if (__userData.token) {
-      if (window.location.href.indexOf('connector') >= 0) toUrl = '/connectors';
-      else if (window.location.href.indexOf('integration') >= 0) toUrl = '/';
-      else toUrl = '/';
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const statusCode = Number(error.response.status);
+    if (statusCode === 404) {
+      const __userData = readLocalData();
+      let toUrl = '/logged-out';
+      if (__userData.token) {
+        if (window.location.href.indexOf('connector') >= 0) toUrl = '/connectors';
+        else if (window.location.href.indexOf('integration') >= 0) toUrl = '/';
+        else toUrl = '/';
+      }
+      window.location.href = toUrl;
     }
-    window.location.href = toUrl;
+    return Promise.reject(error);
   }
-  return Promise.reject(error);
-});
+);
 
 export const useAxios = () => {
   const { userData } = useContext();
 
   const _axios = async <T extends {}>(
     endpoint: string,
-    method: "post" | "delete" | "put" | "get",
+    method: 'post' | 'delete' | 'put' | 'get',
     params: any = {},
     headers: any = {}
   ): Promise<ApiResponse<T>> => {
@@ -38,7 +41,7 @@ export const useAxios = () => {
         method,
         url: `${REACT_APP_FUSEBIT_DEPLOYMENT}${endpoint}`,
         data: params,
-        headers
+        headers,
       };
       if (userData.token) config.headers.Authorization = `Bearer ${userData.token}`;
       const response = await axios(config);
@@ -46,9 +49,9 @@ export const useAxios = () => {
     } catch (e) {
       return { success: false, error: e.message, data: {} as T };
     }
-  }
+  };
 
   return {
     axios: _axios,
-  }
-}
+  };
+};
