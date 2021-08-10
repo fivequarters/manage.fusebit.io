@@ -125,39 +125,36 @@ const Overview: React.FC = () => {
 
   return (
     <SC.Overview
-      onClick={(e: any) => e.target.id !== 'popper' && e.target.id !== 'popperWrapper' && setPopperOpen(false)}
-    >
+      onClick={(e: any) => e.target.id !== 'popper' && e.target.id !== 'popperWrapper' && setPopperOpen(false)}>
       <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
+        aria-labelledby='transition-modal-title'
+        aria-describedby='transition-modal-description'
         open={deleteOpen}
         onClose={() => setDeleteOpen(false)}
         closeAfterTransition
-        BackdropComponent={Backdrop}
-      >
+        BackdropComponent={Backdrop}>
         <Delete open={deleteOpen} onClose={() => setDeleteOpen(false)} />
       </Modal>
       <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
+        aria-labelledby='transition-modal-title'
+        aria-describedby='transition-modal-description'
         open={cliOpen}
         onClose={() => setCliOpen(false)}
         closeAfterTransition
-        BackdropComponent={Backdrop}
-      >
+        BackdropComponent={Backdrop}>
         <CliAccess open={cliOpen} onClose={() => setCliOpen(false)} />
       </Modal>
       <SC.UserCard>
         <SC.UserInfoContainer>
           <div>
-            <SC.DotsWrapper id="popper" onClick={() => setPopperOpen(true)}>
-              <SC.Dots src={dots} alt="options" height="20" width="4" />
+            <SC.DotsWrapper id='popper' onClick={() => setPopperOpen(true)}>
+              <SC.Dots src={dots} alt='options' height='20' width='4' />
             </SC.DotsWrapper>
-            <SC.PopperOpen id="popperWrapper" active={popperOpen}>
+            <SC.PopperOpen id='popperWrapper' active={popperOpen}>
               <SC.PopperElement onClick={() => setDeleteOpen(true)}>Delete User</SC.PopperElement>
             </SC.PopperOpen>
           </div>
-          <SC.UserImage alt="user" src={userData.picture} height="88" width="88" />
+          <SC.UserImage alt='user' src={userData.picture} height='88' width='88' />
           <SC.FlexDown>
             <SC.UserName>
               {dataToRender.firstName} {dataToRender.lastName}
@@ -165,7 +162,7 @@ const Overview: React.FC = () => {
             <SC.UserCompany>{dataToRender.email} </SC.UserCompany>
             <SC.UserId>
               <strong>User-ID:</strong> {userData.id}{' '}
-              <img onClick={() => handleCopy(userData.id || '')} src={copy} alt="copy" height="12" width="12" />
+              <img onClick={() => handleCopy(userData.id || '')} src={copy} alt='copy' height='12' width='12' />
             </SC.UserId>
             <SC.CopySuccess copy={idCopied}>Copied to clipboard!</SC.CopySuccess>
           </SC.FlexDown>
@@ -188,10 +185,9 @@ const Overview: React.FC = () => {
               <Button
                 onClick={() => setEditInformation(true)}
                 fullWidth={false}
-                size="medium"
-                color="primary"
-                variant="outlined"
-              >
+                size='medium'
+                color='primary'
+                variant='outlined'>
                 Edit information
               </Button>
             </SC.EditButtonWrapper>
@@ -216,13 +212,12 @@ const Overview: React.FC = () => {
                 onClick={handleSubmit}
                 style={{ marginRight: '16px' }}
                 fullWidth={false}
-                size="small"
-                color="primary"
-                variant="contained"
-              >
+                size='small'
+                color='primary'
+                variant='contained'>
                 {isSubmitting ? 'Saving...' : 'Save'}
               </Button>
-              <Button onClick={handleCancel} fullWidth={false} size="small" color="primary" variant="outlined">
+              <Button onClick={handleCancel} fullWidth={false} size='small' color='primary' variant='outlined'>
                 Cancel
               </Button>
             </SC.FormInputWrapper>
@@ -235,10 +230,9 @@ const Overview: React.FC = () => {
           onClick={() => setCliOpen(true)}
           style={{ width: '200px' }}
           fullWidth={false}
-          size="large"
-          color="primary"
-          variant="contained"
-        >
+          size='large'
+          color='primary'
+          variant='contained'>
           Grant CLI Access
         </Button>
       </SC.CLIAccesWrapper>

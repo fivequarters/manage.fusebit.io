@@ -6,17 +6,17 @@ export const Wrapper = styled.div`
 `;
 
 export const DeleteWrapper = styled.div<{ active: boolean }>`
-  display: ${(props) => (props.active ? 'flex' : 'none')};
+  display: ${props => (props.active ? 'flex' : 'none')};
   align-items: center;
-  opacity: ${(props) => (props.active ? 1 : 0)};
+  opacity: ${props => (props.active ? 1 : 0)};
   font-size: 18px;
   line-height: 22px;
   font-weight: 400;
   padding: 0 18px;
   min-height: 57px;
   width: 100%;
-  color: ${(props) => (props.active ? 'var(--primary-color)' : 'var(--black)')};
-  background-color: ${(props) => props.active && 'rgba(248, 52, 32, .1)'};
+  color: ${props => (props.active ? 'var(--primary-color)' : 'var(--black)')};
+  background-color: ${props => props.active && 'rgba(248, 52, 32, .1)'};
   margin-bottom: 12px;
   transition: all 0.25s linear;
 `;

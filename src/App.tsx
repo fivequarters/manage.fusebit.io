@@ -3,12 +3,12 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { createMuiTheme, responsiveFontSizes, ThemeProvider } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import CookieConsent from 'react-cookie-consent';
 import { lightTheme } from './theme/appTheme';
 import { routes } from './config';
 import { APP_TITLE } from './utils/constants';
 import { RouteItem } from './interfaces/router';
 import { ContextProvider } from './hooks/useContext';
-import CookieConsent from 'react-cookie-consent';
 
 function App() {
   const queryClient = new QueryClient();
@@ -23,9 +23,9 @@ function App() {
           <QueryClientProvider client={queryClient}>
             <ThemeProvider theme={responsiveFontSizes(createMuiTheme(lightTheme))}>
               <CookieConsent
-                location="bottom"
-                buttonText="Accept"
-                cookieName="CookieConsent"
+                location='bottom'
+                buttonText='Accept'
+                cookieName='CookieConsent'
                 style={{ background: 'rgba(215, 229, 255, 0.4)' }}
                 buttonStyle={{
                   borderRadius: '4px',
@@ -34,8 +34,7 @@ function App() {
                   color: '#F83420',
                   fontSize: '13px',
                 }}
-                expires={150}
-              >
+                expires={150}>
                 <p style={{ color: '#333333', fontWeight: 500 }}>
                   This website uses cookies to enhance the user experience.
                 </p>

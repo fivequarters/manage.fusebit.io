@@ -7,7 +7,7 @@ export const Card = styled.div<{ open: boolean }>`
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
-  opacity: ${(props) => (props.open ? 1 : 0)};
+  opacity: ${props => (props.open ? 1 : 0)};
   padding: 64px;
   width: 1140px;
   height: 671px;
@@ -35,7 +35,7 @@ export const Title = styled.h2`
 
 export const Flex = styled.div<{ alignItems?: boolean }>`
   display: flex;
-  align-items: ${(props) => props.alignItems && 'center'};
+  align-items: ${props => props.alignItems && 'center'};
 `;
 
 export const Column = styled.div<{ border?: boolean }>`
@@ -50,8 +50,8 @@ export const ColumnItem = styled.div<{ active: boolean }>`
   padding: 11px 16px;
   font-size: 16px;
   line-height: 18px;
-  background-color: ${(props) => props.active && 'var(--secondary-color)'};
-  font-weight: ${(props) => (props.active ? 600 : 400)};
+  background-color: ${props => props.active && 'var(--secondary-color)'};
+  font-weight: ${props => (props.active ? 600 : 400)};
   width: 254px;
   transition: background-color 0.2s linear;
   margin-bottom: 8px;

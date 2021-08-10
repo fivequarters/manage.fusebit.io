@@ -105,8 +105,8 @@ export const CopySuccess = styled.p<{ copy: boolean }>`
   font-size: 14px;
   line-height: 16px;
   color: var(--grey);
-  opacity: ${(props) => (props.copy ? 1 : 0)};
-  visibility: ${(props) => (props.copy ? 'visible' : 'hidden')};
+  opacity: ${props => (props.copy ? 1 : 0)};
+  visibility: ${props => (props.copy ? 'visible' : 'hidden')};
   margin-left: auto;
   transition: all 0.5s linear;
 `;
@@ -178,8 +178,8 @@ export const PopperOpen = styled.div<{ active: boolean }>`
   box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
   margin-left: -170px;
   margin-top: 10px;
-  opacity: ${(props) => (props.active ? 1 : 0)};
-  visibility: ${(props) => (props.active ? 'visible' : 'hidden')};
+  opacity: ${props => (props.active ? 1 : 0)};
+  visibility: ${props => (props.active ? 'visible' : 'hidden')};
   z-index: 100;
   transition: all 0.2s linear;
 

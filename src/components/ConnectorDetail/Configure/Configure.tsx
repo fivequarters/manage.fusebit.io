@@ -106,7 +106,7 @@ const Configure: React.FC = () => {
           <SC.InfoTitle>Slack app:</SC.InfoTitle>
           <SC.InfoLink href={'/'}>
             Acme Chatbot
-            <img src={arrow} alt="arrow" height="16" width="16" />
+            <img src={arrow} alt='arrow' height='16' width='16' />
           </SC.InfoLink>
         </SC.InfoWrapper>
       </SC.FlexDown>
@@ -129,10 +129,9 @@ const Configure: React.FC = () => {
               onClick={handleSubmit}
               style={{ width: '200px' }}
               fullWidth={false}
-              size="large"
-              color="primary"
-              variant="contained"
-            >
+              size='large'
+              color='primary'
+              variant='contained'>
               Save
             </Button>
           </SC.FormInputWrapper>

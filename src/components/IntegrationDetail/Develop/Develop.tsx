@@ -241,13 +241,12 @@ const Develop: React.FC = () => {
   return (
     <SC.Background>
       <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
+        aria-labelledby='transition-modal-title'
+        aria-describedby='transition-modal-description'
         open={connectorPickerOpen}
         onClose={() => setConnectorPickerOpen(false)}
         closeAfterTransition
-        BackdropComponent={Backdrop}
-      >
+        BackdropComponent={Backdrop}>
         <Fade in={connectorPickerOpen}>
           <FeedPicker
             onSubmit={(activeIntegration: Feed, data: Data) => addNewConnector(activeIntegration, data)}
@@ -257,25 +256,23 @@ const Develop: React.FC = () => {
         </Fade>
       </Modal>
       <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
+        aria-labelledby='transition-modal-title'
+        aria-describedby='transition-modal-description'
         open={connectOpen}
         onClose={() => setConnectOpen(false)}
         closeAfterTransition
-        BackdropComponent={Backdrop}
-      >
+        BackdropComponent={Backdrop}>
         <Fade in={connectOpen}>
           <Connect open={connectOpen} onClose={() => setConnectOpen(false)} />
         </Fade>
       </Modal>
       <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
+        aria-labelledby='transition-modal-title'
+        aria-describedby='transition-modal-description'
         open={connectorListOpen}
         onClose={() => setConnectorListOpen(false)}
         closeAfterTransition
-        BackdropComponent={Backdrop}
-      >
+        BackdropComponent={Backdrop}>
         <Fade in={connectorListOpen}>
           <SC.ConnectorList>
             <SC.CardTitle>Connectors</SC.CardTitle>
@@ -306,13 +303,12 @@ const Develop: React.FC = () => {
         </Fade>
       </Modal>
       <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
+        aria-labelledby='transition-modal-title'
+        aria-describedby='transition-modal-description'
         open={editOpen}
         onClose={() => setEditOpen(false)}
         closeAfterTransition
-        BackdropComponent={Backdrop}
-      >
+        BackdropComponent={Backdrop}>
         <Fade in={editOpen}>
           <Edit
             open={editOpen}
@@ -332,19 +328,18 @@ const Develop: React.FC = () => {
                 onClick={() => setConnectOpen(true)}
                 startIcon={<AddIcon />}
                 style={{ width: '200px' }}
-                size="large"
-                variant="outlined"
-                color="primary"
-              >
+                size='large'
+                variant='outlined'
+                color='primary'>
                 Connect
               </Button>
             </SC.CardButtonWrapper>
           </SC.Card>
-          <SC.Link href="/test">
+          <SC.Link href='/test'>
             <SC.Bullet />
             Provision integration from your application
           </SC.Link>
-          <SC.Link href="/test2">
+          <SC.Link href='/test2'>
             <SC.Bullet />
             Invoke application from your backend
           </SC.Link>
@@ -353,34 +348,33 @@ const Develop: React.FC = () => {
           <SC.Card>
             <SC.CardTitle>Fusebit</SC.CardTitle>
             <SC.CardIntegration>
-              <img src={arrow} alt="arrow" />
+              <img src={arrow} alt='arrow' />
               {integrationData?.data.id}
             </SC.CardIntegration>
             <SC.CardButtonWrapper>
               <Button
                 onClick={handleEditOpen}
                 style={{ width: '200px' }}
-                size="large"
-                variant="contained"
-                color="primary"
-              >
+                size='large'
+                variant='contained'
+                color='primary'>
                 Edit
               </Button>
             </SC.CardButtonWrapper>
           </SC.Card>
-          <SC.Link href="/test3">
+          <SC.Link href='/test3'>
             <SC.Bullet />
             Edit and publish your integration
           </SC.Link>
-          <SC.Link href="/test4">
+          <SC.Link href='/test4'>
             <SC.Bullet />
             Test your integration
           </SC.Link>
-          <SC.Link href="/test5">
+          <SC.Link href='/test5'>
             <SC.Bullet />
             Debug with real-time logs
           </SC.Link>
-          <SC.Link href="/test6">
+          <SC.Link href='/test6'>
             <SC.Bullet />
             Slack SDK reference
           </SC.Link>
@@ -406,7 +400,7 @@ const Develop: React.FC = () => {
               ? integrationData?.data.data.components.length >= 5 && (
                   <SC.CardConnectorSeeMore href={getRedirectLink('/connectors')}>
                     See all
-                    <img src={arrow} alt="see more" height="10" width="10" />
+                    <img src={arrow} alt='see more' height='10' width='10' />
                   </SC.CardConnectorSeeMore>
                 )
               : null}
@@ -416,20 +410,18 @@ const Develop: React.FC = () => {
                 onClick={() => setConnectorPickerOpen(true)}
                 startIcon={<AddIcon />}
                 style={{ width: '160px', marginTop: '24px' }}
-                size="large"
-                variant="outlined"
-                color="primary"
-              >
+                size='large'
+                variant='outlined'
+                color='primary'>
                 Add New
               </Button>
               <Button
                 onClick={() => setConnectorListOpen(true)}
                 startIcon={<AddIcon />}
                 style={{ width: '160px', marginTop: '24px' }}
-                size="large"
-                variant="outlined"
-                color="primary"
-              >
+                size='large'
+                variant='outlined'
+                color='primary'>
                 Link Existing
               </Button>
             </SC.CardConnectorButtonsWrapper>
@@ -439,29 +431,27 @@ const Develop: React.FC = () => {
                 onClick={() => setConnectorPickerOpen(true)}
                 startIcon={<AddIcon />}
                 style={{ width: '135px', marginTop: '10px' }}
-                size="medium"
-                variant="outlined"
-                color="primary"
-              >
+                size='medium'
+                variant='outlined'
+                color='primary'>
                 Add New
               </Button>
               <Button
                 onClick={() => setConnectorListOpen(true)}
                 startIcon={<AddIcon />}
                 style={{ width: '135px', marginTop: '10px' }}
-                size="medium"
-                variant="outlined"
-                color="primary"
-              >
+                size='medium'
+                variant='outlined'
+                color='primary'>
                 Link Existing
               </Button>
             </SC.CardConnectorButtonsWrapperMobile>
           </SC.Card>
-          <SC.Link href="/test7">
+          <SC.Link href='/test7'>
             <SC.Bullet />
             Improve your own backend API
           </SC.Link>
-          <SC.Link href="/test8">
+          <SC.Link href='/test8'>
             <SC.Bullet />
             Switch to your own Slack App
           </SC.Link>

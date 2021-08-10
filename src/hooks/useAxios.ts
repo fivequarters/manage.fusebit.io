@@ -10,8 +10,8 @@ interface ApiResponse<T> {
 }
 
 axios.interceptors.response.use(
-  (response) => response,
-  (error) => {
+  response => response,
+  error => {
     const statusCode = Number(error.response.status);
     if (statusCode === 404) {
       const __userData = readLocalData();

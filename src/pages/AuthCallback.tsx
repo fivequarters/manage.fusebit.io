@@ -35,7 +35,7 @@ const IntegrationsPage: FC<{}> = (): ReactElement => {
 
   useEffect(() => {
     if (user && account) {
-      getPicture().then((picture) => {
+      getPicture().then(picture => {
         auth({
           ...userData,
           id: user?.data.id,

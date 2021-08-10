@@ -4,13 +4,13 @@ import { Feed } from '../interfaces/feed';
 const { REACT_APP_INTEGRATIONS_FEED_URL, REACT_APP_CONNECTORS_FEED_URL } = process.env;
 
 export const integrationsFeed = async (): Promise<Feed[]> => {
-  return new Promise((accept) => {
-    let req = http.get(REACT_APP_INTEGRATIONS_FEED_URL || 'http://localhost:3000/feed/integrationsFeed.json', (res) => {
+  return new Promise(accept => {
+    let req = http.get(REACT_APP_INTEGRATIONS_FEED_URL || 'http://localhost:3000/feed/integrationsFeed.json', res => {
       let data = '';
-      res.on('data', (stream) => (data += stream));
+      res.on('data', stream => (data += stream));
       res.on('end', () => accept(JSON.parse(data)));
     });
-    req.on('error', (e) => {
+    req.on('error', e => {
       console.log(e.message);
       accept([]);
     });
@@ -18,13 +18,13 @@ export const integrationsFeed = async (): Promise<Feed[]> => {
 };
 
 export const connectorsFeed = async (): Promise<Feed[]> => {
-  return new Promise((accept) => {
-    let req = http.get(REACT_APP_CONNECTORS_FEED_URL || 'http://localhost:3000/feed/connectorsFeed.json', (res) => {
+  return new Promise(accept => {
+    let req = http.get(REACT_APP_CONNECTORS_FEED_URL || 'http://localhost:3000/feed/connectorsFeed.json', res => {
       let data = '';
-      res.on('data', (stream) => (data += stream));
+      res.on('data', stream => (data += stream));
       res.on('end', () => accept(JSON.parse(data)));
     });
-    req.on('error', (e) => {
+    req.on('error', e => {
       console.log(e.message);
       accept([]);
     });

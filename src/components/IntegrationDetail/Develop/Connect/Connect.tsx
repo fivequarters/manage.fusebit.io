@@ -56,34 +56,33 @@ const Connect: React.FC<Props> = ({ onClose, open }) => {
   return (
     <SC.Card open={open}>
       <SC.CardClose onClick={() => onClose()}>
-        <img src={cross} alt="close" height="10" width="10" />
+        <img src={cross} alt='close' height='10' width='10' />
       </SC.CardClose>
       <SC.CardTitle>Connect your application</SC.CardTitle>
       <SC.Flex>
-        <SC.LineTitle margin="10px">Current JWT</SC.LineTitle>
+        <SC.LineTitle margin='10px'>Current JWT</SC.LineTitle>
         <SC.CopyMobile
           onClick={() => handleCopy(userData.token || '', 1)}
           src={copyIcon}
-          alt="copy"
-          height="16"
-          width="16"
+          alt='copy'
+          height='16'
+          width='16'
         />
       </SC.Flex>
       <SC.LineDescription>expires on {expDate}</SC.LineDescription>
       <SC.LineInstructionWrapper
         onMouseLeave={() => setFadeChange(false)}
         onMouseEnter={() => setFadeChange(true)}
-        onClick={() => handleCopy(userData.token || '', 1)}
-      >
+        onClick={() => handleCopy(userData.token || '', 1)}>
         <SC.LineInstructionCopy>
-          <img src={copyIcon} alt="copy" height="16" width="16" />
+          <img src={copyIcon} alt='copy' height='16' width='16' />
         </SC.LineInstructionCopy>
         <SC.LineInstructionFade change={fadeChange} />
         <SC.LineInstruction>{userData.token}</SC.LineInstruction>
         <SC.CopySuccess copy={copiedLine === 1}>Copied to clipboard!</SC.CopySuccess>
       </SC.LineInstructionWrapper>
       <SC.ButtonWrapper>
-        <Button onClick={handleRefresh} style={{ width: '200px' }} size="large" variant="contained" color="primary">
+        <Button onClick={handleRefresh} style={{ width: '200px' }} size='large' variant='contained' color='primary'>
           Refresh Your Token
         </Button>
       </SC.ButtonWrapper>
@@ -94,13 +93,12 @@ const Connect: React.FC<Props> = ({ onClose, open }) => {
             <Button
               startIcon={<AddIcon />}
               style={{ marginBottom: '16px' }}
-              size="large"
-              variant="outlined"
-              color="primary"
-            >
+              size='large'
+              variant='outlined'
+              color='primary'>
               Generate API Key
             </Button>
-            <Button startIcon={<AddIcon />} size="large" variant="outlined" color="primary">
+            <Button startIcon={<AddIcon />} size='large' variant='outlined' color='primary'>
               Refresh Your Token
             </Button>
           </SC.CardButtonsContainer>
@@ -109,21 +107,20 @@ const Connect: React.FC<Props> = ({ onClose, open }) => {
             <Button
               startIcon={<AddIcon />}
               style={{ marginBottom: '16px' }}
-              size="large"
-              variant="outlined"
-              color="primary"
-            >
+              size='large'
+              variant='outlined'
+              color='primary'>
               Create Client
             </Button>
-            <Button startIcon={<LinkIcon />} size="large" variant="outlined" color="primary">
+            <Button startIcon={<LinkIcon />} size='large' variant='outlined' color='primary'>
               Link existing client
             </Button>
           </SC.CardButtonsContainer>
           <SC.CardActionButtons>
-            <Button style={{ marginRight: '16px' }} size="medium" variant="outlined" color="primary">
+            <Button style={{ marginRight: '16px' }} size='medium' variant='outlined' color='primary'>
               Reset
             </Button>
-            <Button size="medium" variant="contained" color="primary">
+            <Button size='medium' variant='contained' color='primary'>
               Save
             </Button>
           </SC.CardActionButtons>

@@ -10,12 +10,11 @@ const TabPanel = (props: any) => {
 
   return (
     <div
-      role="tabpanel"
+      role='tabpanel'
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
+      {...other}>
       {value === index && children}
     </div>
   );
@@ -63,26 +62,24 @@ const TabComponent: React.FC<Props> = ({ tabNames, tabObjects }) => {
       <SC.ContentMobile>
         <SC.Fade />
         <Tabs
-          indicatorColor="primary"
+          indicatorColor='primary'
           value={value}
           onChange={handleChange}
-          aria-label="Tab Selector"
-          scrollButtons="auto"
-        >
+          aria-label='Tab Selector'
+          scrollButtons='auto'>
           {tabNames.map((name, index) => (
             <Tab key={index} label={<SC.TabLabel active={value === index}>{name}</SC.TabLabel>} {...a11yProps(index)} />
           ))}
         </Tabs>
       </SC.ContentMobile>
-      <Container maxWidth="lg">
+      <Container maxWidth='lg'>
         <SC.Content>
           <Tabs
-            indicatorColor="primary"
+            indicatorColor='primary'
             value={value}
             onChange={handleChange}
-            aria-label="Tab Selector"
-            scrollButtons="auto"
-          >
+            aria-label='Tab Selector'
+            scrollButtons='auto'>
             {tabNames.map((name, index) => (
               <Tab
                 key={index}

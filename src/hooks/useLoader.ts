@@ -30,7 +30,7 @@ export const useLoader = () => {
             axios<Operation>(
               `/v2/account/${userData.accountId}/subscription/${userData.subscriptionId}/operation/${operationId}`,
               'get'
-            ).then((response) => {
+            ).then(response => {
               if (response.data.code !== 202) {
                 accept({});
               }
@@ -40,7 +40,7 @@ export const useLoader = () => {
       });
     });
     return new Promise((globalAccept: Function) => {
-      Promise.all(promises).then((_) => {
+      Promise.all(promises).then(_ => {
         Object.keys(intervalIds).forEach((operationId: string) => clearInterval(intervalIds[operationId]));
         globalAccept({});
       });
