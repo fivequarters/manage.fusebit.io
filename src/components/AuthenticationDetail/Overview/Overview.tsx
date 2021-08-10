@@ -23,6 +23,8 @@ import { useLoader } from "../../../hooks/useLoader";
 import { useError } from "../../../hooks/useError";
 import { useCapitalize } from "../../../hooks/useCapitalize";
 import { useCreateToken } from "../../../hooks/useCreateToken";
+import { useAccountUserDeleteOne } from "../../../hooks/api/v1/account/user/useDeleteOne";
+import { useGetRedirectLink } from "../../../hooks/useGetRedirectLink";
 
 const schema = {
     type: "object",
@@ -77,8 +79,8 @@ const Overview: React.FC = () => {
     const { userId } = useParams<{ userId: string }>();
     const { userData } = useContext();
     const [editInformation, setEditInformation] = React.useState(false);
-    const [data, setData] = React.useState({firstName: userData.firstName, lastName: userData.lastName, primaryEmail: userData.primaryEmail});
-    const { data: accountData, refetch: reloadAccount } = useAccountUserGetOne<any>({ enabled: userData.token, userId, accountId: userData.accountId });
+    const [data, setData] = React.useState<Account>();
+    const { data: accountData, refetch: reloadAccount } = useAccountUserGetOne<Account>({ enabled: userData.token, userId, accountId: userData.accountId });
     const updateUser = useAccountUserUpdateOne<Operation>();
     const [errors, setErrors] = React.useState<object[]>([]);
     const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
@@ -92,6 +94,8 @@ const Overview: React.FC = () => {
     const { createError } = useError();
     const { capitalize } = useCapitalize();
     const { _createToken } = useCreateToken();
+    const deleteAccount = useAccountUserDeleteOne<Operation>();
+    const { getRedirectLink } = useGetRedirectLink();
     let timeout: NodeJS.Timeout;
 
     useEffect(() => {
@@ -117,10 +121,10 @@ const Overview: React.FC = () => {
             //update the user info
             setIsSubmitting(true);
             const dataToSubmit: Account = {
-                id: accountData?.data.id,
-                firstName: capitalize(data.firstName || ""),
-                lastName: capitalize(data.lastName || ""),
-                primaryEmail: data.primaryEmail?.toLowerCase(),
+                id: accountData?.data.id || "",
+                firstName: capitalize(data?.firstName || ""),
+                lastName: capitalize(data?.lastName || ""),
+                primaryEmail: data?.primaryEmail?.toLowerCase(),
             }
             await _updateUser(dataToSubmit);
             setEditInformation(false);
@@ -153,7 +157,7 @@ const Overview: React.FC = () => {
         if (token === "") {
             try {
                 createLoader();
-                const token = await _createToken(accountData?.data.id);
+                const token = await _createToken(accountData?.data.id || "");
                 setToken(token);
                 setCliOpen(true);
             } catch (e) {
@@ -166,6 +170,18 @@ const Overview: React.FC = () => {
         }
     }
 
+    const handleDelete = async () => {
+        try {
+            createLoader();
+            const response = await deleteAccount.mutateAsync({ userId: accountData?.data.id, accountId: userData.accountId});    
+            await waitForOperations([response.data.operationId]);
+            window.location.href = getRedirectLink("/authentication");
+        } catch (e) {
+            createError(e.message);
+            setDeleteOpen(false);
+        }   
+    }
+
     return (
         <SC.Overview onClick={(e: any) => (e.target.id !== "popper" && e.target.id !== "popperWrapper") && setPopperOpen(false)}>
             <Modal
@@ -176,7 +192,7 @@ const Overview: React.FC = () => {
                     closeAfterTransition
                     BackdropComponent={Backdrop}
                 >
-                <Delete open={deleteOpen} onClose={() => setDeleteOpen(false)} />
+                <Delete handleDelete={handleDelete} open={deleteOpen} onClose={() => setDeleteOpen(false)} />
             </Modal>
             <Modal
                     aria-labelledby="transition-modal-title"
@@ -211,15 +227,15 @@ const Overview: React.FC = () => {
                 <>
                     <SC.InfoFieldWrapper>
                         <SC.InfoFieldPlaceholder>First Name</SC.InfoFieldPlaceholder>
-                        <SC.InfoField>{data.firstName}</SC.InfoField>
+                        <SC.InfoField>{data?.firstName}</SC.InfoField>
                     </SC.InfoFieldWrapper>
                     <SC.InfoFieldWrapper>
                         <SC.InfoFieldPlaceholder>Last Name</SC.InfoFieldPlaceholder>
-                        <SC.InfoField>{data.lastName}</SC.InfoField>
+                        <SC.InfoField>{data?.lastName}</SC.InfoField>
                     </SC.InfoFieldWrapper>
                     <SC.InfoFieldWrapper>
                         <SC.InfoFieldPlaceholder>E-mail</SC.InfoFieldPlaceholder>
-                        <SC.InfoField>{data.primaryEmail}</SC.InfoField>
+                        <SC.InfoField>{data?.primaryEmail}</SC.InfoField>
                     </SC.InfoFieldWrapper>
                     <SC.EditButtonWrapper>
                         <Button onClick={() => setEditInformation(true)} fullWidth={false} size="medium" color="primary" variant="outlined">Edit information</Button>

@@ -74,7 +74,6 @@ const Authentication: React.FC = () => {
         setSelected(newSelected);
     };
 
-
     const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
     const handleRowDelete = async () => {
