@@ -8,7 +8,7 @@ export const useAccountUserUpdateOne = <T>() => {
 
     return useMutation((params: Params) => {
         const { accountId, userId, data } = params;
-        return axios<T>(`/v2/account/${accountId}/user/${userId}`, 'put', data);
+        return axios<T>(`/v1/account/${accountId}/user/${userId}`, 'put', data);
     }, {
         onMutate: (_: Params) => () => {},
         onError: (_, __, rollback) => rollback?.(),

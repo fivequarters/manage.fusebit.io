@@ -1,5 +1,5 @@
 import React from "react";
-import {Props} from "../../../../interfaces/newUser";
+import { Props } from "../../../../interfaces/newUser";
 import * as SC from "./styles";
 import { Button } from "@material-ui/core";
 import { JsonForms } from '@jsonforms/react';
@@ -10,7 +10,8 @@ import {
   } from '@jsonforms/material-renderers';
 import cross from "../../../../assets/cross.svg";
 import copyIcon from "../../../../assets/copy.svg";
-import {NewUserData} from "../../../../interfaces/newUserData";
+import { NewUserData } from "../../../../interfaces/newUserData";
+import { useCapitalize } from "../../../../hooks/useCapitalize";
 
 const schema = {
     type: "object",
@@ -70,12 +71,8 @@ const NewUser = React.forwardRef(({open, onClose, createUser}: Props, ref) => {
     const [copy, setCopy] = React.useState(false);
     const [fadeChange, setFadeChange] = React.useState(false);
     const [token, setToken] = React.useState("");
+    const { capitalize } = useCapitalize();
     let timeout: NodeJS.Timeout;
-
-    const capitalize = (str: string) => {
-        const lower = str.toLowerCase();
-        return str.charAt(0).toUpperCase() + lower.slice(1);
-    }
 
     const handleSubmit = async () => {
         if (errors.length > 0) {
