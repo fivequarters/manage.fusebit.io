@@ -127,7 +127,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
         setRows(items); // otherwise if we delete and the integration.data.items has 0 items the rows will display 1
         const key = query.get('key');
         let keyDoesntMatch = true;
-        integrationsFeed().then(feed => {
+        integrationsFeed().then((feed) => {
           for (let i = 0; i < feed.length; i++) {
             if (feed[i].id === key) {
               keyDoesntMatch = false;
@@ -149,7 +149,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
 
   const handleSelectAllCheck = (event: any) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map(row => row.id);
+      const newSelecteds = rows.map((row) => row.id);
       setSelected(newSelecteds);
       return;
     }
@@ -234,12 +234,13 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
   return (
     <SC.Wrapper>
       <Modal
-        aria-labelledby='transition-modal-title'
-        aria-describedby='transition-modal-description'
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
         open={addIntegrationOpen}
         onClose={() => setAddIntegrationOpen(false)}
         closeAfterTransition
-        BackdropComponent={Backdrop}>
+        BackdropComponent={Backdrop}
+      >
         <FeedPicker
           isIntegration={true}
           onSubmit={(activeIntegration: Feed, data: Data) => _createIntegration(activeIntegration, data)}
@@ -252,9 +253,10 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
           <Button
             onClick={() => setAddIntegrationOpen(true)}
             startIcon={<AddIcon />}
-            variant='outlined'
-            color='primary'
-            size='large'>
+            variant="outlined"
+            color="primary"
+            size="large"
+          >
             New Integration
           </Button>
         </SC.ButtonMargin>
@@ -265,7 +267,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
           <>
             {selected.length} selected
             <SC.DeleteIconWrapper>
-              <Tooltip title='Delete'>
+              <Tooltip title="Delete">
                 <IconButton onClick={handleRowDelete}>
                   <DeleteIcon />
                 </IconButton>
@@ -275,12 +277,12 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
         )}
       </SC.DeleteWrapper>
       <SC.Table>
-        <Table size='small' aria-label='Overview Table'>
+        <Table size="small" aria-label="Overview Table">
           <TableHead>
             <TableRow>
-              <TableCell padding='checkbox'>
+              <TableCell padding="checkbox">
                 <Checkbox
-                  color='primary'
+                  color="primary"
                   checked={rows.length > 0 && selected.length === rows.length}
                   onChange={handleSelectAllCheck}
                   inputProps={{ 'aria-label': 'select all integrations' }}
@@ -292,42 +294,43 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
                   Name
                 </SC.Flex>
               </TableCell>
-              <TableCell align='left'>Instances</TableCell>
-              <TableCell align='left'>Created</TableCell>
-              <TableCell align='left'>Deployed</TableCell>
+              <TableCell align="left">Instances</TableCell>
+              <TableCell align="left">Created</TableCell>
+              <TableCell align="left">Deployed</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map(row => (
-              <SC.Row key={row.id} onClick={e => handleRowClick(e, getRedirectLink('/integration/' + row.id))}>
+            {rows.map((row) => (
+              <SC.Row key={row.id} onClick={(e) => handleRowClick(e, getRedirectLink('/integration/' + row.id))}>
                 <TableCell
                   style={{ cursor: 'default' }}
-                  padding='checkbox'
-                  id={`enhanced-table-cell-checkbox-${row.id}`}>
+                  padding="checkbox"
+                  id={`enhanced-table-cell-checkbox-${row.id}`}
+                >
                   <Checkbox
-                    color='primary'
-                    onClick={event => handleCheck(event, row.id)}
+                    color="primary"
+                    onClick={(event) => handleCheck(event, row.id)}
                     checked={isSelected(row.id)}
                     inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${row.id}` }}
                     id={`enhanced-table-checkbox-${row.id}`}
                   />
                 </TableCell>
-                <TableCell component='th' scope='row'>
+                <TableCell component="th" scope="row">
                   <SC.CellName>{row.id}</SC.CellName>
                 </TableCell>
-                <TableCell align='left'>
+                <TableCell align="left">
                   10
                   {
                     // TODO: Replace placeholder with real data
                   }
                 </TableCell>
-                <TableCell align='left'>
+                <TableCell align="left">
                   {new Date().toISOString().slice(0, 10)}
                   {
                     // TODO: Replace placeholder with real data
                   }
                 </TableCell>
-                <TableCell align='left'>
+                <TableCell align="left">
                   {new Date().toISOString().slice(0, 10)}
                   {
                     // TODO: Replace placeholder with real data
@@ -339,12 +342,12 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
         </Table>
       </SC.Table>
       <SC.TableMobile>
-        <Table size='small' aria-label='Overview Table'>
+        <Table size="small" aria-label="Overview Table">
           <TableHead>
             <TableRow>
-              <TableCell padding='checkbox'>
+              <TableCell padding="checkbox">
                 <Checkbox
-                  color='primary'
+                  color="primary"
                   checked={rows.length > 0 && selected.length === rows.length}
                   onChange={handleSelectAllCheck}
                   inputProps={{ 'aria-label': 'select all integrations' }}
@@ -356,47 +359,48 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
                   Name
                 </SC.Flex>
               </TableCell>
-              <TableCell align='left'>
+              <TableCell align="left">
                 <SC.TableCellMobile>
                   <p>{selectedCell}</p>
                   <SC.LeftArrow
                     onClick={handlePreviousCellSelect}
                     src={arrowLeft}
-                    alt='previous-cell'
-                    height='16'
-                    width='16'
+                    alt="previous-cell"
+                    height="16"
+                    width="16"
                   />
 
                   <SC.RightArrow
                     onClick={handleNextCellSelect}
                     src={arrowRight}
-                    alt='next-cell'
-                    height='16'
-                    width='16'
+                    alt="next-cell"
+                    height="16"
+                    width="16"
                   />
                 </SC.TableCellMobile>
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map(row => (
-              <SC.Row key={row.id} onClick={e => handleRowClick(e, getRedirectLink('/integration/' + row.id))}>
+            {rows.map((row) => (
+              <SC.Row key={row.id} onClick={(e) => handleRowClick(e, getRedirectLink('/integration/' + row.id))}>
                 <TableCell
                   style={{ cursor: 'default' }}
-                  padding='checkbox'
-                  id={`enhanced-table-cell-checkbox-${row.id}`}>
+                  padding="checkbox"
+                  id={`enhanced-table-cell-checkbox-${row.id}`}
+                >
                   <Checkbox
-                    color='primary'
-                    onClick={event => handleCheck(event, row.id)}
+                    color="primary"
+                    onClick={(event) => handleCheck(event, row.id)}
                     checked={isSelected(row.id)}
                     inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${row.id}` }}
                     id={`enhanced-table-checkbox-${row.id}`}
                   />
                 </TableCell>
-                <TableCell component='th' scope='row'>
+                <TableCell component="th" scope="row">
                   <SC.CellName>{row.id}</SC.CellName>
                 </TableCell>
-                <TableCell align='left'>
+                <TableCell align="left">
                   {selectedCell === cells.INSTANCES
                     ? 10
                     : selectedCell === cells.DEPLOYED

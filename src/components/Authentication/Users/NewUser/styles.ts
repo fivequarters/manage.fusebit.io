@@ -6,7 +6,7 @@ export const Card = styled.div<{ open: boolean }>`
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
-  opacity: ${props => (props.open ? 1 : 0)};
+  opacity: ${(props) => (props.open ? 1 : 0)};
   padding: 64px;
   height: 544px;
   width: 642px;
@@ -138,19 +138,19 @@ export const LineInstruction = styled.div`
 `;
 
 export const LineInstructionFade = styled.div<{ change: boolean; onlyMobileVisible?: boolean }>`
-  display: ${props => props.onlyMobileVisible && 'none'};
+  display: ${(props) => props.onlyMobileVisible && 'none'};
   position: absolute;
   right: 0;
   top: 0;
   height: 50px;
-  width: ${props => (props.change ? '300px' : '60px')};
+  width: ${(props) => (props.change ? '300px' : '60px')};
   background-image: linear-gradient(to left, #eff5ff 10%, rgba(255, 255, 255, 0) 100%);
   z-index: 1;
   transition: all 0.25s linear;
 
   @media only screen and (max-width: 1250px) {
     right: -2px;
-    display: ${props => props.onlyMobileVisible && 'block'};
+    display: ${(props) => props.onlyMobileVisible && 'block'};
     width: 60px;
   }
 `;
@@ -186,8 +186,8 @@ export const CopySuccess = styled.p<{ copy: boolean }>`
   font-size: 14px;
   line-height: 16px;
   color: var(--grey);
-  opacity: ${props => (props.copy ? 1 : 0)};
-  visibility: ${props => (props.copy ? 'visible' : 'hidden')};
+  opacity: ${(props) => (props.copy ? 1 : 0)};
+  visibility: ${(props) => (props.copy ? 'visible' : 'hidden')};
   margin-left: auto;
   transition: all 0.5s linear;
 `;

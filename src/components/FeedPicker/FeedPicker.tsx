@@ -48,7 +48,7 @@ const FeedPicker: React.FC<Props> = ({ open, onClose, onSubmit, isIntegration })
     const key = query.get('key');
 
     if (isIntegration) {
-      integrationsFeed().then(feed => {
+      integrationsFeed().then((feed) => {
         setFeed(feed);
         let keyDoesntMatch = true;
         for (let i = 0; i < feed.length; i++) {
@@ -60,7 +60,7 @@ const FeedPicker: React.FC<Props> = ({ open, onClose, onSubmit, isIntegration })
         keyDoesntMatch && setActiveTemplate(feed[0]);
       });
     } else {
-      connectorsFeed().then(feed => {
+      connectorsFeed().then((feed) => {
         setFeed(feed);
         let keyDoesntMatch = true;
         for (let i = 0; i < feed.length; i++) {
@@ -77,7 +77,7 @@ const FeedPicker: React.FC<Props> = ({ open, onClose, onSubmit, isIntegration })
 
   return (
     <SC.Card open={open}>
-      <SC.Close onClick={() => onClose()} src={cross} alt='close' height='12' width='12' />
+      <SC.Close onClick={() => onClose()} src={cross} alt="close" height="12" width="12" />
       <SC.Title>{isIntegration ? 'New Integration' : 'New Connector'}</SC.Title>
       <SC.Flex>
         <SC.Column>
@@ -86,12 +86,14 @@ const FeedPicker: React.FC<Props> = ({ open, onClose, onSubmit, isIntegration })
           </SC.ColumnItem>
           <SC.ColumnItem
             onClick={() => handleFilterChange(Filters.MESSAGGING)}
-            active={activeFilter === Filters.MESSAGGING}>
+            active={activeFilter === Filters.MESSAGGING}
+          >
             {Filters.MESSAGGING}
           </SC.ColumnItem>
           <SC.ColumnItem
             onClick={() => handleFilterChange(Filters.PRODUCTIVITY)}
-            active={activeFilter === Filters.PRODUCTIVITY}>
+            active={activeFilter === Filters.PRODUCTIVITY}
+          >
             {Filters.PRODUCTIVITY}
           </SC.ColumnItem>
           <SC.ColumnItem onClick={() => handleFilterChange(Filters.CRM)} active={activeFilter === Filters.CRM}>
@@ -99,7 +101,8 @@ const FeedPicker: React.FC<Props> = ({ open, onClose, onSubmit, isIntegration })
           </SC.ColumnItem>
           <SC.ColumnItem
             onClick={() => handleFilterChange(Filters.CALENDAR)}
-            active={activeFilter === Filters.CALENDAR}>
+            active={activeFilter === Filters.CALENDAR}
+          >
             {Filters.CALENDAR}
           </SC.ColumnItem>
         </SC.Column>
@@ -109,9 +112,9 @@ const FeedPicker: React.FC<Props> = ({ open, onClose, onSubmit, isIntegration })
             <TextField
               style={{ width: '254px' }}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchFilter(e.target.value)}
-              label='Search'
+              label="Search"
             />
-            <SC.ColumnSearchIcon src={search} alt='Search Integration' height='24' width='24' />
+            <SC.ColumnSearchIcon src={search} alt="Search Integration" height="24" width="24" />
           </SC.ColumnSearchWrapper>
           {feed.map((integration: Feed) => {
             const tags = integration.tags.catalog.split(', ');
@@ -126,8 +129,9 @@ const FeedPicker: React.FC<Props> = ({ open, onClose, onSubmit, isIntegration })
                 <SC.ColumnItem
                   key={integration.id}
                   onClick={() => setActiveTemplate(integration)}
-                  active={integration.id === activeTemplate?.id}>
-                  <SC.ColumnItemImage src={integration.smallIcon} alt='slack' height='18' width='18' />
+                  active={integration.id === activeTemplate?.id}
+                >
+                  <SC.ColumnItemImage src={integration.smallIcon} alt="slack" height="18" width="18" />
                   {integration.name}
                 </SC.ColumnItem>
               );
@@ -139,7 +143,7 @@ const FeedPicker: React.FC<Props> = ({ open, onClose, onSubmit, isIntegration })
         <SC.ColumnBr />
         <SC.ConnectorInfo>
           <SC.ConnectorTitleWrapper>
-            <SC.ConnectorImage src={activeTemplate?.smallIcon} alt='slack' height='28' width='28' />
+            <SC.ConnectorImage src={activeTemplate?.smallIcon} alt="slack" height="28" width="28" />
             <SC.ConnectorTitle>{activeTemplate?.name}</SC.ConnectorTitle>
             <SC.ConnectorVersion>{activeTemplate?.version}</SC.ConnectorVersion>
           </SC.ConnectorTitleWrapper>
@@ -162,9 +166,10 @@ const FeedPicker: React.FC<Props> = ({ open, onClose, onSubmit, isIntegration })
             onClick={handleSubmit}
             style={{ width: '200px', marginTop: 'auto', marginLeft: 'auto' }}
             fullWidth={false}
-            size='large'
-            color='primary'
-            variant='contained'>
+            size="large"
+            color="primary"
+            variant="contained"
+          >
             Create
           </Button>
         </SC.ConnectorInfo>

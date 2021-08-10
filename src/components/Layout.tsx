@@ -3,7 +3,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { CssBaseline } from '@material-ui/core';
 import GlobalStyle from './globalStyle';
 
-const useStyles = makeStyles(_ =>
+const useStyles = makeStyles((_) =>
   createStyles({
     root: {
       flex: 1,

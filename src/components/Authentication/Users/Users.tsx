@@ -59,7 +59,7 @@ const Authentication: React.FC = () => {
 
   const handleSelectAllCheck = (event: any) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map(row => row.id);
+      const newSelecteds = rows.map((row) => row.id);
       setSelected(newSelecteds);
       return;
     }
@@ -144,12 +144,13 @@ const Authentication: React.FC = () => {
   return (
     <SC.Wrapper>
       <Modal
-        aria-labelledby='transition-modal-title'
-        aria-describedby='transition-modal-description'
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
         open={newUserOpen}
         onClose={() => setNewUserOpen(false)}
         closeAfterTransition
-        BackdropComponent={Backdrop}>
+        BackdropComponent={Backdrop}
+      >
         <NewUser open={newUserOpen} onClose={() => setNewUserOpen(false)} />
       </Modal>
       <SC.ButtonContainer>
@@ -157,9 +158,10 @@ const Authentication: React.FC = () => {
           <Button
             onClick={() => setNewUserOpen(true)}
             startIcon={<AddIcon />}
-            variant='outlined'
-            color='primary'
-            size='large'>
+            variant="outlined"
+            color="primary"
+            size="large"
+          >
             New User
           </Button>
         </SC.ButtonMargin>
@@ -169,7 +171,7 @@ const Authentication: React.FC = () => {
           <>
             {selected.length} selected
             <SC.DeleteIconWrapper>
-              <Tooltip title='Delete'>
+              <Tooltip title="Delete">
                 <IconButton onClick={handleRowDelete}>
                   <DeleteIcon />
                 </IconButton>
@@ -179,12 +181,12 @@ const Authentication: React.FC = () => {
         )}
       </SC.DeleteWrapper>
       <SC.Table>
-        <Table size='small' aria-label='Authentication Table'>
+        <Table size="small" aria-label="Authentication Table">
           <TableHead>
             <TableRow>
-              <TableCell padding='checkbox'>
+              <TableCell padding="checkbox">
                 <Checkbox
-                  color='primary'
+                  color="primary"
                   checked={rows.length > 0 && selected.length === rows.length}
                   onChange={handleSelectAllCheck}
                   inputProps={{ 'aria-label': 'select all integrations' }}
@@ -196,42 +198,43 @@ const Authentication: React.FC = () => {
                   Name
                 </SC.Flex>
               </TableCell>
-              <TableCell align='left'>Email</TableCell>
-              <TableCell align='left'>User-ID</TableCell>
+              <TableCell align="left">Email</TableCell>
+              <TableCell align="left">User-ID</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map(row => (
-              <SC.Row key={row.id} onClick={e => handleRowClick(e, getRedirectLink('/authentication/detail'))}>
+            {rows.map((row) => (
+              <SC.Row key={row.id} onClick={(e) => handleRowClick(e, getRedirectLink('/authentication/detail'))}>
                 <TableCell
                   style={{ cursor: 'default' }}
-                  padding='checkbox'
-                  id={`enhanced-table-cell-checkbox-${row.id}`}>
+                  padding="checkbox"
+                  id={`enhanced-table-cell-checkbox-${row.id}`}
+                >
                   <Checkbox
-                    color='primary'
-                    onClick={event => handleCheck(event, row.id)}
+                    color="primary"
+                    onClick={(event) => handleCheck(event, row.id)}
                     checked={isSelected(row.id)}
                     inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${row.id}` }}
                     id={`enhanced-table-checkbox-${row.id}`}
                   />
                 </TableCell>
-                <TableCell component='th' scope='row'>
+                <TableCell component="th" scope="row">
                   {
                     //TODO: Replace placeholder with real data (currently using the integrations)
                   }
                   <SC.Flex>
-                    <SC.CellImage src={userData.picture} alt='user' height='38' width='38' />
+                    <SC.CellImage src={userData.picture} alt="user" height="38" width="38" />
                     <SC.CellName>{row.id}</SC.CellName>
                     {userData.userId === row.id && <SC.CellNameDetail>[me]</SC.CellNameDetail>}
                   </SC.Flex>
                 </TableCell>
-                <TableCell align='left'>
+                <TableCell align="left">
                   wstewart@acme.com
                   {
                     // TODO: Replace placeholder with real data
                   }
                 </TableCell>
-                <TableCell align='left'>
+                <TableCell align="left">
                   usr-9e72bb1d49ee4a59
                   {
                     // TODO: Replace placeholder with real data
@@ -243,60 +246,61 @@ const Authentication: React.FC = () => {
         </Table>
       </SC.Table>
       <SC.TableMobile>
-        <Table size='small' aria-label='Authentication Table'>
+        <Table size="small" aria-label="Authentication Table">
           <TableHead>
             <TableRow>
-              <TableCell padding='checkbox'>
+              <TableCell padding="checkbox">
                 <Checkbox
-                  color='primary'
+                  color="primary"
                   checked={rows.length > 0 && selected.length === rows.length}
                   onChange={handleSelectAllCheck}
                   inputProps={{ 'aria-label': 'select all integrations' }}
                 />
               </TableCell>
-              <TableCell align='left'>
+              <TableCell align="left">
                 <SC.TableCellMobile>
                   <p>{selectedCell}</p>
                   <SC.LeftArrow
                     onClick={handlePreviousCellSelect}
                     src={arrowLeft}
-                    alt='previous-cell'
-                    height='16'
-                    width='16'
+                    alt="previous-cell"
+                    height="16"
+                    width="16"
                   />
 
                   <SC.RightArrow
                     onClick={handleNextCellSelect}
                     src={arrowRight}
-                    alt='next-cell'
-                    height='16'
-                    width='16'
+                    alt="next-cell"
+                    height="16"
+                    width="16"
                   />
                 </SC.TableCellMobile>
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map(row => (
-              <SC.Row key={row.id} onClick={e => handleRowClick(e, getRedirectLink('/authentication/detail'))}>
+            {rows.map((row) => (
+              <SC.Row key={row.id} onClick={(e) => handleRowClick(e, getRedirectLink('/authentication/detail'))}>
                 <TableCell
                   style={{ cursor: 'default' }}
-                  padding='checkbox'
-                  id={`enhanced-table-cell-checkbox-${row.id}`}>
+                  padding="checkbox"
+                  id={`enhanced-table-cell-checkbox-${row.id}`}
+                >
                   <Checkbox
-                    color='primary'
-                    onClick={event => handleCheck(event, row.id)}
+                    color="primary"
+                    onClick={(event) => handleCheck(event, row.id)}
                     checked={isSelected(row.id)}
                     inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${row.id}` }}
                     id={`enhanced-table-checkbox-${row.id}`}
                   />
                 </TableCell>
-                <TableCell align='left'>
+                <TableCell align="left">
                   {selectedCell === cells.EMAIL ? (
                     'wstewart@acme.com'
                   ) : selectedCell === cells.NAME ? (
                     <SC.Flex>
-                      <SC.CellImage src={client} alt='user' height='38' width='38' />
+                      <SC.CellImage src={client} alt="user" height="38" width="38" />
                       <SC.CellName>{row.id}</SC.CellName>
                     </SC.Flex>
                   ) : (

@@ -95,7 +95,7 @@ const NewUser: React.FC<Props> = ({ open, onClose }) => {
 
   return (
     <SC.Card open={open}>
-      <SC.Close onClick={() => onClose()} src={cross} alt='close' height='12' width='12' />
+      <SC.Close onClick={() => onClose()} src={cross} alt="close" height="12" width="12" />
       {!userCreated ? (
         <>
           <SC.Title>New User</SC.Title>
@@ -118,9 +118,10 @@ const NewUser: React.FC<Props> = ({ open, onClose }) => {
                 onClick={handleSubmit}
                 style={{ width: '200px' }}
                 fullWidth={false}
-                size='large'
-                color='primary'
-                variant='contained'>
+                size="large"
+                color="primary"
+                variant="contained"
+              >
                 {isSubmitting ? 'Creating...' : 'Create'}
               </Button>
             </SC.FormInputWrapper>
@@ -135,7 +136,7 @@ const NewUser: React.FC<Props> = ({ open, onClose }) => {
           </SC.Description>
           <SC.LineInstructionWrapper onClick={() => handleCopy(`http://....`)}>
             <SC.LineInstructionCopy>
-              <img src={copyIcon} alt='copy' height='16' width='16' />
+              <img src={copyIcon} alt="copy" height="16" width="16" />
             </SC.LineInstructionCopy>
             <SC.LineInstructionFade onlyMobileVisible={true} change={false} />
             <SC.LineInstruction>http://....</SC.LineInstruction>
@@ -146,9 +147,10 @@ const NewUser: React.FC<Props> = ({ open, onClose }) => {
               onClick={() => onClose()}
               style={{ width: '200px' }}
               fullWidth={false}
-              size='large'
-              color='primary'
-              variant='contained'>
+              size="large"
+              color="primary"
+              variant="contained"
+            >
               Done
             </Button>
           </SC.UserCreatedButtonWrapper>

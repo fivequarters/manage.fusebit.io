@@ -5,7 +5,7 @@ import warning from '../../assets/warning-red.svg';
 const FatalError: React.FC<{}> = () => {
   return (
     <SC.Wrapper>
-      <SC.Warning src={warning} alt='warning' height='40' width='40' />
+      <SC.Warning src={warning} alt="warning" height="40" width="40" />
       <SC.Title>Error</SC.Title>
       <SC.Subtitle>Lorem ipsum dolor sit amet</SC.Subtitle>
       <SC.Description>

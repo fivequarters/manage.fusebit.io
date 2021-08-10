@@ -25,7 +25,7 @@ const CliAccess: React.FC<Props> = ({ open, onClose }) => {
 
   return (
     <SC.Card open={open}>
-      <SC.Close onClick={() => onClose()} src={cross} alt='cross' height='12' width='12' />
+      <SC.Close onClick={() => onClose()} src={cross} alt="cross" height="12" width="12" />
       <SC.Title>Grant CLI Access</SC.Title>
 
       <SC.Flex>
@@ -33,45 +33,45 @@ const CliAccess: React.FC<Props> = ({ open, onClose }) => {
         <SC.CopyMobile
           onClick={() => handleCopy(`npm install @fusebit/cli -g`, 1)}
           src={copyIcon}
-          alt='copy'
-          height='16'
-          width='16'
+          alt="copy"
+          height="16"
+          width="16"
         />
       </SC.Flex>
       <SC.LineInstructionWrapper onClick={() => handleCopy(`npm install @fusebit/cli -g`, 1)}>
         <SC.LineInstructionCopy>
-          <img src={copyIcon} alt='copy' height='16' width='16' />
+          <img src={copyIcon} alt="copy" height="16" width="16" />
         </SC.LineInstructionCopy>
         <SC.LineInstruction>
-          <span className='unselectable'>$</span> npm <strong>install</strong> @fusebit/cli <span>-g</span>
+          <span className="unselectable">$</span> npm <strong>install</strong> @fusebit/cli <span>-g</span>
         </SC.LineInstruction>
         <SC.CopySuccess copy={copiedLine === 1}>Copied to clipboard!</SC.CopySuccess>
       </SC.LineInstructionWrapper>
 
       <SC.Flex>
-        <SC.LineTitle margin='10px'>2. Run the following initialization command</SC.LineTitle>
+        <SC.LineTitle margin="10px">2. Run the following initialization command</SC.LineTitle>
         <SC.CopyMobile
           onClick={() => handleCopy(`npm install @fusebit/cli -g`, 2)}
           src={copyIcon}
-          alt='copy'
-          height='16'
-          width='16'
+          alt="copy"
+          height="16"
+          width="16"
         />
       </SC.Flex>
       <SC.Description>The one-time token in the command is valid for eight hours.</SC.Description>
       <SC.LineInstructionWrapper onClick={() => handleCopy(`npm install @fusebit/cli -g`, 2)}>
         <SC.LineInstructionCopy>
-          <img src={copyIcon} alt='copy' height='16' width='16' />
+          <img src={copyIcon} alt="copy" height="16" width="16" />
         </SC.LineInstructionCopy>
         <SC.LineInstruction>
-          <span className='unselectable'>$</span> fuse <strong>init</strong> ...
+          <span className="unselectable">$</span> fuse <strong>init</strong> ...
         </SC.LineInstruction>
         <SC.CopySuccess copy={copiedLine === 2}>Copied to clipboard!</SC.CopySuccess>
       </SC.LineInstructionWrapper>
 
       <SC.ButtonsWrapper>
         <SC.OutlinedButtonWrapper>
-          <Button onClick={() => onClose()} variant='outlined' color='primary'>
+          <Button onClick={() => onClose()} variant="outlined" color="primary">
             Done
           </Button>
         </SC.OutlinedButtonWrapper>

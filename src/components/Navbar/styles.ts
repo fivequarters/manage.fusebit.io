@@ -84,7 +84,7 @@ export const SectionDropdown = styled.div<{ active: boolean }>`
 
   & > img {
     margin-bottom: -10px;
-    transform: ${props => props.active && 'rotate(180deg)'};
+    transform: ${(props) => props.active && 'rotate(180deg)'};
     transition: all 0.25s linear;
   }
 
@@ -103,7 +103,7 @@ export const SectionDropdownMobile = styled.div<{ active: boolean }>`
 
   & > img {
     margin-bottom: -10px;
-    transform: ${props => props.active && 'rotate(180deg)'};
+    transform: ${(props) => props.active && 'rotate(180deg)'};
     transition: all 0.25s linear;
   }
 
@@ -155,10 +155,10 @@ export const SectionDropdownIntegration = styled.a<{ active: boolean }>`
   width: 100%;
   padding: 10px 16px;
   border-radius: 4px;
-  background-color: ${props => (props.active ? 'var(--secondary-color)' : 'white')};
+  background-color: ${(props) => (props.active ? 'var(--secondary-color)' : 'white')};
   font-size: 14px;
   line-height: 16px;
-  font-weight: ${props => (props.active ? 700 : 400)};
+  font-weight: ${(props) => (props.active ? 700 : 400)};
   text-decoration: none;
   color: var(--black);
   margin-bottom: 5px;
@@ -171,7 +171,7 @@ export const SectionDropdownIntegration = styled.a<{ active: boolean }>`
 
   & > img {
     margin-left: auto;
-    display: ${props => (props.active ? 'block' : 'none')};
+    display: ${(props) => (props.active ? 'block' : 'none')};
   }
 `;
 
@@ -311,7 +311,7 @@ export const Flex = styled.div<{ mobileHidden?: boolean }>`
   align-items: center;
 
   @media only screen and (max-width: 880px) {
-    display: ${props => props.mobileHidden && 'none'};
+    display: ${(props) => props.mobileHidden && 'none'};
   }
 `;
 
@@ -356,7 +356,7 @@ export const Link = styled.a`
 
 export const ButtonWrapper = styled.div<{ active: boolean }>`
   color: white;
-  border: 1px solid ${props => (props.active ? 'rgba(215, 229, 255, 0)' : '#D7E5FF66')};
+  border: 1px solid ${(props) => (props.active ? 'rgba(215, 229, 255, 0)' : '#D7E5FF66')};
   border-radius: 4px;
   transition: all 0.25s linear;
 

@@ -30,7 +30,7 @@ const Edit: React.FC<Props> = ({ open, onClose, integration, token }) => {
   return (
     <SC.Card open={open}>
       <SC.CardClose onClick={() => onClose()}>
-        <img src={cross} alt='close' height='10' width='10' />
+        <img src={cross} alt="close" height="10" width="10" />
       </SC.CardClose>
       <SC.Title>Edit {integration}</SC.Title>
 
@@ -40,17 +40,17 @@ const Edit: React.FC<Props> = ({ open, onClose, integration, token }) => {
         <SC.CopyMobile
           onClick={() => handleCopy(`npm install @fusebit/cli -g`, 1)}
           src={copyIcon}
-          alt='copy'
-          height='16'
-          width='16'
+          alt="copy"
+          height="16"
+          width="16"
         />
       </SC.Flex>
       <SC.LineInstructionWrapper onClick={() => handleCopy(`npm install @fusebit/cli -g`, 1)}>
         <SC.LineInstructionCopy>
-          <img src={copyIcon} alt='copy' height='16' width='16' />
+          <img src={copyIcon} alt="copy" height="16" width="16" />
         </SC.LineInstructionCopy>
         <SC.LineInstruction>
-          <span className='unselectable'>$</span> npm <strong>install</strong> @fusebit/cli <span>-g</span>
+          <span className="unselectable">$</span> npm <strong>install</strong> @fusebit/cli <span>-g</span>
         </SC.LineInstruction>
         <SC.CopySuccessMobile copy={copiedLine === 1}>Copied to clipboard!</SC.CopySuccessMobile>
       </SC.LineInstructionWrapper>
@@ -60,21 +60,22 @@ const Edit: React.FC<Props> = ({ open, onClose, integration, token }) => {
         <SC.CopyMobile
           onClick={() => handleCopy(`fuse init ${token}`, 2)}
           src={copyIcon}
-          alt='copy'
-          height='16'
-          width='16'
+          alt="copy"
+          height="16"
+          width="16"
         />
       </SC.Flex>
       <SC.LineInstructionWrapper
         onMouseLeave={() => setFadeChange(false)}
         onMouseEnter={() => setFadeChange(true)}
-        onClick={() => handleCopy(`fuse init ${token}`, 2)}>
+        onClick={() => handleCopy(`fuse init ${token}`, 2)}
+      >
         <SC.LineInstructionCopy>
-          <img src={copyIcon} alt='copy' height='16' width='16' />
+          <img src={copyIcon} alt="copy" height="16" width="16" />
         </SC.LineInstructionCopy>
         <SC.LineInstructionFade change={fadeChange} />
         <SC.LineInstruction>
-          <span className='unselectable'>$</span> fuse <strong>init</strong> {token}
+          <span className="unselectable">$</span> fuse <strong>init</strong> {token}
         </SC.LineInstruction>
         <SC.CopySuccessMobile copy={copiedLine === 2}>Copied to clipboard!</SC.CopySuccessMobile>
       </SC.LineInstructionWrapper>
@@ -84,18 +85,18 @@ const Edit: React.FC<Props> = ({ open, onClose, integration, token }) => {
         <SC.CopyMobile
           onClick={() => handleCopy(`fuse integration get ${integration} -d ${integration}`, 3)}
           src={copyIcon}
-          alt='copy'
-          height='16'
-          width='16'
+          alt="copy"
+          height="16"
+          width="16"
         />
       </SC.Flex>
       <SC.LineInstructionWrapper onClick={() => handleCopy(`fuse integration get ${integration} -d ${integration}`, 3)}>
         <SC.LineInstructionCopy>
-          <img src={copyIcon} alt='copy' height='16' width='16' />
+          <img src={copyIcon} alt="copy" height="16" width="16" />
         </SC.LineInstructionCopy>
         <SC.LineInstructionFade onlyMobileVisible={true} change={false} />
         <SC.LineInstruction>
-          <span className='unselectable'>$</span> fuse integration <strong>get</strong> {integration}{' '}
+          <span className="unselectable">$</span> fuse integration <strong>get</strong> {integration}{' '}
           <strong>-d</strong> {integration}
         </SC.LineInstruction>
         <SC.CopySuccessMobile copy={copiedLine === 3}>Copied to clipboard!</SC.CopySuccessMobile>
@@ -106,19 +107,20 @@ const Edit: React.FC<Props> = ({ open, onClose, integration, token }) => {
         <SC.CopyMobile
           onClick={() => handleCopy(`fuse integration deploy ${integration} -d ${integration}`, 4)}
           src={copyIcon}
-          alt='copy'
-          height='16'
-          width='16'
+          alt="copy"
+          height="16"
+          width="16"
         />
       </SC.Flex>
       <SC.LineInstructionWrapper
-        onClick={() => handleCopy(`fuse integration deploy ${integration} -d ${integration}`, 4)}>
+        onClick={() => handleCopy(`fuse integration deploy ${integration} -d ${integration}`, 4)}
+      >
         <SC.LineInstructionCopy>
-          <img src={copyIcon} alt='copy' height='16' width='16' />
+          <img src={copyIcon} alt="copy" height="16" width="16" />
         </SC.LineInstructionCopy>
         <SC.LineInstructionFade onlyMobileVisible={true} change={false} />
         <SC.LineInstruction>
-          <span className='unselectable'>$</span> fuse integration <strong>deploy</strong> {integration}{' '}
+          <span className="unselectable">$</span> fuse integration <strong>deploy</strong> {integration}{' '}
           <strong>-d</strong> {integration}
         </SC.LineInstruction>
         <SC.CopySuccessMobile copy={copiedLine === 4}>Copied to clipboard!</SC.CopySuccessMobile>
@@ -126,7 +128,7 @@ const Edit: React.FC<Props> = ({ open, onClose, integration, token }) => {
 
       <SC.ButtonsWrapper>
         <SC.OutlinedButtonWrapper>
-          <Button onClick={() => onClose()} variant='outlined' color='primary'>
+          <Button onClick={() => onClose()} variant="outlined" color="primary">
             OK
           </Button>
         </SC.OutlinedButtonWrapper>

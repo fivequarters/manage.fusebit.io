@@ -22,16 +22,16 @@ const ConnectorComponent: React.FC<ConnectorComponentProps> = ({
       const feedId = connector.tags['fusebit.feedId'];
 
       if (feedtype === 'integration') {
-        integrationsFeed().then(feed => {
-          feed.forEach(item => {
+        integrationsFeed().then((feed) => {
+          feed.forEach((item) => {
             if (item.id === feedId) {
               setIcon(item.smallIcon);
             }
           });
         });
       } else {
-        connectorsFeed().then(feed => {
-          feed.forEach(item => {
+        connectorsFeed().then((feed) => {
+          feed.forEach((item) => {
             if (item.id === feedId) {
               setIcon(item.smallIcon);
             }
@@ -51,17 +51,18 @@ const ConnectorComponent: React.FC<ConnectorComponentProps> = ({
         } else if (!e.target.id) {
           history.push(getRedirectLink(`/connector/${connector.id}`));
         }
-      }}>
+      }}
+    >
       {
         // TODO: Replace placeholder with real data
       }
-      <SC.CardConnectorImage src={icon} alt={'connector image'} height='20' width='20' />
+      <SC.CardConnectorImage src={icon} alt={'connector image'} height="20" width="20" />
       <SC.CardConnectorText>
         {connector.id} {connector.missing && 'is not found'}
       </SC.CardConnectorText>
       {!linkConnector && (
-        <SC.CardConnectorCrossContainer id='closeWrapper' onClick={() => onConnectorDelete(connector.id)}>
-          <SC.CardConnectorCross id='close' src={cross} alt='close' height='8' width='8' />
+        <SC.CardConnectorCrossContainer id="closeWrapper" onClick={() => onConnectorDelete(connector.id)}>
+          <SC.CardConnectorCross id="close" src={cross} alt="close" height="8" width="8" />
         </SC.CardConnectorCrossContainer>
       )}
     </SC.CardConnector>
