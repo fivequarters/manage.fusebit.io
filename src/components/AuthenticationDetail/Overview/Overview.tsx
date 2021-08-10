@@ -183,7 +183,7 @@ const Overview: React.FC = () => {
     }
 
     return (
-        <SC.Overview onClick={(e: any) => (e.target.id !== "popper" && e.target.id !== "popperWrapper") && setPopperOpen(false)}>
+        <SC.Overview onClick={(e: any) => (e.target.id !== "popper" && e.target.id !== "popperWrapper" && e.target.id !== "popperDots") && setPopperOpen(false)}>
             <Modal
                     aria-labelledby="transition-modal-title"
                     aria-describedby="transition-modal-description"
@@ -206,9 +206,9 @@ const Overview: React.FC = () => {
             </Modal>
             <SC.UserCard>
                 <SC.UserInfoContainer>
-                    <div>
+                    <div onClick={() => setPopperOpen(true)}>
                         <SC.DotsWrapper id="popper" onClick={() => setPopperOpen(true)}>
-                            <SC.Dots src={dots} alt="options" height="20" width="4" />
+                            <SC.Dots id="popperDots" onClick={() => setPopperOpen(true)} src={dots} alt="options" height="20" width="4" />
                         </SC.DotsWrapper>
                         <SC.PopperOpen id="popperWrapper" active={popperOpen}>
                             <SC.PopperElement onClick={() => setDeleteOpen(true)}>Delete User</SC.PopperElement>
