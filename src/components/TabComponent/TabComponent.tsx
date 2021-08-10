@@ -1,99 +1,107 @@
-import React from "react";
-import * as SC from "./styles";
-import { Container, Tabs, Tab } from "@material-ui/core";
+import React from 'react';
+import * as SC from './styles';
+import { Container, Tabs, Tab } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import {Props} from "../../interfaces/TabComponent";
-import { useEffect } from "react";
+import { Props } from '../../interfaces/TabComponent';
+import { useEffect } from 'react';
 
 const TabPanel = (props: any) => {
-    const { children, value, index, ...other } = props;
-    
-    return (
-        <div
-        role="tabpanel"
-        hidden={value !== index}
-        id={`simple-tabpanel-${index}`}
-        aria-labelledby={`simple-tab-${index}`}
-        {...other}
-        >
-        {value === index && (
-            children
-        )}
-        </div>
-    );
-}
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && children}
+    </div>
+  );
+};
 
 TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.any.isRequired,
-    value: PropTypes.any.isRequired,
-  };
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
+};
 
 const a11yProps = (index: number) => {
-    return {
-      id: `simple-tab-${index}`,
-      'aria-controls': `simple-tabpanel-${index}`,
-    };
-  }
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+};
 
-const TabComponent: React.FC<Props> = ({tabNames, tabObjects}) => {
-    const [value, setValue] = React.useState(0);
+const TabComponent: React.FC<Props> = ({ tabNames, tabObjects }) => {
+  const [value, setValue] = React.useState(0);
 
-    useEffect(() => {
-        const hash = window.location.hash;
-        if (!hash.match(tabNames[0])) {
-            let foundTheTag = false;
-            tabNames.forEach((tab: string, index: number) => {
-                if (hash.match(tab)) {
-                    setValue(index);
-                    foundTheTag = true;
-                }
-            });
-            if (!foundTheTag) {
-                window.location.hash = tabNames[0];
-            }
-        } else {
-            setValue(0);
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (!hash.match(tabNames[0])) {
+      let foundTheTag = false;
+      tabNames.forEach((tab: string, index: number) => {
+        if (hash.match(tab)) {
+          setValue(index);
+          foundTheTag = true;
         }
-    }, [tabNames]);
+      });
+      if (!foundTheTag) {
+        window.location.hash = tabNames[0];
+      }
+    } else {
+      setValue(0);
+    }
+  }, [tabNames]);
 
-    const handleChange = (event: any, newValue: number) => {
-        setValue(newValue);
-        window.location.hash = tabNames[newValue];
-      };
+  const handleChange = (event: any, newValue: number) => {
+    setValue(newValue);
+    window.location.hash = tabNames[newValue];
+  };
 
-    return (
-        <>
-        <SC.ContentMobile>
-            <SC.Fade />
-                <Tabs indicatorColor="primary" value={value} onChange={handleChange} aria-label="Tab Selector" scrollButtons="auto">
-                    {
-                        tabNames.map((name, index) => (
-                            <Tab key={index} label={<SC.TabLabel active={value === index}>{name}</SC.TabLabel>} {...a11yProps(index)}/>
-                        ))
-                    }
-                </Tabs>
-        </SC.ContentMobile>
-        <Container maxWidth="lg">
-            <SC.Content>
-                <Tabs indicatorColor="primary" value={value} onChange={handleChange} aria-label="Tab Selector" scrollButtons="auto">
-                    {
-                        tabNames.map((name, index) => (
-                            <Tab key={index} label={<SC.TabLabel active={value === index}>{name}</SC.TabLabel>} {...a11yProps(index)}/>
-                        ))
-                    }
-                </Tabs>
-            </SC.Content>
-            {
-                tabObjects.map((obj, index) => (
-                    <TabPanel key={index} value={value} index={index}>
-                        {obj}
-                    </TabPanel>
-                ))
-            }
-        </Container>
-        </>
-    )
-}
+  return (
+    <>
+      <SC.ContentMobile>
+        <SC.Fade />
+        <Tabs
+          indicatorColor="primary"
+          value={value}
+          onChange={handleChange}
+          aria-label="Tab Selector"
+          scrollButtons="auto"
+        >
+          {tabNames.map((name, index) => (
+            <Tab key={index} label={<SC.TabLabel active={value === index}>{name}</SC.TabLabel>} {...a11yProps(index)} />
+          ))}
+        </Tabs>
+      </SC.ContentMobile>
+      <Container maxWidth="lg">
+        <SC.Content>
+          <Tabs
+            indicatorColor="primary"
+            value={value}
+            onChange={handleChange}
+            aria-label="Tab Selector"
+            scrollButtons="auto"
+          >
+            {tabNames.map((name, index) => (
+              <Tab
+                key={index}
+                label={<SC.TabLabel active={value === index}>{name}</SC.TabLabel>}
+                {...a11yProps(index)}
+              />
+            ))}
+          </Tabs>
+        </SC.Content>
+        {tabObjects.map((obj, index) => (
+          <TabPanel key={index} value={value} index={index}>
+            {obj}
+          </TabPanel>
+        ))}
+      </Container>
+    </>
+  );
+};
 
 export default TabComponent;

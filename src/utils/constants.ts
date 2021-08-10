@@ -1,1 +1,1 @@
-export const APP_TITLE = "Fusebit - Portal";
+export const APP_TITLE = 'Fusebit - Portal';

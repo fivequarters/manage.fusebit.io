@@ -1,5 +1,7 @@
-import axios, { AxiosRequestConfig } from "axios";
-import { readLocalData, useContext } from "./useContext";
+import axios, { AxiosRequestConfig } from 'axios';
+import { readLocalData, useContext } from './useContext';
+
+const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
 interface ApiResponse<T> {
   error?: string;
@@ -7,43 +9,39 @@ interface ApiResponse<T> {
   success?: boolean;
 }
 
-axios.interceptors.response.use(response => response, error => {
-  const statusCode = Number(error.response.status);
-  if (statusCode === 404) {
-    const __userData = readLocalData();
-    let toUrl = "/logged-out";
-    if (__userData.token) {
-      if (window.location.href.indexOf('connector') >= 0) toUrl = '/connectors';
-      else if (window.location.href.indexOf('integration') >= 0) toUrl = '/';
-      else toUrl = '/';
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const statusCode = Number(error.response.status);
+    if (statusCode === 404) {
+      const __userData = readLocalData();
+      let toUrl = '/logged-out';
+      if (__userData.token) {
+        if (window.location.href.indexOf('connector') >= 0) toUrl = '/connectors';
+        else if (window.location.href.indexOf('integration') >= 0) toUrl = '/';
+        else toUrl = '/';
+      }
+      window.location.href = toUrl;
     }
-    window.location.href = toUrl;
+    return Promise.reject(error);
   }
-  return Promise.reject(error);
-});
+);
 
 export const useAxios = () => {
   const { userData } = useContext();
 
-  const getBaseUrl = () => localStorage.getItem('FUSEBIT_API_BASE_URL') || `https://stage.us-west-2.fusebit.io`;
-
-  const setBaseUrl = (value: string) => {
-    localStorage.setItem('FUSEBIT_API_BASE_URL', value);
-    window.location.reload();
-  }
-
   const _axios = async <T extends {}>(
     endpoint: string,
-    method: "post" | "delete" | "put" | "get" | "patch",
+    method: 'post' | 'delete' | 'put' | 'get' | 'patch',
     params: any = {},
     headers: any = {}
   ): Promise<ApiResponse<T>> => {
     try {
       const config: AxiosRequestConfig = {
         method,
-        url: `${getBaseUrl()}${endpoint}`,
+        url: `${REACT_APP_FUSEBIT_DEPLOYMENT}${endpoint}`,
         data: params,
-        headers
+        headers,
       };
       if (userData.token) config.headers.Authorization = `Bearer ${userData.token}`;
       const response = await axios(config);
@@ -51,11 +49,9 @@ export const useAxios = () => {
     } catch (e) {
       return { success: false, error: e.message, data: {} as T };
     }
-  }
+  };
 
   return {
     axios: _axios,
-    getBaseUrl,
-    setBaseUrl
-  }
-}
+  };
+};

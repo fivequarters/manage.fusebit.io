@@ -1,4 +1,4 @@
 export interface Props {
-    onClose: Function;
-    open: boolean;
+  onClose: Function;
+  open: boolean;
 }

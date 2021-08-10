@@ -1,4 +1,4 @@
 export interface OverviewProps {
-    headless: any;
-    setHeadless: Function;
+  headless: any;
+  setHeadless: Function;
 }

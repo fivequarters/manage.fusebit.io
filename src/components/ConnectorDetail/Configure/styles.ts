@@ -1,76 +1,76 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Flex = styled.div`
-    display: flex;
-    padding-bottom: 100px;
+  display: flex;
+  padding-bottom: 100px;
 
-    @media only screen and (max-width: 880px) {
-        flex-direction: column;
-        align-items: center;
-    }
+  @media only screen and (max-width: 880px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 export const FlexDown = styled.div`
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const InfoWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    width: max-content;
+  display: flex;
+  align-items: center;
+  width: max-content;
 
-    @media only screen and (max-width: 880px) {
-        margin-left: -82px;
-    }
+  @media only screen and (max-width: 880px) {
+    margin-left: -82px;
+  }
 `;
 
 export const InfoTitle = styled.h4`
-    font-size: 16px;
-    line-height: 18px;
-    color: black;
-    font-weight: 600;
-    margin-right: 8px;
+  font-size: 16px;
+  line-height: 18px;
+  color: black;
+  font-weight: 600;
+  margin-right: 8px;
 `;
 
 export const InfoDescription = styled.p`
-    font-size: 16px;
-    line-height: 18px;
-    color: black;
+  font-size: 16px;
+  line-height: 18px;
+  color: black;
 `;
 
 export const InfoLink = styled.a`
-    display: flex;
-    align-items: center;
-    font-size: 16px;
-    line-height: 18px;
-    color: var(--primary-color);
-    text-decoration: none;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  line-height: 18px;
+  color: var(--primary-color);
+  text-decoration: none;
 
-    & > img {
-        margin-left: 8px;
-    }
+  & > img {
+    margin-left: 8px;
+  }
 `;
 
 export const FormWrapper = styled.form`
-    display: flex;
-    flex-direction: column;
-    width: 316px;
-    margin-left: 150px;
-    margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 316px;
+  margin-left: 150px;
+  margin-top: 20px;
 
-    @media only screen and (max-width: 880px) {
-        margin-left: 0;
-    }
+  @media only screen and (max-width: 880px) {
+    margin-left: 0;
+  }
 `;
 
 export const FormInputWrapper = styled.div`
-    margin-bottom: 49px;
+  margin-bottom: 49px;
 
-    @media only screen and (max-width: 880px) {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
+  @media only screen and (max-width: 880px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 `;

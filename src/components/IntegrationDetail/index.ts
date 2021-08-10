@@ -1,1 +1,1 @@
-export { default } from "./IntegrationDetail";
+export { default } from './IntegrationDetail';

@@ -1,15 +1,15 @@
-import React, { FC, ReactNode } from "react";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
-import { CssBaseline } from "@material-ui/core";
-import GlobalStyle from "./globalStyle";
+import React, { FC, ReactNode } from 'react';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { CssBaseline } from '@material-ui/core';
+import GlobalStyle from './globalStyle';
 
-const useStyles = makeStyles(_ =>
+const useStyles = makeStyles((_) =>
   createStyles({
     root: {
       flex: 1,
-      display: "flex",
-      flexDirection: "column"
-    }
+      display: 'flex',
+      flexDirection: 'column',
+    },
   })
 );
 
@@ -25,9 +25,7 @@ const Layout: FC<Props> = ({ children }) => {
     <div className={classes.root}>
       <CssBaseline />
       <GlobalStyle />
-      <main>
-        {children}
-      </main>
+      <main>{children}</main>
     </div>
   );
 };

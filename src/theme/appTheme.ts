@@ -1,53 +1,52 @@
 import { createMuiTheme, Theme } from '@material-ui/core/styles';
 
 export const lightTheme: Theme = createMuiTheme({
-    palette: {
-        type: "light",
-        primary: {
-            main: "#F83420"
-
-        },
-        secondary: {
-            main: "rgba(215, 229, 255, 0.4)"
-        },
-        background: {
-            default: "white"
-        }
+  palette: {
+    type: 'light',
+    primary: {
+      main: '#F83420',
     },
-    overrides: {
-        MuiFormControl: {
-          root: {
-            marginBottom: "20px",
-          }
-        }
+    secondary: {
+      main: 'rgba(215, 229, 255, 0.4)',
     },
-    props: {
-        MuiCheckbox: {
-            color: 'primary',
-        },
+    background: {
+      default: 'white',
     },
-    typography: {
-        button: {
-          textTransform: "none",
-        },
-        fontFamily: [
-            'Poppins',
-            '-apple-system',
-            'BlinkMacSystemFont',
-            'Segoe UI',
-            'Roboto',
-            'Helvetica Neue',
-            'Arial',
-            'sans-serif',
-            'Apple Color Emoji',
-            'Segoe UI Emoji',
-            'Segoe UI Symbol',
-          ].join(','),
-      }
+  },
+  overrides: {
+    MuiFormControl: {
+      root: {
+        marginBottom: '20px',
+      },
+    },
+  },
+  props: {
+    MuiCheckbox: {
+      color: 'primary',
+    },
+  },
+  typography: {
+    button: {
+      textTransform: 'none',
+    },
+    fontFamily: [
+      'Poppins',
+      '-apple-system',
+      'BlinkMacSystemFont',
+      'Segoe UI',
+      'Roboto',
+      'Helvetica Neue',
+      'Arial',
+      'sans-serif',
+      'Apple Color Emoji',
+      'Segoe UI Emoji',
+      'Segoe UI Symbol',
+    ].join(','),
+  },
 });
 
 export const darkTheme: Theme = createMuiTheme({
-    palette: {
-        type: "dark"
-    },
+  palette: {
+    type: 'dark',
+  },
 });

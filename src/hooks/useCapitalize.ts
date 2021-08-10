@@ -1,11 +1,10 @@
-export const  useCapitalize = () => {
+export const useCapitalize = () => {
+  const capitalize = (str: string) => {
+    const lower = str.toLowerCase();
+    return str.charAt(0).toUpperCase() + lower.slice(1);
+  };
 
-    const capitalize = (str: string) => {
-        const lower = str.toLowerCase();
-        return str.charAt(0).toUpperCase() + lower.slice(1);
-    }
-
-    return {
-        capitalize
-    };
+  return {
+    capitalize,
+  };
 };

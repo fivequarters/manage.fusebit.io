@@ -6,7 +6,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prettier": "git ls-tree -r `git branch --show-current` --name-only | grep -E \"\\.[tj]?sx?$\" | grep -v public | grep -v build | xargs -P 1 prettier --write",
+    "prepare": "husky install"
   },
   "author": "Litebox",
   "license": "SEE LICENSE IN LICENSE",
@@ -62,6 +64,8 @@
     "@types/react-dom": "^16.9.8",
     "@types/react-highlight": "^0.12.2",
     "@types/react-router-dom": "^5.1.6",
-    "@types/styled-components": "^5.1.10"
+    "@types/styled-components": "^5.1.10",
+    "prettier": "^2.0.5",
+    "husky": "^7.0.1"
   }
 }

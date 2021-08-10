@@ -1,15 +1,15 @@
 type OperationLocation = {
-    entityId: string,
-    accountId: string;
-    entityType: string;
-    subscriptionId: string;
-}
+  entityId: string;
+  accountId: string;
+  entityType: string;
+  subscriptionId: string;
+};
 
 export type Operation = {
-    code: number,
-    type: string,
-    verb: string,
-    location: OperationLocation,
-    operationId: string;
-    id?: string;
-}
+  code: number;
+  type: string;
+  verb: string;
+  location: OperationLocation;
+  operationId: string;
+  id?: string;
+};

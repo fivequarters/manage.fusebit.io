@@ -1,5 +1,5 @@
 export interface Props {
-    open: boolean;
-    onClose: Function;
-    createUser: Function;
+  open: boolean;
+  onClose: Function;
+  createUser: Function;
 }
