@@ -22,6 +22,7 @@ import { Account } from "../../../interfaces/account";
 import { useLoader } from "../../../hooks/useLoader";
 import { useError } from "../../../hooks/useError";
 import { useCapitalize } from "../../../hooks/useCapitalize";
+import { useCreateToken } from "../../../hooks/useCreateToken";
 
 const schema = {
     type: "object",
@@ -87,9 +88,10 @@ const Overview: React.FC = () => {
     const [idCopied, setIdCopied] = React.useState(false);
     const [popperOpen, setPopperOpen] = React.useState(false);
     const [token, setToken] = React.useState("");
-    const { waitForOperations } = useLoader();
+    const { waitForOperations, createLoader, removeLoader } = useLoader();
     const { createError } = useError();
     const { capitalize } = useCapitalize();
+    const { _createToken } = useCreateToken();
     let timeout: NodeJS.Timeout;
 
     useEffect(() => {
@@ -145,6 +147,23 @@ const Overview: React.FC = () => {
         timeout = setTimeout(() => {
             setIdCopied(false);
         }, 3000);
+    }
+
+    const handleCliOpen = async () => {
+        if (token === "") {
+            try {
+                createLoader();
+                const token = await _createToken(accountData?.data.id);
+                setToken(token);
+                setCliOpen(true);
+            } catch (e) {
+                createError(e.message);
+            } finally {
+                removeLoader();
+            }
+        } else {
+            setCliOpen(true);
+        }
     }
 
     return (
@@ -230,7 +249,7 @@ const Overview: React.FC = () => {
             </SC.UserCard>
             <SC.CLIAccesWrapper>
                 <SC.CLIAccess>Command Line (CLI) Access</SC.CLIAccess>
-                <Button onClick={() => setCliOpen(true)} style={{width: "200px"}} fullWidth={false} size="large" color="primary" variant="contained">Grant CLI Access</Button>
+                <Button onClick={handleCliOpen} style={{width: "200px"}} fullWidth={false} size="large" color="primary" variant="contained">Grant CLI Access</Button>
             </SC.CLIAccesWrapper>
         </SC.Overview>
     )

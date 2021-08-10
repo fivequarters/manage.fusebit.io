@@ -16,7 +16,7 @@ import { useGetRedirectLink } from "../../../hooks/useGetRedirectLink";
 import { useAccountUserGetAll } from "../../../hooks/api/v1/account/user/useGetAll";
 import { Account } from "../../../interfaces/account";
 import { useAccountUserCreateUser } from "../../../hooks/api/v1/account/user/useCreateUser";
-import { useAccountUserCreateToken } from "../../../hooks/api/v1/account/user/useCreateToken";
+import { useCreateToken } from "../../../hooks/useCreateToken";
 
 enum cells {
     NAME = "Name",
@@ -36,7 +36,7 @@ const Authentication: React.FC = () => {
     const [newUserOpen, setNewUserOpen] = React.useState(false);
     const { getRedirectLink } = useGetRedirectLink();
     const createUser = useAccountUserCreateUser<Operation>();
-    const createToken = useAccountUserCreateToken<Operation>();
+    const { _createToken } = useCreateToken();
 
     useEffect(() => {
         if (users && users.data.items) {
@@ -127,12 +127,6 @@ const Authentication: React.FC = () => {
         } else {
             setSelectedCell(cells.NAME);
         }
-    }
-
-    const _createToken = async (userId: string) => {
-        const response = await createToken.mutateAsync({userId, accountId: userData.accountId});
-        await waitForOperations([response.data.operationId]);
-        return response.data;
     }
 
     const _createUser = async (data: Account) => {
