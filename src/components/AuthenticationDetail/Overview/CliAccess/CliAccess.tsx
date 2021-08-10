@@ -5,7 +5,7 @@ import cross from "../../../../assets/cross.svg";
 import copyIcon from "../../../../assets/copy.svg";
 import { Button } from "@material-ui/core";
 
-const CliAccess = React.forwardRef(({open, onClose}: Props, ref) => {
+const CliAccess = React.forwardRef(({open, onClose, token}: Props, ref) => {
     const [copiedLine, setCopiedLine] = React.useState(0);
     let timeout: NodeJS.Timeout;
 
@@ -42,14 +42,14 @@ const CliAccess = React.forwardRef(({open, onClose}: Props, ref) => {
 
             <SC.Flex>
                 <SC.LineTitle margin="10px">2. Run the following initialization command</SC.LineTitle>
-                <SC.CopyMobile onClick={() => handleCopy(`npm install @fusebit/cli -g`, 2)} src={copyIcon} alt="copy" height="16" width="16" />
+                <SC.CopyMobile onClick={() => handleCopy(`fuse init ${token}`, 2)} src={copyIcon} alt="copy" height="16" width="16" />
             </SC.Flex>
             <SC.Description>The one-time token in the command is valid for eight hours.</SC.Description>
-            <SC.LineInstructionWrapper onClick={() => handleCopy(`npm install @fusebit/cli -g`, 2)}>
+            <SC.LineInstructionWrapper onClick={() => handleCopy(`fuse init ${token}`, 2)}>
                 <SC.LineInstructionCopy>
                     <img src={copyIcon} alt="copy" height="16" width="16" />
                 </SC.LineInstructionCopy>
-                <SC.LineInstruction><span className="unselectable">$</span> fuse <strong>init</strong> ...</SC.LineInstruction>
+                <SC.LineInstruction><span className="unselectable">$</span> fuse <strong>init</strong> {token}</SC.LineInstruction>
                 <SC.CopySuccess copy={copiedLine === 2}>Copied to clipboard!</SC.CopySuccess>
             </SC.LineInstructionWrapper>
 

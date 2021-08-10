@@ -34,7 +34,7 @@ export const useAxios = () => {
 
   const _axios = async <T extends {}>(
     endpoint: string,
-    method: "post" | "delete" | "put" | "get",
+    method: "post" | "delete" | "put" | "get" | "patch",
     params: any = {},
     headers: any = {}
   ): Promise<ApiResponse<T>> => {

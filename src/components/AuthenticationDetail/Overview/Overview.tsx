@@ -86,6 +86,7 @@ const Overview: React.FC = () => {
     const [deleteOpen, setDeleteOpen] = React.useState(false);
     const [idCopied, setIdCopied] = React.useState(false);
     const [popperOpen, setPopperOpen] = React.useState(false);
+    const [token, setToken] = React.useState("");
     const { waitForOperations } = useLoader();
     const { createError } = useError();
     const { capitalize } = useCapitalize();
@@ -166,7 +167,7 @@ const Overview: React.FC = () => {
                     closeAfterTransition
                     BackdropComponent={Backdrop}
                 >
-                <CliAccess open={cliOpen} onClose={() => setCliOpen(false)} />
+                <CliAccess token={token} open={cliOpen} onClose={() => setCliOpen(false)} />
             </Modal>
             <SC.UserCard>
                 <SC.UserInfoContainer>
