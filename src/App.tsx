@@ -8,7 +8,7 @@ import { lightTheme } from './theme/appTheme';
 import { routes } from './config';
 import { APP_TITLE } from './utils/constants';
 import { RouteItem } from './interfaces/router';
-import { ContextProvider } from './hooks/useContext'
+import { ContextProvider } from './hooks/useContext';
 
 function App() {
   const queryClient = new QueryClient();
