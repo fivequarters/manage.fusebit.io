@@ -75,7 +75,7 @@ const NewUser = React.forwardRef(({open, onClose, createUser}: Props, ref) => {
     const capitalize = (str: string) => {
         const lower = str.toLowerCase();
         return str.charAt(0).toUpperCase() + lower.slice(1);
-      }
+    }
 
     const handleSubmit = async () => {
         if (errors.length > 0) {

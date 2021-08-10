@@ -15,7 +15,13 @@ import CliAccess from "./CliAccess";
 import Delete from "./Delete";
 import { useParams } from "react-router-dom";
 import { useAccountUserGetOne } from "../../../hooks/api/v1/account/user/useGetOne";
+import { useAccountUserUpdateOne } from "../../../hooks/api/v1/account/user/useUpdateOne";
 import client from "../../../assets/client.jpg";
+import { Operation } from "../../../interfaces/operation";
+import { Account } from "../../../interfaces/account";
+import { useLoader } from "../../../hooks/useLoader";
+import { useError } from "../../../hooks/useError";
+import { useCapitalize } from "../../../hooks/useCapitalize";
 
 const schema = {
     type: "object",
@@ -72,6 +78,7 @@ const Overview: React.FC = () => {
     const [editInformation, setEditInformation] = React.useState(false);
     const [data, setData] = React.useState({firstName: userData.firstName, lastName: userData.lastName, primaryEmail: userData.primaryEmail});
     const { data: accountData, refetch: reloadAccount } = useAccountUserGetOne<any>({ enabled: userData.token, userId, accountId: userData.accountId });
+    const updateUser = useAccountUserUpdateOne<Operation>();
     const [errors, setErrors] = React.useState<object[]>([]);
     const [validationMode, setValidationMode] = React.useState<ValidationMode>("ValidateAndHide");
     const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -79,6 +86,9 @@ const Overview: React.FC = () => {
     const [deleteOpen, setDeleteOpen] = React.useState(false);
     const [idCopied, setIdCopied] = React.useState(false);
     const [popperOpen, setPopperOpen] = React.useState(false);
+    const { waitForOperations } = useLoader();
+    const { createError } = useError();
+    const { capitalize } = useCapitalize();
     let timeout: NodeJS.Timeout;
 
     useEffect(() => {
@@ -87,17 +97,32 @@ const Overview: React.FC = () => {
         }
     }, [accountData]);
 
-    const handleSubmit = () => {
+    const _updateUser = async (data: Account) => {
+        try {
+            const response = await updateUser.mutateAsync({data, accountId: userData.accountId , userId: data.id  });
+            await waitForOperations([response.data.operationId]);
+            reloadAccount();
+        } catch (e) {
+            createError(e.message);
+        }
+    }
+
+    const handleSubmit = async () => {
         if (errors.length > 0) {
             setValidationMode("ValidateAndShow");
         } else {
             //update the user info
             setIsSubmitting(true);
-            setTimeout(() => {
-                setEditInformation(false);
-                setIsSubmitting(false);
-                setValidationMode("ValidateAndHide");
-            }, 1000);
+            const dataToSubmit: Account = {
+                id: accountData?.data.id,
+                firstName: capitalize(data.firstName || ""),
+                lastName: capitalize(data.lastName || ""),
+                primaryEmail: data.primaryEmail?.toLowerCase(),
+            }
+            await _updateUser(dataToSubmit);
+            setEditInformation(false);
+            setIsSubmitting(false);
+            setValidationMode("ValidateAndHide");
         }
     }
 
