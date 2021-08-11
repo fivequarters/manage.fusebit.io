@@ -20,77 +20,83 @@ export const useReplaceMustache = () => {
 
   const replaceMustache = React.useCallback(
     async (data: Data, feedMaster: Feed) => {
-      // This hurts but it's easy.
-      const feed = JSON.parse(JSON.stringify(feedMaster));
-      const customTags: any = ['<%', '%>'];
+      const oldMustacheEscape = Mustache.escape;
+      try {
+        // This hurts but it's easy.
+        const feed = JSON.parse(JSON.stringify(feedMaster));
+        const customTags: any = ['<%', '%>'];
 
-      let global: any = {
-        entities: {},
-        consts: {
-          userId: userData.userId,
-          accountId: userData.accountId,
-          subscriptionId: userData.subscriptionId,
-          endpoint: process.env.REACT_APP_FUSEBIT_DEPLOYMENT,
-          integrationId: () => {
-            const integration: any = Object.entries(feed.configuration.entities as Record<string, Entity>).find(
-              ([name, entity]: [string, Entity]) => entity.entityType === 'integration'
-            );
-            if (integration) {
-              return integration[1].id;
-            } else {
-              return '';
+        // Disable html escaping because these values are all trusted
+        Mustache.escape = (s: string) => s;
+
+        let global: any = {
+          entities: {},
+          consts: {
+            userId: userData.userId,
+            accountId: userData.accountId,
+            subscriptionId: userData.subscriptionId,
+            endpoint: process.env.REACT_APP_FUSEBIT_DEPLOYMENT,
+            integrationId: () => {
+              const integration: any = Object.entries(feed.configuration.entities as Record<string, Entity>).find(
+                ([name, entity]: [string, Entity]) => entity.entityType === 'integration'
+              );
+              return integration ? global.entities[integration[0]]?.id() || integration[1].id : '';
+            },
+            random: () => {
+              const randBuffer = [...window.crypto.getRandomValues(new Uint8Array(32))];
+              return randBuffer.map((x) => x.toString(16).padStart(2, '0')).join('');
+            },
+            feed: { ...JSON.parse(JSON.stringify(feed)) },
+          },
+        };
+
+        // No really good reason to delete this besides it making it difficult to console.log the globals.
+        delete global.consts.feed.configuration;
+
+        const newEntities: Entity[] = [];
+
+        // Populate the global entities first, so that the id is always available and always consistent
+        Object.entries(feed.configuration.entities as Record<string, Entity>).forEach(
+          ([name, entity]: [string, Entity]) => {
+            if (!data[name]) {
+              data[name] = {};
             }
-          },
-          random: () => {
-            const randBuffer = [...window.crypto.getRandomValues(new Uint8Array(32))];
-            return randBuffer.map((x) => x.toString(16).padStart(2, '0')).join('');
-          },
-          feed: { ...JSON.parse(JSON.stringify(feed)) },
-        },
-      };
-
-      // No really good reason to delete this besides it making it difficult to console.log the globals.
-      delete global.consts.feed.configuration;
-
-      const newEntities: Entity[] = [];
-
-      // Populate the global entities first, so that the id is always available and always consistent
-      Object.entries(feed.configuration.entities as Record<string, Entity>).forEach(
-        ([name, entity]: [string, Entity]) => {
-          if (!data[name]) {
-            data[name] = {};
+            global.entities[name] = {
+              ...data[name],
+              id: () => {
+                if (!data[name].id) {
+                  data[name].id = `${name}-${Math.floor(Math.random() * 1000)}`;
+                }
+                return data[name].id;
+              },
+            };
           }
-          global.entities[name] = {
-            ...data[name],
-            id: () => {
-              if (!data[name].id) {
-                data[name].id = `${name}-${Math.floor(Math.random() * 1000)}`;
-              }
-              return data[name].id;
-            },
-          };
-        }
-      );
+        );
 
-      // Now parse each entity, replacing it's strings as appropriate
-      Object.entries(feed.configuration.entities as Record<string, Entity>).forEach(
-        ([name, entity]: [string, Entity]) => {
-          const view = {
-            this: {
-              id: () => global.entities[name].id(),
-              name,
-            },
-            global,
-          };
-          newEntities.push(walkObjectStrings(entity, (value: string) => Mustache.render(value, view, {}, customTags)));
-        }
-      );
+        // Now parse each entity, replacing it's strings as appropriate
+        Object.entries(feed.configuration.entities as Record<string, Entity>).forEach(
+          ([name, entity]: [string, Entity]) => {
+            const view = {
+              this: {
+                id: () => global.entities[name].id(),
+                name,
+              },
+              global,
+            };
+            newEntities.push(
+              walkObjectStrings(entity, (value: string) => Mustache.render(value, view, {}, customTags))
+            );
+          }
+        );
 
-      feed.configuration.entities = newEntities;
+        feed.configuration.entities = newEntities;
 
-      feed.description = Mustache.render(feed.description, { global }, {}, customTags);
+        feed.description = Mustache.render(feed.description, { global }, {}, customTags);
 
-      return feed;
+        return feed;
+      } finally {
+        Mustache.escape = oldMustacheEscape;
+      }
     },
     [userData]
   );
