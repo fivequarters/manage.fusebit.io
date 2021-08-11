@@ -11,7 +11,7 @@ import { useContext } from '../../../../hooks/useContext';
 import jwt_decode from 'jwt-decode';
 import { useGetAuthLink } from '../../../../hooks/useGetAuthLink';
 
-const Connect: React.FC<Props> = ({ onClose, open }) => {
+const Connect = React.forwardRef(({ onClose, open }: Props, ref) => {
   const [copiedLine, setCopiedLine] = React.useState(0);
   const [fadeChange, setFadeChange] = React.useState(false);
   const { userData } = useContext();
@@ -131,6 +131,6 @@ const Connect: React.FC<Props> = ({ onClose, open }) => {
       )}
     </SC.Card>
   );
-};
+});
 
 export default Connect;
