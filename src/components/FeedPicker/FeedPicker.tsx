@@ -29,6 +29,7 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
   const [activeFilter, setActiveFilter] = React.useState<Filters>(Filters.ALL);
   const [feed, setFeed] = useState<Feed[]>([]);
   const [activeTemplate, setActiveTemplate] = React.useState<Feed>();
+  const [rawActiveTemplate, setRawActiveTemplate] = React.useState<Feed>();
   const [searchFilter, setSearchFilter] = React.useState('');
   const query = useQuery();
   const { replaceMustache } = useReplaceMustache();
@@ -38,7 +39,7 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
       setValidationMode('ValidateAndShow');
     } else {
       //send data with customized form
-      onSubmit(activeTemplate, { ...data });
+      onSubmit(rawActiveTemplate, { ...data });
     }
   };
 
@@ -58,6 +59,7 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
         }
       }
 
+      setRawActiveTemplate(feed[0]);
       replaceMustache(data, feed[0]).then((template) => {
         setActiveTemplate(template);
       });
@@ -68,6 +70,7 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
   const feedTypeName = isIntegration ? 'Integration' : 'Connector';
 
   const handleTemplateChange = (template: Feed) => {
+    setRawActiveTemplate(template);
     replaceMustache(data, template).then((template) => {
       setActiveTemplate(template);
     });
