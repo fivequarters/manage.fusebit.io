@@ -146,7 +146,7 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
           <SC.FormWrapper>
             <JsonForms
               schema={activeTemplate?.configuration.schema}
-              uischema={activeTemplate?.configuration.uischema}
+              uischema={activeTemplate?.configuration.uischema.elements}
               data={data}
               renderers={materialRenderers}
               cells={materialCells}
