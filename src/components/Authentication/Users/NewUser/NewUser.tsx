@@ -7,6 +7,8 @@ import { ValidationMode } from '@jsonforms/core';
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
 import cross from '../../../../assets/cross.svg';
 import copyIcon from '../../../../assets/copy.svg';
+import { NewUserData } from '../../../../interfaces/newUserData';
+import { useCapitalize } from '../../../../hooks/useCapitalize';
 
 const schema = {
   type: 'object',
@@ -19,7 +21,7 @@ const schema = {
       type: 'string',
       minLength: 2,
     },
-    email: {
+    primaryEmail: {
       type: 'string',
       format: 'email',
       pattern: '^\\S+@\\S+\\.\\S+$',
@@ -27,7 +29,7 @@ const schema = {
       maxLength: 127,
     },
   },
-  required: ['firstName', 'lastName', 'email'],
+  required: ['firstName', 'lastName', 'primaryEmail'],
 };
 
 const uischema = {
@@ -49,7 +51,7 @@ const uischema = {
     },
     {
       type: 'Control',
-      scope: '#/properties/email',
+      scope: '#/properties/primaryEmail',
       options: {
         hideRequiredAsterisk: true,
       },
@@ -57,25 +59,38 @@ const uischema = {
   ],
 };
 
-const NewUser: React.FC<Props> = ({ open, onClose }) => {
-  const [data, setData] = React.useState({});
+const NewUser = React.forwardRef(({ open, onClose, createUser }: Props, ref) => {
+  const [data, setData] = React.useState<NewUserData>({
+    firstName: undefined,
+    lastName: undefined,
+    primaryEmail: undefined,
+  });
   const [errors, setErrors] = React.useState<object[]>([]);
   const [validationMode, setValidationMode] = React.useState<ValidationMode>('ValidateAndHide');
   const [userCreated, setUserCreated] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [copy, setCopy] = React.useState(false);
+  const [fadeChange, setFadeChange] = React.useState(false);
+  const [token, setToken] = React.useState('');
+  const { capitalize } = useCapitalize();
   let timeout: NodeJS.Timeout;
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (errors.length > 0) {
       setValidationMode('ValidateAndShow');
     } else {
       setIsSubmitting(true);
-      // create the user
-      setTimeout(() => {
+      const dataToSubmit = {
+        firstName: capitalize(data.firstName || ''),
+        lastName: capitalize(data.lastName || ''),
+        primaryEmail: data.primaryEmail?.toLowerCase(),
+      };
+      const token = await createUser(dataToSubmit);
+      if (token !== null) {
         setUserCreated(true);
         setIsSubmitting(false);
-      }, 1000);
+        setToken(token);
+      }
     }
   };
 
@@ -134,12 +149,16 @@ const NewUser: React.FC<Props> = ({ open, onClose }) => {
             Securely share the following link with the user. The one-time use token included in the link expires in
             eight hours.
           </SC.Description>
-          <SC.LineInstructionWrapper onClick={() => handleCopy(`http://....`)}>
+          <SC.LineInstructionWrapper
+            onMouseLeave={() => setFadeChange(false)}
+            onMouseEnter={() => setFadeChange(true)}
+            onClick={() => handleCopy(`http://....`)}
+          >
             <SC.LineInstructionCopy>
               <img src={copyIcon} alt="copy" height="16" width="16" />
             </SC.LineInstructionCopy>
-            <SC.LineInstructionFade onlyMobileVisible={true} change={false} />
-            <SC.LineInstruction>http://....</SC.LineInstruction>
+            <SC.LineInstructionFade onlyMobileVisible={false} change={fadeChange} />
+            <SC.LineInstruction>{token}</SC.LineInstruction>
             <SC.CopySuccess copy={copy}>Copied to clipboard!</SC.CopySuccess>
           </SC.LineInstructionWrapper>
           <SC.UserCreatedButtonWrapper>
@@ -158,6 +177,6 @@ const NewUser: React.FC<Props> = ({ open, onClose }) => {
       )}
     </SC.Card>
   );
-};
+});
 
 export default NewUser;

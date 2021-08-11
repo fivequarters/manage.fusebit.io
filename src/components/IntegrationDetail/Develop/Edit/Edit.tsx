@@ -5,7 +5,7 @@ import { Button } from '@material-ui/core';
 import { Props } from '../../../../interfaces/edit';
 import copyIcon from '../../../../assets/copy.svg';
 
-const Edit: React.FC<Props> = ({ open, onClose, integration, token }) => {
+const Edit = React.forwardRef(({ open, onClose, integration, token }: Props, ref) => {
   const [copy, setCopy] = React.useState(false);
   const [fadeChange, setFadeChange] = React.useState(false);
   const [copiedLine, setCopiedLine] = React.useState(0);
@@ -135,6 +135,6 @@ const Edit: React.FC<Props> = ({ open, onClose, integration, token }) => {
       </SC.ButtonsWrapper>
     </SC.Card>
   );
-};
+});
 
 export default Edit;

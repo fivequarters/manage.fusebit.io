@@ -17,9 +17,7 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useContext } from '../../../hooks/useContext';
 import { useLoader } from '../../../hooks/useLoader';
-import { useAccountIntegrationsGetAll } from '../../../hooks/api/v2/account/integration/useGetAll';
-import { useAccountIntegrationDeleteIntegration } from '../../../hooks/api/v2/account/integration/useDeleteOne';
-import { Integration } from '../../../interfaces/integration';
+import { useAccountUserDeleteOne } from '../../../hooks/api/v1/account/user/useDeleteOne';
 import { Operation } from '../../../interfaces/operation';
 import { useError } from '../../../hooks/useError';
 import arrowRight from '../../../assets/arrow-right.svg';
@@ -27,6 +25,10 @@ import arrowLeft from '../../../assets/arrow-left.svg';
 import client from '../../../assets/client.jpg';
 import NewUser from './NewUser';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
+import { useAccountUserGetAll } from '../../../hooks/api/v1/account/user/useGetAll';
+import { Account } from '../../../interfaces/account';
+import { useAccountUserCreateUser } from '../../../hooks/api/v1/account/user/useCreateUser';
+import { useCreateToken } from '../../../hooks/useCreateToken';
 
 enum cells {
   NAME = 'Name',
@@ -36,26 +38,28 @@ enum cells {
 
 const Authentication: React.FC = () => {
   const [selected, setSelected] = React.useState<string[]>([]);
-  const [rows, setRows] = React.useState<Integration[]>([]);
+  const [rows, setRows] = React.useState<Account[]>([]);
   const { userData } = useContext();
-  const { data: integrations, refetch: reloadIntegrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({
+  const { data: users, refetch: reloadUsers } = useAccountUserGetAll<{ items: Account[] }>({
     enabled: userData.token,
     accountId: userData.accountId,
-    subscriptionId: userData.subscriptionId,
+    params: 'include=all',
   });
-  const deleteIntegration = useAccountIntegrationDeleteIntegration<Operation>();
+  const deleteAccount = useAccountUserDeleteOne<Operation>();
   const { waitForOperations, createLoader, removeLoader } = useLoader();
   const { createError } = useError();
   const [selectedCell, setSelectedCell] = React.useState<cells>(cells.NAME);
   const [newUserOpen, setNewUserOpen] = React.useState(false);
   const { getRedirectLink } = useGetRedirectLink();
+  const createUser = useAccountUserCreateUser<Operation>();
+  const { _createToken } = useCreateToken();
 
   useEffect(() => {
-    if (integrations && integrations.data.items) {
-      const items = integrations.data.items;
+    if (users && users.data.items) {
+      const items = users.data.items;
       setRows(items);
     }
-  }, [integrations]);
+  }, [users]);
 
   const handleSelectAllCheck = (event: any) => {
     if (event.target.checked) {
@@ -90,15 +94,11 @@ const Authentication: React.FC = () => {
       createLoader();
       let operationIds: string[] = [];
       for (let i = 0; i < selected.length; i++) {
-        const response = await deleteIntegration.mutateAsync({
-          id: selected[i],
-          accountId: userData.accountId,
-          subscriptionId: userData.subscriptionId,
-        });
+        const response = await deleteAccount.mutateAsync({ userId: selected[i], accountId: userData.accountId });
         operationIds.push(response.data.operationId);
       }
       await waitForOperations(operationIds);
-      reloadIntegrations();
+      reloadUsers();
       setSelected([]);
     } catch (e) {
       createError(e.message);
@@ -141,6 +141,26 @@ const Authentication: React.FC = () => {
     }
   };
 
+  const _createUser = async (data: Account) => {
+    try {
+      createLoader();
+      const response = await createUser.mutateAsync({ ...data, accountId: userData.accountId });
+      await waitForOperations([response.data.operationId]);
+      reloadUsers();
+      if (response.data.id) {
+        const token = await _createToken(response.data.id);
+        return token;
+      }
+    } catch (e) {
+      createError(e.message);
+      removeLoader();
+      setNewUserOpen(false);
+      return null;
+    } finally {
+      removeLoader();
+    }
+  };
+
   return (
     <SC.Wrapper>
       <Modal
@@ -151,7 +171,11 @@ const Authentication: React.FC = () => {
         closeAfterTransition
         BackdropComponent={Backdrop}
       >
-        <NewUser open={newUserOpen} onClose={() => setNewUserOpen(false)} />
+        <NewUser
+          createUser={(data: Account) => _createUser(data)}
+          open={newUserOpen}
+          onClose={() => setNewUserOpen(false)}
+        />
       </Modal>
       <SC.ButtonContainer>
         <SC.ButtonMargin>
@@ -189,7 +213,7 @@ const Authentication: React.FC = () => {
                   color="primary"
                   checked={rows.length > 0 && selected.length === rows.length}
                   onChange={handleSelectAllCheck}
-                  inputProps={{ 'aria-label': 'select all integrations' }}
+                  inputProps={{ 'aria-label': 'select all users' }}
                 />
               </TableCell>
               <TableCell>
@@ -203,8 +227,8 @@ const Authentication: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <SC.Row key={row.id} onClick={(e) => handleRowClick(e, getRedirectLink('/authentication/detail'))}>
+            {rows.map((row: Account) => (
+              <SC.Row key={row.id} onClick={(e) => handleRowClick(e, getRedirectLink('/authentication/' + row.id))}>
                 <TableCell
                   style={{ cursor: 'default' }}
                   padding="checkbox"
@@ -212,30 +236,37 @@ const Authentication: React.FC = () => {
                 >
                   <Checkbox
                     color="primary"
-                    onClick={(event) => handleCheck(event, row.id)}
-                    checked={isSelected(row.id)}
+                    onClick={(event) => handleCheck(event, row.id || '')}
+                    checked={isSelected(row.id || '')}
                     inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${row.id}` }}
                     id={`enhanced-table-checkbox-${row.id}`}
                   />
                 </TableCell>
                 <TableCell component="th" scope="row">
                   {
-                    //TODO: Replace placeholder with real data (currently using the integrations)
+                    //TODO: Replace placeholder with real data (currently using the users)
                   }
                   <SC.Flex>
-                    <SC.CellImage src={userData.picture} alt="user" height="38" width="38" />
-                    <SC.CellName>{row.id}</SC.CellName>
+                    <SC.CellImage
+                      src={userData.userId === row.id ? userData.picture : client}
+                      alt="user"
+                      height="38"
+                      width="38"
+                    />
+                    <SC.CellName>
+                      {row.firstName} {row.lastName}
+                    </SC.CellName>
                     {userData.userId === row.id && <SC.CellNameDetail>[me]</SC.CellNameDetail>}
                   </SC.Flex>
                 </TableCell>
                 <TableCell align="left">
-                  wstewart@acme.com
+                  {row.primaryEmail}
                   {
                     // TODO: Replace placeholder with real data
                   }
                 </TableCell>
                 <TableCell align="left">
-                  usr-9e72bb1d49ee4a59
+                  {row.id}
                   {
                     // TODO: Replace placeholder with real data
                   }
@@ -254,7 +285,7 @@ const Authentication: React.FC = () => {
                   color="primary"
                   checked={rows.length > 0 && selected.length === rows.length}
                   onChange={handleSelectAllCheck}
-                  inputProps={{ 'aria-label': 'select all integrations' }}
+                  inputProps={{ 'aria-label': 'select all users' }}
                 />
               </TableCell>
               <TableCell align="left">
@@ -281,7 +312,7 @@ const Authentication: React.FC = () => {
           </TableHead>
           <TableBody>
             {rows.map((row) => (
-              <SC.Row key={row.id} onClick={(e) => handleRowClick(e, getRedirectLink('/authentication/detail'))}>
+              <SC.Row key={row.id} onClick={(e) => handleRowClick(e, getRedirectLink('/authentication/' + row.id))}>
                 <TableCell
                   style={{ cursor: 'default' }}
                   padding="checkbox"
@@ -297,14 +328,21 @@ const Authentication: React.FC = () => {
                 </TableCell>
                 <TableCell align="left">
                   {selectedCell === cells.EMAIL ? (
-                    'wstewart@acme.com'
+                    row.primaryEmail
                   ) : selectedCell === cells.NAME ? (
                     <SC.Flex>
-                      <SC.CellImage src={client} alt="user" height="38" width="38" />
-                      <SC.CellName>{row.id}</SC.CellName>
+                      <SC.CellImage
+                        src={userData.userId === row.id ? userData.picture : client}
+                        alt="user"
+                        height="38"
+                        width="38"
+                      />
+                      <SC.CellName>
+                        {row.firstName} {row.lastName}
+                      </SC.CellName>
                     </SC.Flex>
                   ) : (
-                    'usr-9e72bb1d49ee4a59'
+                    row.id
                   )}
                   {
                     // TODO: Replace placeholder with real data

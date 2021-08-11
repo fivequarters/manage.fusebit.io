@@ -3,12 +3,12 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { createMuiTheme, responsiveFontSizes, ThemeProvider } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import CookieConsent from 'react-cookie-consent';
 import { lightTheme } from './theme/appTheme';
 import { routes } from './config';
 import { APP_TITLE } from './utils/constants';
 import { RouteItem } from './interfaces/router';
 import { ContextProvider } from './hooks/useContext';
-import CookieConsent from 'react-cookie-consent';
 
 function App() {
   const queryClient = new QueryClient();
