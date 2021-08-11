@@ -43,11 +43,13 @@ export const useAxios = () => {
         data: params,
         headers,
       };
-      if (userData.token) config.headers.Authorization = `Bearer ${userData.token}`;
+      if (userData.token) {
+        config.headers.Authorization = `Bearer ${userData.token}`;
+      }
       const response = await axios(config);
       return { success: true, data: response.data as T };
     } catch (e) {
-      return { success: false, error: e.message, data: {} as T };
+      return { success: false, error: e.message, data: e.response && e.response.data };
     }
   };
 
