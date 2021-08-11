@@ -31,7 +31,7 @@ export const useLoader = () => {
               `/v2/account/${userData.accountId}/subscription/${userData.subscriptionId}/operation/${operationId}`,
               'get'
             ).then((response) => {
-              if (response.data.code !== 202) {
+              if (response.data.statusCode !== 202) {
                 accept({});
               }
             });

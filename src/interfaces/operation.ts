@@ -6,7 +6,7 @@ type OperationLocation = {
 };
 
 export type Operation = {
-  code: number;
+  statusCode: number;
   type: string;
   verb: string;
   location: OperationLocation;

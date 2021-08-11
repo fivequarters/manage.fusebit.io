@@ -65,34 +65,36 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
     async (activeFeed: Feed, data: Data) => {
       try {
         createLoader();
-        let currentIntegrationData: Entity | undefined;
-        let connectors: Entity[] = [];
+        let firstIntegration: Entity | undefined;
+
         const parsedFeed = await replaceMustache(data, activeFeed);
-        for (let i = 0; i < parsedFeed.configuration.entities.length; i++) {
-          const entity: Entity = parsedFeed.configuration.entities[i];
-          if (entity.entityType === 'connector') {
-            connectors.push(entity);
-          } else {
-            currentIntegrationData = entity;
-          }
-        }
-        const response = await createIntegration.mutateAsync({
-          ...currentIntegrationData?.data,
-          accountId: userData.accountId,
-          subscriptionId: userData.subscriptionId,
-        });
-        await waitForOperations([response.data.operationId]);
-        for (let i = 0; i < connectors.length; i++) {
-          const response = await createConnector.mutateAsync({
-            data: connectors[i].data,
-            id: connectors[i].id,
-            tags: connectors[i].tags,
-            accountId: userData.accountId,
-            subscriptionId: userData.subscriptionId,
-          });
-          await waitForOperations([response.data.operationId]);
-        }
-        window.location.href = getRedirectLink('/integration/' + currentIntegrationData?.id);
+        firstIntegration = parsedFeed.configuration.entities.find(
+          (entity: Entity) => entity.entityType === 'integration'
+        );
+
+        const commonTags = {
+          'fusebit.feedType': 'integration',
+          'fusebit.feedId': activeFeed.id,
+        };
+
+        await Promise.all([
+          ...parsedFeed.configuration.entities.map(async (entity: Entity) => {
+            const obj = {
+              data: entity.data,
+              id: entity.id,
+              tags: { ...commonTags, ...entity.tags },
+              accountId: userData.accountId,
+              subscriptionId: userData.subscriptionId,
+            };
+            const response =
+              entity.entityType === 'connector'
+                ? await createConnector.mutateAsync(obj)
+                : await createIntegration.mutateAsync(obj);
+            await waitForOperations([response.data.operationId]);
+          }),
+        ]);
+
+        window.location.href = getRedirectLink('/integration/' + firstIntegration?.id);
       } catch (e) {
         createError(e.message);
       }

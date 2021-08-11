@@ -17,11 +17,10 @@ interface EntityComponent {
   entityType: string;
   entityId: string;
   dependsOn: any[];
-  package: string;
+  provider: string;
 }
 
 export interface Entity {
-  name: string;
   entityType: string;
   id: string;
   data: {
@@ -83,6 +82,6 @@ export interface Feed {
         [key: string]: string;
       };
     };
-    entities: Entity[];
+    entities: Record<string, Entity>;
   };
 }

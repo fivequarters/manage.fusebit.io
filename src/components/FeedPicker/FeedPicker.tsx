@@ -12,6 +12,7 @@ import { Feed } from '../../interfaces/feed';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useQuery } from '../../hooks/useQuery';
+import { useReplaceMustache } from '../../hooks/useReplaceMustache';
 
 enum Filters {
   ALL = 'All',
@@ -28,15 +29,17 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
   const [activeFilter, setActiveFilter] = React.useState<Filters>(Filters.ALL);
   const [feed, setFeed] = useState<Feed[]>([]);
   const [activeTemplate, setActiveTemplate] = React.useState<Feed>();
+  const [rawActiveTemplate, setRawActiveTemplate] = React.useState<Feed>();
   const [searchFilter, setSearchFilter] = React.useState('');
   const query = useQuery();
+  const { replaceMustache } = useReplaceMustache();
 
   const handleSubmit = () => {
     if (errors.length > 0) {
       setValidationMode('ValidateAndShow');
     } else {
       //send data with customized form
-      onSubmit(activeTemplate, { ...data });
+      onSubmit(rawActiveTemplate, { ...data });
     }
   };
 
@@ -47,38 +50,30 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
   useEffect(() => {
     const key = query.get('key');
 
-    if (isIntegration) {
-      integrationsFeed().then((feed) => {
-        setFeed(feed);
-        let keyDoesntMatch = true;
-        for (let i = 0; i < feed.length; i++) {
-          if (feed[i].id === key) {
-            keyDoesntMatch = false;
-            setActiveTemplate(feed[i]);
-          }
+    (isIntegration ? integrationsFeed() : connectorsFeed()).then((feed) => {
+      setFeed(feed);
+      for (let i = 0; i < feed.length; i++) {
+        if (feed[i].id === key) {
+          setRawActiveTemplate(feed[i]);
+          replaceMustache(data, feed[i]).then((template) => setActiveTemplate(template));
+          return;
         }
-        keyDoesntMatch && setActiveTemplate(feed[0]);
+      }
+
+      setRawActiveTemplate(feed[0]);
+      replaceMustache(data, feed[0]).then((template) => {
+        setActiveTemplate(template);
       });
-    } else {
-      connectorsFeed().then((feed) => {
-        setFeed(feed);
-        let keyDoesntMatch = true;
-        for (let i = 0; i < feed.length; i++) {
-          if (feed[i].id === key) {
-            keyDoesntMatch = false;
-            setActiveTemplate(feed[i]);
-          }
-        }
-        keyDoesntMatch && setActiveTemplate(feed[0]);
-      });
-    }
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isIntegration]);
+
+  const feedTypeName = isIntegration ? 'Integration' : 'Connector';
 
   return (
     <SC.Card open={open}>
       <SC.Close onClick={() => onClose()} src={cross} alt="close" height="12" width="12" />
-      <SC.Title>{isIntegration ? 'New Integration' : 'New Connector'}</SC.Title>
+      <SC.Title>{`New ${feedTypeName}`}</SC.Title>
       <SC.Flex>
         <SC.Column>
           <SC.ColumnItem onClick={() => handleFilterChange(Filters.ALL)} active={activeFilter === Filters.ALL}>
@@ -114,25 +109,25 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchFilter(e.target.value)}
               label="Search"
             />
-            <SC.ColumnSearchIcon src={search} alt="Search Integration" height="24" width="24" />
+            <SC.ColumnSearchIcon src={search} alt={`Search ${feedTypeName}`} height="24" width="24" />
           </SC.ColumnSearchWrapper>
-          {feed.map((integration: Feed) => {
-            const tags = integration.tags.catalog.split(', ');
+          {feed.map((feedEntry: Feed) => {
+            const tags = feedEntry.tags.catalog.split(', ');
             let tagIsActive = false;
             tags.forEach((tag: string) => {
               if (activeFilter.toUpperCase().match(tag.toUpperCase()) || activeFilter === Filters.ALL) {
                 tagIsActive = true;
               }
             });
-            if (tagIsActive && integration.name.toUpperCase().includes(searchFilter.toUpperCase())) {
+            if (tagIsActive && feedEntry.name.toUpperCase().includes(searchFilter.toUpperCase())) {
               return (
                 <SC.ColumnItem
-                  key={integration.id}
-                  onClick={() => setActiveTemplate(integration)}
-                  active={integration.id === activeTemplate?.id}
+                  key={feedEntry.id}
+                  onClick={() => setActiveTemplate(feedEntry)}
+                  active={feedEntry.id === activeTemplate?.id}
                 >
-                  <SC.ColumnItemImage src={integration.smallIcon} alt="slack" height="18" width="18" />
-                  {integration.name}
+                  <SC.ColumnItemImage src={feedEntry.smallIcon} alt="slack" height="18" width="18" />
+                  {feedEntry.name}
                 </SC.ColumnItem>
               );
             } else {
@@ -151,7 +146,7 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
           <SC.FormWrapper>
             <JsonForms
               schema={activeTemplate?.configuration.schema}
-              uischema={activeTemplate?.configuration.uischema.elements}
+              uischema={activeTemplate?.configuration.uischema}
               data={data}
               renderers={materialRenderers}
               cells={materialCells}
