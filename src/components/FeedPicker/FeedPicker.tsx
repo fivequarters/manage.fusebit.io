@@ -60,8 +60,6 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
         }
       }
 
-      console.log(feed);
-
       setRawActiveTemplate(feed[0]);
       replaceMustache(data, feed[0]).then((template) => {
         setActiveTemplate(template);
@@ -71,8 +69,6 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
   }, [isIntegration]);
 
   const feedTypeName = isIntegration ? 'Integration' : 'Connector';
-
-  console.log(activeTemplate);
 
   return (
     <SC.Card open={open}>
