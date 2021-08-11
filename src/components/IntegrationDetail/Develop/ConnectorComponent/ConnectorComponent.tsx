@@ -20,6 +20,7 @@ const ConnectorComponent: React.FC<ConnectorComponentProps> = ({
     if (connector.tags && !connector.missing) {
       const feedtype = connector.tags['fusebit.feedType'];
       const feedId = connector.tags['fusebit.feedId'];
+      console.log(feedId);
 
       if (feedtype === 'integration') {
         integrationsFeed().then((feed) => {
