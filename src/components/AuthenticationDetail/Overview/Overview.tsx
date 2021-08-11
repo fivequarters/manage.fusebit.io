@@ -10,6 +10,18 @@ import { materialRenderers, materialCells } from '@jsonforms/material-renderers'
 import { useEffect } from 'react';
 import CliAccess from './CliAccess';
 import Delete from './Delete';
+import { useParams } from 'react-router-dom';
+import { useAccountUserGetOne } from '../../../hooks/api/v1/account/user/useGetOne';
+import { useAccountUserUpdateOne } from '../../../hooks/api/v1/account/user/useUpdateOne';
+import client from '../../../assets/client.jpg';
+import { Operation } from '../../../interfaces/operation';
+import { Account } from '../../../interfaces/account';
+import { useLoader } from '../../../hooks/useLoader';
+import { useError } from '../../../hooks/useError';
+import { useCapitalize } from '../../../hooks/useCapitalize';
+import { useCreateToken } from '../../../hooks/useCreateToken';
+import { useAccountUserDeleteOne } from '../../../hooks/api/v1/account/user/useDeleteOne';
+import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 
 const schema = {
   type: 'object',
@@ -22,7 +34,7 @@ const schema = {
       type: 'string',
       minLength: 2,
     },
-    email: {
+    primaryEmail: {
       type: 'string',
       format: 'email',
       pattern: '^\\S+@\\S+\\.\\S+$',
@@ -30,7 +42,7 @@ const schema = {
       maxLength: 127,
     },
   },
-  required: ['firstName', 'lastName', 'email'],
+  required: ['firstName', 'lastName', 'primaryEmail'],
 };
 
 const uischema = {
@@ -52,7 +64,7 @@ const uischema = {
     },
     {
       type: 'Control',
-      scope: '#/properties/email',
+      scope: '#/properties/primaryEmail',
       options: {
         hideRequiredAsterisk: true,
       },
@@ -61,18 +73,16 @@ const uischema = {
 };
 
 const Overview: React.FC = () => {
+  const { userId } = useParams<{ userId: string }>();
   const { userData } = useContext();
   const [editInformation, setEditInformation] = React.useState(false);
-  const [data, setData] = React.useState({
-    firstName: userData.firstName,
-    lastName: userData.lastName,
-    email: userData.primaryEmail,
+  const [data, setData] = React.useState<Account>();
+  const { data: accountData, refetch: reloadAccount } = useAccountUserGetOne<Account>({
+    enabled: userData.token,
+    userId,
+    accountId: userData.accountId,
   });
-  const [dataToRender, setDataToRender] = React.useState({
-    firstName: userData.firstName,
-    lastName: userData.lastName,
-    email: userData.primaryEmail,
-  });
+  const updateUser = useAccountUserUpdateOne<Operation>();
   const [errors, setErrors] = React.useState<object[]>([]);
   const [validationMode, setValidationMode] = React.useState<ValidationMode>('ValidateAndHide');
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -80,33 +90,54 @@ const Overview: React.FC = () => {
   const [deleteOpen, setDeleteOpen] = React.useState(false);
   const [idCopied, setIdCopied] = React.useState(false);
   const [popperOpen, setPopperOpen] = React.useState(false);
+  const [token, setToken] = React.useState('');
+  const { waitForOperations, createLoader, removeLoader } = useLoader();
+  const { createError } = useError();
+  const { capitalize } = useCapitalize();
+  const { _createToken } = useCreateToken();
+  const deleteAccount = useAccountUserDeleteOne<Operation>();
+  const { getRedirectLink } = useGetRedirectLink();
   let timeout: NodeJS.Timeout;
 
   useEffect(() => {
-    const initData = { firstName: userData.firstName, lastName: userData.lastName, email: userData.primaryEmail };
-    setData(initData);
-    setDataToRender(initData);
-  }, [userData]);
+    if (accountData && accountData.data) {
+      setData(accountData.data);
+    }
+  }, [accountData]);
 
-  const handleSubmit = () => {
+  const _updateUser = async (data: Account) => {
+    try {
+      const response = await updateUser.mutateAsync({ data, accountId: userData.accountId, userId: data.id });
+      await waitForOperations([response.data.operationId]);
+      reloadAccount();
+    } catch (e) {
+      createError(e.message);
+    }
+  };
+
+  const handleSubmit = async () => {
     if (errors.length > 0) {
       setValidationMode('ValidateAndShow');
     } else {
       //update the user info
       setIsSubmitting(true);
-      setTimeout(() => {
-        setDataToRender(data);
-        setEditInformation(false);
-        setIsSubmitting(false);
-        setValidationMode('ValidateAndHide');
-      }, 1000);
+      const dataToSubmit: Account = {
+        id: accountData?.data.id || '',
+        firstName: capitalize(data?.firstName || ''),
+        lastName: capitalize(data?.lastName || ''),
+        primaryEmail: data?.primaryEmail?.toLowerCase(),
+      };
+      await _updateUser(dataToSubmit);
+      setEditInformation(false);
+      setIsSubmitting(false);
+      setValidationMode('ValidateAndHide');
     }
   };
 
   const handleCancel = () => {
     setEditInformation(false);
     setIsSubmitting(false);
-    setData({ firstName: userData.firstName, lastName: userData.lastName, email: userData.primaryEmail });
+    setData(accountData?.data);
   };
 
   const handleCopy = (text: string) => {
@@ -123,9 +154,43 @@ const Overview: React.FC = () => {
     }, 3000);
   };
 
+  const handleCliOpen = async () => {
+    if (token === '') {
+      try {
+        createLoader();
+        const token = await _createToken(accountData?.data.id || '');
+        setToken(token);
+        setCliOpen(true);
+      } catch (e) {
+        createError(e.message);
+      } finally {
+        removeLoader();
+      }
+    } else {
+      setCliOpen(true);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      createLoader();
+      const response = await deleteAccount.mutateAsync({ userId: accountData?.data.id, accountId: userData.accountId });
+      await waitForOperations([response.data.operationId]);
+      window.location.href = getRedirectLink('/authentication');
+    } catch (e) {
+      createError(e.message);
+      setDeleteOpen(false);
+    }
+  };
+
   return (
     <SC.Overview
-      onClick={(e: any) => e.target.id !== 'popper' && e.target.id !== 'popperWrapper' && setPopperOpen(false)}
+      onClick={(e: any) =>
+        e.target.id !== 'popper' &&
+        e.target.id !== 'popperWrapper' &&
+        e.target.id !== 'popperDots' &&
+        setPopperOpen(false)
+      }
     >
       <Modal
         aria-labelledby="transition-modal-title"
@@ -135,7 +200,7 @@ const Overview: React.FC = () => {
         closeAfterTransition
         BackdropComponent={Backdrop}
       >
-        <Delete open={deleteOpen} onClose={() => setDeleteOpen(false)} />
+        <Delete handleDelete={handleDelete} open={deleteOpen} onClose={() => setDeleteOpen(false)} />
       </Modal>
       <Modal
         aria-labelledby="transition-modal-title"
@@ -145,27 +210,40 @@ const Overview: React.FC = () => {
         closeAfterTransition
         BackdropComponent={Backdrop}
       >
-        <CliAccess open={cliOpen} onClose={() => setCliOpen(false)} />
+        <CliAccess token={token} open={cliOpen} onClose={() => setCliOpen(false)} />
       </Modal>
       <SC.UserCard>
         <SC.UserInfoContainer>
-          <div>
+          <div onClick={() => setPopperOpen(true)}>
             <SC.DotsWrapper id="popper" onClick={() => setPopperOpen(true)}>
-              <SC.Dots src={dots} alt="options" height="20" width="4" />
+              <SC.Dots
+                id="popperDots"
+                onClick={() => setPopperOpen(true)}
+                src={dots}
+                alt="options"
+                height="20"
+                width="4"
+              />
             </SC.DotsWrapper>
             <SC.PopperOpen id="popperWrapper" active={popperOpen}>
               <SC.PopperElement onClick={() => setDeleteOpen(true)}>Delete User</SC.PopperElement>
             </SC.PopperOpen>
           </div>
-          <SC.UserImage alt="user" src={userData.picture} height="88" width="88" />
+          <SC.UserImage alt="user" src={client} height="88" width="88" />
           <SC.FlexDown>
             <SC.UserName>
-              {dataToRender.firstName} {dataToRender.lastName}
+              {accountData?.data.firstName} {accountData?.data.lastName}
             </SC.UserName>
-            <SC.UserCompany>{dataToRender.email} </SC.UserCompany>
+            <SC.UserCompany>{accountData?.data.primaryEmail} </SC.UserCompany>
             <SC.UserId>
-              <strong>User-ID:</strong> {userData.id}{' '}
-              <img onClick={() => handleCopy(userData.id || '')} src={copy} alt="copy" height="12" width="12" />
+              <strong>User-ID:&nbsp;</strong> {accountData?.data.id}{' '}
+              <img
+                onClick={() => handleCopy(accountData?.data.id || '')}
+                src={copy}
+                alt="copy"
+                height="12"
+                width="12"
+              />
             </SC.UserId>
             <SC.CopySuccess copy={idCopied}>Copied to clipboard!</SC.CopySuccess>
           </SC.FlexDown>
@@ -174,15 +252,15 @@ const Overview: React.FC = () => {
           <>
             <SC.InfoFieldWrapper>
               <SC.InfoFieldPlaceholder>First Name</SC.InfoFieldPlaceholder>
-              <SC.InfoField>{data.firstName}</SC.InfoField>
+              <SC.InfoField>{data?.firstName}</SC.InfoField>
             </SC.InfoFieldWrapper>
             <SC.InfoFieldWrapper>
               <SC.InfoFieldPlaceholder>Last Name</SC.InfoFieldPlaceholder>
-              <SC.InfoField>{data.lastName}</SC.InfoField>
+              <SC.InfoField>{data?.lastName}</SC.InfoField>
             </SC.InfoFieldWrapper>
             <SC.InfoFieldWrapper>
               <SC.InfoFieldPlaceholder>E-mail</SC.InfoFieldPlaceholder>
-              <SC.InfoField>{data.email}</SC.InfoField>
+              <SC.InfoField>{data?.primaryEmail}</SC.InfoField>
             </SC.InfoFieldWrapper>
             <SC.EditButtonWrapper>
               <Button
@@ -232,7 +310,7 @@ const Overview: React.FC = () => {
       <SC.CLIAccesWrapper>
         <SC.CLIAccess>Command Line (CLI) Access</SC.CLIAccess>
         <Button
-          onClick={() => setCliOpen(true)}
+          onClick={handleCliOpen}
           style={{ width: '200px' }}
           fullWidth={false}
           size="large"

@@ -5,8 +5,9 @@ import cross from '../../../../assets/cross.svg';
 import copyIcon from '../../../../assets/copy.svg';
 import { Button } from '@material-ui/core';
 
-const CliAccess: React.FC<Props> = ({ open, onClose }) => {
+const CliAccess = React.forwardRef(({ open, onClose, token }: Props, ref) => {
   const [copiedLine, setCopiedLine] = React.useState(0);
+  const [fadeChange, setFadeChange] = React.useState(false);
   let timeout: NodeJS.Timeout;
 
   const handleCopy = (text: string, lineNumber: number) => {
@@ -51,7 +52,7 @@ const CliAccess: React.FC<Props> = ({ open, onClose }) => {
       <SC.Flex>
         <SC.LineTitle margin="10px">2. Run the following initialization command</SC.LineTitle>
         <SC.CopyMobile
-          onClick={() => handleCopy(`npm install @fusebit/cli -g`, 2)}
+          onClick={() => handleCopy(`fuse init ${token}`, 2)}
           src={copyIcon}
           alt="copy"
           height="16"
@@ -59,12 +60,17 @@ const CliAccess: React.FC<Props> = ({ open, onClose }) => {
         />
       </SC.Flex>
       <SC.Description>The one-time token in the command is valid for eight hours.</SC.Description>
-      <SC.LineInstructionWrapper onClick={() => handleCopy(`npm install @fusebit/cli -g`, 2)}>
+      <SC.LineInstructionWrapper
+        onMouseLeave={() => setFadeChange(false)}
+        onMouseEnter={() => setFadeChange(true)}
+        onClick={() => handleCopy(`fuse init ${token}`, 2)}
+      >
         <SC.LineInstructionCopy>
           <img src={copyIcon} alt="copy" height="16" width="16" />
         </SC.LineInstructionCopy>
+        <SC.LineInstructionFade onlyMobileVisible={false} change={fadeChange} />
         <SC.LineInstruction>
-          <span className="unselectable">$</span> fuse <strong>init</strong> ...
+          <span className="unselectable">$</span> fuse <strong>init</strong> {token}
         </SC.LineInstruction>
         <SC.CopySuccess copy={copiedLine === 2}>Copied to clipboard!</SC.CopySuccess>
       </SC.LineInstructionWrapper>
@@ -78,6 +84,6 @@ const CliAccess: React.FC<Props> = ({ open, onClose }) => {
       </SC.ButtonsWrapper>
     </SC.Card>
   );
-};
+});
 
 export default CliAccess;

@@ -1,5 +1,7 @@
 export interface Account {
-  id?: string;
+  id: string;
   displayName?: string;
+  firstName?: string;
+  lastName?: string;
   primaryEmail?: string;
 }

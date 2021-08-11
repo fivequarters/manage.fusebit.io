@@ -7,11 +7,8 @@ const Integrations: React.FC = () => {
 
   return (
     <TabComponent
-      tabNames={['Overview', 'Installs']}
-      tabObjects={[
-        <Overview headless={headless} setHeadless={(value: boolean) => (headless.current = value)} />,
-        'Installs',
-      ]}
+      tabNames={['Overview']}
+      tabObjects={[<Overview headless={headless} setHeadless={(value: boolean) => (headless.current = value)} />]}
     />
   );
 };
