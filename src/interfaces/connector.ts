@@ -1,6 +1,11 @@
 export interface Connector {
   id: string;
-  data: object;
+  data: {
+    configuration: object;
+    files: object;
+    handler: string;
+    id: string;
+  };
   tags: {
     [key: string]: any;
   };
