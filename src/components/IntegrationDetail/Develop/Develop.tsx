@@ -340,13 +340,13 @@ const Develop: React.FC = () => {
               </Button>
             </SC.CardButtonWrapper>
           </SC.Card>
-          <SC.Link href="/test">
+          <SC.Link
+            target="_blank"
+            rel="noopener_noreferrer"
+            href="https://docs.fusebit.io/docs/connecting-fusebit-with-your-application"
+          >
             <SC.Bullet />
-            Provision integration from your application
-          </SC.Link>
-          <SC.Link href="/test2">
-            <SC.Bullet />
-            Invoke application from your backend
+            Connecting Fusebit with Your Application
           </SC.Link>
         </SC.FlexDown>
         <SC.FlexDown>
@@ -368,21 +368,9 @@ const Develop: React.FC = () => {
               </Button>
             </SC.CardButtonWrapper>
           </SC.Card>
-          <SC.Link href="/test3">
+          <SC.Link target="_blank" rel="noopener_noreferrer" href="https://docs.fusebit.io/docs/getting-started">
             <SC.Bullet />
-            Edit and publish your integration
-          </SC.Link>
-          <SC.Link href="/test4">
-            <SC.Bullet />
-            Test your integration
-          </SC.Link>
-          <SC.Link href="/test5">
-            <SC.Bullet />
-            Debug with real-time logs
-          </SC.Link>
-          <SC.Link href="/test6">
-            <SC.Bullet />
-            Slack SDK reference
+            Getting Started
           </SC.Link>
         </SC.FlexDown>
         <SC.FlexDown>
@@ -457,14 +445,6 @@ const Develop: React.FC = () => {
               </Button>
             </SC.CardConnectorButtonsWrapperMobile>
           </SC.Card>
-          <SC.Link href="/test7">
-            <SC.Bullet />
-            Improve your own backend API
-          </SC.Link>
-          <SC.Link href="/test8">
-            <SC.Bullet />
-            Switch to your own Slack App
-          </SC.Link>
         </SC.FlexDown>
       </SC.Flex>
     </SC.Background>
