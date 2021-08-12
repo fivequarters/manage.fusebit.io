@@ -101,10 +101,10 @@ const Develop: React.FC = () => {
         name: connectorId,
         entityType: 'connector',
         entityId: connectorId,
-        skip: true,
-        path: 'proident ut tempor in ut',
+        skip: false,
+        provider: '@fusebit-int/oauth-provider',
+        path: '/api/configure',
         dependsOn: [],
-        package: '@fusebit-int/pkg-oauth-integration',
       };
       newData.data.components.push(newConnector);
       const response2 = await updateIntegration.mutateAsync({
@@ -127,43 +127,44 @@ const Develop: React.FC = () => {
   const addNewConnector = async (activeFeed: Feed, data: Data) => {
     try {
       createLoader();
-      let connectors: Entity[] = [];
       const parsedFeed = await replaceMustache(data, activeFeed);
-      for (let i = 0; i < parsedFeed.configuration.entities.length; i++) {
-        const entity: Entity = parsedFeed.configuration.entities[i];
-        if (entity.entityType === 'connector') {
-          connectors.push(entity);
-        }
-      }
-      for (let i = 0; i < connectors.length; i++) {
-        const response = await createConnector.mutateAsync({
-          data: connectors[i].data,
-          id: connectors[i].id,
-          tags: connectors[i].tags,
-          accountId: userData.accountId,
-          subscriptionId: userData.subscriptionId,
-        });
-        await waitForOperations([response.data.operationId]);
-        const currentData = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
-        const newData = currentData;
-        const newConnector: InnerConnector = {
-          name: connectors[i].id,
-          entityType: 'connector',
-          entityId: connectors[i].id,
-          skip: true,
-          path: 'proident ut tempor in ut',
-          dependsOn: [],
-          package: '@fusebit-int/pkg-oauth-integration',
-        };
-        newData.data.components.push(newConnector);
-        const response2 = await updateIntegration.mutateAsync({
-          accountId: userData.accountId,
-          subscriptionId: userData.subscriptionId,
-          integrationId: integrationData?.data.id,
-          data: newData,
-        });
-        await waitForOperations([response2.data.operationId]);
-      }
+      const commonTags = {
+        'fusebit.feedType': 'connector',
+        'fusebit.feedId': activeFeed.id,
+      };
+      await Promise.all([
+        ...parsedFeed.configuration.entities.map(async (entity: Entity) => {
+          const obj = {
+            data: entity.data,
+            id: entity.id,
+            tags: { ...commonTags, ...entity.tags },
+            accountId: userData.accountId,
+            subscriptionId: userData.subscriptionId,
+          };
+          const response = await createConnector.mutateAsync(obj);
+          await waitForOperations([response.data.operationId]);
+
+          const currentData = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
+          const newData = currentData;
+          const newConnector: InnerConnector = {
+            name: entity.id,
+            entityType: 'connector',
+            entityId: entity.id,
+            skip: false,
+            provider: '@fusebit-int/oauth-provider',
+            path: '/api/configure',
+            dependsOn: [],
+          };
+          newData.data.components.push(newConnector);
+          const response2 = await updateIntegration.mutateAsync({
+            accountId: userData.accountId,
+            subscriptionId: userData.subscriptionId,
+            integrationId: integrationData?.data.id,
+            data: newData,
+          });
+          await waitForOperations([response2.data.operationId]);
+        }),
+      ]);
       reloadIntegration();
       reloadConnectors();
     } catch (e) {
@@ -236,6 +237,22 @@ const Develop: React.FC = () => {
     }
 
     return filteredConnectors || [];
+  };
+
+  const checkConnectorsToLink = () => {
+    const connectorsFiltered = connectors?.data.items.filter((item: Connector) => {
+      let returnItem = true;
+      integrationData?.data.data.components.forEach((connector: InnerConnector) => {
+        if (connector.entityId === item.id) {
+          returnItem = false;
+        }
+      });
+      return returnItem;
+    });
+    if (connectorsFiltered && connectorsFiltered?.length > 0) {
+      return false;
+    }
+    return true;
   };
 
   return (
@@ -417,6 +434,7 @@ const Develop: React.FC = () => {
                 size="large"
                 variant="outlined"
                 color="primary"
+                disabled={checkConnectorsToLink()}
               >
                 Link Existing
               </Button>
@@ -440,6 +458,7 @@ const Develop: React.FC = () => {
                 size="medium"
                 variant="outlined"
                 color="primary"
+                disabled={checkConnectorsToLink()}
               >
                 Link Existing
               </Button>

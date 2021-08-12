@@ -14,7 +14,7 @@ export const useCreateDataFromFeed = () => {
   const { userData } = useContext();
   const { getRedirectLink } = useGetRedirectLink();
   const { replaceMustache } = useReplaceMustache();
-  const { waitForOperations, createLoader } = useLoader();
+  const { waitForOperations, createLoader, removeLoader } = useLoader();
   const { createError } = useError();
   const createConnector = useAccountConnectorCreateConnector<Operation>();
   const createIntegration = useAccountIntegrationCreateIntegration<Operation>();
@@ -58,6 +58,7 @@ export const useCreateDataFromFeed = () => {
           : getRedirectLink('/integration/' + firstIntegration?.id);
       } catch (e) {
         createError(e.message);
+        removeLoader();
       }
     },
     [
@@ -69,6 +70,7 @@ export const useCreateDataFromFeed = () => {
       waitForOperations,
       replaceMustache,
       getRedirectLink,
+      removeLoader,
     ]
   );
 
