@@ -20,17 +20,7 @@ interface Element {
 
 export interface ConnectorConfig {
   data: {
-    accessTokenExpirationBuffer: number;
-    authorizationUrl: string;
-    clientId: string;
-    clientSecret: string;
-    mountUrl: string;
-    refreshBackoffIncrement: number;
-    refreshErrorLimit: number;
-    refreshInitialBackoff: number;
-    refreshWaitCountLimit: number;
-    scope: string;
-    tokenUrl: string;
+    [key: string]: object;
   };
   schema: {
     properties: {
