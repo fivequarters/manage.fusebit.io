@@ -98,7 +98,7 @@
                 "name": "slackConnector",
                 "path": "/api/configure",
                 "skip": false,
-                "provider": "@fusebit-int/oauth-provider",
+                "provider": "@fusebit-int/slack-provider",
                 "entityId": "<% global.entities.slackConnector.id %>",
                 "dependsOn": [],
                 "entityType": "connector"
