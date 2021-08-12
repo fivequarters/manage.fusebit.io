@@ -20,7 +20,7 @@ interface Element {
 
 export interface ConnectorConfig {
   data: {
-    [key: string]: object;
+    [key: string]: any;
   };
   schema: {
     properties: {
