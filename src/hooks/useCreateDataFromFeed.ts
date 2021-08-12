@@ -14,20 +14,10 @@ export const useCreateDataFromFeed = () => {
   const { userData } = useContext();
   const { getRedirectLink } = useGetRedirectLink();
   const { replaceMustache } = useReplaceMustache();
-  const { waitForOperations, createLoader } = useLoader();
+  const { waitForOperations, createLoader, removeLoader } = useLoader();
   const { createError } = useError();
   const createConnector = useAccountConnectorCreateConnector<Operation>();
   const createIntegration = useAccountIntegrationCreateIntegration<Operation>();
-
-  const checkIfEntitiesAreValid = (parsedFeed: Feed) => {
-    if (!Array.isArray(parsedFeed.configuration.entities)) {
-      const err = {
-        statusCode: 400,
-        message: 'Entities must be an array',
-      };
-      throw err;
-    }
-  };
 
   const createDataFromFeed = React.useCallback(
     async (activeFeed: Feed, data: Data, isConnector?: boolean) => {
@@ -37,7 +27,6 @@ export const useCreateDataFromFeed = () => {
         let firstConnector: Entity | undefined;
 
         const parsedFeed = await replaceMustache(data, activeFeed);
-        checkIfEntitiesAreValid(parsedFeed);
         firstIntegration = parsedFeed.configuration.entities.find(
           (entity: Entity) => entity.entityType === 'integration'
         );
@@ -69,6 +58,7 @@ export const useCreateDataFromFeed = () => {
           : getRedirectLink('/integration/' + firstIntegration?.id);
       } catch (e) {
         createError(e.message);
+        removeLoader();
       }
     },
     [
@@ -80,6 +70,7 @@ export const useCreateDataFromFeed = () => {
       waitForOperations,
       replaceMustache,
       getRedirectLink,
+      removeLoader,
     ]
   );
 
