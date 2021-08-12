@@ -57,32 +57,34 @@ const Configure: React.FC = () => {
         </SC.InfoWrapper>
       </SC.FlexDown>
       <SC.FlexDown>
-        <SC.FormWrapper>
-          <JsonForms
-            schema={config?.data.schema}
-            uischema={config?.data.uischema}
-            data={config?.data.data}
-            renderers={materialRenderers}
-            cells={materialCells}
-            onChange={({ errors, data }) => {
-              errors && setErrors(errors);
-              setData(data);
-            }}
-            validationMode={validationMode}
-          />
-          <SC.FormInputWrapper>
-            <Button
-              onClick={handleSubmit}
-              style={{ width: '200px' }}
-              fullWidth={false}
-              size="large"
-              color="primary"
-              variant="contained"
-            >
-              Save
-            </Button>
-          </SC.FormInputWrapper>
-        </SC.FormWrapper>
+        {config?.data && (
+          <SC.FormWrapper>
+            <JsonForms
+              schema={config?.data.schema}
+              uischema={config?.data.uischema}
+              data={config?.data.data}
+              renderers={materialRenderers}
+              cells={materialCells}
+              onChange={({ errors, data }) => {
+                errors && setErrors(errors);
+                setData(data);
+              }}
+              validationMode={validationMode}
+            />
+            <SC.FormInputWrapper>
+              <Button
+                onClick={handleSubmit}
+                style={{ width: '200px' }}
+                fullWidth={false}
+                size="large"
+                color="primary"
+                variant="contained"
+              >
+                Save
+              </Button>
+            </SC.FormInputWrapper>
+          </SC.FormWrapper>
+        )}
       </SC.FlexDown>
     </SC.Flex>
   );
