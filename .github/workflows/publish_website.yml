@@ -61,6 +61,8 @@ jobs:
           REACT_APP_CONNECTORS_FEED_URL: https://manage.fusebit.io/feed/connectorsFeed.json
         run: ./scripts/build_tree.sh
       - name: Publish - website
+        env:
+          CLOUDFRONT_ID: E7FLEKLTODN9Q
         run: ./scripts/publish_website.sh
       - name: Notify slack success
         if: success()
