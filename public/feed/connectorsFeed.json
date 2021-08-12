@@ -1,13 +1,14 @@
 [
   {
-    "id": "slack-hello-world",
-    "name": "Slack - Hello World",
+    "id": "slackkksksksk",
+    "name": "Slack",
+    "description": "Slack",
     "smallIcon": "/images/slack.svg",
     "largeIcon": "http://some.icon/large.ico",
-    "version": "1.0.0",
-    "description": "# Welcome to Fusebit!\n\nThis is a Fusebit integration, to be used as part of the Fusebit service!\n\n\n\nA simple <% global.consts.feed.name %> hello world example.\n\n# Sign up for Fusebit Now!\n\nIf you want to sign up for Fusebit to simplify your integrations, go to\n[https://fusebit.io](https://fusebit.io) now!.\n\n\nOpen up your browser to <% global.consts.endpoint %>/v2/account/<% global.consts.accountId %>/subscription/<%\nglobal.consts.subscriptionId %>/integration/<% global.consts.integrationId %>/api/startup to\ntest the integration!\n\n\n",
+    "version": "2.3.0",
     "tags": {
-      "catalog": "slack,intro,popular"
+      "service": "slack",
+      "catalog": "messaging"
     },
     "configuration": {
       "schema": {
@@ -30,6 +31,24 @@
                 "minLength": 3
               }
             }
+          },
+          "clientId": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 6
+              }
+            }
+          },
+          "clientSecret": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 6
+              }
+            }
           }
         }
       },
@@ -49,6 +68,16 @@
                 "type": "Control",
                 "scope": "#/properties/slackConnector/properties/id",
                 "label": "Slack Connector name"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/clientId/properties/id",
+                "label": "Client ID"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/clientSecret/properties/id",
+                "label": "Client Secret"
               }
             ]
           }
@@ -90,7 +119,7 @@
             "files": {
               "package.json": "{\n  \"scripts\": {\n    \"deploy\": \"fuse integration deploy <% this.id %> -d .\",\n    \"get\": \"fuse integration get <% this.id %> -d .\"\n  },\n  \"dependencies\": {\n    \"@fusebit-int/framework\": \"^3.0.0\",\n    \"superagent\": \"^6.1.0\",\n    \"@fusebit-int/oauth-provider\": \"*\"\n  },\n  \"files\": [\"./integration.js\", \"README.md\"]\n}\n",
               "./integration.js": "const { Router } = require('@fusebit-int/framework');\nconst superagent = require('superagent');\n\nconst router = new Router();\n\nrouter.get('/api/message/:identityId', async (ctx) => {\n  const identityId = ctx.params.identityId;\n  const connectorBaseUrl = ctx.state.params.baseUrl.replace(/integration/g, 'connector');\n\n  const connectorUrl = `${connectorBaseUrl}/api/${identityId}/token`;\n\n  const { access_token } = (await superagent.get(connectorUrl)).body;\n\n  ctx.status = 200;\n  ctx.body = access_token;\n});\n\nrouter.get('/api/', async (ctx) => {\n  ctx.body =\n    [\n      ` ____  _   _  ____ ____ _____ ____ ____`,\n      `/ ___|| | | |/ ___/ ___| ____/ ___/ ___|`,\n      `\\\\___ \\\\| | | | |  | |   |  _| \\\\___ \\\\___ \\\\`,\n      ` ___) | |_| | |__| |___| |___ ___) |__) |`,\n      `|____/ \\\\___/ \\\\____\\\\____|_____|____/____/`,\n    ].join('\\n') +\n    `\\n\\nSuccessfully completed the session initalization for ${ctx.query.session}\\n\\n` +\n    `At this point, the user would be redirected back to the backend url, which would perform an authenticated call\\n` +\n    `to persist the configuration session to the database.`;\n});\n\nmodule.exports = router;\n",
-              "README.md": "# Welcome to Fusebit!\n\nThis is a Fusebit integration, to be used as part of the Fusebit service!\n\n\n\nA simple <% global.consts.feed.name %> hello world example.\n\n# Sign up for Fusebit Now!\n\nIf you want to sign up for Fusebit to simplify your integrations, go to\n[https://fusebit.io](https://fusebit.io) now!.\n\n\nOpen up your browser to <% global.consts.endpoint %>/v2/account/<% global.consts.accountId %>/subscription/<%\nglobal.consts.subscriptionId %>/integration/<% global.consts.integrationId %>/api/startup to\ntest the integration!\n\n\n"
+              "README.md": "\n[//]: # (START: HEADER)\n\n# Welcome to Fusebit!\n\nThis is a Fusebit integration, to be used as part of the Fusebit service!\n\n\n[//]: # (END: HEADER)\n\n\n[//]: # (IMPORT: DESCRIPTION)\n\nA simple <% global.consts.feed.name %> hello world example.\n\n\n[//]: # (START: SIGNUP)\n\n# Sign up for Fusebit Now!\n\nIf you want to sign up for Fusebit to simplify your integrations, go to\n[https://fusebit.io](https://fusebit.io) now!.\n\n\n[//]: # (END: SIGNUP)\n\n\n\n[//]: # (START: RUNNING)\n\nOpen up your browser to <% global.consts.endpoint %>/v2/account/<% global.consts.accountId %>/subscription/<%\nglobal.consts.subscriptionId %>/integration/<% global.consts.integrationId %>/api/startup to\ntest the integration!\n\n\n[//]: # (END: RUNNING)\n\n\n"
             },
             "handler": "./integration",
             "components": [
@@ -98,8 +127,292 @@
                 "name": "slackConnector",
                 "path": "/api/configure",
                 "skip": false,
-                "provider": "@fusebit-int/slack-provider",
+                "provider": "@fusebit-int/oauth-provider",
                 "entityId": "<% global.entities.slackConnector.id %>",
+                "dependsOn": [],
+                "entityType": "connector"
+              }
+            ],
+            "componentTags": {}
+          },
+          "id": "<% this.id %>",
+          "tags": {}
+        }
+      }
+    }
+  },
+  {
+    "id": "discord",
+    "name": "Discord",
+    "description": "Discord",
+    "smallIcon": "/images/discord.svg",
+    "largeIcon": "http://some.icon/large.ico",
+    "version": "2.3.0",
+    "tags": {
+      "service": "discord",
+      "catalog": "messaging, productivity, crm"
+    },
+    "configuration": {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "discordIntegration": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 3
+              }
+            }
+          },
+          "discordConnector": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 3
+              }
+            }
+          },
+          "clientId": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 6
+              }
+            }
+          },
+          "clientSecret": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 6
+              }
+            }
+          }
+        }
+      },
+      "uischema": {
+        "type": "Group",
+        "label": "Discord Connector Details",
+        "elements": [
+          {
+            "type": "VerticalLayout",
+            "elements": [
+              {
+                "type": "Control",
+                "scope": "#/properties/discordIntegration/properties/id",
+                "label": "Name"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/discordConnector/properties/id",
+                "label": "Discord Connector name"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/clientId/properties/id",
+                "label": "Client ID"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/clientSecret/properties/id",
+                "label": "Client Secret"
+              }
+            ]
+          }
+        ]
+      },
+      "data": {
+        "discordConnector": {
+          "discordName": "discord-connector"
+        }
+      },
+      "entities": {
+        "discordConnector": {
+          "entityType": "connector",
+          "data": {
+            "configuration": {
+              "scope": "",
+              "tokenUrl": "<%global.fusebit.endpoint%>/connector/proxy/api/token",
+              "authorizationUrl": "<%global.fusebit.endpoint%>/connector/proxy/api/configure",
+              "clientId": "<%global.consts.random%>",
+              "clientSecret": "<%global.consts.random%>",
+              "refreshErrorLimit": 100000,
+              "refreshInitialBackoff": 100000,
+              "refreshWaitCountLimit": 100000,
+              "refreshBackoffIncrement": 100000,
+              "accessTokenExpirationBuffer": 500
+            },
+            "files": {
+              "package.json": "{\n  \"scripts\": {\n    \"redeploy\": \"fuse connector rm <%this.name%> && yarn deploy\",\n    \"deploy\": \"fuse connector deploy <%this.name%> -d .\",\n    \"get\": \"fuse connector get <%this.name%> -d .\"\n  },\n  \"dependencies\": {\n    \"@fusebit-int/oauth-connector\": \"^2.0.0\",\n    \"@fusebit-int/framework\": \"^3.0.0\"\n  }\n}\n"
+            },
+            "handler": "@fusebit-int/oauth-connector"
+          },
+          "id": "<%this.id%>",
+          "tags": {}
+        },
+        "discordIntegration": {
+          "entityType": "integration",
+          "data": {
+            "configuration": {},
+            "files": {
+              "package.json": "{\n  \"scripts\": {\n    \"deploy\": \"fuse integration deploy <% this.id %> -d .\",\n    \"get\": \"fuse integration get <% this.id %> -d .\"\n  },\n  \"dependencies\": {\n    \"@fusebit-int/framework\": \"^3.0.0\",\n    \"superagent\": \"^6.1.0\",\n    \"@fusebit-int/oauth-provider\": \"*\"\n  },\n  \"files\": [\"./integration.js\", \"README.md\"]\n}\n",
+              "./integration.js": "const { Router } = require('@fusebit-int/framework');\nconst superagent = require('superagent');\n\nconst router = new Router();\n\nrouter.get('/api/message/:identityId', async (ctx) => {\n  const identityId = ctx.params.identityId;\n  const connectorBaseUrl = ctx.state.params.baseUrl.replace(/integration/g, 'connector');\n\n  const connectorUrl = `${connectorBaseUrl}/api/${identityId}/token`;\n\n  const { access_token } = (await superagent.get(connectorUrl)).body;\n\n  ctx.status = 200;\n  ctx.body = access_token;\n});\n\nrouter.get('/api/', async (ctx) => {\n  ctx.body =\n    [\n      ` ____  _   _  ____ ____ _____ ____ ____`,\n      `/ ___|| | | |/ ___/ ___| ____/ ___/ ___|`,\n      `\\\\___ \\\\| | | | |  | |   |  _| \\\\___ \\\\___ \\\\`,\n      ` ___) | |_| | |__| |___| |___ ___) |__) |`,\n      `|____/ \\\\___/ \\\\____\\\\____|_____|____/____/`,\n    ].join('\\n') +\n    `\\n\\nSuccessfully completed the session initalization for ${ctx.query.session}\\n\\n` +\n    `At this point, the user would be redirected back to the backend url, which would perform an authenticated call\\n` +\n    `to persist the configuration session to the database.`;\n});\n\nmodule.exports = router;\n",
+              "README.md": "\n[//]: # (START: HEADER)\n\n# Welcome to Fusebit!\n\nThis is a Fusebit integration, to be used as part of the Fusebit service!\n\n\n[//]: # (END: HEADER)\n\n\n[//]: # (IMPORT: DESCRIPTION)\n\nA simple <% global.consts.feed.name %> hello world example.\n\n\n[//]: # (START: SIGNUP)\n\n# Sign up for Fusebit Now!\n\nIf you want to sign up for Fusebit to simplify your integrations, go to\n[https://fusebit.io](https://fusebit.io) now!.\n\n\n[//]: # (END: SIGNUP)\n\n\n\n[//]: # (START: RUNNING)\n\nOpen up your browser to <% global.consts.endpoint %>/v2/account/<% global.consts.accountId %>/subscription/<%\nglobal.consts.subscriptionId %>/integration/<% global.consts.integrationId %>/api/startup to\ntest the integration!\n\n\n[//]: # (END: RUNNING)\n\n\n"
+            },
+            "handler": "./integration",
+            "components": [
+              {
+                "name": "discordConnector",
+                "path": "/api/configure",
+                "skip": false,
+                "provider": "@fusebit-int/oauth-provider",
+                "entityId": "<% global.entities.discordConnector.id %>",
+                "dependsOn": [],
+                "entityType": "connector"
+              }
+            ],
+            "componentTags": {}
+          },
+          "id": "<% this.id %>",
+          "tags": {}
+        }
+      }
+    }
+  },
+  {
+    "id": "as23r333age",
+    "name": "Asana",
+    "description": "Asana",
+    "smallIcon": "/images/asana.svg",
+    "largeIcon": "http://some.icon/large.ico",
+    "version": "2.3.0",
+    "tags": {
+      "service": "asana",
+      "catalog": "crm, calendar"
+    },
+    "configuration": {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "asanaIntegration": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 3
+              }
+            }
+          },
+          "asanaConnector": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 3
+              }
+            }
+          },
+          "clientId": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 6
+              }
+            }
+          },
+          "clientSecret": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 6
+              }
+            }
+          }
+        }
+      },
+      "uischema": {
+        "type": "Group",
+        "label": "Asana Connector Details",
+        "elements": [
+          {
+            "type": "VerticalLayout",
+            "elements": [
+              {
+                "type": "Control",
+                "scope": "#/properties/asanaIntegration/properties/id",
+                "label": "Name"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/asanaConnector/properties/id",
+                "label": "Asana Connector name"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/clientId/properties/id",
+                "label": "Client ID"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/clientSecret/properties/id",
+                "label": "Client Secret"
+              }
+            ]
+          }
+        ]
+      },
+      "data": {
+        "asanaConnector": {
+          "asanaName": "asana-connector"
+        }
+      },
+      "entities": {
+        "asanaConnector": {
+          "entityType": "connector",
+          "data": {
+            "configuration": {
+              "scope": "",
+              "tokenUrl": "<%global.fusebit.endpoint%>/connector/proxy/api/token",
+              "authorizationUrl": "<%global.fusebit.endpoint%>/connector/proxy/api/configure",
+              "clientId": "<%global.consts.random%>",
+              "clientSecret": "<%global.consts.random%>",
+              "refreshErrorLimit": 100000,
+              "refreshInitialBackoff": 100000,
+              "refreshWaitCountLimit": 100000,
+              "refreshBackoffIncrement": 100000,
+              "accessTokenExpirationBuffer": 500
+            },
+            "files": {
+              "package.json": "{\n  \"scripts\": {\n    \"redeploy\": \"fuse connector rm <%this.name%> && yarn deploy\",\n    \"deploy\": \"fuse connector deploy <%this.name%> -d .\",\n    \"get\": \"fuse connector get <%this.name%> -d .\"\n  },\n  \"dependencies\": {\n    \"@fusebit-int/oauth-connector\": \"^2.0.0\",\n    \"@fusebit-int/framework\": \"^3.0.0\"\n  }\n}\n"
+            },
+            "handler": "@fusebit-int/oauth-connector"
+          },
+          "id": "<%this.id%>",
+          "tags": {}
+        },
+        "asanaIntegration": {
+          "entityType": "integration",
+          "data": {
+            "configuration": {},
+            "files": {
+              "package.json": "{\n  \"scripts\": {\n    \"deploy\": \"fuse integration deploy <% this.id %> -d .\",\n    \"get\": \"fuse integration get <% this.id %> -d .\"\n  },\n  \"dependencies\": {\n    \"@fusebit-int/framework\": \"^3.0.0\",\n    \"superagent\": \"^6.1.0\",\n    \"@fusebit-int/oauth-provider\": \"*\"\n  },\n  \"files\": [\"./integration.js\", \"README.md\"]\n}\n",
+              "./integration.js": "const { Router } = require('@fusebit-int/framework');\nconst superagent = require('superagent');\n\nconst router = new Router();\n\nrouter.get('/api/message/:identityId', async (ctx) => {\n  const identityId = ctx.params.identityId;\n  const connectorBaseUrl = ctx.state.params.baseUrl.replace(/integration/g, 'connector');\n\n  const connectorUrl = `${connectorBaseUrl}/api/${identityId}/token`;\n\n  const { access_token } = (await superagent.get(connectorUrl)).body;\n\n  ctx.status = 200;\n  ctx.body = access_token;\n});\n\nrouter.get('/api/', async (ctx) => {\n  ctx.body =\n    [\n      ` ____  _   _  ____ ____ _____ ____ ____`,\n      `/ ___|| | | |/ ___/ ___| ____/ ___/ ___|`,\n      `\\\\___ \\\\| | | | |  | |   |  _| \\\\___ \\\\___ \\\\`,\n      ` ___) | |_| | |__| |___| |___ ___) |__) |`,\n      `|____/ \\\\___/ \\\\____\\\\____|_____|____/____/`,\n    ].join('\\n') +\n    `\\n\\nSuccessfully completed the session initalization for ${ctx.query.session}\\n\\n` +\n    `At this point, the user would be redirected back to the backend url, which would perform an authenticated call\\n` +\n    `to persist the configuration session to the database.`;\n});\n\nmodule.exports = router;\n",
+              "README.md": "\n[//]: # (START: HEADER)\n\n# Welcome to Fusebit!\n\nThis is a Fusebit integration, to be used as part of the Fusebit service!\n\n\n[//]: # (END: HEADER)\n\n\n[//]: # (IMPORT: DESCRIPTION)\n\nA simple <% global.consts.feed.name %> hello world example.\n\n\n[//]: # (START: SIGNUP)\n\n# Sign up for Fusebit Now!\n\nIf you want to sign up for Fusebit to simplify your integrations, go to\n[https://fusebit.io](https://fusebit.io) now!.\n\n\n[//]: # (END: SIGNUP)\n\n\n\n[//]: # (START: RUNNING)\n\nOpen up your browser to <% global.consts.endpoint %>/v2/account/<% global.consts.accountId %>/subscription/<%\nglobal.consts.subscriptionId %>/integration/<% global.consts.integrationId %>/api/startup to\ntest the integration!\n\n\n[//]: # (END: RUNNING)\n\n\n"
+            },
+            "handler": "./integration",
+            "components": [
+              {
+                "name": "asanaConnector",
+                "path": "/api/configure",
+                "skip": false,
+                "provider": "@fusebit-int/oauth-provider",
+                "entityId": "<% global.entities.asanaConnector.id %>",
                 "dependsOn": [],
                 "entityType": "connector"
               }
