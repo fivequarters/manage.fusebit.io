@@ -54,7 +54,6 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
       setFeed(feed);
       for (let i = 0; i < feed.length; i++) {
         if (feed[i].id === key) {
-          setRawActiveTemplate(feed[i]);
           replaceMustache(data, feed[i]).then((template) => setActiveTemplate(template));
           return;
         }
@@ -69,6 +68,13 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
   }, [isIntegration]);
 
   const feedTypeName = isIntegration ? 'Integration' : 'Connector';
+
+  const handleTemplateChange = (template: Feed) => {
+    setRawActiveTemplate(template);
+    replaceMustache(data, template).then((template) => {
+      setActiveTemplate(template);
+    });
+  };
 
   return (
     <SC.Card open={open}>
@@ -112,7 +118,7 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
             <SC.ColumnSearchIcon src={search} alt={`Search ${feedTypeName}`} height="24" width="24" />
           </SC.ColumnSearchWrapper>
           {feed.map((feedEntry: Feed) => {
-            const tags = feedEntry.tags.catalog.split(', ');
+            const tags = feedEntry.tags.catalog.split(',');
             let tagIsActive = false;
             tags.forEach((tag: string) => {
               if (activeFilter.toUpperCase().match(tag.toUpperCase()) || activeFilter === Filters.ALL) {
@@ -123,7 +129,7 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
               return (
                 <SC.ColumnItem
                   key={feedEntry.id}
-                  onClick={() => setActiveTemplate(feedEntry)}
+                  onClick={() => handleTemplateChange(feedEntry)}
                   active={feedEntry.id === activeTemplate?.id}
                 >
                   <SC.ColumnItemImage src={feedEntry.smallIcon} alt="slack" height="18" width="18" />
@@ -142,21 +148,23 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
             <SC.ConnectorTitle>{activeTemplate?.name}</SC.ConnectorTitle>
             <SC.ConnectorVersion>{activeTemplate?.version}</SC.ConnectorVersion>
           </SC.ConnectorTitleWrapper>
-          <SC.ConnectorDescription children={activeTemplate?.description || ''} />
-          <SC.FormWrapper>
-            <JsonForms
-              schema={activeTemplate?.configuration.schema}
-              uischema={activeTemplate?.configuration.uischema.elements}
-              data={data}
-              renderers={materialRenderers}
-              cells={materialCells}
-              onChange={({ errors, data }) => {
-                errors && setErrors(errors);
-                setData(data);
-              }}
-              validationMode={validationMode}
-            />
-          </SC.FormWrapper>
+          <SC.GeneralInfoWrapper>
+            <SC.ConnectorDescription children={activeTemplate?.description || ''} />
+            <SC.FormWrapper>
+              <JsonForms
+                schema={activeTemplate?.configuration.schema}
+                uischema={activeTemplate?.configuration.uischema}
+                data={data}
+                renderers={materialRenderers}
+                cells={materialCells}
+                onChange={({ errors, data }) => {
+                  errors && setErrors(errors);
+                  setData(data);
+                }}
+                validationMode={validationMode}
+              />
+            </SC.FormWrapper>
+          </SC.GeneralInfoWrapper>
           <Button
             onClick={handleSubmit}
             style={{ width: '200px', marginTop: 'auto', marginLeft: 'auto' }}
