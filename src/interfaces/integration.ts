@@ -12,8 +12,8 @@ export interface InnerConnector {
   entityId: string;
   skip: boolean;
   path: string;
+  provider: string;
   dependsOn: [];
-  package: string;
 }
 
 export interface Integration {
