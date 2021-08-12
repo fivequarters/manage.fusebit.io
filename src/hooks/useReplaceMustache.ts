@@ -15,14 +15,25 @@ const walkObjectStrings = (obj: any, func: (value: string) => string): any => {
   return obj;
 };
 
+const checkIfEntitiesAreValid = (parsedFeed: Feed) => {
+  if (Array.isArray(parsedFeed.configuration.entities)) {
+    const err = {
+      statusCode: 403,
+      message: 'Entities cant be an array',
+    };
+    throw err;
+  }
+};
+
 export const useReplaceMustache = () => {
   const { userData } = useContext();
 
   const replaceMustache = React.useCallback(
     async (data: Data, feedMaster: Feed) => {
+      // This hurts but it's easy.
       const oldMustacheEscape = Mustache.escape;
       try {
-        // This hurts but it's easy.
+        checkIfEntitiesAreValid(feedMaster);
         const feed = JSON.parse(JSON.stringify(feedMaster));
         const customTags: any = ['<%', '%>'];
 

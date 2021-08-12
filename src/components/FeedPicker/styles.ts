@@ -136,6 +136,7 @@ export const ConnectorTitleWrapper = styled.div`
   display: flex;
   align-items: center;
   margin-top: 12px;
+  margin-bottom: 12px;
 `;
 
 export const ConnectorVersion = styled.div`
@@ -212,4 +213,10 @@ export const Error = styled.p`
   left: 0;
   bottom: 5px;
   font-size: 0.75rem;
+`;
+
+export const GeneralInfoWrapper = styled.div`
+  position: relative;
+  height: 350px;
+  overflow-y: auto;
 `;

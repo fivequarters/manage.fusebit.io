@@ -18,22 +18,20 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { useContext } from '../../../hooks/useContext';
 import { useLoader } from '../../../hooks/useLoader';
 import { useAccountIntegrationsGetAll } from '../../../hooks/api/v2/account/integration/useGetAll';
-import { useAccountIntegrationCreateIntegration } from '../../../hooks/api/v2/account/integration/useCreateOne';
 import { useAccountIntegrationDeleteIntegration } from '../../../hooks/api/v2/account/integration/useDeleteOne';
-import { useAccountConnectorCreateConnector } from '../../../hooks/api/v2/account/connector/useCreateOne';
 import { Integration } from '../../../interfaces/integration';
 import { Operation } from '../../../interfaces/operation';
 import { useError } from '../../../hooks/useError';
 import arrowRight from '../../../assets/arrow-right.svg';
 import arrowLeft from '../../../assets/arrow-left.svg';
-import { Entity, Feed } from '../../../interfaces/feed';
+import { Feed } from '../../../interfaces/feed';
 import { useQuery } from '../../../hooks/useQuery';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import FeedPicker from '../../FeedPicker';
 import { integrationsFeed } from '../../../static/feed';
 import { OverviewProps } from '../../../interfaces/integrations';
 import { Data } from '../../../interfaces/feedPicker';
-import { useReplaceMustache } from '../../../hooks/useReplaceMustache';
+import { useCreateDataFromFeed } from '../../../hooks/useCreateDataFromFeed';
 
 enum cells {
   INSTANCES = 'Instances',
@@ -50,66 +48,14 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
   });
-  const createIntegration = useAccountIntegrationCreateIntegration<Operation>();
   const deleteIntegration = useAccountIntegrationDeleteIntegration<Operation>();
-  const createConnector = useAccountConnectorCreateConnector<Operation>();
   const { waitForOperations, createLoader, removeLoader } = useLoader();
   const { createError } = useError();
   const [selectedCell, setSelectedCell] = React.useState<cells>(cells.INSTANCES);
   const [addIntegrationOpen, setAddIntegrationOpen] = React.useState(false);
   const query = useQuery();
   const { getRedirectLink } = useGetRedirectLink();
-  const { replaceMustache } = useReplaceMustache();
-
-  const _createIntegration = React.useCallback(
-    async (activeFeed: Feed, data: Data) => {
-      try {
-        createLoader();
-        let firstIntegration: Entity | undefined;
-
-        const parsedFeed = await replaceMustache(data, activeFeed);
-        firstIntegration = parsedFeed.configuration.entities.find(
-          (entity: Entity) => entity.entityType === 'integration'
-        );
-
-        const commonTags = {
-          'fusebit.feedType': 'integration',
-          'fusebit.feedId': activeFeed.id,
-        };
-
-        await Promise.all([
-          ...parsedFeed.configuration.entities.map(async (entity: Entity) => {
-            const obj = {
-              data: entity.data,
-              id: entity.id,
-              tags: { ...commonTags, ...entity.tags },
-              accountId: userData.accountId,
-              subscriptionId: userData.subscriptionId,
-            };
-            const response =
-              entity.entityType === 'connector'
-                ? await createConnector.mutateAsync(obj)
-                : await createIntegration.mutateAsync(obj);
-            await waitForOperations([response.data.operationId]);
-          }),
-        ]);
-
-        window.location.href = getRedirectLink('/integration/' + firstIntegration?.id);
-      } catch (e) {
-        createError(e.message);
-      }
-    },
-    [
-      createConnector,
-      createError,
-      createIntegration,
-      createLoader,
-      userData,
-      waitForOperations,
-      replaceMustache,
-      getRedirectLink,
-    ]
-  );
+  const { createDataFromFeed } = useCreateDataFromFeed();
 
   useEffect(() => {
     if (integrations && integrations.data.items) {
@@ -137,7 +83,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
                 dummyIntegration: 'randomIntegration',
                 dummyConnector: 'randomConnector',
               };
-              _createIntegration(feed[i], dummyData);
+              createDataFromFeed(feed[i], dummyData);
             }
           }
         });
@@ -147,7 +93,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
         setRows(items);
       }
     }
-  }, [integrations, query, _createIntegration, headless, setHeadless]);
+  }, [integrations, query, createDataFromFeed, headless, setHeadless]);
 
   const handleSelectAllCheck = (event: any) => {
     if (event.target.checked) {
@@ -245,7 +191,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
       >
         <FeedPicker
           isIntegration={true}
-          onSubmit={(activeIntegration: Feed, data: Data) => _createIntegration(activeIntegration, data)}
+          onSubmit={(activeIntegration: Feed, data: Data) => createDataFromFeed(activeIntegration, data)}
           open={addIntegrationOpen}
           onClose={() => setAddIntegrationOpen(false)}
         />
