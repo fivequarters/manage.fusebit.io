@@ -92,7 +92,7 @@ const Connect = React.forwardRef(({ onClose, open }: Props, ref) => {
       <SC.Flex>
         <SC.LineTitle margin="16px">Integration Base URL</SC.LineTitle>
         <SC.CopyMobile
-          onClick={() => handleCopy(userData.token || '', 1)}
+          onClick={() => handleCopy(process.env.REACT_APP_FUSEBIT_DEPLOYMENT + '/v2' + window.location.pathname, 2)}
           src={copyIcon}
           alt="copy"
           height="16"
@@ -102,7 +102,7 @@ const Connect = React.forwardRef(({ onClose, open }: Props, ref) => {
       <SC.LineInstructionWrapper
         onMouseLeave={() => setFadeChangeTwo(false)}
         onMouseEnter={() => setFadeChangeTwo(true)}
-        onClick={() => handleCopy(userData.token || '', 2)}
+        onClick={() => handleCopy(process.env.REACT_APP_FUSEBIT_DEPLOYMENT + '/v2' + window.location.pathname, 2)}
       >
         <SC.LineInstructionCopy>
           <img src={copyIcon} alt="copy" height="16" width="16" />
