@@ -59,6 +59,7 @@ export const useCreateDataFromFeed = () => {
       } catch (e) {
         createError(e.message);
         removeLoader();
+        return false;
       }
     },
     [

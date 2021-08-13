@@ -57,10 +57,6 @@ const Navbar: React.FC<Props> = ({
       history.push('/fatal-error');
   }, [integrations, connectors, history]);
 
-  useEffect(() => {
-    console.log(userData);
-  }, [userData]);
-
   const handleLogout = () => {
     setLoggingOut(true);
     setDrawerOpen(false);

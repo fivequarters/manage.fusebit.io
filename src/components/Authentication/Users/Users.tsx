@@ -145,7 +145,6 @@ const Authentication: React.FC = () => {
     try {
       createLoader();
       const response = await createUser.mutateAsync({ ...data, accountId: userData.accountId });
-      await waitForOperations([response.data.operationId]);
       reloadUsers();
       if (response.data.id) {
         const token = await _createToken(response.data.id);
