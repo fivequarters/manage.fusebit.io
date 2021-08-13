@@ -26,18 +26,12 @@ import arrowRight from '../../../assets/arrow-right.svg';
 import arrowLeft from '../../../assets/arrow-left.svg';
 import { Feed } from '../../../interfaces/feed';
 import { useQuery } from '../../../hooks/useQuery';
-import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import FeedPicker from '../../FeedPicker';
 import { integrationsFeed } from '../../../static/feed';
-import { OverviewProps } from '../../../interfaces/integrations';
+import { cells, OverviewProps } from '../../../interfaces/integrations';
 import { Data } from '../../../interfaces/feedPicker';
 import { useCreateDataFromFeed } from '../../../hooks/useCreateDataFromFeed';
-
-enum cells {
-  INSTANCES = 'Instances',
-  CREATED = 'Created',
-  DEPLOYED = 'Deployed',
-}
+import Row from './Row';
 
 const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
   const [selected, setSelected] = React.useState<string[]>([]);
@@ -54,7 +48,6 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
   const [selectedCell, setSelectedCell] = React.useState<cells>(cells.INSTANCES);
   const [addIntegrationOpen, setAddIntegrationOpen] = React.useState(false);
   const query = useQuery();
-  const { getRedirectLink } = useGetRedirectLink();
   const { createDataFromFeed } = useCreateDataFromFeed();
 
   useEffect(() => {
@@ -249,42 +242,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
           </TableHead>
           <TableBody>
             {rows.map((row) => (
-              <SC.Row key={row.id} onClick={(e) => handleRowClick(e, getRedirectLink('/integration/' + row.id))}>
-                <TableCell
-                  style={{ cursor: 'default' }}
-                  padding="checkbox"
-                  id={`enhanced-table-cell-checkbox-${row.id}`}
-                >
-                  <Checkbox
-                    color="primary"
-                    onClick={(event) => handleCheck(event, row.id)}
-                    checked={isSelected(row.id)}
-                    inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${row.id}` }}
-                    id={`enhanced-table-checkbox-${row.id}`}
-                  />
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  <SC.CellName>{row.id}</SC.CellName>
-                </TableCell>
-                <TableCell align="left">
-                  10
-                  {
-                    // TODO: Replace placeholder with real data
-                  }
-                </TableCell>
-                <TableCell align="left">
-                  {new Date().toISOString().slice(0, 10)}
-                  {
-                    // TODO: Replace placeholder with real data
-                  }
-                </TableCell>
-                <TableCell align="left">
-                  {new Date().toISOString().slice(0, 10)}
-                  {
-                    // TODO: Replace placeholder with real data
-                  }
-                </TableCell>
-              </SC.Row>
+              <Row row={row} handleCheck={handleCheck} handleRowClick={handleRowClick} isSelected={isSelected} />
             ))}
           </TableBody>
         </Table>
@@ -331,34 +289,14 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
           </TableHead>
           <TableBody>
             {rows.map((row) => (
-              <SC.Row key={row.id} onClick={(e) => handleRowClick(e, getRedirectLink('/integration/' + row.id))}>
-                <TableCell
-                  style={{ cursor: 'default' }}
-                  padding="checkbox"
-                  id={`enhanced-table-cell-checkbox-${row.id}`}
-                >
-                  <Checkbox
-                    color="primary"
-                    onClick={(event) => handleCheck(event, row.id)}
-                    checked={isSelected(row.id)}
-                    inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${row.id}` }}
-                    id={`enhanced-table-checkbox-${row.id}`}
-                  />
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  <SC.CellName>{row.id}</SC.CellName>
-                </TableCell>
-                <TableCell align="left">
-                  {selectedCell === cells.INSTANCES
-                    ? 10
-                    : selectedCell === cells.DEPLOYED
-                    ? new Date().toISOString().slice(0, 10)
-                    : new Date().toISOString().slice(0, 10)}
-                  {
-                    // TODO: Replace placeholder with real data
-                  }
-                </TableCell>
-              </SC.Row>
+              <Row
+                row={row}
+                handleCheck={handleCheck}
+                handleRowClick={handleRowClick}
+                isSelected={isSelected}
+                mobile={true}
+                selectedCell={selectedCell}
+              />
             ))}
           </TableBody>
         </Table>
