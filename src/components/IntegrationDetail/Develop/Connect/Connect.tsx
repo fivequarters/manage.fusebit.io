@@ -14,6 +14,7 @@ import { useGetAuthLink } from '../../../../hooks/useGetAuthLink';
 const Connect = React.forwardRef(({ onClose, open }: Props, ref) => {
   const [copiedLine, setCopiedLine] = React.useState(0);
   const [fadeChange, setFadeChange] = React.useState(false);
+  const [fadeChangeTwo, setFadeChangeTwo] = React.useState(false);
   const { userData } = useContext();
   const { getAuthLink } = useGetAuthLink();
   const [expDate, setExpDate] = React.useState('');
@@ -60,7 +61,7 @@ const Connect = React.forwardRef(({ onClose, open }: Props, ref) => {
       </SC.CardClose>
       <SC.CardTitle>Connect your application</SC.CardTitle>
       <SC.Flex>
-        <SC.LineTitle margin="10px">Current JWT</SC.LineTitle>
+        <SC.LineTitle>Access Token</SC.LineTitle>
         <SC.CopyMobile
           onClick={() => handleCopy(userData.token || '', 1)}
           src={copyIcon}
@@ -69,7 +70,7 @@ const Connect = React.forwardRef(({ onClose, open }: Props, ref) => {
           width="16"
         />
       </SC.Flex>
-      <SC.LineDescription>expires on {expDate}</SC.LineDescription>
+      <SC.LineDescription>Expires on {expDate}</SC.LineDescription>
       <SC.LineInstructionWrapper
         onMouseLeave={() => setFadeChange(false)}
         onMouseEnter={() => setFadeChange(true)}
@@ -83,8 +84,48 @@ const Connect = React.forwardRef(({ onClose, open }: Props, ref) => {
         <SC.CopySuccess copy={copiedLine === 1}>Copied to clipboard!</SC.CopySuccess>
       </SC.LineInstructionWrapper>
       <SC.ButtonWrapper>
-        <Button onClick={handleRefresh} style={{ width: '200px' }} size="large" variant="contained" color="primary">
+        <Button onClick={handleRefresh} style={{ width: '200px' }} size="large" variant="outlined" color="primary">
           Refresh Your Token
+        </Button>
+      </SC.ButtonWrapper>
+
+      <SC.Flex>
+        <SC.LineTitle margin="16px">Integration Base URL</SC.LineTitle>
+        <SC.CopyMobile
+          onClick={() => handleCopy(userData.token || '', 1)}
+          src={copyIcon}
+          alt="copy"
+          height="16"
+          width="16"
+        />
+      </SC.Flex>
+      <SC.LineInstructionWrapper
+        onMouseLeave={() => setFadeChangeTwo(false)}
+        onMouseEnter={() => setFadeChangeTwo(true)}
+        onClick={() => handleCopy(userData.token || '', 2)}
+      >
+        <SC.LineInstructionCopy>
+          <img src={copyIcon} alt="copy" height="16" width="16" />
+        </SC.LineInstructionCopy>
+        <SC.LineInstructionFade change={fadeChangeTwo} />
+        <SC.LineInstruction>
+          {process.env.REACT_APP_FUSEBIT_DEPLOYMENT + '/v2' + window.location.pathname}
+        </SC.LineInstruction>
+        <SC.CopySuccess copy={copiedLine === 2}>Copied to clipboard!</SC.CopySuccess>
+      </SC.LineInstructionWrapper>
+      <SC.Description>
+        To connect your application, use the values above and follow the instructions in the{' '}
+        <a
+          target="_blank"
+          rel="noreferrer"
+          href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
+        >
+          following document.
+        </a>
+      </SC.Description>
+      <SC.ButtonWrapper>
+        <Button onClick={() => onClose()} style={{ width: '200px' }} size="large" variant="contained" color="primary">
+          Ok
         </Button>
       </SC.ButtonWrapper>
       {false && (
