@@ -5,7 +5,7 @@
     "smallIcon": "/images/slack.svg",
     "largeIcon": "http://some.icon/large.ico",
     "version": "1.0.0",
-    "description": "# Welcome to Fusebit!\n\nThis is a Fusebit integration, to be used as part of the Fusebit service!\n\n\nA simple <% global.consts.feed.name %> hello world example.\n",
+    "description": "# Lorem Ipsum\n\nLorem ipsum dolor sit amet, id nec summo copiosae voluptaria, in per modo saperet accumsan.\n\n\nA simple <% global.consts.feed.name %> hello world example.\n",
     "tags": {
       "catalog": "slack,intro,popular"
     },
@@ -99,9 +99,9 @@
           "entityType": "connector",
           "data": {
             "configuration": {
-              "scope": "",
-              "tokenUrl": "<%global.fusebit.endpoint%>/connector/proxy/api/token",
-              "authorizationUrl": "<%global.fusebit.endpoint%>/connector/proxy/api/configure",
+              "scope": "chat:write",
+              "tokenUrl": "<%global.consts.endpoint%>/v2/account/<%global.consts.accountId%>/subscription/<%global.consts.subscriptionId%>/connector/<%this.id%>/proxy/slack/oauth/token",
+              "authorizationUrl": "<%global.consts.endpoint%>/v2/account/<%global.consts.accountId%>/subscription/<%global.consts.subscriptionId%>/connector/<%this.id%>/proxy/slack/oauth/authorize",
               "clientId": "<%global.consts.random%>",
               "clientSecret": "<%global.consts.random%>",
               "refreshErrorLimit": 100000,
@@ -111,7 +111,7 @@
               "accessTokenExpirationBuffer": 500
             },
             "files": {
-              "package.json": "{\n  \"scripts\": {\n    \"redeploy\": \"fuse connector rm <%this.name%> && yarn deploy\",\n    \"deploy\": \"fuse connector deploy <%this.name%> -d .\",\n    \"get\": \"fuse connector get <%this.name%> -d .\"\n  },\n  \"dependencies\": {\n    \"@fusebit-int/slack-connector\": \"^2.0.0\",\n    \"@fusebit-int/framework\": \"^3.0.0\"\n  }\n}\n"
+              "package.json": "{\n  \"scripts\": {\n    \"redeploy\": \"fuse connector rm <%this.name%> && yarn deploy\",\n    \"deploy\": \"fuse connector deploy <%this.name%> -d .\",\n    \"get\": \"fuse connector get <%this.name%> -d .\"\n  },\n  \"dependencies\": {\n    \"@fusebit-int/slack-connector\": \"^2.0.0\",\n    \"@fusebit-int/framework\": \"^3.0.2\"\n  }\n}\n"
             },
             "handler": "@fusebit-int/oauth-connector"
           },
@@ -123,17 +123,16 @@
           "data": {
             "configuration": {},
             "files": {
-              "package.json": "{\n  \"scripts\": {\n    \"deploy\": \"fuse integration deploy <% this.id %> -d .\",\n    \"get\": \"fuse integration get <% this.id %> -d .\"\n  },\n  \"dependencies\": {\n    \"@fusebit-int/framework\": \"^3.0.0\",\n    \"superagent\": \"^6.1.0\",\n    \"@fusebit-int/oauth-provider\": \"*\"\n  },\n  \"files\": [\"./integration.js\", \"README.md\"]\n}\n",
-              "./integration.js": "const { Integration } = require('@fusebit-int/framework');\n\nconst integration = new Integration();\nconst router = integration.router;\n\n/**\n * Post a message to Slack\n */\nrouter.post('/api/:tenantId/sendMessage', integration.middleware.authorizeUser('instance:put'), async (ctx) => {\n  const slackClient = await integration.tenant.getSdkByTenant(ctx, 'slackConnector', ctx.params.tenantId);\n  const result = await slackClient.chat.postMessage({\n    text: 'Hello world from Fusebit!',\n    channel: 'your-channel-name-here',\n  });\n  ctx.body = result;\n});\n\n/**\n * List Slack users\n */\nrouter.get('/api/:tenantId/users', integration.middleware.authorizeUser('instance:get'), async (ctx) => {\n  const slackClient = await integration.tenant.getSdkByTenant(ctx, 'slackConnector', ctx.params.tenantId);\n  const result = await slackClient.users.identity();\n  ctx.body = result;\n});\n\nexport default integration;\n",
-              "README.md": "# Welcome to Fusebit!\n\nThis is a Fusebit integration, to be used as part of the Fusebit service!\n\n\n\nA simple <% global.consts.feed.name %> hello world example.\n\n# Sign up for Fusebit Now!\n\nIf you want to sign up for Fusebit to simplify your integrations, go to\n[https://fusebit.io](https://fusebit.io) now!.\n\n\nOpen up your browser to <% global.consts.endpoint %>/v2/account/<% global.consts.accountId %>/subscription/<%\nglobal.consts.subscriptionId %>/integration/<% global.consts.integrationId %>/api/startup to\ntest the integration!\n\n\n"
+              "package.json": "{\n  \"scripts\": {\n    \"deploy\": \"fuse integration deploy <% this.id %> -d .\",\n    \"get\": \"fuse integration get <% this.id %> -d .\"\n  },\n  \"dependencies\": {\n    \"@fusebit-int/framework\": \"^3.0.2\",\n    \"superagent\": \"^6.1.0\",\n    \"@fusebit-int/slack-provider\": \"*\"\n  },\n  \"files\": [\"./integration.js\", \"README.md\"]\n}\n",
+              "README.md": "# Lorem Ipsum\n\nLorem ipsum dolor sit amet, id nec summo copiosae voluptaria, in per modo saperet accumsan.\n\n\n\nA simple <% global.consts.feed.name %> hello world example.\n\n# Sign up for Fusebit Now!\n\nIf you want to sign up for Fusebit to simplify your integrations, go to\n[https://fusebit.io](https://fusebit.io) now!.\n\n\nOpen up your browser to <% global.consts.endpoint %>/v2/account/<% global.consts.accountId %>/subscription/<%\nglobal.consts.subscriptionId %>/integration/<% global.consts.integrationId %>/api/startup to\ntest the integration!\n\n\n",
+              "./integration.js": "const { Integration } = require('@fusebit-int/framework');\n\nconst integration = new Integration();\nconst router = integration.router;\n\n/**\n * Post a message to Slack\n */\nrouter.post('/api/:tenantId/sendMessage', integration.middleware.authorizeUser('instance:put'), async (ctx) => {\n  const slackClient = await integration.tenant.getSdkByTenant(ctx, 'slackConnector', ctx.params.tenantId);\n  const result = await slackClient.chat.postMessage({\n    text: 'Hello world from Fusebit!',\n    channel: 'your-channel-name-here',\n  });\n  ctx.body = result;\n});\n\n/**\n * List Slack users\n */\nrouter.get('/api/:tenantId/users', integration.middleware.authorizeUser('instance:get'), async (ctx) => {\n  const slackClient = await integration.tenant.getSdkByTenant(ctx, 'slackConnector', ctx.params.tenantId);\n  const result = await slackClient.users.identity();\n  ctx.body = result;\n});\n\nmodule.exports = integration;\n"
             },
             "handler": "./integration",
             "components": [
               {
                 "name": "slackConnector",
-                "path": "/api/configure",
                 "skip": false,
-                "provider": "@fusebit-int/oauth-provider",
+                "provider": "@fusebit-int/slack-provider",
                 "entityId": "<% global.entities.slackConnector.id %>",
                 "dependsOn": [],
                 "entityType": "connector"
