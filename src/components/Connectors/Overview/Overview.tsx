@@ -26,18 +26,12 @@ import arrowRight from '../../../assets/arrow-right.svg';
 import arrowLeft from '../../../assets/arrow-left.svg';
 import { Feed } from '../../../interfaces/feed';
 import { useQuery } from '../../../hooks/useQuery';
-import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import FeedPicker from '../../FeedPicker';
 import { connectorsFeed } from '../../../static/feed';
-import { OverviewProps } from '../../../interfaces/connectors';
+import { cells, OverviewProps } from '../../../interfaces/connectors';
 import { Data } from '../../../interfaces/feedPicker';
 import { useCreateDataFromFeed } from '../../../hooks/useCreateDataFromFeed';
-
-enum cells {
-  TYPE = 'Type',
-  IDENTITIES = 'Identities',
-  CREATED = 'Created',
-}
+import Row from './Row';
 
 const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
   const [selected, setSelected] = React.useState<string[]>([]);
@@ -54,7 +48,6 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
   const [selectedCell, setSelectedCell] = React.useState<cells>(cells.TYPE);
   const [addConnectorOpen, setAddConnectorOpen] = React.useState(false);
   const query = useQuery();
-  const { getRedirectLink } = useGetRedirectLink();
   const { createDataFromFeed } = useCreateDataFromFeed();
 
   React.useEffect(() => {
@@ -247,42 +240,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
           </TableHead>
           <TableBody>
             {rows.map((row) => (
-              <SC.Row key={row.id} onClick={(e) => handleRowClick(e, getRedirectLink('/connector/' + row.id))}>
-                <TableCell
-                  style={{ cursor: 'default' }}
-                  padding="checkbox"
-                  id={`enhanced-table-cell-checkbox-${row.id}`}
-                >
-                  <Checkbox
-                    color="primary"
-                    onClick={(event) => handleCheck(event, row.id)}
-                    checked={isSelected(row.id)}
-                    inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${row.id}` }}
-                    id={`enhanced-table-checkbox-${row.id}`}
-                  />
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  <SC.CellName>{row.id}</SC.CellName>
-                </TableCell>
-                <TableCell align="left">
-                  Slack
-                  {
-                    // TODO: Replace placeholder with real data
-                  }
-                </TableCell>
-                <TableCell align="left">
-                  5
-                  {
-                    // TODO: Replace placeholder with real data
-                  }
-                </TableCell>
-                <TableCell align="left">
-                  {new Date().toISOString().slice(0, 10)}
-                  {
-                    // TODO: Replace placeholder with real data
-                  }
-                </TableCell>
-              </SC.Row>
+              <Row row={row} handleCheck={handleCheck} handleRowClick={handleRowClick} isSelected={isSelected} />
             ))}
           </TableBody>
         </Table>
@@ -328,34 +286,14 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
           </TableHead>
           <TableBody>
             {rows.map((row) => (
-              <SC.Row key={row.id} onClick={(e) => handleRowClick(e, getRedirectLink('/connector/' + row.id))}>
-                <TableCell
-                  style={{ cursor: 'default' }}
-                  padding="checkbox"
-                  id={`enhanced-table-cell-checkbox-${row.id}`}
-                >
-                  <Checkbox
-                    color="primary"
-                    onClick={(event) => handleCheck(event, row.id)}
-                    checked={isSelected(row.id)}
-                    inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${row.id}` }}
-                    id={`enhanced-table-checkbox-${row.id}`}
-                  />
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  <SC.CellName>{row.id}</SC.CellName>
-                </TableCell>
-                <TableCell align="left">
-                  {selectedCell === cells.TYPE
-                    ? 'Slack'
-                    : selectedCell === cells.IDENTITIES
-                    ? 10
-                    : new Date().toISOString().slice(0, 10)}
-                  {
-                    // TODO: Replace placeholder with real data
-                  }
-                </TableCell>
-              </SC.Row>
+              <Row
+                row={row}
+                handleCheck={handleCheck}
+                handleRowClick={handleRowClick}
+                isSelected={isSelected}
+                mobile={true}
+                selectedCell={selectedCell}
+              />
             ))}
           </TableBody>
         </Table>
