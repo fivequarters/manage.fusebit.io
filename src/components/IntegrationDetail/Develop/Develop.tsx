@@ -102,8 +102,7 @@ const Develop: React.FC = () => {
         entityType: 'connector',
         entityId: connectorId,
         skip: false,
-        provider: '@fusebit-int/oauth-provider',
-        path: '/api/configure',
+        provider: '@fusebit-int/slack-provider',
         dependsOn: [],
       };
       newData.data.components.push(newConnector);
@@ -151,8 +150,7 @@ const Develop: React.FC = () => {
             entityType: 'connector',
             entityId: entity.id,
             skip: false,
-            provider: '@fusebit-int/oauth-provider',
-            path: '/api/configure',
+            provider: '@fusebit-int/slack-provider',
             dependsOn: [],
           };
           newData.data.components.push(newConnector);
