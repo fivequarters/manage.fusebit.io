@@ -182,6 +182,7 @@ const Develop: React.FC = () => {
         const data = {
           protocol: 'pki',
           profile: {
+            id: 'default',
             subscription: userData.subscriptionId,
           },
         };
