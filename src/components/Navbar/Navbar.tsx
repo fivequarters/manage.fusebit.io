@@ -157,7 +157,7 @@ const Navbar: React.FC<Props> = ({
                           <SC.SectionDropdownIntegration
                             key={index}
                             active={sectionName === integration.id}
-                            href={getRedirectLink('/integration/' + integration.id)}
+                            href={getRedirectLink('/integration/' + integration.id + '/develop')}
                           >
                             {integration.id}
                             <img src={check} alt="check" height="16" width="16" />
@@ -174,7 +174,7 @@ const Navbar: React.FC<Props> = ({
                           <SC.SectionDropdownIntegration
                             key={index}
                             active={sectionName === connector.id}
-                            href={getRedirectLink('/connector/' + connector.id)}
+                            href={getRedirectLink('/connector/' + connector.id + '/configure')}
                           >
                             {connector.id}
                             <img src={check} alt="check" height="16" width="16" />
@@ -195,7 +195,7 @@ const Navbar: React.FC<Props> = ({
                           <SC.SectionDropdownIntegration
                             key={index}
                             active={sectionName === integration.id}
-                            href={getRedirectLink('/integration/' + integration.id)}
+                            href={getRedirectLink('/integration/' + integration.id + '/develop')}
                           >
                             {integration.id}
                             <img src={check} alt="check" height="16" width="16" />
@@ -212,7 +212,7 @@ const Navbar: React.FC<Props> = ({
                           <SC.SectionDropdownIntegration
                             key={index}
                             active={sectionName === connector.id}
-                            href={getRedirectLink('/connector/' + connector.id)}
+                            href={getRedirectLink('/connector/' + connector.id + '/configure')}
                           >
                             {connector.id}
                             <img src={check} alt="check" height="16" width="16" />

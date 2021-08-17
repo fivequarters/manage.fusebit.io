@@ -33,18 +33,6 @@ const Row: React.FC<RowProps> = ({ row, handleRowClick, handleCheck, isSelected,
           <SC.CellName>{row.id}</SC.CellName>
         </TableCell>
         <TableCell align="left">{installsData?.data.total}</TableCell>
-        <TableCell align="left">
-          {new Date().toISOString().slice(0, 10)}
-          {
-            // TODO: Replace placeholder with real data
-          }
-        </TableCell>
-        <TableCell align="left">
-          {new Date().toISOString().slice(0, 10)}
-          {
-            // TODO: Replace placeholder with real data
-          }
-        </TableCell>
       </SC.Row>
     );
   } else {
@@ -62,16 +50,7 @@ const Row: React.FC<RowProps> = ({ row, handleRowClick, handleCheck, isSelected,
         <TableCell component="th" scope="row">
           <SC.CellName>{row.id}</SC.CellName>
         </TableCell>
-        <TableCell align="left">
-          {selectedCell === cells.INSTANCES
-            ? installsData?.data.total
-            : selectedCell === cells.DEPLOYED
-            ? new Date().toISOString().slice(0, 10)
-            : new Date().toISOString().slice(0, 10)}
-          {
-            // TODO: Replace placeholder with real data
-          }
-        </TableCell>
+        <TableCell align="left">{selectedCell === cells.INSTALLS && installsData?.data.total}</TableCell>
       </SC.Row>
     );
   }

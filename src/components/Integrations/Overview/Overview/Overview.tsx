@@ -45,7 +45,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
   const deleteIntegration = useAccountIntegrationDeleteIntegration<Operation>();
   const { waitForOperations, createLoader, removeLoader } = useLoader();
   const { createError } = useError();
-  const [selectedCell, setSelectedCell] = React.useState<cells>(cells.INSTANCES);
+  const [selectedCell, setSelectedCell] = React.useState<cells>(cells.INSTALLS);
   const [addIntegrationOpen, setAddIntegrationOpen] = React.useState(false);
   const query = useQuery();
   const { createDataFromFeed } = useCreateDataFromFeed();
@@ -153,22 +153,22 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
   };
 
   const handlePreviousCellSelect = () => {
-    if (selectedCell === cells.INSTANCES) {
-      setSelectedCell(cells.DEPLOYED);
+    if (selectedCell === cells.INSTALLS) {
+      // setSelectedCell(cells.DEPLOYED);
     } else if (selectedCell === cells.CREATED) {
-      setSelectedCell(cells.INSTANCES);
+      setSelectedCell(cells.INSTALLS); //uncommented to not leave the variable unused
     } else {
-      setSelectedCell(cells.CREATED);
+      // setSelectedCell(cells.CREATED);
     }
   };
 
   const handleNextCellSelect = () => {
-    if (selectedCell === cells.INSTANCES) {
-      setSelectedCell(cells.CREATED);
+    if (selectedCell === cells.INSTALLS) {
+      // setSelectedCell(cells.CREATED);
     } else if (selectedCell === cells.CREATED) {
-      setSelectedCell(cells.DEPLOYED);
+      // setSelectedCell(cells.DEPLOYED);
     } else {
-      setSelectedCell(cells.INSTANCES);
+      // setSelectedCell(cells.INSTALLS);
     }
   };
 
@@ -242,9 +242,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
                   Name
                 </SC.Flex>
               </TableCell>
-              <TableCell align="left">Instances</TableCell>
-              <TableCell align="left">Created</TableCell>
-              <TableCell align="left">Deployed</TableCell>
+              <TableCell align="left">Installs</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

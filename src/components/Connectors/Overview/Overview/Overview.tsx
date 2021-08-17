@@ -154,8 +154,6 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
 
   const handlePreviousCellSelect = () => {
     if (selectedCell === cells.TYPE) {
-      setSelectedCell(cells.CREATED);
-    } else if (selectedCell === cells.CREATED) {
       setSelectedCell(cells.IDENTITIES);
     } else {
       setSelectedCell(cells.TYPE);
@@ -165,8 +163,6 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
   const handleNextCellSelect = () => {
     if (selectedCell === cells.TYPE) {
       setSelectedCell(cells.IDENTITIES);
-    } else if (selectedCell === cells.IDENTITIES) {
-      setSelectedCell(cells.CREATED);
     } else {
       setSelectedCell(cells.TYPE);
     }
@@ -242,7 +238,6 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
               </TableCell>
               <TableCell align="left">Type</TableCell>
               <TableCell align="left">Identities</TableCell>
-              <TableCell align="left">Created</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
