@@ -1,11 +1,11 @@
 [
   {
-    "id": "slack-hello-world",
-    "name": "Slack - Hello World",
+    "id": "slack",
+    "name": "Slack",
     "smallIcon": "/images/slack.svg",
-    "largeIcon": "http://some.icon/large.ico",
+    "largeIcon": "/images/slack.svg",
     "version": "1.0.0",
-    "description": "# Lorem Ipsum\n\nLorem ipsum dolor sit amet, id nec summo copiosae voluptaria, in per modo saperet accumsan.\n\n\nA simple <% global.consts.feed.name %> hello world example.\n",
+    "description": "This Connector facilitates authentication, authorization, and API calls between Fusebit and Slack on your behalf.\n",
     "tags": {
       "catalog": "slack,intro,popular"
     },
@@ -13,15 +13,6 @@
       "schema": {
         "type": "object",
         "properties": {
-          "slackIntegration": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string",
-                "minLength": 3
-              }
-            }
-          },
           "slackConnector": {
             "type": "object",
             "properties": {
@@ -30,62 +21,16 @@
                 "minLength": 3
               }
             }
-          },
-          "ui": {
-            "type": "object",
-            "properties": {
-              "toggle": {
-                "type": "boolean",
-                "description": "The \"toggle\" option renders boolean values as a toggle."
-              }
-            }
           }
         }
       },
       "uischema": {
-        "type": "Group",
-        "label": "Slack Connector Details",
+        "type": "VerticalLayout",
         "elements": [
           {
-            "type": "VerticalLayout",
-            "elements": [
-              {
-                "type": "Control",
-                "label": "Advanced configuration...",
-                "scope": "#/properties/ui/properties/toggle",
-                "options": {
-                  "toggle": true
-                }
-              },
-              {
-                "type": "Control",
-                "scope": "#/properties/slackIntegration/properties/id",
-                "label": "Name",
-                "rule": {
-                  "effect": "SHOW",
-                  "condition": {
-                    "scope": "#/properties/ui/properties/toggle",
-                    "schema": {
-                      "const": true
-                    }
-                  }
-                }
-              },
-              {
-                "type": "Control",
-                "scope": "#/properties/slackConnector/properties/id",
-                "label": "Slack Connector name",
-                "rule": {
-                  "effect": "SHOW",
-                  "condition": {
-                    "scope": "#/properties/ui/properties/toggle",
-                    "schema": {
-                      "const": true
-                    }
-                  }
-                }
-              }
-            ]
+            "type": "Control",
+            "scope": "#/properties/slackConnector/properties/id",
+            "label": "Name"
           }
         ]
       },
@@ -99,7 +44,7 @@
           "entityType": "connector",
           "data": {
             "configuration": {
-              "scope": "chat:write",
+              "scope": "chat:write users:read channels:read channels:join chat:write.public",
               "tokenUrl": "<%global.consts.endpoint%>/v2/account/<%global.consts.accountId%>/subscription/<%global.consts.subscriptionId%>/connector/<%this.id%>/proxy/slack/oauth/token",
               "authorizationUrl": "<%global.consts.endpoint%>/v2/account/<%global.consts.accountId%>/subscription/<%global.consts.subscriptionId%>/connector/<%this.id%>/proxy/slack/oauth/authorize",
               "clientId": "<%global.consts.random%>",
@@ -124,8 +69,8 @@
             "configuration": {},
             "files": {
               "package.json": "{\n  \"scripts\": {\n    \"deploy\": \"fuse integration deploy <% this.id %> -d .\",\n    \"get\": \"fuse integration get <% this.id %> -d .\"\n  },\n  \"dependencies\": {\n    \"@fusebit-int/framework\": \"^3.0.2\",\n    \"superagent\": \"^6.1.0\",\n    \"@fusebit-int/slack-provider\": \"*\"\n  },\n  \"files\": [\"./integration.js\", \"README.md\"]\n}\n",
-              "./integration.js": "const { Integration } = require('@fusebit-int/framework');\n\nconst integration = new Integration();\nconst router = integration.router;\n\n/**\n * Post a message to Slack\n */\nrouter.post('/api/:tenantId/sendMessage', integration.middleware.authorizeUser('instance:put'), async (ctx) => {\n  const slackClient = await integration.tenant.getSdkByTenant(ctx, 'slackConnector', ctx.params.tenantId);\n  const result = await slackClient.chat.postMessage({\n    text: 'Hello world from Fusebit!',\n    channel: 'your-channel-name-here',\n  });\n  ctx.body = result;\n});\n\n/**\n * List Slack users\n */\nrouter.get('/api/:tenantId/users', integration.middleware.authorizeUser('instance:get'), async (ctx) => {\n  const slackClient = await integration.tenant.getSdkByTenant(ctx, 'slackConnector', ctx.params.tenantId);\n  const result = await slackClient.users.identity();\n  ctx.body = result;\n});\n\nmodule.exports = integration;\n",
-              "README.md": "# Lorem Ipsum\n\nLorem ipsum dolor sit amet, id nec summo copiosae voluptaria, in per modo saperet accumsan.\n\n\n\nA simple <% global.consts.feed.name %> hello world example.\n\n# Sign up for Fusebit Now!\n\nIf you want to sign up for Fusebit to simplify your integrations, go to\n[https://fusebit.io](https://fusebit.io) now!.\n\n\nOpen up your browser to <% global.consts.endpoint %>/v2/account/<% global.consts.accountId %>/subscription/<%\nglobal.consts.subscriptionId %>/integration/<% global.consts.integrationId %>/api/startup to\ntest the integration!\n\n\n"
+              "./integration.js": "const { Integration } = require('@fusebit-int/framework');\n\nconst integration = new Integration();\nconst router = integration.router;\n\n/**\n * Post a message to Slack\n */\nrouter.post('/api/tenant/:tenantId/test', integration.middleware.authorizeUser('instance:put'), async (ctx) => {\n  const slackClient = await integration.tenant.getSdkByTenant(ctx, 'slackConnector', ctx.params.tenantId);\n  const result = await slackClient.chat.postMessage({\n    text: 'Hello world from Fusebit!',\n    channel: 'your-channel-name-here',\n  });\n  ctx.body = result;\n});\n\n/**\n * List Slack users\n */\nrouter.get('/api/tenant/:tenantId/users', integration.middleware.authorizeUser('instance:get'), async (ctx) => {\n  const slackClient = await integration.tenant.getSdkByTenant(ctx, 'slackConnector', ctx.params.tenantId);\n  const result = await slackClient.users.list();\n  ctx.body = result;\n});\n\nmodule.exports = integration;\n",
+              "README.md": "Thanks for trying out Fusebit and downloading your <% global.consts.feed.name %> Integration code.\n\nUse your favorite tools to make any changes to the code in this folder.\n\n\nA simple <% global.consts.feed.name %> hello world example.\n"
             },
             "handler": "./integration",
             "components": [
