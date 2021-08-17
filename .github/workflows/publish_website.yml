@@ -59,6 +59,7 @@ jobs:
           REACT_APP_LOGOUT_REDIRECT_URL: https://fusebit.io
           REACT_APP_INTEGRATIONS_FEED_URL: https://manage.fusebit.io/feed/integrationsFeed.json
           REACT_APP_CONNECTORS_FEED_URL: https://manage.fusebit.io/feed/connectorsFeed.json
+          REACT_APP_SEGMENT_ANALYTICS_TAG: CaC5PUXF3swrCxkM5rGOA7oUUGVZv9zH
         run: ./scripts/build_tree.sh
       - name: Publish - website
         env:

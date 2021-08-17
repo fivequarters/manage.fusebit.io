@@ -27,6 +27,9 @@ export const useLoader = () => {
       return new Promise((accept: Function) => {
         intervalIds[operationId] = Number(
           setInterval(() => {
+            if (!operationId) {
+              return accept({});
+            }
             axios<Operation>(
               `/v2/account/${userData.accountId}/subscription/${userData.subscriptionId}/operation/${operationId}`,
               'get'

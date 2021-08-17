@@ -11,7 +11,7 @@ export interface InnerConnector {
   entityType: string;
   entityId: string;
   skip: boolean;
-  path: string;
+  path?: string;
   provider: string;
   dependsOn: [];
 }

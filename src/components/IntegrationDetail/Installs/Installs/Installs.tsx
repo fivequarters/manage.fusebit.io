@@ -34,16 +34,17 @@ const Installs: React.FC = () => {
       createLoader();
       const data = JSON.parse(JSON.stringify(installsData?.data)) as Install;
       let operationIds: string[] = [];
-      for (let i = 0; i < data.items?.length; i++) {
-        const response = await deleteInstance.mutateAsync({
-          data: data.items[i],
-          id: id,
-          accountId: userData.accountId,
-          subscriptionId: userData.subscriptionId,
-        });
-        operationIds.push(response.data.operationId);
-      }
-      await waitForOperations(operationIds);
+      await Promise.all(
+        (data.items || []).map(async (item) => {
+          const response = await deleteInstance.mutateAsync({
+            data: item,
+            id: id,
+            accountId: userData.accountId,
+            subscriptionId: userData.subscriptionId,
+          });
+          return waitForOperations([response.data.operationId]);
+        })
+      );
       reloadInstalls();
     } catch (e) {
       createError(e.message);
@@ -55,7 +56,14 @@ const Installs: React.FC = () => {
   return (
     <SC.Wrapper>
       <SC.Header>Total Installs: {installsData ? installsData?.data.total : 'Loading...'}</SC.Header>
-      <Button onClick={handleDelete} style={{ width: '200px' }} variant="contained" color="primary" size="large">
+      <Button
+        onClick={handleDelete}
+        disabled={!installsData || installsData?.data.total === 0}
+        style={{ width: '200px' }}
+        variant="contained"
+        color="primary"
+        size="large"
+      >
         Delete all installs
       </Button>
     </SC.Wrapper>

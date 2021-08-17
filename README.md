@@ -39,6 +39,7 @@ REACT_APP_AUTH0_CLIENT_ID=dimuls6VLYgXpD7UYCo6yPdKAXPXjQng
 REACT_APP_LOGOUT_REDIRECT_URL=https://fusebit.io
 REACT_APP_INTEGRATIONS_FEED_URL=https://manage.fusebit.io/feed/integrationsFeed.json
 REACT_APP_CONNECTORS_FEED_URL=https://manage.fusebit.io/feed/connectorsFeed.json
+REACT_APP_SEGMENT_ANALYTICS_TAG=CaC5PUXF3swrCxkM5rGOA7oUUGVZv9zH
 ```
 
 ## Running and serving a dev build
