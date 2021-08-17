@@ -7,12 +7,12 @@ export const Card = styled.div<{ open: boolean }>`
   transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
+  justify-content: center;
   background-color: white;
   opacity: ${(props) => (props.open ? 1 : 0)};
-  padding: 64px 120px;
+  padding: 40px 96px;
   border-radius: 8px;
   box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
-  width: 907px;
   transition: all 1s linear;
 
   @media only screen and (max-width: 550px) {
@@ -57,6 +57,7 @@ export const CardTitle = styled.h2`
   font-weight: 600;
   color: var(--black);
   margin-bottom: 32px;
+  max-width: 667px;
 `;
 
 export const CardSubtitle = styled.h5`
@@ -67,7 +68,7 @@ export const CardSubtitle = styled.h5`
   color: var(--black);
   margin-bottom: 16px;
   text-align: center;
-  width: 100%;
+  max-width: 667px;
 `;
 
 export const CardButtonsContainer = styled.div`
@@ -85,6 +86,7 @@ export const CardActionButtons = styled.div`
 export const LineInstructionWrapper = styled.div`
   position: relative;
   margin-bottom: 16px;
+  max-width: 667px;
 
   &:hover {
     cursor: pointer;
@@ -99,7 +101,6 @@ export const LineInstruction = styled.div`
   position: relative;
   height: 50px;
   padding: 16px;
-  width: 667px;
   border: 0;
   margin: 0;
   outline: rgba(255, 255, 255, 0);
@@ -208,7 +209,7 @@ export const CopyMobile = styled.img`
 export const Flex = styled.div`
   display: flex;
   align-items: center;
-  width: 100%;
+  max-width: 667px;
 `;
 
 export const LineTitle = styled.h4<{ margin?: string }>`
@@ -216,7 +217,7 @@ export const LineTitle = styled.h4<{ margin?: string }>`
   line-height: 18px;
   font-weight: 600;
   color: var(--black);
-  margin-bottom: ${(props) => (props.margin ? props.margin : '16px')};
+  margin-bottom: ${(props) => (props.margin ? props.margin : '8px')};
 
   @media only screen and (max-width: 1250px) {
     font-size: 14px;
@@ -231,6 +232,7 @@ export const LineDescription = styled.p`
   line-height: 20px;
   color: var(--black);
   margin-bottom: 18px;
+  max-width: 667px;
 
   @media only screen and (max-width: 1250px) {
     font-size: 12px;
@@ -241,5 +243,18 @@ export const LineDescription = styled.p`
 export const ButtonWrapper = styled.div`
   width: 200px;
   margin: 0 auto;
-  margin-top: 52px;
+  margin-top: 32px;
+`;
+
+export const Description = styled.p`
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--black);
+  max-width: 556px;
+  margin-top: 48px;
+
+  & > a {
+    color: var(--primary-color);
+    text-decoration: none;
+  }
 `;
