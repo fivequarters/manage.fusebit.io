@@ -5,7 +5,7 @@ export interface OverviewProps {
   setHeadless: Function;
 }
 export enum cells {
-  INSTANCES = 'Instances',
+  INSTALLS = 'Installs',
   CREATED = 'Created',
   DEPLOYED = 'Deployed',
 }
