@@ -53,6 +53,7 @@ export const useLoader = () => {
           globalAccept({});
         })
         .catch((e: any) => {
+          Object.keys(intervalIds).forEach((operationId: string) => clearInterval(intervalIds[operationId]));
           globalReject(e);
         });
     });
