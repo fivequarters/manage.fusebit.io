@@ -4,10 +4,10 @@ import Layout from '../components/Layout';
 import { useAccountConnectorsGetOne } from '../hooks/api/v2/account/connector/useGetOne';
 import { useContext } from '../hooks/useContext';
 import { Connector } from '../interfaces/connector';
-import ConnectorDetail from '../components/ConnectorDetail';
+import Identities from '../components/ConnectorDetail/Identities';
 import Navbar from '../components/Navbar';
 
-const ConnectorDetailPage: FC<{}> = (): ReactElement => {
+const ConnectorDetailIdentitiesPage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
   const { userData } = useContext();
   const { data: connectorData } = useAccountConnectorsGetOne<Connector>({
@@ -20,9 +20,9 @@ const ConnectorDetailPage: FC<{}> = (): ReactElement => {
   return (
     <Layout>
       <Navbar sectionName={connectorData?.data.id || id} dropdown={true} />
-      <ConnectorDetail />
+      <Identities id={id} />
     </Layout>
   );
 };
 
-export default ConnectorDetailPage;
+export default ConnectorDetailIdentitiesPage;

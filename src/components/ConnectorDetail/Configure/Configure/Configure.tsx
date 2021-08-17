@@ -1,19 +1,19 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import * as SC from './styles';
-import { useAccountConnectorsGetOne } from '../../../hooks/api/v2/account/connector/useGetOne';
-import { useAccountConnectorsGetOneConfig } from '../../../hooks/api/v2/account/connector/useGetOneConfig';
-import { useContext } from '../../../hooks/useContext';
-import { Connector, ConnectorConfig } from '../../../interfaces/connector';
+import { useAccountConnectorsGetOne } from '../../../../hooks/api/v2/account/connector/useGetOne';
+import { useAccountConnectorsGetOneConfig } from '../../../../hooks/api/v2/account/connector/useGetOneConfig';
+import { useContext } from '../../../../hooks/useContext';
+import { Connector, ConnectorConfig } from '../../../../interfaces/connector';
 
 import { Button } from '@material-ui/core';
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
 import { JsonForms } from '@jsonforms/react';
 import { ValidationMode } from '@jsonforms/core';
-import { useAccountConnectorUpdateConnector } from '../../../hooks/api/v2/account/connector/useUpdateOne';
-import { Operation } from '../../../interfaces/operation';
-import { useLoader } from '../../../hooks/useLoader';
-import { useError } from '../../../hooks/useError';
+import { useAccountConnectorUpdateConnector } from '../../../../hooks/api/v2/account/connector/useUpdateOne';
+import { Operation } from '../../../../interfaces/operation';
+import { useLoader } from '../../../../hooks/useLoader';
+import { useError } from '../../../../hooks/useError';
 
 const Configure: React.FC = () => {
   const { id } = useParams<{ id: string }>();

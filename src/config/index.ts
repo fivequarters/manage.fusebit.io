@@ -2,7 +2,8 @@ import ConnectorsPage from '../pages/ConnectorsPage';
 import IntegrationsPage from '../pages/IntegrationsPage';
 import IntegrationDetailDevelopPage from '../pages/IntegrationDetailDevelopPage';
 import IntegrationDetailInstallsPage from '../pages/IntegrationDetailInstallsPage';
-import ConnectorDetailPage from '../pages/ConnectorDetailPage';
+import ConnectorDetailConfigurePage from '../pages/ConnectorDetailConfigurePage';
+import ConnectorDetailIdentitiesPage from '../pages/ConnectorDetailIdentitiesPage';
 import LoggedOutErrorPage from '../pages/LoggedOutErrorPage';
 import AuthenticationPage from '../pages/AuthenticationPage';
 import AuthenticationDetailPage from '../pages/AuthenticationDetailPage';
@@ -24,19 +25,24 @@ export const routes: Array<RouteItem> = [
     component: IntegrationsPage,
   },
   {
-    key: 'router-integration-detail',
+    key: 'router-integration-detail-develop',
     path: '/account/:accountId/subscription/:subscriptionId/integration/:id/develop',
     component: IntegrationDetailDevelopPage,
   },
   {
-    key: 'router-integration-detail',
+    key: 'router-integration-detail-installs',
     path: '/account/:accountId/subscription/:subscriptionId/integration/:id/installs',
     component: IntegrationDetailInstallsPage,
   },
   {
-    key: 'router-connector-detail',
-    path: '/account/:accountId/subscription/:subscriptionId/connector/:id',
-    component: ConnectorDetailPage,
+    key: 'router-connector-detail-configure',
+    path: '/account/:accountId/subscription/:subscriptionId/connector/:id/configure',
+    component: ConnectorDetailConfigurePage,
+  },
+  {
+    key: 'router-connector-detail-identities',
+    path: '/account/:accountId/subscription/:subscriptionId/connector/:id/identities',
+    component: ConnectorDetailIdentitiesPage,
   },
   {
     key: 'router-auth-callback',

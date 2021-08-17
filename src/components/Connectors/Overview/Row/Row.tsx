@@ -19,7 +19,7 @@ const Row: React.FC<RowProps> = ({ row, handleRowClick, handleCheck, isSelected,
 
   if (!mobile) {
     return (
-      <SC.Row key={row.id} onClick={(e) => handleRowClick(e, getRedirectLink('/connector/' + row.id))}>
+      <SC.Row key={row.id} onClick={(e) => handleRowClick(e, getRedirectLink('/connector/' + row.id + '/configure'))}>
         <TableCell style={{ cursor: 'default' }} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
           <Checkbox
             color="primary"
@@ -49,7 +49,7 @@ const Row: React.FC<RowProps> = ({ row, handleRowClick, handleCheck, isSelected,
     );
   } else {
     return (
-      <SC.Row key={row.id} onClick={(e) => handleRowClick(e, getRedirectLink('/connector/' + row.id))}>
+      <SC.Row key={row.id} onClick={(e) => handleRowClick(e, getRedirectLink('/connector/' + row.id + '/configure'))}>
         <TableCell style={{ cursor: 'default' }} padding="checkbox" id={`enhanced-table-cell-checkbox-${row.id}`}>
           <Checkbox
             color="primary"

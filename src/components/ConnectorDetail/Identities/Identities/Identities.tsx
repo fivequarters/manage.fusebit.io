@@ -2,13 +2,13 @@ import React from 'react';
 import * as SC from './styles';
 import { Button } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import { useAccountConnectorIdentityGetAll } from '../../../hooks/api/v2/account/connector/identity/useGetAll';
-import { useAccountConnectorIdentityDeleteOne } from '../../../hooks/api/v2/account/connector/identity/useDeleteOne';
-import { useContext } from '../../../hooks/useContext';
-import { Identity } from '../../../interfaces/identities';
-import { useLoader } from '../../../hooks/useLoader';
-import { useError } from '../../../hooks/useError';
-import { Operation } from '../../../interfaces/operation';
+import { useAccountConnectorIdentityGetAll } from '../../../../hooks/api/v2/account/connector/identity/useGetAll';
+import { useAccountConnectorIdentityDeleteOne } from '../../../../hooks/api/v2/account/connector/identity/useDeleteOne';
+import { useContext } from '../../../../hooks/useContext';
+import { Identity } from '../../../../interfaces/identities';
+import { useLoader } from '../../../../hooks/useLoader';
+import { useError } from '../../../../hooks/useError';
+import { Operation } from '../../../../interfaces/operation';
 
 const Identities: React.FC = () => {
   const { id } = useParams<{ id: string }>();
