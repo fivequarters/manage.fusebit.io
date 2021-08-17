@@ -15,20 +15,20 @@ import {
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { useContext } from '../../../hooks/useContext';
-import { useLoader } from '../../../hooks/useLoader';
-import { useAccountUserDeleteOne } from '../../../hooks/api/v1/account/user/useDeleteOne';
-import { Operation } from '../../../interfaces/operation';
-import { useError } from '../../../hooks/useError';
-import arrowRight from '../../../assets/arrow-right.svg';
-import arrowLeft from '../../../assets/arrow-left.svg';
-import client from '../../../assets/client.jpg';
+import { useContext } from '../../../../hooks/useContext';
+import { useLoader } from '../../../../hooks/useLoader';
+import { useAccountUserDeleteOne } from '../../../../hooks/api/v1/account/user/useDeleteOne';
+import { Operation } from '../../../../interfaces/operation';
+import { useError } from '../../../../hooks/useError';
+import arrowRight from '../../../../assets/arrow-right.svg';
+import arrowLeft from '../../../../assets/arrow-left.svg';
+import client from '../../../../assets/client.jpg';
 import NewUser from './NewUser';
-import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
-import { useAccountUserGetAll } from '../../../hooks/api/v1/account/user/useGetAll';
-import { Account } from '../../../interfaces/account';
-import { useAccountUserCreateUser } from '../../../hooks/api/v1/account/user/useCreateUser';
-import { useCreateToken } from '../../../hooks/useCreateToken';
+import { useGetRedirectLink } from '../../../../hooks/useGetRedirectLink';
+import { useAccountUserGetAll } from '../../../../hooks/api/v1/account/user/useGetAll';
+import { Account } from '../../../../interfaces/account';
+import { useAccountUserCreateUser } from '../../../../hooks/api/v1/account/user/useCreateUser';
+import { useCreateToken } from '../../../../hooks/useCreateToken';
 
 enum cells {
   NAME = 'Name',

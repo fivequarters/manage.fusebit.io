@@ -1,15 +1,15 @@
 import React, { FC, ReactElement } from 'react';
-import Authentication from '../components/Authentication/Authentication';
+import AuthenticationUsers from '../components/Authentication/Users/AuthenticationUsers';
 import Layout from '../components/Layout';
 import Navbar from '../components/Navbar';
 
-const AuthenticationPage: FC<{}> = (): ReactElement => {
+const AuthenticationUsersPage: FC<{}> = (): ReactElement => {
   return (
     <Layout>
       <Navbar sectionName="Authentication" authenticationLink={true} authentication={true} />
-      <Authentication />
+      <AuthenticationUsers />
     </Layout>
   );
 };
 
-export default AuthenticationPage;
+export default AuthenticationUsersPage;

@@ -85,7 +85,7 @@ const Navbar: React.FC<Props> = ({
                           integrationsLink
                             ? getRedirectLink('/integrations/overview')
                             : authenticationLink
-                            ? getRedirectLink('/authentication')
+                            ? getRedirectLink('/authentication/users')
                             : getRedirectLink('/connectors/overview')
                         }
                       >
@@ -234,7 +234,7 @@ const Navbar: React.FC<Props> = ({
                       <SC.SectionDropdownMenu>
                         <SC.Flex>
                           <SC.SectionDropdownTitle>Accounts</SC.SectionDropdownTitle>
-                          <SC.SectionDropdownSeeMore href={getRedirectLink('/authentication')}>
+                          <SC.SectionDropdownSeeMore href={getRedirectLink('/authentication/users')}>
                             See all
                             <img src={rightArrow} alt="See all" height="8" width="8" />
                           </SC.SectionDropdownSeeMore>
@@ -258,7 +258,7 @@ const Navbar: React.FC<Props> = ({
                       <SC.SectionDropdownMenu>
                         <SC.Flex>
                           <SC.SectionDropdownTitle>Accounts</SC.SectionDropdownTitle>
-                          <SC.SectionDropdownSeeMore href={getRedirectLink('/authentication')}>
+                          <SC.SectionDropdownSeeMore href={getRedirectLink('/authentication/users')}>
                             See all
                             <img src={rightArrow} alt="See all" height="8" width="8" />
                           </SC.SectionDropdownSeeMore>
@@ -287,7 +287,7 @@ const Navbar: React.FC<Props> = ({
                   integration
                     ? getRedirectLink('/integrations/overview')
                     : authentication
-                    ? getRedirectLink('/authentication')
+                    ? getRedirectLink('/authentication/users')
                     : getRedirectLink('/connectors/overview')
                 }
               >
@@ -340,7 +340,9 @@ const Navbar: React.FC<Props> = ({
                   <SC.UserDropdownStatusArrow src={rightArrow} alt="right arrow" height="12" width="12" />
                 </SC.UserDropdownStatus>
                 <SC.UserDropdownLinksWrapper>
-                  <SC.UserDropdownLink href={getRedirectLink('/authentication')}>Authentication</SC.UserDropdownLink>
+                  <SC.UserDropdownLink href={getRedirectLink('/authentication/users')}>
+                    Authentication
+                  </SC.UserDropdownLink>
                   <SC.UserDropdownLink href="/billing">Billing</SC.UserDropdownLink>
                   <SC.UserDropdownLink href="/settings">Settings</SC.UserDropdownLink>
                 </SC.UserDropdownLinksWrapper>
@@ -384,7 +386,9 @@ const Navbar: React.FC<Props> = ({
                 <SC.UserDropdownStatusArrow src={rightArrow} alt="right arrow" height="12" width="12" />
               </SC.UserDropdownStatus>
               <SC.UserDropdownLinksWrapper>
-                <SC.UserDropdownLink href={getRedirectLink('/authentication')}>Authentication</SC.UserDropdownLink>
+                <SC.UserDropdownLink href={getRedirectLink('/authentication/users')}>
+                  Authentication
+                </SC.UserDropdownLink>
                 <SC.UserDropdownLink href="/billing">Billing</SC.UserDropdownLink>
                 <SC.UserDropdownLink href="/settings">Settings</SC.UserDropdownLink>
               </SC.UserDropdownLinksWrapper>

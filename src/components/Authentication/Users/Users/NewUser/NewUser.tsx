@@ -1,14 +1,14 @@
 import React from 'react';
-import { Props } from '../../../../interfaces/newUser';
+import { Props } from '../../../../../interfaces/newUser';
 import * as SC from './styles';
 import { Button } from '@material-ui/core';
 import { JsonForms } from '@jsonforms/react';
 import { ValidationMode } from '@jsonforms/core';
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
-import cross from '../../../../assets/cross.svg';
-import copyIcon from '../../../../assets/copy.svg';
-import { NewUserData } from '../../../../interfaces/newUserData';
-import { useCapitalize } from '../../../../hooks/useCapitalize';
+import cross from '../../../../../assets/cross.svg';
+import copyIcon from '../../../../../assets/copy.svg';
+import { NewUserData } from '../../../../../interfaces/newUserData';
+import { useCapitalize } from '../../../../../hooks/useCapitalize';
 
 const schema = {
   type: 'object',

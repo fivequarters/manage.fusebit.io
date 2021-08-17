@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import arrow from '../../../assets/table-arrow.svg';
+import arrow from '../../../../assets/table-arrow.svg';
 
 export const Wrapper = styled.div`
   padding-bottom: 80px;
