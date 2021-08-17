@@ -33,7 +33,6 @@ const Installs: React.FC = () => {
     try {
       createLoader();
       const data = JSON.parse(JSON.stringify(installsData?.data)) as Install;
-      let operationIds: string[] = [];
       await Promise.all(
         (data.items || []).map(async (item) => {
           const response = await deleteInstance.mutateAsync({
