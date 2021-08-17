@@ -362,7 +362,7 @@ const Develop: React.FC = () => {
           <SC.Link
             target="_blank"
             rel="noopener_noreferrer"
-            href="https://docs.fusebit.io/docs/connecting-fusebit-with-your-application"
+            href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
           >
             <SC.Bullet />
             Connecting Fusebit with Your Application
@@ -387,7 +387,7 @@ const Develop: React.FC = () => {
               </Button>
             </SC.CardButtonWrapper>
           </SC.Card>
-          <SC.Link target="_blank" rel="noopener_noreferrer" href="https://docs.fusebit.io/docs/getting-started">
+          <SC.Link target="_blank" rel="noopener_noreferrer" href="https://developer.fusebit.io/docs/getting-started">
             <SC.Bullet />
             Getting Started
           </SC.Link>
