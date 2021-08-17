@@ -13,6 +13,8 @@ export const Flex = styled.div`
 export const FlexDown = styled.div`
   display: flex;
   flex-direction: column;
+  position: relative;
+  width: 100%;
 `;
 
 export const InfoWrapper = styled.div`
@@ -55,8 +57,7 @@ export const InfoLink = styled.a`
 export const FormWrapper = styled.form`
   display: flex;
   flex-direction: column;
-  width: 455px;
-  margin-left: 150px;
+  width: 100%;
   margin-top: 20px;
 
   @media only screen and (max-width: 880px) {

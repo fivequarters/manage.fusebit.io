@@ -90,6 +90,7 @@ const NewUser = React.forwardRef(({ open, onClose, createUser }: Props, ref) => 
         setUserCreated(true);
         setIsSubmitting(false);
         setToken(token);
+        setData(dataToSubmit);
       }
     }
   };
@@ -144,7 +145,9 @@ const NewUser = React.forwardRef(({ open, onClose, createUser }: Props, ref) => 
         </>
       ) : (
         <>
-          <SC.Title>User Bob Smith Created!</SC.Title>
+          <SC.Title>
+            User {capitalize(data.firstName || '')} {capitalize(data.lastName || '')} Created!
+          </SC.Title>
           <SC.Description>
             Securely share the following link with the user. The one-time use token included in the link expires in
             eight hours.

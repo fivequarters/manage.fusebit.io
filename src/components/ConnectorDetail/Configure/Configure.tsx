@@ -7,7 +7,6 @@ import { useContext } from '../../../hooks/useContext';
 import { Connector, ConnectorConfig } from '../../../interfaces/connector';
 
 import { Button } from '@material-ui/core';
-import arrow from '../../../assets/arrow-primary.svg';
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
 import { JsonForms } from '@jsonforms/react';
 import { ValidationMode } from '@jsonforms/core';
@@ -69,19 +68,6 @@ const Configure: React.FC = () => {
 
   return (
     <SC.Flex>
-      <SC.FlexDown>
-        <SC.InfoWrapper>
-          <SC.InfoTitle>ID:</SC.InfoTitle>
-          <SC.InfoDescription>{connectorData?.data.id}</SC.InfoDescription>
-        </SC.InfoWrapper>
-        <SC.InfoWrapper>
-          <SC.InfoTitle>Slack app:</SC.InfoTitle>
-          <SC.InfoLink href={'/'}>
-            Acme Chatbot
-            <img src={arrow} alt="arrow" height="16" width="16" />
-          </SC.InfoLink>
-        </SC.InfoWrapper>
-      </SC.FlexDown>
       <SC.FlexDown>
         {config?.data && (
           <SC.FormWrapper>

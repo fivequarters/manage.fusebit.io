@@ -172,6 +172,13 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
     }
   };
 
+  const handleConnectorCreation = async (activeIntegration: Feed, data: Data, connector: boolean) => {
+    const res = await createDataFromFeed(activeIntegration, data, connector);
+    if (!res) {
+      setAddConnectorOpen(false);
+    }
+  };
+
   return (
     <SC.Wrapper>
       <Modal
@@ -183,7 +190,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
         BackdropComponent={Backdrop}
       >
         <FeedPicker
-          onSubmit={(activeIntegration: Feed, data: Data) => createDataFromFeed(activeIntegration, data, true)}
+          onSubmit={(activeIntegration: Feed, data: Data) => handleConnectorCreation(activeIntegration, data, true)}
           open={addConnectorOpen}
           onClose={() => setAddConnectorOpen(false)}
         />
@@ -240,7 +247,13 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
           </TableHead>
           <TableBody>
             {rows.map((row) => (
-              <Row row={row} handleCheck={handleCheck} handleRowClick={handleRowClick} isSelected={isSelected} />
+              <Row
+                key={row.id}
+                row={row}
+                handleCheck={handleCheck}
+                handleRowClick={handleRowClick}
+                isSelected={isSelected}
+              />
             ))}
           </TableBody>
         </Table>
@@ -287,6 +300,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
           <TableBody>
             {rows.map((row) => (
               <Row
+                key={row.id}
                 row={row}
                 handleCheck={handleCheck}
                 handleRowClick={handleRowClick}

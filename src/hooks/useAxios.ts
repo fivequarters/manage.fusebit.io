@@ -23,7 +23,7 @@ axios.interceptors.response.use(
       }
       window.location.href = toUrl;
     }
-    return Promise.reject(error);
+    return Promise.reject(error.response);
   }
 );
 

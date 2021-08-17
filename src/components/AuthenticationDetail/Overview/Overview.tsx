@@ -91,7 +91,7 @@ const Overview: React.FC = () => {
   const [idCopied, setIdCopied] = React.useState(false);
   const [popperOpen, setPopperOpen] = React.useState(false);
   const [token, setToken] = React.useState('');
-  const { waitForOperations, createLoader, removeLoader } = useLoader();
+  const { createLoader, removeLoader } = useLoader();
   const { createError } = useError();
   const { capitalize } = useCapitalize();
   const { _createToken } = useCreateToken();
@@ -107,8 +107,7 @@ const Overview: React.FC = () => {
 
   const _updateUser = async (data: Account) => {
     try {
-      const response = await updateUser.mutateAsync({ data, accountId: userData.accountId, userId: data.id });
-      await waitForOperations([response.data.operationId]);
+      await updateUser.mutateAsync({ data, accountId: userData.accountId, userId: data.id });
       reloadAccount();
     } catch (e) {
       createError(e.message);
@@ -174,8 +173,7 @@ const Overview: React.FC = () => {
   const handleDelete = async () => {
     try {
       createLoader();
-      const response = await deleteAccount.mutateAsync({ userId: accountData?.data.id, accountId: userData.accountId });
-      await waitForOperations([response.data.operationId]);
+      await deleteAccount.mutateAsync({ userId: accountData?.data.id, accountId: userData.accountId });
       window.location.href = getRedirectLink('/authentication');
     } catch (e) {
       createError(e.message);

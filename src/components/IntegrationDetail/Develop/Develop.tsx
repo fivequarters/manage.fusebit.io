@@ -134,35 +134,37 @@ const Develop: React.FC = () => {
       };
       await Promise.all([
         ...parsedFeed.configuration.entities.map(async (entity: Entity) => {
-          const obj = {
-            data: entity.data,
-            id: entity.id,
-            tags: { ...commonTags, ...entity.tags },
-            accountId: userData.accountId,
-            subscriptionId: userData.subscriptionId,
-          };
-          const response = await createConnector.mutateAsync(obj);
-          await waitForOperations([response.data.operationId]);
+          if (entity.entityType === 'connector') {
+            const obj = {
+              data: entity.data,
+              id: entity.id,
+              tags: { ...commonTags, ...entity.tags },
+              accountId: userData.accountId,
+              subscriptionId: userData.subscriptionId,
+            };
+            const response = await createConnector.mutateAsync(obj);
+            await waitForOperations([response.data.operationId]);
 
-          const currentData = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
-          const newData = currentData;
-          const newConnector: InnerConnector = {
-            name: entity.id,
-            entityType: 'connector',
-            entityId: entity.id,
-            skip: false,
-            provider: '@fusebit-int/oauth-provider',
-            path: '/api/configure',
-            dependsOn: [],
-          };
-          newData.data.components.push(newConnector);
-          const response2 = await updateIntegration.mutateAsync({
-            accountId: userData.accountId,
-            subscriptionId: userData.subscriptionId,
-            integrationId: integrationData?.data.id,
-            data: newData,
-          });
-          await waitForOperations([response2.data.operationId]);
+            const currentData = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
+            const newData = currentData;
+            const newConnector: InnerConnector = {
+              name: entity.id,
+              entityType: 'connector',
+              entityId: entity.id,
+              skip: false,
+              provider: '@fusebit-int/oauth-provider',
+              path: '/api/configure',
+              dependsOn: [],
+            };
+            newData.data.components.push(newConnector);
+            const response2 = await updateIntegration.mutateAsync({
+              accountId: userData.accountId,
+              subscriptionId: userData.subscriptionId,
+              integrationId: integrationData?.data.id,
+              data: newData,
+            });
+            await waitForOperations([response2.data.operationId]);
+          }
         }),
       ]);
       reloadIntegration();
