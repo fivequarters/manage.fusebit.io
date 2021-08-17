@@ -11,7 +11,7 @@ export interface InnerConnector {
   entityType: string;
   entityId: string;
   skip: boolean;
-  path: string;
+  path?: string;
   provider: string;
   dependsOn: [];
 }
@@ -19,4 +19,8 @@ export interface InnerConnector {
 export interface Integration {
   id: string;
   data: IntegrationData;
+}
+
+export interface Props {
+  id: string;
 }

@@ -1,10 +1,12 @@
-import ConnectorsPage from '../pages/ConnectorsPage';
-import IntegrationsPage from '../pages/IntegrationsPage';
-import IntegrationDetailPage from '../pages/IntegrationDetailPage';
-import ConnectorDetailPage from '../pages/ConnectorDetailPage';
+import ConnectorsOverviewPage from '../pages/ConnectorsOverviewPage';
+import IntegrationsOverviewPage from '../pages/IntegrationsOverviewPage';
+import IntegrationDetailDevelopPage from '../pages/IntegrationDetailDevelopPage';
+import IntegrationDetailInstallsPage from '../pages/IntegrationDetailInstallsPage';
+import ConnectorDetailConfigurePage from '../pages/ConnectorDetailConfigurePage';
+import ConnectorDetailIdentitiesPage from '../pages/ConnectorDetailIdentitiesPage';
 import LoggedOutErrorPage from '../pages/LoggedOutErrorPage';
-import AuthenticationPage from '../pages/AuthenticationPage';
-import AuthenticationDetailPage from '../pages/AuthenticationDetailPage';
+import AuthenticationUsersPage from '../pages/AuthenticationUsersPage';
+import AuthenticationDetailOverviewPage from '../pages/AuthenticationDetailOverviewPage';
 import FatalErrorPage from '../pages/FatalErrorPage';
 import AuthCallback from '../pages/AuthCallback';
 import NotFoundPage from '../pages/NotFoundPage';
@@ -13,24 +15,34 @@ import { RouteItem } from '../interfaces/router';
 // define app routes
 export const routes: Array<RouteItem> = [
   {
-    key: 'router-home',
-    path: '/account/:accountId/subscription/:subscriptionId/connectors',
-    component: ConnectorsPage,
+    key: 'router-connectors-overview',
+    path: '/account/:accountId/subscription/:subscriptionId/connectors/overview',
+    component: ConnectorsOverviewPage,
   },
   {
-    key: 'router-integrations',
-    path: '/account/:accountId/subscription/:subscriptionId/integrations',
-    component: IntegrationsPage,
+    key: 'router-integrations-overview',
+    path: '/account/:accountId/subscription/:subscriptionId/integrations/overview',
+    component: IntegrationsOverviewPage,
   },
   {
-    key: 'router-integration-detail',
-    path: '/account/:accountId/subscription/:subscriptionId/integration/:id',
-    component: IntegrationDetailPage,
+    key: 'router-integration-detail-develop',
+    path: '/account/:accountId/subscription/:subscriptionId/integration/:id/develop',
+    component: IntegrationDetailDevelopPage,
   },
   {
-    key: 'router-connector-detail',
-    path: '/account/:accountId/subscription/:subscriptionId/connector/:id',
-    component: ConnectorDetailPage,
+    key: 'router-integration-detail-installs',
+    path: '/account/:accountId/subscription/:subscriptionId/integration/:id/installs',
+    component: IntegrationDetailInstallsPage,
+  },
+  {
+    key: 'router-connector-detail-configure',
+    path: '/account/:accountId/subscription/:subscriptionId/connector/:id/configure',
+    component: ConnectorDetailConfigurePage,
+  },
+  {
+    key: 'router-connector-detail-identities',
+    path: '/account/:accountId/subscription/:subscriptionId/connector/:id/identities',
+    component: ConnectorDetailIdentitiesPage,
   },
   {
     key: 'router-auth-callback',
@@ -43,14 +55,14 @@ export const routes: Array<RouteItem> = [
     component: LoggedOutErrorPage,
   },
   {
-    key: 'router-authentication',
-    path: '/account/:accountId/subscription/:subscriptionId/authentication',
-    component: AuthenticationPage,
+    key: 'router-authentication-users',
+    path: '/account/:accountId/subscription/:subscriptionId/authentication/users',
+    component: AuthenticationUsersPage,
   },
   {
-    key: 'router-authentication-detail',
-    path: '/account/:accountId/subscription/:subscriptionId/authentication/:userId',
-    component: AuthenticationDetailPage,
+    key: 'router-authentication-detail-overview',
+    path: '/account/:accountId/subscription/:subscriptionId/authentication/:userId/overview',
+    component: AuthenticationDetailOverviewPage,
   },
   {
     key: 'router-fatal-error',

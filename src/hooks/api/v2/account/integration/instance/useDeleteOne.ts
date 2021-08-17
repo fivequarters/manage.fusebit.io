@@ -8,7 +8,7 @@ export const useAccountIntegrationInstanceDeleteOne = <T>() => {
 
   return useMutation(
     (params: Params) => {
-      const { accountId, subscriptionId, id, ...data } = params;
+      const { accountId, subscriptionId, id, data } = params;
       return axios<T>(
         `/v2/account/${accountId}/subscription/${subscriptionId}/integration/${id}/instance/${data.id}`,
         'delete'

@@ -70,10 +70,10 @@ const Navbar: React.FC<Props> = ({
     <SC.Background>
       <Container maxWidth="lg">
         <SC.Nav>
-          <SC.CompanyImg href={getRedirectLink('/integrations')} />
+          <SC.CompanyImg href={getRedirectLink('/integrations/overview')} />
           <SC.FlexDown>
             <SC.Flex>
-              <SC.CompanyName href={getRedirectLink('/integrations')}>{userData.company}</SC.CompanyName>
+              <SC.CompanyName href={getRedirectLink('/integrations/overview')}>{userData.company}</SC.CompanyName>
             </SC.Flex>
             {dropdown ? (
               <>
@@ -83,10 +83,10 @@ const Navbar: React.FC<Props> = ({
                       <SC.SectionLink
                         href={
                           integrationsLink
-                            ? getRedirectLink('/integrations')
+                            ? getRedirectLink('/integrations/overview')
                             : authenticationLink
-                            ? getRedirectLink('/authentication')
-                            : getRedirectLink('/connectors')
+                            ? getRedirectLink('/authentication/users')
+                            : getRedirectLink('/connectors/overview')
                         }
                       >
                         {integrationsLink ? 'Integrations' : authenticationLink ? 'Authentication' : 'Connectors'}
@@ -148,7 +148,7 @@ const Navbar: React.FC<Props> = ({
                       <SC.SectionDropdownMenu>
                         <SC.Flex>
                           <SC.SectionDropdownTitle>Integrations</SC.SectionDropdownTitle>
-                          <SC.SectionDropdownSeeMore href={getRedirectLink('/integrations')}>
+                          <SC.SectionDropdownSeeMore href={getRedirectLink('/integrations/overview')}>
                             See all
                             <img src={rightArrow} alt="See all" height="8" width="8" />
                           </SC.SectionDropdownSeeMore>
@@ -165,7 +165,7 @@ const Navbar: React.FC<Props> = ({
                         ))}
                         <SC.Flex>
                           <SC.SectionDropdownTitle>Connectors</SC.SectionDropdownTitle>
-                          <SC.SectionDropdownSeeMore href={getRedirectLink('/connectors')}>
+                          <SC.SectionDropdownSeeMore href={getRedirectLink('/connectors/overview')}>
                             See all
                             <img src={rightArrow} alt="See all" height="8" width="8" />
                           </SC.SectionDropdownSeeMore>
@@ -186,7 +186,7 @@ const Navbar: React.FC<Props> = ({
                       <SC.SectionDropdownMenu>
                         <SC.Flex>
                           <SC.SectionDropdownTitle>Integrations</SC.SectionDropdownTitle>
-                          <SC.SectionDropdownSeeMore href={getRedirectLink('/integrations')}>
+                          <SC.SectionDropdownSeeMore href={getRedirectLink('/integrations/overview')}>
                             See all
                             <img src={rightArrow} alt="See all" height="8" width="8" />
                           </SC.SectionDropdownSeeMore>
@@ -203,7 +203,7 @@ const Navbar: React.FC<Props> = ({
                         ))}
                         <SC.Flex>
                           <SC.SectionDropdownTitle>Connectors</SC.SectionDropdownTitle>
-                          <SC.SectionDropdownSeeMore href={getRedirectLink('/connectors')}>
+                          <SC.SectionDropdownSeeMore href={getRedirectLink('/connectors/overview')}>
                             See all
                             <img src={rightArrow} alt="See all" height="8" width="8" />
                           </SC.SectionDropdownSeeMore>
@@ -234,7 +234,7 @@ const Navbar: React.FC<Props> = ({
                       <SC.SectionDropdownMenu>
                         <SC.Flex>
                           <SC.SectionDropdownTitle>Accounts</SC.SectionDropdownTitle>
-                          <SC.SectionDropdownSeeMore href={getRedirectLink('/authentication')}>
+                          <SC.SectionDropdownSeeMore href={getRedirectLink('/authentication/users')}>
                             See all
                             <img src={rightArrow} alt="See all" height="8" width="8" />
                           </SC.SectionDropdownSeeMore>
@@ -258,7 +258,7 @@ const Navbar: React.FC<Props> = ({
                       <SC.SectionDropdownMenu>
                         <SC.Flex>
                           <SC.SectionDropdownTitle>Accounts</SC.SectionDropdownTitle>
-                          <SC.SectionDropdownSeeMore href={getRedirectLink('/authentication')}>
+                          <SC.SectionDropdownSeeMore href={getRedirectLink('/authentication/users')}>
                             See all
                             <img src={rightArrow} alt="See all" height="8" width="8" />
                           </SC.SectionDropdownSeeMore>
@@ -285,10 +285,10 @@ const Navbar: React.FC<Props> = ({
               <SC.SectionLink
                 href={
                   integration
-                    ? getRedirectLink('/integrations')
+                    ? getRedirectLink('/integrations/overview')
                     : authentication
-                    ? getRedirectLink('/authentication')
-                    : getRedirectLink('/connectors')
+                    ? getRedirectLink('/authentication/users')
+                    : getRedirectLink('/connectors/overview')
                 }
               >
                 {sectionName}
@@ -296,8 +296,8 @@ const Navbar: React.FC<Props> = ({
             )}
           </SC.FlexDown>
           <SC.LinksContainer>
-            <SC.Link href="/support">Support</SC.Link>
-            <SC.Link href="/docs">Docs</SC.Link>
+            <SC.Link href="https://fusebit.io/contact">Support</SC.Link>
+            <SC.Link href="https://developer.fusebit.io">Docs</SC.Link>
           </SC.LinksContainer>
           <SC.ButtonWrapper active={Boolean(anchorUserDropdown) && !loggingOut}>
             <Button
@@ -332,7 +332,7 @@ const Navbar: React.FC<Props> = ({
                     <SC.UserDropdownInfoEmail>{userData.primaryEmail}</SC.UserDropdownInfoEmail>
                   </SC.UserDropdownPersonalInfo>
                 </SC.UserDropdownInfo>
-                <SC.UserDropdownStatus href={getRedirectLink('/integrations')}>
+                <SC.UserDropdownStatus href={getRedirectLink('/integrations/overview')}>
                   <div>
                     <SC.UserDropdownStatusTitle>Stage</SC.UserDropdownStatusTitle>
                     <SC.UserDropdownStatusId>{userData.subscriptionId}</SC.UserDropdownStatusId>
@@ -340,7 +340,9 @@ const Navbar: React.FC<Props> = ({
                   <SC.UserDropdownStatusArrow src={rightArrow} alt="right arrow" height="12" width="12" />
                 </SC.UserDropdownStatus>
                 <SC.UserDropdownLinksWrapper>
-                  <SC.UserDropdownLink href={getRedirectLink('/authentication')}>Authentication</SC.UserDropdownLink>
+                  <SC.UserDropdownLink href={getRedirectLink('/authentication/users')}>
+                    Authentication
+                  </SC.UserDropdownLink>
                   <SC.UserDropdownLink href="/billing">Billing</SC.UserDropdownLink>
                   <SC.UserDropdownLink href="/settings">Settings</SC.UserDropdownLink>
                 </SC.UserDropdownLinksWrapper>
@@ -376,7 +378,7 @@ const Navbar: React.FC<Props> = ({
                 </SC.UserDropdownPersonalInfo>
               </SC.UserDropdownInfo>
 
-              <SC.UserDropdownStatus href={getRedirectLink('/integrations')}>
+              <SC.UserDropdownStatus href={getRedirectLink('/integrations/overview')}>
                 <div>
                   <SC.UserDropdownStatusTitle>Stage</SC.UserDropdownStatusTitle>
                   <SC.UserDropdownStatusId>{userData.subscriptionId}</SC.UserDropdownStatusId>
@@ -384,7 +386,9 @@ const Navbar: React.FC<Props> = ({
                 <SC.UserDropdownStatusArrow src={rightArrow} alt="right arrow" height="12" width="12" />
               </SC.UserDropdownStatus>
               <SC.UserDropdownLinksWrapper>
-                <SC.UserDropdownLink href={getRedirectLink('/authentication')}>Authentication</SC.UserDropdownLink>
+                <SC.UserDropdownLink href={getRedirectLink('/authentication/users')}>
+                  Authentication
+                </SC.UserDropdownLink>
                 <SC.UserDropdownLink href="/billing">Billing</SC.UserDropdownLink>
                 <SC.UserDropdownLink href="/settings">Settings</SC.UserDropdownLink>
               </SC.UserDropdownLinksWrapper>
@@ -392,8 +396,8 @@ const Navbar: React.FC<Props> = ({
               <SC.Br />
 
               <SC.UserDropdownLinksWrapper>
-                <SC.UserDropdownLink href="/support">Support</SC.UserDropdownLink>
-                <SC.UserDropdownLink href="/docs">Docs</SC.UserDropdownLink>
+                <SC.UserDropdownLink href="https://fusebit.io/contact">Support</SC.UserDropdownLink>
+                <SC.UserDropdownLink href="https://developer.fusebit.io">Docs</SC.UserDropdownLink>
               </SC.UserDropdownLinksWrapper>
 
               <SC.UserButtonWrapper>

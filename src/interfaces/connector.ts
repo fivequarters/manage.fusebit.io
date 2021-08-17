@@ -35,3 +35,7 @@ export interface ConnectorConfig {
   };
   success: boolean;
 }
+
+export interface Props {
+  id: string;
+}
