@@ -1,8 +1,8 @@
 import React from 'react';
 import * as SC from './styles';
-import { useContext } from '../../../hooks/useContext';
-import copy from '../../../assets/copy.svg';
-import dots from '../../../assets/dots.svg';
+import { useContext } from '../../../../hooks/useContext';
+import copy from '../../../../assets/copy.svg';
+import dots from '../../../../assets/dots.svg';
 import { Button, Modal, Backdrop } from '@material-ui/core';
 import { JsonForms } from '@jsonforms/react';
 import { ValidationMode } from '@jsonforms/core';
@@ -11,17 +11,17 @@ import { useEffect } from 'react';
 import CliAccess from './CliAccess';
 import Delete from './Delete';
 import { useParams } from 'react-router-dom';
-import { useAccountUserGetOne } from '../../../hooks/api/v1/account/user/useGetOne';
-import { useAccountUserUpdateOne } from '../../../hooks/api/v1/account/user/useUpdateOne';
-import client from '../../../assets/client.jpg';
-import { Operation } from '../../../interfaces/operation';
-import { Account } from '../../../interfaces/account';
-import { useLoader } from '../../../hooks/useLoader';
-import { useError } from '../../../hooks/useError';
-import { useCapitalize } from '../../../hooks/useCapitalize';
-import { useCreateToken } from '../../../hooks/useCreateToken';
-import { useAccountUserDeleteOne } from '../../../hooks/api/v1/account/user/useDeleteOne';
-import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
+import { useAccountUserGetOne } from '../../../../hooks/api/v1/account/user/useGetOne';
+import { useAccountUserUpdateOne } from '../../../../hooks/api/v1/account/user/useUpdateOne';
+import client from '../../../../assets/client.jpg';
+import { Operation } from '../../../../interfaces/operation';
+import { Account } from '../../../../interfaces/account';
+import { useLoader } from '../../../../hooks/useLoader';
+import { useError } from '../../../../hooks/useError';
+import { useCapitalize } from '../../../../hooks/useCapitalize';
+import { useCreateToken } from '../../../../hooks/useCreateToken';
+import { useAccountUserDeleteOne } from '../../../../hooks/api/v1/account/user/useDeleteOne';
+import { useGetRedirectLink } from '../../../../hooks/useGetRedirectLink';
 
 const schema = {
   type: 'object',

@@ -1,5 +1,5 @@
 import React, { FC, ReactElement } from 'react';
-import AuthenticationDetail from '../components/AuthenticationDetail/AuthenticationDetail';
+import AuthenticationDetail from '../components/AuthenticationDetail/Overview/AuthenticationDetail';
 import Layout from '../components/Layout';
 import Navbar from '../components/Navbar';
 

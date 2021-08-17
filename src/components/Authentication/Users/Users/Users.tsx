@@ -227,7 +227,10 @@ const Authentication: React.FC = () => {
           </TableHead>
           <TableBody>
             {rows.map((row: Account) => (
-              <SC.Row key={row.id} onClick={(e) => handleRowClick(e, getRedirectLink('/authentication/' + row.id))}>
+              <SC.Row
+                key={row.id}
+                onClick={(e) => handleRowClick(e, getRedirectLink('/authentication/' + row.id + '/overview'))}
+              >
                 <TableCell
                   style={{ cursor: 'default' }}
                   padding="checkbox"
@@ -311,7 +314,10 @@ const Authentication: React.FC = () => {
           </TableHead>
           <TableBody>
             {rows.map((row) => (
-              <SC.Row key={row.id} onClick={(e) => handleRowClick(e, getRedirectLink('/authentication/' + row.id))}>
+              <SC.Row
+                key={row.id}
+                onClick={(e) => handleRowClick(e, getRedirectLink('/authentication/' + row.id + '/overview'))}
+              >
                 <TableCell
                   style={{ cursor: 'default' }}
                   padding="checkbox"

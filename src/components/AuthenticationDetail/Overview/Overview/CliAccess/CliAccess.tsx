@@ -1,8 +1,8 @@
 import React from 'react';
 import * as SC from './styles';
-import { Props } from '../../../../interfaces/cliAccess';
-import cross from '../../../../assets/cross.svg';
-import copyIcon from '../../../../assets/copy.svg';
+import { Props } from '../../../../../interfaces/cliAccess';
+import cross from '../../../../../assets/cross.svg';
+import copyIcon from '../../../../../assets/copy.svg';
 import { Button } from '@material-ui/core';
 
 const CliAccess = React.forwardRef(({ open, onClose, token }: Props, ref) => {

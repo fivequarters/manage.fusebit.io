@@ -6,7 +6,7 @@ import ConnectorDetailConfigurePage from '../pages/ConnectorDetailConfigurePage'
 import ConnectorDetailIdentitiesPage from '../pages/ConnectorDetailIdentitiesPage';
 import LoggedOutErrorPage from '../pages/LoggedOutErrorPage';
 import AuthenticationUsersPage from '../pages/AuthenticationUsersPage';
-import AuthenticationDetailPage from '../pages/AuthenticationDetailPage';
+import AuthenticationDetailOverviewPage from '../pages/AuthenticationDetailOverviewPage';
 import FatalErrorPage from '../pages/FatalErrorPage';
 import AuthCallback from '../pages/AuthCallback';
 import NotFoundPage from '../pages/NotFoundPage';
@@ -60,9 +60,9 @@ export const routes: Array<RouteItem> = [
     component: AuthenticationUsersPage,
   },
   {
-    key: 'router-authentication-detail',
-    path: '/account/:accountId/subscription/:subscriptionId/authentication/:userId',
-    component: AuthenticationDetailPage,
+    key: 'router-authentication-detail-overview',
+    path: '/account/:accountId/subscription/:subscriptionId/authentication/:userId/overview',
+    component: AuthenticationDetailOverviewPage,
   },
   {
     key: 'router-fatal-error',

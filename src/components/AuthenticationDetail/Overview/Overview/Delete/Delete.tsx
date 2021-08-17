@@ -1,7 +1,7 @@
 import React from 'react';
 import * as SC from './styles';
-import cross from '../../../../assets/cross.svg';
-import { Props } from '../../../../interfaces/delete';
+import cross from '../../../../../assets/cross.svg';
+import { Props } from '../../../../../interfaces/delete';
 import { Button } from '@material-ui/core';
 
 const Delete = React.forwardRef(({ open, onClose, handleDelete }: Props, ref) => {
