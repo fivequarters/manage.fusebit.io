@@ -7,7 +7,7 @@ import copyIcon from '../../../../../assets/copy.svg';
 
 const Edit = React.forwardRef(({ open, onClose, integration, token }: Props, ref) => {
   const [copy, setCopy] = React.useState(false);
-  const [fadeChange, setFadeChange] = React.useState(false);
+  const [fadeChangeLine, setFadeChangeLine] = React.useState(-1);
   const [copiedLine, setCopiedLine] = React.useState(0);
   let timeout: NodeJS.Timeout;
 
@@ -66,14 +66,14 @@ const Edit = React.forwardRef(({ open, onClose, integration, token }: Props, ref
         />
       </SC.Flex>
       <SC.LineInstructionWrapper
-        onMouseLeave={() => setFadeChange(false)}
-        onMouseEnter={() => setFadeChange(true)}
+        onMouseLeave={() => setFadeChangeLine(-1)}
+        onMouseEnter={() => setFadeChangeLine(2)}
         onClick={() => handleCopy(`fuse init ${token}`, 2)}
       >
         <SC.LineInstructionCopy>
           <img src={copyIcon} alt="copy" height="16" width="16" />
         </SC.LineInstructionCopy>
-        <SC.LineInstructionFade change={fadeChange} />
+        <SC.LineInstructionFade change={fadeChangeLine === 2} />
         <SC.LineInstruction>
           <span className="unselectable">$</span> fuse <strong>init</strong> {token}
         </SC.LineInstruction>
@@ -90,11 +90,15 @@ const Edit = React.forwardRef(({ open, onClose, integration, token }: Props, ref
           width="16"
         />
       </SC.Flex>
-      <SC.LineInstructionWrapper onClick={() => handleCopy(`fuse integration get ${integration} -d ${integration}`, 3)}>
+      <SC.LineInstructionWrapper
+        onMouseLeave={() => setFadeChangeLine(-1)}
+        onMouseEnter={() => setFadeChangeLine(3)}
+        onClick={() => handleCopy(`fuse integration get ${integration} -d ${integration}`, 3)}
+      >
         <SC.LineInstructionCopy>
           <img src={copyIcon} alt="copy" height="16" width="16" />
         </SC.LineInstructionCopy>
-        <SC.LineInstructionFade onlyMobileVisible={true} change={false} />
+        <SC.LineInstructionFade change={fadeChangeLine === 3} />
         <SC.LineInstruction>
           <span className="unselectable">$</span> fuse integration <strong>get</strong> {integration}{' '}
           <strong>-d</strong> {integration}
@@ -113,12 +117,14 @@ const Edit = React.forwardRef(({ open, onClose, integration, token }: Props, ref
         />
       </SC.Flex>
       <SC.LineInstructionWrapper
+        onMouseLeave={() => setFadeChangeLine(-1)}
+        onMouseEnter={() => setFadeChangeLine(4)}
         onClick={() => handleCopy(`fuse integration deploy ${integration} -d ${integration}`, 4)}
       >
         <SC.LineInstructionCopy>
           <img src={copyIcon} alt="copy" height="16" width="16" />
         </SC.LineInstructionCopy>
-        <SC.LineInstructionFade onlyMobileVisible={true} change={false} />
+        <SC.LineInstructionFade change={fadeChangeLine === 4} />
         <SC.LineInstruction>
           <span className="unselectable">$</span> fuse integration <strong>deploy</strong> {integration}{' '}
           <strong>-d</strong> {integration}
