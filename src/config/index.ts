@@ -1,4 +1,4 @@
-import ConnectorsPage from '../pages/ConnectorsPage';
+import ConnectorsOverviewPage from '../pages/ConnectorsOverviewPage';
 import IntegrationsOverviewPage from '../pages/IntegrationsOverviewPage';
 import IntegrationDetailDevelopPage from '../pages/IntegrationDetailDevelopPage';
 import IntegrationDetailInstallsPage from '../pages/IntegrationDetailInstallsPage';
@@ -15,9 +15,9 @@ import { RouteItem } from '../interfaces/router';
 // define app routes
 export const routes: Array<RouteItem> = [
   {
-    key: 'router-home',
-    path: '/account/:accountId/subscription/:subscriptionId/connectors',
-    component: ConnectorsPage,
+    key: 'router-connectors-overview',
+    path: '/account/:accountId/subscription/:subscriptionId/connectors/overview',
+    component: ConnectorsOverviewPage,
   },
   {
     key: 'router-integrations-overview',

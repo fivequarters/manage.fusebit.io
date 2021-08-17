@@ -15,22 +15,22 @@ import {
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { useContext } from '../../../hooks/useContext';
-import { useLoader } from '../../../hooks/useLoader';
-import { useAccountConnectorsGetAll } from '../../../hooks/api/v2/account/connector/useGetAll';
-import { useAccountConnectorDeleteConnector } from '../../../hooks/api/v2/account/connector/useDeleteOne';
-import { Operation } from '../../../interfaces/operation';
-import { Connector } from '../../../interfaces/connector';
-import { useError } from '../../../hooks/useError';
-import arrowRight from '../../../assets/arrow-right.svg';
-import arrowLeft from '../../../assets/arrow-left.svg';
-import { Feed } from '../../../interfaces/feed';
-import { useQuery } from '../../../hooks/useQuery';
-import FeedPicker from '../../FeedPicker';
-import { connectorsFeed } from '../../../static/feed';
-import { cells, OverviewProps } from '../../../interfaces/connectors';
-import { Data } from '../../../interfaces/feedPicker';
-import { useCreateDataFromFeed } from '../../../hooks/useCreateDataFromFeed';
+import { useContext } from '../../../../hooks/useContext';
+import { useLoader } from '../../../../hooks/useLoader';
+import { useAccountConnectorsGetAll } from '../../../../hooks/api/v2/account/connector/useGetAll';
+import { useAccountConnectorDeleteConnector } from '../../../../hooks/api/v2/account/connector/useDeleteOne';
+import { Operation } from '../../../../interfaces/operation';
+import { Connector } from '../../../../interfaces/connector';
+import { useError } from '../../../../hooks/useError';
+import arrowRight from '../../../../assets/arrow-right.svg';
+import arrowLeft from '../../../../assets/arrow-left.svg';
+import { Feed } from '../../../../interfaces/feed';
+import { useQuery } from '../../../../hooks/useQuery';
+import FeedPicker from '../../../FeedPicker';
+import { connectorsFeed } from '../../../../static/feed';
+import { cells, OverviewProps } from '../../../../interfaces/connectors';
+import { Data } from '../../../../interfaces/feedPicker';
+import { useCreateDataFromFeed } from '../../../../hooks/useCreateDataFromFeed';
 import Row from './Row';
 
 const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {

@@ -1,11 +1,11 @@
 import React from 'react';
-import { useContext } from '../../../../hooks/useContext';
+import { useContext } from '../../../../../hooks/useContext';
 import * as SC from './styles';
 import { TableCell, Checkbox } from '@material-ui/core';
-import { useGetRedirectLink } from '../../../../hooks/useGetRedirectLink';
-import { RowProps, cells } from '../../../../interfaces/connectors';
-import { useAccountConnectorIdentityGetAll } from '../../../../hooks/api/v2/account/connector/identity/useGetAll';
-import { Identity } from '../../../../interfaces/identities';
+import { useGetRedirectLink } from '../../../../../hooks/useGetRedirectLink';
+import { RowProps, cells } from '../../../../../interfaces/connectors';
+import { useAccountConnectorIdentityGetAll } from '../../../../../hooks/api/v2/account/connector/identity/useGetAll';
+import { Identity } from '../../../../../interfaces/identities';
 
 const Row: React.FC<RowProps> = ({ row, handleRowClick, handleCheck, isSelected, mobile, selectedCell }) => {
   const { userData } = useContext();

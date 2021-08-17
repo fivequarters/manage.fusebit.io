@@ -86,7 +86,7 @@ const Navbar: React.FC<Props> = ({
                             ? getRedirectLink('/integrations/overview')
                             : authenticationLink
                             ? getRedirectLink('/authentication')
-                            : getRedirectLink('/connectors')
+                            : getRedirectLink('/connectors/overview')
                         }
                       >
                         {integrationsLink ? 'Integrations' : authenticationLink ? 'Authentication' : 'Connectors'}
@@ -165,7 +165,7 @@ const Navbar: React.FC<Props> = ({
                         ))}
                         <SC.Flex>
                           <SC.SectionDropdownTitle>Connectors</SC.SectionDropdownTitle>
-                          <SC.SectionDropdownSeeMore href={getRedirectLink('/connectors')}>
+                          <SC.SectionDropdownSeeMore href={getRedirectLink('/connectors/overview')}>
                             See all
                             <img src={rightArrow} alt="See all" height="8" width="8" />
                           </SC.SectionDropdownSeeMore>
@@ -203,7 +203,7 @@ const Navbar: React.FC<Props> = ({
                         ))}
                         <SC.Flex>
                           <SC.SectionDropdownTitle>Connectors</SC.SectionDropdownTitle>
-                          <SC.SectionDropdownSeeMore href={getRedirectLink('/connectors')}>
+                          <SC.SectionDropdownSeeMore href={getRedirectLink('/connectors/overview')}>
                             See all
                             <img src={rightArrow} alt="See all" height="8" width="8" />
                           </SC.SectionDropdownSeeMore>
@@ -288,7 +288,7 @@ const Navbar: React.FC<Props> = ({
                     ? getRedirectLink('/integrations/overview')
                     : authentication
                     ? getRedirectLink('/authentication')
-                    : getRedirectLink('/connectors')
+                    : getRedirectLink('/connectors/overview')
                 }
               >
                 {sectionName}

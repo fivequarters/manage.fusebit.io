@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
-import TabComponent from '../TabComponent';
+import TabComponent from '../../TabComponent';
 import Overview from './Overview';
 
-const Connectors: React.FC = () => {
+const ConnectorsOverview: React.FC = () => {
   let headless = useRef(true); // the parent has to have this otherwise the mounting of the overview will open the feed picker if there is a query param.
   return (
     <TabComponent
@@ -12,4 +12,4 @@ const Connectors: React.FC = () => {
   );
 };
 
-export default Connectors;
+export default ConnectorsOverview;

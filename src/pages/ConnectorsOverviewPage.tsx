@@ -1,15 +1,15 @@
 import React, { FC, ReactElement } from 'react';
 import Layout from '../components/Layout';
-import Connectors from '../components/Connectors';
+import ConnectorsOverview from '../components/Connectors/Overview/ConnectorsOverview';
 import Navbar from '../components/Navbar';
 
-const ConnectorsPage: FC<{}> = (): ReactElement => {
+const ConnectorsOverviewPage: FC<{}> = (): ReactElement => {
   return (
     <Layout>
       <Navbar dropdown={true} sectionName="Connectors" connector={true} />
-      <Connectors />
+      <ConnectorsOverview />
     </Layout>
   );
 };
 
-export default ConnectorsPage;
+export default ConnectorsOverviewPage;
