@@ -39,12 +39,6 @@ const Row: React.FC<RowProps> = ({ row, handleRowClick, handleCheck, isSelected,
           }
         </TableCell>
         <TableCell align="left">{identitiesData?.data.total}</TableCell>
-        <TableCell align="left">
-          {new Date().toISOString().slice(0, 10)}
-          {
-            // TODO: Replace placeholder with real data
-          }
-        </TableCell>
       </SC.Row>
     );
   } else {
@@ -63,12 +57,8 @@ const Row: React.FC<RowProps> = ({ row, handleRowClick, handleCheck, isSelected,
           <SC.CellName>{row.id}</SC.CellName>
         </TableCell>
         <TableCell align="left">
-          {selectedCell === cells.TYPE
-            ? 'Slack'
-            : selectedCell === cells.IDENTITIES
-            ? identitiesData?.data.total
-            : new Date().toISOString().slice(0, 10)}
           {
+            selectedCell === cells.TYPE ? 'Slack' : identitiesData?.data.total
             // TODO: Replace placeholder with real data
           }
         </TableCell>

@@ -154,21 +154,21 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
 
   const handlePreviousCellSelect = () => {
     if (selectedCell === cells.INSTALLS) {
-      setSelectedCell(cells.DEPLOYED);
+      // setSelectedCell(cells.DEPLOYED);
     } else if (selectedCell === cells.CREATED) {
-      setSelectedCell(cells.INSTALLS);
+      setSelectedCell(cells.INSTALLS); //uncommented to not leave the variable unused
     } else {
-      setSelectedCell(cells.CREATED);
+      // setSelectedCell(cells.CREATED);
     }
   };
 
   const handleNextCellSelect = () => {
     if (selectedCell === cells.INSTALLS) {
-      setSelectedCell(cells.CREATED);
+      // setSelectedCell(cells.CREATED);
     } else if (selectedCell === cells.CREATED) {
-      setSelectedCell(cells.DEPLOYED);
+      // setSelectedCell(cells.DEPLOYED);
     } else {
-      setSelectedCell(cells.INSTALLS);
+      // setSelectedCell(cells.INSTALLS);
     }
   };
 
