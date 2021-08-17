@@ -1,15 +1,15 @@
 import React, { FC, ReactElement } from 'react';
 import Layout from '../components/Layout';
-import Integrations from '../components/Integrations';
+import IntegrationsOverview from '../components/Integrations/Overview/IntegrationsOverview';
 import Navbar from '../components/Navbar';
 
-const IntegrationsPage: FC<{}> = (): ReactElement => {
+const IntegrationsOverviewPage: FC<{}> = (): ReactElement => {
   return (
     <Layout>
       <Navbar dropdown={true} sectionName="Integrations" integration={true} />
-      <Integrations />
+      <IntegrationsOverview />
     </Layout>
   );
 };
 
-export default IntegrationsPage;
+export default IntegrationsOverviewPage;

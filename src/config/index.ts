@@ -1,5 +1,5 @@
 import ConnectorsPage from '../pages/ConnectorsPage';
-import IntegrationsPage from '../pages/IntegrationsPage';
+import IntegrationsOverviewPage from '../pages/IntegrationsOverviewPage';
 import IntegrationDetailDevelopPage from '../pages/IntegrationDetailDevelopPage';
 import IntegrationDetailInstallsPage from '../pages/IntegrationDetailInstallsPage';
 import ConnectorDetailConfigurePage from '../pages/ConnectorDetailConfigurePage';
@@ -20,9 +20,9 @@ export const routes: Array<RouteItem> = [
     component: ConnectorsPage,
   },
   {
-    key: 'router-integrations',
-    path: '/account/:accountId/subscription/:subscriptionId/integrations',
-    component: IntegrationsPage,
+    key: 'router-integrations-overview',
+    path: '/account/:accountId/subscription/:subscriptionId/integrations/overview',
+    component: IntegrationsOverviewPage,
   },
   {
     key: 'router-integration-detail-develop',

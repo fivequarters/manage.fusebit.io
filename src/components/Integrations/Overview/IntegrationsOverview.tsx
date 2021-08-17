@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
-import TabComponent from '../TabComponent';
+import TabComponent from '../../TabComponent';
 import Overview from './Overview';
 
-const Integrations: React.FC = () => {
+const IntegrationsOverview: React.FC = () => {
   let headless = useRef(true); // the parent has to have this otherwise the mounting of the overview will open the feed picker if there is a query param.
 
   return (
@@ -13,4 +13,4 @@ const Integrations: React.FC = () => {
   );
 };
 
-export default Integrations;
+export default IntegrationsOverview;

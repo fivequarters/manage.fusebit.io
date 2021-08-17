@@ -15,14 +15,14 @@ const NotFoundPage: FC<{}> = (): ReactElement => {
     const refreshTokenUrl = localStorage.getItem('refreshTokenUrl'); //the refreshTokenUrl we should redirect to
     if (integrationsContract !== null) {
       localStorage.removeItem('integrationsContract');
-      history.push(getRedirectLink('/integrations' + integrationsContract));
+      history.push(getRedirectLink('/integrations' + integrationsContract + '/overview'));
     } else if (connectorsContract !== null) {
       localStorage.removeItem('connectorsContract');
-      history.push(getRedirectLink('/connectors' + connectorsContract));
+      history.push(getRedirectLink('/connectors' + connectorsContract + '/overview'));
     } else if (refreshToken === 'true' && refreshTokenUrl) {
       history.push(refreshTokenUrl);
     } else if (userData.accountId !== undefined && userData.subscriptionId !== undefined) {
-      history.push(getRedirectLink('/integrations'));
+      history.push(getRedirectLink('/integrations/overview'));
     }
   }, [history, userData, getRedirectLink]);
 
