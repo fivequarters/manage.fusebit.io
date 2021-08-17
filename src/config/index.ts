@@ -1,6 +1,7 @@
 import ConnectorsPage from '../pages/ConnectorsPage';
 import IntegrationsPage from '../pages/IntegrationsPage';
-import IntegrationDetailPage from '../pages/IntegrationDetailPage';
+import IntegrationDetailDevelopPage from '../pages/IntegrationDetailDevelopPage';
+import IntegrationDetailInstallsPage from '../pages/IntegrationDetailInstallsPage';
 import ConnectorDetailPage from '../pages/ConnectorDetailPage';
 import LoggedOutErrorPage from '../pages/LoggedOutErrorPage';
 import AuthenticationPage from '../pages/AuthenticationPage';
@@ -24,8 +25,13 @@ export const routes: Array<RouteItem> = [
   },
   {
     key: 'router-integration-detail',
-    path: '/account/:accountId/subscription/:subscriptionId/integration/:id',
-    component: IntegrationDetailPage,
+    path: '/account/:accountId/subscription/:subscriptionId/integration/:id/develop',
+    component: IntegrationDetailDevelopPage,
+  },
+  {
+    key: 'router-integration-detail',
+    path: '/account/:accountId/subscription/:subscriptionId/integration/:id/installs',
+    component: IntegrationDetailInstallsPage,
   },
   {
     key: 'router-connector-detail',

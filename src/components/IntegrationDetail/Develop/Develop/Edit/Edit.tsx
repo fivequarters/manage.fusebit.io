@@ -1,9 +1,9 @@
 import React from 'react';
 import * as SC from './styles';
-import cross from '../../../../assets/cross.svg';
+import cross from '../../../../../assets/cross.svg';
 import { Button } from '@material-ui/core';
-import { Props } from '../../../../interfaces/edit';
-import copyIcon from '../../../../assets/copy.svg';
+import { Props } from '../../../../../interfaces/edit';
+import copyIcon from '../../../../../assets/copy.svg';
 
 const Edit = React.forwardRef(({ open, onClose, integration, token }: Props, ref) => {
   const [copy, setCopy] = React.useState(false);

@@ -4,10 +4,10 @@ import Layout from '../components/Layout';
 import { useAccountIntegrationsGetOne } from '../hooks/api/v2/account/integration/useGetOne';
 import { useContext } from '../hooks/useContext';
 import { Integration } from '../interfaces/integration';
-import IntegrationDetail from '../components/IntegrationDetail';
+import IntegrationDetailDevelop from '../components/IntegrationDetail/Develop';
 import Navbar from '../components/Navbar';
 
-const IntegrationDetailPage: FC<{}> = (): ReactElement => {
+const IntegrationDetailDevelopPage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
   const { userData } = useContext();
   const { data: integrationData } = useAccountIntegrationsGetOne<Integration>({
@@ -20,9 +20,9 @@ const IntegrationDetailPage: FC<{}> = (): ReactElement => {
   return (
     <Layout>
       <Navbar sectionName={integrationData?.data.id || id} dropdown={true} integrationsLink={true} />
-      <IntegrationDetail />
+      <IntegrationDetailDevelop id={id} />
     </Layout>
   );
 };
 
-export default IntegrationDetailPage;
+export default IntegrationDetailDevelopPage;

@@ -2,13 +2,13 @@ import React from 'react';
 import * as SC from './styles';
 import { Button } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import { useAccountIntegrationInstanceGetAll } from '../../../hooks/api/v2/account/integration/instance/useGetAll';
-import { useAccountIntegrationInstanceDeleteOne } from '../../../hooks/api/v2/account/integration/instance/useDeleteOne';
-import { useContext } from '../../../hooks/useContext';
-import { Install } from '../../../interfaces/install';
-import { useLoader } from '../../../hooks/useLoader';
-import { useError } from '../../../hooks/useError';
-import { Operation } from '../../../interfaces/operation';
+import { useAccountIntegrationInstanceGetAll } from '../../../../hooks/api/v2/account/integration/instance/useGetAll';
+import { useAccountIntegrationInstanceDeleteOne } from '../../../../hooks/api/v2/account/integration/instance/useDeleteOne';
+import { useContext } from '../../../../hooks/useContext';
+import { Install } from '../../../../interfaces/install';
+import { useLoader } from '../../../../hooks/useLoader';
+import { useError } from '../../../../hooks/useError';
+import { Operation } from '../../../../interfaces/operation';
 
 const Installs: React.FC = () => {
   const { id } = useParams<{ id: string }>();

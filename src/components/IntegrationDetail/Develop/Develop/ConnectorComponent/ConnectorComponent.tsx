@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import * as SC from './styles';
-import { ConnectorComponentProps } from '../../../../interfaces/integrationDetailDevelop';
-import cross from '../../../../assets/cross.svg';
+import { ConnectorComponentProps } from '../../../../../interfaces/integrationDetailDevelop';
+import cross from '../../../../../assets/cross.svg';
 import { useHistory } from 'react-router-dom';
-import { useGetRedirectLink } from '../../../../hooks/useGetRedirectLink';
-import { integrationsFeed, connectorsFeed } from '../../../../static/feed';
+import { useGetRedirectLink } from '../../../../../hooks/useGetRedirectLink';
+import { integrationsFeed, connectorsFeed } from '../../../../../static/feed';
 
 const ConnectorComponent: React.FC<ConnectorComponentProps> = ({
   connector,

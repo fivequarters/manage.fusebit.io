@@ -55,7 +55,7 @@ export const useCreateDataFromFeed = () => {
         ]);
         window.location.href = isConnector
           ? getRedirectLink('/connector/' + firstConnector?.id)
-          : getRedirectLink('/integration/' + firstIntegration?.id);
+          : getRedirectLink('/integration/' + firstIntegration?.id + '/develop');
       } catch (e) {
         createError(e.message);
         removeLoader();

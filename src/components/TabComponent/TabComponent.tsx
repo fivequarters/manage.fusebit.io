@@ -47,7 +47,7 @@ const TabComponent: React.FC<Props> = ({ tabNames, tabObjects }) => {
 
   const handleChange = (event: any, newValue: number) => {
     if (newValue !== activeTab) {
-      console.log('going to ' + tabObjects[newValue]);
+      window.location.href = tabObjects[newValue];
     }
   };
 

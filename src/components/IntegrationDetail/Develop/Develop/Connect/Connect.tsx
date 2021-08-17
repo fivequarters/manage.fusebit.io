@@ -3,13 +3,13 @@ import * as SC from './styles';
 import { Button } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import LinkIcon from '@material-ui/icons/Link';
-import cross from '../../../../assets/cross.svg';
-import copyIcon from '../../../../assets/copy.svg';
-import { Props } from '../../../../interfaces/connect';
-import { Decoded } from '../../../../interfaces/decoded';
-import { useContext } from '../../../../hooks/useContext';
+import cross from '../../../../../assets/cross.svg';
+import copyIcon from '../../../../../assets/copy.svg';
+import { Props } from '../../../../../interfaces/connect';
+import { Decoded } from '../../../../../interfaces/decoded';
+import { useContext } from '../../../../../hooks/useContext';
 import jwt_decode from 'jwt-decode';
-import { useGetAuthLink } from '../../../../hooks/useGetAuthLink';
+import { useGetAuthLink } from '../../../../../hooks/useGetAuthLink';
 
 const Connect = React.forwardRef(({ onClose, open }: Props, ref) => {
   const [copiedLine, setCopiedLine] = React.useState(0);
