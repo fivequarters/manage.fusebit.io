@@ -49,7 +49,7 @@ const ConnectorComponent: React.FC<ConnectorComponentProps> = ({
         if (linkConnector) {
           onLinkConnectorClick && onLinkConnectorClick(connector.id);
         } else if (!e.target.id) {
-          history.push(getRedirectLink(`/connector/${connector.id}`));
+          history.push(getRedirectLink(`/connector/${connector.id}/configure`));
         }
       }}
     >
