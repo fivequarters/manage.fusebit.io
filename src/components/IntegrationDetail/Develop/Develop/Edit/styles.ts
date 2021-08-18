@@ -100,14 +100,12 @@ export const LineInstructionWrapper = styled.div`
 export const LineInstruction = styled.div`
   position: relative;
   width: 667px;
-  height: 50px;
   padding: 16px;
   border: 0;
   margin: 0;
   outline: rgba(255, 255, 255, 0);
   border-radius: 4px;
   background-color: var(--secondary-color);
-  overflow: hidden;
   white-space: nowrap;
   font-family: 'Courier';
   font-size: 16px;
@@ -115,16 +113,15 @@ export const LineInstruction = styled.div`
   color: var(--black);
   display: flex;
 
-  & > span {
-    color: var(--primary-color);
+  & span {
     font-weight: 400;
-    margin: 0 10px;
+    margin: 0 0 0 10px;
   }
 
-  & > strong {
+  & strong {
     color: var(--primary-color);
     font-weight: 400;
-    margin: 0 10px;
+    margin: 0 0 0 10px;
   }
 
   .unselectable {
@@ -138,6 +135,16 @@ export const LineInstruction = styled.div`
     font-size: 14px;
     line-height: 16px;
     width: 100%;
+  }
+`;
+
+export const LineInstructionCode = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  > div:not(:first-child) {
+    margin-top: 10px;
+    margin-left: 2ch;
   }
 `;
 
