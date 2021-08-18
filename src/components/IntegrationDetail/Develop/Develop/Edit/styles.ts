@@ -138,7 +138,7 @@ export const LineInstruction = styled.div`
   }
 `;
 
-export const SublineInstruction = styled.div`
+export const LineInstructionCode = styled.div`
   display: flex;
   flex-direction: column;
 

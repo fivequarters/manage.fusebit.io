@@ -80,7 +80,7 @@ const Edit = React.forwardRef(({ open, onClose, integration, token }: Props) => 
         <SC.LineInstructionFade change={fadeChangeLine === 3} />
         <SC.LineInstruction>
           <span className="unselectable">$</span>
-          <SC.SublineInstruction>
+          <SC.LineInstructionCode>
             <div>
               <span>fuse integration</span>
               <strong>get</strong>
@@ -90,7 +90,7 @@ const Edit = React.forwardRef(({ open, onClose, integration, token }: Props) => 
               <strong>--dir</strong>
               <span>{integration}</span>
             </div>
-          </SC.SublineInstruction>
+          </SC.LineInstructionCode>
         </SC.LineInstruction>
         <SC.CopySuccessMobile copy={copiedLine === 3}>Copied to clipboard!</SC.CopySuccessMobile>
       </SC.LineInstructionWrapper>
@@ -116,7 +116,7 @@ const Edit = React.forwardRef(({ open, onClose, integration, token }: Props) => 
         <SC.LineInstructionFade change={fadeChangeLine === 4} />
         <SC.LineInstruction>
           <span className="unselectable">$</span>
-          <SC.SublineInstruction>
+          <SC.LineInstructionCode>
             <div>
               <span>fuse integration</span>
               <strong>deploy</strong>
@@ -126,7 +126,7 @@ const Edit = React.forwardRef(({ open, onClose, integration, token }: Props) => 
               <strong>--dir</strong>
               <span>{integration}</span>
             </div>
-          </SC.SublineInstruction>
+          </SC.LineInstructionCode>
         </SC.LineInstruction>
         <SC.CopySuccessMobile copy={copiedLine === 4}>Copied to clipboard!</SC.CopySuccessMobile>
       </SC.LineInstructionWrapper>
