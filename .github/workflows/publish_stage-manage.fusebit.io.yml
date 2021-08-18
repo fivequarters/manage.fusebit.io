@@ -64,6 +64,7 @@ jobs:
       - name: Publish - website
         env:
           CLOUDFRONT_ID: EBDYJ0OF13PS7
+          S3_BUCKET: stage-manage.fusebit.io
         run: ./scripts/publish_website.sh
       - name: Notify slack success
         if: success()
