@@ -144,7 +144,7 @@ export const LineInstructionCode = styled.div`
 
   > div:not(:first-child) {
     margin-top: 10px;
-    margin-left: 20px;
+    margin-left: 2ch;
   }
 `;
 
