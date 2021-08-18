@@ -114,6 +114,10 @@ export const LineInstruction = styled.div`
   line-height: 18px;
   color: var(--black);
   display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  gap: 1ch;
 
   & > span {
     color: var(--primary-color);
@@ -132,6 +136,23 @@ export const LineInstruction = styled.div`
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* IE10+/Edge */
     user-select: none; /* Standard */
+  }
+
+  .cli-column {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+
+  .cli-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 1ch;
+  }
+  .cli-row > div:not(:first-child) {
+    padding-left: 2ch;
   }
 
   @media only screen and (max-width: 1250px) {

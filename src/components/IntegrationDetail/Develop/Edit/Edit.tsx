@@ -70,8 +70,24 @@ const Edit = React.forwardRef(({ open, onClose, integration }: Props) => {
         </SC.LineInstructionCopy>
         <SC.LineInstructionFade onlyMobileVisible={true} change={false} />
         <SC.LineInstruction>
-          <span className="unselectable">$</span> fuse integration <strong>get</strong> {integration}{' '}
-          <strong>-d</strong> {integration}
+          <span className="unselectable cli-column">
+          $
+          </span>
+          <div className="cli-column">
+            <div className="cli-row">
+              <div>
+                fuse integration
+                <strong>
+                  get
+                </strong>
+                slackIntegration-489 \
+              </div>
+              <div>
+                <strong>-d</strong>
+                slackIntegration-489 test a long string
+              </div>
+            </div>
+          </div>
         </SC.LineInstruction>
         <SC.CopySuccessMobile copy={copiedLine === 3}>Copied to clipboard!</SC.CopySuccessMobile>
       </SC.LineInstructionWrapper>
@@ -94,8 +110,19 @@ const Edit = React.forwardRef(({ open, onClose, integration }: Props) => {
         </SC.LineInstructionCopy>
         <SC.LineInstructionFade onlyMobileVisible={true} change={false} />
         <SC.LineInstruction>
-          <span className="unselectable">$</span> fuse integration <strong>deploy</strong> {integration}{' '}
-          <strong>-d</strong> {integration}
+          <span className="unselectable cli-column">
+          $
+          </span>
+            <div className="cli-column">
+                <div className="cli-row">
+                    <div>
+                    fuse integration <strong>deploy</strong> {integration} \
+                    </div>
+                    <div>
+                    <strong>-d</strong> {integration}
+                    </div>
+                </div>
+            </div>
         </SC.LineInstruction>
         <SC.CopySuccessMobile copy={copiedLine === 4}>Copied to clipboard!</SC.CopySuccessMobile>
       </SC.LineInstructionWrapper>
