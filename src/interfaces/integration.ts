@@ -20,3 +20,7 @@ export interface Integration {
   id: string;
   data: IntegrationData;
 }
+
+export interface Props {
+  id: string;
+}

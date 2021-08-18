@@ -24,7 +24,7 @@ export const useLoader = () => {
   const waitForOperations = async (operationIds: string[]) => {
     const intervalIds: { [key: string]: number } = {};
     const promises = operationIds.map((operationId: string) => {
-      return new Promise((accept: Function) => {
+      return new Promise((accept: Function, reject: Function) => {
         intervalIds[operationId] = Number(
           setInterval(() => {
             if (!operationId) {
@@ -33,20 +33,29 @@ export const useLoader = () => {
             axios<Operation>(
               `/v2/account/${userData.accountId}/subscription/${userData.subscriptionId}/operation/${operationId}`,
               'get'
-            ).then((response) => {
-              if (response.data.statusCode !== 202) {
-                accept({});
-              }
-            });
+            )
+              .then((response) => {
+                if (response.data.statusCode !== 202) {
+                  accept({});
+                }
+              })
+              .catch((e: any) => {
+                reject(e);
+              });
           }, 1000)
         );
       });
     });
-    return new Promise((globalAccept: Function) => {
-      Promise.all(promises).then((_) => {
-        Object.keys(intervalIds).forEach((operationId: string) => clearInterval(intervalIds[operationId]));
-        globalAccept({});
-      });
+    return new Promise((globalAccept: Function, globalReject: Function) => {
+      Promise.all(promises)
+        .then((_) => {
+          Object.keys(intervalIds).forEach((operationId: string) => clearInterval(intervalIds[operationId]));
+          globalAccept({});
+        })
+        .catch((e: any) => {
+          Object.keys(intervalIds).forEach((operationId: string) => clearInterval(intervalIds[operationId]));
+          globalReject(e);
+        });
     });
   };
 

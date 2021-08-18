@@ -35,29 +35,20 @@ const a11yProps = (index: number) => {
 };
 
 const TabComponent: React.FC<Props> = ({ tabNames, tabObjects }) => {
-  const [value, setValue] = React.useState(0);
+  const [activeTab, setActiveTab] = React.useState(0);
 
   useEffect(() => {
-    const hash = window.location.hash;
-    if (!hash.match(tabNames[0])) {
-      let foundTheTag = false;
-      tabNames.forEach((tab: string, index: number) => {
-        if (hash.match(tab)) {
-          setValue(index);
-          foundTheTag = true;
-        }
-      });
-      if (!foundTheTag) {
-        window.location.hash = tabNames[0];
+    tabObjects.forEach((obj, index) => {
+      if (typeof obj !== 'string') {
+        setActiveTab(index);
       }
-    } else {
-      setValue(0);
-    }
-  }, [tabNames]);
+    });
+  }, [tabObjects]);
 
   const handleChange = (event: any, newValue: number) => {
-    setValue(newValue);
-    window.location.hash = tabNames[newValue];
+    if (newValue !== activeTab) {
+      window.location.href = tabObjects[newValue];
+    }
   };
 
   return (
@@ -66,13 +57,17 @@ const TabComponent: React.FC<Props> = ({ tabNames, tabObjects }) => {
         <SC.Fade />
         <Tabs
           indicatorColor="primary"
-          value={value}
+          value={activeTab}
           onChange={handleChange}
           aria-label="Tab Selector"
           scrollButtons="auto"
         >
           {tabNames.map((name, index) => (
-            <Tab key={index} label={<SC.TabLabel active={value === index}>{name}</SC.TabLabel>} {...a11yProps(index)} />
+            <Tab
+              key={index}
+              label={<SC.TabLabel active={activeTab === index}>{name}</SC.TabLabel>}
+              {...a11yProps(index)}
+            />
           ))}
         </Tabs>
       </SC.ContentMobile>
@@ -80,7 +75,7 @@ const TabComponent: React.FC<Props> = ({ tabNames, tabObjects }) => {
         <SC.Content>
           <Tabs
             indicatorColor="primary"
-            value={value}
+            value={activeTab}
             onChange={handleChange}
             aria-label="Tab Selector"
             scrollButtons="auto"
@@ -88,14 +83,14 @@ const TabComponent: React.FC<Props> = ({ tabNames, tabObjects }) => {
             {tabNames.map((name, index) => (
               <Tab
                 key={index}
-                label={<SC.TabLabel active={value === index}>{name}</SC.TabLabel>}
+                label={<SC.TabLabel active={activeTab === index}>{name}</SC.TabLabel>}
                 {...a11yProps(index)}
               />
             ))}
           </Tabs>
         </SC.Content>
         {tabObjects.map((obj, index) => (
-          <TabPanel key={index} value={value} index={index}>
+          <TabPanel key={index} value={activeTab} index={index}>
             {obj}
           </TabPanel>
         ))}

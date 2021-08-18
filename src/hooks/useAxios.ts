@@ -36,21 +36,17 @@ export const useAxios = () => {
     params: any = {},
     headers: any = {}
   ): Promise<ApiResponse<T>> => {
-    try {
-      const config: AxiosRequestConfig = {
-        method,
-        url: `${REACT_APP_FUSEBIT_DEPLOYMENT}${endpoint}`,
-        data: params,
-        headers,
-      };
-      if (userData.token) {
-        config.headers.Authorization = `Bearer ${userData.token}`;
-      }
-      const response = await axios(config);
-      return { success: true, data: response.data as T };
-    } catch (e) {
-      return { success: false, error: e.message, data: e.response && e.response.data };
+    const config: AxiosRequestConfig = {
+      method,
+      url: `${REACT_APP_FUSEBIT_DEPLOYMENT}${endpoint}`,
+      data: params,
+      headers,
+    };
+    if (userData.token) {
+      config.headers.Authorization = `Bearer ${userData.token}`;
     }
+    const response = await axios(config);
+    return { success: true, data: response.data as T };
   };
 
   return {

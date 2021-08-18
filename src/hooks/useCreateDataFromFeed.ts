@@ -54,11 +54,12 @@ export const useCreateDataFromFeed = () => {
           }),
         ]);
         window.location.href = isConnector
-          ? getRedirectLink('/connector/' + firstConnector?.id)
-          : getRedirectLink('/integration/' + firstIntegration?.id);
+          ? getRedirectLink('/connector/' + firstConnector?.id + '/configure')
+          : getRedirectLink('/integration/' + firstIntegration?.id + '/develop');
       } catch (e) {
         createError(e.message);
         removeLoader();
+        return false;
       }
     },
     [
