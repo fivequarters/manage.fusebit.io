@@ -11,6 +11,7 @@
 ### Localhost
 
 ```
+REACT_APP_DEPLOYMENT_KEY=Localhost
 REACT_APP_FUSEBIT_DEPLOYMENT=https://bruno.us-west-1.dev.fusebit.io
 REACT_APP_AUTH0_DOMAIN=https://dev-zhwbl-rl.us.auth0.com
 REACT_APP_AUTH0_CLIENT_ID=HXmmy0n9RWCdQkKIZiIozMbvK4DjyKRq

@@ -53,6 +53,7 @@ jobs:
         run: aws s3 ls
       - name: Build for manage.fusebit.io
         env:
+          REACT_APP_DEPLOYMENT_KEY: Production
           REACT_APP_FUSEBIT_DEPLOYMENT: https://api.us-west-1.on.fusebit.io
           REACT_APP_AUTH0_DOMAIN: https://fusebit.auth0.com
           REACT_APP_AUTH0_CLIENT_ID: NIfqE4hpPOXuIhllkxndlafSKcKesEfc

@@ -325,7 +325,7 @@ const Navbar: React.FC<Props> = ({
               variant="text"
               color="inherit"
             >
-              Stage
+              {process.env.REACT_APP_DEPLOYMENT_KEY}
             </Button>
             <Menu
               style={{ top: '100px', margin: '0 0 0 -88px' }}
@@ -348,7 +348,7 @@ const Navbar: React.FC<Props> = ({
                 </SC.UserDropdownInfo>
                 <SC.UserDropdownStatus href={getRedirectLink('/integrations/overview')}>
                   <div>
-                    <SC.UserDropdownStatusTitle>Stage</SC.UserDropdownStatusTitle>
+                    <SC.UserDropdownStatusTitle>{process.env.REACT_APP_DEPLOYMENT_KEY}</SC.UserDropdownStatusTitle>
                     <SC.UserDropdownStatusId>{userData.subscriptionId}</SC.UserDropdownStatusId>
                   </div>
                   <SC.UserDropdownStatusArrow src={rightArrow} alt="right arrow" height="12" width="12" />
