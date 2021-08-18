@@ -62,31 +62,6 @@
           },
           "id": "<%this.id%>",
           "tags": {}
-        },
-        "slackIntegration": {
-          "entityType": "integration",
-          "data": {
-            "configuration": {},
-            "files": {
-              "package.json": "{\n  \"scripts\": {\n    \"deploy\": \"fuse integration deploy <% this.id %> -d .\",\n    \"get\": \"fuse integration get <% this.id %> -d .\"\n  },\n  \"dependencies\": {\n    \"@fusebit-int/framework\": \"^3.0.2\",\n    \"superagent\": \"^6.1.0\",\n    \"@fusebit-int/slack-provider\": \"*\"\n  },\n  \"files\": [\"./integration.js\", \"README.md\"]\n}\n",
-              "./integration.js": "const { Integration } = require('@fusebit-int/framework');\n\nconst integration = new Integration();\nconst router = integration.router;\n\n/**\n * Post a message to Slack\n */\nrouter.post('/api/tenant/:tenantId/test', integration.middleware.authorizeUser('instance:put'), async (ctx) => {\n  const slackClient = await integration.tenant.getSdkByTenant(ctx, 'slackConnector', ctx.params.tenantId);\n  const result = await slackClient.chat.postMessage({\n    text: 'Hello world from Fusebit!',\n    channel: 'your-channel-name-here',\n  });\n  ctx.body = result;\n});\n\n/**\n * List Slack users\n */\nrouter.get('/api/tenant/:tenantId/users', integration.middleware.authorizeUser('instance:get'), async (ctx) => {\n  const slackClient = await integration.tenant.getSdkByTenant(ctx, 'slackConnector', ctx.params.tenantId);\n  const result = await slackClient.users.list();\n  ctx.body = result;\n});\n\nmodule.exports = integration;\n",
-              "README.md": "Thanks for trying out Fusebit and downloading your <% global.consts.feed.name %> Integration code.\n\nUse your favorite tools to make any changes to the code in this folder.\n\n\nA simple <% global.consts.feed.name %> hello world example.\n"
-            },
-            "handler": "./integration",
-            "components": [
-              {
-                "name": "slackConnector",
-                "skip": false,
-                "provider": "@fusebit-int/slack-provider",
-                "entityId": "<% global.entities.slackConnector.id %>",
-                "dependsOn": [],
-                "entityType": "connector"
-              }
-            ],
-            "componentTags": {}
-          },
-          "id": "<% this.id %>",
-          "tags": {}
         }
       }
     }
