@@ -5,7 +5,7 @@ import { Button } from '@material-ui/core';
 import { Props } from '../../../../../interfaces/edit';
 import copyIcon from '../../../../../assets/copy.svg';
 
-const Edit = React.forwardRef(({ open, onClose, integration, token }: Props, ref) => {
+const Edit = React.forwardRef(({ open, onClose, integration, token }: Props) => {
   const [copy, setCopy] = React.useState(false);
   const [fadeChangeLine, setFadeChangeLine] = React.useState(-1);
   const [copiedLine, setCopiedLine] = React.useState(0);
@@ -107,7 +107,7 @@ const Edit = React.forwardRef(({ open, onClose, integration, token }: Props, ref
       </SC.LineInstructionWrapper>
 
       <SC.Flex>
-        <SC.LineTitle>4. After making your code changes run</SC.LineTitle>
+        <SC.LineTitle>3. After making your code changes run</SC.LineTitle>
         <SC.CopyMobile
           onClick={() => handleCopy(`fuse integration deploy ${integration} -d ${integration}`, 4)}
           src={copyIcon}
