@@ -53,8 +53,7 @@ const Edit = React.forwardRef(({ open, onClose, integration, token }: Props) => 
           <span className="unselectable">$</span>
           <span>npm</span>
           <strong>install</strong>
-          <span>@fusebit/cli</span>
-          <strong>-g</strong>
+          <span>@fusebit/cli -g</span>
         </SC.LineInstruction>
         <SC.CopySuccessMobile copy={copiedLine === 1}>Copied to clipboard!</SC.CopySuccessMobile>
       </SC.LineInstructionWrapper>
