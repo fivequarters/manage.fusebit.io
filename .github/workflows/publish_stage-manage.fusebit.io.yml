@@ -1,7 +1,7 @@
 ###################################################################
 # Auto-created by the cicd-actions tool
 on: workflow_dispatch
-name: Publish the Website
+name: Publish stage-manage.fusebit.io
 jobs:
   deploy:
     name: Deploy
@@ -51,19 +51,19 @@ jobs:
         run: ./scripts/create_env_files.sh
       - name: Qualify - aws-cli works
         run: aws s3 ls
-      - name: Build
+      - name: Build for manage.fusebit.io
         env:
           REACT_APP_FUSEBIT_DEPLOYMENT: https://stage.us-west-2.fusebit.io
           REACT_APP_AUTH0_DOMAIN: https://fusebit.auth0.com
           REACT_APP_AUTH0_CLIENT_ID: dimuls6VLYgXpD7UYCo6yPdKAXPXjQng
           REACT_APP_LOGOUT_REDIRECT_URL: https://fusebit.io
-          REACT_APP_INTEGRATIONS_FEED_URL: https://manage.fusebit.io/feed/integrationsFeed.json
-          REACT_APP_CONNECTORS_FEED_URL: https://manage.fusebit.io/feed/connectorsFeed.json
+          REACT_APP_INTEGRATIONS_FEED_URL: https://stage-manage.fusebit.io/feed/integrationsFeed.json
+          REACT_APP_CONNECTORS_FEED_URL: https://stage-manage.fusebit.io/feed/connectorsFeed.json
           REACT_APP_SEGMENT_ANALYTICS_TAG: CaC5PUXF3swrCxkM5rGOA7oUUGVZv9zH
         run: ./scripts/build_tree.sh
       - name: Publish - website
         env:
-          CLOUDFRONT_ID: E7FLEKLTODN9Q
+          CLOUDFRONT_ID: EBDYJ0OF13PS7
         run: ./scripts/publish_website.sh
       - name: Notify slack success
         if: success()
