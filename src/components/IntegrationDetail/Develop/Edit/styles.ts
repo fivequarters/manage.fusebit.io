@@ -102,22 +102,19 @@ export const LineInstruction = styled.div`
   width: 667px;
   height: 50px;
   padding: 16px;
+  padding-right: 48px;
   border: 0;
   margin: 0;
   outline: rgba(255, 255, 255, 0);
   border-radius: 4px;
   background-color: var(--secondary-color);
-  overflow: hidden;
+  overflow: auto;
   white-space: nowrap;
   font-family: 'Courier';
   font-size: 16px;
   line-height: 18px;
   color: var(--black);
   display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  flex-wrap: nowrap;
-  gap: 1ch;
 
   & > span {
     color: var(--primary-color);
@@ -136,23 +133,6 @@ export const LineInstruction = styled.div`
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* IE10+/Edge */
     user-select: none; /* Standard */
-  }
-
-  .cli-column {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-  }
-
-  .cli-row {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 1ch;
-  }
-  .cli-row > div:not(:first-child) {
-    padding-left: 2ch;
   }
 
   @media only screen and (max-width: 1250px) {
@@ -189,13 +169,14 @@ export const LineInstructionCopy = styled.div`
   right: 0;
   top: 0;
   height: 50px;
-  width: 70px;
+  width: 50px;
   font-size: 14px;
   line-height: 16px;
   font-weight: 500;
   color: var(--primary-color);
   z-index: 2;
   opacity: 0;
+  background-color: var(--secondary-color-opaque);
   transition: all 0.25s linear;
 
   @media only screen and (max-width: 1250px) {
