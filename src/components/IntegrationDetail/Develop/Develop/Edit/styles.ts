@@ -141,7 +141,7 @@ export const LineInstruction = styled.div`
 export const SublineInstruction = styled.div`
   display: flex;
   flex-direction: column;
-  
+
   > div:not(:first-child) {
     margin-top: 10px;
     margin-left: 20px;
