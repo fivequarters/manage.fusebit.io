@@ -144,7 +144,9 @@ const NewUser = React.forwardRef(({ open, onClose, createUser }: Props, ref) => 
         </>
       ) : (
         <>
-          <SC.Title>User Bob Smith Created!</SC.Title>
+          <SC.Title>
+            User {data.firstName} {data.lastName} Created!
+          </SC.Title>
           <SC.Description>
             Securely share the following link with the user. The one-time use token included in the link expires in
             eight hours.
