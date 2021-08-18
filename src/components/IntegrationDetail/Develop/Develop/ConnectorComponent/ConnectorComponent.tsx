@@ -53,10 +53,11 @@ const ConnectorComponent: React.FC<ConnectorComponentProps> = ({
         }
       }}
     >
-      {
-        // TODO: Replace placeholder with real data
-      }
-      <SC.CardConnectorImage src={icon} alt={'connector image'} height="20" width="20" />
+      {icon === '' ? (
+        <SC.CardConnectorImagePlaceholder />
+      ) : (
+        <SC.CardConnectorImage src={icon} alt={'connector image'} height="20" width="20" />
+      )}
       <SC.CardConnectorText>
         {connector.id} {connector.missing && 'is not found'}
       </SC.CardConnectorText>

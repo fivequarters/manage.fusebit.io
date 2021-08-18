@@ -20,6 +20,12 @@ export const CardConnectorImage = styled.img`
   margin-right: 16px;
 `;
 
+export const CardConnectorImagePlaceholder = styled.div`
+  height: 20px;
+  width: 20px;
+  margin-right: 16px;
+`;
+
 export const CardConnectorText = styled.h4`
   font-size: 14px;
   line-height: 16px;
