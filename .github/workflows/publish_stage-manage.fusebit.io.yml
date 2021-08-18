@@ -59,7 +59,9 @@ jobs:
           REACT_APP_LOGOUT_REDIRECT_URL: https://fusebit.io
           REACT_APP_INTEGRATIONS_FEED_URL: https://stage-manage.fusebit.io/feed/integrationsFeed.json
           REACT_APP_CONNECTORS_FEED_URL: https://stage-manage.fusebit.io/feed/connectorsFeed.json
-          REACT_APP_SEGMENT_ANALYTICS_TAG: CaC5PUXF3swrCxkM5rGOA7oUUGVZv9zH
+          REACT_APP_SEGMENT_ANALYTICS_TAG: gTwm2aSb6Y6Jp273lyO5R5JMU9rJERSi
+          REACT_APP_GOOGLE_ANALYTICS: UA-136792777-1
+          REACT_APP_HOTJAR_ID: 2534393
         run: ./scripts/build_tree.sh
       - name: Publish - website
         env:

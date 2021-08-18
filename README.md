@@ -17,6 +17,8 @@ REACT_APP_AUTH0_CLIENT_ID=HXmmy0n9RWCdQkKIZiIozMbvK4DjyKRq
 REACT_APP_LOGOUT_REDIRECT_URL=http://localhost:3000
 REACT_APP_INTEGRATIONS_FEED_URL=http://localhost:3000/feed/integrationsFeed.json
 REACT_APP_CONNECTORS_FEED_URL=http://localhost:3000/feed/connectorsFeed.json
+REACT_APP_GOOGLE_ANALYTICS=
+REACT_APP_HOTJAR_ID=
 ```
 
 ### Vercel
@@ -28,18 +30,6 @@ REACT_APP_AUTH0_CLIENT_ID=dimuls6VLYgXpD7UYCo6yPdKAXPXjQng
 REACT_APP_LOGOUT_REDIRECT_URL=https://fusebit.io
 REACT_APP_INTEGRATIONS_FEED_URL=https://portal-fusebit-io.vercel.app/feed/connectorsFeed.json
 REACT_APP_CONNECTORS_FEED_URL=https://portal-fusebit-io.vercel.app/feed/connectorsFeed.json
-```
-
-### Production
-
-```
-REACT_APP_FUSEBIT_DEPLOYMENT=https://api.fusebit.io
-REACT_APP_AUTH0_DOMAIN=https://fusebit.auth0.com
-REACT_APP_AUTH0_CLIENT_ID=dimuls6VLYgXpD7UYCo6yPdKAXPXjQng
-REACT_APP_LOGOUT_REDIRECT_URL=https://fusebit.io
-REACT_APP_INTEGRATIONS_FEED_URL=https://manage.fusebit.io/feed/integrationsFeed.json
-REACT_APP_CONNECTORS_FEED_URL=https://manage.fusebit.io/feed/connectorsFeed.json
-REACT_APP_SEGMENT_ANALYTICS_TAG=CaC5PUXF3swrCxkM5rGOA7oUUGVZv9zH
 ```
 
 ## Running and serving a dev build
