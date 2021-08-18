@@ -5,9 +5,8 @@ import { Button } from '@material-ui/core';
 import { Props } from '../../../../interfaces/edit';
 import copyIcon from '../../../../assets/copy.svg';
 
-const Edit = React.forwardRef(({ open, onClose, integration, token }: Props, ref) => {
+const Edit = React.forwardRef(({ open, onClose, integration }: Props) => {
   const [copy, setCopy] = React.useState(false);
-  const [fadeChange, setFadeChange] = React.useState(false);
   const [copiedLine, setCopiedLine] = React.useState(0);
   let timeout: NodeJS.Timeout;
 
@@ -56,32 +55,7 @@ const Edit = React.forwardRef(({ open, onClose, integration, token }: Props, ref
       </SC.LineInstructionWrapper>
 
       <SC.Flex>
-        <SC.LineTitle>2. Initialize the CLI by running</SC.LineTitle>
-        <SC.CopyMobile
-          onClick={() => handleCopy(`fuse init ${token}`, 2)}
-          src={copyIcon}
-          alt="copy"
-          height="16"
-          width="16"
-        />
-      </SC.Flex>
-      <SC.LineInstructionWrapper
-        onMouseLeave={() => setFadeChange(false)}
-        onMouseEnter={() => setFadeChange(true)}
-        onClick={() => handleCopy(`fuse init ${token}`, 2)}
-      >
-        <SC.LineInstructionCopy>
-          <img src={copyIcon} alt="copy" height="16" width="16" />
-        </SC.LineInstructionCopy>
-        <SC.LineInstructionFade change={fadeChange} />
-        <SC.LineInstruction>
-          <span className="unselectable">$</span> fuse <strong>init</strong> {token}
-        </SC.LineInstruction>
-        <SC.CopySuccessMobile copy={copiedLine === 2}>Copied to clipboard!</SC.CopySuccessMobile>
-      </SC.LineInstructionWrapper>
-
-      <SC.Flex>
-        <SC.LineTitle>3. Download the integration code</SC.LineTitle>
+        <SC.LineTitle>2. Download the integration code</SC.LineTitle>
         <SC.CopyMobile
           onClick={() => handleCopy(`fuse integration get ${integration} -d ${integration}`, 3)}
           src={copyIcon}
@@ -103,7 +77,7 @@ const Edit = React.forwardRef(({ open, onClose, integration, token }: Props, ref
       </SC.LineInstructionWrapper>
 
       <SC.Flex>
-        <SC.LineTitle>4. After making your code changes run</SC.LineTitle>
+        <SC.LineTitle>3. After making your code changes run</SC.LineTitle>
         <SC.CopyMobile
           onClick={() => handleCopy(`fuse integration deploy ${integration} -d ${integration}`, 4)}
           src={copyIcon}
