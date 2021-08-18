@@ -388,6 +388,14 @@ const Develop: React.FC = () => {
             <SC.Bullet />
             Getting Started
           </SC.Link>
+          <SC.Link
+            target="_blank"
+            rel="noopener_noreferrer"
+            href="https://developer.fusebit.io/docs/integration-programming-model"
+          >
+            <SC.Bullet />
+            Integration Programming Model
+          </SC.Link>
         </SC.FlexDown>
         <SC.FlexDown>
           <SC.Card>
