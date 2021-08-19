@@ -51,9 +51,9 @@ const Edit = React.forwardRef(({ open, onClose, integration, token }: Props) => 
         </SC.LineInstructionCopy>
         <SC.LineInstruction>
           <span className="unselectable">$</span>
-          <span>npm</span>
-          <strong>install</strong>
-          <span>@fusebit/cli -g</span>
+          <span>
+            npm <strong>install</strong> @fusebit/cli -g
+          </span>
         </SC.LineInstruction>
         <SC.CopySuccessMobile copy={copiedLine === 1}>Copied to clipboard!</SC.CopySuccessMobile>
       </SC.LineInstructionWrapper>
@@ -79,17 +79,9 @@ const Edit = React.forwardRef(({ open, onClose, integration, token }: Props) => 
         <SC.LineInstructionFade change={fadeChangeLine === 3} />
         <SC.LineInstruction>
           <span className="unselectable">$</span>
-          <SC.LineInstructionCode>
-            <div>
-              <span>fuse integration</span>
-              <strong>get</strong>
-              <span>{integration} \</span>
-            </div>
-            <div>
-              <strong>--dir</strong>
-              <span>{integration}</span>
-            </div>
-          </SC.LineInstructionCode>
+          <span>
+            fuse integration <strong>get</strong> {integration} --dir {integration}
+          </span>
         </SC.LineInstruction>
         <SC.CopySuccessMobile copy={copiedLine === 3}>Copied to clipboard!</SC.CopySuccessMobile>
       </SC.LineInstructionWrapper>
@@ -115,17 +107,10 @@ const Edit = React.forwardRef(({ open, onClose, integration, token }: Props) => 
         <SC.LineInstructionFade change={fadeChangeLine === 4} />
         <SC.LineInstruction>
           <span className="unselectable">$</span>
-          <SC.LineInstructionCode>
-            <div>
-              <span>fuse integration</span>
-              <strong>deploy</strong>
-              <span>{integration} \</span>
-            </div>
-            <div>
-              <strong>--dir</strong>
-              <span>{integration}</span>
-            </div>
-          </SC.LineInstructionCode>
+
+          <span>
+            fuse integration <strong>deploy</strong> {integration} --dir {integration}
+          </span>
         </SC.LineInstruction>
         <SC.CopySuccessMobile copy={copiedLine === 4}>Copied to clipboard!</SC.CopySuccessMobile>
       </SC.LineInstructionWrapper>
