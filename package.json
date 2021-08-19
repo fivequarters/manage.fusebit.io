@@ -64,8 +64,9 @@
     "@types/react-dom": "^16.9.8",
     "@types/react-highlight": "^0.12.2",
     "@types/react-router-dom": "^5.1.6",
+    "@types/segment-analytics": "0.0.34",
     "@types/styled-components": "^5.1.10",
-    "prettier": "^2.0.5",
-    "husky": "^7.0.1"
+    "husky": "^7.0.1",
+    "prettier": "^2.0.5"
   }
 }
