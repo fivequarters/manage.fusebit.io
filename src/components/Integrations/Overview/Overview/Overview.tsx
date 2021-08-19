@@ -79,8 +79,8 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
               createDataFromFeed(feed[i], dummyData);
             }
           }
+          setAddIntegrationOpen(keyDoesntMatch);
         });
-        setAddIntegrationOpen(keyDoesntMatch);
       } else {
         const items = integrations.data.items;
         setRows(items);
