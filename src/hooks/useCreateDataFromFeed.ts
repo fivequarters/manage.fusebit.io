@@ -55,6 +55,7 @@ export const useCreateDataFromFeed = () => {
             await waitForOperations([response.data.operationId]);
           }),
         ]);
+        removeLoader();
         history.push(
           isConnector
             ? getRedirectLink('/connector/' + firstConnector?.id + '/configure')

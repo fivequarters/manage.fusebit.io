@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as SC from './styles';
 import { ConnectorComponentProps } from '../../../../../interfaces/integrationDetailDevelop';
 import cross from '../../../../../assets/cross.svg';
@@ -7,6 +7,7 @@ import { useGetRedirectLink } from '../../../../../hooks/useGetRedirectLink';
 import { integrationsFeed, connectorsFeed } from '../../../../../static/feed';
 import { Button, Modal, Backdrop } from '@material-ui/core';
 
+const NOT_FOUND_ICON = '/images/warning-red.svg';
 const ConnectorComponent: React.FC<ConnectorComponentProps> = ({
   connector,
   onConnectorDelete,
@@ -17,9 +18,14 @@ const ConnectorComponent: React.FC<ConnectorComponentProps> = ({
   const { getRedirectLink } = useGetRedirectLink();
   const [icon, setIcon] = useState('');
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const connectorRef = useRef(connector);
 
   useEffect(() => {
-    if (connector.tags && !connector.missing) {
+    connectorRef.current = connector;
+  }, [connector]);
+
+  useEffect(() => {
+    if (connector.tags) {
       const feedtype = connector.tags['fusebit.feedType'];
       const feedId = connector.tags['fusebit.feedId'];
 
@@ -40,10 +46,19 @@ const ConnectorComponent: React.FC<ConnectorComponentProps> = ({
           });
         });
       }
-    } else {
-      setIcon('/images/warning-red.svg');
+    } else if (connector.missing) {
+      setTimeout(() => {
+        if (connectorRef.current.missing) {
+          setIcon(NOT_FOUND_ICON);
+        }
+      }, 1000);
     }
   }, [connector]);
+
+  const handleConnectorDelete = () => {
+    onConnectorDelete(connector.id);
+    setDeleteModalOpen(false);
+  };
 
   return (
     <SC.CardConnector
@@ -78,7 +93,7 @@ const ConnectorComponent: React.FC<ConnectorComponentProps> = ({
               Cancel
             </Button>
             <Button
-              onClick={() => onConnectorDelete(connector.id)}
+              onClick={handleConnectorDelete}
               style={{ width: '77px' }}
               size="medium"
               variant="contained"
@@ -95,7 +110,7 @@ const ConnectorComponent: React.FC<ConnectorComponentProps> = ({
         <SC.CardConnectorImage src={icon} alt={'connector image'} height="20" width="20" />
       )}
       <SC.CardConnectorText>
-        {connector.id} {connector.missing && 'is not found'}
+        {connector.id} {icon === NOT_FOUND_ICON && 'is not found'}
       </SC.CardConnectorText>
       {!linkConnector && (
         <SC.CardConnectorCrossContainer id="closeWrapper" onClick={() => setDeleteModalOpen(true)}>

@@ -71,7 +71,7 @@ const Develop: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    reloadIntegration();
+    if (userData.subscriptionId) reloadIntegration();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [integrationId]);
 
@@ -245,6 +245,7 @@ const Develop: React.FC = () => {
           const missingConnector: FinalConnector = {
             missing: true,
             id: innerConnector.entityId,
+            ...innerConnector,
           };
           finalConnectorsList?.push(missingConnector);
         }

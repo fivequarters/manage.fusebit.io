@@ -48,8 +48,10 @@ const Configure: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    reloadConnector();
-    reloadConfig();
+    if (userData.subscriptionId) {
+      reloadConnector();
+      reloadConfig();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectorId]);
 
