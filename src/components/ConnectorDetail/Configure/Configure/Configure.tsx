@@ -41,9 +41,11 @@ const Configure: React.FC = () => {
   const { createError } = useError();
 
   useEffect(() => {
-    history.listen((location) => {
+    const unlisten = history.listen((location) => {
       setConnectorId(location.pathname.split('/')[6]);
     });
+
+    return () => unlisten();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

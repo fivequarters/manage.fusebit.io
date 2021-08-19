@@ -64,9 +64,11 @@ const Develop: React.FC = () => {
       localStorage.removeItem('refreshTokenUrl');
       setConnectOpen(true);
     }
-    history.listen((location) => {
+    const unlisten = history.listen((location) => {
       setIntegrationId(location.pathname.split('/')[6]);
     });
+
+    return () => unlisten();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -54,10 +54,12 @@ const Navbar: React.FC<Props> = ({
   });
 
   useEffect(() => {
-    history.listen(() => {
+    const unlisten = history.listen(() => {
       setAnchorSectionDropdown(null);
       setDrawerOpen(false);
     });
+
+    return () => unlisten();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
