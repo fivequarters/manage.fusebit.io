@@ -7,4 +7,10 @@ export default createGlobalStyle`
         --black: #333333;
         --grey: #959595;
     }
+    a {
+        text-decoration: none;
+        span {
+            display: block;
+        }
+    }
 `;

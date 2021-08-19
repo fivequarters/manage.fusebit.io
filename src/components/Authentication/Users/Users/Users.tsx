@@ -29,6 +29,7 @@ import { useAccountUserGetAll } from '../../../../hooks/api/v1/account/user/useG
 import { Account } from '../../../../interfaces/account';
 import { useAccountUserCreateUser } from '../../../../hooks/api/v1/account/user/useCreateUser';
 import { useCreateToken } from '../../../../hooks/useCreateToken';
+import { useHistory } from 'react-router-dom';
 
 enum cells {
   NAME = 'Name',
@@ -37,6 +38,7 @@ enum cells {
 }
 
 const Authentication: React.FC = () => {
+  const history = useHistory();
   const [selected, setSelected] = React.useState<string[]>([]);
   const [rows, setRows] = React.useState<Account[]>([]);
   const { userData } = useContext();
@@ -117,7 +119,8 @@ const Authentication: React.FC = () => {
     //     createError("You don't have sufficient permissions to edit integration {integration}.  Please contact an account administrator.");
     // }
     if (!event.target.id) {
-      window.location.href = href;
+      history.push(href);
+      // window.location.href = href;
     }
   };
 

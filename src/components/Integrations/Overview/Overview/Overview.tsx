@@ -32,8 +32,10 @@ import { cells, OverviewProps } from '../../../../interfaces/integrations';
 import { Data } from '../../../../interfaces/feedPicker';
 import { useCreateDataFromFeed } from '../../../../hooks/useCreateDataFromFeed';
 import Row from './Row';
+import { useHistory } from 'react-router-dom';
 
 const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
+  const history = useHistory();
   const [selected, setSelected] = React.useState<string[]>([]);
   const [rows, setRows] = React.useState<Integration[]>([]);
   const { userData } = useContext();
@@ -148,7 +150,8 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
     //     createError("You don't have sufficient permissions to edit integration {integration}.  Please contact an account administrator.");
     // }
     if (!event.target.id) {
-      window.location.href = href;
+      history.push(href);
+      // window.location.href = href;
     }
   };
 
