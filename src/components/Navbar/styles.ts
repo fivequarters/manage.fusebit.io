@@ -57,10 +57,6 @@ export const CompanyName = styled.span`
     font-size: 14px;
     line-height: 16px;
     font-weight: 500;
-    width: 100px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
   }
 `;
 

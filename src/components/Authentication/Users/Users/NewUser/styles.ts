@@ -14,8 +14,11 @@ export const Card = styled.div<{ open: boolean }>`
   box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
   transition: all 1s linear;
 
-  @media only screen and (max-width: 550px) {
+  @media only screen and (max-width: 660px) {
     width: 100%;
+    height: 100%;
+    border-radius: 0;
+    padding: 32px;
     left: 0;
     top: auto;
     bottom: 0;
@@ -63,8 +66,8 @@ export const FormWrapper = styled.form`
   margin: 0px auto;
   width: 400px;
 
-  @media only screen and (max-width: 880px) {
-    margin-left: 0;
+  @media only screen and (max-width: 660px) {
+    width: 100%;
   }
 `;
 
@@ -151,6 +154,7 @@ export const LineInstructionFade = styled.div<{ change: boolean; onlyMobileVisib
   @media only screen and (max-width: 1250px) {
     right: -2px;
     display: ${(props) => props.onlyMobileVisible && 'block'};
+    width: 300px !important;
     width: 60px;
   }
 `;

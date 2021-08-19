@@ -3,6 +3,11 @@ import styled from 'styled-components';
 export const Overview = styled.div`
   display: flex;
   padding-bottom: 60px;
+
+  @media only screen and (max-width: 780px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 export const FlexDown = styled.div`
@@ -21,6 +26,15 @@ export const UserCard = styled.div`
   box-shadow: 0px 1px 30px -1px rgba(52, 72, 123, 0.1);
   z-index: 0;
   border-radius: 8px;
+
+  @media only screen and (max-width: 780px) {
+    width: 100%;
+    height: 100%;
+  }
+
+  @media only screen and (max-width: 370px) {
+    padding: 16px;
+  }
 `;
 
 export const UserInfoContainer = styled.div`
@@ -53,6 +67,10 @@ export const UserImage = styled.img`
   object-fit: contain;
   border-radius: 50%;
   margin-right: 32px;
+
+  @media only screen and (max-width: 780px) {
+    display: none;
+  }
 `;
 
 export const UserName = styled.h3`
@@ -109,6 +127,10 @@ export const CopySuccess = styled.p<{ copy: boolean }>`
   visibility: ${(props) => (props.copy ? 'visible' : 'hidden')};
   margin-left: auto;
   transition: all 0.5s linear;
+
+  @media only screen and (max-width: 780px) {
+    left: 0;
+  }
 `;
 
 export const InfoFieldWrapper = styled.div`
@@ -145,6 +167,11 @@ export const CLIAccesWrapper = styled.div`
   flex-direction: column;
   margin-left: 59px;
   margin-top: 52px;
+
+  @media only screen and (max-width: 780px) {
+    align-items: center;
+    margin-left: 0;
+  }
 `;
 
 export const CLIAccess = styled.h4`
