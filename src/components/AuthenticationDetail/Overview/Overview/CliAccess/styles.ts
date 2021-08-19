@@ -13,8 +13,11 @@ export const Card = styled.div<{ open: boolean }>`
   box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
   transition: all 1s linear;
 
-  @media only screen and (max-width: 550px) {
+  @media only screen and (max-width: 850px) {
     width: 100%;
+    height: 100%;
+    border-radius: 0;
+    padding: 32px;
     left: 0;
     top: auto;
     bottom: 0;
@@ -144,7 +147,7 @@ export const LineInstructionFade = styled.div<{ change: boolean; onlyMobileVisib
   @media only screen and (max-width: 1250px) {
     right: -2px;
     display: ${(props) => props.onlyMobileVisible && 'block'};
-    width: 60px;
+    width: 300px !important;
   }
 `;
 
@@ -167,7 +170,7 @@ export const LineInstructionCopy = styled.div`
   transition: all 0.25s linear;
 
   @media only screen and (max-width: 1250px) {
-    display: none;
+    opacity: 1;
   }
 `;
 
@@ -182,18 +185,6 @@ export const CopySuccess = styled.p<{ copy: boolean }>`
   visibility: ${(props) => (props.copy ? 'visible' : 'hidden')};
   margin-left: auto;
   transition: all 0.5s linear;
-`;
-
-export const CopyMobile = styled.img`
-  display: none;
-  height: 16px;
-  width: 16px;
-  object-fit: contain;
-  margin-left: auto;
-
-  @media only screen and (max-width: 1250px) {
-    display: block;
-  }
 `;
 
 export const ButtonsWrapper = styled.div`

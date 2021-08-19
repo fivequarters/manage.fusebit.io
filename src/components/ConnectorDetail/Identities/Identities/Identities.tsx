@@ -55,7 +55,14 @@ const Identities: React.FC = () => {
   return (
     <SC.Wrapper>
       <SC.Header>Total Identities: {identitiesData ? identitiesData?.data.total : 'Loading...'}</SC.Header>
-      <Button onClick={handleDelete} style={{ width: '200px' }} variant="contained" color="primary" size="large">
+      <Button
+        onClick={handleDelete}
+        disabled={!identitiesData || identitiesData?.data.total === 0}
+        style={{ width: '200px' }}
+        variant="contained"
+        color="primary"
+        size="large"
+      >
         Delete all Identities
       </Button>
     </SC.Wrapper>

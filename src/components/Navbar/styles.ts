@@ -29,7 +29,7 @@ export const FlexDown = styled.div`
   flex-direction: column;
 `;
 
-export const CompanyImg = styled.a`
+export const CompanyImg = styled.span`
   height: 56px;
   width: 56px;
   background-size: contain;
@@ -44,7 +44,7 @@ export const CompanyImg = styled.a`
   }
 `;
 
-export const CompanyName = styled.a`
+export const CompanyName = styled.span`
   font-size: 16px;
   line-height: 18px;
   font-weight: 600;
@@ -57,10 +57,6 @@ export const CompanyName = styled.a`
     font-size: 14px;
     line-height: 16px;
     font-weight: 500;
-    width: 100px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
   }
 `;
 
@@ -131,7 +127,7 @@ export const SectionDropdownTitle = styled.h4`
   margin-bottom: 16px;
 `;
 
-export const SectionDropdownSeeMore = styled.a`
+export const SectionDropdownSeeMore = styled.span`
   font-size: 12px;
   line-height: 14px;
   font-weight: 300;
@@ -149,7 +145,7 @@ export const SectionDropdownSeeMore = styled.a`
   }
 `;
 
-export const SectionDropdownIntegration = styled.a<{ active: boolean }>`
+export const SectionDropdownIntegration = styled.span<{ active: boolean }>`
   display: flex;
   align-items: center;
   width: 100%;
@@ -227,7 +223,7 @@ export const UserDropdownInfoEmail = styled.div`
   margin-bottom: auto;
 `;
 
-export const UserDropdownStatus = styled.a`
+export const UserDropdownStatus = styled.span`
   display: flex;
   align-items: center;
   width: 100%;
@@ -280,7 +276,21 @@ export const UserDropdownLinksWrapper = styled.div`
   margin-bottom: 24px;
 `;
 
-export const UserDropdownLink = styled.a`
+export const UserDropdownLink = styled.span<{ noMargin?: boolean }>`
+  font-size: 14px;
+  line-height: 16px;
+  color: var(--black);
+  text-decoration: none;
+  width: max-content;
+  transition: all 0.25s linear;
+  ${(props) => (props.noMargin ? '' : 'margin-bottom: 16px;')}
+
+  &:hover {
+    color: var(--primary-color);
+  }
+`;
+
+export const UserDropdownLinkA = styled.a`
   font-size: 14px;
   line-height: 16px;
   color: var(--black);
@@ -315,7 +325,7 @@ export const Flex = styled.div<{ mobileHidden?: boolean }>`
   }
 `;
 
-export const SectionLink = styled.a`
+export const SectionLink = styled.span`
   font-size: 20px;
   line-height: 22px;
   font-weight: 300;
@@ -341,7 +351,20 @@ export const LinksContainer = styled.div`
   align-items: center;
 `;
 
-export const Link = styled.a`
+export const Link = styled.span`
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  color: white;
+  margin-right: 72px;
+
+  @media only screen and (max-width: 880px) {
+    display: none;
+  }
+`;
+
+export const LinkA = styled.a`
   font-size: 14px;
   line-height: 16px;
   font-weight: 500;
@@ -407,7 +430,7 @@ export const Br = styled.div`
 `;
 
 // TODO: Remove me
-export const FloatingLogin = styled.a`
+export const FloatingLogin = styled.span`
   position: fixed;
   bottom: 0;
   right: 20px;
