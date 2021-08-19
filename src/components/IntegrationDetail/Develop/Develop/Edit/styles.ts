@@ -112,6 +112,7 @@ export const LineInstruction = styled.div`
   line-height: 18px;
   color: var(--black);
   display: flex;
+  overflow: auto;
 
   & span {
     font-weight: 400;
@@ -121,7 +122,6 @@ export const LineInstruction = styled.div`
   & strong {
     color: var(--primary-color);
     font-weight: 400;
-    margin: 0 0 0 10px;
   }
 
   .unselectable {
@@ -138,22 +138,13 @@ export const LineInstruction = styled.div`
   }
 `;
 
-export const LineInstructionCode = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  > div:not(:first-child) {
-    margin-top: 10px;
-    margin-left: 2ch;
-  }
-`;
-
 export const LineInstructionFade = styled.div<{ change: boolean; onlyMobileVisible?: boolean }>`
   display: ${(props) => props.onlyMobileVisible && 'none'};
   position: absolute;
   right: 0;
   top: 0;
   height: 50px;
+  pointer-events: none;
   width: ${(props) => (props.change ? '300px' : '60px')};
   background-image: linear-gradient(to left, #eff5ff 10%, rgba(255, 255, 255, 0) 100%);
   z-index: 1;
