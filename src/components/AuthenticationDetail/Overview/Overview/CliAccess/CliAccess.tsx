@@ -31,33 +31,21 @@ const CliAccess = React.forwardRef(({ open, onClose, token }: Props, ref) => {
 
       <SC.Flex>
         <SC.LineTitle>1. Install the Fusebit CLI</SC.LineTitle>
-        <SC.CopyMobile
-          onClick={() => handleCopy(`npm install @fusebit/cli -g`, 1)}
-          src={copyIcon}
-          alt="copy"
-          height="16"
-          width="16"
-        />
       </SC.Flex>
       <SC.LineInstructionWrapper onClick={() => handleCopy(`npm install @fusebit/cli -g`, 1)}>
         <SC.LineInstructionCopy>
           <img src={copyIcon} alt="copy" height="16" width="16" />
         </SC.LineInstructionCopy>
+        <SC.LineInstructionFade onlyMobileVisible={true} change={fadeChange} />
         <SC.LineInstruction>
           <span className="unselectable">$</span> npm <strong>install</strong> @fusebit/cli <span>-g</span>
         </SC.LineInstruction>
+
         <SC.CopySuccess copy={copiedLine === 1}>Copied to clipboard!</SC.CopySuccess>
       </SC.LineInstructionWrapper>
 
       <SC.Flex>
         <SC.LineTitle margin="10px">2. Run the following initialization command</SC.LineTitle>
-        <SC.CopyMobile
-          onClick={() => handleCopy(`fuse init ${token}`, 2)}
-          src={copyIcon}
-          alt="copy"
-          height="16"
-          width="16"
-        />
       </SC.Flex>
       <SC.Description>The one-time token in the command is valid for eight hours.</SC.Description>
       <SC.LineInstructionWrapper
