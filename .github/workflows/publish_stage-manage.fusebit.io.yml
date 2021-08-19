@@ -1,6 +1,9 @@
 ###################################################################
 # Auto-created by the cicd-actions tool
-on: workflow_dispatch
+on: 
+  push:
+    branches:
+      - main
 name: Publish stage-manage.fusebit.io
 jobs:
   deploy:
