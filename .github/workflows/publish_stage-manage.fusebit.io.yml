@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 name: Publish stage-manage.fusebit.io
 jobs:
   deploy:
