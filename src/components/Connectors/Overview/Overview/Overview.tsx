@@ -78,6 +78,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
                 dummyIntegration: 'randomIntegration',
                 dummyConnector: 'randomConnector',
               };
+              localStorage.setItem('showSettingUp', 'true');
               createDataFromFeed(feed[i], dummyData, true);
             }
           }
