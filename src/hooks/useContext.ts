@@ -25,6 +25,10 @@ const _useContext = () => {
       const todayInMiliseconds = new Date().getTime();
       if (todayInMiliseconds - expInmilliseconds >= TIME_T0_EXPIRE) {
         window.location.href = getAuthLink(); //refreshing the token
+      } else if (window.location.pathname === '/quickstart') {
+        localStorage.setItem('integrationsContract', window.location.search);
+      } else if (window.location.pathname === '/quickstart-connectors') {
+        localStorage.setItem('connectorsContract', window.location.search);
       }
     } else if (window.location.href.indexOf('logged-out') < 0) {
       if (window.location.pathname === '/quickstart') {
