@@ -69,6 +69,7 @@ export const useCreateDataFromFeed = () => {
         return false;
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       createConnector,
       createError,
