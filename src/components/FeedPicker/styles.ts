@@ -15,12 +15,19 @@ export const Card = styled.div<{ open: boolean }>`
   box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
   transition: all 1s linear;
 
-  @media only screen and (max-width: 550px) {
+  @media only screen and (max-width: 1145px) {
     width: 100%;
+    height: 100%;
+    overflow: auto;
+  }
+
+  @media only screen and (max-width: 1100px) {
     left: 0;
     top: auto;
     bottom: 0;
     transform: translate(0, 0);
+    border-radius: 0;
+    padding: 32px;
   }
 `;
 
@@ -36,12 +43,21 @@ export const Title = styled.h2`
 export const Flex = styled.div<{ alignItems?: boolean }>`
   display: flex;
   align-items: ${(props) => props.alignItems && 'center'};
+
+  @media only screen and (max-width: 1100px) {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 export const Column = styled.div<{ border?: boolean }>`
   display: flex;
   flex-direction: column;
   height: 490px;
+
+  @media only screen and (max-width: 1100px) {
+    height: 100%;
+  }
 `;
 
 export const ColumnItem = styled.div<{ active: boolean }>`
@@ -61,6 +77,10 @@ export const ColumnItem = styled.div<{ active: boolean }>`
     cursor: pointer;
     background-color: var(--secondary-color);
   }
+
+  @media only screen and (max-width: 1100px) {
+    width: 100%;
+  }
 `;
 
 export const ColumnItemImage = styled.img`
@@ -76,6 +96,12 @@ export const ColumnBr = styled.div`
   background-color: #959595;
   opacity: 0.3;
   margin: 0 32px;
+
+  @media only screen and (max-width: 1100px) {
+    width: 100%;
+    height: 1px;
+    margin: 32px 0;
+  }
 `;
 
 export const ColumnSearchWrapper = styled.div`
@@ -99,6 +125,10 @@ export const ColumnSearch = styled.input`
     line-height: 20px;
     color: #959595;
   }
+
+  @media only screen and (max-width: 1100px) {
+    width: 100%;
+  }
 `;
 
 export const ColumnSearchIcon = styled.img`
@@ -116,6 +146,10 @@ export const ConnectorInfo = styled.div`
   flex-direction: column;
   padding-left: 24px;
   width: 100%;
+
+  @media only screen and (max-width: 1100px) {
+    padding-left: 0;
+  }
 `;
 
 export const ConnectorImage = styled.img`
@@ -157,6 +191,10 @@ export const ConnectorDescription = styled(ReactMarkdown)`
     margin: 0;
     margin-top: 16px;
   }
+
+  @media only screen and (max-width: 1100px) {
+    max-width: none;
+  }
 `;
 
 export const ConnectorCustomize = styled.div`
@@ -173,6 +211,10 @@ export const FormWrapper = styled.form`
   flex-direction: column;
   width: 316px;
   margin-top: 15px;
+
+  @media only screen and (max-width: 1100px) {
+    width: 100%;
+  }
 `;
 
 export const FormInputWrapper = styled.div`
@@ -219,4 +261,22 @@ export const GeneralInfoWrapper = styled.div`
   position: relative;
   height: 350px;
   overflow-y: auto;
+`;
+
+export const MobileVisible = styled.div`
+  width: 100%;
+  display: none;
+
+  @media only screen and (max-width: 1100px) {
+    display: flex;
+  }
+`;
+
+export const MobileHidden = styled.div`
+  width: 100%;
+  display: flex;
+
+  @media only screen and (max-width: 1100px) {
+    display: none;
+  }
 `;

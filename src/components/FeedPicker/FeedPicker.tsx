@@ -111,7 +111,7 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
         <SC.Column border={true}>
           <SC.ColumnSearchWrapper>
             <TextField
-              style={{ width: '254px' }}
+              style={{ width: '100%' }}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchFilter(e.target.value)}
               label="Search"
             />
@@ -165,16 +165,30 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
               />
             </SC.FormWrapper>
           </SC.GeneralInfoWrapper>
-          <Button
-            onClick={handleSubmit}
-            style={{ width: '200px', marginTop: 'auto', marginLeft: 'auto' }}
-            fullWidth={false}
-            size="large"
-            color="primary"
-            variant="contained"
-          >
-            Create
-          </Button>
+          <SC.MobileHidden>
+            <Button
+              onClick={handleSubmit}
+              style={{ width: '200px', marginTop: 'auto', marginLeft: 'auto' }}
+              fullWidth={false}
+              size="large"
+              color="primary"
+              variant="contained"
+            >
+              Create
+            </Button>
+          </SC.MobileHidden>
+          <SC.MobileVisible>
+            <Button
+              onClick={handleSubmit}
+              style={{ width: '200px', margin: 'auto' }}
+              fullWidth={false}
+              size="large"
+              color="primary"
+              variant="contained"
+            >
+              Create
+            </Button>
+          </SC.MobileVisible>
         </SC.ConnectorInfo>
       </SC.Flex>
     </SC.Card>
