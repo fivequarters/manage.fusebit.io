@@ -9,8 +9,10 @@ import { useError } from './useError';
 import { Operation } from '../interfaces/operation';
 import { useAccountConnectorCreateConnector } from './api/v2/account/connector/useCreateOne';
 import { useAccountIntegrationCreateIntegration } from './api/v2/account/integration/useCreateOne';
+import { useHistory } from 'react-router-dom';
 
 export const useCreateDataFromFeed = () => {
+  const history = useHistory();
   const { userData } = useContext();
   const { getRedirectLink } = useGetRedirectLink();
   const { replaceMustache } = useReplaceMustache();
@@ -53,9 +55,14 @@ export const useCreateDataFromFeed = () => {
             await waitForOperations([response.data.operationId]);
           }),
         ]);
-        window.location.href = isConnector
-          ? getRedirectLink('/connector/' + firstConnector?.id + '/configure')
-          : getRedirectLink('/integration/' + firstIntegration?.id + '/develop');
+        history.push(
+          isConnector
+            ? getRedirectLink('/connector/' + firstConnector?.id + '/configure')
+            : getRedirectLink('/integration/' + firstIntegration?.id + '/develop')
+        );
+        // window.location.href = isConnector
+        //   ? getRedirectLink('/connector/' + firstConnector?.id + '/configure')
+        //   : getRedirectLink('/integration/' + firstIntegration?.id + '/develop');
       } catch (e) {
         createError(e.message);
         removeLoader();

@@ -10,7 +10,7 @@ import { materialRenderers, materialCells } from '@jsonforms/material-renderers'
 import { useEffect } from 'react';
 import CliAccess from './CliAccess';
 import Delete from './Delete';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useAccountUserGetOne } from '../../../../hooks/api/v1/account/user/useGetOne';
 import { useAccountUserUpdateOne } from '../../../../hooks/api/v1/account/user/useUpdateOne';
 import client from '../../../../assets/client.jpg';
@@ -73,6 +73,7 @@ const uischema = {
 };
 
 const Overview: React.FC = () => {
+  const history = useHistory();
   const { userId } = useParams<{ userId: string }>();
   const { userData } = useContext();
   const [editInformation, setEditInformation] = React.useState(false);
@@ -174,7 +175,8 @@ const Overview: React.FC = () => {
     try {
       createLoader();
       await deleteAccount.mutateAsync({ userId: accountData?.data.id, accountId: userData.accountId });
-      window.location.href = getRedirectLink('/authentication');
+      history.push(getRedirectLink('/authentication'));
+      // window.location.href = getRedirectLink('/authentication');
     } catch (e) {
       createError(e.message);
       setDeleteOpen(false);

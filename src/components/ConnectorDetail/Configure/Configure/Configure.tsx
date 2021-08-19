@@ -1,5 +1,5 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import * as SC from './styles';
 import { useAccountConnectorsGetOne } from '../../../../hooks/api/v2/account/connector/useGetOne';
 import { useAccountConnectorsGetOneConfig } from '../../../../hooks/api/v2/account/connector/useGetOneConfig';
@@ -14,19 +14,22 @@ import { useAccountConnectorUpdateConnector } from '../../../../hooks/api/v2/acc
 import { Operation } from '../../../../interfaces/operation';
 import { useLoader } from '../../../../hooks/useLoader';
 import { useError } from '../../../../hooks/useError';
+import { useEffect } from 'react';
 
 const Configure: React.FC = () => {
+  const history = useHistory();
   const { id } = useParams<{ id: string }>();
+  const [connectorId, setConnectorId] = useState(id);
   const { userData } = useContext();
-  const { data: connectorData } = useAccountConnectorsGetOne<Connector>({
+  const { data: connectorData, refetch: reloadConnector } = useAccountConnectorsGetOne<Connector>({
     enabled: userData.token,
-    id,
+    id: connectorId,
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
   });
-  const { data: config } = useAccountConnectorsGetOneConfig<ConnectorConfig>({
+  const { data: config, refetch: reloadConfig } = useAccountConnectorsGetOneConfig<ConnectorConfig>({
     enabled: userData.token,
-    id,
+    id: connectorId,
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
   });
@@ -36,6 +39,19 @@ const Configure: React.FC = () => {
   const updateConnector = useAccountConnectorUpdateConnector<Operation>();
   const { waitForOperations, createLoader, removeLoader } = useLoader();
   const { createError } = useError();
+
+  useEffect(() => {
+    history.listen((location) => {
+      setConnectorId(location.pathname.split('/')[6]);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    reloadConnector();
+    reloadConfig();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [connectorId]);
 
   const _updateConnector = async () => {
     try {

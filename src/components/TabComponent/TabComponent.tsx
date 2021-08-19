@@ -4,6 +4,7 @@ import { Container, Tabs, Tab } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { Props } from '../../interfaces/TabComponent';
 import { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const TabPanel = (props: any) => {
   const { children, value, index, ...other } = props;
@@ -35,6 +36,7 @@ const a11yProps = (index: number) => {
 };
 
 const TabComponent: React.FC<Props> = ({ tabNames, tabObjects }) => {
+  const history = useHistory();
   const [activeTab, setActiveTab] = React.useState(0);
 
   useEffect(() => {
@@ -47,7 +49,8 @@ const TabComponent: React.FC<Props> = ({ tabNames, tabObjects }) => {
 
   const handleChange = (event: any, newValue: number) => {
     if (newValue !== activeTab) {
-      window.location.href = tabObjects[newValue];
+      history.push(tabObjects[newValue]);
+      // window.location.href = tabObjects[newValue];
     }
   };
 

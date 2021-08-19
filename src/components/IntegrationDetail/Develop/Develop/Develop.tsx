@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import * as SC from './styles';
 import { Button, Modal, Backdrop, Fade } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
@@ -25,9 +25,13 @@ import { Entity, Feed } from '../../../../interfaces/feed';
 import { Data } from '../../../../interfaces/feedPicker';
 import { useReplaceMustache } from '../../../../hooks/useReplaceMustache';
 import { FinalConnector } from '../../../../interfaces/integrationDetailDevelop';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const Develop: React.FC = () => {
+  const history = useHistory();
   const { id } = useParams<{ id: string }>();
+  const [integrationId, setIntegrationId] = useState(id);
   const { userData } = useContext();
   const { data: connectors, refetch: reloadConnectors } = useAccountConnectorsGetAll<{ items: Connector[] }>({
     enabled: userData.token,
@@ -36,7 +40,7 @@ const Develop: React.FC = () => {
   });
   const { data: integrationData, refetch: reloadIntegration } = useAccountIntegrationsGetOne<Integration>({
     enabled: userData.token,
-    id,
+    id: integrationId,
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
   });
@@ -60,7 +64,16 @@ const Develop: React.FC = () => {
       localStorage.removeItem('refreshTokenUrl');
       setConnectOpen(true);
     }
+    history.listen((location) => {
+      setIntegrationId(location.pathname.split('/')[6]);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    reloadIntegration();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [integrationId]);
 
   const handleConnectorDelete = async (connectorId: string) => {
     try {
@@ -419,10 +432,12 @@ const Develop: React.FC = () => {
             </SC.CardConnectorWrapper>
             {integrationData?.data.data.components.length
               ? integrationData?.data.data.components.length >= 5 && (
-                  <SC.CardConnectorSeeMore href={getRedirectLink('/connectors')}>
-                    See all
-                    <img src={arrow} alt="see more" height="10" width="10" />
-                  </SC.CardConnectorSeeMore>
+                  <Link to={getRedirectLink('/connectors')}>
+                    <SC.CardConnectorSeeMore href={getRedirectLink('/connectors')}>
+                      See all
+                      <img src={arrow} alt="see more" height="10" width="10" />
+                    </SC.CardConnectorSeeMore>
+                  </Link>
                 )
               : null}
 
