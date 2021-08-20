@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import * as SC from './styles';
+import * as CSC from '../../../globalStyle';
 import {
   Table,
   TableBody,
@@ -22,20 +23,14 @@ import { Operation } from '../../../../interfaces/operation';
 import { useError } from '../../../../hooks/useError';
 import arrowRight from '../../../../assets/arrow-right.svg';
 import arrowLeft from '../../../../assets/arrow-left.svg';
-import client from '../../../../assets/client.jpg';
 import NewUser from './NewUser';
-import { useGetRedirectLink } from '../../../../hooks/useGetRedirectLink';
 import { useAccountUserGetAll } from '../../../../hooks/api/v1/account/user/useGetAll';
 import { Account } from '../../../../interfaces/account';
 import { useAccountUserCreateUser } from '../../../../hooks/api/v1/account/user/useCreateUser';
 import { useCreateToken } from '../../../../hooks/useCreateToken';
 import { useHistory } from 'react-router-dom';
-
-enum cells {
-  NAME = 'Name',
-  EMAIL = 'Email',
-  USER_ID = 'User-ID',
-}
+import { cells } from '../../../../interfaces/users';
+import Row from './Row';
 
 const Authentication: React.FC = () => {
   const history = useHistory();
@@ -52,14 +47,15 @@ const Authentication: React.FC = () => {
   const { createError } = useError();
   const [selectedCell, setSelectedCell] = React.useState<cells>(cells.NAME);
   const [newUserOpen, setNewUserOpen] = React.useState(false);
-  const { getRedirectLink } = useGetRedirectLink();
   const createUser = useAccountUserCreateUser<Operation>();
   const { _createToken } = useCreateToken();
+  const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
     if (users && users.data.items) {
       const items = users.data.items;
       setRows(items);
+      setLoading(false);
     }
   }, [users]);
 
@@ -206,161 +202,98 @@ const Authentication: React.FC = () => {
           </>
         )}
       </SC.DeleteWrapper>
-      <SC.Table>
-        <Table size="small" aria-label="Authentication Table">
-          <TableHead>
-            <TableRow>
-              <TableCell padding="checkbox">
-                <Checkbox
-                  color="primary"
-                  checked={rows.length > 0 && selected.length === rows.length}
-                  onChange={handleSelectAllCheck}
-                  inputProps={{ 'aria-label': 'select all users' }}
-                />
-              </TableCell>
-              <TableCell>
-                <SC.Flex>
-                  <SC.ArrowUp />
-                  Name
-                </SC.Flex>
-              </TableCell>
-              <TableCell align="left">Email</TableCell>
-              <TableCell align="left">User-ID</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row: Account) => (
-              <SC.Row
-                key={row.id}
-                onClick={(e) => handleRowClick(e, getRedirectLink('/authentication/' + row.id + '/overview'))}
-              >
-                <TableCell
-                  style={{ cursor: 'default' }}
-                  padding="checkbox"
-                  id={`enhanced-table-cell-checkbox-${row.id}`}
-                >
-                  <Checkbox
-                    color="primary"
-                    onClick={(event) => handleCheck(event, row.id || '')}
-                    checked={isSelected(row.id || '')}
-                    inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${row.id}` }}
-                    id={`enhanced-table-checkbox-${row.id}`}
-                  />
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {
-                    //TODO: Replace placeholder with real data (currently using the users)
-                  }
-                  <SC.Flex>
-                    <SC.CellImage
-                      src={userData.userId === row.id ? userData.picture : client}
-                      alt="user"
-                      height="38"
-                      width="38"
+      {!loading && (
+        <>
+          <SC.Table>
+            <Table size="small" aria-label="Authentication Table">
+              <TableHead>
+                <TableRow>
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      color="primary"
+                      checked={rows.length > 0 && selected.length === rows.length}
+                      onChange={handleSelectAllCheck}
+                      inputProps={{ 'aria-label': 'select all users' }}
                     />
-                    <SC.CellName>
-                      {row.firstName} {row.lastName}
-                    </SC.CellName>
-                    {userData.userId === row.id && <SC.CellNameDetail>[me]</SC.CellNameDetail>}
-                  </SC.Flex>
-                </TableCell>
-                <TableCell align="left">
-                  {row.primaryEmail}
-                  {
-                    // TODO: Replace placeholder with real data
-                  }
-                </TableCell>
-                <TableCell align="left">
-                  {row.id}
-                  {
-                    // TODO: Replace placeholder with real data
-                  }
-                </TableCell>
-              </SC.Row>
-            ))}
-          </TableBody>
-        </Table>
-      </SC.Table>
-      <SC.TableMobile>
-        <Table size="small" aria-label="Authentication Table">
-          <TableHead>
-            <TableRow>
-              <TableCell padding="checkbox">
-                <Checkbox
-                  color="primary"
-                  checked={rows.length > 0 && selected.length === rows.length}
-                  onChange={handleSelectAllCheck}
-                  inputProps={{ 'aria-label': 'select all users' }}
-                />
-              </TableCell>
-              <TableCell align="left">
-                <SC.TableCellMobile>
-                  <p>{selectedCell}</p>
-                  <SC.LeftArrow
-                    onClick={handlePreviousCellSelect}
-                    src={arrowLeft}
-                    alt="previous-cell"
-                    height="16"
-                    width="16"
-                  />
-
-                  <SC.RightArrow
-                    onClick={handleNextCellSelect}
-                    src={arrowRight}
-                    alt="next-cell"
-                    height="16"
-                    width="16"
-                  />
-                </SC.TableCellMobile>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <SC.Row
-                key={row.id}
-                onClick={(e) => handleRowClick(e, getRedirectLink('/authentication/' + row.id + '/overview'))}
-              >
-                <TableCell
-                  style={{ cursor: 'default' }}
-                  padding="checkbox"
-                  id={`enhanced-table-cell-checkbox-${row.id}`}
-                >
-                  <Checkbox
-                    color="primary"
-                    onClick={(event) => handleCheck(event, row.id)}
-                    checked={isSelected(row.id)}
-                    inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${row.id}` }}
-                    id={`enhanced-table-checkbox-${row.id}`}
-                  />
-                </TableCell>
-                <TableCell align="left">
-                  {selectedCell === cells.EMAIL ? (
-                    row.primaryEmail
-                  ) : selectedCell === cells.NAME ? (
+                  </TableCell>
+                  <TableCell>
                     <SC.Flex>
-                      <SC.CellImage
-                        src={userData.userId === row.id ? userData.picture : client}
-                        alt="user"
-                        height="38"
-                        width="38"
-                      />
-                      <SC.CellName>
-                        {row.firstName} {row.lastName}
-                      </SC.CellName>
+                      <SC.ArrowUp />
+                      Name
                     </SC.Flex>
-                  ) : (
-                    row.id
-                  )}
-                  {
-                    // TODO: Replace placeholder with real data
-                  }
-                </TableCell>
-              </SC.Row>
-            ))}
-          </TableBody>
-        </Table>
-      </SC.TableMobile>
+                  </TableCell>
+                  <TableCell align="left">Email</TableCell>
+                  <TableCell align="left">User-ID</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row: Account) => (
+                  <Row
+                    row={row}
+                    handleCheck={handleCheck}
+                    handleRowClick={handleRowClick}
+                    isSelected={isSelected}
+                    selectedCell={selectedCell}
+                  />
+                ))}
+              </TableBody>
+            </Table>
+          </SC.Table>
+          <SC.TableMobile>
+            <Table size="small" aria-label="Authentication Table">
+              <TableHead>
+                <TableRow>
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      color="primary"
+                      checked={rows.length > 0 && selected.length === rows.length}
+                      onChange={handleSelectAllCheck}
+                      inputProps={{ 'aria-label': 'select all users' }}
+                    />
+                  </TableCell>
+                  <TableCell align="left">
+                    <SC.TableCellMobile>
+                      <p>{selectedCell}</p>
+                      <SC.LeftArrow
+                        onClick={handlePreviousCellSelect}
+                        src={arrowLeft}
+                        alt="previous-cell"
+                        height="16"
+                        width="16"
+                      />
+
+                      <SC.RightArrow
+                        onClick={handleNextCellSelect}
+                        src={arrowRight}
+                        alt="next-cell"
+                        height="16"
+                        width="16"
+                      />
+                    </SC.TableCellMobile>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row) => (
+                  <Row
+                    row={row}
+                    handleCheck={handleCheck}
+                    handleRowClick={handleRowClick}
+                    isSelected={isSelected}
+                    selectedCell={selectedCell}
+                    mobile={true}
+                  />
+                ))}
+              </TableBody>
+            </Table>
+          </SC.TableMobile>
+        </>
+      )}
+      {loading && (
+        <CSC.LoaderContainer>
+          <CSC.Spinner loading={true} />
+        </CSC.LoaderContainer>
+      )}
     </SC.Wrapper>
   );
 };

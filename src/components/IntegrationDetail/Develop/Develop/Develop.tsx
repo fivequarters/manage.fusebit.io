@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import * as SC from './styles';
+import * as CSC from '../../../globalStyle';
 import { Button, Modal, Backdrop, Fade } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import arrow from '../../../../assets/arrow-right-black.svg';
@@ -56,6 +57,7 @@ const Develop: React.FC = () => {
   const { getRedirectLink } = useGetRedirectLink();
   const [connectorPickerOpen, setConnectorPickerOpen] = React.useState(false);
   const { replaceMustache } = useReplaceMustache();
+  const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
     const res = localStorage.getItem('refreshToken');
@@ -66,6 +68,7 @@ const Develop: React.FC = () => {
     }
     const unlisten = history.listen((location) => {
       setIntegrationId(location.pathname.split('/')[6]);
+      setLoading(true);
     });
 
     return () => unlisten();
@@ -73,7 +76,14 @@ const Develop: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (userData.subscriptionId) reloadIntegration();
+    const checkAndReloadIntegration = async () => {
+      if (userData.subscriptionId) {
+        await reloadIntegration();
+        setLoading(false);
+      }
+    };
+
+    checkAndReloadIntegration();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [integrationId]);
 
@@ -387,10 +397,20 @@ const Develop: React.FC = () => {
         <SC.FlexDown>
           <SC.Card>
             <SC.CardTitle>Fusebit</SC.CardTitle>
-            <SC.CardIntegration>
-              <img src={arrow} alt="arrow" />
-              {integrationData?.data.id}
-            </SC.CardIntegration>
+            {integrationData?.data.id === undefined && !loading ? (
+              <CSC.LoaderContainer>
+                <CSC.Spinner loading={true} />
+              </CSC.LoaderContainer>
+            ) : loading ? (
+              <CSC.LoaderContainer>
+                <CSC.Spinner loading={true} />
+              </CSC.LoaderContainer>
+            ) : (
+              <SC.CardIntegration>
+                <img src={arrow} alt="arrow" />
+                {integrationData?.data.id}
+              </SC.CardIntegration>
+            )}
             <SC.CardButtonWrapper>
               <Button
                 onClick={handleEditOpen}
@@ -420,18 +440,28 @@ const Develop: React.FC = () => {
           <SC.Card>
             <SC.CardTitle>Connectors</SC.CardTitle>
             <SC.CardConnectorWrapper>
-              {filterConnectors().map((connector: FinalConnector, index: number) => {
-                if (index < 5) {
-                  return (
-                    <ConnectorComponent
-                      key={index}
-                      connector={connector}
-                      onConnectorDelete={(id: string) => handleConnectorDelete(id)}
-                    />
-                  );
-                }
-                return null;
-              })}
+              {connectors?.data.items === undefined && !loading ? (
+                <CSC.LoaderContainer>
+                  <CSC.Spinner loading={true} />
+                </CSC.LoaderContainer>
+              ) : loading ? (
+                <CSC.LoaderContainer>
+                  <CSC.Spinner loading={true} />
+                </CSC.LoaderContainer>
+              ) : (
+                filterConnectors().map((connector: FinalConnector, index: number) => {
+                  if (index < 5) {
+                    return (
+                      <ConnectorComponent
+                        key={index}
+                        connector={connector}
+                        onConnectorDelete={(id: string) => handleConnectorDelete(id)}
+                      />
+                    );
+                  }
+                  return null;
+                })
+              )}
             </SC.CardConnectorWrapper>
             {integrationData?.data.data.components.length
               ? integrationData?.data.data.components.length >= 5 && (
