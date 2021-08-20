@@ -1,6 +1,7 @@
 import React from 'react';
 import { useContext } from '../../../../../hooks/useContext';
 import * as SC from './styles';
+import * as CSC from '../../../../globalStyle';
 import { TableCell, Checkbox } from '@material-ui/core';
 import { useGetRedirectLink } from '../../../../../hooks/useGetRedirectLink';
 import { RowProps, cells } from '../../../../../interfaces/integrations';
@@ -32,7 +33,9 @@ const Row: React.FC<RowProps> = ({ row, handleRowClick, handleCheck, isSelected,
         <TableCell component="th" scope="row">
           <SC.CellName>{row.id}</SC.CellName>
         </TableCell>
-        <TableCell align="left">{installsData?.data.total}</TableCell>
+        <TableCell align="left">
+          {installsData?.data.total !== undefined ? installsData?.data.total : <CSC.Spinner />}
+        </TableCell>
       </SC.Row>
     );
   } else {
@@ -50,7 +53,13 @@ const Row: React.FC<RowProps> = ({ row, handleRowClick, handleCheck, isSelected,
         <TableCell component="th" scope="row">
           <SC.CellName>{row.id}</SC.CellName>
         </TableCell>
-        <TableCell align="left">{selectedCell === cells.INSTALLS && installsData?.data.total}</TableCell>
+        <TableCell align="left">
+          {selectedCell === cells.INSTALLS && installsData?.data.total !== undefined ? (
+            installsData?.data.total
+          ) : (
+            <CSC.Spinner />
+          )}
+        </TableCell>
       </SC.Row>
     );
   }

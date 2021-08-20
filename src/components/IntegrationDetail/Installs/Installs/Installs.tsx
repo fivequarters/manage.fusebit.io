@@ -1,5 +1,6 @@
 import React from 'react';
 import * as SC from './styles';
+import * as CSC from '../../../globalStyle';
 import { Button } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { useAccountIntegrationInstanceGetAll } from '../../../../hooks/api/v2/account/integration/instance/useGetAll';
@@ -54,7 +55,9 @@ const Installs: React.FC = () => {
 
   return (
     <SC.Wrapper>
-      <SC.Header>Total Installs: {installsData ? installsData?.data.total : 'Loading...'}</SC.Header>
+      <SC.Header>
+        Total Installs: {installsData ? installsData?.data.total : <CSC.Spinner margin="0 0 0 5px" />}
+      </SC.Header>
       <Button
         onClick={handleDelete}
         disabled={!installsData || installsData?.data.total === 0}

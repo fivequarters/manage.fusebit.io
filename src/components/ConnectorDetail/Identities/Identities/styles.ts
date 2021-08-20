@@ -8,6 +8,8 @@ export const Wrapper = styled.div`
 `;
 
 export const Header = styled.h3`
+  display: flex;
+  align-items: center;
   font-size: 20px;
   line-height: 26px;
   font-weight: 600;

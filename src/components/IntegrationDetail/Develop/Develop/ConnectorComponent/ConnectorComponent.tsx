@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as SC from './styles';
+import * as CSC from '../../../../globalStyle';
 import { ConnectorComponentProps } from '../../../../../interfaces/integrationDetailDevelop';
 import cross from '../../../../../assets/cross.svg';
 import { useHistory } from 'react-router-dom';
@@ -105,7 +106,7 @@ const ConnectorComponent: React.FC<ConnectorComponentProps> = ({
         </SC.Card>
       </Modal>
       {icon === '' ? (
-        <SC.CardConnectorImagePlaceholder />
+        <CSC.Spinner margin="0 16px 0 0" />
       ) : (
         <SC.CardConnectorImage src={icon} alt={'connector image'} height="20" width="20" />
       )}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useContext } from '../../../../../hooks/useContext';
 import * as SC from './styles';
+import * as CSC from '../../../../globalStyle';
 import { TableCell, Checkbox } from '@material-ui/core';
 import { useGetRedirectLink } from '../../../../../hooks/useGetRedirectLink';
 import { RowProps, cells } from '../../../../../interfaces/connectors';
@@ -38,7 +39,9 @@ const Row: React.FC<RowProps> = ({ row, handleRowClick, handleCheck, isSelected,
             // TODO: Replace placeholder with real data
           }
         </TableCell>
-        <TableCell align="left">{identitiesData?.data.total}</TableCell>
+        <TableCell align="left">
+          {identitiesData?.data.total !== undefined ? identitiesData?.data.total : <CSC.Spinner />}
+        </TableCell>
       </SC.Row>
     );
   } else {
@@ -58,7 +61,13 @@ const Row: React.FC<RowProps> = ({ row, handleRowClick, handleCheck, isSelected,
         </TableCell>
         <TableCell align="left">
           {
-            selectedCell === cells.TYPE ? 'Slack' : identitiesData?.data.total
+            selectedCell === cells.TYPE ? (
+              'Slack'
+            ) : identitiesData?.data.total !== undefined ? (
+              identitiesData?.data.total
+            ) : (
+              <CSC.Spinner />
+            )
             // TODO: Replace placeholder with real data
           }
         </TableCell>

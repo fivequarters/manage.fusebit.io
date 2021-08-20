@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import * as SC from './styles';
+import * as CSC from '../../../globalStyle';
 import {
   Table,
   TableBody,
@@ -51,9 +52,11 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
   const [addIntegrationOpen, setAddIntegrationOpen] = React.useState(false);
   const query = useQuery();
   const { createDataFromFeed } = useCreateDataFromFeed();
+  const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
     if (integrations && integrations.data.items) {
+      setLoading(false);
       if (integrations.data.items.length > 0) {
         const items = integrations.data.items;
         setRows(items);
@@ -228,95 +231,104 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
           </>
         )}
       </SC.DeleteWrapper>
-      <SC.Table>
-        <Table size="small" aria-label="Overview Table">
-          <TableHead>
-            <TableRow>
-              <TableCell padding="checkbox">
-                <Checkbox
-                  color="primary"
-                  checked={rows.length > 0 && selected.length === rows.length}
-                  onChange={handleSelectAllCheck}
-                  inputProps={{ 'aria-label': 'select all integrations' }}
-                />
-              </TableCell>
-              <TableCell>
-                <SC.Flex>
-                  <SC.ArrowUp />
-                  Name
-                </SC.Flex>
-              </TableCell>
-              <TableCell align="left">Installs</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <Row
-                key={row.id}
-                row={row}
-                handleCheck={handleCheck}
-                handleRowClick={handleRowClick}
-                isSelected={isSelected}
-              />
-            ))}
-          </TableBody>
-        </Table>
-      </SC.Table>
-      <SC.TableMobile>
-        <Table size="small" aria-label="Overview Table">
-          <TableHead>
-            <TableRow>
-              <TableCell padding="checkbox">
-                <Checkbox
-                  color="primary"
-                  checked={rows.length > 0 && selected.length === rows.length}
-                  onChange={handleSelectAllCheck}
-                  inputProps={{ 'aria-label': 'select all integrations' }}
-                />
-              </TableCell>
-              <TableCell>
-                <SC.Flex>
-                  <SC.ArrowUp />
-                  Name
-                </SC.Flex>
-              </TableCell>
-              <TableCell align="left">
-                <SC.TableCellMobile>
-                  <p>{selectedCell}</p>
-                  <SC.LeftArrow
-                    onClick={handlePreviousCellSelect}
-                    src={arrowLeft}
-                    alt="previous-cell"
-                    height="16"
-                    width="16"
+      {!loading && (
+        <>
+          <SC.Table>
+            <Table size="small" aria-label="Overview Table">
+              <TableHead>
+                <TableRow>
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      color="primary"
+                      checked={rows.length > 0 && selected.length === rows.length}
+                      onChange={handleSelectAllCheck}
+                      inputProps={{ 'aria-label': 'select all integrations' }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <SC.Flex>
+                      <SC.ArrowUp />
+                      Name
+                    </SC.Flex>
+                  </TableCell>
+                  <TableCell align="left">Installs</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row) => (
+                  <Row
+                    key={row.id}
+                    row={row}
+                    handleCheck={handleCheck}
+                    handleRowClick={handleRowClick}
+                    isSelected={isSelected}
                   />
+                ))}
+              </TableBody>
+            </Table>
+          </SC.Table>
+          <SC.TableMobile>
+            <Table size="small" aria-label="Overview Table">
+              <TableHead>
+                <TableRow>
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      color="primary"
+                      checked={rows.length > 0 && selected.length === rows.length}
+                      onChange={handleSelectAllCheck}
+                      inputProps={{ 'aria-label': 'select all integrations' }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <SC.Flex>
+                      <SC.ArrowUp />
+                      Name
+                    </SC.Flex>
+                  </TableCell>
+                  <TableCell align="left">
+                    <SC.TableCellMobile>
+                      <p>{selectedCell}</p>
+                      <SC.LeftArrow
+                        onClick={handlePreviousCellSelect}
+                        src={arrowLeft}
+                        alt="previous-cell"
+                        height="16"
+                        width="16"
+                      />
 
-                  <SC.RightArrow
-                    onClick={handleNextCellSelect}
-                    src={arrowRight}
-                    alt="next-cell"
-                    height="16"
-                    width="16"
+                      <SC.RightArrow
+                        onClick={handleNextCellSelect}
+                        src={arrowRight}
+                        alt="next-cell"
+                        height="16"
+                        width="16"
+                      />
+                    </SC.TableCellMobile>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row) => (
+                  <Row
+                    key={row.id}
+                    row={row}
+                    handleCheck={handleCheck}
+                    handleRowClick={handleRowClick}
+                    isSelected={isSelected}
+                    mobile={true}
+                    selectedCell={selectedCell}
                   />
-                </SC.TableCellMobile>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <Row
-                key={row.id}
-                row={row}
-                handleCheck={handleCheck}
-                handleRowClick={handleRowClick}
-                isSelected={isSelected}
-                mobile={true}
-                selectedCell={selectedCell}
-              />
-            ))}
-          </TableBody>
-        </Table>
-      </SC.TableMobile>
+                ))}
+              </TableBody>
+            </Table>
+          </SC.TableMobile>
+        </>
+      )}
+      {loading && (
+        <CSC.LoaderContainer>
+          <CSC.Spinner />
+        </CSC.LoaderContainer>
+      )}
     </SC.Wrapper>
   );
 };

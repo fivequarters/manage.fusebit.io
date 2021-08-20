@@ -112,3 +112,11 @@ export const RightArrow = styled.img`
 export const LeftArrow = styled(RightArrow)`
   left: -25px;
 `;
+
+export const LoaderContainer = styled.tr`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 24px;
+`;

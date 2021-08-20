@@ -1,5 +1,6 @@
 import React from 'react';
 import * as SC from './styles';
+import * as CSC from '../../../globalStyle';
 import { Button } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { useAccountConnectorIdentityGetAll } from '../../../../hooks/api/v2/account/connector/identity/useGetAll';
@@ -54,7 +55,9 @@ const Identities: React.FC = () => {
 
   return (
     <SC.Wrapper>
-      <SC.Header>Total Identities: {identitiesData ? identitiesData?.data.total : 'Loading...'}</SC.Header>
+      <SC.Header>
+        Total Identities: {identitiesData ? identitiesData?.data.total : <CSC.Spinner margin="0 0 0 5px" />}
+      </SC.Header>
       <Button
         onClick={handleDelete}
         disabled={!identitiesData || identitiesData?.data.total === 0}

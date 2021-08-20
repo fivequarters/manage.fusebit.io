@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import * as SC from './styles';
+import * as CSC from '../../../globalStyle';
 import { useAccountConnectorsGetOne } from '../../../../hooks/api/v2/account/connector/useGetOne';
 import { useAccountConnectorsGetOneConfig } from '../../../../hooks/api/v2/account/connector/useGetOneConfig';
 import { useContext } from '../../../../hooks/useContext';
@@ -39,10 +40,12 @@ const Configure: React.FC = () => {
   const updateConnector = useAccountConnectorUpdateConnector<Operation>();
   const { waitForOperations, createLoader, removeLoader } = useLoader();
   const { createError } = useError();
+  const [loading, setLoading] = React.useState(false);
 
   useEffect(() => {
     const unlisten = history.listen((location) => {
       setConnectorId(location.pathname.split('/')[6]);
+      setLoading(true);
     });
 
     return () => unlisten();
@@ -50,10 +53,14 @@ const Configure: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (userData.subscriptionId) {
-      reloadConnector();
-      reloadConfig();
-    }
+    const reloadData = async () => {
+      if (userData.subscriptionId) {
+        await reloadConnector();
+        await reloadConfig();
+        setLoading(false);
+      }
+    };
+    reloadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectorId]);
 
@@ -89,7 +96,7 @@ const Configure: React.FC = () => {
   return (
     <SC.Flex>
       <SC.FlexDown>
-        {config?.data && (
+        {config?.data && !loading ? (
           <SC.FormWrapper>
             <JsonForms
               schema={config?.data.schema}
@@ -116,6 +123,10 @@ const Configure: React.FC = () => {
               </Button>
             </SC.FormInputWrapper>
           </SC.FormWrapper>
+        ) : (
+          <CSC.LoaderContainer>
+            <CSC.Spinner />
+          </CSC.LoaderContainer>
         )}
       </SC.FlexDown>
     </SC.Flex>
