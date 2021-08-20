@@ -291,7 +291,7 @@ const Authentication: React.FC = () => {
       )}
       {loading && (
         <CSC.LoaderContainer>
-          <CSC.Spinner loading={true} />
+          <CSC.Spinner />
         </CSC.LoaderContainer>
       )}
     </SC.Wrapper>

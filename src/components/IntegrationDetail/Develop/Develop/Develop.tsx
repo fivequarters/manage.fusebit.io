@@ -399,11 +399,11 @@ const Develop: React.FC = () => {
             <SC.CardTitle>Fusebit</SC.CardTitle>
             {integrationData?.data.id === undefined && !loading ? (
               <CSC.LoaderContainer>
-                <CSC.Spinner loading={true} />
+                <CSC.Spinner />
               </CSC.LoaderContainer>
             ) : loading ? (
               <CSC.LoaderContainer>
-                <CSC.Spinner loading={true} />
+                <CSC.Spinner />
               </CSC.LoaderContainer>
             ) : (
               <SC.CardIntegration>
@@ -442,11 +442,11 @@ const Develop: React.FC = () => {
             <SC.CardConnectorWrapper>
               {connectors?.data.items === undefined && !loading ? (
                 <CSC.LoaderContainer>
-                  <CSC.Spinner loading={true} />
+                  <CSC.Spinner />
                 </CSC.LoaderContainer>
               ) : loading ? (
                 <CSC.LoaderContainer>
-                  <CSC.Spinner loading={true} />
+                  <CSC.Spinner />
                 </CSC.LoaderContainer>
               ) : (
                 filterConnectors().map((connector: FinalConnector, index: number) => {

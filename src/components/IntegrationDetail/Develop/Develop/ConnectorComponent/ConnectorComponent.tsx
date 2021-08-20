@@ -106,7 +106,7 @@ const ConnectorComponent: React.FC<ConnectorComponentProps> = ({
         </SC.Card>
       </Modal>
       {icon === '' ? (
-        <CSC.Spinner loading={true} margin="0 16px 0 0" />
+        <CSC.Spinner margin="0 16px 0 0" />
       ) : (
         <SC.CardConnectorImage src={icon} alt={'connector image'} height="20" width="20" />
       )}

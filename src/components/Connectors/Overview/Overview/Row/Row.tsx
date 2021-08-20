@@ -40,7 +40,7 @@ const Row: React.FC<RowProps> = ({ row, handleRowClick, handleCheck, isSelected,
           }
         </TableCell>
         <TableCell align="left">
-          {identitiesData?.data.total !== undefined ? identitiesData?.data.total : <CSC.Spinner loading={true} />}
+          {identitiesData?.data.total !== undefined ? identitiesData?.data.total : <CSC.Spinner />}
         </TableCell>
       </SC.Row>
     );
@@ -66,7 +66,7 @@ const Row: React.FC<RowProps> = ({ row, handleRowClick, handleCheck, isSelected,
             ) : identitiesData?.data.total !== undefined ? (
               identitiesData?.data.total
             ) : (
-              <CSC.Spinner loading={true} />
+              <CSC.Spinner />
             )
             // TODO: Replace placeholder with real data
           }

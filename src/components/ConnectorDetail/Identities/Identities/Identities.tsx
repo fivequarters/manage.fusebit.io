@@ -56,8 +56,7 @@ const Identities: React.FC = () => {
   return (
     <SC.Wrapper>
       <SC.Header>
-        Total Identities:{' '}
-        {identitiesData ? identitiesData?.data.total : <CSC.Spinner loading={true} margin="0 0 0 5px" />}
+        Total Identities: {identitiesData ? identitiesData?.data.total : <CSC.Spinner margin="0 0 0 5px" />}
       </SC.Header>
       <Button
         onClick={handleDelete}

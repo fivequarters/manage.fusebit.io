@@ -312,7 +312,7 @@ const Overview: React.FC = () => {
       ) : (
         <SC.UserCard>
           <CSC.LoaderContainer>
-            <CSC.Spinner loading={true} />
+            <CSC.Spinner />
           </CSC.LoaderContainer>
         </SC.UserCard>
       )}

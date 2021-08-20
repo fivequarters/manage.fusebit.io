@@ -125,7 +125,7 @@ const Configure: React.FC = () => {
           </SC.FormWrapper>
         ) : (
           <CSC.LoaderContainer>
-            <CSC.Spinner loading={true} />
+            <CSC.Spinner />
           </CSC.LoaderContainer>
         )}
       </SC.FlexDown>

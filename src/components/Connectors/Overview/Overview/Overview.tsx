@@ -320,7 +320,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
       )}
       {loading && (
         <CSC.LoaderContainer>
-          <CSC.Spinner loading={true} />
+          <CSC.Spinner />
         </CSC.LoaderContainer>
       )}
     </SC.Wrapper>

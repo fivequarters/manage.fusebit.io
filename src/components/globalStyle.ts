@@ -27,8 +27,7 @@ const rotate = keyframes`
   }
 `;
 
-export const Spinner = styled.div<{ loading: boolean; margin?: string }>`
-  display: ${(props) => (props.loading ? 'block' : 'none')};
+export const Spinner = styled.div<{ margin?: string }>`
   height: 20px;
   width: 20px;
   background-image: url(${spinner});

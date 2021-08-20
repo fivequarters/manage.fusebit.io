@@ -34,7 +34,7 @@ const Row: React.FC<RowProps> = ({ row, handleRowClick, handleCheck, isSelected,
           <SC.CellName>{row.id}</SC.CellName>
         </TableCell>
         <TableCell align="left">
-          {installsData?.data.total !== undefined ? installsData?.data.total : <CSC.Spinner loading={true} />}
+          {installsData?.data.total !== undefined ? installsData?.data.total : <CSC.Spinner />}
         </TableCell>
       </SC.Row>
     );
@@ -57,7 +57,7 @@ const Row: React.FC<RowProps> = ({ row, handleRowClick, handleCheck, isSelected,
           {selectedCell === cells.INSTALLS && installsData?.data.total !== undefined ? (
             installsData?.data.total
           ) : (
-            <CSC.Spinner loading={true} />
+            <CSC.Spinner />
           )}
         </TableCell>
       </SC.Row>

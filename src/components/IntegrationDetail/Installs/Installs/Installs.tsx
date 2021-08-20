@@ -56,7 +56,7 @@ const Installs: React.FC = () => {
   return (
     <SC.Wrapper>
       <SC.Header>
-        Total Installs: {installsData ? installsData?.data.total : <CSC.Spinner loading={true} margin="0 0 0 5px" />}
+        Total Installs: {installsData ? installsData?.data.total : <CSC.Spinner margin="0 0 0 5px" />}
       </SC.Header>
       <Button
         onClick={handleDelete}
