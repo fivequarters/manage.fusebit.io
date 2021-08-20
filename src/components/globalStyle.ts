@@ -27,12 +27,13 @@ const rotate = keyframes`
   }
 `;
 
-export const Spinner = styled.div<{ loading: boolean }>`
+export const Spinner = styled.div<{ loading: boolean; margin?: string }>`
   display: ${(props) => (props.loading ? 'block' : 'none')};
-  height: 18px;
-  width: 18px;
+  height: 20px;
+  width: 20px;
   background-image: url(${spinner});
   background-size: contain;
+  margin: ${(props) => props.margin && props.margin};
   animation: ${rotate} 1s linear infinite;
 `;
 
