@@ -253,16 +253,15 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {!loading &&
-              rows.map((row) => (
-                <Row
-                  key={row.id}
-                  row={row}
-                  handleCheck={handleCheck}
-                  handleRowClick={handleRowClick}
-                  isSelected={isSelected}
-                />
-              ))}
+            {rows.map((row) => (
+              <Row
+                key={row.id}
+                row={row}
+                handleCheck={handleCheck}
+                handleRowClick={handleRowClick}
+                isSelected={isSelected}
+              />
+            ))}
           </TableBody>
         </Table>
       </SC.Table>
