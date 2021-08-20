@@ -1,5 +1,6 @@
 import React from 'react';
 import * as SC from './styles';
+import * as CSC from '../../../globalStyle';
 import { useContext } from '../../../../hooks/useContext';
 import copy from '../../../../assets/copy.svg';
 import dots from '../../../../assets/dots.svg';
@@ -212,101 +213,109 @@ const Overview: React.FC = () => {
       >
         <CliAccess token={token} open={cliOpen} onClose={() => setCliOpen(false)} />
       </Modal>
-      <SC.UserCard>
-        <SC.UserInfoContainer>
-          <div onClick={() => setPopperOpen(true)}>
-            <SC.DotsWrapper id="popper" onClick={() => setPopperOpen(true)}>
-              <SC.Dots
-                id="popperDots"
-                onClick={() => setPopperOpen(true)}
-                src={dots}
-                alt="options"
-                height="20"
-                width="4"
+      {accountData?.data.id === userId ? (
+        <SC.UserCard>
+          <SC.UserInfoContainer>
+            <div onClick={() => setPopperOpen(true)}>
+              <SC.DotsWrapper id="popper" onClick={() => setPopperOpen(true)}>
+                <SC.Dots
+                  id="popperDots"
+                  onClick={() => setPopperOpen(true)}
+                  src={dots}
+                  alt="options"
+                  height="20"
+                  width="4"
+                />
+              </SC.DotsWrapper>
+              <SC.PopperOpen id="popperWrapper" active={popperOpen}>
+                <SC.PopperElement onClick={() => setDeleteOpen(true)}>Delete User</SC.PopperElement>
+              </SC.PopperOpen>
+            </div>
+            <SC.UserImage alt="user" src={client} height="88" width="88" />
+            <SC.FlexDown>
+              <SC.UserName>
+                {accountData?.data.firstName} {accountData?.data.lastName}
+              </SC.UserName>
+              <SC.UserCompany>{accountData?.data.primaryEmail} </SC.UserCompany>
+              <SC.UserId>
+                <strong>User-ID:&nbsp;</strong> {accountData?.data.id}{' '}
+                <img
+                  onClick={() => handleCopy(accountData?.data.id || '')}
+                  src={copy}
+                  alt="copy"
+                  height="12"
+                  width="12"
+                />
+              </SC.UserId>
+              <SC.CopySuccess copy={idCopied}>Copied to clipboard!</SC.CopySuccess>
+            </SC.FlexDown>
+          </SC.UserInfoContainer>
+          {!editInformation ? (
+            <>
+              <SC.InfoFieldWrapper>
+                <SC.InfoFieldPlaceholder>First Name</SC.InfoFieldPlaceholder>
+                <SC.InfoField>{data?.firstName}</SC.InfoField>
+              </SC.InfoFieldWrapper>
+              <SC.InfoFieldWrapper>
+                <SC.InfoFieldPlaceholder>Last Name</SC.InfoFieldPlaceholder>
+                <SC.InfoField>{data?.lastName}</SC.InfoField>
+              </SC.InfoFieldWrapper>
+              <SC.InfoFieldWrapper>
+                <SC.InfoFieldPlaceholder>E-mail</SC.InfoFieldPlaceholder>
+                <SC.InfoField>{data?.primaryEmail}</SC.InfoField>
+              </SC.InfoFieldWrapper>
+              <SC.EditButtonWrapper>
+                <Button
+                  onClick={() => setEditInformation(true)}
+                  fullWidth={false}
+                  size="medium"
+                  color="primary"
+                  variant="outlined"
+                >
+                  Edit information
+                </Button>
+              </SC.EditButtonWrapper>
+            </>
+          ) : (
+            <SC.FormWrapper>
+              <JsonForms
+                schema={schema}
+                uischema={uischema}
+                data={data}
+                renderers={materialRenderers}
+                cells={materialCells}
+                onChange={({ errors, data }) => {
+                  errors && setErrors(errors);
+                  setData(data);
+                }}
+                validationMode={validationMode}
               />
-            </SC.DotsWrapper>
-            <SC.PopperOpen id="popperWrapper" active={popperOpen}>
-              <SC.PopperElement onClick={() => setDeleteOpen(true)}>Delete User</SC.PopperElement>
-            </SC.PopperOpen>
-          </div>
-          <SC.UserImage alt="user" src={client} height="88" width="88" />
-          <SC.FlexDown>
-            <SC.UserName>
-              {accountData?.data.firstName} {accountData?.data.lastName}
-            </SC.UserName>
-            <SC.UserCompany>{accountData?.data.primaryEmail} </SC.UserCompany>
-            <SC.UserId>
-              <strong>User-ID:&nbsp;</strong> {accountData?.data.id}{' '}
-              <img
-                onClick={() => handleCopy(accountData?.data.id || '')}
-                src={copy}
-                alt="copy"
-                height="12"
-                width="12"
-              />
-            </SC.UserId>
-            <SC.CopySuccess copy={idCopied}>Copied to clipboard!</SC.CopySuccess>
-          </SC.FlexDown>
-        </SC.UserInfoContainer>
-        {!editInformation ? (
-          <>
-            <SC.InfoFieldWrapper>
-              <SC.InfoFieldPlaceholder>First Name</SC.InfoFieldPlaceholder>
-              <SC.InfoField>{data?.firstName}</SC.InfoField>
-            </SC.InfoFieldWrapper>
-            <SC.InfoFieldWrapper>
-              <SC.InfoFieldPlaceholder>Last Name</SC.InfoFieldPlaceholder>
-              <SC.InfoField>{data?.lastName}</SC.InfoField>
-            </SC.InfoFieldWrapper>
-            <SC.InfoFieldWrapper>
-              <SC.InfoFieldPlaceholder>E-mail</SC.InfoFieldPlaceholder>
-              <SC.InfoField>{data?.primaryEmail}</SC.InfoField>
-            </SC.InfoFieldWrapper>
-            <SC.EditButtonWrapper>
-              <Button
-                onClick={() => setEditInformation(true)}
-                fullWidth={false}
-                size="medium"
-                color="primary"
-                variant="outlined"
-              >
-                Edit information
-              </Button>
-            </SC.EditButtonWrapper>
-          </>
-        ) : (
-          <SC.FormWrapper>
-            <JsonForms
-              schema={schema}
-              uischema={uischema}
-              data={data}
-              renderers={materialRenderers}
-              cells={materialCells}
-              onChange={({ errors, data }) => {
-                errors && setErrors(errors);
-                setData(data);
-              }}
-              validationMode={validationMode}
-            />
-            <SC.FormInputWrapper>
-              <Button
-                disabled={isSubmitting}
-                onClick={handleSubmit}
-                style={{ marginRight: '16px' }}
-                fullWidth={false}
-                size="small"
-                color="primary"
-                variant="contained"
-              >
-                {isSubmitting ? 'Saving...' : 'Save'}
-              </Button>
-              <Button onClick={handleCancel} fullWidth={false} size="small" color="primary" variant="outlined">
-                Cancel
-              </Button>
-            </SC.FormInputWrapper>
-          </SC.FormWrapper>
-        )}
-      </SC.UserCard>
+              <SC.FormInputWrapper>
+                <Button
+                  disabled={isSubmitting}
+                  onClick={handleSubmit}
+                  style={{ marginRight: '16px' }}
+                  fullWidth={false}
+                  size="small"
+                  color="primary"
+                  variant="contained"
+                >
+                  {isSubmitting ? 'Saving...' : 'Save'}
+                </Button>
+                <Button onClick={handleCancel} fullWidth={false} size="small" color="primary" variant="outlined">
+                  Cancel
+                </Button>
+              </SC.FormInputWrapper>
+            </SC.FormWrapper>
+          )}
+        </SC.UserCard>
+      ) : (
+        <SC.UserCard>
+          <CSC.LoaderContainer>
+            <CSC.Spinner loading={true} />
+          </CSC.LoaderContainer>
+        </SC.UserCard>
+      )}
       <SC.CLIAccesWrapper>
         <SC.CLIAccess>Command Line (CLI) Access</SC.CLIAccess>
         <Button
