@@ -53,7 +53,13 @@ const Row: React.FC<RowProps> = ({ row, handleRowClick, handleCheck, isSelected,
         <TableCell component="th" scope="row">
           <SC.CellName>{row.id}</SC.CellName>
         </TableCell>
-        <TableCell align="left">{selectedCell === cells.INSTALLS && installsData?.data.total}</TableCell>
+        <TableCell align="left">
+          {selectedCell === cells.INSTALLS && installsData?.data.total !== undefined ? (
+            installsData?.data.total
+          ) : (
+            <CSC.Spinner loading={true} />
+          )}
+        </TableCell>
       </SC.Row>
     );
   }
