@@ -322,9 +322,9 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
         </Table>
       </SC.TableMobile>
       {loading && (
-        <SC.LoaderContainer>
+        <CSC.LoaderContainer>
           <CSC.Spinner loading={true} />
-        </SC.LoaderContainer>
+        </CSC.LoaderContainer>
       )}
     </SC.Wrapper>
   );

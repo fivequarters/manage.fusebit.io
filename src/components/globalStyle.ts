@@ -35,3 +35,11 @@ export const Spinner = styled.div<{ loading: boolean }>`
   background-size: contain;
   animation: ${rotate} 1s linear infinite;
 `;
+
+export const LoaderContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 24px;
+`;

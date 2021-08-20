@@ -1,5 +1,6 @@
 import React from 'react';
 import * as SC from './styles';
+import * as CSC from '../../../globalStyle';
 import {
   Table,
   TableBody,
@@ -51,9 +52,11 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
   const [addConnectorOpen, setAddConnectorOpen] = React.useState(false);
   const query = useQuery();
   const { createDataFromFeed } = useCreateDataFromFeed();
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     if (connectors && connectors.data.items) {
+      setLoading(false);
       if (connectors.data.items.length > 0) {
         const items = connectors.data.items;
         setRows(items);
@@ -311,6 +314,11 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
           </TableBody>
         </Table>
       </SC.TableMobile>
+      {loading && (
+        <CSC.LoaderContainer>
+          <CSC.Spinner loading={true} />
+        </CSC.LoaderContainer>
+      )}
     </SC.Wrapper>
   );
 };

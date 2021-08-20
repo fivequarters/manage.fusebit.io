@@ -119,8 +119,4 @@ export const LoaderContainer = styled.tr`
   flex-direction: column;
   align-items: center;
   margin-top: 24px;
-
-  &:hover {
-    cursor: pointer;
-  }
 `;
