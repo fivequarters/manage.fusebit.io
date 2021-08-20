@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import * as SC from './styles';
+import * as CSC from '../../../globalStyle';
 import {
   Table,
   TableBody,
@@ -51,9 +52,11 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
   const [addIntegrationOpen, setAddIntegrationOpen] = React.useState(false);
   const query = useQuery();
   const { createDataFromFeed } = useCreateDataFromFeed();
+  const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
     if (integrations && integrations.data.items) {
+      setLoading(false);
       if (integrations.data.items.length > 0) {
         const items = integrations.data.items;
         setRows(items);
@@ -250,15 +253,16 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <Row
-                key={row.id}
-                row={row}
-                handleCheck={handleCheck}
-                handleRowClick={handleRowClick}
-                isSelected={isSelected}
-              />
-            ))}
+            {!loading &&
+              rows.map((row) => (
+                <Row
+                  key={row.id}
+                  row={row}
+                  handleCheck={handleCheck}
+                  handleRowClick={handleRowClick}
+                  isSelected={isSelected}
+                />
+              ))}
           </TableBody>
         </Table>
       </SC.Table>
@@ -317,6 +321,11 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
           </TableBody>
         </Table>
       </SC.TableMobile>
+      {loading && (
+        <SC.LoaderContainer>
+          <CSC.Spinner loading={true} />
+        </SC.LoaderContainer>
+      )}
     </SC.Wrapper>
   );
 };
