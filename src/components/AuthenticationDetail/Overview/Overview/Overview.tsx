@@ -228,7 +228,9 @@ const Overview: React.FC = () => {
                 />
               </SC.DotsWrapper>
               <SC.PopperOpen id="popperWrapper" active={popperOpen}>
-                <SC.PopperElement onClick={() => setDeleteOpen(true)}>Delete User</SC.PopperElement>
+                {accountData?.data.id !== userData.userId && (
+                  <SC.PopperElement onClick={() => setDeleteOpen(true)}>Delete User</SC.PopperElement>
+                )}
               </SC.PopperOpen>
             </div>
             <SC.UserImage alt="user" src={client} height="88" width="88" />
