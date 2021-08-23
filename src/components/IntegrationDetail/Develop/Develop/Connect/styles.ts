@@ -24,6 +24,7 @@ export const Card = styled.div<{ open: boolean }>`
     left: 0;
     top: auto;
     bottom: 0;
+    border-radius: 0;
     transform: translate(0, 0);
   }
 `;
