@@ -3,7 +3,6 @@ import styled from 'styled-components';
 export const LineInstructionWrapper = styled.div`
   position: relative;
   margin-bottom: 16px;
-  max-width: 667px;
 
   &:hover {
     cursor: pointer;
@@ -18,7 +17,7 @@ export const LineInstructionWrapper = styled.div`
   }
 `;
 
-export const LineInstruction = styled.div`
+export const LineInstruction = styled.div<{ horizontalScrollbar?: boolean }>`
   position: relative;
   height: 50px;
   padding: 16px;
@@ -27,7 +26,8 @@ export const LineInstruction = styled.div`
   outline: rgba(255, 255, 255, 0);
   border-radius: 4px;
   background-color: var(--secondary-color);
-  overflow: hidden;
+  overflow-x: ${(props) => (props.horizontalScrollbar ? 'auto' : 'hidden')};
+  overflow-y: scroll;
   white-space: nowrap;
   font-family: 'Courier';
   font-size: 16px;

@@ -3,7 +3,7 @@ import * as SC from './styles';
 import copyIcon from '../../assets/copy.svg';
 import { Props } from '../../interfaces/copyLine';
 
-const CopyLine: React.FC<Props> = ({ text }) => {
+const CopyLine: React.FC<Props> = ({ text, highlightedText, horizontalScrollbar }) => {
   const [fadeChange, setFadeChange] = React.useState(false);
   const [copiedLine, setCopiedLine] = React.useState(false);
   let timeout: NodeJS.Timeout;
@@ -31,7 +31,24 @@ const CopyLine: React.FC<Props> = ({ text }) => {
         <img src={copyIcon} alt="copy" height="16" width="16" />
       </SC.LineInstructionCopy>
       <SC.LineInstructionFade change={fadeChange} />
-      <SC.LineInstruction>{text}</SC.LineInstruction>
+      <SC.LineInstruction horizontalScrollbar={horizontalScrollbar}>
+        {highlightedText && <span className="unselectable">$</span>}
+        {highlightedText
+          ? text.split(' ').map((word) => {
+              let foundWord = false;
+              highlightedText.split(' ').forEach((wordToHightlight) => {
+                if (wordToHightlight.match(word)) {
+                  foundWord = true;
+                }
+              });
+              if (foundWord) {
+                return <strong key={word}>{word}</strong>;
+              } else {
+                return word + ' ';
+              }
+            })
+          : text}
+      </SC.LineInstruction>
       <SC.CopySuccess copy={copiedLine}>Copied to clipboard!</SC.CopySuccess>
     </SC.LineInstructionWrapper>
   );

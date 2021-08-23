@@ -3,30 +3,9 @@ import * as SC from './styles';
 import cross from '../../../../../assets/cross.svg';
 import { Button } from '@material-ui/core';
 import { Props } from '../../../../../interfaces/edit';
-import copyIcon from '../../../../../assets/copy.svg';
+import CopyLine from '../../../../CopyLine';
 
-const Edit = React.forwardRef(({ open, onClose, integration, token }: Props) => {
-  const [copy, setCopy] = React.useState(false);
-  const [fadeChangeLine, setFadeChangeLine] = React.useState(-1);
-  const [copiedLine, setCopiedLine] = React.useState(0);
-  let timeout: NodeJS.Timeout;
-
-  const handleCopy = (text: string, lineNumber: number) => {
-    clearTimeout(timeout);
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
-    setCopy(true);
-    setCopiedLine(lineNumber);
-    timeout = setTimeout(() => {
-      setCopy(false);
-      setCopiedLine(0);
-    }, 3000);
-  };
-
+const Edit = React.forwardRef(({ open, onClose, integration }: Props) => {
   return (
     <SC.Card open={open}>
       <SC.CardClose onClick={() => onClose()}>
@@ -36,84 +15,26 @@ const Edit = React.forwardRef(({ open, onClose, integration, token }: Props) => 
 
       <SC.Flex>
         <SC.LineTitle>1. Install the Fusebit CLI</SC.LineTitle>
-        <SC.CopySuccess copy={copy}>Copied to clipboard!</SC.CopySuccess>
-        <SC.CopyMobile
-          onClick={() => handleCopy(`npm install @fusebit/cli -g`, 1)}
-          src={copyIcon}
-          alt="copy"
-          height="16"
-          width="16"
-        />
       </SC.Flex>
-      <SC.LineInstructionWrapper onClick={() => handleCopy(`npm install @fusebit/cli -g`, 1)}>
-        <SC.LineInstructionCopy>
-          <img src={copyIcon} alt="copy" height="16" width="16" />
-        </SC.LineInstructionCopy>
-        <SC.LineInstruction>
-          <span className="unselectable">$</span>
-          <span>
-            npm <strong>install</strong> @fusebit/cli -g
-          </span>
-        </SC.LineInstruction>
-        <SC.CopySuccessMobile copy={copiedLine === 1}>Copied to clipboard!</SC.CopySuccessMobile>
-      </SC.LineInstructionWrapper>
+      <CopyLine text={'npm install @fusebit/cli -g'} highlightedText="install -g" />
 
       <SC.Flex>
         <SC.LineTitle>2. Download the integration code</SC.LineTitle>
-        <SC.CopyMobile
-          onClick={() => handleCopy(`fuse integration get ${integration} --dir ${integration}`, 3)}
-          src={copyIcon}
-          alt="copy"
-          height="16"
-          width="16"
-        />
       </SC.Flex>
-      <SC.LineInstructionWrapper
-        onMouseLeave={() => setFadeChangeLine(-1)}
-        onMouseEnter={() => setFadeChangeLine(3)}
-        onClick={() => handleCopy(`fuse integration get ${integration} --dir ${integration}`, 3)}
-      >
-        <SC.LineInstructionCopy>
-          <img src={copyIcon} alt="copy" height="16" width="16" />
-        </SC.LineInstructionCopy>
-        <SC.LineInstructionFade change={fadeChangeLine === 3} />
-        <SC.LineInstruction>
-          <span className="unselectable">$</span>
-          <span>
-            fuse integration <strong>get</strong> {integration} --dir {integration}
-          </span>
-        </SC.LineInstruction>
-        <SC.CopySuccessMobile copy={copiedLine === 3}>Copied to clipboard!</SC.CopySuccessMobile>
-      </SC.LineInstructionWrapper>
+      <CopyLine
+        text={'fuse integration get ' + integration + ' --dir ' + integration}
+        highlightedText="get --dir"
+        horizontalScrollbar={true}
+      />
 
       <SC.Flex>
         <SC.LineTitle>3. After making your code changes run</SC.LineTitle>
-        <SC.CopyMobile
-          onClick={() => handleCopy(`fuse integration deploy ${integration} -d ${integration}`, 4)}
-          src={copyIcon}
-          alt="copy"
-          height="16"
-          width="16"
-        />
       </SC.Flex>
-      <SC.LineInstructionWrapper
-        onMouseLeave={() => setFadeChangeLine(-1)}
-        onMouseEnter={() => setFadeChangeLine(4)}
-        onClick={() => handleCopy(`fuse integration deploy ${integration} -d ${integration}`, 4)}
-      >
-        <SC.LineInstructionCopy>
-          <img src={copyIcon} alt="copy" height="16" width="16" />
-        </SC.LineInstructionCopy>
-        <SC.LineInstructionFade change={fadeChangeLine === 4} />
-        <SC.LineInstruction>
-          <span className="unselectable">$</span>
-
-          <span>
-            fuse integration <strong>deploy</strong> {integration} --dir {integration}
-          </span>
-        </SC.LineInstruction>
-        <SC.CopySuccessMobile copy={copiedLine === 4}>Copied to clipboard!</SC.CopySuccessMobile>
-      </SC.LineInstructionWrapper>
+      <CopyLine
+        text={'fuse integration deploy ' + integration + ' -d ' + integration}
+        highlightedText="deploy -d"
+        horizontalScrollbar={true}
+      />
 
       <SC.ButtonsWrapper>
         <SC.OutlinedButtonWrapper>
