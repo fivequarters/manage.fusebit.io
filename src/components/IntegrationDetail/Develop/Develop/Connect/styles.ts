@@ -12,14 +12,20 @@ export const Card = styled.div<{ open: boolean }>`
   opacity: ${(props) => (props.open ? 1 : 0)};
   padding: 40px 96px;
   border-radius: 8px;
+  width: 859px;
   box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
   transition: all 1s linear;
 
-  @media only screen and (max-width: 550px) {
+  @media only screen and (max-width: 870px) {
     width: 100%;
+    height: 100%;
+    overflow: auto;
+    padding: 32px;
+    padding-top: 200px;
     left: 0;
     top: auto;
     bottom: 0;
+    border-radius: 0;
     transform: translate(0, 0);
   }
 `;

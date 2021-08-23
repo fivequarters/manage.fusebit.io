@@ -9,7 +9,6 @@ import Connect from './Connect';
 import { useLoader } from '../../../../hooks/useLoader';
 import { useError } from '../../../../hooks/useError';
 import { useContext } from '../../../../hooks/useContext';
-import { useAccountUserCreateToken } from '../../../../hooks/api/v1/account/user/useCreateToken';
 import { useAccountIntegrationUpdateIntegration } from '../../../../hooks/api/v2/account/integration/useUpdateOne';
 import { useAccountIntegrationsGetOne } from '../../../../hooks/api/v2/account/integration/useGetOne';
 import { useAccountConnectorsGetAll } from '../../../../hooks/api/v2/account/connector/useGetAll';
@@ -18,7 +17,6 @@ import { Operation } from '../../../../interfaces/operation';
 import { Connector } from '../../../../interfaces/connector';
 import { Integration, InnerConnector } from '../../../../interfaces/integration';
 import Edit from './Edit';
-import { FuseInitToken } from '../../../../interfaces/fuseInitToken';
 import { useGetRedirectLink } from '../../../../hooks/useGetRedirectLink';
 import FeedPicker from '../../../FeedPicker';
 import ConnectorComponent from './ConnectorComponent';
@@ -49,9 +47,7 @@ const Develop: React.FC = () => {
   const updateIntegration = useAccountIntegrationUpdateIntegration<Operation>();
   const { waitForOperations, createLoader, removeLoader } = useLoader();
   const { createError } = useError();
-  const createToken = useAccountUserCreateToken<FuseInitToken>();
   const [editOpen, setEditOpen] = React.useState(false);
-  const [editToken, setEditToken] = React.useState<string | FuseInitToken>();
   const [connectOpen, setConnectOpen] = React.useState(false);
   const [connectorListOpen, setConnectorListOpen] = React.useState(false);
   const { getRedirectLink } = useGetRedirectLink();
@@ -201,33 +197,6 @@ const Develop: React.FC = () => {
     }
   };
 
-  const handleEditOpen = async () => {
-    if (!editToken) {
-      try {
-        createLoader();
-        const data = {
-          protocol: 'pki',
-          profile: {
-            id: 'default',
-            subscription: userData.subscriptionId,
-          },
-        };
-        const response = await createToken.mutateAsync({
-          accountId: userData.accountId,
-          userId: userData.userId,
-          data: data,
-        });
-        setEditToken(response.data);
-        setEditOpen(true);
-        removeLoader();
-      } catch (e) {
-        createError(e.message);
-      }
-    } else {
-      setEditOpen(true);
-    }
-  };
-
   const filterConnectors = () => {
     const filteredConnectors = connectors?.data.items.filter((item: Connector) => {
       let returnItem = false;
@@ -359,12 +328,7 @@ const Develop: React.FC = () => {
         BackdropComponent={Backdrop}
       >
         <Fade in={editOpen}>
-          <Edit
-            open={editOpen}
-            onClose={() => setEditOpen(false)}
-            integration={integrationData?.data.id || ''}
-            token={editToken || ''}
-          />
+          <Edit open={editOpen} onClose={() => setEditOpen(false)} integration={integrationData?.data.id || ''} />
         </Fade>
       </Modal>
       <SC.Flex>
@@ -385,14 +349,16 @@ const Develop: React.FC = () => {
               </Button>
             </SC.CardButtonWrapper>
           </SC.Card>
-          <SC.Link
-            target="_blank"
-            rel="noopener_noreferrer"
-            href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
-          >
-            <SC.Bullet />
-            Connecting Fusebit with Your Application
-          </SC.Link>
+          <SC.LinkWrapper>
+            <SC.Link
+              target="_blank"
+              rel="noopener_noreferrer"
+              href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
+            >
+              <SC.Bullet />
+              Connecting Fusebit with Your Application
+            </SC.Link>
+          </SC.LinkWrapper>
         </SC.FlexDown>
         <SC.FlexDown>
           <SC.Card>
@@ -413,7 +379,7 @@ const Develop: React.FC = () => {
             )}
             <SC.CardButtonWrapper>
               <Button
-                onClick={handleEditOpen}
+                onClick={() => setEditOpen(true)}
                 style={{ width: '200px' }}
                 size="large"
                 variant="contained"
@@ -423,18 +389,20 @@ const Develop: React.FC = () => {
               </Button>
             </SC.CardButtonWrapper>
           </SC.Card>
-          <SC.Link target="_blank" rel="noopener_noreferrer" href="https://developer.fusebit.io/docs/getting-started">
-            <SC.Bullet />
-            Getting Started
-          </SC.Link>
-          <SC.Link
-            target="_blank"
-            rel="noopener_noreferrer"
-            href="https://developer.fusebit.io/docs/integration-programming-model"
-          >
-            <SC.Bullet />
-            Integration Programming Model
-          </SC.Link>
+          <SC.LinkWrapper>
+            <SC.Link target="_blank" rel="noopener_noreferrer" href="https://developer.fusebit.io/docs/getting-started">
+              <SC.Bullet />
+              Getting Started
+            </SC.Link>
+            <SC.Link
+              target="_blank"
+              rel="noopener_noreferrer"
+              href="https://developer.fusebit.io/docs/integration-programming-model"
+            >
+              <SC.Bullet />
+              Integration Programming Model
+            </SC.Link>
+          </SC.LinkWrapper>
         </SC.FlexDown>
         <SC.FlexDown>
           <SC.Card>
@@ -512,7 +480,7 @@ const Develop: React.FC = () => {
               <Button
                 onClick={() => setConnectorListOpen(true)}
                 startIcon={<AddIcon />}
-                style={{ width: '135px', marginTop: '10px' }}
+                style={{ width: '140px', marginTop: '10px' }}
                 size="medium"
                 variant="outlined"
                 color="primary"
@@ -522,6 +490,28 @@ const Develop: React.FC = () => {
               </Button>
             </SC.CardConnectorButtonsWrapperMobile>
           </SC.Card>
+          <SC.LinkWrapperMobile>
+            <SC.Link
+              target="_blank"
+              rel="noopener_noreferrer"
+              href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
+            >
+              <SC.Bullet />
+              Connecting Fusebit with Your Application
+            </SC.Link>
+            <SC.Link target="_blank" rel="noopener_noreferrer" href="https://developer.fusebit.io/docs/getting-started">
+              <SC.Bullet />
+              Getting Started
+            </SC.Link>
+            <SC.Link
+              target="_blank"
+              rel="noopener_noreferrer"
+              href="https://developer.fusebit.io/docs/integration-programming-model"
+            >
+              <SC.Bullet />
+              Integration Programming Model
+            </SC.Link>
+          </SC.LinkWrapperMobile>
         </SC.FlexDown>
       </SC.Flex>
     </SC.Background>
