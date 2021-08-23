@@ -349,14 +349,16 @@ const Develop: React.FC = () => {
               </Button>
             </SC.CardButtonWrapper>
           </SC.Card>
-          <SC.Link
-            target="_blank"
-            rel="noopener_noreferrer"
-            href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
-          >
-            <SC.Bullet />
-            Connecting Fusebit with Your Application
-          </SC.Link>
+          <SC.LinkWrapper>
+            <SC.Link
+              target="_blank"
+              rel="noopener_noreferrer"
+              href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
+            >
+              <SC.Bullet />
+              Connecting Fusebit with Your Application
+            </SC.Link>
+          </SC.LinkWrapper>
         </SC.FlexDown>
         <SC.FlexDown>
           <SC.Card>
@@ -387,18 +389,20 @@ const Develop: React.FC = () => {
               </Button>
             </SC.CardButtonWrapper>
           </SC.Card>
-          <SC.Link target="_blank" rel="noopener_noreferrer" href="https://developer.fusebit.io/docs/getting-started">
-            <SC.Bullet />
-            Getting Started
-          </SC.Link>
-          <SC.Link
-            target="_blank"
-            rel="noopener_noreferrer"
-            href="https://developer.fusebit.io/docs/integration-programming-model"
-          >
-            <SC.Bullet />
-            Integration Programming Model
-          </SC.Link>
+          <SC.LinkWrapper>
+            <SC.Link target="_blank" rel="noopener_noreferrer" href="https://developer.fusebit.io/docs/getting-started">
+              <SC.Bullet />
+              Getting Started
+            </SC.Link>
+            <SC.Link
+              target="_blank"
+              rel="noopener_noreferrer"
+              href="https://developer.fusebit.io/docs/integration-programming-model"
+            >
+              <SC.Bullet />
+              Integration Programming Model
+            </SC.Link>
+          </SC.LinkWrapper>
         </SC.FlexDown>
         <SC.FlexDown>
           <SC.Card>
@@ -476,7 +480,7 @@ const Develop: React.FC = () => {
               <Button
                 onClick={() => setConnectorListOpen(true)}
                 startIcon={<AddIcon />}
-                style={{ width: '135px', marginTop: '10px' }}
+                style={{ width: '140px', marginTop: '10px' }}
                 size="medium"
                 variant="outlined"
                 color="primary"
@@ -486,6 +490,28 @@ const Develop: React.FC = () => {
               </Button>
             </SC.CardConnectorButtonsWrapperMobile>
           </SC.Card>
+          <SC.LinkWrapperMobile>
+            <SC.Link
+              target="_blank"
+              rel="noopener_noreferrer"
+              href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
+            >
+              <SC.Bullet />
+              Connecting Fusebit with Your Application
+            </SC.Link>
+            <SC.Link target="_blank" rel="noopener_noreferrer" href="https://developer.fusebit.io/docs/getting-started">
+              <SC.Bullet />
+              Getting Started
+            </SC.Link>
+            <SC.Link
+              target="_blank"
+              rel="noopener_noreferrer"
+              href="https://developer.fusebit.io/docs/integration-programming-model"
+            >
+              <SC.Bullet />
+              Integration Programming Model
+            </SC.Link>
+          </SC.LinkWrapperMobile>
         </SC.FlexDown>
       </SC.Flex>
     </SC.Background>

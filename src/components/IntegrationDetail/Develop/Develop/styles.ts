@@ -157,7 +157,8 @@ export const CardConnectorButtonsWrapperMobile = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-top: auto;
-  width: 100%;
+  margin-left: -10px;
+  width: 300px;
 
   @media only screen and (max-width: 450px) {
     display: flex;
@@ -194,6 +195,20 @@ export const Bullet = styled.div`
   transition: all 0.25s linear;
 `;
 
+export const LinkWrapper = styled.div`
+  @media only screen and (max-width: 1250px) {
+    display: none;
+  }
+`;
+
+export const LinkWrapperMobile = styled.div`
+  display: none;
+  @media only screen and (max-width: 1250px) {
+    display: flex;
+    flex-direction: column;
+  }
+`;
+
 export const Link = styled.a`
   display: flex;
   align-items: center;
@@ -221,10 +236,6 @@ export const Link = styled.a`
     > div {
       background-color: #959595;
     }
-  }
-
-  @media only screen and (max-width: 1250px) {
-    display: none;
   }
 `;
 
