@@ -12,6 +12,10 @@ export const LineInstructionWrapper = styled.div`
       opacity: 1;
     }
   }
+
+  @media only screen and (max-width: 870px) {
+    max-width: none;
+  }
 `;
 
 export const LineInstruction = styled.div`
@@ -28,6 +32,7 @@ export const LineInstruction = styled.div`
   font-family: 'Courier';
   font-size: 16px;
   line-height: 18px;
+  width: 100%;
   color: var(--black);
   display: flex;
 
@@ -109,16 +114,4 @@ export const CopySuccess = styled.p<{ copy: boolean }>`
   visibility: ${(props) => (props.copy ? 'visible' : 'hidden')};
   margin-left: auto;
   transition: all 0.5s linear;
-`;
-
-export const CopyMobile = styled.img`
-  display: none;
-  height: 16px;
-  width: 16px;
-  object-fit: contain;
-  margin-left: auto;
-
-  @media only screen and (max-width: 1250px) {
-    display: block;
-  }
 `;
