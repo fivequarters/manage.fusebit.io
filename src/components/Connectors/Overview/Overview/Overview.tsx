@@ -305,7 +305,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
+                {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                   <Row
                     key={row.id}
                     row={row}

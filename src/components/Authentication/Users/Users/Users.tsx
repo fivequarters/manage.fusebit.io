@@ -277,7 +277,7 @@ const Authentication: React.FC = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
+                {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                   <Row
                     row={row}
                     handleCheck={handleCheck}
