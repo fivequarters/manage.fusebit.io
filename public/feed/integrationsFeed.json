@@ -18,7 +18,8 @@
             "properties": {
               "id": {
                 "type": "string",
-                "minLength": 3
+                "minLength": 3,
+                "maxLength": 64
               }
             }
           },
@@ -27,7 +28,8 @@
             "properties": {
               "id": {
                 "type": "string",
-                "minLength": 3
+                "minLength": 3,
+                "maxLength": 64
               }
             }
           },
