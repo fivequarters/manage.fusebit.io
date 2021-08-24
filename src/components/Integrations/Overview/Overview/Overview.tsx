@@ -35,7 +35,7 @@ import { Data } from '../../../../interfaces/feedPicker';
 import { useCreateDataFromFeed } from '../../../../hooks/useCreateDataFromFeed';
 import Row from './Row';
 import { useHistory } from 'react-router-dom';
-import { ROWS_PER_PAGE, ROWS_PER_PAGE_OPTIONS } from '../../../../static/paginationConstants';
+import { usePagination } from '../../../../hooks/usePagination';
 
 const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
   const history = useHistory();
@@ -55,8 +55,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
   const query = useQuery();
   const { createDataFromFeed } = useCreateDataFromFeed();
   const [loading, setLoading] = React.useState(true);
-  const [rowsPerPage, setRowsPerPage] = React.useState(ROWS_PER_PAGE);
-  const [page, setPage] = React.useState(0);
+  const { page, rowsPerPage, handleChangePage, handleChangeRowsPerPage, ROWS_PER_PAGE_OPTIONS } = usePagination();
 
   useEffect(() => {
     if (integrations && integrations.data.items) {
@@ -188,15 +187,6 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
     if (!res) {
       setAddIntegrationOpen(false);
     }
-  };
-
-  const handleChangePage = (event: any, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event: any) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
   };
 
   return (
