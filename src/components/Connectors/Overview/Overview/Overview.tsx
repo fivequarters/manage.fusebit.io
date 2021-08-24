@@ -13,6 +13,7 @@ import {
   Tooltip,
   Modal,
   Backdrop,
+  TablePagination,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -34,6 +35,7 @@ import { Data } from '../../../../interfaces/feedPicker';
 import { useCreateDataFromFeed } from '../../../../hooks/useCreateDataFromFeed';
 import Row from './Row';
 import { useHistory } from 'react-router-dom';
+import { ROWS_PER_PAGE, ROWS_PER_PAGE_OPTIONS } from '../../../../static/paginationConstants';
 
 const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
   const history = useHistory();
@@ -53,6 +55,8 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
   const query = useQuery();
   const { createDataFromFeed } = useCreateDataFromFeed();
   const [loading, setLoading] = React.useState(true);
+  const [rowsPerPage, setRowsPerPage] = React.useState(ROWS_PER_PAGE);
+  const [page, setPage] = React.useState(0);
 
   React.useEffect(() => {
     if (connectors && connectors.data.items) {
@@ -182,6 +186,15 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
     }
   };
 
+  const handleChangePage = (event: any, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: any) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   return (
     <SC.Wrapper>
       <Modal
@@ -250,7 +263,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
+                {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                   <Row
                     key={row.id}
                     row={row}
@@ -316,6 +329,15 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
               </TableBody>
             </Table>
           </SC.TableMobile>
+          <TablePagination
+            rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+          />
         </>
       )}
       {loading && (

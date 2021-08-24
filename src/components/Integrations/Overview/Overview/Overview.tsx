@@ -35,6 +35,7 @@ import { Data } from '../../../../interfaces/feedPicker';
 import { useCreateDataFromFeed } from '../../../../hooks/useCreateDataFromFeed';
 import Row from './Row';
 import { useHistory } from 'react-router-dom';
+import { ROWS_PER_PAGE, ROWS_PER_PAGE_OPTIONS } from '../../../../static/paginationConstants';
 
 const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
   const history = useHistory();
@@ -54,7 +55,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
   const query = useQuery();
   const { createDataFromFeed } = useCreateDataFromFeed();
   const [loading, setLoading] = React.useState(true);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(ROWS_PER_PAGE);
   const [page, setPage] = React.useState(0);
 
   useEffect(() => {
@@ -335,7 +336,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
             </Table>
           </SC.TableMobile>
           <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
+            rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
             component="div"
             count={rows.length}
             rowsPerPage={rowsPerPage}
