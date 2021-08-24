@@ -6,9 +6,9 @@ import { JsonForms } from '@jsonforms/react';
 import { ValidationMode } from '@jsonforms/core';
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
 import cross from '../../../../../assets/cross.svg';
-import copyIcon from '../../../../../assets/copy.svg';
 import { NewUserData } from '../../../../../interfaces/newUserData';
 import { useCapitalize } from '../../../../../hooks/useCapitalize';
+import CopyLine from '../../../../CopyLine';
 
 const schema = {
   type: 'object',
@@ -69,11 +69,8 @@ const NewUser = React.forwardRef(({ open, onClose, createUser }: Props, ref) => 
   const [validationMode, setValidationMode] = React.useState<ValidationMode>('ValidateAndHide');
   const [userCreated, setUserCreated] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [copy, setCopy] = React.useState(false);
-  const [fadeChange, setFadeChange] = React.useState(false);
   const [token, setToken] = React.useState('');
   const { capitalize } = useCapitalize();
-  let timeout: NodeJS.Timeout;
 
   const handleSubmit = async () => {
     if (errors.length > 0) {
@@ -93,20 +90,6 @@ const NewUser = React.forwardRef(({ open, onClose, createUser }: Props, ref) => 
         setData(dataToSubmit);
       }
     }
-  };
-
-  const handleCopy = (text: string) => {
-    clearTimeout(timeout);
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
-    setCopy(true);
-    timeout = setTimeout(() => {
-      setCopy(false);
-    }, 3000);
   };
 
   return (
@@ -152,18 +135,7 @@ const NewUser = React.forwardRef(({ open, onClose, createUser }: Props, ref) => 
             Securely share the following link with the user. The one-time use token included in the link expires in
             eight hours.
           </SC.Description>
-          <SC.LineInstructionWrapper
-            onMouseLeave={() => setFadeChange(false)}
-            onMouseEnter={() => setFadeChange(true)}
-            onClick={() => handleCopy(`http://....`)}
-          >
-            <SC.LineInstructionCopy>
-              <img src={copyIcon} alt="copy" height="16" width="16" />
-            </SC.LineInstructionCopy>
-            <SC.LineInstructionFade onlyMobileVisible={false} change={fadeChange} />
-            <SC.LineInstruction>{token}</SC.LineInstruction>
-            <SC.CopySuccess copy={copy}>Copied to clipboard!</SC.CopySuccess>
-          </SC.LineInstructionWrapper>
+          <CopyLine text={token} />
           <SC.UserCreatedButtonWrapper>
             <Button
               onClick={() => onClose()}

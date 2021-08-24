@@ -4,21 +4,17 @@ import { Button } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import LinkIcon from '@material-ui/icons/Link';
 import cross from '../../../../../assets/cross.svg';
-import copyIcon from '../../../../../assets/copy.svg';
 import { Props } from '../../../../../interfaces/connect';
 import { Decoded } from '../../../../../interfaces/decoded';
 import { useContext } from '../../../../../hooks/useContext';
 import jwt_decode from 'jwt-decode';
 import { useGetAuthLink } from '../../../../../hooks/useGetAuthLink';
+import CopyLine from '../../../../CopyLine';
 
 const Connect = React.forwardRef(({ onClose, open }: Props, ref) => {
-  const [copiedLine, setCopiedLine] = React.useState(0);
-  const [fadeChange, setFadeChange] = React.useState(false);
-  const [fadeChangeTwo, setFadeChangeTwo] = React.useState(false);
   const { userData } = useContext();
   const { getAuthLink } = useGetAuthLink();
   const [expDate, setExpDate] = React.useState('');
-  let timeout: NodeJS.Timeout;
 
   const handleRefresh = () => {
     localStorage.setItem('refreshToken', 'true');
@@ -40,20 +36,6 @@ const Connect = React.forwardRef(({ onClose, open }: Props, ref) => {
     }
   }, [userData]);
 
-  const handleCopy = (text: string, lineNumber: number) => {
-    clearTimeout(timeout);
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
-    setCopiedLine(lineNumber);
-    timeout = setTimeout(() => {
-      setCopiedLine(0);
-    }, 3000);
-  };
-
   return (
     <SC.Card open={open}>
       <SC.CardClose onClick={() => onClose()}>
@@ -62,27 +44,9 @@ const Connect = React.forwardRef(({ onClose, open }: Props, ref) => {
       <SC.CardTitle>Connect your application</SC.CardTitle>
       <SC.Flex>
         <SC.LineTitle>Access Token</SC.LineTitle>
-        <SC.CopyMobile
-          onClick={() => handleCopy(userData.token || '', 1)}
-          src={copyIcon}
-          alt="copy"
-          height="16"
-          width="16"
-        />
       </SC.Flex>
       <SC.LineDescription>Expires on {expDate}</SC.LineDescription>
-      <SC.LineInstructionWrapper
-        onMouseLeave={() => setFadeChange(false)}
-        onMouseEnter={() => setFadeChange(true)}
-        onClick={() => handleCopy(userData.token || '', 1)}
-      >
-        <SC.LineInstructionCopy>
-          <img src={copyIcon} alt="copy" height="16" width="16" />
-        </SC.LineInstructionCopy>
-        <SC.LineInstructionFade change={fadeChange} />
-        <SC.LineInstruction>{userData.token}</SC.LineInstruction>
-        <SC.CopySuccess copy={copiedLine === 1}>Copied to clipboard!</SC.CopySuccess>
-      </SC.LineInstructionWrapper>
+      <CopyLine text={userData.token || ''} />
       <SC.ButtonWrapper>
         <Button onClick={handleRefresh} style={{ width: '200px' }} size="large" variant="outlined" color="primary">
           Refresh Your Token
@@ -91,28 +55,8 @@ const Connect = React.forwardRef(({ onClose, open }: Props, ref) => {
 
       <SC.Flex>
         <SC.LineTitle margin="16px">Integration Base URL</SC.LineTitle>
-        <SC.CopyMobile
-          onClick={() => handleCopy(process.env.REACT_APP_FUSEBIT_DEPLOYMENT + '/v2' + window.location.pathname, 2)}
-          src={copyIcon}
-          alt="copy"
-          height="16"
-          width="16"
-        />
       </SC.Flex>
-      <SC.LineInstructionWrapper
-        onMouseLeave={() => setFadeChangeTwo(false)}
-        onMouseEnter={() => setFadeChangeTwo(true)}
-        onClick={() => handleCopy(process.env.REACT_APP_FUSEBIT_DEPLOYMENT + '/v2' + window.location.pathname, 2)}
-      >
-        <SC.LineInstructionCopy>
-          <img src={copyIcon} alt="copy" height="16" width="16" />
-        </SC.LineInstructionCopy>
-        <SC.LineInstructionFade change={fadeChangeTwo} />
-        <SC.LineInstruction>
-          {process.env.REACT_APP_FUSEBIT_DEPLOYMENT + '/v2' + window.location.pathname}
-        </SC.LineInstruction>
-        <SC.CopySuccess copy={copiedLine === 2}>Copied to clipboard!</SC.CopySuccess>
-      </SC.LineInstructionWrapper>
+      <CopyLine text={process.env.REACT_APP_FUSEBIT_DEPLOYMENT + '/v2' + window.location.pathname} />
       <SC.Description>
         To connect your application, use the values above and follow the instructions in the{' '}
         <a
