@@ -43,6 +43,11 @@ const _useContext = () => {
 
   const auth = (__userData: User) => {
     setUserData(__userData);
+    analytics.ready(() => {
+      analytics.identify(__userData.id, {
+        ...__userData,
+      } as Object);
+    });
     localStorage.setItem(LS_KEY, JSON.stringify(__userData));
   };
 
