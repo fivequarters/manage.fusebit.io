@@ -3,6 +3,7 @@ import arrow from '../../../../assets/table-arrow.svg';
 
 export const Wrapper = styled.div`
   padding-bottom: 80px;
+  min-height: 600px;
 `;
 
 export const DeleteWrapper = styled.div<{ active: boolean }>`

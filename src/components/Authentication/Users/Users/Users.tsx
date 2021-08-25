@@ -13,6 +13,7 @@ import {
   Tooltip,
   Modal,
   Backdrop,
+  TablePagination,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -31,6 +32,7 @@ import { useCreateToken } from '../../../../hooks/useCreateToken';
 import { useHistory } from 'react-router-dom';
 import { cells } from '../../../../interfaces/users';
 import Row from './Row';
+import { usePagination } from '../../../../hooks/usePagination';
 
 const Authentication: React.FC = () => {
   const history = useHistory();
@@ -50,6 +52,7 @@ const Authentication: React.FC = () => {
   const createUser = useAccountUserCreateUser<Operation>();
   const { _createToken } = useCreateToken();
   const [loading, setLoading] = React.useState(true);
+  const { page, rowsPerPage, handleChangePage, handleChangeRowsPerPage, ROWS_PER_PAGE_OPTIONS } = usePagination();
 
   useEffect(() => {
     if (users && users.data.items) {
@@ -227,7 +230,7 @@ const Authentication: React.FC = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row: Account) => (
+                {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row: Account) => (
                   <Row
                     row={row}
                     handleCheck={handleCheck}
@@ -274,7 +277,7 @@ const Authentication: React.FC = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
+                {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                   <Row
                     row={row}
                     handleCheck={handleCheck}
@@ -287,6 +290,15 @@ const Authentication: React.FC = () => {
               </TableBody>
             </Table>
           </SC.TableMobile>
+          <TablePagination
+            rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+          />
         </>
       )}
       {loading && (
