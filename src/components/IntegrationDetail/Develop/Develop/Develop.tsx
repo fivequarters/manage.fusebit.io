@@ -396,7 +396,6 @@ const Develop: React.FC = () => {
               <SC.Bullet />
               Getting Started
             </SC.Link>
-
             <SC.Link
               target="_blank"
               rel="noopener_noreferrer"
