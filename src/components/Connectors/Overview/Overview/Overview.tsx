@@ -13,6 +13,7 @@ import {
   Tooltip,
   Modal,
   Backdrop,
+  TablePagination,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -33,6 +34,7 @@ import { Data } from '../../../../interfaces/feedPicker';
 import { useCreateDataFromFeed } from '../../../../hooks/useCreateDataFromFeed';
 import Row from './Row';
 import { useHistory } from 'react-router-dom';
+import { usePagination } from '../../../../hooks/usePagination';
 
 const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
   const history = useHistory();
@@ -52,6 +54,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
   const query = useQuery();
   const { createDataFromFeed } = useCreateDataFromFeed();
   const [loading, setLoading] = React.useState(true);
+  const { page, rowsPerPage, handleChangePage, handleChangeRowsPerPage, ROWS_PER_PAGE_OPTIONS } = usePagination();
 
   React.useEffect(() => {
     if (connectors && connectors.data.items) {
@@ -229,7 +232,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
+                {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                   <Row
                     key={row.id}
                     row={row}
@@ -281,7 +284,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
+                {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                   <Row
                     key={row.id}
                     row={row}
@@ -295,6 +298,15 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
               </TableBody>
             </Table>
           </SC.TableMobile>
+          <TablePagination
+            rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+          />
         </>
       )}
       {loading && (

@@ -350,6 +350,7 @@ const Develop: React.FC = () => {
             </SC.CardButtonWrapper>
           </SC.Card>
           <SC.LinkWrapper>
+            <SC.LinkTitle>Learn More:</SC.LinkTitle>
             <SC.Link
               target="_blank"
               rel="noopener_noreferrer"
@@ -390,6 +391,7 @@ const Develop: React.FC = () => {
             </SC.CardButtonWrapper>
           </SC.Card>
           <SC.LinkWrapper>
+            <SC.LinkTitle>Learn More:</SC.LinkTitle>
             <SC.Link target="_blank" rel="noopener_noreferrer" href="https://developer.fusebit.io/docs/getting-started">
               <SC.Bullet />
               Getting Started
@@ -491,6 +493,7 @@ const Develop: React.FC = () => {
             </SC.CardConnectorButtonsWrapperMobile>
           </SC.Card>
           <SC.LinkWrapperMobile>
+            <SC.LinkTitle>Learn More:</SC.LinkTitle>
             <SC.Link
               target="_blank"
               rel="noopener_noreferrer"

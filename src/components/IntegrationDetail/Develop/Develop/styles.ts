@@ -36,7 +36,7 @@ export const CardSeparator = styled.div`
   background-color: var(--black);
 
   @media only screen and (max-width: 1250px) {
-    height: calc(100% - 320px);
+    height: calc(100% - 420px);
     width: 1px;
     left: 50%;
     transform: translateX(-50%);
@@ -58,6 +58,14 @@ export const Card = styled.div`
 
   @media only screen and (max-width: 450px) {
     width: 340px;
+  }
+
+  @media only screen and (max-width: 390px) {
+    width: 320px;
+  }
+
+  @media only screen and (max-width: 330px) {
+    width: 300px;
   }
 `;
 
@@ -163,6 +171,16 @@ export const CardConnectorButtonsWrapperMobile = styled.div`
   @media only screen and (max-width: 450px) {
     display: flex;
   }
+
+  @media only screen and (max-width: 390px) {
+    width: 280px;
+    margin-left: -12.5px;
+  }
+
+  @media only screen and (max-width: 330px) {
+    width: 280px;
+    margin-left: -22.5px;
+  }
 `;
 
 export const CardConnectorSeeMore = styled.a`
@@ -209,13 +227,21 @@ export const LinkWrapperMobile = styled.div`
   }
 `;
 
+export const LinkTitle = styled.h5`
+  font-size: 12px;
+  line-height: 14px;
+  font-weight: 300;
+  color: var(--black);
+  margin-bottom: 16px;
+`;
+
 export const Link = styled.a`
   display: flex;
   align-items: center;
   font-size: 14px;
   line-height: 16px;
   color: var(--black);
-  text-decoration: none;
+  text-decoration: underline;
   width: max-content;
   margin-bottom: 16px;
   margin-left: 5px;
@@ -223,7 +249,6 @@ export const Link = styled.a`
 
   &:hover {
     color: var(--primary-color);
-    text-decoration: underline;
 
     > div {
       background-color: var(--primary-color);
