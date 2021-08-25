@@ -69,6 +69,12 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
             setAddIntegrationOpen(true);
           }
         }
+      } else if (headless.current) {
+        setHeadless(false); // so we only do this once.
+        const key = query.get('key');
+        if (key !== null && key !== undefined) {
+          setAddIntegrationOpen(true);
+        }
       } else {
         const items = integrations.data.items;
         setRows(items);

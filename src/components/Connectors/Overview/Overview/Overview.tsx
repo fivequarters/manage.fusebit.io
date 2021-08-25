@@ -69,6 +69,12 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
             setAddConnectorOpen(true);
           }
         }
+      } else if (headless.current) {
+        setHeadless(false); // so we only do this once.
+        const key = query.get('key');
+        if (key !== null && key !== undefined) {
+          setAddConnectorOpen(true);
+        }
       } else {
         const items = connectors.data.items;
         setRows(items); // otherwise if we delete and the connectors.data.items has 0 items the rows will display 1
