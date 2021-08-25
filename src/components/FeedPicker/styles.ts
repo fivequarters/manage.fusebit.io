@@ -107,7 +107,7 @@ export const ColumnBr = styled.div`
 export const ColumnSearchWrapper = styled.div`
   position: relative;
   margin-bottom: 32px;
-  width: 254px;
+  min-width: 254px;
 `;
 
 export const ColumnSearch = styled.input`
