@@ -28,6 +28,12 @@ const Edit = React.forwardRef(({ open, onClose, integration }: Props) => {
       />
 
       <SC.Flex>
+        <SC.LineTitle>
+          3. Explore the code on disk and check out README.md for instructions on how to run your integration
+        </SC.LineTitle>
+      </SC.Flex>
+
+      <SC.Flex>
         <SC.LineTitle>3. After making your code changes run</SC.LineTitle>
       </SC.Flex>
       <CopyLine
