@@ -56,6 +56,7 @@ export const useError = () => {
   };
 
   const createError = (errorMessage: string) => {
+    removeError(); // we dont want 2 errors at the same time
     const error = document.createElement('div');
     error.setAttribute('id', 'error');
     error.setAttribute('style', errorCss);
