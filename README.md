@@ -4,30 +4,34 @@
 
 1. Clone or fork this repo
 2. `cd` into the project directory and run `npm install` or `yarn`
-3. Copy `.env.example` to `.env` and update the values accordingly
+3. Configure `.env` file depending on the scenario below and run portal with `npm start`
 
 ## Env file configuration
 
-### Localhost
+### Localhost over Localhost
+
+If you are running the portal locally against a local function-api stack, read the instuctions [here](https://docs.google.com/document/d/1dkI4UdRgaD840HWc-sGi6_qz4JY8AHts97MD-1O4SpY/edit#heading=h.gtoda0wgke4n).
+
+### Localhost over Production
+
+If you are running the portal locally against the production Fusebit deployment, configure .env as follows:
 
 ```
-REACT_APP_DEPLOYMENT_KEY=Localhost
-REACT_APP_FUSEBIT_DEPLOYMENT=https://bruno.us-west-1.dev.fusebit.io
-REACT_APP_AUTH0_DOMAIN=https://dev-zhwbl-rl.us.auth0.com
-REACT_APP_AUTH0_CLIENT_ID=HXmmy0n9RWCdQkKIZiIozMbvK4DjyKRq
+REACT_APP_DEPLOYMENT_KEY=Production
+REACT_APP_FUSEBIT_DEPLOYMENT=https://api.us-west-1.on.fusebit.io
+REACT_APP_AUTH0_DOMAIN=https://fusebit.auth0.com
+REACT_APP_AUTH0_CLIENT_ID=NIfqE4hpPOXuIhllkxndlafSKcKesEfc
 REACT_APP_LOGOUT_REDIRECT_URL=http://localhost:3000
 REACT_APP_INTEGRATIONS_FEED_URL=http://localhost:3000/feed/integrationsFeed.json
 REACT_APP_CONNECTORS_FEED_URL=http://localhost:3000/feed/connectorsFeed.json
-REACT_APP_GOOGLE_ANALYTICS=
-REACT_APP_HOTJAR_ID=
 ```
 
-### Vercel
+### Vercel over Production
 
 ```
-REACT_APP_FUSEBIT_DEPLOYMENT=https://stage.us-west-2.fusebit.io
+REACT_APP_FUSEBIT_DEPLOYMENT=https://api.us-west-1.on.fusebit.io
 REACT_APP_AUTH0_DOMAIN=https://fusebit.auth0.com
-REACT_APP_AUTH0_CLIENT_ID=dimuls6VLYgXpD7UYCo6yPdKAXPXjQng
+REACT_APP_AUTH0_CLIENT_ID=NIfqE4hpPOXuIhllkxndlafSKcKesEfc
 REACT_APP_LOGOUT_REDIRECT_URL=https://fusebit.io
 REACT_APP_INTEGRATIONS_FEED_URL=https://portal-fusebit-io.vercel.app/feed/connectorsFeed.json
 REACT_APP_CONNECTORS_FEED_URL=https://portal-fusebit-io.vercel.app/feed/connectorsFeed.json
