@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import warning from '../assets/warning.svg';
 import cross from '../assets/cross-warning.svg';
+import { useHistory } from 'react-router-dom';
 
 const errorCss = `
     display: flex;
@@ -50,12 +52,24 @@ const errorCross = `
     `;
 
 export const useError = () => {
+  const history = useHistory();
+
+  useEffect(() => {
+    const unlisten = history.listen(() => {
+      removeError();
+    });
+
+    return () => unlisten();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const removeError = () => {
     const error = document.getElementById('error');
     if (error) error.remove();
   };
 
   const createError = (errorMessage: string) => {
+    removeError();
     const error = document.createElement('div');
     error.setAttribute('id', 'error');
     error.setAttribute('style', errorCss);
@@ -86,5 +100,6 @@ export const useError = () => {
 
   return {
     createError,
+    removeError,
   };
 };
