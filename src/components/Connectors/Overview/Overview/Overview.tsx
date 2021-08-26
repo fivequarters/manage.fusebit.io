@@ -65,14 +65,14 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
         if (headless.current) {
           setHeadless(false); // so we only do this once.
           const key = query.get('key');
-          if (key !== null && key !== undefined) {
+          if (key) {
             setAddConnectorOpen(true);
           }
         }
       } else if (headless.current) {
         setHeadless(false); // so we only do this once.
         const key = query.get('key');
-        if (key !== null && key !== undefined) {
+        if (key) {
           setAddConnectorOpen(true);
         }
       } else {
