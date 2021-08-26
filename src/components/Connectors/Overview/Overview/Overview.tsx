@@ -228,7 +228,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
           </>
         )}
       </SC.DeleteWrapper>
-      {!loading && (
+      {!loading && rows.length > 0 ? (
         <>
           <SC.Table>
             <Table size="small" aria-label="Overview Table">
@@ -329,6 +329,10 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
             onChangeRowsPerPage={handleChangeRowsPerPage}
           />
         </>
+      ) : (
+        !loading && (
+          <SC.NoConnectorsWrapper>Your connectors list is empty, please create a connector</SC.NoConnectorsWrapper>
+        )
       )}
       {loading && (
         <CSC.LoaderContainer>
