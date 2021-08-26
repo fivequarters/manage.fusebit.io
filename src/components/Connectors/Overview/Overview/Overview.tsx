@@ -29,7 +29,6 @@ import arrowLeft from '../../../../assets/arrow-left.svg';
 import { Feed } from '../../../../interfaces/feed';
 import { useQuery } from '../../../../hooks/useQuery';
 import FeedPicker from '../../../FeedPicker';
-import { connectorsFeed } from '../../../../static/feed';
 import { cells, OverviewProps } from '../../../../interfaces/connectors';
 import { Data } from '../../../../interfaces/feedPicker';
 import { useCreateDataFromFeed } from '../../../../hooks/useCreateDataFromFeed';
@@ -66,30 +65,16 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
         if (headless.current) {
           setHeadless(false); // so we only do this once.
           const key = query.get('key');
-          if (key !== null && key !== undefined) {
+          if (key) {
             setAddConnectorOpen(true);
           }
         }
       } else if (headless.current) {
         setHeadless(false); // so we only do this once.
-        const items = connectors.data.items;
-        setRows(items); // otherwise if we delete and the connectors.data.items has 0 items the rows will display 1
         const key = query.get('key');
-        let keyDoesntMatch = true;
-        connectorsFeed().then((feed) => {
-          for (let i = 0; i < feed.length; i++) {
-            if (feed[i].id === key) {
-              keyDoesntMatch = false;
-              const dummyData = {
-                dummyIntegration: 'randomIntegration',
-                dummyConnector: 'randomConnector',
-              };
-              localStorage.setItem('showSettingUp', 'true');
-              createDataFromFeed(feed[i], dummyData, true);
-            }
-          }
-          setAddConnectorOpen(keyDoesntMatch);
-        });
+        if (key) {
+          setAddConnectorOpen(true);
+        }
       } else {
         const items = connectors.data.items;
         setRows(items); // otherwise if we delete and the connectors.data.items has 0 items the rows will display 1

@@ -24,7 +24,7 @@ export const useLoader = () => {
     if (loader) loader.remove();
     if (loaderTitle) {
       loaderTitle.remove();
-      localStorage.removeItem('showSettingUp');
+      localStorage.removeItem('loaderText');
     }
   };
 
@@ -34,12 +34,12 @@ export const useLoader = () => {
     loader.setAttribute('style', css);
     loader.innerHTML = '<img src="/loader.svg" width="100" height="100">';
     document.body.appendChild(loader);
-    const showSettingUp = localStorage.getItem('showSettingUp');
-    if (showSettingUp === 'true') {
+    const loaderText = localStorage.getItem('loaderText');
+    if (loaderText !== null) {
       const title = document.createElement('div');
       title.setAttribute('id', 'loaderTitle');
       title.setAttribute('style', settingUpCss);
-      title.innerHTML = 'Setting Up!';
+      title.innerHTML = loaderText;
       document.body.appendChild(title);
     }
   };
