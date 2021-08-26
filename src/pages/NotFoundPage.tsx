@@ -1,6 +1,6 @@
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 import * as CSC from '../components/globalStyle';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useContext } from '../hooks/useContext';
 import { useGetRedirectLink } from '../hooks/useGetRedirectLink';
 
@@ -9,9 +9,10 @@ const NotFoundPage: FC<{}> = (): ReactElement => {
   const { userData } = useContext();
   const { getRedirectLink } = useGetRedirectLink();
   const [showLoader, setShowLoader] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
-    if (window.location.pathname === '/') {
+    if (location.pathname === '/') {
       setShowLoader(true);
     }
 
@@ -30,7 +31,7 @@ const NotFoundPage: FC<{}> = (): ReactElement => {
     } else if (userData.accountId !== undefined && userData.subscriptionId !== undefined) {
       history.push(getRedirectLink('/integrations/overview'));
     }
-  }, [history, userData, getRedirectLink]);
+  }, [history, userData, getRedirectLink, location]);
 
   return (
     <>
