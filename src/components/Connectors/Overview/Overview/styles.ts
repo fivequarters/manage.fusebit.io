@@ -113,3 +113,10 @@ export const RightArrow = styled.img`
 export const LeftArrow = styled(RightArrow)`
   left: -25px;
 `;
+
+export const NoConnectorsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+`;

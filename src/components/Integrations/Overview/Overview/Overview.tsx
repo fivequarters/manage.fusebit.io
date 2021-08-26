@@ -234,7 +234,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
           </>
         )}
       </SC.DeleteWrapper>
-      {!loading && (
+      {!loading && rows.length > 0 ? (
         <>
           <SC.Table>
             <Table size="small" aria-label="Overview Table">
@@ -335,6 +335,12 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
             onChangeRowsPerPage={handleChangeRowsPerPage}
           />
         </>
+      ) : (
+        !loading && (
+          <SC.NoIntegrationWrapper>
+            Your integrations list is empty, please create an integration
+          </SC.NoIntegrationWrapper>
+        )
       )}
       {loading && (
         <CSC.LoaderContainer>
