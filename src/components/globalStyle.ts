@@ -36,10 +36,21 @@ export const Spinner = styled.div<{ margin?: string }>`
   animation: ${rotate} 1s linear infinite;
 `;
 
+export const BigSpinner = styled(Spinner)`
+  height: 50px;
+  width: 50px;
+`;
+
 export const LoaderContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 24px;
+`;
+
+export const BigSpinnerContainer = styled(LoaderContainer)`
+  margin-top: 0;
+  height: 100vh;
+  justify-content: center;
 `;
