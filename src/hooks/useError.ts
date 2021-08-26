@@ -100,6 +100,5 @@ export const useError = () => {
 
   return {
     createError,
-    removeError,
   };
 };
