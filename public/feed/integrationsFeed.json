@@ -1,5 +1,137 @@
 [
   {
+    "id": "hubspot-crm-contacts",
+    "name": "HubSpot Contacts sync",
+    "smallIcon": "/images/hubspot.svg",
+    "largeIcon": "/images/hubspot.svg",
+    "version": "1.0.0",
+    "description": "Integrating with HubSpot is easy with Fusebit! This example lets you list Contacts in your customer's HubSpot instance.\n",
+    "tags": {
+      "catalog": "hubspot,crm,sales,intro,popular"
+    },
+    "configuration": {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "hubspotIntegration": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 3
+              }
+            }
+          },
+          "hubspotConnector": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 3
+              }
+            }
+          },
+          "ui": {
+            "type": "object",
+            "properties": {
+              "toggle": {
+                "type": "boolean",
+                "description": "The \"toggle\" option renders boolean values as a toggle."
+              }
+            }
+          }
+        }
+      },
+      "uischema": {
+        "type": "VerticalLayout",
+        "elements": [
+          {
+            "type": "Control",
+            "scope": "#/properties/hubspotIntegration/properties/id",
+            "label": "Name"
+          },
+          {
+            "type": "Control",
+            "label": "Customize",
+            "scope": "#/properties/ui/properties/toggle",
+            "options": {
+              "toggle": true
+            }
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/hubspotConnector/properties/id",
+            "label": "HubSpot Connector name",
+            "rule": {
+              "effect": "SHOW",
+              "condition": {
+                "scope": "#/properties/ui/properties/toggle",
+                "schema": {
+                  "const": true
+                }
+              }
+            }
+          }
+        ]
+      },
+      "data": {
+        "hubspotConnector": {
+          "hubspotName": "hubspot-connector"
+        }
+      },
+      "entities": {
+        "hubspotConnector": {
+          "entityType": "connector",
+          "data": {
+            "configuration": {
+              "scope": "contacts",
+              "tokenUrl": "<%global.consts.endpoint%>/v2/account/<%global.consts.accountId%>/subscription/<%global.consts.subscriptionId%>/connector/<%this.id%>/proxy/hubspot/oauth/token",
+              "authorizationUrl": "<%global.consts.endpoint%>/v2/account/<%global.consts.accountId%>/subscription/<%global.consts.subscriptionId%>/connector/<%this.id%>/proxy/hubspot/oauth/authorize",
+              "clientId": "<%global.consts.random%>",
+              "clientSecret": "<%global.consts.random%>",
+              "refreshErrorLimit": 100000,
+              "refreshInitialBackoff": 100000,
+              "refreshWaitCountLimit": 100000,
+              "refreshBackoffIncrement": 100000,
+              "accessTokenExpirationBuffer": 500
+            },
+            "files": {
+              "package.json": "{\n  \"scripts\": {\n    \"redeploy\": \"fuse connector rm <%this.name%> && yarn deploy\",\n    \"deploy\": \"fuse connector deploy <%this.name%> -d .\",\n    \"get\": \"fuse connector get <%this.name%> -d .\"\n  },\n  \"dependencies\": {\n    \"@fusebit-int/hubspot-connector\": \"^1.0.0\",\n    \"@fusebit-int/framework\": \"^3.0.2\"\n  }\n}\n"
+            },
+            "handler": "@fusebit-int/hubspot-connector"
+          },
+          "id": "<%this.id%>",
+          "tags": {}
+        },
+        "hubspotIntegration": {
+          "entityType": "integration",
+          "data": {
+            "configuration": {},
+            "files": {
+              "package.json": "{\n  \"scripts\": {\n    \"deploy\": \"fuse integration deploy <% this.id %> -d .\",\n    \"get\": \"fuse integration get <% this.id %> -d .\"\n  },\n  \"dependencies\": {\n    \"@fusebit-int/framework\": \"^3.0.2\",\n    \"@fusebit-int/hubspot-provider\": \"^1.0.0\"\n  },\n  \"files\": [\n    \"./integration.js\",\n    \"README.md\"\n  ]\n}\n",
+              "README.md": "Thanks for trying out Fusebit and downloading your <% global.consts.feed.name %> Integration code.\n\nUse your favorite tools to make any changes to the code in this folder.\n\n\n# Running your Integration\n\nTo run the Integration and test as you make changes, follow these steps:\n\n1. (First run only) The integration needs to know the Identity of the Slack user on whose behalf to execute. In production, this will be handled by your application, but for test purposes, you can log in as yourself manually.\n\nOpen the test application for the '<% global.consts.integrationId %>' integration in the browser with:\n\n`fuse integration test <% global.consts.integrationId %>`\n\nYou will be asked to log in to your Slack workspace, and the integration will act on your behalf\ngoing forward.\n\n2. Note the `curl` command and JavaScript example displayed by the test application in the previous step and use that to invoke the integration. If your token expires, you can always obtain a new one by opening up the test application again with `fuse integration test <% global.consts.integrationId %>`, or by generating a new access token directly with `fuse token -o raw`.\n\n\n# Debugging your Integration\n\nAfter you make a code change and run the Integration, you can inspect `console`\noutput and any errors by running:\n\n`fuse integration log <% global.consts.integrationId %>`\n\n\n",
+              "./integration.js": "// Fusebit HubSpot Integration\n//\n// Interact with HubSpot Contacts in your customer's HubSpot instance. This template\n// shows you how easy it is to create your very own Fusebit Integration and use the official HubSpot\n// SDK - without any of the work!\n//\n// Learn more about Fusebit Integrations at:\n// https://developer.fusebit.io/docs/integration-programming-model\n\nconst { Integration } = require('@fusebit-int/framework');\n\nconst integration = new Integration();\n\n// Fusebit leverages the very popular Router concept, as used by both Express and KoaJS.\nconst router = integration.router;\n\n// Allow only authorized clients (such as your backend) to list all HubSpot CRM Contacts\nrouter.post('/api/tenant/:tenantId/test', integration.middleware.authorizeUser('instance:get'), async (ctx) => {\n  // Create an official HubSpot client instance, already authorized with the tenant's credentials\n  const hubspotClient = await integration.tenant.getSdkByTenant(ctx, 'hubspotConnector', ctx.params.tenantId);\n\n  const contacts = await hubspotClient.crm.contacts.getAll();\n\n  ctx.body = `Successfully loaded ${contacts.length} Contacts from HubSpot`;\n});\n\nmodule.exports = integration;\n"
+            },
+            "handler": "./integration",
+            "components": [
+              {
+                "name": "hubspotConnector",
+                "skip": false,
+                "provider": "@fusebit-int/hubspot-provider",
+                "entityId": "<% global.entities.hubspotConnector.id %>",
+                "dependsOn": [],
+                "entityType": "connector"
+              }
+            ],
+            "componentTags": {}
+          },
+          "id": "<% this.id %>",
+          "tags": {}
+        }
+      }
+    }
+  },
+  {
     "id": "slack-bot",
     "name": "Slack Bot",
     "smallIcon": "/images/slack.svg",
@@ -109,8 +241,8 @@
             "configuration": {},
             "files": {
               "package.json": "{\n  \"scripts\": {\n    \"deploy\": \"fuse integration deploy <% this.id %> -d .\",\n    \"get\": \"fuse integration get <% this.id %> -d .\"\n  },\n  \"dependencies\": {\n    \"@fusebit-int/framework\": \"^3.0.2\",\n    \"superagent\": \"^6.1.0\",\n    \"@fusebit-int/slack-provider\": \"*\"\n  },\n  \"files\": [\"./integration.js\", \"README.md\"]\n}\n",
-              "README.md": "Thanks for trying out Fusebit and downloading your <% global.consts.feed.name %> Integration code.\n\nUse your favorite tools to make any changes to the code in this folder.\n\n\n# Running your Integration\n\nTo run the Integration and test as you make changes, follow these steps:\n\n1. (First run only) The integration needs to know the Identity of the Slack user on whose behalf to execute. In production, this will be handled by your application, but for test purposes, you can log in as yourself manually.\n\nOpen the test application for the '<% global.consts.integrationId %>' integration in the browser with:\n\n`fuse integration test <% global.consts.integrationId %>`\n\nYou will be asked to log in to your Slack workspace, and the integration will act on your behalf\ngoing forward.\n\n2. Note the `curl` command and JavaScript example displayed by the test application in the previous step and use that to invoke the integration. If your token expires, you can always obtain a new one by opening up the test application again with `fuse integration test <% global.consts.integrationId %>`, or by generating a new access token directly with `fuse token -o raw`.\n\n\n# Debugging your Integration\n\nAfter you make a code change and run the Integration, you can inspect `console`\noutput and any errors by running:\n\n`fuse integration log <% global.consts.integrationId %>`\n\n\n",
-              "./integration.js": "// Fusebit Slack Integration\n//\n// Create a simple bot to communicate about events in your product with your customers, over their very own\n// Slack.  This template shows you how easy it is to create your very own Fusebit Integration and use the\n// official Slack SDK - without any of the work!\n//\n// After reading through this integration, you will be able to create an integration, enable your customers to\n// approve it for use in their Slack workspaces, and send messages to your customers based on events that\n// happen in your infrastructure or elsewhere on your product.\n//\n// Learn more about Fusebit Integrations at: https://developer.fusebit.io/docs/integration-programming-model\n\nconst { Integration } = require('@fusebit-int/framework');\n\nconst integration = new Integration();\n\n// Fusebit leverages the very popular Router concept, as used by both Express and KoaJS.\nconst router = integration.router;\n\n// Allow only authorized clients (such as your backend) to send a test message to a tenant.\nrouter.post('/api/tenant/:tenantId/test', integration.middleware.authorizeUser('instance:get'), async (ctx) => {\n  // Create an official Slack SDK instance, already authorized with the tenant's credentials\n  const slackClient = await integration.tenant.getSdkByTenant(ctx, 'slackConnector', ctx.params.tenantId);\n\n  // Send a message! Try replacing the text and the channel name with something different :)\n  const result = await slackClient.chat.postMessage({\n    text: 'Hello world from Fusebit!',\n    channel: 'general',\n  });\n\n  ctx.body = result;\n});\n\n// Instead of sending a message, list all of the active users and return that information to the caller.\nrouter.get('/api/tenant/:tenantId/users', integration.middleware.authorizeUser('instance:get'), async (ctx) => {\n  const slackClient = await integration.tenant.getSdkByTenant(ctx, 'slackConnector', ctx.params.tenantId);\n\n  const result = await slackClient.users.list();\n\n  ctx.body = result;\n});\n\nmodule.exports = integration;\n"
+              "./integration.js": "// Fusebit Slack Integration\n//\n// Create a simple bot to communicate about events in your product with your customers, over their very own\n// Slack.  This template shows you how easy it is to create your very own Fusebit Integration and use the\n// official Slack SDK - without any of the work!\n//\n// After reading through this integration, you will be able to create an integration, enable your customers to\n// approve it for use in their Slack workspaces, and send messages to your customers based on events that\n// happen in your infrastructure or elsewhere on your product.\n//\n// Learn more about Fusebit Integrations at: https://developer.fusebit.io/docs/integration-programming-model\n\nconst { Integration } = require('@fusebit-int/framework');\n\nconst integration = new Integration();\n\n// Fusebit leverages the very popular Router concept, as used by both Express and KoaJS.\nconst router = integration.router;\n\n// Allow only authorized clients (such as your backend) to send a test message to a tenant.\nrouter.post('/api/tenant/:tenantId/test', integration.middleware.authorizeUser('instance:get'), async (ctx) => {\n  // Create an official Slack SDK instance, already authorized with the tenant's credentials\n  const slackClient = await integration.tenant.getSdkByTenant(ctx, 'slackConnector', ctx.params.tenantId);\n\n  // Send a message! Try replacing the text and the channel name with something different :)\n  const result = await slackClient.chat.postMessage({\n    text: 'Hello world from Fusebit!',\n    channel: 'general',\n  });\n\n  ctx.body = result;\n});\n\n// Instead of sending a message, list all of the active users and return that information to the caller.\nrouter.get('/api/tenant/:tenantId/users', integration.middleware.authorizeUser('instance:get'), async (ctx) => {\n  const slackClient = await integration.tenant.getSdkByTenant(ctx, 'slackConnector', ctx.params.tenantId);\n\n  const result = await slackClient.users.list();\n\n  ctx.body = result;\n});\n\nmodule.exports = integration;\n",
+              "README.md": "Thanks for trying out Fusebit and downloading your <% global.consts.feed.name %> Integration code.\n\nUse your favorite tools to make any changes to the code in this folder.\n\n\n# Running your Integration\n\nTo run the Integration and test as you make changes, follow these steps:\n\n1. (First run only) The integration needs to know the Identity of the Slack user on whose behalf to execute. In production, this will be handled by your application, but for test purposes, you can log in as yourself manually.\n\nOpen the test application for the '<% global.consts.integrationId %>' integration in the browser with:\n\n`fuse integration test <% global.consts.integrationId %>`\n\nYou will be asked to log in to your Slack workspace, and the integration will act on your behalf\ngoing forward.\n\n2. Note the `curl` command and JavaScript example displayed by the test application in the previous step and use that to invoke the integration. If your token expires, you can always obtain a new one by opening up the test application again with `fuse integration test <% global.consts.integrationId %>`, or by generating a new access token directly with `fuse token -o raw`.\n\n\n# Debugging your Integration\n\nAfter you make a code change and run the Integration, you can inspect `console`\noutput and any errors by running:\n\n`fuse integration log <% global.consts.integrationId %>`\n\n\n"
             },
             "handler": "./integration",
             "components": [
