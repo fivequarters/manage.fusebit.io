@@ -52,17 +52,23 @@ const IntegrationsPage: FC<{}> = (): ReactElement => {
 
   useEffect(() => {
     if (userData.id) history.push('/');
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userData]);
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(location.hash.substring(1));
-    const token = urlParams.get('access_token') || '';
-    const decoded =
-      jwt_decode<{ 'https://fusebit.io/profile': { accountId: string; subscriptionId: string; userId: string } }>(
-        token
-      );
-    auth({ token, ...decoded['https://fusebit.io/profile'] });
+    try {
+      const urlParams = new URLSearchParams(location.hash.substring(1));
+      const token = urlParams.get('access_token') || '';
+      const decoded =
+        jwt_decode<{ 'https://fusebit.io/profile': { accountId: string; subscriptionId: string; userId: string } }>(
+          token
+        );
+      auth({ token, ...decoded['https://fusebit.io/profile'] });
+    } catch {
+      history.push('/logged-out');
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
