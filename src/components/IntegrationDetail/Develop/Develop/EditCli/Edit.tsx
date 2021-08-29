@@ -5,13 +5,13 @@ import { Button } from '@material-ui/core';
 import { Props } from '../../../../../interfaces/edit';
 import CopyLine from '../../../../CopyLine';
 
-const Edit = React.forwardRef(({ open, onClose, integration }: Props) => {
+const Edit = React.forwardRef(({ open, onClose, integrationId }: Props) => {
   return (
     <SC.Card open={open}>
       <SC.CardClose onClick={() => onClose()}>
         <img src={cross} alt="close" height="10" width="10" />
       </SC.CardClose>
-      <SC.Title>Edit {integration}</SC.Title>
+      <SC.Title>Edit {integrationId}</SC.Title>
 
       <SC.Flex>
         <SC.LineTitle>1. Install the Fusebit CLI</SC.LineTitle>
@@ -22,7 +22,7 @@ const Edit = React.forwardRef(({ open, onClose, integration }: Props) => {
         <SC.LineTitle>2. Download the integration code</SC.LineTitle>
       </SC.Flex>
       <CopyLine
-        text={'fuse integration get ' + integration + ' --dir ' + integration}
+        text={'fuse integration get ' + integrationId + ' --dir ' + integrationId}
         highlightedText="get --dir"
         horizontalScrollbar={true}
       />
@@ -31,7 +31,7 @@ const Edit = React.forwardRef(({ open, onClose, integration }: Props) => {
         <SC.LineTitle>3. After making your code changes run</SC.LineTitle>
       </SC.Flex>
       <CopyLine
-        text={'fuse integration deploy ' + integration + ' -d ' + integration}
+        text={'fuse integration deploy ' + integrationId + ' -d ' + integrationId}
         highlightedText="deploy -d"
         horizontalScrollbar={true}
       />
