@@ -63,7 +63,17 @@
           "id": "<%this.id%>",
           "tags": {}
         }
-      }
+      },
+      "components": [
+        {
+          "name": "<% this.id %>",
+          "skip": false,
+          "provider": "@fusebit-int/hubspot-provider",
+          "entityId": "<% this.id %>",
+          "dependsOn": [],
+          "entityType": "connector"
+        }
+      ]
     }
   },
   {
@@ -130,7 +140,17 @@
           "id": "<%this.id%>",
           "tags": {}
         }
-      }
+      },
+      "components": [
+        {
+          "name": "<% this.id %>",
+          "skip": false,
+          "provider": "@fusebit-int/slack-provider",
+          "entityId": "<% this.id %>",
+          "dependsOn": [],
+          "entityType": "connector"
+        }
+      ]
     }
   }
 ]
