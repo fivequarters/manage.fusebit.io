@@ -10,7 +10,7 @@ const EditGui = React.forwardRef(({ open, onClose, integrationId }: Props) => {
   const { userData } = useContext();
 
   return (
-    <SC.Card open={open}>
+    <SC.FusebitEditorCard open={open}>
       <SC.CardClose onClick={() => onClose()}>
         <img src={cross} alt="close" height="10" width="10" />
       </SC.CardClose>
@@ -26,7 +26,7 @@ const EditGui = React.forwardRef(({ open, onClose, integrationId }: Props) => {
         }}
         options={{ entityType: 'integration' }}
       />
-    </SC.Card>
+    </SC.FusebitEditorCard>
   );
 });
 

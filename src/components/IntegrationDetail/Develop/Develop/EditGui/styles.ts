@@ -26,6 +26,12 @@ export const Card = styled.div<{ open: boolean }>`
   }
 `;
 
+export const FusebitEditorCard = styled(Card)`
+  width: 90%;
+  height: 90%;
+  padding: 24px 60px;
+`;
+
 export const Flex = styled.div`
   display: flex;
   align-items: center;
