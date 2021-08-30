@@ -29,7 +29,7 @@ import { useAccountUserCreateUser } from '../../../../hooks/api/v1/account/user/
 import { useCreateToken } from '../../../../hooks/useCreateToken';
 import { cells } from '../../../../interfaces/users';
 import Row from './Row';
-import { useTableLogic } from '../../../../hooks/useTableLogic';
+import { useEntityTable } from '../../../../hooks/useEntityTable';
 
 const Authentication: React.FC = () => {
   const [rows, setRows] = React.useState<Account[]>([]);
@@ -46,7 +46,7 @@ const Authentication: React.FC = () => {
   const createUser = useAccountUserCreateUser<Operation>();
   const { _createToken } = useCreateToken();
   const [loading, setLoading] = React.useState(true);
-  const { handleSelectAllCheck, handleCheck, isSelected, handleRowClick, handleRowDelete, selected } = useTableLogic({
+  const { handleSelectAllCheck, handleCheck, isSelected, handleRowClick, handleRowDelete, selected } = useEntityTable({
     reloadUsers,
   });
 

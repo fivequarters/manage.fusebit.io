@@ -26,7 +26,7 @@ import FeedPicker from '../../../FeedPicker';
 import { cells, OverviewProps } from '../../../../interfaces/connectors';
 import { Data } from '../../../../interfaces/feedPicker';
 import Row from './Row';
-import { useTableLogic } from '../../../../hooks/useTableLogic';
+import { useEntityTable } from '../../../../hooks/useEntityTable';
 
 const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
   const { userData } = useContext();
@@ -48,7 +48,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
     setAddConnectorOpen,
     rows,
     selected,
-  } = useTableLogic({ headless, setHeadless, reloadConnectors, connectors });
+  } = useEntityTable({ headless, setHeadless, reloadConnectors, connectors });
 
   const handlePreviousCellSelect = () => {
     if (selectedCell === cells.TYPE) {

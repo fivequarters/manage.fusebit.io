@@ -2,17 +2,17 @@ import { useEffect, useRef, useState } from 'react';
 import { useContext } from './useContext';
 import { Integration } from '../interfaces/integration';
 import { Connector } from '../interfaces/connector';
-import { useLoader } from '../hooks/useLoader';
-import { useAccountIntegrationDeleteIntegration } from '../hooks/api/v2/account/integration/useDeleteOne';
-import { useAccountConnectorDeleteConnector } from '../hooks/api/v2/account/connector/useDeleteOne';
-import { useAccountUserDeleteOne } from '../hooks/api/v1/account/user/useDeleteOne';
+import { useLoader } from './useLoader';
+import { useAccountIntegrationDeleteIntegration } from './api/v2/account/integration/useDeleteOne';
+import { useAccountConnectorDeleteConnector } from './api/v2/account/connector/useDeleteOne';
+import { useAccountUserDeleteOne } from './api/v1/account/user/useDeleteOne';
 import { Operation } from '../interfaces/operation';
-import { useError } from '../hooks/useError';
+import { useError } from './useError';
 import { useHistory } from 'react-router';
 import { Feed } from '../interfaces/feed';
 import { Data } from '../interfaces/feedPicker';
-import { useCreateDataFromFeed } from '../hooks/useCreateDataFromFeed';
-import { useQuery } from '../hooks/useQuery';
+import { useCreateDataFromFeed } from './useCreateDataFromFeed';
+import { useQuery } from './useQuery';
 
 interface Props {
   headless?: any;
@@ -32,7 +32,7 @@ interface Props {
   };
 }
 
-export const useTableLogic = ({
+export const useEntityTable = ({
   headless,
   setHeadless,
   reloadIntegrations,
