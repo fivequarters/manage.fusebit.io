@@ -5,6 +5,7 @@ import { Connector } from '../interfaces/connector';
 import { useLoader } from '../hooks/useLoader';
 import { useAccountIntegrationDeleteIntegration } from '../hooks/api/v2/account/integration/useDeleteOne';
 import { useAccountConnectorDeleteConnector } from '../hooks/api/v2/account/connector/useDeleteOne';
+import { useAccountUserDeleteOne } from '../hooks/api/v1/account/user/useDeleteOne';
 import { Operation } from '../interfaces/operation';
 import { useError } from '../hooks/useError';
 import { useHistory } from 'react-router';
@@ -14,10 +15,11 @@ import { useCreateDataFromFeed } from '../hooks/useCreateDataFromFeed';
 import { useQuery } from '../hooks/useQuery';
 
 interface Props {
-  headless: any;
-  setHeadless: Function;
+  headless?: any;
+  setHeadless?: Function;
   reloadIntegrations?: Function;
   reloadConnectors?: Function;
+  reloadUsers?: Function;
   integrations?: {
     data: {
       items: Integration[];
@@ -35,6 +37,7 @@ export const useTableLogic = ({
   setHeadless,
   reloadIntegrations,
   reloadConnectors,
+  reloadUsers,
   integrations,
   connectors,
 }: Props) => {
@@ -45,6 +48,7 @@ export const useTableLogic = ({
   const { waitForOperations, createLoader, removeLoader } = useLoader();
   const deleteIntegration = useAccountIntegrationDeleteIntegration<Operation>();
   const deleteConnector = useAccountConnectorDeleteConnector<Operation>();
+  const deleteAccount = useAccountUserDeleteOne<Operation>();
   const { createError } = useError();
   const { createDataFromFeed } = useCreateDataFromFeed();
   const [addIntegrationOpen, setAddIntegrationOpen] = useState(false);
@@ -59,7 +63,7 @@ export const useTableLogic = ({
   };
 
   const checkQuery = () => {
-    setHeadless(false); // so we only do this once.
+    setHeadless && setHeadless(false); // so we only do this once.
     const key = query.get('key');
     if (key !== null && key !== undefined) {
       isIntegration.current ? setAddIntegrationOpen(true) : setAddConnectorOpen(true);
@@ -127,17 +131,24 @@ export const useTableLogic = ({
             subscriptionId: userData.subscriptionId,
           });
           operationIds.push(response.data.operationId);
-        } else {
+        } else if (window.location.href.indexOf('connector') >= 0) {
           const response = await deleteConnector.mutateAsync({
             id: selected[i],
             accountId: userData.accountId,
             subscriptionId: userData.subscriptionId,
           });
           operationIds.push(response.data.operationId);
+        } else {
+          const response = await deleteAccount.mutateAsync({ userId: selected[i], accountId: userData.accountId });
+          operationIds.push(response.data.operationId);
         }
       }
       await waitForOperations(operationIds);
-      isIntegration.current ? reloadIntegrations && reloadIntegrations() : reloadConnectors && reloadConnectors();
+      isIntegration.current
+        ? reloadIntegrations && reloadIntegrations()
+        : reloadConnectors
+        ? reloadConnectors()
+        : reloadUsers && reloadUsers();
       setSelected([]);
     } catch (e) {
       createError(e.message);
