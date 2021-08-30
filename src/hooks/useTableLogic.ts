@@ -53,16 +53,16 @@ export const useTableLogic = ({
   const query = useQuery();
   const isIntegration = useRef(false);
 
-  const setItems = (integration?: boolean) => {
-    const items = integration ? integrations?.data.items : connectors?.data.items;
+  const setItems = () => {
+    const items = isIntegration.current ? integrations?.data.items : connectors?.data.items;
     items && setRows(items);
   };
 
-  const checkQuery = (integration?: boolean) => {
+  const checkQuery = () => {
     setHeadless(false); // so we only do this once.
     const key = query.get('key');
     if (key !== null && key !== undefined) {
-      integration ? setAddIntegrationOpen(true) : setAddConnectorOpen(true);
+      isIntegration.current ? setAddIntegrationOpen(true) : setAddConnectorOpen(true);
     }
   };
 
@@ -71,17 +71,17 @@ export const useTableLogic = ({
     if (integrations && integrations.data.items) {
       setLoading(false);
       // If there are integrations to show or if all of the integrations where deleted we call the setItems function
-      (integrations.data.items.length > 0 || !headless.current) && setItems(true);
+      (integrations.data.items.length > 0 || !headless.current) && setItems();
 
       // If we have just navigated to the integrations list we check if there is a query param
-      headless.current && checkQuery(true);
+      headless.current && checkQuery();
     } else if (connectors && connectors.data.items) {
       setLoading(false);
       // If there are connectors to show or if all of the connectors where deleted we call the setItems function
-      (connectors.data.items.length > 0 || !headless.current) && setItems(true);
+      (connectors.data.items.length > 0 || !headless.current) && setItems();
 
       // If we have just navigated to the connectors list we check if there is a query param
-      headless.current && checkQuery(true);
+      headless.current && checkQuery();
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

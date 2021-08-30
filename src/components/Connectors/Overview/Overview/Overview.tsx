@@ -17,147 +17,38 @@ import {
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useContext } from '../../../../hooks/useContext';
-import { useLoader } from '../../../../hooks/useLoader';
 import { useAccountConnectorsGetAll } from '../../../../hooks/api/v2/account/connector/useGetAll';
-import { useAccountConnectorDeleteConnector } from '../../../../hooks/api/v2/account/connector/useDeleteOne';
-import { Operation } from '../../../../interfaces/operation';
 import { Connector } from '../../../../interfaces/connector';
-import { useError } from '../../../../hooks/useError';
 import arrowRight from '../../../../assets/arrow-right.svg';
 import arrowLeft from '../../../../assets/arrow-left.svg';
 import { Feed } from '../../../../interfaces/feed';
-import { useQuery } from '../../../../hooks/useQuery';
 import FeedPicker from '../../../FeedPicker';
-import { connectorsFeed } from '../../../../static/feed';
 import { cells, OverviewProps } from '../../../../interfaces/connectors';
 import { Data } from '../../../../interfaces/feedPicker';
-import { useCreateDataFromFeed } from '../../../../hooks/useCreateDataFromFeed';
 import Row from './Row';
-import { useHistory } from 'react-router-dom';
+import { useTableLogic } from '../../../../hooks/useTableLogic';
 
 const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
-  const history = useHistory();
-  const [selected, setSelected] = React.useState<string[]>([]);
-  const [rows, setRows] = React.useState<Connector[]>([]);
   const { userData } = useContext();
   const { data: connectors, refetch: reloadConnectors } = useAccountConnectorsGetAll<{ items: Connector[] }>({
     enabled: userData.token,
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
   });
-  const deleteConnector = useAccountConnectorDeleteConnector<Operation>();
-  const { waitForOperations, createLoader, removeLoader } = useLoader();
-  const { createError } = useError();
   const [selectedCell, setSelectedCell] = React.useState<cells>(cells.TYPE);
-  const [addConnectorOpen, setAddConnectorOpen] = React.useState(false);
-  const query = useQuery();
-  const { createDataFromFeed } = useCreateDataFromFeed();
-  const [loading, setLoading] = React.useState(true);
-
-  React.useEffect(() => {
-    if (connectors && connectors.data.items) {
-      setLoading(false);
-      if (connectors.data.items.length > 0) {
-        const items = connectors.data.items;
-        setRows(items);
-        if (headless.current) {
-          setHeadless(false); // so we only do this once.
-          const key = query.get('key');
-          if (key !== null && key !== undefined) {
-            setAddConnectorOpen(true);
-          }
-        }
-      } else if (headless.current) {
-        setHeadless(false); // so we only do this once.
-        const items = connectors.data.items;
-        setRows(items); // otherwise if we delete and the connectors.data.items has 0 items the rows will display 1
-        const key = query.get('key');
-        let keyDoesntMatch = true;
-        connectorsFeed().then((feed) => {
-          for (let i = 0; i < feed.length; i++) {
-            if (feed[i].id === key) {
-              keyDoesntMatch = false;
-              const dummyData = {
-                dummyIntegration: 'randomIntegration',
-                dummyConnector: 'randomConnector',
-              };
-              localStorage.setItem('showSettingUp', 'true');
-              createDataFromFeed(feed[i], dummyData, true);
-            }
-          }
-          setAddConnectorOpen(keyDoesntMatch);
-        });
-      } else {
-        const items = connectors.data.items;
-        setRows(items); // otherwise if we delete and the connectors.data.items has 0 items the rows will display 1
-      }
-    }
-  }, [connectors, query, createDataFromFeed, headless, setHeadless]);
-
-  const handleSelectAllCheck = (event: any) => {
-    if (event.target.checked) {
-      const newSelecteds = rows.map((row) => row.id);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleCheck = (event: any, id: string) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected: string[] = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-    }
-
-    setSelected(newSelected);
-  };
-
-  const isSelected = (name: string) => selected.indexOf(name) !== -1;
-
-  const handleRowDelete = async () => {
-    try {
-      createLoader();
-      let operationIds: string[] = [];
-      for (let i = 0; i < selected.length; i++) {
-        const response = await deleteConnector.mutateAsync({
-          id: selected[i],
-          accountId: userData.accountId,
-          subscriptionId: userData.subscriptionId,
-        });
-        operationIds.push(response.data.operationId);
-      }
-      await waitForOperations(operationIds);
-      reloadConnectors();
-      setSelected([]);
-    } catch (e) {
-      createError(e.message);
-    } finally {
-      removeLoader();
-    }
-  };
-
-  const handleRowClick = (event: any, href: string) => {
-    // TODO: check if the user has auth to edit this row before sending him there, and if not send this error
-    // if (has auth) {
-    //     if (!event.target.id) {
-    //         window.location.href = href;
-    //     }
-    // } else {
-    //     createError("You don't have sufficient permissions to edit connector {connector}.  Please contact an account administrator.");
-    // }
-    if (!event.target.id) {
-      history.push(href);
-      // window.location.href = href;
-    }
-  };
+  const {
+    handleSelectAllCheck,
+    handleCheck,
+    isSelected,
+    handleRowDelete,
+    handleRowClick,
+    handleConnectorCreation,
+    loading,
+    addConnectorOpen,
+    setAddConnectorOpen,
+    rows,
+    selected,
+  } = useTableLogic({ headless, setHeadless, reloadConnectors, connectors });
 
   const handlePreviousCellSelect = () => {
     if (selectedCell === cells.TYPE) {
@@ -175,13 +66,6 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
     }
   };
 
-  const handleConnectorCreation = async (activeIntegration: Feed, data: Data, connector: boolean) => {
-    const res = await createDataFromFeed(activeIntegration, data, connector);
-    if (!res) {
-      setAddConnectorOpen(false);
-    }
-  };
-
   return (
     <SC.Wrapper>
       <Modal
@@ -193,7 +77,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
         BackdropComponent={Backdrop}
       >
         <FeedPicker
-          onSubmit={(activeIntegration: Feed, data: Data) => handleConnectorCreation(activeIntegration, data, true)}
+          onSubmit={(activeIntegration: Feed, data: Data) => handleConnectorCreation(activeIntegration, data)}
           open={addConnectorOpen}
           onClose={() => setAddConnectorOpen(false)}
         />
