@@ -51,11 +51,11 @@ export const useTableLogic = ({
   const [addConnectorOpen, setAddConnectorOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const query = useQuery();
-  const isIntegration = useRef(undefined);
+  const isIntegration = useRef(false);
 
   const setItems = (integration?: boolean) => {
-    const items = integration ? integrations.data.items : connectors.data.items;
-    setRows(items);
+    const items = integration ? integrations?.data.items : connectors?.data.items;
+    items && setRows(items);
   };
 
   const checkQuery = (integration?: boolean) => {
@@ -137,7 +137,7 @@ export const useTableLogic = ({
         }
       }
       await waitForOperations(operationIds);
-      isIntegration.current ? reloadIntegrations() : reloadConnectors();
+      isIntegration.current ? reloadIntegrations && reloadIntegrations() : reloadConnectors && reloadConnectors();
       setSelected([]);
     } catch (e) {
       createError(e.message);
@@ -180,5 +180,6 @@ export const useTableLogic = ({
     addIntegrationOpen,
     addConnectorOpen,
     loading,
+    selected,
   };
 };

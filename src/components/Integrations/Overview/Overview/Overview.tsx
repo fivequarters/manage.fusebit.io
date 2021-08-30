@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import * as SC from './styles';
 import * as CSC from '../../../globalStyle';
 import {
@@ -17,147 +17,38 @@ import {
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useContext } from '../../../../hooks/useContext';
-import { useLoader } from '../../../../hooks/useLoader';
 import { useAccountIntegrationsGetAll } from '../../../../hooks/api/v2/account/integration/useGetAll';
-import { useAccountIntegrationDeleteIntegration } from '../../../../hooks/api/v2/account/integration/useDeleteOne';
 import { Integration } from '../../../../interfaces/integration';
-import { Operation } from '../../../../interfaces/operation';
-import { useError } from '../../../../hooks/useError';
 import arrowRight from '../../../../assets/arrow-right.svg';
 import arrowLeft from '../../../../assets/arrow-left.svg';
 import { Feed } from '../../../../interfaces/feed';
-import { useQuery } from '../../../../hooks/useQuery';
 import FeedPicker from '../../../FeedPicker';
-import { integrationsFeed } from '../../../../static/feed';
 import { cells, OverviewProps } from '../../../../interfaces/integrations';
 import { Data } from '../../../../interfaces/feedPicker';
-import { useCreateDataFromFeed } from '../../../../hooks/useCreateDataFromFeed';
 import Row from './Row';
-import { useHistory } from 'react-router-dom';
+import { useTableLogic } from '../../../../hooks/useTableLogic';
 
 const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
-  const history = useHistory();
-  const [selected, setSelected] = React.useState<string[]>([]);
-  const [rows, setRows] = React.useState<Integration[]>([]);
   const { userData } = useContext();
   const { data: integrations, refetch: reloadIntegrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({
     enabled: userData.token,
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
   });
-  const deleteIntegration = useAccountIntegrationDeleteIntegration<Operation>();
-  const { waitForOperations, createLoader, removeLoader } = useLoader();
-  const { createError } = useError();
   const [selectedCell, setSelectedCell] = React.useState<cells>(cells.INSTALLS);
-  const [addIntegrationOpen, setAddIntegrationOpen] = React.useState(false);
-  const query = useQuery();
-  const { createDataFromFeed } = useCreateDataFromFeed();
-  const [loading, setLoading] = React.useState(true);
-
-  useEffect(() => {
-    if (integrations && integrations.data.items) {
-      setLoading(false);
-      if (integrations.data.items.length > 0) {
-        const items = integrations.data.items;
-        setRows(items);
-        if (headless.current) {
-          setHeadless(false); // so we only do this once.
-          const key = query.get('key');
-          if (key !== null && key !== undefined) {
-            setAddIntegrationOpen(true);
-          }
-        }
-      } else if (headless.current) {
-        setHeadless(false); // so we only do this once.
-        const items = integrations.data.items;
-        setRows(items); // otherwise if we delete and the integration.data.items has 0 items the rows will display 1
-        const key = query.get('key');
-        let keyDoesntMatch = true;
-        integrationsFeed().then((feed) => {
-          for (let i = 0; i < feed.length; i++) {
-            if (feed[i].id === key) {
-              keyDoesntMatch = false;
-              const dummyData = {
-                dummyIntegration: 'randomIntegration',
-                dummyConnector: 'randomConnector',
-              };
-              localStorage.setItem('showSettingUp', 'true');
-              createDataFromFeed(feed[i], dummyData);
-            }
-          }
-          setAddIntegrationOpen(keyDoesntMatch);
-        });
-      } else {
-        const items = integrations.data.items;
-        setRows(items);
-      }
-    }
-  }, [integrations, query, createDataFromFeed, headless, setHeadless]);
-
-  const handleSelectAllCheck = (event: any) => {
-    if (event.target.checked) {
-      const newSelecteds = rows.map((row) => row.id);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleCheck = (event: any, id: string) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected: string[] = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-    }
-
-    setSelected(newSelected);
-  };
-
-  const isSelected = (name: string) => selected.indexOf(name) !== -1;
-
-  const handleRowDelete = async () => {
-    try {
-      createLoader();
-      let operationIds: string[] = [];
-      for (let i = 0; i < selected.length; i++) {
-        const response = await deleteIntegration.mutateAsync({
-          id: selected[i],
-          accountId: userData.accountId,
-          subscriptionId: userData.subscriptionId,
-        });
-        operationIds.push(response.data.operationId);
-      }
-      await waitForOperations(operationIds);
-      reloadIntegrations();
-      setSelected([]);
-    } catch (e) {
-      createError(e.message);
-    } finally {
-      removeLoader();
-    }
-  };
-
-  const handleRowClick = (event: any, href: string) => {
-    // TODO: check if the user has auth to edit this row before sending him there, and if not send this error
-    // if (has auth) {
-    //     if (!event.target.id) {
-    //         window.location.href = href;
-    //     }
-    // } else {
-    //     createError("You don't have sufficient permissions to edit integration {integration}.  Please contact an account administrator.");
-    // }
-    if (!event.target.id) {
-      history.push(href);
-      // window.location.href = href;
-    }
-  };
+  const {
+    handleSelectAllCheck,
+    handleCheck,
+    isSelected,
+    handleRowDelete,
+    handleRowClick,
+    handleIntegrationCreation,
+    loading,
+    addIntegrationOpen,
+    setAddIntegrationOpen,
+    rows,
+    selected,
+  } = useTableLogic({ headless, setHeadless, reloadIntegrations, integrations });
 
   const handlePreviousCellSelect = () => {
     if (selectedCell === cells.INSTALLS) {
@@ -176,13 +67,6 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
       // setSelectedCell(cells.DEPLOYED);
     } else {
       // setSelectedCell(cells.INSTALLS);
-    }
-  };
-
-  const handleIntegrationCreation = async (activeIntegration: Feed, data: Data) => {
-    const res = await createDataFromFeed(activeIntegration, data);
-    if (!res) {
-      setAddIntegrationOpen(false);
     }
   };
 
