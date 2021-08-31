@@ -19,7 +19,6 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useContext } from '../../../../hooks/useContext';
 import { useLoader } from '../../../../hooks/useLoader';
-import { useAccountUserDeleteOne } from '../../../../hooks/api/v1/account/user/useDeleteOne';
 import { Operation } from '../../../../interfaces/operation';
 import { useError } from '../../../../hooks/useError';
 import arrowRight from '../../../../assets/arrow-right.svg';
@@ -29,14 +28,12 @@ import { useAccountUserGetAll } from '../../../../hooks/api/v1/account/user/useG
 import { Account } from '../../../../interfaces/account';
 import { useAccountUserCreateUser } from '../../../../hooks/api/v1/account/user/useCreateUser';
 import { useCreateToken } from '../../../../hooks/useCreateToken';
-import { useHistory } from 'react-router-dom';
 import { cells } from '../../../../interfaces/users';
 import Row from './Row';
 import { usePagination } from '../../../../hooks/usePagination';
+import { useEntityTable } from '../../../../hooks/useEntityTable';
 
 const Authentication: React.FC = () => {
-  const history = useHistory();
-  const [selected, setSelected] = React.useState<string[]>([]);
   const [rows, setRows] = React.useState<Account[]>([]);
   const { userData } = useContext();
   const { data: users, refetch: reloadUsers } = useAccountUserGetAll<{ items: Account[] }>({
@@ -44,8 +41,7 @@ const Authentication: React.FC = () => {
     accountId: userData.accountId,
     params: 'include=all',
   });
-  const deleteAccount = useAccountUserDeleteOne<Operation>();
-  const { waitForOperations, createLoader, removeLoader } = useLoader();
+  const { createLoader, removeLoader } = useLoader();
   const { createError } = useError();
   const [selectedCell, setSelectedCell] = React.useState<cells>(cells.NAME);
   const [newUserOpen, setNewUserOpen] = React.useState(false);
@@ -53,6 +49,9 @@ const Authentication: React.FC = () => {
   const { _createToken } = useCreateToken();
   const [loading, setLoading] = React.useState(true);
   const { page, rowsPerPage, handleChangePage, handleChangeRowsPerPage, ROWS_PER_PAGE_OPTIONS } = usePagination();
+  const { handleSelectAllCheck, handleCheck, isSelected, handleRowClick, handleRowDelete, selected } = useEntityTable({
+    reloadUsers,
+  });
 
   useEffect(() => {
     if (users && users.data.items) {
@@ -61,67 +60,6 @@ const Authentication: React.FC = () => {
       setLoading(false);
     }
   }, [users]);
-
-  const handleSelectAllCheck = (event: any) => {
-    if (event.target.checked) {
-      const newSelecteds = rows.map((row) => row.id);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleCheck = (event: any, id: string) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected: string[] = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-    }
-
-    setSelected(newSelected);
-  };
-
-  const isSelected = (name: string) => selected.indexOf(name) !== -1;
-
-  const handleRowDelete = async () => {
-    try {
-      createLoader();
-      let operationIds: string[] = [];
-      for (let i = 0; i < selected.length; i++) {
-        const response = await deleteAccount.mutateAsync({ userId: selected[i], accountId: userData.accountId });
-        operationIds.push(response.data.operationId);
-      }
-      await waitForOperations(operationIds);
-      reloadUsers();
-      setSelected([]);
-    } catch (e) {
-      createError(e.message);
-    } finally {
-      removeLoader();
-    }
-  };
-
-  const handleRowClick = (event: any, href: string) => {
-    // TODO: check if the user has auth to edit this row before sending him there, and if not send this error
-    // if (has auth) {
-    //     if (!event.target.id) {
-    //         window.location.href = href;
-    //     }
-    // } else {
-    //     createError("You don't have sufficient permissions to edit integration {integration}.  Please contact an account administrator.");
-    // }
-    if (!event.target.id) {
-      history.push(href);
-      // window.location.href = href;
-    }
-  };
 
   const handlePreviousCellSelect = () => {
     if (selectedCell === cells.NAME) {

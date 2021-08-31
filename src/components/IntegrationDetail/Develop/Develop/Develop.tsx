@@ -9,11 +9,8 @@ import Connect from './Connect';
 import { useLoader } from '../../../../hooks/useLoader';
 import { useError } from '../../../../hooks/useError';
 import { useContext } from '../../../../hooks/useContext';
-import { useAccountIntegrationUpdateIntegration } from '../../../../hooks/api/v2/account/integration/useUpdateOne';
 import { useAccountIntegrationsGetOne } from '../../../../hooks/api/v2/account/integration/useGetOne';
 import { useAccountConnectorsGetAll } from '../../../../hooks/api/v2/account/connector/useGetAll';
-import { useAccountConnectorCreateConnector } from '../../../../hooks/api/v2/account/connector/useCreateOne';
-import { Operation } from '../../../../interfaces/operation';
 import { Connector } from '../../../../interfaces/connector';
 import { Integration, InnerConnector } from '../../../../interfaces/integration';
 import Edit from './Edit';
@@ -26,6 +23,7 @@ import { useReplaceMustache } from '../../../../hooks/useReplaceMustache';
 import { FinalConnector } from '../../../../interfaces/integrationDetailDevelop';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { useEntityApi } from '../../../../hooks/useEntityApi';
 
 const Develop: React.FC = () => {
   const history = useHistory();
@@ -43,9 +41,7 @@ const Develop: React.FC = () => {
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
   });
-  const createConnector = useAccountConnectorCreateConnector<Operation>();
-  const updateIntegration = useAccountIntegrationUpdateIntegration<Operation>();
-  const { waitForOperations, createLoader, removeLoader } = useLoader();
+  const { createLoader, removeLoader } = useLoader();
   const { createError } = useError();
   const [editOpen, setEditOpen] = React.useState(false);
   const [connectOpen, setConnectOpen] = React.useState(false);
@@ -54,6 +50,7 @@ const Develop: React.FC = () => {
   const [connectorPickerOpen, setConnectorPickerOpen] = React.useState(false);
   const { replaceMustache } = useReplaceMustache();
   const [loading, setLoading] = React.useState(false);
+  const { toggleConnector, createEntity } = useEntityApi(true);
 
   React.useEffect(() => {
     const res = localStorage.getItem('refreshToken');
@@ -83,65 +80,23 @@ const Develop: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [integrationId]);
 
-  const handleConnectorDelete = async (connectorId: string) => {
-    try {
-      createLoader();
-      const data = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
-      const filteredComponents = data.data.components.filter((connector: InnerConnector) => {
-        let returnConnector = true;
-        if (connector.entityId === connectorId) {
-          returnConnector = false;
-        }
-        return returnConnector;
-      });
-      data.data.components = filteredComponents;
-      const response2 = await updateIntegration.mutateAsync({
-        accountId: userData.accountId,
-        subscriptionId: userData.subscriptionId,
-        integrationId: integrationData?.data.id,
-        data: data,
-      });
-      await waitForOperations([response2.data.operationId]);
+  const _toggleConnector = (connectorId: string, isAdding: boolean) => {
+    createLoader();
+    setConnectorListOpen(false);
+    toggleConnector(isAdding, connectorId, integrationData, () => {
       reloadIntegration();
       reloadConnectors();
-    } catch (e) {
-      createError(e.message);
-    } finally {
-      removeLoader();
-      setConnectorListOpen(false);
-    }
+    });
+    removeLoader();
+    setConnectorListOpen(false);
+  };
+
+  const handleConnectorDelete = async (connectorId: string) => {
+    _toggleConnector(connectorId, false);
   };
 
   const linkConnector = async (connectorId: string) => {
-    try {
-      createLoader();
-      setConnectorListOpen(false);
-      const data = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
-      const newData = data;
-      const newConnector: InnerConnector = {
-        name: connectorId,
-        entityType: 'connector',
-        entityId: connectorId,
-        skip: false,
-        provider: '@fusebit-int/slack-provider',
-        dependsOn: [],
-      };
-      newData.data.components.push(newConnector);
-      const response2 = await updateIntegration.mutateAsync({
-        accountId: userData.accountId,
-        subscriptionId: userData.subscriptionId,
-        integrationId: integrationData?.data.id,
-        data: newData,
-      });
-      await waitForOperations([response2.data.operationId]);
-      reloadIntegration();
-      reloadConnectors();
-    } catch (e) {
-      createError(e.message);
-    } finally {
-      removeLoader();
-      setConnectorListOpen(false);
-    }
+    _toggleConnector(connectorId, true);
   };
 
   const addNewConnector = async (activeFeed: Feed, data: Data) => {
@@ -155,28 +110,8 @@ const Develop: React.FC = () => {
       await Promise.all([
         ...parsedFeed.configuration.entities.map(async (entity: Entity) => {
           if (entity.entityType === 'connector') {
-            const obj = {
-              data: entity.data,
-              id: entity.id,
-              tags: { ...commonTags, ...entity.tags },
-              accountId: userData.accountId,
-              subscriptionId: userData.subscriptionId,
-            };
-            const response = await createConnector.mutateAsync(obj);
-            await waitForOperations([response.data.operationId]);
-
-            const currentData = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
-            const newData = currentData;
-            entity.components?.forEach((component) => {
-              newData.data.components.push(component);
-            });
-            const response2 = await updateIntegration.mutateAsync({
-              accountId: userData.accountId,
-              subscriptionId: userData.subscriptionId,
-              integrationId: integrationData?.data.id,
-              data: newData,
-            });
-            await waitForOperations([response2.data.operationId]);
+            await createEntity(entity, commonTags);
+            await toggleConnector(true, entity.id, integrationData);
           }
         }),
       ]);

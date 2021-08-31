@@ -1,3 +1,4 @@
+import { Connector } from './connector';
 import { Integration } from './integration';
 
 export interface OverviewProps {
@@ -11,7 +12,7 @@ export enum cells {
 }
 
 export interface RowProps {
-  row: Integration;
+  row: Integration | Connector;
   handleRowClick: Function;
   handleCheck: Function;
   isSelected: Function;
