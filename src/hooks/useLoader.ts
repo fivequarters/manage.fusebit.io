@@ -29,6 +29,8 @@ export const useLoader = () => {
   };
 
   const createLoader = () => {
+    const loaderExists = !!document.getElementById('loader');
+    if (loaderExists) return;
     const loader = document.createElement('div');
     loader.setAttribute('id', 'loader');
     loader.setAttribute('style', css);

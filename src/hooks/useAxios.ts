@@ -3,7 +3,7 @@ import { readLocalData, useContext } from './useContext';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
-interface ApiResponse<T> {
+export interface ApiResponse<T> {
   error?: string;
   data: T;
   success?: boolean;
