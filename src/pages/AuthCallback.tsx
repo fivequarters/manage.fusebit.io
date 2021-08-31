@@ -9,7 +9,12 @@ import { User } from '../interfaces/user';
 import { Account } from '../interfaces/account';
 import axios from 'axios';
 
-const { REACT_APP_AUTH0_DOMAIN } = process.env;
+const {
+  REACT_APP_AUTH0_DOMAIN,
+  REACT_APP_FUSEBIT_USER_ID,
+  REACT_APP_FUSEBIT_ACCOUNT_ID,
+  REACT_APP_FUSEBIT_SUBSCRIPTION_ID,
+} = process.env;
 
 const IntegrationsPage: FC<{}> = (): ReactElement => {
   const location = useLocation();
@@ -60,15 +65,23 @@ const IntegrationsPage: FC<{}> = (): ReactElement => {
     try {
       const urlParams = new URLSearchParams(location.hash.substring(1));
       const token = urlParams.get('access_token') || '';
-      const decoded =
-        jwt_decode<{ 'https://fusebit.io/profile': { accountId: string; subscriptionId: string; userId: string } }>(
-          token
-        );
-      auth({ token, ...decoded['https://fusebit.io/profile'] });
+      if (REACT_APP_FUSEBIT_ACCOUNT_ID && REACT_APP_FUSEBIT_SUBSCRIPTION_ID && REACT_APP_FUSEBIT_USER_ID) {
+        auth({
+          token,
+          accountId: REACT_APP_FUSEBIT_ACCOUNT_ID,
+          subscriptionId: REACT_APP_FUSEBIT_SUBSCRIPTION_ID,
+          userId: REACT_APP_FUSEBIT_USER_ID,
+        });
+      } else {
+        const decoded =
+          jwt_decode<{ 'https://fusebit.io/profile': { accountId: string; subscriptionId: string; userId: string } }>(
+            token
+          );
+        auth({ token, ...decoded['https://fusebit.io/profile'] });
+      }
     } catch {
       history.push('/logged-out');
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
