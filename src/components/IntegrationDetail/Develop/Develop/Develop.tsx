@@ -68,8 +68,8 @@ const Develop: React.FC = () => {
   const { toggleConnector, createEntity } = useEntityApi(true);
 
   const editOptions = [
-    { name: 'Edit', handle: setEditGuiOpen },
-    { name: 'CLI', handle: setEditCliOpen },
+    { buttonLabel: 'Edit', optionLabel: 'Edit in the in-browser editor', handle: setEditGuiOpen },
+    { buttonLabel: 'CLI', optionLabel: 'Edit with your favorite editor', handle: setEditCliOpen },
   ];
   const editOptionAnchor = React.useRef<HTMLDivElement>(null);
   const [editOption, setEditOption] = React.useState(0);
@@ -369,7 +369,7 @@ const Develop: React.FC = () => {
                   variant="contained"
                   color="primary"
                 >
-                  {editOptions[editOption].name}
+                  {editOptions[editOption].buttonLabel}
                 </Button>
                 <Button
                   color="primary"
@@ -403,16 +403,20 @@ const Develop: React.FC = () => {
                         <MenuList id="split-button-menu">
                           {editOptions.map(
                             (
-                              option: { name: string; handle: React.Dispatch<React.SetStateAction<boolean>> },
+                              option: {
+                                buttonLabel: string;
+                                optionLabel: string;
+                                handle: React.Dispatch<React.SetStateAction<boolean>>;
+                              },
                               index: number
                             ) => (
                               <MenuItem
-                                key={option.name}
+                                key={option.buttonLabel}
                                 disabled={index === 2}
                                 selected={index === editOption}
                                 onClick={(event) => handleEditOptionClick(event, index)}
                               >
-                                {option.name}
+                                {option.optionLabel}
                               </MenuItem>
                             )
                           )}
