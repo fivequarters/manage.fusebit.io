@@ -10,10 +10,9 @@ export interface InnerConnector {
   name: string;
   entityType: string;
   entityId: string;
-  skip: boolean;
-  path?: string;
+  dependsOn: any[];
   provider: string;
-  dependsOn: [];
+  skip?: boolean;
 }
 
 export interface Integration {

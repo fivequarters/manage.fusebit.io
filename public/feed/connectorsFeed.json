@@ -62,7 +62,17 @@
             "handler": "@fusebit-int/oauth-connector"
           },
           "id": "<%this.id%>",
-          "tags": {}
+          "tags": {},
+          "components": [
+            {
+              "name": "<% this.id %>",
+              "skip": false,
+              "provider": "@fusebit-int/slack-provider",
+              "entityId": "<% this.id %>",
+              "dependsOn": [],
+              "entityType": "connector"
+            }
+          ]
         }
       }
     }

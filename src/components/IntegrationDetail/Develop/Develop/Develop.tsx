@@ -167,16 +167,9 @@ const Develop: React.FC = () => {
 
             const currentData = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
             const newData = currentData;
-            const newConnector: InnerConnector = {
-              name: entity.id,
-              entityType: 'connector',
-              entityId: entity.id,
-              skip: false,
-              provider: '@fusebit-int/slack-provider',
-              path: '/api/configure',
-              dependsOn: [],
-            };
-            newData.data.components.push(newConnector);
+            entity.components?.forEach((component) => {
+              newData.data.components.push(component);
+            });
             const response2 = await updateIntegration.mutateAsync({
               accountId: userData.accountId,
               subscriptionId: userData.subscriptionId,

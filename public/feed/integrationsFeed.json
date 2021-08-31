@@ -103,7 +103,17 @@
             "handler": "@fusebit-int/slack-connector"
           },
           "id": "<%this.id%>",
-          "tags": {}
+          "tags": {},
+          "components": [
+            {
+              "name": "<% this.id %>",
+              "skip": false,
+              "provider": "@fusebit-int/slack-provider",
+              "entityId": "<% this.id %>",
+              "dependsOn": [],
+              "entityType": "connector"
+            }
+          ]
         },
         "slackIntegration": {
           "entityType": "integration",
