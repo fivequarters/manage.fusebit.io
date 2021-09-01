@@ -28,7 +28,7 @@ import { useAccountUserGetAll } from '../../../../hooks/api/v1/account/user/useG
 import { Account } from '../../../../interfaces/account';
 import { useAccountUserCreateUser } from '../../../../hooks/api/v1/account/user/useCreateUser';
 import { useCreateToken } from '../../../../hooks/useCreateToken';
-import { cells } from '../../../../interfaces/users';
+import { UserCells } from '../../../../interfaces/tableRow';
 import Row from './Row';
 import { usePagination } from '../../../../hooks/usePagination';
 import { useEntityTable } from '../../../../hooks/useEntityTable';
@@ -43,7 +43,7 @@ const Authentication: React.FC = () => {
   });
   const { createLoader, removeLoader } = useLoader();
   const { createError } = useError();
-  const [selectedCell, setSelectedCell] = React.useState<cells>(cells.NAME);
+  const [selectedCell, setSelectedCell] = React.useState<UserCells>(UserCells.NAME);
   const [newUserOpen, setNewUserOpen] = React.useState(false);
   const createUser = useAccountUserCreateUser<Operation>();
   const { _createToken } = useCreateToken();
@@ -62,22 +62,22 @@ const Authentication: React.FC = () => {
   }, [users]);
 
   const handlePreviousCellSelect = () => {
-    if (selectedCell === cells.NAME) {
-      setSelectedCell(cells.USER_ID);
-    } else if (selectedCell === cells.EMAIL) {
-      setSelectedCell(cells.NAME);
+    if (selectedCell === UserCells.NAME) {
+      setSelectedCell(UserCells.USER_ID);
+    } else if (selectedCell === UserCells.EMAIL) {
+      setSelectedCell(UserCells.NAME);
     } else {
-      setSelectedCell(cells.EMAIL);
+      setSelectedCell(UserCells.EMAIL);
     }
   };
 
   const handleNextCellSelect = () => {
-    if (selectedCell === cells.NAME) {
-      setSelectedCell(cells.EMAIL);
-    } else if (selectedCell === cells.EMAIL) {
-      setSelectedCell(cells.USER_ID);
+    if (selectedCell === UserCells.NAME) {
+      setSelectedCell(UserCells.EMAIL);
+    } else if (selectedCell === UserCells.EMAIL) {
+      setSelectedCell(UserCells.USER_ID);
     } else {
-      setSelectedCell(cells.NAME);
+      setSelectedCell(UserCells.NAME);
     }
   };
 

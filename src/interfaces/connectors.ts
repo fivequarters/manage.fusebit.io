@@ -5,12 +5,6 @@ export interface OverviewProps {
   setHeadless: Function;
 }
 
-export enum cells {
-  TYPE = 'Type',
-  IDENTITIES = 'Identities',
-  CREATED = 'Created',
-}
-
 export interface RowProps {
   row: Row;
   handleRowClick: Function;

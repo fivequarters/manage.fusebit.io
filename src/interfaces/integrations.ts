@@ -4,11 +4,6 @@ export interface OverviewProps {
   headless: any;
   setHeadless: Function;
 }
-export enum cells {
-  INSTALLS = 'Installs',
-  CREATED = 'Created',
-  DEPLOYED = 'Deployed',
-}
 
 export interface RowProps {
   row: Row;

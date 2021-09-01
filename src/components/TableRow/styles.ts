@@ -6,6 +6,7 @@ export const Row = styled.tr`
   vertical-align: middle;
   color: inherit;
   text-decoration: none;
+  height: 65px;
 
   &:hover {
     cursor: pointer;

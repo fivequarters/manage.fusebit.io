@@ -24,7 +24,8 @@ import arrowRight from '../../../../assets/arrow-right.svg';
 import arrowLeft from '../../../../assets/arrow-left.svg';
 import { Feed } from '../../../../interfaces/feed';
 import FeedPicker from '../../../FeedPicker';
-import { cells, OverviewProps } from '../../../../interfaces/connectors';
+import { OverviewProps } from '../../../../interfaces/connectors';
+import { ConnectorCells } from '../../../../interfaces/tableRow';
 import { Data } from '../../../../interfaces/feedPicker';
 import Row from './Row';
 import { useEntityTable } from '../../../../hooks/useEntityTable';
@@ -37,7 +38,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
   });
-  const [selectedCell, setSelectedCell] = React.useState<cells>(cells.TYPE);
+  const [selectedCell, setSelectedCell] = React.useState<ConnectorCells>(ConnectorCells.TYPE);
   const { page, rowsPerPage, handleChangePage, handleChangeRowsPerPage, ROWS_PER_PAGE_OPTIONS } = usePagination();
   const {
     handleSelectAllCheck,
@@ -54,18 +55,18 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
   } = useEntityTable({ headless, setHeadless, reloadConnectors, connectors });
 
   const handlePreviousCellSelect = () => {
-    if (selectedCell === cells.TYPE) {
-      setSelectedCell(cells.IDENTITIES);
+    if (selectedCell === ConnectorCells.TYPE) {
+      setSelectedCell(ConnectorCells.IDENTITIES);
     } else {
-      setSelectedCell(cells.TYPE);
+      setSelectedCell(ConnectorCells.TYPE);
     }
   };
 
   const handleNextCellSelect = () => {
-    if (selectedCell === cells.TYPE) {
-      setSelectedCell(cells.IDENTITIES);
+    if (selectedCell === ConnectorCells.TYPE) {
+      setSelectedCell(ConnectorCells.IDENTITIES);
     } else {
-      setSelectedCell(cells.TYPE);
+      setSelectedCell(ConnectorCells.TYPE);
     }
   };
 

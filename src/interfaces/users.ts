@@ -1,13 +1,7 @@
-import { Account } from './account';
-
-export enum cells {
-  NAME = 'Name',
-  EMAIL = 'Email',
-  USER_ID = 'User-ID',
-}
+import { Row } from './tableRow';
 
 export interface RowProps {
-  row: Account;
+  row: Row;
   handleRowClick: Function;
   isSelected: Function;
   selectedCell: string;

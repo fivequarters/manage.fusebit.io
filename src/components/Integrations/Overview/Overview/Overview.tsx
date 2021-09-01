@@ -24,7 +24,8 @@ import arrowRight from '../../../../assets/arrow-right.svg';
 import arrowLeft from '../../../../assets/arrow-left.svg';
 import { Feed } from '../../../../interfaces/feed';
 import FeedPicker from '../../../FeedPicker';
-import { cells, OverviewProps } from '../../../../interfaces/integrations';
+import { OverviewProps } from '../../../../interfaces/integrations';
+import { IntegrationCells } from '../../../../interfaces/tableRow';
 import { Data } from '../../../../interfaces/feedPicker';
 import Row from './Row';
 import { usePagination } from '../../../../hooks/usePagination';
@@ -37,7 +38,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
   });
-  const [selectedCell, setSelectedCell] = React.useState<cells>(cells.INSTALLS);
+  const [selectedCell, setSelectedCell] = React.useState<IntegrationCells>(IntegrationCells.INSTALLS);
   const { page, rowsPerPage, handleChangePage, handleChangeRowsPerPage, ROWS_PER_PAGE_OPTIONS } = usePagination();
   const {
     handleSelectAllCheck,
@@ -54,22 +55,22 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
   } = useEntityTable({ headless, setHeadless, reloadIntegrations, integrations });
 
   const handlePreviousCellSelect = () => {
-    if (selectedCell === cells.INSTALLS) {
-      // setSelectedCell(cells.DEPLOYED);
-    } else if (selectedCell === cells.CREATED) {
-      setSelectedCell(cells.INSTALLS); //uncommented to not leave the variable unused
+    if (selectedCell === IntegrationCells.INSTALLS) {
+      // setSelectedCell(IntegrationCells.DEPLOYED);
+    } else if (selectedCell === IntegrationCells.CREATED) {
+      setSelectedCell(IntegrationCells.INSTALLS); //uncommented to not leave the variable unused
     } else {
-      // setSelectedCell(cells.CREATED);
+      // setSelectedCell(IntegrationCells.CREATED);
     }
   };
 
   const handleNextCellSelect = () => {
-    if (selectedCell === cells.INSTALLS) {
-      // setSelectedCell(cells.CREATED);
-    } else if (selectedCell === cells.CREATED) {
-      // setSelectedCell(cells.DEPLOYED);
+    if (selectedCell === IntegrationCells.INSTALLS) {
+      // setSelectedCell(IntegrationCells.CREATED);
+    } else if (selectedCell === IntegrationCells.CREATED) {
+      // setSelectedCell(IntegrationCells.DEPLOYED);
     } else {
-      // setSelectedCell(cells.INSTALLS);
+      // setSelectedCell(IntegrationCells.INSTALLS);
     }
   };
 
