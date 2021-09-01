@@ -339,12 +339,12 @@ const Develop: React.FC = () => {
           <SC.Card>
             <SC.CardTitle>Your Application</SC.CardTitle>
             <SC.CardButtonWrapper>
-              <SC.CardConnectorButtonsWrapper>
+              <SC.CardConnectorButtonsWrapper style={{ display: 'flex', flexDirection: 'column' }}>
                 <ConnectClientButton />
                 <Button
                   onClick={() => setConnectOpen(true)}
                   startIcon={<AddIcon />}
-                  style={{ width: '160px', marginTop: '24px', marginLeft: '5px' }}
+                  style={{ width: '160px', marginTop: '10px' }}
                   size="large"
                   variant="outlined"
                   color="primary"
