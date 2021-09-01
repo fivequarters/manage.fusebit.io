@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
+import { nanoid } from 'nanoid';
+import { generateKeyPair } from '../../../../utils/crypto';
 import * as SC from './styles';
 import * as CSC from '../../../globalStyle';
 import { Button, Modal, Backdrop, Fade } from '@material-ui/core';
@@ -13,6 +15,7 @@ import { useAccountIntegrationUpdateIntegration } from '../../../../hooks/api/v2
 import { useAccountIntegrationsGetOne } from '../../../../hooks/api/v2/account/integration/useGetOne';
 import { useAccountConnectorsGetAll } from '../../../../hooks/api/v2/account/connector/useGetAll';
 import { useAccountConnectorCreateConnector } from '../../../../hooks/api/v2/account/connector/useCreateOne';
+import { useAccountUserCreateIssuer } from '../../../../hooks/api/v1/account/issuer/useCreateIssuer';
 import { Operation } from '../../../../interfaces/operation';
 import { Connector } from '../../../../interfaces/connector';
 import { Integration, InnerConnector } from '../../../../interfaces/integration';
@@ -44,6 +47,7 @@ const Develop: React.FC = () => {
     subscriptionId: userData.subscriptionId,
   });
   const createConnector = useAccountConnectorCreateConnector<Operation>();
+  const createIssuer = useAccountUserCreateIssuer<Operation>();
   const updateIntegration = useAccountIntegrationUpdateIntegration<Operation>();
   const { waitForOperations, createLoader, removeLoader } = useLoader();
   const { createError } = useError();
@@ -252,6 +256,31 @@ const Develop: React.FC = () => {
     return true;
   };
 
+  const registerBackend = async () => {
+    try {
+      createLoader();
+      const randomSuffix = nanoid();
+      const issuerId = `iss-${randomSuffix}`;
+      const keyId = `key-${randomSuffix}`;
+      const keyPair = await generateKeyPair();
+      const newIssuer = {
+        issuerId,
+        displayName: `Backend client issuer`,
+        publicKeys: [
+          {
+            keyId,
+            publicKey: keyPair.publicKeyPem,
+          },
+        ],
+      };
+      await createIssuer.mutateAsync(newIssuer);
+    } catch (e) {
+      createError(e.message);
+    } finally {
+      removeLoader();
+    }
+  };
+
   return (
     <SC.Background>
       <Modal
@@ -337,16 +366,28 @@ const Develop: React.FC = () => {
           <SC.Card>
             <SC.CardTitle>Your Application</SC.CardTitle>
             <SC.CardButtonWrapper>
-              <Button
-                onClick={() => setConnectOpen(true)}
-                startIcon={<AddIcon />}
-                style={{ width: '200px' }}
-                size="large"
-                variant="outlined"
-                color="primary"
-              >
-                Connect
-              </Button>
+              <SC.CardConnectorButtonsWrapper>
+                <Button
+                  onClick={() => registerBackend()}
+                  startIcon={<AddIcon />}
+                  style={{ width: '160px', marginTop: '24px' }}
+                  size="large"
+                  variant="outlined"
+                  color="primary"
+                >
+                  Add Backend
+                </Button>
+                <Button
+                  onClick={() => setConnectOpen(true)}
+                  startIcon={<AddIcon />}
+                  style={{ width: '160px', marginTop: '24px', marginLeft: '5px' }}
+                  size="large"
+                  variant="outlined"
+                  color="primary"
+                >
+                  Connect
+                </Button>
+              </SC.CardConnectorButtonsWrapper>
             </SC.CardButtonWrapper>
           </SC.Card>
           <SC.LinkWrapper>
