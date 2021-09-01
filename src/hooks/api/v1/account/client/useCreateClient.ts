@@ -2,15 +2,13 @@ import { useMutation } from 'react-query';
 import { Params } from '../../../../../interfaces/api';
 import { useAxios } from '../../../../useAxios';
 
-export const useCreateIssuer = <T>() => {
+export const useCreateClient = <T>() => {
   const { axios } = useAxios();
 
   return useMutation(
     (params: Params) => {
-      const { accountId, issuer } = params;
-      const issuerId = issuer.id;
-      delete issuer.id;
-      return axios<T>(`/v1/account/${accountId}/issuer/${issuerId}`, 'post', issuer);
+      const { accountId, client } = params;
+      return axios<T>(`/v1/account/${accountId}/client`, 'post', client);
     },
     {
       onMutate: (_: Params) => () => {},

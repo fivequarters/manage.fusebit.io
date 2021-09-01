@@ -15,7 +15,9 @@ import { useAccountIntegrationUpdateIntegration } from '../../../../hooks/api/v2
 import { useAccountIntegrationsGetOne } from '../../../../hooks/api/v2/account/integration/useGetOne';
 import { useAccountConnectorsGetAll } from '../../../../hooks/api/v2/account/connector/useGetAll';
 import { useAccountConnectorCreateConnector } from '../../../../hooks/api/v2/account/connector/useCreateOne';
-import { useAccountUserCreateIssuer } from '../../../../hooks/api/v1/account/issuer/useCreateIssuer';
+import { useCreateIssuer } from '../../../../hooks/api/v1/account/issuer/useCreateIssuer';
+import { useCreateClient } from '../../../../hooks/api/v1/account/client/useCreateClient';
+import { usePatchClient } from '../../../../hooks/api/v1/account/client/usePatchClient';
 import { Operation } from '../../../../interfaces/operation';
 import { Connector } from '../../../../interfaces/connector';
 import { Integration, InnerConnector } from '../../../../interfaces/integration';
@@ -47,7 +49,9 @@ const Develop: React.FC = () => {
     subscriptionId: userData.subscriptionId,
   });
   const createConnector = useAccountConnectorCreateConnector<Operation>();
-  const createIssuer = useAccountUserCreateIssuer<Operation>();
+  const createIssuer = useCreateIssuer<Operation>();
+  const createClient = useCreateClient<Operation>();
+  const patchClient = usePatchClient<Operation>();
   const updateIntegration = useAccountIntegrationUpdateIntegration<Operation>();
   const { waitForOperations, createLoader, removeLoader } = useLoader();
   const { createError } = useError();
@@ -256,29 +260,75 @@ const Develop: React.FC = () => {
     return true;
   };
 
+  const createNewClient = async (accountId: string, subscriptionId: string) => {
+    const client = {
+      displayName: 'My Backend',
+      access: {
+        allow: [
+          {
+            action: '*',
+            resource: `/account/${accountId}/subscription/${subscriptionId}`,
+          },
+        ],
+      },
+    };
+    const response = await createClient.mutateAsync({
+      accountId: userData.accountId,
+      client,
+    });
+    const persistedClient = response.data;
+    return persistedClient;
+  };
+
+  const createNewIssuer = async (accountId: string, client: any) => {
+    const randomSuffix = nanoid();
+    const issuerId = `iss-${randomSuffix}`;
+    const keyId = `key-${randomSuffix}`;
+    const keyPair = await generateKeyPair();
+    const newIssuer = {
+      id: issuerId,
+      displayName: `Issuer for the ${client.id} client`,
+      publicKeys: [
+        {
+          keyId,
+          publicKey: keyPair.publicKeyPem,
+        },
+      ],
+    };
+    const response = await createIssuer.mutateAsync({
+      accountId: accountId,
+      issuer: newIssuer,
+    });
+    const persistedIssuer = response.data;
+    return persistedIssuer;
+  };
+
+  const patchCreatedClient = async (accountId: string, issuer: any, client: any) => {
+    const clientChanges = {
+      identities: [
+        {
+          issuerId: issuer.id,
+          subject: client.id,
+        },
+      ],
+    };
+    const response = await patchClient.mutateAsync({
+      accountId: accountId,
+      clientId: client.id,
+      clientChanges,
+    });
+    const patchedClient = response.data;
+    return patchedClient;
+  };
+
   const registerBackend = async () => {
     try {
       createLoader();
-      const randomSuffix = nanoid();
-      const issuerId = `iss-${randomSuffix}`;
-      const keyId = `key-${randomSuffix}`;
-      const keyPair = await generateKeyPair();
-      const newIssuer = {
-        id: issuerId,
-        displayName: `Issuer for Backend Client (auto generated on the portal)`,
-        publicKeys: [
-          {
-            keyId,
-            publicKey: keyPair.publicKeyPem,
-          },
-        ],
-      };
-      const response = await createIssuer.mutateAsync({
-        accountId: userData.accountId,
-        issuer: newIssuer,
-      });
-      const persistedIssuer = response.data;
-      console.log(response);
+      const { accountId, subscriptionId } = userData as Required<typeof userData>;
+      const client = await createNewClient(accountId, subscriptionId);
+      const issuer = await createNewIssuer(accountId, client);
+      const patchedClient = await patchCreatedClient(accountId, issuer, client);
+      console.log(patchedClient);
     } catch (e) {
       createError(e.message);
     } finally {
