@@ -7,8 +7,10 @@ export const useAccountUserCreateIssuer = <T>() => {
 
   return useMutation(
     (params: Params) => {
-      const { accountId, issuerId, data } = params;
-      return axios<T>(`/v1/account/${accountId}/issuer/${issuerId}`, 'post', data);
+      const { accountId, issuer } = params;
+      const issuerId = issuer.id;
+      delete issuer.id;
+      return axios<T>(`/v1/account/${accountId}/issuer/${issuerId}`, 'post', issuer);
     },
     {
       onMutate: (_: Params) => () => {},

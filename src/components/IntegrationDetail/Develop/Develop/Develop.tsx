@@ -264,8 +264,8 @@ const Develop: React.FC = () => {
       const keyId = `key-${randomSuffix}`;
       const keyPair = await generateKeyPair();
       const newIssuer = {
-        issuerId,
-        displayName: `Backend client issuer`,
+        id: issuerId,
+        displayName: `Issuer for Backend Client (auto generated on the portal)`,
         publicKeys: [
           {
             keyId,
@@ -273,7 +273,12 @@ const Develop: React.FC = () => {
           },
         ],
       };
-      await createIssuer.mutateAsync(newIssuer);
+      const response = await createIssuer.mutateAsync({
+        accountId: userData.accountId,
+        issuer: newIssuer,
+      });
+      const persistedIssuer = response.data;
+      console.log(response);
     } catch (e) {
       createError(e.message);
     } finally {

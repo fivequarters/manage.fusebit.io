@@ -51,13 +51,14 @@ export async function signJwt(tokenPayload: TokenPayload, issuer: Issuer, privat
 }
 
 function uint8ArrayToString(unsignedArray: Uint8Array): string {
-  const base64string = btoa(String.fromCharCode.apply(0, unsignedArray));
+  const base64string = btoa(String.fromCharCode(...unsignedArray));
   return base64string.replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
 }
 
 function base64ToUint8Array(base64Contents: string): Uint8Array {
   base64Contents = base64Contents.replace(/-/g, '+').replace(/_/g, '/').replace(/\s/g, '');
-  return new Uint8Array(Array.prototype.map.call(atob(base64Contents), (c) => c.charCodeAt(0)));
+  const content = atob(base64Contents);
+  return new Uint8Array(content.split('').map((c) => c.charCodeAt(0)));
 }
 
 function stringToUint8Array(contents: string): Uint8Array {
