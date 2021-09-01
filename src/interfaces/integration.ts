@@ -18,6 +18,9 @@ export interface InnerConnector {
 export interface Integration {
   id: string;
   data: IntegrationData;
+  tags?: {
+    [key: string]: any;
+  };
 }
 
 export interface Props {

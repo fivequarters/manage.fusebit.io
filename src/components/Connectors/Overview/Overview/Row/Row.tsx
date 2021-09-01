@@ -33,12 +33,7 @@ const Row: React.FC<RowProps> = ({ row, handleRowClick, handleCheck, isSelected,
         <TableCell component="th" scope="row">
           <SC.CellName>{row.id}</SC.CellName>
         </TableCell>
-        <TableCell align="left">
-          Slack
-          {
-            // TODO: Replace placeholder with real data
-          }
-        </TableCell>
+        <TableCell align="left">{row.tags ? row.tags['fusebit.provider'] : <CSC.Spinner />}</TableCell>
         <TableCell align="left">
           {identitiesData?.data.total !== undefined ? identitiesData?.data.total : <CSC.Spinner />}
         </TableCell>
@@ -62,7 +57,11 @@ const Row: React.FC<RowProps> = ({ row, handleRowClick, handleCheck, isSelected,
         <TableCell align="left">
           {
             selectedCell === cells.TYPE ? (
-              'Slack'
+              row.tags ? (
+                row.tags['fusebit.provider']
+              ) : (
+                <CSC.Spinner />
+              )
             ) : identitiesData?.data.total !== undefined ? (
               identitiesData?.data.total
             ) : (

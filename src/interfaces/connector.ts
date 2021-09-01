@@ -1,16 +1,14 @@
 export interface Connector {
   id: string;
   data: {
-    configuration: object;
-    files: object;
     handler: string;
-    id: string;
   };
+  dateAdded: string;
+  dateModified: string;
   tags: {
     [key: string]: any;
   };
   version: string;
-  expires: string;
 }
 
 interface Element {
