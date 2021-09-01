@@ -1,4 +1,4 @@
-type KeyPair = CryptoKeyPair & {
+export type KeyPair = CryptoKeyPair & {
   privateKeyPem: string;
   publicKeyPem: string;
 };
