@@ -1,5 +1,5 @@
+import axios from 'axios';
 import { Button } from '@material-ui/core';
-
 import { nanoid } from 'nanoid';
 
 import { Operation } from '../../../../interfaces/operation';
@@ -11,6 +11,9 @@ import { useCreateClient } from '../../../../hooks/api/v1/account/client/useCrea
 import { usePatchClient } from '../../../../hooks/api/v1/account/client/usePatchClient';
 import { usePutStorage } from '../../../../hooks/api/v1/account/storage/usePutStorage';
 import { useContext } from '../../../../hooks/useContext';
+import { BACKEND_LIST_STORAGE_ID } from '../../../../utils/constants';
+
+const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
 export default function ConnectClientButton() {
   const { userData } = useContext();
@@ -24,12 +27,16 @@ export default function ConnectClientButton() {
   const registerBackend = async () => {
     try {
       createLoader();
-      const { accountId, subscriptionId } = userData as Required<typeof userData>;
+      const { accountId, subscriptionId, token } = userData as Required<typeof userData>;
+      const currentBackendList = await loadBackendList(accountId, subscriptionId, token);
+      if (currentBackendList.length >= 5) {
+        throw new Error('You have reached the limit of 5 backend clients registered at Fusebit.');
+      }
       const keyPair = await generateKeyPair();
       const client = await createNewClient(createClient, accountId, subscriptionId);
       const issuer = await createNewIssuer(createIssuer, accountId, client, keyPair);
       await patchCreatedClient(patchClient, accountId, issuer, client);
-      await persistPrivateKey(putStorage, accountId, subscriptionId, issuer, keyPair);
+      await addClientToBackendList(putStorage, accountId, subscriptionId, client, currentBackendList);
     } catch (e) {
       createError(e.message);
     } finally {
@@ -110,19 +117,36 @@ const patchCreatedClient = async (patchClient: any, accountId: string, issuer: a
   return patchedClient;
 };
 
-const persistPrivateKey = async (
+const addClientToBackendList = async (
   putStorage: any,
   accountId: string,
   subscriptionId: string,
-  issuer: any,
-  keyPair: KeyPair
+  client: any,
+  currentBackendList: string[]
 ) => {
-  const data = keyPair.privateKeyPem;
-  const storageId = issuer.id;
+  const data = [...currentBackendList, client.id];
+  const storageId = BACKEND_LIST_STORAGE_ID;
   await putStorage.mutateAsync({
     accountId,
     subscriptionId,
     storageId,
     data,
   });
+};
+
+const loadBackendList = async (accountId: string, subscriptionId: string, accessToken: string) => {
+  try {
+    const storageId = BACKEND_LIST_STORAGE_ID;
+    const storagePath = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/subscription/${subscriptionId}/storage/${storageId}`;
+    const axiosNo404MiddlewareInstance = axios.create();
+    const storageResponse = await axiosNo404MiddlewareInstance.get(storagePath, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    return storageResponse.data.data;
+  } catch (err) {
+    if (err.message.includes('404')) {
+      return [];
+    }
+    throw err;
+  }
 };
