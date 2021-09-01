@@ -39,7 +39,6 @@ export interface Entity {
   tags: {
     [key: string]: string;
   };
-  components?: EntityComponent[];
 }
 
 export interface Feed {
@@ -76,5 +75,6 @@ export interface Feed {
       };
     };
     entities: Record<string, Entity>;
+    components?: EntityComponent[];
   };
 }

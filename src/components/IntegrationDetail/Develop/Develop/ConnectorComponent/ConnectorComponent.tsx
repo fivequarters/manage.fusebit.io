@@ -5,8 +5,8 @@ import { ConnectorComponentProps } from '../../../../../interfaces/integrationDe
 import cross from '../../../../../assets/cross.svg';
 import { useHistory } from 'react-router-dom';
 import { useGetRedirectLink } from '../../../../../hooks/useGetRedirectLink';
-import { integrationsFeed, connectorsFeed } from '../../../../../static/feed';
 import { Button, Modal, Backdrop } from '@material-ui/core';
+import { findMatchingConnectorFeed } from '../../../../../utils/utils';
 
 const NOT_FOUND_ICON = '/images/warning-red.svg';
 const ConnectorComponent: React.FC<ConnectorComponentProps> = ({
@@ -26,38 +26,23 @@ const ConnectorComponent: React.FC<ConnectorComponentProps> = ({
   }, [connector]);
 
   useEffect(() => {
-    if (connector.tags) {
-      const feedtype = connector.tags['fusebit.feedType'];
-      const feedId = connector.tags['fusebit.feedId'];
-
-      if (feedtype === 'integration') {
-        integrationsFeed().then((feed) => {
-          feed.forEach((item) => {
-            if (item.id === feedId) {
-              setIcon(item.smallIcon);
+    findMatchingConnectorFeed(connector)
+      .then((item) => {
+        setIcon(item.smallIcon);
+      })
+      .catch(() => {
+        if (connector.missing) {
+          setTimeout(() => {
+            if (connectorRef.current.missing) {
+              setIcon(NOT_FOUND_ICON);
             }
-          });
-        });
-      } else {
-        connectorsFeed().then((feed) => {
-          feed.forEach((item) => {
-            if (item.id === feedId) {
-              setIcon(item.smallIcon);
-            }
-          });
-        });
-      }
-    } else if (connector.missing) {
-      setTimeout(() => {
-        if (connectorRef.current.missing) {
-          setIcon(NOT_FOUND_ICON);
+          }, 1000);
         }
-      }, 1000);
-    }
+      });
   }, [connector]);
 
   const handleConnectorDelete = () => {
-    onConnectorDelete(connector.id);
+    onConnectorDelete(connector);
     setDeleteModalOpen(false);
   };
 
@@ -65,7 +50,7 @@ const ConnectorComponent: React.FC<ConnectorComponentProps> = ({
     <SC.CardConnector
       onClick={(e: any) => {
         if (linkConnector) {
-          onLinkConnectorClick && onLinkConnectorClick(connector.id);
+          onLinkConnectorClick && onLinkConnectorClick(connector);
         } else if (!e.target.id && !deleteModalOpen) {
           history.push(getRedirectLink(`/connector/${connector.id}/configure`));
         }

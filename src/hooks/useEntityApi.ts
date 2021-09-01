@@ -1,4 +1,4 @@
-import { Entity } from '../interfaces/feed';
+import { Entity, Feed } from '../interfaces/feed';
 import { useLoader } from './useLoader';
 import { Operation } from '../interfaces/operation';
 import { useAccountConnectorCreateConnector } from './api/v2/account/connector/useCreateOne';
@@ -17,6 +17,7 @@ import { useAccountIntegrationUpdateIntegration } from './api/v2/account/integra
 import { useAccountIntegrationDeleteIntegration } from './api/v2/account/integration/useDeleteOne';
 import { useAccountConnectorDeleteConnector } from './api/v2/account/connector/useDeleteOne';
 import { useAccountUserDeleteOne } from './api/v1/account/user/useDeleteOne';
+import { findMatchingConnectorFeed } from '../utils/utils';
 
 export const useEntityApi = (preventLoader?: boolean) => {
   const { userData } = useContext();
@@ -38,7 +39,7 @@ export const useEntityApi = (preventLoader?: boolean) => {
   const deleteConnector = useAccountConnectorDeleteConnector<Operation>();
   const deleteAccount = useAccountUserDeleteOne<Operation>();
 
-  const createEntity = async (entity: Entity, commonTags: { [key: string]: string }) => {
+  const createEntity = async (entity: Entity, commonTags?: { [key: string]: string }) => {
     const obj = {
       data: entity.data,
       id: entity.id,
@@ -76,38 +77,52 @@ export const useEntityApi = (preventLoader?: boolean) => {
 
   const toggleConnector = async (
     isAdding: boolean,
-    connectorId: string,
+    connector: Entity,
     integrationData: ApiResponse<Integration> | undefined,
     callback?: Function
   ) => {
     try {
       if (!preventLoader) createLoader();
       const data = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
+      let newData = data;
       if (isAdding) {
-        const newConnector: InnerConnector = {
-          name: connectorId,
-          entityType: 'connector',
-          entityId: connectorId,
-          skip: false,
-          provider: '@fusebit-int/slack-provider',
-          dependsOn: [],
-        };
-        data.data.components.push(newConnector);
+        const feedtype = connector.tags['fusebit.feedType'];
+
+        const item: Feed = await findMatchingConnectorFeed(connector);
+        if (feedtype === 'connector') {
+          item.configuration.components?.forEach((component) => {
+            component.name = connector.id;
+            component.entityId = connector.id;
+            newData.data.components.push(component);
+          });
+        } else {
+          Object.entries(item.configuration.entities).forEach((entity) => {
+            if (entity[1].entityType === 'integration') {
+              entity[1].data.components?.forEach((component) => {
+                component.name = connector.id;
+                component.entityId = connector.id;
+                newData.data.components.push(component);
+              });
+            }
+          });
+        }
       } else {
-        const filteredComponents = data.data.components.filter((connector: InnerConnector) => {
+        const filteredComponents = newData.data.components.filter((innerConnector: InnerConnector) => {
           let returnConnector = true;
-          if (connector.entityId === connectorId) {
+          console.log(innerConnector.entityId);
+          console.log(connector.id);
+          if (innerConnector.entityId === connector.id) {
             returnConnector = false;
           }
           return returnConnector;
         });
-        data.data.components = filteredComponents;
+        newData.data.components = filteredComponents;
       }
       const response2 = await updateIntegration.mutateAsync({
         accountId: userData.accountId,
         subscriptionId: userData.subscriptionId,
         integrationId: integrationData?.data.id,
-        data: data,
+        data: newData,
       });
       await waitForOperations([response2.data.operationId]);
       if (callback) callback();
