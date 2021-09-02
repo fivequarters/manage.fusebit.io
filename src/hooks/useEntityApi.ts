@@ -20,7 +20,7 @@ import { useAccountUserDeleteOne } from './api/v1/account/user/useDeleteOne';
 
 export const useEntityApi = (preventLoader?: boolean) => {
   const { userData } = useContext();
-  const { waitForOperations, createLoader, removeLoader } = useLoader();
+  const { waitForEntityStateChange, createLoader, removeLoader } = useLoader();
   const { createError } = useError();
 
   // creates
@@ -46,11 +46,10 @@ export const useEntityApi = (preventLoader?: boolean) => {
       accountId: userData.accountId,
       subscriptionId: userData.subscriptionId,
     };
-    const response =
-      entity.entityType === 'connector'
-        ? await createConnector.mutateAsync(obj)
-        : await createIntegration.mutateAsync(obj);
-    await waitForOperations([response.data.operationId]);
+    entity.entityType === 'connector'
+      ? await createConnector.mutateAsync(obj)
+      : await createIntegration.mutateAsync(obj);
+    await waitForEntityStateChange(entity.entityType, [entity.id]);
   };
 
   const updateEntity = async (data: ApiResponse<Connector> | undefined, formData: any) => {
@@ -59,13 +58,13 @@ export const useEntityApi = (preventLoader?: boolean) => {
       const newData = data;
       if (newData) {
         newData.data.data.configuration = formData;
-        const response = await updateConnector.mutateAsync({
+        await updateConnector.mutateAsync({
           subscriptionId: userData.subscriptionId,
           accountId: userData.accountId,
           id: newData?.data.id,
           data: newData.data,
         });
-        await waitForOperations([response.data.operationId]);
+        await waitForEntityStateChange('connector', [newData?.data.id]);
       }
     } catch (e) {
       createError(e.message);
@@ -103,13 +102,13 @@ export const useEntityApi = (preventLoader?: boolean) => {
         });
         data.data.components = filteredComponents;
       }
-      const response2 = await updateIntegration.mutateAsync({
+      await updateIntegration.mutateAsync({
         accountId: userData.accountId,
         subscriptionId: userData.subscriptionId,
         integrationId: integrationData?.data.id,
         data: data,
       });
-      await waitForOperations([response2.data.operationId]);
+      await waitForEntityStateChange('integration', [integrationData?.data.id || '']);
       if (callback) callback();
     } catch (e) {
       createError(e.message);
@@ -135,10 +134,10 @@ export const useEntityApi = (preventLoader?: boolean) => {
             accountId: userData.accountId,
             subscriptionId: userData.subscriptionId,
           };
-          const response = isIdentity
-            ? await deleteIndentity.mutateAsync(params)
-            : await deleteInstall.mutateAsync(params);
-          return waitForOperations([response.data.operationId]);
+          isIdentity ? await deleteIndentity.mutateAsync(params) : await deleteInstall.mutateAsync(params);
+          return waitForEntityStateChange(isIdentity ? `integration/${id}/instance` : `connector/${id}/identity`, [
+            item.id,
+          ]);
         })
       );
       if (callback) callback();
@@ -152,28 +151,26 @@ export const useEntityApi = (preventLoader?: boolean) => {
   const massiveDelete = async (ids: string[], type: 'I' | 'C' | 'A', callback?: Function) => {
     try {
       createLoader();
-      let operationIds: string[] = [];
       for (let i = 0; i < ids.length; i++) {
         if (type === 'I') {
-          const response = await deleteIntegration.mutateAsync({
+          await deleteIntegration.mutateAsync({
             id: ids[i],
             accountId: userData.accountId,
             subscriptionId: userData.subscriptionId,
           });
-          operationIds.push(response.data.operationId);
         } else if (type === 'C') {
-          const response = await deleteConnector.mutateAsync({
+          await deleteConnector.mutateAsync({
             id: ids[i],
             accountId: userData.accountId,
             subscriptionId: userData.subscriptionId,
           });
-          operationIds.push(response.data.operationId);
         } else if (type === 'A') {
-          const response = await deleteAccount.mutateAsync({ userId: ids[i], accountId: userData.accountId });
-          operationIds.push(response.data.operationId);
+          await deleteAccount.mutateAsync({ userId: ids[i], accountId: userData.accountId });
         }
       }
-      await waitForOperations(operationIds);
+      if (type !== 'A') {
+        await waitForEntityStateChange(type === 'I' ? 'integration' : 'connector', ids);
+      }
       if (callback) callback();
     } catch (e) {
       createError(e.message);

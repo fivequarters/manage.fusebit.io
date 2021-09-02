@@ -1,4 +1,4 @@
-import { Operation } from '../interfaces/operation';
+import { EntityState, OperationState, OperationStatus } from '../interfaces/operation';
 import { useAxios } from './useAxios';
 import { useContext } from './useContext';
 
@@ -46,22 +46,28 @@ export const useLoader = () => {
     }
   };
 
-  const waitForOperations = async (operationIds: string[]) => {
+  const waitForEntityStateChange = async (entityType: string, entityIds: string[]) => {
     const intervalIds: { [key: string]: number } = {};
-    const promises = operationIds.map((operationId: string) => {
+    const promises = entityIds.map((entityId: string) => {
       return new Promise((accept: Function, reject: Function) => {
-        intervalIds[operationId] = Number(
+        intervalIds[entityId] = Number(
           setInterval(() => {
-            if (!operationId) {
+            if (!entityId) {
               return accept({});
             }
-            axios<Operation>(
-              `/v2/account/${userData.accountId}/subscription/${userData.subscriptionId}/operation/${operationId}`,
+            axios<EntityState>(
+              `/v2/account/${userData.accountId}/subscription/${userData.subscriptionId}/${entityType}/${entityId}`,
               'get'
             )
               .then((response) => {
-                if (response.data.statusCode !== 202) {
-                  accept({});
+                if (response.data.state === OperationState.active) {
+                  if (response.data.operationState.status === OperationStatus.success) {
+                    accept({});
+                  } else {
+                    reject({
+                      message: `${response.data.operationState.errorCode}: ${response.data.operationState.errorDetails}`,
+                    });
+                  }
                 }
               })
               .catch((e: any) => {
@@ -74,11 +80,11 @@ export const useLoader = () => {
     return new Promise((globalAccept: Function, globalReject: Function) => {
       Promise.all(promises)
         .then((_) => {
-          Object.keys(intervalIds).forEach((operationId: string) => clearInterval(intervalIds[operationId]));
+          Object.keys(intervalIds).forEach((entityId: string) => clearInterval(intervalIds[entityId]));
           globalAccept({});
         })
         .catch((e: any) => {
-          Object.keys(intervalIds).forEach((operationId: string) => clearInterval(intervalIds[operationId]));
+          Object.keys(intervalIds).forEach((entityId: string) => clearInterval(intervalIds[entityId]));
           globalReject(e);
         });
     });
@@ -86,7 +92,7 @@ export const useLoader = () => {
 
   return {
     createLoader,
-    waitForOperations,
+    waitForEntityStateChange,
     removeLoader,
   };
 };
