@@ -205,9 +205,9 @@ export const useEntityApi = (preventLoader?: boolean) => {
           await deleteAccount.mutateAsync({ userId: ids[i], accountId: userData.accountId });
         }
       }
-      if (type !== 'A') {
-        await waitForEntityStateChange(type === 'I' ? 'integration' : 'connector', ids);
-      }
+      // if (type !== 'A') {
+      //   await waitForEntityStateChange(type === 'I' ? 'integration' : 'connector', ids);
+      // }
       if (callback) callback();
     } catch (e) {
       createError(e.message);
