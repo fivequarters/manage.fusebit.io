@@ -7,6 +7,7 @@ import { Data } from '../interfaces/feedPicker';
 import { useCreateDataFromFeed } from './useCreateDataFromFeed';
 import { useQuery } from './useQuery';
 import { useEntityApi } from './useEntityApi';
+import { Account } from '../interfaces/account';
 
 interface Props {
   headless?: any;
@@ -24,6 +25,11 @@ interface Props {
       items: Connector[];
     };
   };
+  users?: {
+    data: {
+      items: Account[];
+    };
+  };
 }
 
 export const useEntityTable = ({
@@ -34,13 +40,15 @@ export const useEntityTable = ({
   reloadUsers,
   integrations,
   connectors,
+  users,
 }: Props) => {
   const history = useHistory();
   const [selected, setSelected] = useState<string[]>([]);
-  const [rows, setRows] = useState<Integration[] | Connector[]>([]);
+  const [rows, setRows] = useState<Integration[] | Connector[] | Account[]>([]);
   const { createDataFromFeed } = useCreateDataFromFeed();
   const [addIntegrationOpen, setAddIntegrationOpen] = useState(false);
   const [addConnectorOpen, setAddConnectorOpen] = useState(false);
+  const [newUserOpen, setNewUserOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const query = useQuery();
   const isIntegration = useRef(false);
@@ -75,10 +83,13 @@ export const useEntityTable = ({
 
       // If we have just navigated to the connectors list we check if there is a query param
       headless.current && checkQuery();
+    } else if (users && users.data.items) {
+      setLoading(false);
+      users.data.items.length > 0 && setRows(users?.data.items);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [integrations, connectors, query]);
+  }, [integrations, connectors, users, query]);
 
   const handleSelectAllCheck = (event: any) => {
     if (event.target.checked) {
@@ -154,8 +165,10 @@ export const useEntityTable = ({
     handleConnectorCreation,
     setAddIntegrationOpen,
     setAddConnectorOpen,
+    setNewUserOpen,
     addIntegrationOpen,
     addConnectorOpen,
+    newUserOpen,
     loading,
     selected,
   };

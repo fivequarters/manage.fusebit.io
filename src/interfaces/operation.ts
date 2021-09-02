@@ -20,6 +20,11 @@ export enum OperationType {
   deleting = 'deleting',
 }
 
+export enum OperationState {
+  active = 'active',
+  processing = 'processing',
+}
+
 export enum OperationStatus {
   success = 'success',
   failed = 'failed',
@@ -41,4 +46,9 @@ export interface IOperationState {
   message?: string;
   errorCode?: OperationErrorCode;
   errorDetails?: any;
+}
+
+export interface EntityState {
+  state: string;
+  operationState: IOperationState;
 }

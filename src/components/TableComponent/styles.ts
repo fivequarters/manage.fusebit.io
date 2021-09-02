@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import arrow from '../../../../assets/table-arrow.svg';
+import arrow from '../../assets/table-arrow.svg';
 
 export const Wrapper = styled.div`
   padding-bottom: 80px;
@@ -40,10 +40,21 @@ export const Flex = styled.div`
   align-items: center;
 `;
 
-export const CellNameDetail = styled.p`
-  color: #959595;
+export const CellName = styled.p`
+  color: var(--primary-color);
   font-weight: 500;
-  margin-left: 5px;
+`;
+
+export const Row = styled.tr`
+  display: table-row;
+  outline: 0;
+  vertical-align: middle;
+  color: inherit;
+  text-decoration: none;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const ButtonContainer = styled.div`
@@ -82,7 +93,7 @@ export const TableCellMobile = styled.div`
     width: 90px;
     margin: 0;
 
-    @media only screen and (max-width: 390px) {
+    @media only screen and (max-width: 345px) {
       width: 70px;
     }
   }
@@ -100,5 +111,20 @@ export const RightArrow = styled.img`
 `;
 
 export const LeftArrow = styled(RightArrow)`
-  left: -20px;
+  left: -25px;
+`;
+
+export const LoaderContainer = styled.tr`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 24px;
+`;
+
+export const NoIntegrationWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 `;

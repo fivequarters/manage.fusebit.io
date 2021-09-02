@@ -80,10 +80,10 @@ const Develop: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [integrationId]);
 
-  const _toggleConnector = (connectorId: string, isAdding: boolean) => {
+  const _toggleConnector = async (connector: Entity, isAdding: boolean) => {
     createLoader();
     setConnectorListOpen(false);
-    toggleConnector(isAdding, connectorId, integrationData, () => {
+    await toggleConnector(isAdding, connector, integrationData, () => {
       reloadIntegration();
       reloadConnectors();
     });
@@ -91,12 +91,12 @@ const Develop: React.FC = () => {
     setConnectorListOpen(false);
   };
 
-  const handleConnectorDelete = async (connectorId: string) => {
-    _toggleConnector(connectorId, false);
+  const handleConnectorDelete = async (connector: Entity) => {
+    _toggleConnector(connector, false);
   };
 
-  const linkConnector = async (connectorId: string) => {
-    _toggleConnector(connectorId, true);
+  const linkConnector = async (connector: Entity) => {
+    _toggleConnector(connector, true);
   };
 
   const addNewConnector = async (activeFeed: Feed, data: Data) => {
@@ -111,7 +111,7 @@ const Develop: React.FC = () => {
         ...parsedFeed.configuration.entities.map(async (entity: Entity) => {
           if (entity.entityType === 'connector') {
             await createEntity(entity, commonTags);
-            await toggleConnector(true, entity.id, integrationData);
+            await toggleConnector(true, entity, integrationData);
           }
         }),
       ]);
@@ -235,11 +235,11 @@ const Develop: React.FC = () => {
                 .map((connector: Connector, index: number) => {
                   return (
                     <ConnectorComponent
-                      onLinkConnectorClick={(id: string) => linkConnector(id)}
+                      onLinkConnectorClick={(connector: any) => linkConnector(connector)}
                       linkConnector={true}
                       key={index}
                       connector={connector}
-                      onConnectorDelete={(id: string) => handleConnectorDelete(id)}
+                      onConnectorDelete={(connector: Entity) => handleConnectorDelete(connector)}
                     />
                   );
                 })}
@@ -353,7 +353,7 @@ const Develop: React.FC = () => {
                       <ConnectorComponent
                         key={index}
                         connector={connector}
-                        onConnectorDelete={(id: string) => handleConnectorDelete(id)}
+                        onConnectorDelete={(connector: Entity) => handleConnectorDelete(connector)}
                       />
                     );
                   }

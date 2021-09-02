@@ -26,38 +26,6 @@ export const Card = styled.div<{ open: boolean }>`
   }
 `;
 
-export const Close = styled.img`
-  height: 12px;
-  width: 12px;
-  object-fit: contain;
-  position: absolute;
-  top: 32px;
-  right: 32px;
-  transition: all 0.25s linear;
-
-  &:hover {
-    cursor: pointer;
-    transform: rotate(90deg);
-  }
-`;
-
-export const Title = styled.h2`
-  font-size: 24px;
-  line-height: 26px;
-  font-weight: 600;
-  color: var(--black);
-  margin-bottom: 50px;
-  text-align: center;
-`;
-
-export const Description = styled.p`
-  font-size: 16px;
-  line-height: 22px;
-  color: var(--black);
-  margin-top: 90px;
-  margin-bottom: 24px;
-`;
-
 export const FormWrapper = styled.form`
   display: flex;
   flex-direction: column;
