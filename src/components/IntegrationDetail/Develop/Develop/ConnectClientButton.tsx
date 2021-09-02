@@ -65,7 +65,7 @@ export default function ConnectClientButton() {
   return (
     <Button
       onClick={() => registerBackend()}
-      style={{ width: '160px', marginTop: '10px' }}
+      style={{ width: '100%', marginTop: '10px' }}
       size="large"
       variant="outlined"
       color="primary"

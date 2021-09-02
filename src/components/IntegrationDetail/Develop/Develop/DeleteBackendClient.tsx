@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, TextField } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 
 import { useLoader } from '../../../../hooks/useLoader';
 import { useError } from '../../../../hooks/useError';
@@ -26,13 +26,13 @@ export default function DeleteBackendClient() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', marginTop: '10px' }}>
       <input
-      style={{width: '100%'}}
+        style={{ width: '100%' }}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBackendClientID(e.target.value)}
-        placeholder="Remove ID"
+        placeholder="Backend ID"
       />
       <Button
         onClick={removeBackendClientListener}
-        style={{ width: '160px' }}
+        style={{ width: '100%' }}
         size="large"
         variant="outlined"
         color="primary"

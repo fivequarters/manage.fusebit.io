@@ -23,16 +23,14 @@ export default function ListBackendClients() {
   };
 
   return (
-    <>
-      <Button
-        onClick={getBackendClientListener}
-        style={{ width: '160px', marginTop: '10px' }}
-        size="large"
-        variant="outlined"
-        color="primary"
-      >
-        List
-      </Button>
-    </>
+    <Button
+      onClick={getBackendClientListener}
+      style={{ width: '100%', marginTop: '10px' }}
+      size="large"
+      variant="outlined"
+      color="primary"
+    >
+      List
+    </Button>
   );
 }

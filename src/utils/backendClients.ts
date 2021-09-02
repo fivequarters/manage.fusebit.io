@@ -46,3 +46,14 @@ export function putBackendClients(user: User, backendClients: any[]) {
     }
   );
 }
+
+export async function renewToken(user: User, clientId: string, issuerId: string) {
+  const clients = await getBackendClients(user);
+  const client = clients.find((c: any) => c.id === clientId);
+
+  if (!client) {
+    throw new Error(`Client ${clientId} not found.`);
+  }
+
+  // TODO finish later
+}

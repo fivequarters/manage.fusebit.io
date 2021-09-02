@@ -9,6 +9,7 @@ import Connect from './Connect';
 import ConnectClientButton from './ConnectClientButton';
 import DeleteBackendClient from './DeleteBackendClient';
 import ListBackendClients from './ListBackendClients';
+import RenewToken from './RenewToken';
 import { useLoader } from '../../../../hooks/useLoader';
 import { useError } from '../../../../hooks/useError';
 import { useContext } from '../../../../hooks/useContext';
@@ -341,20 +342,13 @@ const Develop: React.FC = () => {
           <SC.Card>
             <SC.CardTitle>Your Application</SC.CardTitle>
             <SC.CardButtonWrapper>
-              <SC.CardConnectorButtonsWrapper style={{ display: 'grid', gridTemplateColumns: '50% 50%', alignItems: 'end' }}>
+              <SC.CardConnectorButtonsWrapper
+                style={{ display: 'grid', gridTemplateColumns: '50% 50%', alignItems: 'end', columnGap: '5px' }}
+              >
                 <DeleteBackendClient />
+                <RenewToken />
                 <ListBackendClients />
                 <ConnectClientButton />
-                <Button
-                  onClick={() => setConnectOpen(true)}
-                  startIcon={<AddIcon />}
-                  style={{ width: '160px', marginTop: '10px' }}
-                  size="large"
-                  variant="outlined"
-                  color="primary"
-                >
-                  Connect
-                </Button>
               </SC.CardConnectorButtonsWrapper>
             </SC.CardButtonWrapper>
           </SC.Card>
