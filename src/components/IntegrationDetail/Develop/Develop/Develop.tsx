@@ -7,6 +7,7 @@ import AddIcon from '@material-ui/icons/Add';
 import arrow from '../../../../assets/arrow-right-black.svg';
 import Connect from './Connect';
 import ConnectClientButton from './ConnectClientButton';
+import DeleteBackendClient from './DeleteBackendClient';
 import { useLoader } from '../../../../hooks/useLoader';
 import { useError } from '../../../../hooks/useError';
 import { useContext } from '../../../../hooks/useContext';
@@ -340,6 +341,7 @@ const Develop: React.FC = () => {
             <SC.CardTitle>Your Application</SC.CardTitle>
             <SC.CardButtonWrapper>
               <SC.CardConnectorButtonsWrapper style={{ display: 'flex', flexDirection: 'column' }}>
+                <DeleteBackendClient />
                 <ConnectClientButton />
                 <Button
                   onClick={() => setConnectOpen(true)}
