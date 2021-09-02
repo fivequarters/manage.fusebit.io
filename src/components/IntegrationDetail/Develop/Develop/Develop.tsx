@@ -109,6 +109,7 @@ const Develop: React.FC = () => {
       };
       await Promise.all([
         ...parsedFeed.configuration.entities.map(async (entity: Entity) => {
+          entity.tags = { ...commonTags, ...entity.tags };
           if (entity.entityType === 'connector') {
             await createEntity(entity, commonTags);
             await toggleConnector(true, entity, integrationData);

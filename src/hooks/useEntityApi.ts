@@ -48,7 +48,7 @@ export const useEntityApi = (preventLoader?: boolean) => {
     const obj = {
       data: entity.data,
       id: entity.id,
-      tags: { ...commonTags, ...entity.tags },
+      tags: { ...(commonTags || {}), ...entity.tags },
       accountId: userData.accountId,
       subscriptionId: userData.subscriptionId,
     };
@@ -108,7 +108,6 @@ export const useEntityApi = (preventLoader?: boolean) => {
       let newData = data;
       if (isAdding) {
         const feedtype = connector.tags['fusebit.feedType'];
-
         const item: Feed = await findMatchingConnectorFeed(connector);
         if (feedtype === 'connector') {
           item.configuration.components?.forEach((component) => {
@@ -130,8 +129,6 @@ export const useEntityApi = (preventLoader?: boolean) => {
       } else {
         const filteredComponents = newData.data.components.filter((innerConnector: InnerConnector) => {
           let returnConnector = true;
-          console.log(innerConnector.entityId);
-          console.log(connector.id);
           if (innerConnector.entityId === connector.id) {
             returnConnector = false;
           }

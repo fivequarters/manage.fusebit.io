@@ -7,26 +7,28 @@ export const findMatchingConnectorFeed = async (connector: Entity | FinalConnect
     if (connector.tags) {
       const feedtype = connector.tags['fusebit.feedType'];
       const feedId = connector.tags['fusebit.feedId'];
-
       if (feedtype === 'integration') {
         integrationsFeed().then((feed) => {
           feed.forEach((item) => {
             if (item.id === feedId) {
-              accept(item);
+              return accept(item);
             }
           });
+          return reject({});
         });
       } else {
         connectorsFeed().then((feed) => {
           feed.forEach((item) => {
+            console.log(item.id, feedId);
             if (item.id === feedId) {
-              accept(item);
+              return accept(item);
             }
           });
+          return reject({});
         });
       }
     } else {
-      reject({});
+      return reject({});
     }
   });
 };
