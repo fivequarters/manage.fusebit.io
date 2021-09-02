@@ -85,11 +85,11 @@ export const useEntityTable = ({
       headless.current && checkQuery();
     } else if (users && users.data.items) {
       setLoading(false);
-      setRows(users?.data.items);
+      users.data.items.length > 0 && setRows(users?.data.items);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [integrations, connectors, query]);
+  }, [integrations, connectors, users, query]);
 
   const handleSelectAllCheck = (event: any) => {
     if (event.target.checked) {
