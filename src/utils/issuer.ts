@@ -11,6 +11,7 @@ export function removeIssuer(user: User, issuerId: string) {
   const issuerPath = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/issuer/${issuerId}`;
   return axiosNo404MiddlewareInstance.delete(issuerPath, {
     headers: { Authorization: `Bearer ${token}` },
+    validateStatus: (status) => status === 204 || status === 404,
   });
 }
 
