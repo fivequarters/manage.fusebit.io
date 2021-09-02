@@ -5,12 +5,14 @@ import { BACKEND_LIST_STORAGE_ID } from './constants';
 import { generateKeyPair } from './crypto';
 import { generateNonExpiringToken } from './jwt';
 import { createIssuer, removeIssuer } from './issuer';
+import { BackendClient } from '../interfaces/backendClient';
+import { Storage } from '../interfaces/storage';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
 const axiosNo404MiddlewareInstance = axios.create();
 
-export async function createBackendClient(user: User) {
+export async function createBackendClient(user: User): Promise<BackendClient> {
   const currentBackends = await getBackendClients(user);
 
   if (currentBackends.length >= 5) {
@@ -25,35 +27,34 @@ export async function createBackendClient(user: User) {
   const nonExpiringToken = await generateNonExpiringToken(ketPair, issuer);
   const tokenSignature = nonExpiringToken.split('.')[2];
 
-  const backendClientDetails = {
+  const backendClient = {
     id: client.id,
     issuer: issuer.id,
     tokenSignature,
   };
-  const backends = [...currentBackends, backendClientDetails];
-
+  const backends = [...currentBackends, backendClient];
   await putBackendClients(user, backends);
 
   return {
+    ...backendClient,
     token: nonExpiringToken,
-    signature: tokenSignature,
   };
 }
 
-export async function removedBackendClient(user: User, clientId: string) {
+export async function removedBackendClient(user: User, clientId: string): Promise<void> {
   const clients = await getBackendClients(user);
-  const filteredClients = clients.filter((c: any) => c.id !== clientId);
+  const filteredClients = clients.filter((c) => c.id !== clientId);
 
   await removeIssuer(user, clientId);
   await removeClient(user, clientId);
   await putBackendClients(user, filteredClients);
 }
 
-export async function getBackendClients(user: User) {
+export async function getBackendClients(user: User): Promise<BackendClient[]> {
   try {
     const { accountId, subscriptionId, token } = user;
     const clientsPaths = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/subscription/${subscriptionId}/storage/${BACKEND_LIST_STORAGE_ID}`;
-    const clientsResponse = await axiosNo404MiddlewareInstance.get(clientsPaths, {
+    const clientsResponse = await axiosNo404MiddlewareInstance.get<Storage<BackendClient>>(clientsPaths, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return clientsResponse.data.data;
@@ -65,7 +66,7 @@ export async function getBackendClients(user: User) {
   }
 }
 
-function putBackendClients(user: User, backendClients: any[]) {
+function putBackendClients(user: User, backendClients: BackendClient[]) {
   const { accountId, subscriptionId, token } = user;
   const clientsPaths = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/subscription/${subscriptionId}/storage/${BACKEND_LIST_STORAGE_ID}`;
   return axiosNo404MiddlewareInstance.put(

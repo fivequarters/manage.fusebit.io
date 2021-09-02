@@ -1,11 +1,12 @@
 import axios from 'axios';
+import { Issuer } from '../interfaces/issuer';
 import { User } from '../interfaces/user';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
 const axiosNo404MiddlewareInstance = axios.create();
 
-export async function removeClient(user: User, clientId: any) {
+export async function removeClient(user: User, clientId: string) {
   const { accountId, token } = user;
   const clientPath = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/client/${clientId}`;
   return axiosNo404MiddlewareInstance.delete(clientPath, {
@@ -22,7 +23,7 @@ export function getClient(user: User, clientId: string) {
   });
 }
 
-export async function addClientIdentity(user: User, clientId: string, issuer: any) {
+export async function addClientIdentity(user: User, clientId: string, issuer: Issuer) {
   const { data: client } = await getClient(user, clientId);
 
   const { accountId, token } = user;

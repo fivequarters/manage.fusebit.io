@@ -4,7 +4,7 @@ import { TokenPayload } from '../interfaces/tokenPayload';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
-export function generateNonExpiringToken(keyPair: KeyPair, issuer: any) {
+export function generateNonExpiringToken(keyPair: KeyPair, issuer: Issuer): Promise<string> {
   const tokenPayload = {
     sub: issuer.id,
     aud: REACT_APP_FUSEBIT_DEPLOYMENT as string,

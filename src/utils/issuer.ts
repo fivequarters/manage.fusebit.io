@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { User } from '../interfaces/user';
+import { Client } from '../interfaces/client';
 import { KeyPair } from '../interfaces/keyPair';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
@@ -15,7 +16,7 @@ export function removeIssuer(user: User, clientId: string) {
   });
 }
 
-export function createIssuer(user: User, client: any, keyPair: KeyPair) {
+export function createIssuer(user: User, client: Client, keyPair: KeyPair) {
   const issuerId = `iss-${client.id}`;
   const keyId = client.id;
   const issuer = {
