@@ -1,7 +1,4 @@
-export type KeyPair = CryptoKeyPair & {
-  privateKeyPem: string;
-  publicKeyPem: string;
-};
+import { KeyPair } from '../interfaces/keyPair';
 
 export async function generateKeyPair(): Promise<KeyPair> {
   const generatedKeyPair: CryptoKeyPair = await crypto.subtle.generateKey(

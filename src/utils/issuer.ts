@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { User } from '../interfaces/user';
-import { KeyPair } from './crypto';
+import { KeyPair } from '../interfaces/keyPair';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 

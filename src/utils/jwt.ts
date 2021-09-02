@@ -1,21 +1,8 @@
-import { KeyPair } from './crypto';
+import { KeyPair } from '../interfaces/keyPair';
+import { Issuer } from '../interfaces/issuer';
+import { TokenPayload } from '../interfaces/tokenPayload';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
-
-type Issuer = {
-  displayName: string;
-  id: string;
-  publicKeys: {
-    keyId: string;
-    publicKey: string;
-  }[];
-};
-
-type TokenPayload = {
-  sub: string;
-  aud: string;
-  [key: string]: any;
-};
 
 export function generateNonExpiringToken(keyPair: KeyPair, issuer: any) {
   const tokenPayload = {
