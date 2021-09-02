@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import warning from '../assets/warning.svg';
 import cross from '../assets/cross-warning.svg';
+import { useLocation } from 'react-router-dom';
 
 const errorCss = `
     display: flex;
@@ -50,12 +52,19 @@ const errorCross = `
     `;
 
 export const useError = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    removeError();
+  }, [location]);
+
   const removeError = () => {
     const error = document.getElementById('error');
     if (error) error.remove();
   };
 
   const createError = (errorMessage: string) => {
+    removeError(); // we dont want 2 errors at the same time
     const error = document.createElement('div');
     error.setAttribute('id', 'error');
     error.setAttribute('style', errorCss);

@@ -1,8 +1,9 @@
 import styled from 'styled-components';
-import arrow from '../../../../assets/table-arrow.svg';
+import arrow from '../../assets/table-arrow.svg';
 
 export const Wrapper = styled.div`
   padding-bottom: 80px;
+  min-height: 600px;
 `;
 
 export const DeleteWrapper = styled.div<{ active: boolean }>`
@@ -119,4 +120,11 @@ export const LoaderContainer = styled.tr`
   flex-direction: column;
   align-items: center;
   margin-top: 24px;
+`;
+
+export const NoIntegrationWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 `;

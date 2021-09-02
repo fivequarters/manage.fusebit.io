@@ -6,11 +6,12 @@ export interface Connector {
     handler: string;
     id: string;
   };
+  dateAdded: string;
+  dateModified: string;
   tags: {
     [key: string]: any;
   };
   version: string;
-  expires: string;
 }
 
 interface Element {
