@@ -5,19 +5,17 @@ import { useLoader } from '../../../../hooks/useLoader';
 import { useError } from '../../../../hooks/useError';
 import { generateKeyPair } from '../../../../utils/crypto';
 import { generateNonExpiringToken } from '../../../../utils/jwt';
-import { usePatchClient } from '../../../../hooks/api/v1/account/client/usePatchClient';
 import { usePutStorage } from '../../../../hooks/api/v1/account/storage/usePutStorage';
 import { useContext } from '../../../../hooks/useContext';
 import { BACKEND_LIST_STORAGE_ID } from '../../../../utils/constants';
 import { getBackendClients } from '../../../../utils/backendClients';
 import { createIssuer } from '../../../../utils/issuer';
-import { createClient } from '../../../../utils/clients';
+import { addClientIdentity, createClient } from '../../../../utils/clients';
 
 export default function ConnectClientButton() {
   const { userData } = useContext();
   const { createLoader, removeLoader } = useLoader();
   const { createError } = useError();
-  const patchClient = usePatchClient<Operation>();
   const putStorage = usePutStorage<Operation>();
 
   const registerBackend = async () => {
@@ -33,8 +31,8 @@ export default function ConnectClientButton() {
       const keyPairToken2 = await generateKeyPair();
       const { data: issuerToken1 } = await createIssuer(userData, client, keyPairToken1);
       const { data: issuerToken2 } = await createIssuer(userData, client, keyPairToken2);
-      const patchedClient1 = await patchCreatedClient(patchClient, accountId, issuerToken1, client);
-      await patchCreatedClient(patchClient, accountId, issuerToken2, patchedClient1);
+      await addClientIdentity(userData, client.id, issuerToken1);
+      await addClientIdentity(userData, client.id, issuerToken2);
       await addClientToBackendList(
         putStorage,
         accountId,
@@ -69,26 +67,6 @@ export default function ConnectClientButton() {
     </Button>
   );
 }
-
-const patchCreatedClient = async (patchClient: any, accountId: string, issuer: any, client: any) => {
-  const existingIdentities = client.identities || [];
-  const clientChanges = {
-    identities: [
-      ...existingIdentities,
-      {
-        issuerId: issuer.id,
-        subject: client.id,
-      },
-    ],
-  };
-  const response = await patchClient.mutateAsync({
-    accountId: accountId,
-    clientId: client.id,
-    clientChanges,
-  });
-  const patchedClient = response.data;
-  return patchedClient;
-};
 
 const addClientToBackendList = async (
   putStorage: any,

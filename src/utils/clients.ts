@@ -19,6 +19,32 @@ export function patchClient(user: User, clientId: string, partialClient: any) {
   });
 }
 
+export function getClient(user: User, clientId: string) {
+  const { accountId, token } = user;
+  const clientPath = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/client/${clientId}`;
+  return axiosNo404MiddlewareInstance.get(clientPath, {
+    headers: { authorization: `bearer ${token}` },
+  });
+}
+
+export async function addClientIdentity(user: User, clientId: string, issuer: any) {
+  const { data: client } = await getClient(user, clientId);
+
+  const { accountId, token } = user;
+  const identities = client.identities || [];
+  identities.push({
+    issuerId: issuer.id,
+    subject: client.id,
+  });
+  const partialClient = {
+    identities,
+  };
+  const clientPath = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/client/${clientId}`;
+  return axiosNo404MiddlewareInstance.patch(clientPath, partialClient, {
+    headers: { authorization: `bearer ${token}` },
+  });
+}
+
 export function createClient(user: User) {
   const { accountId, subscriptionId, token } = user;
   const clientPath = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/client`;
