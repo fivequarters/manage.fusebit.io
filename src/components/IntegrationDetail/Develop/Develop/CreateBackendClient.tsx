@@ -8,7 +8,7 @@ import { createBackendClient, getBackendClients } from '../../../../utils/backen
 import { createIssuer } from '../../../../utils/issuer';
 import { addClientIdentity, createClient } from '../../../../utils/clients';
 
-export default function ConnectClientButton() {
+export default function CreateBackendClient() {
   const { userData } = useContext();
   const { createLoader, removeLoader } = useLoader();
   const { createError } = useError();
@@ -22,18 +22,13 @@ export default function ConnectClientButton() {
       }
       const { data: client } = await createClient(userData);
       const keyPairToken1 = await generateKeyPair();
-      const keyPairToken2 = await generateKeyPair();
-      const { data: issuerToken1 } = await createIssuer(userData, client, keyPairToken1);
-      const { data: issuerToken2 } = await createIssuer(userData, client, keyPairToken2);
-      await addClientIdentity(userData, client.id, issuerToken1);
-      await addClientIdentity(userData, client.id, issuerToken2);
-      await createBackendClient(userData, client, issuerToken1, issuerToken2);
+      const { data: issuer } = await createIssuer(userData, client, keyPairToken1);
+      await addClientIdentity(userData, client.id, issuer);
+      await createBackendClient(userData, client, issuer);
 
-      const nonExpiringToken1 = await generateNonExpiringToken(keyPairToken1, issuerToken1, client.id);
-      const nonExpiringToken2 = await generateNonExpiringToken(keyPairToken2, issuerToken2, client.id);
+      const nonExpiringToken1 = await generateNonExpiringToken(keyPairToken1, issuer, client.id);
 
       console.log(nonExpiringToken1);
-      console.log(nonExpiringToken2);
     } catch (e) {
       createError(e.message);
     } finally {
