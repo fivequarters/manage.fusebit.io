@@ -1,24 +1,22 @@
 import { Button } from '@material-ui/core';
-import { nanoid } from 'nanoid';
 
 import { Operation } from '../../../../interfaces/operation';
 import { useLoader } from '../../../../hooks/useLoader';
 import { useError } from '../../../../hooks/useError';
-import { generateKeyPair, KeyPair } from '../../../../utils/crypto';
+import { generateKeyPair } from '../../../../utils/crypto';
 import { generateNonExpiringToken } from '../../../../utils/jwt';
-import { useCreateIssuer } from '../../../../hooks/api/v1/account/issuer/useCreateIssuer';
 import { useCreateClient } from '../../../../hooks/api/v1/account/client/useCreateClient';
 import { usePatchClient } from '../../../../hooks/api/v1/account/client/usePatchClient';
 import { usePutStorage } from '../../../../hooks/api/v1/account/storage/usePutStorage';
 import { useContext } from '../../../../hooks/useContext';
 import { BACKEND_LIST_STORAGE_ID } from '../../../../utils/constants';
 import { getBackendClients } from '../../../../utils/backendClients';
+import { createIssuer } from '../../../../utils/issuer';
 
 export default function ConnectClientButton() {
   const { userData } = useContext();
   const { createLoader, removeLoader } = useLoader();
   const { createError } = useError();
-  const createIssuer = useCreateIssuer<Operation>();
   const createClient = useCreateClient<Operation>();
   const patchClient = usePatchClient<Operation>();
   const putStorage = usePutStorage<Operation>();
@@ -34,8 +32,8 @@ export default function ConnectClientButton() {
       let client = await createNewClient(createClient, accountId, subscriptionId);
       const keyPairToken1 = await generateKeyPair();
       const keyPairToken2 = await generateKeyPair();
-      const issuerToken1 = await createNewIssuer(createIssuer, accountId, client, keyPairToken1);
-      const issuerToken2 = await createNewIssuer(createIssuer, accountId, client, keyPairToken2);
+      const { data: issuerToken1 } = await createIssuer(userData, client, keyPairToken1);
+      const { data: issuerToken2 } = await createIssuer(userData, client, keyPairToken2);
       client = await patchCreatedClient(patchClient, accountId, issuerToken1, client);
       client = await patchCreatedClient(patchClient, accountId, issuerToken2, client);
       await addClientToBackendList(
@@ -91,29 +89,6 @@ const createNewClient = async (createClient: any, accountId: string, subscriptio
   });
   const persistedClient = response.data;
   return persistedClient;
-};
-
-const createNewIssuer = async (createIssuer: any, accountId: string, client: any, keyPair: KeyPair) => {
-  const randomSuffix = nanoid();
-  const issuerId = `iss-${randomSuffix}`;
-  const keyId = `key-${randomSuffix}`;
-  const newIssuer = {
-    id: issuerId,
-    displayName: `Issuer for the ${client.id} client`,
-    publicKeys: [
-      {
-        keyId,
-        publicKey: keyPair.publicKeyPem,
-      },
-    ],
-  };
-  const response = await createIssuer.mutateAsync({
-    accountId: accountId,
-    issuer: newIssuer,
-  });
-  const persistedIssuer = response.data;
-  persistedIssuer.keyId = keyId;
-  return persistedIssuer;
 };
 
 const patchCreatedClient = async (patchClient: any, accountId: string, issuer: any, client: any) => {

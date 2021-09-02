@@ -1,11 +1,14 @@
-import { KeyPair } from "./crypto";
+import { KeyPair } from './crypto';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
 type Issuer = {
   displayName: string;
   id: string;
-  keyId: string;
+  publicKeys: {
+    keyId: string;
+    publicKey: string;
+  }[];
 };
 
 type TokenPayload = {
@@ -26,7 +29,7 @@ export async function signJwt(tokenPayload: TokenPayload, issuer: Issuer, privat
   const header = {
     alg: 'RS256',
     typ: 'JWT',
-    kid: issuer.keyId,
+    kid: issuer.publicKeys[0].keyId,
   };
 
   const nowInSeconds = Math.floor(Date.now() / 1000);
