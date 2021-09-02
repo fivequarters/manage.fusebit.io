@@ -23,7 +23,6 @@
     "dotenv": "^8.2.0",
     "jwt-decode": "^3.1.2",
     "mustache": "^4.2.0",
-    "nanoid": "^3.1.25",
     "react": "^17.0.1",
     "react-cookie-consent": "^6.2.4",
     "react-dom": "^17.0.1",

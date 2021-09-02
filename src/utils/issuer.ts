@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { nanoid } from 'nanoid';
 import { User } from '../interfaces/user';
 import { KeyPair } from './crypto';
 
@@ -16,7 +15,7 @@ export function removeIssuer(user: User, issuerId: string) {
 }
 
 export function createIssuer(user: User, client: any, keyPair: KeyPair) {
-  const randomSuffix = nanoid();
+  const randomSuffix = Date.now();
   const issuerId = `iss-${randomSuffix}`;
   const keyId = `key-${randomSuffix}`;
   const issuer = {
