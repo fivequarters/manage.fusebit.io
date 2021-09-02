@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { User } from '../interfaces/user';
-import { deleteClient } from './clients';
+import { addClientIdentity, deleteClient } from './clients';
 import { BACKEND_LIST_STORAGE_ID } from './constants';
-import { removeIssuer } from './issuer';
+import { generateKeyPair } from './crypto';
+import { createIssuer, removeIssuer } from './issuer';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
@@ -74,5 +75,17 @@ export async function renewToken(user: User, clientId: string, issuerId: string)
     throw new Error(`Client ${clientId} not found.`);
   }
 
-  // TODO finish later
+  await removeIssuer(user, issuerId);
+  const keyPair = await generateKeyPair();
+
+  const { data: issuer } = await createIssuer(user, client, keyPair);
+  await addClientIdentity(user, client.id, issuer);
+
+  if (client.issuerToken1 === issuerId) {
+    client.issuerToken1 = issuer.id;
+  }
+  if (client.issuerToken2 === issuerId) {
+    client.issuerToken2 = issuer.id;
+  }
+  await putBackendClients(user, clients);
 }
