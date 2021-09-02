@@ -1,15 +1,15 @@
 import React from 'react';
 import * as SC from './styles';
-import cross from '../../../../../assets/cross.svg';
+import * as CSC from '../../../../globalStyle';
 import { Props } from '../../../../../interfaces/delete';
 import { Button } from '@material-ui/core';
 
 const Delete = React.forwardRef(({ open, onClose, handleDelete }: Props, ref) => {
   return (
     <SC.Card open={open}>
-      <SC.Close onClick={() => onClose()} src={cross} alt="cross" height="12" width="12" />
-      <SC.Title>Are you sure you want to delete this user?</SC.Title>
-      <SC.Description>You cannot undo this action.</SC.Description>
+      <CSC.Close onClick={() => onClose()} />
+      <CSC.ModalTitle>Are you sure you want to delete this user?</CSC.ModalTitle>
+      <CSC.ModalDescription textAlign="center">You cannot undo this action.</CSC.ModalDescription>
       <SC.ButtonsWrapper>
         <Button
           onClick={() => onClose()}

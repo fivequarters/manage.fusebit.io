@@ -10,15 +10,17 @@ export interface InnerConnector {
   name: string;
   entityType: string;
   entityId: string;
-  skip: boolean;
-  path?: string;
+  dependsOn: any[];
   provider: string;
-  dependsOn: [];
+  skip?: boolean;
 }
 
 export interface Integration {
   id: string;
   data: IntegrationData;
+  tags?: {
+    [key: string]: any;
+  };
 }
 
 export interface Props {

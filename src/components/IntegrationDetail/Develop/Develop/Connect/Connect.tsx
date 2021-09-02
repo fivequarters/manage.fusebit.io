@@ -1,9 +1,9 @@
 import React from 'react';
 import * as SC from './styles';
+import * as CSC from '../../../../globalStyle';
 import { Button } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import LinkIcon from '@material-ui/icons/Link';
-import cross from '../../../../../assets/cross.svg';
 import { Props } from '../../../../../interfaces/connect';
 import { Decoded } from '../../../../../interfaces/decoded';
 import { useContext } from '../../../../../hooks/useContext';
@@ -38,14 +38,12 @@ const Connect = React.forwardRef(({ onClose, open }: Props, ref) => {
 
   return (
     <SC.Card open={open}>
-      <SC.CardClose onClick={() => onClose()}>
-        <img src={cross} alt="close" height="10" width="10" />
-      </SC.CardClose>
-      <SC.CardTitle>Connect your application</SC.CardTitle>
-      <SC.Flex>
-        <SC.LineTitle>Access Token</SC.LineTitle>
-      </SC.Flex>
-      <SC.LineDescription>Expires on {expDate}</SC.LineDescription>
+      <CSC.Close onClick={() => onClose()} />
+      <CSC.ModalTitle>Connect your application</CSC.ModalTitle>
+      <CSC.Flex>
+        <CSC.LineTitle>Access Token</CSC.LineTitle>
+      </CSC.Flex>
+      <CSC.ModalDescription>Expires on {expDate}</CSC.ModalDescription>
       <CopyLine text={userData.token || ''} />
       <SC.ButtonWrapper>
         <Button onClick={handleRefresh} style={{ width: '200px' }} size="large" variant="outlined" color="primary">
@@ -53,11 +51,11 @@ const Connect = React.forwardRef(({ onClose, open }: Props, ref) => {
         </Button>
       </SC.ButtonWrapper>
 
-      <SC.Flex>
-        <SC.LineTitle margin="16px">Integration Base URL</SC.LineTitle>
-      </SC.Flex>
+      <CSC.Flex>
+        <CSC.LineTitle margin="16px">Integration Base URL</CSC.LineTitle>
+      </CSC.Flex>
       <CopyLine text={process.env.REACT_APP_FUSEBIT_DEPLOYMENT + '/v2' + window.location.pathname} />
-      <SC.Description>
+      <CSC.ModalDescription margin="24px 0 24px 0">
         To connect your application, use the values above and follow the instructions in the{' '}
         <a
           target="_blank"
@@ -66,7 +64,7 @@ const Connect = React.forwardRef(({ onClose, open }: Props, ref) => {
         >
           following document.
         </a>
-      </SC.Description>
+      </CSC.ModalDescription>
       <SC.ButtonWrapper>
         <Button onClick={() => onClose()} style={{ width: '200px' }} size="large" variant="contained" color="primary">
           Ok
@@ -74,7 +72,7 @@ const Connect = React.forwardRef(({ onClose, open }: Props, ref) => {
       </SC.ButtonWrapper>
       {false && (
         <>
-          <SC.CardSubtitle>Development</SC.CardSubtitle>
+          <CSC.ModalTitle>Development</CSC.ModalTitle>
           <SC.CardButtonsContainer>
             <Button
               startIcon={<AddIcon />}
@@ -89,7 +87,7 @@ const Connect = React.forwardRef(({ onClose, open }: Props, ref) => {
               Refresh Your Token
             </Button>
           </SC.CardButtonsContainer>
-          <SC.CardSubtitle>Production</SC.CardSubtitle>
+          <CSC.ModalTitle>Production</CSC.ModalTitle>
           <SC.CardButtonsContainer>
             <Button
               startIcon={<AddIcon />}

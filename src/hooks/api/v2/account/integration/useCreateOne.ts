@@ -9,7 +9,7 @@ export const useAccountIntegrationCreateIntegration = <T>() => {
   return useMutation(
     (params: Params) => {
       const { accountId, subscriptionId, ...data } = params;
-      return axios<T>(`/v2/account/${accountId}/subscription/${subscriptionId}/integration`, 'post', data);
+      return axios<T>(`/v2/account/${accountId}/subscription/${subscriptionId}/integration/${data.id}`, 'post', data);
     },
     {
       onMutate: (_: Params) => () => {},

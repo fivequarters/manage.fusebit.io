@@ -18,6 +18,7 @@ interface EntityComponent {
   entityId: string;
   dependsOn: any[];
   provider: string;
+  skip?: boolean;
 }
 
 export interface Entity {
@@ -30,18 +31,9 @@ export interface Entity {
     configuration?: {
       [key: string]: any;
     };
-    data?: {
-      files: {
-        [key: string]: any;
-      };
-      handler: string;
-      components: EntityComponent[];
-      componentTags: {
-        [key: string]: any;
-      };
-      configuration: {
-        [key: string]: any;
-      };
+    components?: EntityComponent[];
+    componentTags?: {
+      [key: string]: any;
     };
   };
   tags: {
@@ -83,5 +75,6 @@ export interface Feed {
       };
     };
     entities: Record<string, Entity>;
+    components?: EntityComponent[];
   };
 }

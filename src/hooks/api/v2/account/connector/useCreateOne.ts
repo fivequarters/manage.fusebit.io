@@ -9,7 +9,7 @@ export const useAccountConnectorCreateConnector = <T>() => {
   return useMutation(
     (params: Params) => {
       const { accountId, subscriptionId, ...data } = params;
-      return axios<T>(`/v2/account/${accountId}/subscription/${subscriptionId}/connector`, 'post', data);
+      return axios<T>(`/v2/account/${accountId}/subscription/${subscriptionId}/connector/${data.id}`, 'post', data);
     },
     {
       onMutate: (_: Params) => () => {},
