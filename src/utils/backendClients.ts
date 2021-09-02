@@ -22,15 +22,20 @@ export async function createBackendClient(user: User) {
   const { data: issuer } = await createIssuer(user, client, keyPairToken1);
   await addClientIdentity(user, client.id, issuer);
 
-  const clientDetails = {
+  const nonExpiringToken = await generateNonExpiringToken(keyPairToken1, issuer, client.id);
+  const tokenSignature = nonExpiringToken.split('.')[2];
+
+  const backendClientDetails = {
     id: client.id,
     issuer: issuer.id,
+    tokenSignature,
   };
   const currentBackends = await getBackendClients(user);
-  const backends = [...currentBackends, clientDetails];
+  const backends = [...currentBackends, backendClientDetails];
 
   await putBackendClients(user, backends);
-  return generateNonExpiringToken(keyPairToken1, issuer, client.id);
+
+  return nonExpiringToken;
 }
 
 export async function removedBackendClient(user: User, clientId: string) {
