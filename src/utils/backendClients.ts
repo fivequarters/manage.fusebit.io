@@ -42,6 +42,18 @@ export async function getBackendClients(user: User) {
   }
 }
 
+export async function createBackendClient(user: User, client: any, issuerToken1: any, issuerToken2: any) {
+  const clientDetails = {
+    id: client.id,
+    issuerToken1: issuerToken1.id,
+    issuerToken2: issuerToken2.id,
+  };
+  const currentBackends = await getBackendClients(user);
+  const backends = [...currentBackends, clientDetails];
+
+  await putBackendClients(user, backends);
+}
+
 export function putBackendClients(user: User, backendClients: any[]) {
   const { accountId, subscriptionId, token } = user;
   const clientsPaths = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/subscription/${subscriptionId}/storage/${BACKEND_LIST_STORAGE_ID}`;
