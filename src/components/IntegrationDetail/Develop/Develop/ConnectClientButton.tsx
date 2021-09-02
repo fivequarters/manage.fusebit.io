@@ -6,6 +6,7 @@ import { Operation } from '../../../../interfaces/operation';
 import { useLoader } from '../../../../hooks/useLoader';
 import { useError } from '../../../../hooks/useError';
 import { generateKeyPair, KeyPair } from '../../../../utils/crypto';
+import { signJwt } from '../../../../utils/jwt';
 import { useCreateIssuer } from '../../../../hooks/api/v1/account/issuer/useCreateIssuer';
 import { useCreateClient } from '../../../../hooks/api/v1/account/client/useCreateClient';
 import { usePatchClient } from '../../../../hooks/api/v1/account/client/usePatchClient';
@@ -48,6 +49,12 @@ export default function ConnectClientButton() {
         issuerToken2,
         currentBackendList
       );
+
+      const nonExpiringToken1 = await generateNonExpiringToken(keyPairToken1, issuerToken1, client.id);
+      const nonExpiringToken2 = await generateNonExpiringToken(keyPairToken2, issuerToken2, client.id);
+
+      console.log(nonExpiringToken1);
+      console.log(nonExpiringToken2);
     } catch (e) {
       createError(e.message);
     } finally {
@@ -107,6 +114,7 @@ const createNewIssuer = async (createIssuer: any, accountId: string, client: any
     issuer: newIssuer,
   });
   const persistedIssuer = response.data;
+  persistedIssuer.keyId = keyId;
   return persistedIssuer;
 };
 
@@ -139,8 +147,8 @@ const addClientToBackendList = async (
 ) => {
   const clientDetails = {
     id: client.id,
-    issuerToken1,
-    issuerToken2,
+    issuerToken1: issuerToken1.id,
+    issuerToken2: issuerToken2.id,
   };
   const data = [...currentBackendList, clientDetails];
   const storageId = BACKEND_LIST_STORAGE_ID;
@@ -167,4 +175,12 @@ const loadBackendList = async (accountId: string, subscriptionId: string, access
     }
     throw err;
   }
+};
+
+const generateNonExpiringToken = async (keyPair: KeyPair, issuer: any, sub: string) => {
+  const tokenPayload = {
+    sub,
+    aud: REACT_APP_FUSEBIT_DEPLOYMENT as string,
+  };
+  return signJwt(tokenPayload, issuer, keyPair.privateKey);
 };
