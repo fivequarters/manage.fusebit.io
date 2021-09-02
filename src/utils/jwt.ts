@@ -17,9 +17,9 @@ type TokenPayload = {
   [key: string]: any;
 };
 
-export function generateNonExpiringToken(keyPair: KeyPair, issuer: any, sub: string) {
+export function generateNonExpiringToken(keyPair: KeyPair, issuer: any) {
   const tokenPayload = {
-    sub,
+    sub: issuer.id,
     aud: REACT_APP_FUSEBIT_DEPLOYMENT as string,
   };
   return signJwt(tokenPayload, issuer, keyPair.privateKey);
