@@ -41,7 +41,7 @@ export async function addClientIdentity(user: User, clientId: string, issuer: an
 }
 
 export function createClient(user: User) {
-  const { accountId, subscriptionId, token } = user;
+  const { accountId, token } = user;
   const clientPath = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/client`;
   const client = {
     displayName: 'My Backend',
@@ -49,7 +49,7 @@ export function createClient(user: User) {
       allow: [
         {
           action: '*',
-          resource: `/account/${accountId}/subscription/${subscriptionId}`,
+          resource: `/account/${accountId}`,
         },
       ],
     },
