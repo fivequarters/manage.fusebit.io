@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { Button } from '@material-ui/core';
 import { nanoid } from 'nanoid';
 
@@ -6,15 +5,14 @@ import { Operation } from '../../../../interfaces/operation';
 import { useLoader } from '../../../../hooks/useLoader';
 import { useError } from '../../../../hooks/useError';
 import { generateKeyPair, KeyPair } from '../../../../utils/crypto';
-import { signJwt } from '../../../../utils/jwt';
+import { generateNonExpiringToken } from '../../../../utils/jwt';
 import { useCreateIssuer } from '../../../../hooks/api/v1/account/issuer/useCreateIssuer';
 import { useCreateClient } from '../../../../hooks/api/v1/account/client/useCreateClient';
 import { usePatchClient } from '../../../../hooks/api/v1/account/client/usePatchClient';
 import { usePutStorage } from '../../../../hooks/api/v1/account/storage/usePutStorage';
 import { useContext } from '../../../../hooks/useContext';
 import { BACKEND_LIST_STORAGE_ID } from '../../../../utils/constants';
-
-const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
+import { getBackendClients } from '../../../../utils/backendClients';
 
 export default function ConnectClientButton() {
   const { userData } = useContext();
@@ -28,8 +26,8 @@ export default function ConnectClientButton() {
   const registerBackend = async () => {
     try {
       createLoader();
-      const { accountId, subscriptionId, token } = userData as Required<typeof userData>;
-      const currentBackendList = await loadBackendList(accountId, subscriptionId, token);
+      const { accountId, subscriptionId } = userData as Required<typeof userData>;
+      const currentBackendList = await getBackendClients(userData);
       if (currentBackendList.length >= 5) {
         throw new Error('You have reached the limit of 5 backend clients registered at Fusebit.');
       }
@@ -160,29 +158,4 @@ const addClientToBackendList = async (
     storageId,
     data,
   });
-};
-
-const loadBackendList = async (accountId: string, subscriptionId: string, accessToken: string) => {
-  try {
-    const storageId = BACKEND_LIST_STORAGE_ID;
-    const storagePath = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/subscription/${subscriptionId}/storage/${storageId}`;
-    const axiosNo404MiddlewareInstance = axios.create();
-    const storageResponse = await axiosNo404MiddlewareInstance.get(storagePath, {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-    return storageResponse.data.data;
-  } catch (err) {
-    if (err.message.includes('404')) {
-      return [];
-    }
-    throw err;
-  }
-};
-
-const generateNonExpiringToken = async (keyPair: KeyPair, issuer: any, sub: string) => {
-  const tokenPayload = {
-    sub,
-    aud: REACT_APP_FUSEBIT_DEPLOYMENT as string,
-  };
-  return signJwt(tokenPayload, issuer, keyPair.privateKey);
 };

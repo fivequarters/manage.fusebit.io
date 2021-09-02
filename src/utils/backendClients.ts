@@ -27,12 +27,19 @@ export async function removedBackendClient(user: User, clientId: string) {
 }
 
 export async function getBackendClients(user: User) {
-  const { accountId, subscriptionId, token } = user;
-  const clientsPaths = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/subscription/${subscriptionId}/storage/${BACKEND_LIST_STORAGE_ID}`;
-  const clientsResponse = await axiosNo404MiddlewareInstance.get(clientsPaths, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  return clientsResponse.data.data;
+  try {
+    const { accountId, subscriptionId, token } = user;
+    const clientsPaths = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/subscription/${subscriptionId}/storage/${BACKEND_LIST_STORAGE_ID}`;
+    const clientsResponse = await axiosNo404MiddlewareInstance.get(clientsPaths, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return clientsResponse.data.data;
+  } catch (err) {
+    if (err.message.includes('404')) {
+      return [];
+    }
+    throw err;
+  }
 }
 
 export function putBackendClients(user: User, backendClients: any[]) {

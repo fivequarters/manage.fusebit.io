@@ -1,3 +1,7 @@
+import { KeyPair } from "./crypto";
+
+const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
+
 type Issuer = {
   displayName: string;
   id: string;
@@ -9,6 +13,14 @@ type TokenPayload = {
   aud: string;
   [key: string]: any;
 };
+
+export function generateNonExpiringToken(keyPair: KeyPair, issuer: any, sub: string) {
+  const tokenPayload = {
+    sub,
+    aud: REACT_APP_FUSEBIT_DEPLOYMENT as string,
+  };
+  return signJwt(tokenPayload, issuer, keyPair.privateKey);
+}
 
 export async function signJwt(tokenPayload: TokenPayload, issuer: Issuer, privateKey: CryptoKey): Promise<string> {
   const header = {
