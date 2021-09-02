@@ -25,7 +25,8 @@ const Layout: FC<Props> = ({ children }) => {
   const { userData } = useContext();
 
   useEffect(() => {
-    if (userData.id && userData.accountId) {
+    //@ts-ignore
+    if (userData.id && userData.accountId)
       pendo.initialize({
         visitor: {
           id: userData.id, // Required if user is logged in
@@ -35,7 +36,6 @@ const Layout: FC<Props> = ({ children }) => {
           // creationDate: // Optional
         },
       });
-    }
   }, [userData]);
 
   return (
