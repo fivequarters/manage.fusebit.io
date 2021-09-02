@@ -32,10 +32,13 @@ export default function ConnectClientButton() {
       if (currentBackendList.length >= 5) {
         throw new Error('You have reached the limit of 5 backend clients registered at Fusebit.');
       }
-      const keyPair = await generateKeyPair();
       const client = await createNewClient(createClient, accountId, subscriptionId);
-      const issuer = await createNewIssuer(createIssuer, accountId, client, keyPair);
-      await patchCreatedClient(patchClient, accountId, issuer, client);
+      const keyPairToken1 = await generateKeyPair();
+      const keyPairToken2 = await generateKeyPair();
+      const issuerToken1 = await createNewIssuer(createIssuer, accountId, client, keyPairToken1);
+      const issuerToken2 = await createNewIssuer(createIssuer, accountId, client, keyPairToken2);
+      await patchCreatedClient(patchClient, accountId, issuerToken1, client);
+      await patchCreatedClient(patchClient, accountId, issuerToken2, client);
       await addClientToBackendList(putStorage, accountId, subscriptionId, client, currentBackendList);
     } catch (e) {
       createError(e.message);
