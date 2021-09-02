@@ -11,9 +11,9 @@ const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 const axiosNo404MiddlewareInstance = axios.create();
 
 export async function createBackendClient(user: User) {
-  const currentBackendList = await getBackendClients(user);
+  const currentBackends = await getBackendClients(user);
 
-  if (currentBackendList.length >= 5) {
+  if (currentBackends.length >= 5) {
     throw new Error('You have reached the limit of 5 backend clients registered at Fusebit.');
   }
 
@@ -30,22 +30,21 @@ export async function createBackendClient(user: User) {
     issuer: issuer.id,
     tokenSignature,
   };
-  const currentBackends = await getBackendClients(user);
   const backends = [...currentBackends, backendClientDetails];
 
   await putBackendClients(user, backends);
 
-  return nonExpiringToken;
+  return {
+    token: nonExpiringToken,
+    signature: tokenSignature,
+  };
 }
 
 export async function removedBackendClient(user: User, clientId: string) {
   const clients = await getBackendClients(user);
-  const clientToBeRevoked = clients.find((c: any) => c.id === clientId);
   const filteredClients = clients.filter((c: any) => c.id !== clientId);
 
-  if (clientToBeRevoked) {
-    await removeIssuer(user, clientToBeRevoked.issuer);
-  }
+  await removeIssuer(user, clientId);
   await removeClient(user, clientId);
   await putBackendClients(user, filteredClients);
 }

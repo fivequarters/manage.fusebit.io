@@ -49,7 +49,7 @@ export function createClient(user: User) {
       allow: [
         {
           action: '*',
-          resource: `/account/${accountId}`,
+          resource: `/account/${accountId}/`,
         },
       ],
     },

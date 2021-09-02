@@ -6,9 +6,9 @@ const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
 const axiosNo404MiddlewareInstance = axios.create();
 
-export function removeIssuer(user: User, issuerId: string) {
+export function removeIssuer(user: User, clientId: string) {
   const { accountId, token } = user;
-  const issuerPath = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/issuer/${issuerId}`;
+  const issuerPath = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/issuer/iss-${clientId}`;
   return axiosNo404MiddlewareInstance.delete(issuerPath, {
     headers: { Authorization: `Bearer ${token}` },
     validateStatus: (status) => status === 204 || status === 404,
@@ -16,7 +16,7 @@ export function removeIssuer(user: User, issuerId: string) {
 }
 
 export function createIssuer(user: User, client: any, keyPair: KeyPair) {
-  const issuerId = client.id;
+  const issuerId = `iss-${client.id}`;
   const keyId = client.id;
   const issuer = {
     displayName: `Issuer for the ${client.id} client`,
