@@ -78,24 +78,36 @@ const TableComponent: React.FC<Props> = ({
 
   return (
     <SC.Wrapper>
-      {integrationTable && connectorTable ? (
+      {integrationTable ? (
         <Modal
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"
-          open={integrationTable ? addIntegrationOpen : addConnectorOpen}
-          onClose={() => (integrationTable ? setAddIntegrationOpen(false) : setAddConnectorOpen(false))}
+          open={addIntegrationOpen}
+          onClose={() => setAddIntegrationOpen(false)}
           closeAfterTransition
           BackdropComponent={Backdrop}
         >
           <FeedPicker
-            isIntegration={integrationTable}
-            onSubmit={(activeIntegration: Feed, data: Data) =>
-              integrationTable
-                ? handleIntegrationCreation(activeIntegration, data)
-                : handleConnectorCreation(activeIntegration, data)
-            }
-            open={integrationTable ? addIntegrationOpen : addConnectorOpen}
-            onClose={() => (integrationTable ? setAddIntegrationOpen(false) : setAddConnectorOpen(false))}
+            isIntegration={true}
+            onSubmit={(activeIntegration: Feed, data: Data) => handleIntegrationCreation(activeIntegration, data)}
+            open={addIntegrationOpen}
+            onClose={() => setAddIntegrationOpen(false)}
+          />
+        </Modal>
+      ) : connectorTable ? (
+        <Modal
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          open={addConnectorOpen}
+          onClose={() => setAddConnectorOpen(false)}
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+        >
+          <FeedPicker
+            isIntegration={false}
+            onSubmit={(activeIntegration: Feed, data: Data) => handleConnectorCreation(activeIntegration, data)}
+            open={addConnectorOpen}
+            onClose={() => setAddConnectorOpen(false)}
           />
         </Modal>
       ) : (
