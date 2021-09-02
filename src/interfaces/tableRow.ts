@@ -39,9 +39,4 @@ export interface Props {
   selectedCell?: string;
   integrationsTable?: boolean;
   connectorsTable?: boolean;
-  installs?: {
-    data: {
-      total: number;
-    };
-  };
 }

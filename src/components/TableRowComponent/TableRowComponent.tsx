@@ -6,8 +6,12 @@ import { Props, ConnectorCells, IntegrationCells, UserCells } from '../../interf
 import { useGetRedirectLink } from '../../hooks/useGetRedirectLink';
 import { useContext } from '../../hooks/useContext';
 import client from '../../assets/client.jpg';
+import { useAccountConnectorIdentityGetAll } from '../../hooks/api/v2/account/connector/identity/useGetAll';
+import { useAccountIntegrationInstanceGetAll } from '../../hooks/api/v2/account/integration/instance/useGetAll';
+import { Identity } from '../../interfaces/identities';
+import { Install } from '../../interfaces/install';
 
-const TableRow: React.FC<Props> = ({
+const TableRowComponent: React.FC<Props> = ({
   row,
   handleRowClick,
   handleCheck,
@@ -16,10 +20,21 @@ const TableRow: React.FC<Props> = ({
   selectedCell,
   integrationsTable,
   connectorsTable,
-  installs,
 }) => {
   const { getRedirectLink } = useGetRedirectLink();
   const { userData } = useContext();
+  const { data: identitiesData } = useAccountConnectorIdentityGetAll<Identity>({
+    enabled: userData.token,
+    id: row.id,
+    accountId: userData.accountId,
+    subscriptionId: userData.subscriptionId,
+  });
+  const { data: installsData } = useAccountIntegrationInstanceGetAll<Install>({
+    enabled: userData.token,
+    id: row.id,
+    accountId: userData.accountId,
+    subscriptionId: userData.subscriptionId,
+  });
 
   const handleClick = (e: React.MouseEvent<HTMLTableRowElement, MouseEvent>) => {
     handleRowClick(
@@ -69,7 +84,17 @@ const TableRow: React.FC<Props> = ({
         )}
         {integrationsTable || connectorsTable ? (
           <TableCell align="left">
-            {installs?.data.total !== undefined ? installs?.data.total : <CSC.Spinner />}
+            {integrationsTable ? (
+              installsData?.data.total !== undefined ? (
+                installsData?.data.total
+              ) : (
+                <CSC.Spinner />
+              )
+            ) : identitiesData?.data.total !== undefined ? (
+              identitiesData?.data.total
+            ) : (
+              <CSC.Spinner />
+            )}
           </TableCell>
         ) : (
           <>
@@ -102,8 +127,8 @@ const TableRow: React.FC<Props> = ({
         )}
         <TableCell align="left">
           {integrationsTable ? (
-            selectedCell === IntegrationCells.INSTALLS && installs?.data.total !== undefined ? (
-              installs?.data.total
+            selectedCell === IntegrationCells.INSTALLS && installsData?.data.total !== undefined ? (
+              installsData?.data.total
             ) : (
               <CSC.Spinner />
             )
@@ -114,8 +139,8 @@ const TableRow: React.FC<Props> = ({
               ) : (
                 <CSC.Spinner />
               )
-            ) : installs?.data.total !== undefined ? (
-              installs?.data.total
+            ) : identitiesData?.data.total !== undefined ? (
+              identitiesData?.data.total
             ) : (
               <CSC.Spinner />
             )
@@ -142,4 +167,4 @@ const TableRow: React.FC<Props> = ({
   }
 };
 
-export default TableRow;
+export default TableRowComponent;

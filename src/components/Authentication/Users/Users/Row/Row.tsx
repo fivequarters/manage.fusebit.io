@@ -1,6 +1,6 @@
 import React from 'react';
 import { RowProps } from '../../../../../interfaces/users';
-import TableRow from '../../../../TableRow';
+import TableRow from '../../../../TableRowComponent';
 
 const Row: React.FC<RowProps> = ({ row, handleRowClick, isSelected, selectedCell, handleCheck, mobile }) => {
   return (

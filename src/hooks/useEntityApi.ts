@@ -18,15 +18,20 @@ import { useAccountIntegrationDeleteIntegration } from './api/v2/account/integra
 import { useAccountConnectorDeleteConnector } from './api/v2/account/connector/useDeleteOne';
 import { useAccountUserDeleteOne } from './api/v1/account/user/useDeleteOne';
 import { findMatchingConnectorFeed } from '../utils/utils';
+import { useAccountUserCreateUser } from './api/v1/account/user/useCreateUser';
+import { Account } from '../interfaces/account';
+import { useCreateToken } from './useCreateToken';
 
 export const useEntityApi = (preventLoader?: boolean) => {
   const { userData } = useContext();
   const { waitForOperations, createLoader, removeLoader } = useLoader();
   const { createError } = useError();
+  const { _createToken } = useCreateToken();
 
   // creates
   const createConnector = useAccountConnectorCreateConnector<Operation>();
   const createIntegration = useAccountIntegrationCreateIntegration<Operation>();
+  const createUser = useAccountUserCreateUser<Operation>();
 
   // updates
   const updateConnector = useAccountConnectorUpdateConnector<Operation>();
@@ -52,6 +57,23 @@ export const useEntityApi = (preventLoader?: boolean) => {
         ? await createConnector.mutateAsync(obj)
         : await createIntegration.mutateAsync(obj);
     await waitForOperations([response.data.operationId]);
+  };
+
+  const _createUser = async (data: Account, reloadUsers: Function) => {
+    try {
+      createLoader();
+      const response = await createUser.mutateAsync({ ...data, accountId: userData.accountId });
+      reloadUsers();
+      if (response.data.id) {
+        const token = await _createToken(response.data.id);
+        return token;
+      }
+    } catch (e) {
+      createError(e.message);
+      removeLoader();
+    } finally {
+      removeLoader();
+    }
   };
 
   const updateEntity = async (data: ApiResponse<Connector> | undefined, formData: any) => {
@@ -199,6 +221,7 @@ export const useEntityApi = (preventLoader?: boolean) => {
 
   return {
     createEntity,
+    _createUser,
     updateEntity,
     deleteEntity,
     toggleConnector,
