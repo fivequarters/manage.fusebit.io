@@ -39,7 +39,15 @@ export default function ConnectClientButton() {
       const issuerToken2 = await createNewIssuer(createIssuer, accountId, client, keyPairToken2);
       await patchCreatedClient(patchClient, accountId, issuerToken1, client);
       await patchCreatedClient(patchClient, accountId, issuerToken2, client);
-      await addClientToBackendList(putStorage, accountId, subscriptionId, client, currentBackendList);
+      await addClientToBackendList(
+        putStorage,
+        accountId,
+        subscriptionId,
+        client,
+        issuerToken1,
+        issuerToken2,
+        currentBackendList
+      );
     } catch (e) {
       createError(e.message);
     } finally {
@@ -125,9 +133,16 @@ const addClientToBackendList = async (
   accountId: string,
   subscriptionId: string,
   client: any,
+  issuerToken1: any,
+  issuerToken2: any,
   currentBackendList: string[]
 ) => {
-  const data = [...currentBackendList, client.id];
+  const clientDetails = {
+    id: client.id,
+    issuerToken1,
+    issuerToken2,
+  };
+  const data = [...currentBackendList, clientDetails];
   const storageId = BACKEND_LIST_STORAGE_ID;
   await putStorage.mutateAsync({
     accountId,
