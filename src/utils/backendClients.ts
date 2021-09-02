@@ -59,7 +59,7 @@ export async function getBackendClients(user: User) {
     });
     return clientsResponse.data.data;
   } catch (err) {
-    if (err.message.includes('404')) {
+    if (err?.response?.status === 404) {
       return [];
     }
     throw err;
