@@ -8,6 +8,7 @@ import arrow from '../../../../assets/arrow-right-black.svg';
 import Connect from './Connect';
 import ConnectClientButton from './ConnectClientButton';
 import DeleteBackendClient from './DeleteBackendClient';
+import ListBackendClients from './ListBackendClients';
 import { useLoader } from '../../../../hooks/useLoader';
 import { useError } from '../../../../hooks/useError';
 import { useContext } from '../../../../hooks/useContext';
@@ -341,6 +342,7 @@ const Develop: React.FC = () => {
             <SC.CardTitle>Your Application</SC.CardTitle>
             <SC.CardButtonWrapper>
               <SC.CardConnectorButtonsWrapper style={{ display: 'flex', flexDirection: 'column' }}>
+                <ListBackendClients />
                 <DeleteBackendClient />
                 <ConnectClientButton />
                 <Button

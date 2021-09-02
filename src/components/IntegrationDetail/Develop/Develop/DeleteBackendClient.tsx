@@ -37,7 +37,7 @@ export default function DeleteBackendClient() {
         variant="outlined"
         color="primary"
       >
-        Remove Backend Client
+        Remove Backend
       </Button>
     </>
   );
