@@ -121,7 +121,6 @@ const Navbar: React.FC<Props> = ({
                           {integrationsLink ? 'Integrations' : authenticationLink ? 'Authentication' : 'Connectors'}
                         </SC.SectionLink>
                       </Link>
-                      <SC.Arrow />
                     </SC.Flex>
                   )}
                   <SC.SectionDropdown

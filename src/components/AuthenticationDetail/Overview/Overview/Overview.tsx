@@ -176,11 +176,13 @@ const Overview: React.FC = () => {
     try {
       createLoader();
       await deleteAccount.mutateAsync({ userId: accountData?.data.id, accountId: userData.accountId });
-      history.push(getRedirectLink('/authentication'));
+      history.push(getRedirectLink('/authentication/users'));
       // window.location.href = getRedirectLink('/authentication');
     } catch (e) {
       createError(e.message);
       setDeleteOpen(false);
+    } finally {
+      removeLoader();
     }
   };
 

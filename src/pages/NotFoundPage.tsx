@@ -1,5 +1,6 @@
-import React, { FC, ReactElement, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { FC, ReactElement, useEffect, useState } from 'react';
+import * as CSC from '../components/globalStyle';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useContext } from '../hooks/useContext';
 import { useGetRedirectLink } from '../hooks/useGetRedirectLink';
 
@@ -7,8 +8,14 @@ const NotFoundPage: FC<{}> = (): ReactElement => {
   const history = useHistory();
   const { userData } = useContext();
   const { getRedirectLink } = useGetRedirectLink();
+  const [showLoader, setShowLoader] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
+    if (location.pathname === '/') {
+      setShowLoader(true);
+    }
+
     const integrationsContract = localStorage.getItem('integrationsContract'); //if there is something here it means that the user logged in for the first time and wants to create the integrations template associated with this key
     const connectorsContract = localStorage.getItem('connectorsContract'); //if there is something here it means that the user logged in for the first time and wants to create the connectors template associated with this key
     const refreshToken = localStorage.getItem('refreshToken'); //if the user refreshed the token it returns true
@@ -24,9 +31,17 @@ const NotFoundPage: FC<{}> = (): ReactElement => {
     } else if (userData.accountId !== undefined && userData.subscriptionId !== undefined) {
       history.push(getRedirectLink('/integrations/overview'));
     }
-  }, [history, userData, getRedirectLink]);
+  }, [history, userData, getRedirectLink, location]);
 
-  return <></>;
+  return (
+    <>
+      {showLoader && (
+        <CSC.BigSpinnerContainer>
+          <CSC.BigSpinner />
+        </CSC.BigSpinnerContainer>
+      )}
+    </>
+  );
 };
 
 export default NotFoundPage;

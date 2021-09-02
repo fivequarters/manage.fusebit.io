@@ -1,18 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import { useContext } from './useContext';
 import { Integration } from '../interfaces/integration';
 import { Connector } from '../interfaces/connector';
-import { useLoader } from './useLoader';
-import { useAccountIntegrationDeleteIntegration } from './api/v2/account/integration/useDeleteOne';
-import { useAccountConnectorDeleteConnector } from './api/v2/account/connector/useDeleteOne';
-import { useAccountUserDeleteOne } from './api/v1/account/user/useDeleteOne';
-import { Operation } from '../interfaces/operation';
-import { useError } from './useError';
 import { useHistory } from 'react-router';
 import { Feed } from '../interfaces/feed';
 import { Data } from '../interfaces/feedPicker';
 import { useCreateDataFromFeed } from './useCreateDataFromFeed';
 import { useQuery } from './useQuery';
+import { useEntityApi } from './useEntityApi';
+import { Account } from '../interfaces/account';
 
 interface Props {
   headless?: any;
@@ -30,6 +25,11 @@ interface Props {
       items: Connector[];
     };
   };
+  users?: {
+    data: {
+      items: Account[];
+    };
+  };
 }
 
 export const useEntityTable = ({
@@ -40,22 +40,19 @@ export const useEntityTable = ({
   reloadUsers,
   integrations,
   connectors,
+  users,
 }: Props) => {
   const history = useHistory();
-  const { userData } = useContext();
   const [selected, setSelected] = useState<string[]>([]);
-  const [rows, setRows] = useState<Integration[] | Connector[]>([]);
-  const { waitForOperations, createLoader, removeLoader } = useLoader();
-  const deleteIntegration = useAccountIntegrationDeleteIntegration<Operation>();
-  const deleteConnector = useAccountConnectorDeleteConnector<Operation>();
-  const deleteAccount = useAccountUserDeleteOne<Operation>();
-  const { createError } = useError();
+  const [rows, setRows] = useState<Integration[] | Connector[] | Account[]>([]);
   const { createDataFromFeed } = useCreateDataFromFeed();
   const [addIntegrationOpen, setAddIntegrationOpen] = useState(false);
   const [addConnectorOpen, setAddConnectorOpen] = useState(false);
+  const [newUserOpen, setNewUserOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const query = useQuery();
   const isIntegration = useRef(false);
+  const { massiveDelete } = useEntityApi();
 
   const setItems = () => {
     const items = isIntegration.current ? integrations?.data.items : connectors?.data.items;
@@ -86,10 +83,13 @@ export const useEntityTable = ({
 
       // If we have just navigated to the connectors list we check if there is a query param
       headless.current && checkQuery();
+    } else if (users && users.data.items) {
+      setLoading(false);
+      users.data.items.length > 0 && setRows(users?.data.items);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [integrations, connectors, query]);
+  }, [integrations, connectors, users, query]);
 
   const handleSelectAllCheck = (event: any) => {
     if (event.target.checked) {
@@ -120,41 +120,18 @@ export const useEntityTable = ({
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
   const handleRowDelete = async () => {
-    try {
-      createLoader();
-      let operationIds: string[] = [];
-      for (let i = 0; i < selected.length; i++) {
-        if (isIntegration.current) {
-          const response = await deleteIntegration.mutateAsync({
-            id: selected[i],
-            accountId: userData.accountId,
-            subscriptionId: userData.subscriptionId,
-          });
-          operationIds.push(response.data.operationId);
-        } else if (window.location.href.indexOf('connector') >= 0) {
-          const response = await deleteConnector.mutateAsync({
-            id: selected[i],
-            accountId: userData.accountId,
-            subscriptionId: userData.subscriptionId,
-          });
-          operationIds.push(response.data.operationId);
-        } else {
-          const response = await deleteAccount.mutateAsync({ userId: selected[i], accountId: userData.accountId });
-          operationIds.push(response.data.operationId);
-        }
+    massiveDelete(
+      selected,
+      isIntegration.current ? 'I' : window.location.href.indexOf('connector') >= 0 ? 'C' : 'A',
+      () => {
+        isIntegration.current
+          ? reloadIntegrations && reloadIntegrations()
+          : reloadConnectors
+          ? reloadConnectors()
+          : reloadUsers && reloadUsers();
+        setSelected([]);
       }
-      await waitForOperations(operationIds);
-      isIntegration.current
-        ? reloadIntegrations && reloadIntegrations()
-        : reloadConnectors
-        ? reloadConnectors()
-        : reloadUsers && reloadUsers();
-      setSelected([]);
-    } catch (e) {
-      createError(e.message);
-    } finally {
-      removeLoader();
-    }
+    );
   };
 
   const handleRowClick = (event: any, href: string) => {
@@ -188,8 +165,10 @@ export const useEntityTable = ({
     handleConnectorCreation,
     setAddIntegrationOpen,
     setAddConnectorOpen,
+    setNewUserOpen,
     addIntegrationOpen,
     addConnectorOpen,
+    newUserOpen,
     loading,
     selected,
   };

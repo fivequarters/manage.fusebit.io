@@ -1,19 +1,12 @@
-import { Connector } from './connector';
-import { Integration } from './integration';
+import { Row } from './tableRow';
 
 export interface OverviewProps {
   headless: any;
   setHeadless: Function;
 }
 
-export enum cells {
-  TYPE = 'Type',
-  IDENTITIES = 'Identities',
-  CREATED = 'Created',
-}
-
 export interface RowProps {
-  row: Connector | Integration;
+  row: Row;
   handleRowClick: Function;
   handleCheck: Function;
   isSelected: Function;
