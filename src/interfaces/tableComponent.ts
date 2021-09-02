@@ -3,8 +3,8 @@ import { Connector } from './connector';
 import { Integration } from './integration';
 
 export interface Props {
-  headless: any;
-  setHeadless: Function;
+  headless?: any;
+  setHeadless?: Function;
   selectedCell: string;
   handlePreviousCellSelect: Function;
   handleNextCellSelect: Function;
