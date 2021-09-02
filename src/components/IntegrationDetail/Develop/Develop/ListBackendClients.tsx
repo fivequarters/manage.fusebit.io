@@ -31,7 +31,7 @@ export default function ListBackendClients() {
         variant="outlined"
         color="primary"
       >
-        List Backends
+        List
       </Button>
     </>
   );

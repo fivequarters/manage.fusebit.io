@@ -341,9 +341,9 @@ const Develop: React.FC = () => {
           <SC.Card>
             <SC.CardTitle>Your Application</SC.CardTitle>
             <SC.CardButtonWrapper>
-              <SC.CardConnectorButtonsWrapper style={{ display: 'flex', flexDirection: 'column' }}>
-                <ListBackendClients />
+              <SC.CardConnectorButtonsWrapper style={{ display: 'grid', gridTemplateColumns: '50% 50%', alignItems: 'end' }}>
                 <DeleteBackendClient />
+                <ListBackendClients />
                 <ConnectClientButton />
                 <Button
                   onClick={() => setConnectOpen(true)}

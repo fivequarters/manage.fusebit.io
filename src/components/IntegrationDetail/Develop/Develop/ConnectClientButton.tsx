@@ -70,7 +70,7 @@ export default function ConnectClientButton() {
       variant="outlined"
       color="primary"
     >
-      Add Backend
+      Add
     </Button>
   );
 }

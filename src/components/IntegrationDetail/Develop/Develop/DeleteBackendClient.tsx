@@ -24,21 +24,21 @@ export default function DeleteBackendClient() {
   };
 
   return (
-    <>
-      <TextField
-        style={{ width: '100%' }}
+    <div style={{ display: 'flex', flexDirection: 'column', marginTop: '10px' }}>
+      <input
+      style={{width: '100%'}}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBackendClientID(e.target.value)}
-        label="Backend Client ID"
+        placeholder="Remove ID"
       />
       <Button
         onClick={removeBackendClientListener}
-        style={{ width: '160px', marginTop: '10px' }}
+        style={{ width: '160px' }}
         size="large"
         variant="outlined"
         color="primary"
       >
-        Remove Backend
+        Remove
       </Button>
-    </>
+    </div>
   );
 }
