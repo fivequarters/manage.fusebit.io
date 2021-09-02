@@ -5,7 +5,7 @@
     "smallIcon": "/images/hubspot.svg",
     "largeIcon": "/images/hubspot.svg",
     "version": "1.0.0",
-    "description": "This Connector facilitates authentication, authorization, and API calls between Fusebit and HubSpot on your behalf.\n",
+    "description": "This Connector facilitates authentication, authorization, and API calls between Fusebit and HubSpot on your behalf.\n\n[Learn more](https://developer.fusebit.io/docs/hubspot)!\n",
     "tags": {
       "catalog": "hubspot,crm,sales,intro,popular"
     },
@@ -45,8 +45,8 @@
           "data": {
             "configuration": {
               "scope": "contacts",
-              "tokenUrl": "<%global.consts.endpoint%>/v2/account/<%global.consts.accountId%>/subscription/<%global.consts.subscriptionId%>/connector/<%this.id%>/proxy/hubspot/oauth/token",
-              "authorizationUrl": "<%global.consts.endpoint%>/v2/account/<%global.consts.accountId%>/subscription/<%global.consts.subscriptionId%>/connector/<%this.id%>/proxy/hubspot/oauth/authorize",
+              "tokenUrl": "/v2/account/<%global.consts.accountId%>/subscription/<%global.consts.subscriptionId%>/connector/<%this.id%>/proxy/hubspot/oauth/token",
+              "authorizationUrl": "/v2/account/<%global.consts.accountId%>/subscription/<%global.consts.subscriptionId%>/connector/<%this.id%>/proxy/hubspot/oauth/authorize",
               "clientId": "<%global.consts.random%>",
               "clientSecret": "<%global.consts.random%>",
               "refreshErrorLimit": 100000,
@@ -56,12 +56,12 @@
               "accessTokenExpirationBuffer": 500
             },
             "files": {
-              "package.json": "{\n  \"scripts\": {\n    \"redeploy\": \"fuse connector rm <%this.name%> && yarn deploy\",\n    \"deploy\": \"fuse connector deploy <%this.name%> -d .\",\n    \"get\": \"fuse connector get <%this.name%> -d .\"\n  },\n  \"dependencies\": {\n    \"@fusebit-int/hubspot-connector\": \"^1.0.0\",\n    \"@fusebit-int/framework\": \"^3.0.2\"\n  }\n}\n"
+              "package.json": "{\n  \"scripts\": {\n    \"redeploy\": \"fuse connector rm <%this.name%> && yarn deploy\",\n    \"deploy\": \"fuse connector deploy <%this.name%> -d .\",\n    \"get\": \"fuse connector get <%this.name%> -d .\"\n  },\n  \"dependencies\": {\n    \"@fusebit-int/hubspot-connector\": \"^1.1.0\",\n    \"@fusebit-int/framework\": \"^4.0.0\"\n  }\n}\n"
             },
-            "handler": "@fusebit-int/oauth-connector"
+            "handler": "@fusebit-int/hubspot-connector"
           },
           "id": "<%this.id%>",
-          "tags": { "fusebit.provider": "hubspot" }
+          "tags": {}
         }
       },
       "components": [
@@ -82,7 +82,7 @@
     "smallIcon": "/images/slack.svg",
     "largeIcon": "/images/slack.svg",
     "version": "1.0.0",
-    "description": "This Connector facilitates authentication, authorization, and API calls between Fusebit and Slack on your behalf.\n",
+    "description": "This Connector facilitates authentication, authorization, and API calls between Fusebit and Slack on your behalf.\n\n[Learn more](https://developer.fusebit.io/docs/slack)!\n",
     "tags": {
       "catalog": "slack,intro,popular"
     },
@@ -95,8 +95,7 @@
             "properties": {
               "id": {
                 "type": "string",
-                "minLength": 3,
-                "maxLength": 64
+                "minLength": 3
               }
             }
           }
@@ -123,8 +122,8 @@
           "data": {
             "configuration": {
               "scope": "chat:write users:read channels:read channels:join chat:write.public",
-              "tokenUrl": "<%global.consts.endpoint%>/v2/account/<%global.consts.accountId%>/subscription/<%global.consts.subscriptionId%>/connector/<%this.id%>/proxy/slack/oauth/token",
-              "authorizationUrl": "<%global.consts.endpoint%>/v2/account/<%global.consts.accountId%>/subscription/<%global.consts.subscriptionId%>/connector/<%this.id%>/proxy/slack/oauth/authorize",
+              "tokenUrl": "/v2/account/<%global.consts.accountId%>/subscription/<%global.consts.subscriptionId%>/connector/<%this.id%>/proxy/slack/oauth/token",
+              "authorizationUrl": "/v2/account/<%global.consts.accountId%>/subscription/<%global.consts.subscriptionId%>/connector/<%this.id%>/proxy/slack/oauth/authorize",
               "clientId": "<%global.consts.random%>",
               "clientSecret": "<%global.consts.random%>",
               "refreshErrorLimit": 100000,
@@ -134,12 +133,12 @@
               "accessTokenExpirationBuffer": 500
             },
             "files": {
-              "package.json": "{\n  \"scripts\": {\n    \"redeploy\": \"fuse connector rm <%this.name%> && yarn deploy\",\n    \"deploy\": \"fuse connector deploy <%this.name%> -d .\",\n    \"get\": \"fuse connector get <%this.name%> -d .\"\n  },\n  \"dependencies\": {\n    \"@fusebit-int/slack-connector\": \"^2.0.0\",\n    \"@fusebit-int/framework\": \"^3.0.2\"\n  }\n}\n"
+              "package.json": "{\n  \"scripts\": {\n    \"redeploy\": \"fuse connector rm <%this.name%> && yarn deploy\",\n    \"deploy\": \"fuse connector deploy <%this.name%> -d .\",\n    \"get\": \"fuse connector get <%this.name%> -d .\"\n  },\n  \"dependencies\": {\n    \"@fusebit-int/slack-connector\": \"^3.0.0\",\n    \"@fusebit-int/framework\": \"^4.0.0\"\n  }\n}\n"
             },
             "handler": "@fusebit-int/oauth-connector"
           },
           "id": "<%this.id%>",
-          "tags": { "fusebit.provider": "slack" }
+          "tags": {}
         }
       },
       "components": [
