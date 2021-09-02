@@ -63,7 +63,7 @@ export const useLoader = () => {
                 if (response.data.state === OperationState.active) {
                   if (response.data.operationState.status === OperationStatus.success) {
                     accept({});
-                  } else {
+                  } else if (response.data.operationState.status === OperationStatus.failed) {
                     reject({
                       message: `${response.data.operationState.errorCode}: ${response.data.operationState.errorDetails}`,
                     });
