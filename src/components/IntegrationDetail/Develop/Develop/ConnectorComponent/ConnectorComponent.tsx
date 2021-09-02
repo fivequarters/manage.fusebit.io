@@ -65,9 +65,9 @@ const ConnectorComponent: React.FC<ConnectorComponentProps> = ({
         BackdropComponent={Backdrop}
       >
         <SC.Card open={deleteModalOpen}>
-          <SC.Close onClick={() => setDeleteModalOpen(false)} src={cross} alt="cross" height="12" width="12" />
-          <SC.Title>Are you sure you want to delete this connector?</SC.Title>
-          <SC.Description>You cannot undo this action.</SC.Description>
+          <CSC.Close onClick={() => setDeleteModalOpen(false)} />
+          <CSC.ModalTitle>Are you sure you want to delete this connector?</CSC.ModalTitle>
+          <CSC.ModalDescription textAlign="center">You cannot undo this action.</CSC.ModalDescription>
           <SC.ButtonsWrapper>
             <Button
               onClick={() => setDeleteModalOpen(false)}
