@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { User } from '../interfaces/user';
-import { addClientIdentity, createClient, deleteClient } from './clients';
+import { addClientIdentity, createClient, removeClient } from './clients';
 import { BACKEND_LIST_STORAGE_ID } from './constants';
 import { generateKeyPair } from './crypto';
 import { generateNonExpiringToken } from './jwt';
@@ -38,11 +38,11 @@ export async function removedBackendClient(user: User, clientId: string) {
   const clientToBeRevoked = clients.find((c: any) => c.id === clientId);
   const filteredClients = clients.filter((c: any) => c.id !== clientId);
 
-  return Promise.all([
-    putBackendClients(user, filteredClients),
-    removeIssuer(user, clientToBeRevoked.issuer),
-    deleteClient(user, clientToBeRevoked.id),
-  ]);
+  if (clientToBeRevoked) {
+    await removeIssuer(user, clientToBeRevoked.issuer);
+  }
+  await removeClient(user, clientId);
+  await putBackendClients(user, filteredClients);
 }
 
 export async function getBackendClients(user: User) {
