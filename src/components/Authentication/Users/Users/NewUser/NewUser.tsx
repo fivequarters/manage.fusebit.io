@@ -5,10 +5,10 @@ import { Button } from '@material-ui/core';
 import { JsonForms } from '@jsonforms/react';
 import { ValidationMode } from '@jsonforms/core';
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
-import cross from '../../../../../assets/cross.svg';
 import { NewUserData } from '../../../../../interfaces/newUserData';
 import { useCapitalize } from '../../../../../hooks/useCapitalize';
 import CopyLine from '../../../../CopyLine';
+import * as CSC from '../../../../globalStyle';
 
 const schema = {
   type: 'object',
@@ -94,10 +94,10 @@ const NewUser = React.forwardRef(({ open, onClose, createUser }: Props, ref) => 
 
   return (
     <SC.Card open={open}>
-      <SC.Close onClick={() => onClose()} src={cross} alt="close" height="12" width="12" />
+      <CSC.Close onClick={() => onClose()} />
       {!userCreated ? (
         <>
-          <SC.Title>New User</SC.Title>
+          <CSC.ModalTitle>New User</CSC.ModalTitle>
           <SC.FormWrapper>
             <JsonForms
               schema={schema}
@@ -128,13 +128,13 @@ const NewUser = React.forwardRef(({ open, onClose, createUser }: Props, ref) => 
         </>
       ) : (
         <>
-          <SC.Title>
+          <CSC.ModalTitle margin="0 0 100px 0">
             User {capitalize(data.firstName || '')} {capitalize(data.lastName || '')} Created!
-          </SC.Title>
-          <SC.Description>
+          </CSC.ModalTitle>
+          <CSC.ModalDescription>
             Securely share the following link with the user. The one-time use token included in the link expires in
             eight hours.
-          </SC.Description>
+          </CSC.ModalDescription>
           <CopyLine text={token} />
           <SC.UserCreatedButtonWrapper>
             <Button
