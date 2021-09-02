@@ -16,9 +16,8 @@ export function removeIssuer(user: User, issuerId: string) {
 }
 
 export function createIssuer(user: User, client: any, keyPair: KeyPair) {
-  const randomSuffix = Date.now();
-  const issuerId = `iss-${randomSuffix}`;
-  const keyId = `key-${randomSuffix}`;
+  const issuerId = client.id;
+  const keyId = client.id;
   const issuer = {
     displayName: `Issuer for the ${client.id} client`,
     publicKeys: [
