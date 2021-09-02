@@ -18,3 +18,20 @@ export function patchClient(user: User, clientId: string, partialClient: any) {
     headers: { authorization: `bearer ${token}` },
   });
 }
+
+export function createClient(user: User) {
+  const { accountId, subscriptionId, token } = user;
+  const clientPath = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/client`;
+  const client = {
+    displayName: 'My Backend',
+    access: {
+      allow: [
+        {
+          action: '*',
+          resource: `/account/${accountId}/subscription/${subscriptionId}`,
+        },
+      ],
+    },
+  };
+  return axiosNo404MiddlewareInstance.post(clientPath, client, { headers: { authorization: `bearer ${token}` } });
+}

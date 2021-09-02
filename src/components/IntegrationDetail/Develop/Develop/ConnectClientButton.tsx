@@ -5,19 +5,18 @@ import { useLoader } from '../../../../hooks/useLoader';
 import { useError } from '../../../../hooks/useError';
 import { generateKeyPair } from '../../../../utils/crypto';
 import { generateNonExpiringToken } from '../../../../utils/jwt';
-import { useCreateClient } from '../../../../hooks/api/v1/account/client/useCreateClient';
 import { usePatchClient } from '../../../../hooks/api/v1/account/client/usePatchClient';
 import { usePutStorage } from '../../../../hooks/api/v1/account/storage/usePutStorage';
 import { useContext } from '../../../../hooks/useContext';
 import { BACKEND_LIST_STORAGE_ID } from '../../../../utils/constants';
 import { getBackendClients } from '../../../../utils/backendClients';
 import { createIssuer } from '../../../../utils/issuer';
+import { createClient } from '../../../../utils/clients';
 
 export default function ConnectClientButton() {
   const { userData } = useContext();
   const { createLoader, removeLoader } = useLoader();
   const { createError } = useError();
-  const createClient = useCreateClient<Operation>();
   const patchClient = usePatchClient<Operation>();
   const putStorage = usePutStorage<Operation>();
 
@@ -29,13 +28,13 @@ export default function ConnectClientButton() {
       if (currentBackendList.length >= 5) {
         throw new Error('You have reached the limit of 5 backend clients registered at Fusebit.');
       }
-      let client = await createNewClient(createClient, accountId, subscriptionId);
+      const { data: client } = await createClient(userData);
       const keyPairToken1 = await generateKeyPair();
       const keyPairToken2 = await generateKeyPair();
       const { data: issuerToken1 } = await createIssuer(userData, client, keyPairToken1);
       const { data: issuerToken2 } = await createIssuer(userData, client, keyPairToken2);
-      client = await patchCreatedClient(patchClient, accountId, issuerToken1, client);
-      client = await patchCreatedClient(patchClient, accountId, issuerToken2, client);
+      const patchedClient1 = await patchCreatedClient(patchClient, accountId, issuerToken1, client);
+      await patchCreatedClient(patchClient, accountId, issuerToken2, patchedClient1);
       await addClientToBackendList(
         putStorage,
         accountId,
@@ -70,26 +69,6 @@ export default function ConnectClientButton() {
     </Button>
   );
 }
-
-const createNewClient = async (createClient: any, accountId: string, subscriptionId: string) => {
-  const client = {
-    displayName: 'My Backend',
-    access: {
-      allow: [
-        {
-          action: '*',
-          resource: `/account/${accountId}/subscription/${subscriptionId}`,
-        },
-      ],
-    },
-  };
-  const response = await createClient.mutateAsync({
-    accountId: accountId,
-    client,
-  });
-  const persistedClient = response.data;
-  return persistedClient;
-};
 
 const patchCreatedClient = async (patchClient: any, accountId: string, issuer: any, client: any) => {
   const existingIdentities = client.identities || [];
