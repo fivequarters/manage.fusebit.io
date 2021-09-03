@@ -1,9 +1,7 @@
 import constate from 'constate';
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { User } from '../interfaces/user';
 import { useGetAuthLink } from '../hooks/useGetAuthLink';
-import { Decoded } from '../interfaces/decoded';
-import jwt_decode from 'jwt-decode';
 
 const { REACT_APP_AUTH0_DOMAIN, REACT_APP_LOGOUT_REDIRECT_URL } = process.env;
 
@@ -12,22 +10,16 @@ export const readLocalData = () => JSON.parse(localStorage.getItem(LS_KEY) || '{
 
 const _useContext = () => {
   const [userData, setUserData] = useState<User>({});
-  const { getAuthLink } = useGetAuthLink();
+  const { getAuthLink, isTokenExpired } = useGetAuthLink();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const __userData = readLocalData();
     if (__userData.token) {
       setUserData(__userData);
-      const TIME_T0_EXPIRE = 300000; // in miliseconds (5 mins currently)
-      const decoded: Decoded = jwt_decode(__userData.token);
-      const exp = decoded.exp;
-      const expInmilliseconds = exp * 1000;
-      const todayInMiliseconds = new Date().getTime();
-      if (todayInMiliseconds - expInmilliseconds >= TIME_T0_EXPIRE) {
-        window.location.href = getAuthLink(); //refreshing the token
-      } else if (window.location.pathname === '/quickstart') {
+      const isExpired = isTokenExpired(__userData.token);
+      if (window.location.pathname === '/quickstart' && !isExpired) {
         localStorage.setItem('integrationsContract', window.location.search);
-      } else if (window.location.pathname === '/quickstart-connectors') {
+      } else if (window.location.pathname === '/quickstart-connectors' && !isExpired) {
         localStorage.setItem('connectorsContract', window.location.search);
       }
     } else if (window.location.href.indexOf('logged-out') < 0) {

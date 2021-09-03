@@ -19,7 +19,6 @@ export const findMatchingConnectorFeed = async (connector: Entity | FinalConnect
       } else {
         connectorsFeed().then((feed) => {
           feed.forEach((item) => {
-            console.log(item.id, feedId);
             if (item.id === feedId) {
               return accept(item);
             }

@@ -19,8 +19,6 @@ import cross from '../../assets/cross.svg';
 import { useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useGetRedirectLink } from '../../hooks/useGetRedirectLink';
-import { Decoded } from '../../interfaces/decoded';
-import jwt_decode from 'jwt-decode';
 import { useGetAuthLink } from '../../hooks/useGetAuthLink';
 
 const Navbar: React.FC<Props> = ({
@@ -40,7 +38,7 @@ const Navbar: React.FC<Props> = ({
   const [drawerBottomOpen, setDrawerBottomOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
   const { getRedirectLink } = useGetRedirectLink();
-  const { getAuthLink } = useGetAuthLink();
+  const { isTokenExpired } = useGetAuthLink();
 
   const { data: integrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({
     enabled: userData.token,
@@ -64,22 +62,20 @@ const Navbar: React.FC<Props> = ({
   }, []);
 
   useEffect(() => {
+    userData.token && isTokenExpired(userData.token);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userData]);
+
+  useEffect(() => {
     if (
       (integrations?.error && integrations.error.indexOf('403') >= 0) ||
       (connectors?.error && connectors.error.indexOf('403') >= 0)
     ) {
-      const TIME_T0_EXPIRE = 300000; // in miliseconds (5 mins currently)
-      const decoded: Decoded = jwt_decode(userData.token || '');
-      const exp = decoded.exp;
-      const expInmilliseconds = exp * 1000;
-      const todayInMiliseconds = new Date().getTime();
-      if (todayInMiliseconds - expInmilliseconds >= TIME_T0_EXPIRE) {
-        window.location.href = getAuthLink(); //refreshing the token
-      } else {
-        history.push('/fatal-error');
-      }
+      history.push('/fatal-error');
     }
-  }, [integrations, connectors, history, getAuthLink, userData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [integrations, connectors, history]);
 
   const handleLogout = () => {
     setLoggingOut(true);
