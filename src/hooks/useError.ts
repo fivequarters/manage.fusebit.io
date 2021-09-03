@@ -63,7 +63,7 @@ export const useError = () => {
     if (error) error.remove();
   };
 
-  const createError = (errorMessage: string) => {
+  const createError = (err: any) => {
     removeError(); // we dont want 2 errors at the same time
     const error = document.createElement('div');
     error.setAttribute('id', 'error');
@@ -80,7 +80,7 @@ export const useError = () => {
 
     const text = document.createElement('p');
     text.setAttribute('style', errorTextCss);
-    text.innerHTML = errorMessage;
+    text.innerHTML = err.response.data.message.split(':')[1]; // the element 0 shows the key, the 1 show the value, i only want the value so i get the element 1
     error.appendChild(text);
 
     const cross = document.createElement('div');
