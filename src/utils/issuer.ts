@@ -21,7 +21,7 @@ export async function createIssuer(user: User, client: Client, keyPair: KeyPair)
   const issuerId = `iss-${client.id}`;
   const keyId = client.id;
   const issuer = {
-    displayName: `Issuer for the ${client.id} client`,
+    displayName: `API Key issuer associated with the ${client.id} client`,
     publicKeys: [
       {
         keyId,
