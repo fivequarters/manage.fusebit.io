@@ -63,3 +63,12 @@ export async function createClient(user: User): Promise<Client> {
   });
   return response.data;
 }
+
+export async function patchClient(user: User, client: Partial<Client>): Promise<Client> {
+  const { accountId, token } = user;
+  const clientPath = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/client/${client.id}`;
+  const response = await axiosNo404MiddlewareInstance.patch<Client>(clientPath, client, {
+    headers: { authorization: `bearer ${token}` },
+  });
+  return response.data;
+}
