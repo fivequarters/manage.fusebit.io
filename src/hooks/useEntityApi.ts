@@ -169,9 +169,9 @@ export const useEntityApi = (preventLoader?: boolean) => {
             subscriptionId: userData.subscriptionId,
           };
           isIdentity ? await deleteIndentity.mutateAsync(params) : await deleteInstall.mutateAsync(params);
-          return waitForEntityStateChange(isIdentity ? `integration/${id}/instance` : `connector/${id}/identity`, [
-            item.id,
-          ]);
+          // return waitForEntityStateChange(isIdentity ? `integration/${id}/instance` : `connector/${id}/identity`, [
+          //   item.id,
+          // ]);
         })
       );
       if (callback) callback();
