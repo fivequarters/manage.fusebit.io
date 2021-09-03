@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Client } from '../interfaces/client';
 import { Issuer } from '../interfaces/issuer';
 import { User } from '../interfaces/user';
 
@@ -6,25 +7,26 @@ const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
 const axiosNo404MiddlewareInstance = axios.create();
 
-export async function removeClient(user: User, clientId: string) {
+export async function removeClient(user: User, clientId: string): Promise<void> {
   const { accountId, token } = user;
   const clientPath = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/client/${clientId}`;
-  return axiosNo404MiddlewareInstance.delete(clientPath, {
+  await axiosNo404MiddlewareInstance.delete<Client>(clientPath, {
     headers: { authorization: `bearer ${token}` },
     validateStatus: (status) => status === 204 || status === 404,
   });
 }
 
-export function getClient(user: User, clientId: string) {
+export async function getClient(user: User, clientId: string): Promise<Client> {
   const { accountId, token } = user;
   const clientPath = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/client/${clientId}`;
-  return axiosNo404MiddlewareInstance.get(clientPath, {
+  const response = await axiosNo404MiddlewareInstance.get<Client>(clientPath, {
     headers: { authorization: `bearer ${token}` },
   });
+  return response.data;
 }
 
-export async function addClientIdentity(user: User, clientId: string, issuer: Issuer) {
-  const { data: client } = await getClient(user, clientId);
+export async function addClientIdentity(user: User, clientId: string, issuer: Issuer): Promise<Client> {
+  const client = await getClient(user, clientId);
 
   const { accountId, token } = user;
   const identities = client.identities || [];
@@ -36,12 +38,13 @@ export async function addClientIdentity(user: User, clientId: string, issuer: Is
     identities,
   };
   const clientPath = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/client/${clientId}`;
-  return axiosNo404MiddlewareInstance.patch(clientPath, partialClient, {
+  const response = await axiosNo404MiddlewareInstance.patch<Client>(clientPath, partialClient, {
     headers: { authorization: `bearer ${token}` },
   });
+  return response.data;
 }
 
-export function createClient(user: User) {
+export async function createClient(user: User): Promise<Client> {
   const { accountId, token } = user;
   const clientPath = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/client`;
   const client = {
@@ -55,5 +58,8 @@ export function createClient(user: User) {
       ],
     },
   };
-  return axiosNo404MiddlewareInstance.post(clientPath, client, { headers: { authorization: `bearer ${token}` } });
+  const response = await axiosNo404MiddlewareInstance.post<Client>(clientPath, client, {
+    headers: { authorization: `bearer ${token}` },
+  });
+  return response.data;
 }

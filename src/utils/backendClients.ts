@@ -19,9 +19,9 @@ export async function createBackendClient(user: User): Promise<BackendClient> {
     throw new Error('You have reached the limit of 5 backend clients registered at Fusebit.');
   }
 
-  const { data: client } = await createClient(user);
+  const client = await createClient(user);
   const ketPair = await generateKeyPair();
-  const { data: issuer } = await createIssuer(user, client, ketPair);
+  const issuer = await createIssuer(user, client, ketPair);
   await addClientIdentity(user, client.id, issuer);
 
   const nonExpiringToken = await generateNonExpiringToken(ketPair, issuer);
@@ -66,14 +66,15 @@ export async function getBackendClients(user: User): Promise<BackendClient[]> {
   }
 }
 
-function putBackendClients(user: User, backendClients: BackendClient[]) {
+async function putBackendClients(user: User, backendClients: BackendClient[]): Promise<Storage<BackendClient>> {
   const { accountId, subscriptionId, token } = user;
   const clientsPaths = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/subscription/${subscriptionId}/storage/${BACKEND_LIST_STORAGE_ID}`;
-  return axiosNo404MiddlewareInstance.put(
+  const response = await axiosNo404MiddlewareInstance.put<Storage<BackendClient>>(
     clientsPaths,
     { data: backendClients },
     {
       headers: { Authorization: `Bearer ${token}` },
     }
   );
+  return response.data;
 }
