@@ -68,7 +68,7 @@ export const useEntityApi = (preventLoader?: boolean) => {
         return token;
       }
     } catch (e) {
-      createError(e.message);
+      createError(e);
       removeLoader();
     } finally {
       removeLoader();
@@ -90,7 +90,7 @@ export const useEntityApi = (preventLoader?: boolean) => {
         await waitForEntityStateChange('connector', [newData?.data.id]);
       }
     } catch (e) {
-      createError(e.message);
+      createError(e);
     } finally {
       if (!preventLoader) removeLoader();
     }
@@ -145,7 +145,7 @@ export const useEntityApi = (preventLoader?: boolean) => {
       await waitForEntityStateChange('integration', [integrationData?.data.id || '']);
       if (callback) callback();
     } catch (e) {
-      createError(e.message);
+      createError(e);
     } finally {
       if (!preventLoader) removeLoader();
     }
@@ -176,7 +176,7 @@ export const useEntityApi = (preventLoader?: boolean) => {
       );
       if (callback) callback();
     } catch (e) {
-      createError(e.message);
+      createError(e);
     } finally {
       if (!preventLoader) removeLoader();
     }
@@ -207,7 +207,7 @@ export const useEntityApi = (preventLoader?: boolean) => {
       // }
       if (callback) callback();
     } catch (e) {
-      createError(e.message);
+      createError(e);
     } finally {
       removeLoader();
     }
