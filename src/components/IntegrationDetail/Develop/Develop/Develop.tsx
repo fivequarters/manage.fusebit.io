@@ -6,9 +6,6 @@ import { Button, Modal, Backdrop, Fade } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import arrow from '../../../../assets/arrow-right-black.svg';
 import Connect from './Connect';
-import CreateBackendClient from './CreateBackendClient';
-import DeleteBackendClient from './DeleteBackendClient';
-import ListBackendClients from './ListBackendClients';
 import { useLoader } from '../../../../hooks/useLoader';
 import { useError } from '../../../../hooks/useError';
 import { useContext } from '../../../../hooks/useContext';
@@ -44,9 +41,7 @@ const Develop: React.FC = () => {
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
   });
-
   const { createLoader, removeLoader } = useLoader();
-
   const { createError } = useError();
   const [editOpen, setEditOpen] = React.useState(false);
   const [connectOpen, setConnectOpen] = React.useState(false);
@@ -271,11 +266,16 @@ const Develop: React.FC = () => {
           <SC.Card>
             <SC.CardTitle>Your Application</SC.CardTitle>
             <SC.CardButtonWrapper>
-              <SC.CardConnectorButtonsWrapper style={{ display: 'flex', flexDirection: 'column' }}>
-                <CreateBackendClient />
-                <ListBackendClients />
-                <DeleteBackendClient />
-              </SC.CardConnectorButtonsWrapper>
+              <Button
+                onClick={() => setConnectOpen(true)}
+                startIcon={<AddIcon />}
+                style={{ width: '200px' }}
+                size="large"
+                variant="outlined"
+                color="primary"
+              >
+                Connect
+              </Button>
             </SC.CardButtonWrapper>
           </SC.Card>
           <SC.LinkWrapper>
