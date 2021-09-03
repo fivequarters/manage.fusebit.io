@@ -13,9 +13,9 @@ const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 const axiosNo404MiddlewareInstance = axios.create();
 
 export async function createBackendClient(user: User): Promise<BackendClient> {
-  const currentBackends = await getBackendClients(user);
+  const backendClients = await getBackendClients(user);
 
-  if (currentBackends.length >= 5) {
+  if (backendClients.length >= 5) {
     throw new Error('You have reached the limit of 5 backend clients registered at Fusebit.');
   }
 
@@ -32,7 +32,7 @@ export async function createBackendClient(user: User): Promise<BackendClient> {
     issuer: issuer.id,
     tokenSignature,
   };
-  const backends = [...currentBackends, backendClient];
+  const backends = [...backendClients, backendClient];
   await putBackendClients(user, backends);
 
   return {
