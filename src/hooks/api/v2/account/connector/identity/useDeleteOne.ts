@@ -8,7 +8,7 @@ export const useAccountConnectorIdentityDeleteOne = <T>() => {
 
   return useMutation(
     (params: Params) => {
-      const { accountId, subscriptionId, id, ...data } = params;
+      const { accountId, subscriptionId, id, data } = params;
       return axios<T>(
         `/v2/account/${accountId}/subscription/${subscriptionId}/connector/${id}/identity/${data.id}`,
         'delete'
