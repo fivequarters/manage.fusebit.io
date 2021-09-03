@@ -6,13 +6,14 @@ import { useLocation } from 'react-router-dom';
 const errorCss = `
     display: flex;
     align-items: center;
-    width: 86%;
+    width: max-content;
+    max-width: 750px;
     padding: 10px 24px;
     border-radius: 8px;
     background-color: #F83420;
     box-shadow: 0px 6px 23px rgba(224, 70, 4, 0.3);
     position: absolute;
-    top: 240px;
+    top: 285px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 99;
@@ -39,6 +40,7 @@ const errorTextCss = `
     font-size: 14px;
     line-height: 16px;
     margin-left: 5px;
+    margin-right: 15px;
     `;
 
 const errorCross = `
