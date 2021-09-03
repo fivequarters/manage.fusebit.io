@@ -48,7 +48,7 @@ export const useCreateDataFromFeed = () => {
             : getRedirectLink('/integration/' + firstIntegration?.id + '/develop')
         );
       } catch (e) {
-        createError(e.message);
+        createError(e);
         removeLoader();
         return false;
       }

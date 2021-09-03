@@ -119,7 +119,7 @@ const Develop: React.FC = () => {
       reloadIntegration();
       reloadConnectors();
     } catch (e) {
-      createError(e.message);
+      createError(e);
     } finally {
       removeLoader();
       setConnectorPickerOpen(false);
