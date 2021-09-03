@@ -38,6 +38,15 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
     if (errors.length > 0) {
       setValidationMode('ValidateAndShow');
     } else {
+      //normalize data
+      const keys = Object.keys(data);
+      for (let i = 0; keys.length > i; i++) {
+        const id: any = data[keys[i]].id;
+        if (typeof id === 'string') {
+          data[keys[i]].id = id.replace(/\s/g, '');
+        }
+      }
+
       //send data with customized form
       onSubmit(rawActiveTemplate, { ...data });
     }

@@ -61,7 +61,7 @@
             "handler": "@fusebit-int/hubspot-connector"
           },
           "id": "<%this.id%>",
-          "tags": {}
+          "tags": { "fusebit.provider": "hubspot" }
         }
       },
       "components": [
@@ -95,7 +95,8 @@
             "properties": {
               "id": {
                 "type": "string",
-                "minLength": 3
+                "minLength": 3,
+                "maxLength": 64
               }
             }
           }
@@ -138,7 +139,7 @@
             "handler": "@fusebit-int/oauth-connector"
           },
           "id": "<%this.id%>",
-          "tags": {}
+          "tags": { "fusebit.provider": "slack" }
         }
       },
       "components": [
