@@ -101,7 +101,7 @@
             "handler": "@fusebit-int/hubspot-connector"
           },
           "id": "<%this.id%>",
-          "tags": { "fusebit.provider": "hubspot" }
+          "tags": {}
         },
         "hubspotIntegration": {
           "entityType": "integration",
@@ -150,8 +150,7 @@
             "properties": {
               "id": {
                 "type": "string",
-                "minLength": 3,
-                "maxLength": 64
+                "minLength": 3
               }
             }
           },
@@ -160,8 +159,7 @@
             "properties": {
               "id": {
                 "type": "string",
-                "minLength": 3,
-                "maxLength": 64
+                "minLength": 3
               }
             }
           },
@@ -235,7 +233,7 @@
             "handler": "@fusebit-int/slack-connector"
           },
           "id": "<%this.id%>",
-          "tags": { "fusebit.provider": "slack" }
+          "tags": {}
         },
         "slackIntegration": {
           "entityType": "integration",
