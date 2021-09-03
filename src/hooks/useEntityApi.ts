@@ -47,7 +47,7 @@ export const useEntityApi = (preventLoader?: boolean) => {
   const createEntity = async (entity: Entity, commonTags?: { [key: string]: string }) => {
     const obj = {
       data: entity.data,
-      id: null, // CAMBIA ESTO POR entity.id
+      id: entity.id,
       tags: { ...(commonTags || {}), ...entity.tags },
       accountId: userData.accountId,
       subscriptionId: userData.subscriptionId,
