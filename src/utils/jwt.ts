@@ -1,12 +1,13 @@
+import { Client } from '../interfaces/client';
 import { KeyPair } from '../interfaces/keyPair';
 import { Issuer } from '../interfaces/issuer';
 import { TokenPayload } from '../interfaces/tokenPayload';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
-export function generateNonExpiringToken(keyPair: KeyPair, issuer: Issuer): Promise<string> {
+export function generateNonExpiringToken(keyPair: KeyPair, client: Client, issuer: Issuer): Promise<string> {
   const tokenPayload = {
-    sub: issuer.id,
+    sub: client.id,
     aud: REACT_APP_FUSEBIT_DEPLOYMENT as string,
   };
   return signJwt(tokenPayload, issuer, keyPair.privateKey);

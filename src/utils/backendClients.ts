@@ -24,7 +24,7 @@ export async function createBackendClient(user: User): Promise<BackendClient> {
   const issuer = await createIssuer(user, client, ketPair);
   await addClientIdentity(user, client.id, issuer);
 
-  const nonExpiringToken = await generateNonExpiringToken(ketPair, issuer);
+  const nonExpiringToken = await generateNonExpiringToken(ketPair, client, issuer);
   const tokenSignature = nonExpiringToken.split('.')[2];
 
   const backendClient = {
