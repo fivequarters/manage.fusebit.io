@@ -47,47 +47,36 @@ export const useLoader = () => {
   };
 
   const waitForEntityStateChange = async (entityType: string, entityIds: string[]) => {
-    const intervalIds: { [key: string]: number } = {};
     const promises = entityIds.map((entityId: string) => {
-      return new Promise((accept: Function, reject: Function) => {
-        intervalIds[entityId] = Number(
-          setInterval(() => {
-            if (!entityId) {
-              return accept({});
-            }
-            axios<EntityState>(
+      return new Promise(async (accept: Function, reject: Function) => {
+        if (!entityId) {
+          return accept({});
+        }
+        let lastResponse;
+        while (!lastResponse || lastResponse.data.operationState.status === OperationStatus.processing) {
+          try {
+            lastResponse = await axios<EntityState>(
               `/v2/account/${userData.accountId}/subscription/${userData.subscriptionId}/${entityType}/${entityId}`,
               'get'
-            )
-              .then((response) => {
-                if (response.data.state === OperationState.active) {
-                  if (response.data.operationState.status === OperationStatus.success) {
-                    accept({});
-                  } else if (response.data.operationState.status === OperationStatus.failed) {
-                    reject({
-                      message: `${response.data.operationState.errorCode}: ${response.data.operationState.errorDetails}`,
-                    });
-                  }
-                }
-              })
-              .catch((e: any) => {
-                reject(e);
-              });
-          }, 1000)
-        );
+            );
+          } catch (err) {
+            reject(err);
+          }
+        }
+        const { operationState } = lastResponse.data;
+        if (operationState.status === OperationStatus.success) {
+          accept({});
+        } else {
+          const detailedError = operationState.errorCode
+            ? `${operationState.errorCode}: ${operationState.errorDetails}`
+            : '';
+          reject({
+            message: `Failed to create entity. ${detailedError}`,
+          });
+        }
       });
     });
-    return new Promise((globalAccept: Function, globalReject: Function) => {
-      Promise.all(promises)
-        .then((_) => {
-          Object.keys(intervalIds).forEach((entityId: string) => clearInterval(intervalIds[entityId]));
-          globalAccept({});
-        })
-        .catch((e: any) => {
-          Object.keys(intervalIds).forEach((entityId: string) => clearInterval(intervalIds[entityId]));
-          globalReject(e);
-        });
-    });
+    return Promise.all(promises);
   };
 
   return {
