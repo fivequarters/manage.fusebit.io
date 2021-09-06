@@ -7,6 +7,8 @@ import jwt_decode from 'jwt-decode';
 const { REACT_APP_AUTH0_DOMAIN, REACT_APP_AUTH0_CLIENT_ID, REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 export const LS_KEY = `T29M03eleloegehOxGtpEPel18JfM3djp5pUL4Jm`;
 
+export const readLocalData = () => JSON.parse(localStorage.getItem(LS_KEY) || '{}');
+
 export const findMatchingConnectorFeed = async (connector: Entity | FinalConnector) => {
   return new Promise<Feed>((accept, reject) => {
     if (connector.tags) {
@@ -42,7 +44,9 @@ export const getAuthLink = () => {
   return authLink;
 };
 
-export const isTokenExpired = (token: string) => {
+export const isTokenExpired = () => {
+  const __userData = readLocalData();
+  const token = __userData.token;
   const TIME_T0_EXPIRE = 300000; // in miliseconds (5 mins currently)
   const decoded: Decoded = jwt_decode(token);
   const exp = decoded.exp;
@@ -51,10 +55,11 @@ export const isTokenExpired = (token: string) => {
   return expInMilliseconds - todayInMiliseconds <= TIME_T0_EXPIRE; // if true it expired
 };
 
-export const handleTokenExpired = (expired: boolean) => {
+export const validateToken = ({ onValid }: { onValid?: () => void }) => {
+  const expired = isTokenExpired();
   if (expired) {
     window.location.href = getAuthLink(); //refreshing the token
+  } else {
+    onValid?.();
   }
 };
-
-export const readLocalData = () => JSON.parse(localStorage.getItem(LS_KEY) || '{}');

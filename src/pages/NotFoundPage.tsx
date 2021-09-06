@@ -3,7 +3,7 @@ import * as CSC from '../components/globalStyle';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useContext } from '../hooks/useContext';
 import { useGetRedirectLink } from '../hooks/useGetRedirectLink';
-import { handleTokenExpired, isTokenExpired } from '../utils/utils';
+import { validateToken } from '../utils/utils';
 
 const NotFoundPage: FC<{}> = (): ReactElement => {
   const history = useHistory();
@@ -30,9 +30,7 @@ const NotFoundPage: FC<{}> = (): ReactElement => {
     } else if (refreshToken === 'true' && refreshTokenUrl) {
       history.push(refreshTokenUrl);
     } else if (userData.accountId && userData.subscriptionId && userData.token) {
-      const expired = isTokenExpired(userData.token);
-      handleTokenExpired(expired);
-      !expired && history.push(getRedirectLink('/integrations/overview'));
+      validateToken({ onValid: () => history.push(getRedirectLink('/integrations/overview')) });
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

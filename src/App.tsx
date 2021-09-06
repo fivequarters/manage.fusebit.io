@@ -9,17 +9,13 @@ import { routes } from './config';
 import { APP_TITLE } from './utils/constants';
 import { RouteItem } from './interfaces/router';
 import { ContextProvider } from './hooks/useContext';
-import { handleTokenExpired, isTokenExpired, readLocalData } from './utils/utils';
+import { validateToken } from './utils/utils';
 
 function App() {
   const queryClient = new QueryClient();
 
   useEffect(() => {
-    const __userData = readLocalData();
-    if (__userData.token) {
-      const expired = isTokenExpired(__userData.token);
-      handleTokenExpired(expired);
-    }
+    validateToken({});
   }, []);
 
   return (
