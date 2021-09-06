@@ -19,7 +19,6 @@ import cross from '../../assets/cross.svg';
 import { useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useGetRedirectLink } from '../../hooks/useGetRedirectLink';
-import { useGetAuthLink } from '../../hooks/useGetAuthLink';
 
 const Navbar: React.FC<Props> = ({
   sectionName,
@@ -38,7 +37,6 @@ const Navbar: React.FC<Props> = ({
   const [drawerBottomOpen, setDrawerBottomOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
   const { getRedirectLink } = useGetRedirectLink();
-  const { isTokenExpired } = useGetAuthLink();
 
   const { data: integrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({
     enabled: userData.token,
@@ -60,12 +58,6 @@ const Navbar: React.FC<Props> = ({
     return () => unlisten();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    userData.token && isTokenExpired(userData.token);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userData]);
 
   useEffect(() => {
     if (

@@ -1,25 +1,20 @@
 import constate from 'constate';
-import { useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { User } from '../interfaces/user';
-import { useGetAuthLink } from '../hooks/useGetAuthLink';
+import { getAuthLink, LS_KEY, readLocalData } from '../utils/utils';
 
 const { REACT_APP_AUTH0_DOMAIN, REACT_APP_LOGOUT_REDIRECT_URL } = process.env;
 
-const LS_KEY = `T29M03eleloegehOxGtpEPel18JfM3djp5pUL4Jm`;
-export const readLocalData = () => JSON.parse(localStorage.getItem(LS_KEY) || '{}');
-
 const _useContext = () => {
   const [userData, setUserData] = useState<User>({});
-  const { getAuthLink, isTokenExpired } = useGetAuthLink();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const __userData = readLocalData();
     if (__userData.token) {
       setUserData(__userData);
-      const isExpired = isTokenExpired(__userData.token);
-      if (window.location.pathname === '/quickstart' && !isExpired) {
+      if (window.location.pathname === '/quickstart') {
         localStorage.setItem('integrationsContract', window.location.search);
-      } else if (window.location.pathname === '/quickstart-connectors' && !isExpired) {
+      } else if (window.location.pathname === '/quickstart-connectors') {
         localStorage.setItem('connectorsContract', window.location.search);
       }
     } else if (window.location.href.indexOf('logged-out') < 0) {
