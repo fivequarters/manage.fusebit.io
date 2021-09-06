@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { isTokenExpired, readLocalData } from '../utils/utils';
+import { handleTokenExpired, isTokenExpired, readLocalData } from '../utils/utils';
 import { useContext } from './useContext';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
@@ -16,7 +16,8 @@ axios.interceptors.response.use(
     const statusCode = Number(error.response.status);
     const __userData = readLocalData();
     if (statusCode === 403) {
-      isTokenExpired(__userData.token);
+      const expired = isTokenExpired(__userData.token);
+      handleTokenExpired(expired);
     } else if (statusCode === 404) {
       let toUrl = '/logged-out';
       if (__userData.token) {

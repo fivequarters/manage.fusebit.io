@@ -42,16 +42,18 @@ export const getAuthLink = () => {
   return authLink;
 };
 
-export const isTokenExpired = async (token: string) => {
+export const isTokenExpired = (token: string) => {
   const TIME_T0_EXPIRE = 300000; // in miliseconds (5 mins currently)
   const decoded: Decoded = jwt_decode(token);
   const exp = decoded.exp;
   const expInMilliseconds = exp * 1000;
   const todayInMiliseconds = new Date().getTime();
-  if (expInMilliseconds - todayInMiliseconds <= TIME_T0_EXPIRE) {
+  return expInMilliseconds - todayInMiliseconds <= TIME_T0_EXPIRE; // if true it expired
+};
+
+export const handleTokenExpired = (expired: boolean) => {
+  if (expired) {
     window.location.href = getAuthLink(); //refreshing the token
-  } else {
-    return false;
   }
 };
 
