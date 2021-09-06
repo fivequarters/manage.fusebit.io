@@ -55,7 +55,7 @@ export const isTokenExpired = () => {
   return expInMilliseconds - todayInMiliseconds <= TIME_T0_EXPIRE; // if true it expired
 };
 
-export const validateToken = ({ onValid }: { onValid?: () => void }) => {
+export const validateToken = ({ onValid }: { onValid?: () => void } = {}) => {
   const expired = isTokenExpired();
   if (expired) {
     window.location.href = getAuthLink(); //refreshing the token

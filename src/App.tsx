@@ -15,7 +15,7 @@ function App() {
   const queryClient = new QueryClient();
 
   useEffect(() => {
-    validateToken({});
+    validateToken();
   }, []);
 
   return (
