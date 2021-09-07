@@ -79,6 +79,11 @@ const TableComponent: React.FC<Props> = ({
     users,
   });
 
+  const isPlural = selected.length > 1;
+  const integrationText = integrationTable && (isPlural ? 'these Integrations' : 'this Integration');
+  const connectorText = connectorTable && (isPlural ? 'these Connectors' : 'this Connector');
+  const usersText = !integrationTable && !connectorTable && (isPlural ? 'these Users' : 'this User');
+
   return (
     <SC.Wrapper>
       {integrationTable ? (
@@ -134,19 +139,7 @@ const TableComponent: React.FC<Props> = ({
         open={deleteModalOpen}
         setOpen={setDeleteModalOpen}
         handleConfirmation={handleRowDelete}
-        title={`Are you sure you want to delete ${
-          integrationTable
-            ? selected.length > 1
-              ? 'these Integrations'
-              : 'this Integration'
-            : connectorTable
-            ? selected.length > 1
-              ? 'these Connectors'
-              : 'this Connector'
-            : selected.length > 1
-            ? 'these Users'
-            : 'this User'
-        }?`}
+        title={`Are you sure you want to delete ${integrationText || connectorText || usersText}?`}
         description={`You cannot undo this action ${
           integrationTable || connectorTable ? 'and any linked applications may not work as expected.' : ''
         }`}
