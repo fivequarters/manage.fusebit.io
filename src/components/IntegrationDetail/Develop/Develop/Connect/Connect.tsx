@@ -8,12 +8,11 @@ import { Props } from '../../../../../interfaces/connect';
 import { Decoded } from '../../../../../interfaces/decoded';
 import { useContext } from '../../../../../hooks/useContext';
 import jwt_decode from 'jwt-decode';
-import { useGetAuthLink } from '../../../../../hooks/useGetAuthLink';
 import CopyLine from '../../../../CopyLine';
+import { getAuthLink } from '../../../../../utils/utils';
 
 const Connect = React.forwardRef(({ onClose, open }: Props, ref) => {
   const { userData } = useContext();
-  const { getAuthLink } = useGetAuthLink();
   const [expDate, setExpDate] = React.useState('');
 
   const handleRefresh = () => {

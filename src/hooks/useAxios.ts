@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { readLocalData, useContext } from './useContext';
+import { readLocalData, validateToken } from '../utils/utils';
+import { useContext } from './useContext';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
@@ -13,8 +14,10 @@ axios.interceptors.response.use(
   (response) => response,
   (error) => {
     const statusCode = Number(error.response.status);
-    if (statusCode === 404) {
-      const __userData = readLocalData();
+    const __userData = readLocalData();
+    if (statusCode === 403) {
+      validateToken();
+    } else if (statusCode === 404) {
       let toUrl = '/logged-out';
       if (__userData.token) {
         if (window.location.href.indexOf('connector') >= 0) toUrl = '/connectors';
