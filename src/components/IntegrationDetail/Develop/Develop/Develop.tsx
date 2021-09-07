@@ -265,6 +265,18 @@ const Develop: React.FC = () => {
         <SC.FlexDown>
           <SC.Card>
             <SC.CardTitle>Your Application</SC.CardTitle>
+            <SC.NoApplicationsConfiguredWrapper>
+              <SC.Flex>
+                <SC.DashedBox />
+                <SC.NoApplicationsConfiguredTitle>
+                  No application connections configured
+                </SC.NoApplicationsConfiguredTitle>
+              </SC.Flex>
+              <SC.NoApplicationsConfiguredDescription>
+                Once you have tested your integration, click “Connect” to see how to call it from your application.
+              </SC.NoApplicationsConfiguredDescription>
+            </SC.NoApplicationsConfiguredWrapper>
+
             <SC.CardButtonWrapper>
               <Button
                 onClick={() => setConnectOpen(true)}
