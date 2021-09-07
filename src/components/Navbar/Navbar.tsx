@@ -78,6 +78,12 @@ const Navbar: React.FC<Props> = ({
     }, 250);
   };
 
+  const to = integrationsLink
+    ? getRedirectLink('/integrations/overview')
+    : authenticationLink
+    ? getRedirectLink('/authentication/users')
+    : getRedirectLink('/connectors/overview');
+
   return (
     <SC.Background>
       <Container maxWidth="lg">
@@ -95,15 +101,7 @@ const Navbar: React.FC<Props> = ({
               <>
                 <SC.Flex>
                   {sectionName !== 'Integrations' && sectionName !== 'Connectors' && (
-                    <Link
-                      to={
-                        integrationsLink
-                          ? getRedirectLink('/integrations/overview')
-                          : authenticationLink
-                          ? getRedirectLink('/authentication/users')
-                          : getRedirectLink('/connectors/overview')
-                      }
-                    >
+                    <Link to={to}>
                       <SC.Flex mobileHidden={true}>
                         <SC.SectionLink>
                           {integrationsLink ? 'Integrations' : authenticationLink ? 'Authentication' : 'Connectors'}
