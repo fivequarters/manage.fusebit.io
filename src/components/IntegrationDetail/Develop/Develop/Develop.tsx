@@ -302,10 +302,7 @@ const Develop: React.FC = () => {
                 <CSC.Spinner />
               </CSC.LoaderContainer>
             ) : (
-              <SC.CardIntegration>
-                <img src={arrow} alt="arrow" />
-                {integrationData?.data.id}
-              </SC.CardIntegration>
+              <SC.CardIntegration>{integrationData?.data.id}</SC.CardIntegration>
             )}
             <SC.CardButtonWrapper>
               <Button
