@@ -37,7 +37,9 @@ const Installs: React.FC = () => {
         open={deleteOpen}
         setOpen={setDeleteOpen}
         handleConfirmation={handleDelete}
-        title={`Are you sure you want to delete this Install?`}
+        title={`Are you sure you want to delete ${
+          installsData ? (installsData?.data.total > 1 ? 'these Installs?' : 'this Install?') : ''
+        }`}
         description={`Your tenants will have to re-install this integration in their account.`}
       />
       <SC.Header>
