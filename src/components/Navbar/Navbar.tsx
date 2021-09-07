@@ -315,7 +315,7 @@ const Navbar: React.FC<Props> = ({
                     : getRedirectLink('/connectors/overview')
                 }
               >
-                <SC.SectionLink>{sectionName} asdasd</SC.SectionLink>
+                <SC.SectionLink>{sectionName}</SC.SectionLink>
               </Link>
             )}
           </SC.FlexDown>
