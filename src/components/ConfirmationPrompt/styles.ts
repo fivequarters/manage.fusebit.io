@@ -7,7 +7,7 @@ export const Card = styled.div<{ open: boolean }>`
   transform: translate(-50%, -50%);
   background-color: white;
   opacity: ${(props) => (props.open ? 1 : 0)};
-  padding: 64px 64px;
+  padding: 64px;
   width: 449px;
   border-radius: 8px;
   box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
