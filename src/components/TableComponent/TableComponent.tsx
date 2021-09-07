@@ -30,6 +30,7 @@ import { useEntityApi } from '../../hooks/useEntityApi';
 import { Account } from '../../interfaces/account';
 import NewUser from '../Authentication/Users/Users/NewUser';
 import { Row } from '../../interfaces/tableRow';
+import ConfirmationPrompt from '../ConfirmationPrompt/ConfirmationPrompt';
 
 const TableComponent: React.FC<Props> = ({
   headless,
@@ -65,6 +66,8 @@ const TableComponent: React.FC<Props> = ({
     setNewUserOpen,
     rows,
     selected,
+    deleteModalOpen,
+    setDeleteModalOpen,
   } = useEntityTable({
     headless,
     setHeadless,
@@ -127,6 +130,28 @@ const TableComponent: React.FC<Props> = ({
         </Modal>
       )}
 
+      <ConfirmationPrompt
+        open={deleteModalOpen}
+        setOpen={setDeleteModalOpen}
+        handleConfirmation={handleRowDelete}
+        title={`Are you sure you want to delete ${
+          integrationTable
+            ? selected.length > 1
+              ? 'these Integrations'
+              : 'this Integration'
+            : connectorTable
+            ? selected.length > 1
+              ? 'these Connectors'
+              : 'this Connector'
+            : selected.length > 1
+            ? 'these Users'
+            : 'this User'
+        }?`}
+        description={`You cannot undo this action ${
+          integrationTable || connectorTable ? 'and any linked applications may not work as expected.' : ''
+        }`}
+      />
+
       <SC.ButtonContainer>
         <SC.ButtonMargin>
           <Button
@@ -153,7 +178,7 @@ const TableComponent: React.FC<Props> = ({
             {selected.length} selected
             <SC.DeleteIconWrapper>
               <Tooltip title="Delete">
-                <IconButton onClick={handleRowDelete}>
+                <IconButton onClick={() => setDeleteModalOpen(true)}>
                   <DeleteIcon />
                 </IconButton>
               </Tooltip>

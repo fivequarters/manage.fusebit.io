@@ -12,6 +12,11 @@ const ConfirmationPrompt: React.FC<Props> = ({
   description,
   confirmationButtonText,
 }) => {
+  const onConfirm = () => {
+    setOpen(false);
+    handleConfirmation();
+  };
+
   return (
     <Modal
       aria-labelledby="transition-modal-title"
@@ -23,7 +28,7 @@ const ConfirmationPrompt: React.FC<Props> = ({
     >
       <SC.Card open={open}>
         <CSC.Close onClick={() => setOpen(false)} />
-        <CSC.ModalTitle>{title}</CSC.ModalTitle>
+        <CSC.ModalTitle margin="0 0 16px 0">{title}</CSC.ModalTitle>
         <CSC.ModalDescription textAlign="center">{description}</CSC.ModalDescription>
         <SC.ButtonsWrapper>
           <Button
@@ -35,13 +40,7 @@ const ConfirmationPrompt: React.FC<Props> = ({
           >
             Cancel
           </Button>
-          <Button
-            onClick={() => handleConfirmation()}
-            style={{ width: '77px' }}
-            size="medium"
-            variant="contained"
-            color="primary"
-          >
+          <Button onClick={onConfirm} style={{ width: '77px' }} size="medium" variant="contained" color="primary">
             {confirmationButtonText ? confirmationButtonText : 'Delete'}
           </Button>
         </SC.ButtonsWrapper>

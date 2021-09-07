@@ -8,7 +8,7 @@ export const Card = styled.div<{ open: boolean }>`
   background-color: white;
   opacity: ${(props) => (props.open ? 1 : 0)};
   padding: 64px;
-  width: 449px;
+  width: 480px;
   border-radius: 8px;
   box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
   outline: transparent;
@@ -27,4 +27,5 @@ export const ButtonsWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 40px;
 `;
