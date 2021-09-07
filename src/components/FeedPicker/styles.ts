@@ -107,6 +107,7 @@ export const ColumnBr = styled.div`
 export const ColumnSearchWrapper = styled.div`
   position: relative;
   margin-bottom: 32px;
+  min-width: 254px;
 `;
 
 export const ColumnSearch = styled.input`
@@ -206,7 +207,7 @@ export const ConnectorCustomize = styled.div`
   margin-right: 24px;
 `;
 
-export const FormWrapper = styled.form`
+export const FormWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 316px;

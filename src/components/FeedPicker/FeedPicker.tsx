@@ -38,6 +38,15 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
     if (errors.length > 0) {
       setValidationMode('ValidateAndShow');
     } else {
+      //normalize data
+      const keys = Object.keys(data);
+      for (let i = 0; keys.length > i; i++) {
+        const id: any = data[keys[i]].id;
+        if (typeof id === 'string') {
+          data[keys[i]].id = id.replace(/\s/g, '');
+        }
+      }
+
       //send data with customized form
       onSubmit(rawActiveTemplate, { ...data });
     }
@@ -76,8 +85,14 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
     });
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSubmit();
+    }
+  };
+
   return (
-    <SC.Card open={open}>
+    <SC.Card onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)} open={open}>
       <SC.Close onClick={() => onClose()} src={cross} alt="close" height="12" width="12" />
       <SC.Title>{`New ${feedTypeName}`}</SC.Title>
       <SC.Flex>

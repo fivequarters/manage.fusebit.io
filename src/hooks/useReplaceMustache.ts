@@ -76,7 +76,9 @@ export const useReplaceMustache = () => {
               ...data[name],
               id: () => {
                 if (!data[name].id) {
-                  data[name].id = `${name}-${Math.floor(Math.random() * 1000)}`;
+                  data[name].id = `${
+                    entity.entityType === 'integration' ? 'my-integration' : 'my-connector'
+                  }-${Math.floor(Math.random() * 1000)}`;
                 }
                 return data[name].id;
               },

@@ -1,16 +1,19 @@
+import { useEffect } from 'react';
 import warning from '../assets/warning.svg';
 import cross from '../assets/cross-warning.svg';
+import { useLocation } from 'react-router-dom';
 
 const errorCss = `
     display: flex;
     align-items: center;
-    width: 86%;
+    width: max-content;
+    max-width: 750px;
     padding: 10px 24px;
     border-radius: 8px;
     background-color: #F83420;
     box-shadow: 0px 6px 23px rgba(224, 70, 4, 0.3);
     position: absolute;
-    top: 240px;
+    top: 285px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 99;
@@ -37,6 +40,7 @@ const errorTextCss = `
     font-size: 14px;
     line-height: 16px;
     margin-left: 5px;
+    margin-right: 15px;
     `;
 
 const errorCross = `
@@ -50,12 +54,19 @@ const errorCross = `
     `;
 
 export const useError = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    removeError();
+  }, [location]);
+
   const removeError = () => {
     const error = document.getElementById('error');
     if (error) error.remove();
   };
 
-  const createError = (errorMessage: string) => {
+  const createError = (err: any) => {
+    removeError(); // we dont want 2 errors at the same time
     const error = document.createElement('div');
     error.setAttribute('id', 'error');
     error.setAttribute('style', errorCss);
@@ -71,7 +82,7 @@ export const useError = () => {
 
     const text = document.createElement('p');
     text.setAttribute('style', errorTextCss);
-    text.innerHTML = errorMessage;
+    text.innerHTML = err.response.data.message.split(':')?.[1] || 'There was an error'; // the element 0 shows the key, the 1 show the value, i only want the value so i get the element 1
     error.appendChild(text);
 
     const cross = document.createElement('div');

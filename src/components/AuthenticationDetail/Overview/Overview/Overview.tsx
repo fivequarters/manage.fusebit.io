@@ -112,7 +112,7 @@ const Overview: React.FC = () => {
       await updateUser.mutateAsync({ data, accountId: userData.accountId, userId: data.id });
       reloadAccount();
     } catch (e) {
-      createError(e.message);
+      createError(e);
     }
   };
 
@@ -163,7 +163,7 @@ const Overview: React.FC = () => {
         setToken(token);
         setCliOpen(true);
       } catch (e) {
-        createError(e.message);
+        createError(e);
       } finally {
         removeLoader();
       }
@@ -176,11 +176,13 @@ const Overview: React.FC = () => {
     try {
       createLoader();
       await deleteAccount.mutateAsync({ userId: accountData?.data.id, accountId: userData.accountId });
-      history.push(getRedirectLink('/authentication'));
+      history.push(getRedirectLink('/authentication/users'));
       // window.location.href = getRedirectLink('/authentication');
     } catch (e) {
-      createError(e.message);
+      createError(e);
       setDeleteOpen(false);
+    } finally {
+      removeLoader();
     }
   };
 
