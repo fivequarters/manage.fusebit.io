@@ -3,11 +3,9 @@ import * as SC from './styles';
 import fusebit from '../../assets/fusebit-logo.svg';
 import warning from '../../assets/warning-red.svg';
 import { Button } from '@material-ui/core';
-import { useGetAuthLink } from '../../hooks/useGetAuthLink';
+import { getAuthLink } from '../../utils/utils';
 
 const LoggedOutError: React.FC = () => {
-  const { getAuthLink } = useGetAuthLink();
-
   const handleAuth = () => {
     window.location.href = getAuthLink();
   };

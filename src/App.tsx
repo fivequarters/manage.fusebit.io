@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { createMuiTheme, responsiveFontSizes, ThemeProvider } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
@@ -9,9 +9,14 @@ import { routes } from './config';
 import { APP_TITLE } from './utils/constants';
 import { RouteItem } from './interfaces/router';
 import { ContextProvider } from './hooks/useContext';
+import { validateToken } from './utils/utils';
 
 function App() {
   const queryClient = new QueryClient();
+
+  useEffect(() => {
+    validateToken();
+  }, []);
 
   return (
     <>
