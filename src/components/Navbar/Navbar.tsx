@@ -95,21 +95,22 @@ const Navbar: React.FC<Props> = ({
               <>
                 <SC.Flex>
                   {sectionName !== 'Integrations' && sectionName !== 'Connectors' && (
-                    <SC.Flex mobileHidden={true}>
-                      <Link
-                        to={
-                          integrationsLink
-                            ? getRedirectLink('/integrations/overview')
-                            : authenticationLink
-                            ? getRedirectLink('/authentication/users')
-                            : getRedirectLink('/connectors/overview')
-                        }
-                      >
+                    <Link
+                      to={
+                        integrationsLink
+                          ? getRedirectLink('/integrations/overview')
+                          : authenticationLink
+                          ? getRedirectLink('/authentication/users')
+                          : getRedirectLink('/connectors/overview')
+                      }
+                    >
+                      <SC.Flex mobileHidden={true}>
                         <SC.SectionLink>
                           {integrationsLink ? 'Integrations' : authenticationLink ? 'Authentication' : 'Connectors'}
                         </SC.SectionLink>
-                      </Link>
-                    </SC.Flex>
+                        <SC.Arrow />
+                      </SC.Flex>
+                    </Link>
                   )}
                   <SC.SectionDropdown
                     active={Boolean(anchorSectionDropdown)}
@@ -314,7 +315,7 @@ const Navbar: React.FC<Props> = ({
                     : getRedirectLink('/connectors/overview')
                 }
               >
-                <SC.SectionLink>{sectionName}</SC.SectionLink>
+                <SC.SectionLink>{sectionName} asdasd</SC.SectionLink>
               </Link>
             )}
           </SC.FlexDown>
