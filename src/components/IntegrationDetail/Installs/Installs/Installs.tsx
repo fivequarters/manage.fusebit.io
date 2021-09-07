@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as SC from './styles';
 import * as CSC from '../../../globalStyle';
 import { Button } from '@material-ui/core';
@@ -7,6 +7,7 @@ import { useAccountIntegrationInstanceGetAll } from '../../../../hooks/api/v2/ac
 import { useContext } from '../../../../hooks/useContext';
 import { Install } from '../../../../interfaces/install';
 import { useEntityApi } from '../../../../hooks/useEntityApi';
+import ConfirmationPrompt from '../../../ConfirmationPrompt/ConfirmationPrompt';
 
 const Installs: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -18,6 +19,7 @@ const Installs: React.FC = () => {
     subscriptionId: userData.subscriptionId,
   });
   const { deleteEntity } = useEntityApi();
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   React.useEffect(() => {
     if (!installsData) {
@@ -31,11 +33,18 @@ const Installs: React.FC = () => {
 
   return (
     <SC.Wrapper>
+      <ConfirmationPrompt
+        open={deleteOpen}
+        setOpen={setDeleteOpen}
+        handleConfirmation={handleDelete}
+        title={`Are you sure you want to delete this Install?`}
+        description={`Your tenants will have to re-install this integration in their account.`}
+      />
       <SC.Header>
         Total Installs: {installsData ? installsData?.data.total : <CSC.Spinner margin="0 0 0 5px" />}
       </SC.Header>
       <Button
-        onClick={handleDelete}
+        onClick={() => setDeleteOpen(true)}
         disabled={!installsData || installsData?.data.total === 0}
         style={{ width: '200px' }}
         variant="contained"
