@@ -16,7 +16,7 @@ export default function ListBackendClients() {
       const backendClients = await getBackendClients(userData);
       console.log(backendClients);
     } catch (e) {
-      createError(e.message);
+      createError(e);
     } finally {
       removeLoader();
     }

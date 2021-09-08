@@ -10,7 +10,6 @@ import { ValidationMode } from '@jsonforms/core';
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
 import { useEffect } from 'react';
 import CliAccess from './CliAccess';
-import Delete from './Delete';
 import { useHistory, useParams } from 'react-router-dom';
 import { useAccountUserGetOne } from '../../../../hooks/api/v1/account/user/useGetOne';
 import { useAccountUserUpdateOne } from '../../../../hooks/api/v1/account/user/useUpdateOne';
@@ -23,6 +22,7 @@ import { useCapitalize } from '../../../../hooks/useCapitalize';
 import { useCreateToken } from '../../../../hooks/useCreateToken';
 import { useAccountUserDeleteOne } from '../../../../hooks/api/v1/account/user/useDeleteOne';
 import { useGetRedirectLink } from '../../../../hooks/useGetRedirectLink';
+import ConfirmationPrompt from '../../../ConfirmationPrompt/ConfirmationPrompt';
 
 const schema = {
   type: 'object',
@@ -195,16 +195,13 @@ const Overview: React.FC = () => {
         setPopperOpen(false)
       }
     >
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
+      <ConfirmationPrompt
         open={deleteOpen}
-        onClose={() => setDeleteOpen(false)}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-      >
-        <Delete handleDelete={handleDelete} open={deleteOpen} onClose={() => setDeleteOpen(false)} />
-      </Modal>
+        setOpen={setDeleteOpen}
+        handleConfirmation={handleDelete}
+        title={`Are you sure you want to delete this user?`}
+        description={`You cannot undo this action.`}
+      />
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
