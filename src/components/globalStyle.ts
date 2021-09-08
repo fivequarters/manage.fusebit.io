@@ -70,7 +70,7 @@ export const BigSpinnerContainer = styled(LoaderContainer)`
 
 export const ModalTitle = styled.h2<{ margin?: string }>`
   font-size: 24px;
-  line-height: 26px;
+  line-height: 30px;
   font-weight: 600;
   color: var(--black);
   margin: ${(props) => (props.margin ? props.margin : '0 0 50px 0')};
