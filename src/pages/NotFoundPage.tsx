@@ -3,6 +3,7 @@ import * as CSC from '../components/globalStyle';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useContext } from '../hooks/useContext';
 import { useGetRedirectLink } from '../hooks/useGetRedirectLink';
+import { validateToken } from '../utils/utils';
 
 const NotFoundPage: FC<{}> = (): ReactElement => {
   const history = useHistory();
@@ -28,9 +29,11 @@ const NotFoundPage: FC<{}> = (): ReactElement => {
       history.push(getRedirectLink('/connectors/overview' + connectorsContract));
     } else if (refreshToken === 'true' && refreshTokenUrl) {
       history.push(refreshTokenUrl);
-    } else if (userData.accountId !== undefined && userData.subscriptionId !== undefined) {
-      history.push(getRedirectLink('/integrations/overview'));
+    } else if (userData.accountId && userData.subscriptionId && userData.token) {
+      validateToken({ onValid: () => history.push(getRedirectLink('/integrations/overview')) });
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [history, userData, getRedirectLink, location]);
 
   return (

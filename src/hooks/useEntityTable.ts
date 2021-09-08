@@ -50,6 +50,7 @@ export const useEntityTable = ({
   const [addConnectorOpen, setAddConnectorOpen] = useState(false);
   const [newUserOpen, setNewUserOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const query = useQuery();
   const isIntegration = useRef(false);
   const { massiveDelete } = useEntityApi();
@@ -171,5 +172,7 @@ export const useEntityTable = ({
     newUserOpen,
     loading,
     selected,
+    deleteModalOpen,
+    setDeleteModalOpen,
   };
 };

@@ -5,8 +5,8 @@ import { ConnectorComponentProps } from '../../../../../interfaces/integrationDe
 import cross from '../../../../../assets/cross.svg';
 import { useHistory } from 'react-router-dom';
 import { useGetRedirectLink } from '../../../../../hooks/useGetRedirectLink';
-import { Button, Modal, Backdrop } from '@material-ui/core';
 import { findMatchingConnectorFeed } from '../../../../../utils/utils';
+import ConfirmationPrompt from '../../../../ConfirmationPrompt/ConfirmationPrompt';
 
 const NOT_FOUND_ICON = '/images/warning-red.svg';
 const ConnectorComponent: React.FC<ConnectorComponentProps> = ({
@@ -56,40 +56,16 @@ const ConnectorComponent: React.FC<ConnectorComponentProps> = ({
         }
       }}
     >
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
+      <ConfirmationPrompt
         open={deleteModalOpen}
-        onClose={() => setDeleteModalOpen(false)}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-      >
-        <SC.Card open={deleteModalOpen}>
-          <CSC.Close onClick={() => setDeleteModalOpen(false)} />
-          <CSC.ModalTitle>Are you sure you want to delete this connector?</CSC.ModalTitle>
-          <CSC.ModalDescription textAlign="center">You cannot undo this action.</CSC.ModalDescription>
-          <SC.ButtonsWrapper>
-            <Button
-              onClick={() => setDeleteModalOpen(false)}
-              style={{ width: '77px', marginRight: '16px' }}
-              size="medium"
-              variant="outlined"
-              color="primary"
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleConnectorDelete}
-              style={{ width: '77px' }}
-              size="medium"
-              variant="contained"
-              color="primary"
-            >
-              Delete
-            </Button>
-          </SC.ButtonsWrapper>
-        </SC.Card>
-      </Modal>
+        setOpen={setDeleteModalOpen}
+        handleConfirmation={handleConnectorDelete}
+        title={'Are you sure want to remove this Connector from the Integration?'}
+        description={
+          'This will break the integration for your application and it will not work until you re-link this connector back'
+        }
+        confirmationButtonText={'Remove'}
+      />
       {icon === '' ? (
         <CSC.Spinner margin="0 16px 0 0" />
       ) : (

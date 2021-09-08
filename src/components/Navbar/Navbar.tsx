@@ -19,9 +19,6 @@ import cross from '../../assets/cross.svg';
 import { useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useGetRedirectLink } from '../../hooks/useGetRedirectLink';
-import { Decoded } from '../../interfaces/decoded';
-import jwt_decode from 'jwt-decode';
-import { useGetAuthLink } from '../../hooks/useGetAuthLink';
 
 const Navbar: React.FC<Props> = ({
   sectionName,
@@ -40,7 +37,6 @@ const Navbar: React.FC<Props> = ({
   const [drawerBottomOpen, setDrawerBottomOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
   const { getRedirectLink } = useGetRedirectLink();
-  const { getAuthLink } = useGetAuthLink();
 
   const { data: integrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({
     enabled: userData.token,
@@ -68,18 +64,10 @@ const Navbar: React.FC<Props> = ({
       (integrations?.error && integrations.error.indexOf('403') >= 0) ||
       (connectors?.error && connectors.error.indexOf('403') >= 0)
     ) {
-      const TIME_T0_EXPIRE = 300000; // in miliseconds (5 mins currently)
-      const decoded: Decoded = jwt_decode(userData.token || '');
-      const exp = decoded.exp;
-      const expInmilliseconds = exp * 1000;
-      const todayInMiliseconds = new Date().getTime();
-      if (todayInMiliseconds - expInmilliseconds >= TIME_T0_EXPIRE) {
-        window.location.href = getAuthLink(); //refreshing the token
-      } else {
-        history.push('/fatal-error');
-      }
+      history.push('/fatal-error');
     }
-  }, [integrations, connectors, history, getAuthLink, userData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [integrations, connectors, history]);
 
   const handleLogout = () => {
     setLoggingOut(true);
@@ -89,6 +77,12 @@ const Navbar: React.FC<Props> = ({
       logout();
     }, 250);
   };
+
+  const to = integrationsLink
+    ? getRedirectLink('/integrations/overview')
+    : authenticationLink
+    ? getRedirectLink('/authentication/users')
+    : getRedirectLink('/connectors/overview');
 
   return (
     <SC.Background>
@@ -107,21 +101,14 @@ const Navbar: React.FC<Props> = ({
               <>
                 <SC.Flex>
                   {sectionName !== 'Integrations' && sectionName !== 'Connectors' && (
-                    <SC.Flex mobileHidden={true}>
-                      <Link
-                        to={
-                          integrationsLink
-                            ? getRedirectLink('/integrations/overview')
-                            : authenticationLink
-                            ? getRedirectLink('/authentication/users')
-                            : getRedirectLink('/connectors/overview')
-                        }
-                      >
+                    <Link to={to}>
+                      <SC.Flex mobileHidden={true}>
                         <SC.SectionLink>
                           {integrationsLink ? 'Integrations' : authenticationLink ? 'Authentication' : 'Connectors'}
                         </SC.SectionLink>
-                      </Link>
-                    </SC.Flex>
+                        <SC.Arrow />
+                      </SC.Flex>
+                    </Link>
                   )}
                   <SC.SectionDropdown
                     active={Boolean(anchorSectionDropdown)}
