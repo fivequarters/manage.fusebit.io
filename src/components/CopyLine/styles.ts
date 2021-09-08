@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
-export const LineInstructionWrapper = styled.div`
+export const LineInstructionWrapper = styled.div<{ disableCursorPointer?: boolean }>`
   position: relative;
   margin-bottom: 16px;
 
   &:hover {
-    cursor: pointer;
+    cursor: ${(props) => (props.disableCursorPointer ? 'default' : 'pointer')};
 
     & > div {
       opacity: 1;
@@ -17,7 +17,7 @@ export const LineInstructionWrapper = styled.div`
   }
 `;
 
-export const LineInstruction = styled.div<{ horizontalScrollbar?: boolean }>`
+export const LineInstruction = styled.div<{ horizontalScrollbar?: boolean; warning?: boolean }>`
   position: relative;
   height: 50px;
   padding: 16px;
@@ -25,6 +25,7 @@ export const LineInstruction = styled.div<{ horizontalScrollbar?: boolean }>`
   margin: 0;
   outline: rgba(255, 255, 255, 0);
   border-radius: 4px;
+  border: ${(props) => props.warning && '2px solid #F83420'};
   background-color: var(--secondary-color);
   overflow-x: ${(props) => (props.horizontalScrollbar ? 'auto' : 'hidden')};
   overflow-y: scroll;
@@ -62,16 +63,21 @@ export const LineInstruction = styled.div<{ horizontalScrollbar?: boolean }>`
   }
 `;
 
-export const LineInstructionFade = styled.div<{ change: boolean; onlyMobileVisible?: boolean }>`
+export const LineInstructionFade = styled.div<{
+  change: boolean;
+  onlyMobileVisible?: boolean;
+  warning?: boolean;
+  disabled?: boolean;
+}>`
   display: ${(props) => props.onlyMobileVisible && 'none'};
   position: absolute;
-  right: 0;
-  top: 0;
-  height: 50px;
-  width: ${(props) => (props.change ? '300px' : '60px')};
+  right: ${(props) => (props.warning ? '2px' : 0)};
+  top: 3px;
+  height: 45px;
+  width: ${(props) => (props.change && !props.disabled ? '300px' : '60px')};
   background-image: linear-gradient(to left, #eff5ff 10%, rgba(255, 255, 255, 0) 100%);
   z-index: 1;
-  transition: all 0.25s linear;
+  transition: width 0.25s linear;
 
   @media only screen and (max-width: 1250px) {
     right: -2px;
@@ -80,12 +86,13 @@ export const LineInstructionFade = styled.div<{ change: boolean; onlyMobileVisib
   }
 `;
 
-export const LineInstructionCopy = styled.div`
+export const LineInstructionCopy = styled.div<{ disabled?: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   position: absolute;
+  visibility: ${(props) => (props.disabled ? 'hidden' : 'visible')};
   right: 0;
   top: 0;
   height: 50px;

@@ -2,7 +2,6 @@ import React from 'react';
 import * as SC from './styles';
 import * as CSC from '../../../globalStyle';
 import { useContext } from '../../../../hooks/useContext';
-import copy from '../../../../assets/copy.svg';
 import dots from '../../../../assets/dots.svg';
 import { Button, Modal, Backdrop } from '@material-ui/core';
 import { JsonForms } from '@jsonforms/react';
@@ -23,6 +22,7 @@ import { useCapitalize } from '../../../../hooks/useCapitalize';
 import { useCreateToken } from '../../../../hooks/useCreateToken';
 import { useAccountUserDeleteOne } from '../../../../hooks/api/v1/account/user/useDeleteOne';
 import { useGetRedirectLink } from '../../../../hooks/useGetRedirectLink';
+import { useCopy } from '../../../../hooks/useCopy';
 
 const schema = {
   type: 'object',
@@ -90,7 +90,6 @@ const Overview: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [cliOpen, setCliOpen] = React.useState(false);
   const [deleteOpen, setDeleteOpen] = React.useState(false);
-  const [idCopied, setIdCopied] = React.useState(false);
   const [popperOpen, setPopperOpen] = React.useState(false);
   const [token, setToken] = React.useState('');
   const { createLoader, removeLoader } = useLoader();
@@ -99,7 +98,7 @@ const Overview: React.FC = () => {
   const { _createToken } = useCreateToken();
   const deleteAccount = useAccountUserDeleteOne<Operation>();
   const { getRedirectLink } = useGetRedirectLink();
-  let timeout: NodeJS.Timeout;
+  const { handleCopy, copiedLine } = useCopy();
 
   useEffect(() => {
     if (accountData && accountData.data) {
@@ -139,20 +138,6 @@ const Overview: React.FC = () => {
     setEditInformation(false);
     setIsSubmitting(false);
     setData(accountData?.data);
-  };
-
-  const handleCopy = (text: string) => {
-    clearTimeout(timeout);
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
-    setIdCopied(true);
-    timeout = setTimeout(() => {
-      setIdCopied(false);
-    }, 3000);
   };
 
   const handleCliOpen = async () => {
@@ -245,7 +230,7 @@ const Overview: React.FC = () => {
                 <strong>User-ID:&nbsp;</strong> {accountData?.data.id}{' '}
                 <CSC.Copy margin="0 6px 0 auto" onClick={() => handleCopy(accountData?.data.id || '')} />
               </SC.UserId>
-              <SC.CopySuccess copy={idCopied}>Copied to clipboard!</SC.CopySuccess>
+              <SC.CopySuccess copy={copiedLine}>Copied to clipboard!</SC.CopySuccess>
             </SC.FlexDown>
           </SC.UserInfoContainer>
           {!editInformation ? (

@@ -51,6 +51,8 @@ const Develop: React.FC = () => {
   const { replaceMustache } = useReplaceMustache();
   const [loading, setLoading] = React.useState(false);
   const { toggleConnector, createEntity } = useEntityApi(true);
+  const [keyIsCopied, setKeyIsCopied] = useState(false);
+  const [showWarning, setShowWarning] = useState(false);
 
   React.useEffect(() => {
     const res = localStorage.getItem('refreshToken');
@@ -181,6 +183,18 @@ const Develop: React.FC = () => {
     return true;
   };
 
+  const onConnectClose = () => {
+    if (keyIsCopied || showWarning) {
+      setConnectOpen(false);
+      setTimeout(() => {
+        setShowWarning(false);
+        setKeyIsCopied(false);
+      }, 250);
+    } else {
+      setShowWarning(true);
+    }
+  };
+
   return (
     <SC.Background>
       <Modal
@@ -203,12 +217,19 @@ const Develop: React.FC = () => {
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         open={connectOpen}
-        onClose={() => setConnectOpen(false)}
+        onClose={onConnectClose}
         closeAfterTransition
         BackdropComponent={Backdrop}
       >
         <Fade in={connectOpen}>
-          <Connect open={connectOpen} onClose={() => setConnectOpen(false)} />
+          <Connect
+            showWarning={showWarning}
+            setShowWarning={setShowWarning}
+            keyIsCopied={keyIsCopied}
+            setKeyIsCopied={setKeyIsCopied}
+            open={connectOpen}
+            onClose={onConnectClose}
+          />
         </Fade>
       </Modal>
       <Modal

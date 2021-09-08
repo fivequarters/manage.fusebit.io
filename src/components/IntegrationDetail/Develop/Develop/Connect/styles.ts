@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import disclaimer from '../../../../../assets/disclaimer.svg';
 import time from '../../../../../assets/time.svg';
+import warning from '../../../../../assets/black-warning.svg';
 
 export const Card = styled.div<{ open: boolean }>`
   position: absolute;
@@ -43,6 +44,7 @@ export const Wrapper = styled.div`
 `;
 
 export const SmallTitleWrapper = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
 `;
@@ -52,7 +54,6 @@ export const SmallTitle = styled.h4`
   line-height: 22px;
   font-weight: 400;
   color: var(--black);
-  margin-right: 24px;
 
   strong {
     font-weight: 600;
@@ -122,4 +123,41 @@ export const Or = styled.h4`
   color: var(--black);
   margin: 0 auto;
   transform: translateY(-27px);
+`;
+
+export const CopySuccess = styled.p<{ copy: boolean }>`
+  position: absolute;
+  bottom: -15px;
+  font-size: 14px;
+  line-height: 16px;
+  color: var(--grey);
+  opacity: ${(props) => (props.copy ? 1 : 0)};
+  visibility: ${(props) => (props.copy ? 'visible' : 'hidden')};
+  margin-left: auto;
+  transition: all 0.5s linear;
+`;
+
+export const WarningWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 24px;
+  background-color: var(--yellow);
+  border-radius: 8px;
+  margin-top: 18px;
+
+  p {
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--black);
+  }
+`;
+
+export const WarningIcon = styled.div`
+  height: 19px;
+  width: 22px;
+  background-image: url(${warning});
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: 17px;
 `;

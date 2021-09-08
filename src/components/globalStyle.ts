@@ -10,6 +10,7 @@ export default createGlobalStyle`
         --secondary-color: rgba(215, 229, 255, 0.4);
         --black: #333333;
         --grey: #959595;
+        --yellow: #FFC940;
     }
     a {
         text-decoration: none;
