@@ -243,13 +243,7 @@ const Overview: React.FC = () => {
               <SC.UserCompany>{accountData?.data.primaryEmail} </SC.UserCompany>
               <SC.UserId>
                 <strong>User-ID:&nbsp;</strong> {accountData?.data.id}{' '}
-                <img
-                  onClick={() => handleCopy(accountData?.data.id || '')}
-                  src={copy}
-                  alt="copy"
-                  height="12"
-                  width="12"
-                />
+                <CSC.Copy margin="0 6px 0 auto" onClick={() => handleCopy(accountData?.data.id || '')} />
               </SC.UserId>
               <SC.CopySuccess copy={idCopied}>Copied to clipboard!</SC.CopySuccess>
             </SC.FlexDown>
