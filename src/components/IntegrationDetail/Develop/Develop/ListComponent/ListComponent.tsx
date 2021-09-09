@@ -53,6 +53,7 @@ const ListComponent: React.FC<ListComponentProps> = ({
   const handleConnectorDelete = () => {
     onConnectorDelete(connector);
     setDeleteModalOpen(false);
+    setConnectOpen(false);
   };
 
   return (
@@ -95,6 +96,7 @@ const ListComponent: React.FC<ListComponentProps> = ({
       >
         <Fade in={connectOpen}>
           <Connect
+            onDelete={handleConnectorDelete}
             token={'*************' + connector.tokenSignature?.slice(-4)}
             id={connector.id}
             disableCopy

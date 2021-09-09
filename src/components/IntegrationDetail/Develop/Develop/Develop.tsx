@@ -115,6 +115,7 @@ const Develop: React.FC = () => {
 
   const handleListComponentDelete = async (connector: Entity) => {
     if (connector.isApplication) {
+      setConnectOpen(false);
       await removeBackendClientListener(connector.id);
       await getBackendClients();
     } else {
@@ -256,6 +257,7 @@ const Develop: React.FC = () => {
       >
         <Fade in={connectOpen}>
           <Connect
+            onDelete={handleListComponentDelete}
             id={backendClientId}
             token={backendClientToken}
             showWarning={showWarning}

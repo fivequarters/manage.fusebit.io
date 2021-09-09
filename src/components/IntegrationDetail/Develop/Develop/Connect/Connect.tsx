@@ -5,21 +5,37 @@ import { Button, Input } from '@material-ui/core';
 import { Props } from '../../../../../interfaces/connect';
 import CopyLine from '../../../../CopyLine';
 import { useCopy } from '../../../../../hooks/useCopy';
+import ConfirmationPrompt from '../../../../ConfirmationPrompt';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
 const Connect = React.forwardRef(
-  ({ id, token, onClose, open, setKeyIsCopied, keyIsCopied, setShowWarning, showWarning, disableCopy }: Props, ref) => {
+  (
+    {
+      id,
+      token,
+      onClose,
+      onDelete,
+      open,
+      setKeyIsCopied,
+      keyIsCopied,
+      setShowWarning,
+      showWarning,
+      disableCopy,
+    }: Props,
+    ref
+  ) => {
     const [editMode, setEditMode] = useState(false);
     const [editedBackendClientId, setEditedBackendClientId] = useState(id);
     const [backendClientId, setBackendClientId] = useState(id);
     const { handleCopy, copiedLine } = useCopy();
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
     const handleClose = () => {
       if (disableCopy) {
         onClose();
       } else if (setShowWarning) {
-        keyIsCopied || showWarning ? onClose(keyIsCopied, showWarning) : setShowWarning(true);
+        keyIsCopied || showWarning ? onClose() : setShowWarning(true);
       }
     };
 
@@ -33,7 +49,18 @@ const Connect = React.forwardRef(
       setEditMode(false);
     };
 
-    return (
+    return deleteModalOpen ? (
+      <ConfirmationPrompt
+        open={deleteModalOpen}
+        setOpen={setDeleteModalOpen}
+        handleConfirmation={() => onDelete({ isApplication: true, id: id })}
+        title={'Are you sure you want to delete this application?'}
+        description={
+          'This will cause all integrations in your application to stop working. You will be able to fix this by generating a new key and authenticating with Fusebit again.'
+        }
+        confirmationButtonText={'Delete'}
+      />
+    ) : (
       <SC.Card open={open}>
         <SC.Wrapper>
           <CSC.Close onClick={handleClose} />
@@ -156,7 +183,13 @@ const Connect = React.forwardRef(
           </CSC.Flex>
 
           <CSC.Flex margin="88px 0 0 auto" width="max-content">
-            <Button style={{ width: '200px', marginRight: '32px' }} variant="outlined" color="primary" size="large">
+            <Button
+              onClick={() => setDeleteModalOpen(true)}
+              style={{ width: '200px', marginRight: '32px' }}
+              variant="outlined"
+              color="primary"
+              size="large"
+            >
               Delete
             </Button>
             <Button onClick={handleClose} style={{ width: '200px' }} variant="contained" color="primary" size="large">
