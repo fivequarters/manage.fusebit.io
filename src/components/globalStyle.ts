@@ -1,4 +1,4 @@
-import { createGlobalStyle, keyframes } from 'styled-components';
+import { createGlobalStyle, css, keyframes } from 'styled-components';
 import styled from 'styled-components';
 import spinner from '../assets/spinner.svg';
 import cross from '../assets/cross.svg';
@@ -99,7 +99,7 @@ export const Flex = styled.div`
   width: 100%;
 `;
 
-export const Close = styled.div`
+export const CloseIconMixin = css`
   height: 12px;
   width: 12px;
   object-fit: contain;
@@ -114,4 +114,8 @@ export const Close = styled.div`
     cursor: pointer;
     transform: rotate(90deg);
   }
+`
+
+export const Close = styled.div`
+  ${CloseIconMixin}
 `;

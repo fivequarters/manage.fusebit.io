@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { CloseIconMixin } from '../../../../globalStyle';
 
 export const Card = styled.div<{ open: boolean }>`
   position: absolute;
@@ -119,3 +120,37 @@ export const OutlinedButtonWrapper = styled.div`
     margin: 0 auto;
   }
 `;
+
+export const EditorContainer = styled.div`
+  --closeHeaderHeight: 30px;
+`
+
+export const Close = styled.div`
+  ${CloseIconMixin}
+  z-index: 1;
+  top: calc(var(--closeHeaderHeight) / 2);
+  height: 18px;
+  width: 18px;
+  background-size: cover;
+  transform: translateY(-50%);
+
+  &:hover {
+    transform: translateY(-50%) rotate(90deg);
+  }
+`
+
+
+export const CloseHeader = styled.div`
+  position: absolute;
+  top: 0;
+  height: var(--closeHeaderHeight);
+  width: 100%;
+  background: white;
+`
+
+export const FusebitEditorContainer = styled.div`
+  position: absolute;
+  transform: translateY(var(--closeHeaderHeight));
+  width: 100%;
+  height: calc(100vh - var(--closeHeaderHeight));
+`

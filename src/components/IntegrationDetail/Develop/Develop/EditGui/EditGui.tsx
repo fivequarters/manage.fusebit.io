@@ -1,32 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as SC from './styles';
-import cross from '../../../../../assets/cross.svg';
 import { Props } from '../../../../../interfaces/edit';
 import { useContext } from '../../../../../hooks/useContext';
 
 import FusebitEditor from './FusebitEditor';
 
-const EditGui = React.forwardRef(({ open, onClose, integrationId }: Props) => {
+const EditGui = React.forwardRef(({ onClose, integrationId }: Props) => {
   const { userData } = useContext();
+  const [isMounted, setIsMounted] = useState(false);
 
   return (
-    <SC.FusebitEditorCard open={open}>
-      <SC.CardClose onClick={() => onClose()}>
-        <img src={cross} alt="close" height="10" width="10" />
-      </SC.CardClose>
-      <SC.Title>Edit {integrationId}</SC.Title>
-      <FusebitEditor
-        boundaryId={'integration'}
-        functionId={integrationId}
-        account={{
-          accountId: userData.accountId,
-          subscriptionId: userData.subscriptionId,
-          baseUrl: process.env.REACT_APP_FUSEBIT_DEPLOYMENT,
-          accessToken: userData.token,
-        }}
-        options={{ entityType: 'integration' }}
-      />
-    </SC.FusebitEditorCard>
+    <SC.EditorContainer>
+      {isMounted && (
+        <SC.CloseHeader>
+          <SC.Close onClick={onClose} />
+        </SC.CloseHeader>
+      )}
+      <SC.FusebitEditorContainer>
+        <FusebitEditor
+          boundaryId={'integration'}
+          functionId={integrationId}
+          account={{
+            accountId: userData.accountId,
+            subscriptionId: userData.subscriptionId,
+            baseUrl: process.env.REACT_APP_FUSEBIT_DEPLOYMENT,
+            accessToken: userData.token,
+          }}
+          options={{ entityType: 'integration' }}
+          onLoaded={() => setIsMounted(true)}
+        />
+      </SC.FusebitEditorContainer>
+    </SC.EditorContainer>
   );
 });
 

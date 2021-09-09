@@ -8,10 +8,8 @@ import CopyLine from '../../../../CopyLine';
 const Edit = React.forwardRef(({ open, onClose, integrationId }: Props) => {
   return (
     <SC.Card open={open}>
-      <SC.CardClose onClick={() => onClose()}>
-        <img src={cross} alt="close" height="10" width="10" />
-      </SC.CardClose>
-      <SC.Title>Edit {integrationId}</SC.Title>
+      <CSC.Close onClick={() => onClose()} />
+      <CSC.ModalTitle>Edit {integrationId}</CSC.ModalTitle>
 
       <CSC.Flex>
         <CSC.LineTitle>1. Install the Fusebit CLI</CSC.LineTitle>
