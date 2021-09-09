@@ -5,28 +5,50 @@ import { Button, Input } from '@material-ui/core';
 import { Props } from '../../../../../interfaces/connect';
 import CopyLine from '../../../../CopyLine';
 import { useCopy } from '../../../../../hooks/useCopy';
+import { useLoader } from '../../../../../hooks/useLoader';
+import { useError } from '../../../../../hooks/useError';
+import { removedBackendClient } from '../../../../../utils/backendClients';
+import { useContext } from '../../../../../hooks/useContext';
 
-const initialName = 'Stage Backend';
+const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
 const Connect = React.forwardRef(
-  ({ onClose, open, setKeyIsCopied, keyIsCopied, setShowWarning, showWarning }: Props, ref) => {
+  ({ id, token, onClose, open, setKeyIsCopied, keyIsCopied, setShowWarning, showWarning, disableCopy }: Props, ref) => {
+    const { userData } = useContext();
     const [editMode, setEditMode] = useState(false);
-    const [editedName, setEditedName] = useState(initialName);
-    const [name, setName] = useState(initialName);
+    const [editedBackendClientId, setEditedBackendClientId] = useState(id);
+    const [backendClientId, setBackendClientId] = useState(id);
     const { handleCopy, copiedLine } = useCopy();
+    const { createLoader, removeLoader } = useLoader();
+    const { createError } = useError();
 
     const handleClose = () => {
-      keyIsCopied || showWarning ? onClose(keyIsCopied, showWarning) : setShowWarning(true);
+      if (disableCopy) {
+        onClose();
+      } else if (setShowWarning) {
+        keyIsCopied || showWarning ? onClose(keyIsCopied, showWarning) : setShowWarning(true);
+      }
     };
 
     const handleSave = () => {
-      setName(editedName);
+      setBackendClientId(editedBackendClientId);
       setEditMode(false);
     };
 
     const handleCancel = () => {
-      setEditedName(name);
+      setEditedBackendClientId(backendClientId);
       setEditMode(false);
+    };
+
+    const removeBackendClientListener = async () => {
+      try {
+        createLoader();
+        await removedBackendClient(userData, backendClientId);
+      } catch (e) {
+        createError(e);
+      } finally {
+        removeLoader();
+      }
     };
 
     return (
@@ -34,14 +56,14 @@ const Connect = React.forwardRef(
         <SC.Wrapper>
           <CSC.Close onClick={handleClose} />
 
-          <CSC.ModalTitle>{name}</CSC.ModalTitle>
+          <CSC.ModalTitle>{backendClientId}</CSC.ModalTitle>
           <SC.SmallTitleWrapper>
             <SC.SmallTitle>
               <strong>Key Name:</strong>
             </SC.SmallTitle>
             {!editMode ? (
               <>
-                <SC.SmallTitle>&nbsp; {name}</SC.SmallTitle>
+                <SC.SmallTitle>&nbsp; {backendClientId}</SC.SmallTitle>
                 <Button
                   style={{ marginLeft: '24px' }}
                   onClick={() => setEditMode(true)}
@@ -56,9 +78,9 @@ const Connect = React.forwardRef(
               <>
                 <Input
                   id="standard-adornment-weight"
-                  value={editedName}
-                  onChange={(e) => setEditedName(e.target.value)}
-                  aria-describedby="standard-name-helper-text"
+                  value={editedBackendClientId}
+                  onChange={(e) => setEditedBackendClientId(e.target.value)}
+                  aria-describedby="standard-backend-Client-Id-helper-text"
                   style={{ width: '214px', marginLeft: '8.5px' }}
                   inputProps={{
                     'aria-label': 'Name',
@@ -87,7 +109,7 @@ const Connect = React.forwardRef(
           </SC.SmallTitleWrapper>
           <SC.SmallTitleWrapper>
             <SC.SmallTitle>
-              <strong>Integration Base URL:</strong> https://api.us-west-2...
+              <strong>Integration Base URL:</strong> {REACT_APP_FUSEBIT_DEPLOYMENT}
             </SC.SmallTitle>
             <CSC.Copy onClick={() => handleCopy('https://api.us-west-2...')} margin="0 0 0 20px" />
             <SC.CopySuccess copy={copiedLine}>Copied to clipboard!</SC.CopySuccess>
@@ -97,9 +119,10 @@ const Connect = React.forwardRef(
 
           <SC.Subtitle>Key</SC.Subtitle>
           <CopyLine
+            disableCopy={disableCopy}
             warning={showWarning && !keyIsCopied}
-            onCopy={() => setKeyIsCopied(true)}
-            text="eyJhbeyJhbeyJhbeyJhbeyJhbeyJhbeyJhbeyJhbeyJhbeyJhbeyJhbeyJhbeyJhbeyJhbeyJhb..."
+            onCopy={() => setKeyIsCopied && setKeyIsCopied(true)}
+            text={token}
           />
           {showWarning && !keyIsCopied ? (
             <SC.WarningWrapper>
@@ -107,12 +130,14 @@ const Connect = React.forwardRef(
               You did not copy the key above. It will be lost after you close this window.
             </SC.WarningWrapper>
           ) : (
-            <CSC.Flex margin="0 0 10px 0">
-              <SC.DisclaimerIcon />
-              <SC.Disclaimer>
-                For security reasons, <strong>this is the last time you will see this key.</strong>
-              </SC.Disclaimer>
-            </CSC.Flex>
+            !disableCopy && (
+              <CSC.Flex margin="0 0 10px 0">
+                <SC.DisclaimerIcon />
+                <SC.Disclaimer>
+                  For security reasons, <strong>this is the last time you will see this key.</strong>
+                </SC.Disclaimer>
+              </CSC.Flex>
+            )
           )}
 
           <SC.Hr />

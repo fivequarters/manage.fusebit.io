@@ -58,7 +58,7 @@ export async function getBackendClients(user: User): Promise<BackendClient[]> {
       headers: { Authorization: `Bearer ${token}` },
     });
     return clientsResponse.data.data;
-  } catch (err) {
+  } catch (err: any) {
     if (err?.response?.status === 404) {
       return [];
     }

@@ -16,7 +16,7 @@ import { Integration, InnerConnector } from '../../../../interfaces/integration'
 import Edit from './Edit';
 import { useGetRedirectLink } from '../../../../hooks/useGetRedirectLink';
 import FeedPicker from '../../../FeedPicker';
-import ConnectorComponent from './ConnectorComponent';
+import ListComponent from './ListComponent';
 import { Entity, Feed } from '../../../../interfaces/feed';
 import { Data } from '../../../../interfaces/feedPicker';
 import { useReplaceMustache } from '../../../../hooks/useReplaceMustache';
@@ -24,6 +24,7 @@ import { FinalConnector } from '../../../../interfaces/integrationDetailDevelop'
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useEntityApi } from '../../../../hooks/useEntityApi';
+import { createBackendClient } from '../../../../utils/backendClients';
 
 const Develop: React.FC = () => {
   const history = useHistory();
@@ -195,6 +196,18 @@ const Develop: React.FC = () => {
     }
   };
 
+  const registerBackend = async () => {
+    try {
+      createLoader();
+      const nonExpiringToken = await createBackendClient(userData);
+      console.log(nonExpiringToken);
+    } catch (e) {
+      createError(e);
+    } finally {
+      removeLoader();
+    }
+  };
+
   return (
     <SC.Background>
       <Modal
@@ -223,6 +236,8 @@ const Develop: React.FC = () => {
       >
         <Fade in={connectOpen}>
           <Connect
+            id={'Stage Backend'}
+            token={'eyJhb...'}
             showWarning={showWarning}
             setShowWarning={setShowWarning}
             keyIsCopied={keyIsCopied}
@@ -256,7 +271,7 @@ const Develop: React.FC = () => {
                 })
                 .map((connector: Connector, index: number) => {
                   return (
-                    <ConnectorComponent
+                    <ListComponent
                       onLinkConnectorClick={(connector: any) => linkConnector(connector)}
                       linkConnector={true}
                       key={index}
@@ -297,6 +312,10 @@ const Develop: React.FC = () => {
                 Once you have tested your integration, click “Connect” to see how to call it from your application.
               </SC.NoApplicationsConfiguredDescription>
             </SC.NoApplicationsConfiguredWrapper>
+            <ListComponent
+              connector={{ id: 'Stage Backend', isApplication: true }}
+              onConnectorDelete={(connector: Entity) => handleConnectorDelete(connector)}
+            />
 
             <SC.CardButtonWrapper>
               <Button
@@ -381,7 +400,7 @@ const Develop: React.FC = () => {
                 filterConnectors().map((connector: FinalConnector, index: number) => {
                   if (index < 5) {
                     return (
-                      <ConnectorComponent
+                      <ListComponent
                         key={index}
                         connector={connector}
                         onConnectorDelete={(connector: Entity) => handleConnectorDelete(connector)}

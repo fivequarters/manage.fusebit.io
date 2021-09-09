@@ -1,4 +1,4 @@
-export interface ConnectorComponentProps {
+export interface ListComponentProps {
   connector: FinalConnector;
   onConnectorDelete: Function;
   onLinkConnectorClick?: Function;
@@ -8,6 +8,7 @@ export interface ConnectorComponentProps {
 export interface FinalConnector {
   missing?: boolean;
   id: string;
+  isApplication?: boolean;
   data?: object;
   tags?: {
     [key: string]: any;

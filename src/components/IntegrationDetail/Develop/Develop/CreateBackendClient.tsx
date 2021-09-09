@@ -15,7 +15,7 @@ export default function CreateBackendClient() {
       const nonExpiringToken = await createBackendClient(userData);
       console.log(nonExpiringToken);
     } catch (e) {
-      createError(e.message);
+      createError(e);
     } finally {
       removeLoader();
     }

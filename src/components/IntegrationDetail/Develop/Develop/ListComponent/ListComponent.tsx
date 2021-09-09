@@ -1,15 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as SC from './styles';
 import * as CSC from '../../../../globalStyle';
-import { ConnectorComponentProps } from '../../../../../interfaces/integrationDetailDevelop';
+import { ListComponentProps } from '../../../../../interfaces/integrationDetailDevelop';
 import cross from '../../../../../assets/cross.svg';
+import server from '../../../../../assets/server.svg';
 import { useHistory } from 'react-router-dom';
 import { useGetRedirectLink } from '../../../../../hooks/useGetRedirectLink';
 import { findMatchingConnectorFeed } from '../../../../../utils/utils';
 import ConfirmationPrompt from '../../../../ConfirmationPrompt/ConfirmationPrompt';
+import Connect from '../Connect';
+import { Backdrop, Fade, Modal } from '@material-ui/core';
 
 const NOT_FOUND_ICON = '/images/warning-red.svg';
-const ConnectorComponent: React.FC<ConnectorComponentProps> = ({
+
+const ListComponent: React.FC<ListComponentProps> = ({
   connector,
   onConnectorDelete,
   onLinkConnectorClick,
@@ -19,6 +23,7 @@ const ConnectorComponent: React.FC<ConnectorComponentProps> = ({
   const { getRedirectLink } = useGetRedirectLink();
   const [icon, setIcon] = useState('');
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [connectOpen, setConnectOpen] = React.useState(false);
   const connectorRef = useRef(connector);
 
   useEffect(() => {
@@ -26,19 +31,23 @@ const ConnectorComponent: React.FC<ConnectorComponentProps> = ({
   }, [connector]);
 
   useEffect(() => {
-    findMatchingConnectorFeed(connector)
-      .then((item) => {
-        setIcon(item.smallIcon);
-      })
-      .catch(() => {
-        if (connector.missing) {
-          setTimeout(() => {
-            if (connectorRef.current.missing) {
-              setIcon(NOT_FOUND_ICON);
-            }
-          }, 1000);
-        }
-      });
+    if (!connector.isApplication) {
+      findMatchingConnectorFeed(connector)
+        .then((item) => {
+          setIcon(item.smallIcon);
+        })
+        .catch(() => {
+          if (connector.missing) {
+            setTimeout(() => {
+              if (connectorRef.current.missing) {
+                setIcon(NOT_FOUND_ICON);
+              }
+            }, 1000);
+          }
+        });
+    } else {
+      setIcon(server);
+    }
   }, [connector]);
 
   const handleConnectorDelete = () => {
@@ -49,7 +58,11 @@ const ConnectorComponent: React.FC<ConnectorComponentProps> = ({
   return (
     <SC.CardConnector
       onClick={(e: any) => {
-        if (linkConnector) {
+        if (connector.isApplication) {
+          if (!e.target.id && !connectOpen && !deleteModalOpen) {
+            setConnectOpen(true);
+          }
+        } else if (linkConnector) {
           onLinkConnectorClick && onLinkConnectorClick(connector);
         } else if (!e.target.id && !deleteModalOpen) {
           history.push(getRedirectLink(`/connector/${connector.id}/configure`));
@@ -66,6 +79,24 @@ const ConnectorComponent: React.FC<ConnectorComponentProps> = ({
         }
         confirmationButtonText={'Remove'}
       />
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={connectOpen}
+        onClose={() => setConnectOpen(false)}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+      >
+        <Fade in={connectOpen}>
+          <Connect
+            token={'eyJhb...'}
+            id={connector.id}
+            disableCopy
+            open={connectOpen}
+            onClose={() => setConnectOpen(false)}
+          />
+        </Fade>
+      </Modal>
       {icon === '' ? (
         <CSC.Spinner margin="0 16px 0 0" />
       ) : (
@@ -83,4 +114,4 @@ const ConnectorComponent: React.FC<ConnectorComponentProps> = ({
   );
 };
 
-export default ConnectorComponent;
+export default ListComponent;

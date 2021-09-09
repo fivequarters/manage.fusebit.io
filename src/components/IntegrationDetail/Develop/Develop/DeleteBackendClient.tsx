@@ -17,7 +17,7 @@ export default function DeleteBackendClient() {
       createLoader();
       await removedBackendClient(userData, backendClientId);
     } catch (e) {
-      createError(e.message);
+      createError(e);
     } finally {
       removeLoader();
     }
