@@ -5,22 +5,15 @@ import { Button, Input } from '@material-ui/core';
 import { Props } from '../../../../../interfaces/connect';
 import CopyLine from '../../../../CopyLine';
 import { useCopy } from '../../../../../hooks/useCopy';
-import { useLoader } from '../../../../../hooks/useLoader';
-import { useError } from '../../../../../hooks/useError';
-import { removedBackendClient } from '../../../../../utils/backendClients';
-import { useContext } from '../../../../../hooks/useContext';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
 const Connect = React.forwardRef(
   ({ id, token, onClose, open, setKeyIsCopied, keyIsCopied, setShowWarning, showWarning, disableCopy }: Props, ref) => {
-    const { userData } = useContext();
     const [editMode, setEditMode] = useState(false);
     const [editedBackendClientId, setEditedBackendClientId] = useState(id);
     const [backendClientId, setBackendClientId] = useState(id);
     const { handleCopy, copiedLine } = useCopy();
-    const { createLoader, removeLoader } = useLoader();
-    const { createError } = useError();
 
     const handleClose = () => {
       if (disableCopy) {
@@ -38,17 +31,6 @@ const Connect = React.forwardRef(
     const handleCancel = () => {
       setEditedBackendClientId(backendClientId);
       setEditMode(false);
-    };
-
-    const removeBackendClientListener = async () => {
-      try {
-        createLoader();
-        await removedBackendClient(userData, backendClientId);
-      } catch (e) {
-        createError(e);
-      } finally {
-        removeLoader();
-      }
     };
 
     return (

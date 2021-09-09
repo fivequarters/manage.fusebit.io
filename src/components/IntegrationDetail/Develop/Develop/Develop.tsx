@@ -24,7 +24,8 @@ import { FinalConnector } from '../../../../interfaces/integrationDetailDevelop'
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useEntityApi } from '../../../../hooks/useEntityApi';
-import { createBackendClient } from '../../../../utils/backendClients';
+import { useBackendClient } from '../../../../hooks/useBackendClient';
+import { BackendClient } from '../../../../interfaces/backendClient';
 
 const Develop: React.FC = () => {
   const history = useHistory();
@@ -51,9 +52,27 @@ const Develop: React.FC = () => {
   const [connectorPickerOpen, setConnectorPickerOpen] = React.useState(false);
   const { replaceMustache } = useReplaceMustache();
   const [loading, setLoading] = React.useState(false);
+  const [backendClientsLoading, setBackendClientsLoading] = React.useState(true);
   const { toggleConnector, createEntity } = useEntityApi(true);
   const [keyIsCopied, setKeyIsCopied] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
+  const { getBackendClientListener, registerBackend, removeBackendClientListener } = useBackendClient();
+  const [backendClients, setBackendClients] = useState<BackendClient[]>([]);
+  const [backendClientToken, setBackendClientToken] = useState('');
+  const [backendClientId, setBackendClientId] = useState('');
+
+  const getBackendClients = async () => {
+    const backendClients = await getBackendClientListener();
+    backendClients && setBackendClients(backendClients);
+    setBackendClientsLoading(false);
+  };
+
+  React.useEffect(() => {
+    if (userData.accountId) {
+      getBackendClients();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userData]);
 
   React.useEffect(() => {
     const res = localStorage.getItem('refreshToken');
@@ -94,8 +113,13 @@ const Develop: React.FC = () => {
     setConnectorListOpen(false);
   };
 
-  const handleConnectorDelete = async (connector: Entity) => {
-    _toggleConnector(connector, false);
+  const handleListComponentDelete = async (connector: Entity) => {
+    if (connector.isApplication) {
+      await removeBackendClientListener(connector.id);
+      await getBackendClients();
+    } else {
+      _toggleConnector(connector, false);
+    }
   };
 
   const linkConnector = async (connector: Entity) => {
@@ -184,8 +208,9 @@ const Develop: React.FC = () => {
     return true;
   };
 
-  const onConnectClose = () => {
+  const onConnectClose = async () => {
     if (keyIsCopied || showWarning) {
+      await getBackendClients();
       setConnectOpen(false);
       setTimeout(() => {
         setShowWarning(false);
@@ -196,16 +221,11 @@ const Develop: React.FC = () => {
     }
   };
 
-  const registerBackend = async () => {
-    try {
-      createLoader();
-      const nonExpiringToken = await createBackendClient(userData);
-      console.log(nonExpiringToken);
-    } catch (e) {
-      createError(e);
-    } finally {
-      removeLoader();
-    }
+  const handleConnectOpen = async () => {
+    const backendClient = await registerBackend();
+    setBackendClientToken(backendClient?.token || '');
+    setBackendClientId(backendClient?.id || '');
+    setConnectOpen(true);
   };
 
   return (
@@ -236,8 +256,8 @@ const Develop: React.FC = () => {
       >
         <Fade in={connectOpen}>
           <Connect
-            id={'Stage Backend'}
-            token={'eyJhb...'}
+            id={backendClientId}
+            token={backendClientToken}
             showWarning={showWarning}
             setShowWarning={setShowWarning}
             keyIsCopied={keyIsCopied}
@@ -276,7 +296,7 @@ const Develop: React.FC = () => {
                       linkConnector={true}
                       key={index}
                       connector={connector}
-                      onConnectorDelete={(connector: Entity) => handleConnectorDelete(connector)}
+                      onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
                     />
                   );
                 })}
@@ -301,25 +321,34 @@ const Develop: React.FC = () => {
         <SC.FlexDown>
           <SC.Card>
             <SC.CardTitle>Your Application</SC.CardTitle>
-            <SC.NoApplicationsConfiguredWrapper>
-              <SC.Flex>
-                <SC.DashedBox />
-                <SC.NoApplicationsConfiguredTitle>
-                  No application connections configured
-                </SC.NoApplicationsConfiguredTitle>
-              </SC.Flex>
-              <SC.NoApplicationsConfiguredDescription>
-                Once you have tested your integration, click “Connect” to see how to call it from your application.
-              </SC.NoApplicationsConfiguredDescription>
-            </SC.NoApplicationsConfiguredWrapper>
-            <ListComponent
-              connector={{ id: 'Stage Backend', isApplication: true }}
-              onConnectorDelete={(connector: Entity) => handleConnectorDelete(connector)}
-            />
+            {backendClients.length > 0 ? (
+              backendClients.map((client: BackendClient) => (
+                <ListComponent
+                  connector={{ ...client, isApplication: true }}
+                  onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
+                />
+              ))
+            ) : !backendClientsLoading ? (
+              <SC.NoApplicationsConfiguredWrapper>
+                <SC.Flex>
+                  <SC.DashedBox />
+                  <SC.NoApplicationsConfiguredTitle>
+                    No application connections configured
+                  </SC.NoApplicationsConfiguredTitle>
+                </SC.Flex>
+                <SC.NoApplicationsConfiguredDescription>
+                  Once you have tested your integration, click “Connect” to see how to call it from your application.
+                </SC.NoApplicationsConfiguredDescription>
+              </SC.NoApplicationsConfiguredWrapper>
+            ) : (
+              <CSC.LoaderContainer>
+                <CSC.Spinner />
+              </CSC.LoaderContainer>
+            )}
 
             <SC.CardButtonWrapper>
               <Button
-                onClick={() => setConnectOpen(true)}
+                onClick={handleConnectOpen}
                 startIcon={<AddIcon />}
                 style={{ width: '200px' }}
                 size="large"
@@ -403,7 +432,7 @@ const Develop: React.FC = () => {
                       <ListComponent
                         key={index}
                         connector={connector}
-                        onConnectorDelete={(connector: Entity) => handleConnectorDelete(connector)}
+                        onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
                       />
                     );
                   }

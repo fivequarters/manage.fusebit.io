@@ -8,6 +8,7 @@ export interface ListComponentProps {
 export interface FinalConnector {
   missing?: boolean;
   id: string;
+  tokenSignature?: string;
   isApplication?: boolean;
   data?: object;
   tags?: {

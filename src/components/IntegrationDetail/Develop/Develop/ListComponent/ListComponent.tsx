@@ -73,11 +73,17 @@ const ListComponent: React.FC<ListComponentProps> = ({
         open={deleteModalOpen}
         setOpen={setDeleteModalOpen}
         handleConfirmation={handleConnectorDelete}
-        title={'Are you sure want to remove this Connector from the Integration?'}
-        description={
-          'This will break the integration for your application and it will not work until you re-link this connector back'
+        title={
+          connector.isApplication
+            ? 'Are you sure you want to delete this application?'
+            : 'Are you sure want to remove this Connector from the Integration?'
         }
-        confirmationButtonText={'Remove'}
+        description={
+          connector.isApplication
+            ? 'This will cause all integrations in your application to stop working. You will be able to fix this by generating a new key and authenticating with Fusebit again.'
+            : 'This will break the integration for your application and it will not work until you re-link this connector back'
+        }
+        confirmationButtonText={connector.isApplication ? 'Delete' : 'Remove'}
       />
       <Modal
         aria-labelledby="transition-modal-title"
@@ -89,7 +95,7 @@ const ListComponent: React.FC<ListComponentProps> = ({
       >
         <Fade in={connectOpen}>
           <Connect
-            token={'eyJhb...'}
+            token={'*************' + connector.tokenSignature?.slice(-4)}
             id={connector.id}
             disableCopy
             open={connectOpen}
