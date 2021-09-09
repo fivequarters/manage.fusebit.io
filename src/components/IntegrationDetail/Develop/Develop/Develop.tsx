@@ -359,7 +359,7 @@ const Develop: React.FC = () => {
                 disableTouchListener
                 open={connectHover && backendClients.length >= 5}
                 title="You cant add more than 5 applications"
-                aria-label="add"
+                aria-label="You cant add more than 5 applications"
               >
                 <div onMouseEnter={() => setConnectHover(true)} onMouseLeave={() => setConnectHover(false)}>
                   <Button
