@@ -123,7 +123,7 @@ export const OutlinedButtonWrapper = styled.div`
 
 export const EditorContainer = styled.div`
   --closeHeaderHeight: 30px;
-`
+`;
 
 export const Close = styled.div`
   ${CloseIconMixin}
@@ -137,8 +137,7 @@ export const Close = styled.div`
   &:hover {
     transform: translateY(-50%) rotate(90deg);
   }
-`
-
+`;
 
 export const CloseHeader = styled.div`
   position: absolute;
@@ -146,11 +145,11 @@ export const CloseHeader = styled.div`
   height: var(--closeHeaderHeight);
   width: 100%;
   background: white;
-`
+`;
 
 export const FusebitEditorContainer = styled.div`
   position: absolute;
   transform: translateY(var(--closeHeaderHeight));
   width: 100%;
   height: calc(100vh - var(--closeHeaderHeight));
-`
+`;

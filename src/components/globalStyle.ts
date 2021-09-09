@@ -114,7 +114,7 @@ export const CloseIconMixin = css`
     cursor: pointer;
     transform: rotate(90deg);
   }
-`
+`;
 
 export const Close = styled.div`
   ${CloseIconMixin}
