@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import * as SC from './styles';
 import * as CSC from '../../../globalStyle';
-import { Button, Modal, Backdrop, Fade } from '@material-ui/core';
+import { Button, Modal, Backdrop, Fade, Tooltip } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import arrow from '../../../../assets/arrow-right-black.svg';
 import Connect from './Connect';
@@ -60,6 +60,7 @@ const Develop: React.FC = () => {
   const [backendClients, setBackendClients] = useState<BackendClient[]>([]);
   const [backendClientToken, setBackendClientToken] = useState('');
   const [backendClientId, setBackendClientId] = useState('');
+  const [connectHover, setConnectHover] = useState(false);
 
   const getBackendClients = async () => {
     const backendClients = await getBackendClientListener();
@@ -349,16 +350,31 @@ const Develop: React.FC = () => {
             )}
 
             <SC.CardButtonWrapper>
-              <Button
-                onClick={handleConnectOpen}
-                startIcon={<AddIcon />}
-                style={{ width: '200px' }}
-                size="large"
-                variant="outlined"
-                color="primary"
+              <Tooltip
+                PopperProps={{
+                  disablePortal: true,
+                }}
+                disableFocusListener
+                disableHoverListener
+                disableTouchListener
+                open={connectHover && backendClients.length >= 5}
+                title="You cant add more than 5 applications"
+                aria-label="add"
               >
-                Connect
-              </Button>
+                <div onMouseEnter={() => setConnectHover(true)} onMouseLeave={() => setConnectHover(false)}>
+                  <Button
+                    onClick={handleConnectOpen}
+                    startIcon={<AddIcon />}
+                    disabled={backendClients.length >= 5}
+                    style={{ width: '200px' }}
+                    size="large"
+                    variant="outlined"
+                    color="primary"
+                  >
+                    Connect
+                  </Button>
+                </div>
+              </Tooltip>
             </SC.CardButtonWrapper>
           </SC.Card>
           <SC.LinkWrapper>
