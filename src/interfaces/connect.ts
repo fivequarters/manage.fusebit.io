@@ -1,8 +1,10 @@
 export interface Props {
   onClose: Function;
   onDelete: Function;
+  onChange?: () => void;
   open: boolean;
   id: string;
+  name: string;
   token: string;
   keyIsCopied?: boolean;
   setKeyIsCopied?: Function;

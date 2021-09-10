@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { User } from '../interfaces/user';
-import { addClientIdentity, createClient, removeClient } from './clients';
+import { addClientIdentity, createClient, patchClient, removeClient } from './clients';
 import { BACKEND_LIST_STORAGE_ID } from './constants';
 import { generateKeyPair } from './crypto';
 import { generateNonExpiringToken } from './jwt';
@@ -29,9 +29,11 @@ export async function createBackendClient(user: User): Promise<BackendClient> {
 
   const backendClient = {
     id: client.id,
+    name: client.displayName,
     issuer: issuer.id,
     tokenSignature,
   };
+
   const backends = [...backendClients, backendClient];
   await putBackendClients(user, backends);
 
@@ -69,6 +71,30 @@ export async function getBackendClients(user: User): Promise<BackendClient[]> {
 async function putBackendClients(user: User, backendClients: BackendClient[]): Promise<Storage<BackendClient>> {
   const { accountId, subscriptionId, token } = user;
   const clientsPaths = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/subscription/${subscriptionId}/storage/${BACKEND_LIST_STORAGE_ID}`;
+  const response = await axiosNo404MiddlewareInstance.put<Storage<BackendClient>>(
+    clientsPaths,
+    { data: backendClients },
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+  return response.data;
+}
+
+export async function patchBackendClients(
+  id: string,
+  user: User,
+  backendClient: Partial<BackendClient>
+): Promise<Storage<BackendClient>> {
+  const backendClients: any[] = await getBackendClients(user);
+  const index = backendClients.findIndex((client) => client.id === id);
+  backendClients[index] = {
+    ...backendClients[index],
+    ...backendClient,
+  };
+  const { accountId, subscriptionId, token } = user;
+  const clientsPaths = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/subscription/${subscriptionId}/storage/${BACKEND_LIST_STORAGE_ID}`;
+  await patchClient(user, { id: id, displayName: backendClient.name });
   const response = await axiosNo404MiddlewareInstance.put<Storage<BackendClient>>(
     clientsPaths,
     { data: backendClients },

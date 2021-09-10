@@ -58,8 +58,7 @@ const Develop: React.FC = () => {
   const [showWarning, setShowWarning] = useState(false);
   const { getBackendClientListener, registerBackend, removeBackendClientListener } = useBackendClient();
   const [backendClients, setBackendClients] = useState<BackendClient[]>([]);
-  const [backendClientToken, setBackendClientToken] = useState('');
-  const [backendClientId, setBackendClientId] = useState('');
+  const [backendClient, setBackendClient] = useState<BackendClient>();
   const [connectHover, setConnectHover] = useState(false);
 
   const getBackendClients = async () => {
@@ -225,8 +224,7 @@ const Develop: React.FC = () => {
 
   const handleConnectOpen = async () => {
     const backendClient = await registerBackend();
-    setBackendClientToken(backendClient?.token || '');
-    setBackendClientId(backendClient?.id || '');
+    setBackendClient(backendClient);
     setConnectOpen(true);
   };
 
@@ -259,8 +257,10 @@ const Develop: React.FC = () => {
         <Fade in={connectOpen}>
           <Connect
             onDelete={handleListComponentDelete}
-            id={backendClientId}
-            token={backendClientToken}
+            name={backendClient?.name || ''}
+            id={backendClient?.id || ''}
+            onChange={getBackendClients}
+            token={backendClient?.token || ''}
             showWarning={showWarning}
             setShowWarning={setShowWarning}
             keyIsCopied={keyIsCopied}
@@ -297,7 +297,7 @@ const Develop: React.FC = () => {
                     <ListComponent
                       onLinkConnectorClick={(connector: any) => linkConnector(connector)}
                       linkConnector={true}
-                      key={index}
+                      key={connector.id}
                       connector={connector}
                       onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
                     />
@@ -327,6 +327,7 @@ const Develop: React.FC = () => {
             {backendClients.length > 0 ? (
               backendClients.map((client: BackendClient) => (
                 <ListComponent
+                  onChange={getBackendClients}
                   connector={{ ...client, isApplication: true }}
                   onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
                 />

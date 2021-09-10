@@ -15,6 +15,7 @@ const NOT_FOUND_ICON = '/images/warning-red.svg';
 
 const ListComponent: React.FC<ListComponentProps> = ({
   connector,
+  onChange,
   onConnectorDelete,
   onLinkConnectorClick,
   linkConnector,
@@ -55,7 +56,6 @@ const ListComponent: React.FC<ListComponentProps> = ({
     setDeleteModalOpen(false);
     setConnectOpen(false);
   };
-
   return (
     <SC.CardConnector
       onClick={(e: any) => {
@@ -98,7 +98,9 @@ const ListComponent: React.FC<ListComponentProps> = ({
           <Connect
             onDelete={handleConnectorDelete}
             token={'*************' + connector.tokenSignature?.slice(-4)}
-            id={connector.id}
+            name={connector.name || ''}
+            onChange={onChange}
+            id={connector.id || ''}
             disableCopy
             open={connectOpen}
             onClose={() => setConnectOpen(false)}
@@ -111,7 +113,7 @@ const ListComponent: React.FC<ListComponentProps> = ({
         <SC.CardConnectorImage src={icon} alt={'connector image'} height="20" width="20" />
       )}
       <SC.CardConnectorText>
-        {connector.id} {icon === NOT_FOUND_ICON && 'is not found'}
+        {connector?.name ? connector?.name : connector.id} {icon === NOT_FOUND_ICON && 'is not found'}
       </SC.CardConnectorText>
       {!linkConnector && (
         <SC.CardConnectorCrossContainer id="closeWrapper" onClick={() => setDeleteModalOpen(true)}>

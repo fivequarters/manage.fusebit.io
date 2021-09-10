@@ -11,7 +11,6 @@ export const integrationsFeed = async (): Promise<Feed[]> => {
       res.on('end', () => accept(JSON.parse(data)));
     });
     req.on('error', (e) => {
-      console.log(e.message);
       accept([]);
     });
   });
@@ -25,7 +24,6 @@ export const connectorsFeed = async (): Promise<Feed[]> => {
       res.on('end', () => accept(JSON.parse(data)));
     });
     req.on('error', (e) => {
-      console.log(e.message);
       accept([]);
     });
   });

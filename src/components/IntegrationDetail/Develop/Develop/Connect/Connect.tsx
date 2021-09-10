@@ -6,6 +6,8 @@ import { Props } from '../../../../../interfaces/connect';
 import CopyLine from '../../../../CopyLine';
 import { useCopy } from '../../../../../hooks/useCopy';
 import ConfirmationPrompt from '../../../../ConfirmationPrompt';
+import { useContext } from '../../../../../hooks/useContext';
+import { patchBackendClients } from '../../../../../utils/backendClients';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
@@ -13,8 +15,10 @@ const Connect = React.forwardRef(
   (
     {
       id,
+      name,
       token,
       onClose,
+      onChange,
       onDelete,
       open,
       setKeyIsCopied,
@@ -25,11 +29,13 @@ const Connect = React.forwardRef(
     }: Props,
     ref
   ) => {
+    const { userData } = useContext();
     const [editMode, setEditMode] = useState(false);
-    const [editedBackendClientId, setEditedBackendClientId] = useState(id);
-    const [backendClientId, setBackendClientId] = useState(id);
+    const [editedBackendClientId, setEditedBackendClientId] = useState(name);
+    const [backendClientId, setBackendClientId] = useState(name);
     const { handleCopy, copiedLine } = useCopy();
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [saving, setSaving] = useState(false);
 
     const handleClose = () => {
       if (disableCopy) {
@@ -39,9 +45,13 @@ const Connect = React.forwardRef(
       }
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
+      setSaving(true);
+      await patchBackendClients(id, userData, { name: editedBackendClientId });
+      disableCopy && onChange?.(); //if its the first time its created, we dont call onChange
       setBackendClientId(editedBackendClientId);
       setEditMode(false);
+      setSaving(false);
     };
 
     const handleCancel = () => {
@@ -96,13 +106,14 @@ const Connect = React.forwardRef(
                   }}
                 />
                 <Button
-                  style={{ marginLeft: '24px' }}
+                  disabled={saving}
+                  style={{ marginLeft: '24px', width: '70px' }}
                   onClick={handleSave}
                   variant="contained"
                   color="primary"
                   size="small"
                 >
-                  Save
+                  {saving ? 'Saving...' : 'Save'}
                 </Button>
                 <Button
                   style={{ marginLeft: '16px' }}

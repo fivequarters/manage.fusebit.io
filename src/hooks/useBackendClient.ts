@@ -12,6 +12,7 @@ export const useBackendClient = () => {
     try {
       createLoader();
       const nonExpiringToken = await createBackendClient(userData);
+      console.log(nonExpiringToken);
       removeLoader();
       return nonExpiringToken;
     } catch (e) {
