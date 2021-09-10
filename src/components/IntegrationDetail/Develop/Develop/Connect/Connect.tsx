@@ -75,7 +75,7 @@ const Connect = React.forwardRef(
         <SC.Wrapper>
           <CSC.Close onClick={handleClose} />
 
-          <CSC.ModalTitle margin="0 0 24px 0">{backendClientId}</CSC.ModalTitle>
+          <CSC.ModalTitle margin="0 0 42px 0">{backendClientId}</CSC.ModalTitle>
           <SC.SmallTitleWrapper>
             <SC.SmallTitle>
               <strong>Key Name:</strong>

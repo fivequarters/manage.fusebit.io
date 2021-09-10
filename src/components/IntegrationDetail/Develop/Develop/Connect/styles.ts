@@ -17,7 +17,7 @@ export const Card = styled.div<{ open: boolean }>`
   padding: 40px 96px;
   border-radius: 8px;
   width: 859px;
-  height: 710px;
+  height: 700px;
   box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
   transition: all 1s linear;
 
@@ -46,6 +46,7 @@ export const SmallTitleWrapper = styled.div`
   position: relative;
   display: flex;
   align-items: center;
+  margin-bottom: 24px;
 `;
 
 export const SmallTitle = styled.h4`
@@ -53,6 +54,7 @@ export const SmallTitle = styled.h4`
   line-height: 22px;
   font-weight: 400;
   color: var(--black);
+  margin: 0;
 
   strong {
     font-weight: 600;
