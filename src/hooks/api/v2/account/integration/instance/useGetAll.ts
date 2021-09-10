@@ -5,11 +5,13 @@ import { useAxios } from '../../../../../useAxios';
 export const useAccountIntegrationInstanceGetAll = <T>(params: Params) => {
   const { axios } = useAxios();
 
+  const { enabled, ...queryParams } = params
+
   return useQuery(
-    'accountIntegrationInstanceGetAll',
+    ['accountIntegrationInstanceGetAll', queryParams],
     () =>
       axios<T>(
-        `/v2/account/${params.accountId}/subscription/${params.subscriptionId}/integration/${params.id}/instance`,
+        `/v2/account/${queryParams.accountId}/subscription/${queryParams.subscriptionId}/integration/${queryParams.id}/instance`,
         'get',
         params
       ),
