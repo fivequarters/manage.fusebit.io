@@ -17,8 +17,7 @@ export const Card = styled.div<{ open: boolean }>`
   padding: 40px 96px;
   border-radius: 8px;
   width: 859px;
-  height: 659px;
-  overflow: auto;
+  height: 710px;
   box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
   transition: all 1s linear;
 
@@ -40,7 +39,7 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 667px;
-  padding-top: 300px;
+  padding-top: 0px;
 `;
 
 export const SmallTitleWrapper = styled.div`
@@ -67,7 +66,6 @@ export const Hr = styled.div`
   height: 1px;
   background-color: var(--grey);
   margin: 40px 0;
-  z-index: 100000000000;
 `;
 
 export const Subtitle = styled.h3`

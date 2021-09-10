@@ -75,7 +75,7 @@ const Connect = React.forwardRef(
         <SC.Wrapper>
           <CSC.Close onClick={handleClose} />
 
-          <CSC.ModalTitle>{backendClientId}</CSC.ModalTitle>
+          <CSC.ModalTitle margin="0 0 24px 0">{backendClientId}</CSC.ModalTitle>
           <SC.SmallTitleWrapper>
             <SC.SmallTitle>
               <strong>Key Name:</strong>
@@ -135,8 +135,6 @@ const Connect = React.forwardRef(
             <SC.CopySuccess copy={copiedLine}>Copied to clipboard!</SC.CopySuccess>
           </SC.SmallTitleWrapper>
 
-          <SC.Hr />
-
           <SC.Subtitle>Key</SC.Subtitle>
           <CopyLine
             disableCopy={disableCopy}
@@ -159,8 +157,6 @@ const Connect = React.forwardRef(
               </CSC.Flex>
             )
           )}
-
-          <SC.Hr />
 
           <SC.Subtitle>Connect your Backend</SC.Subtitle>
           <CSC.Flex margin="32px 0 0 0">
@@ -193,7 +189,7 @@ const Connect = React.forwardRef(
             </CSC.Flex>
           </CSC.Flex>
 
-          <CSC.Flex margin="88px 0 0 auto" width="max-content">
+          <CSC.Flex margin="50px 0 0 auto" width="max-content">
             <Button
               onClick={() => setDeleteModalOpen(true)}
               style={{ width: '200px', marginRight: '32px' }}
