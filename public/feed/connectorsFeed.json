@@ -56,7 +56,7 @@
               "accessTokenExpirationBuffer": 500
             },
             "files": {
-              "package.json": "{\n  \"scripts\": {\n    \"redeploy\": \"fuse connector rm <%this.name%> && yarn deploy\",\n    \"deploy\": \"fuse connector deploy <%this.name%> -d .\",\n    \"get\": \"fuse connector get <%this.name%> -d .\"\n  },\n  \"dependencies\": {\n    \"@fusebit-int/hubspot-connector\": \"1.1.1\",\n    \"@fusebit-int/framework\": \"4.0.1\"\n  }\n}\n"
+              "package.json": "{\n  \"scripts\": {\n    \"redeploy\": \"fuse connector rm <%this.name%> && yarn deploy\",\n    \"deploy\": \"fuse connector deploy <%this.name%> -d .\",\n    \"get\": \"fuse connector get <%this.name%> -d .\"\n  },\n  \"dependencies\": {\n    \"@fusebit-int/hubspot-connector\": \"1.1.1\",\n    \"@fusebit-int/framework\": \"4.0.2\"\n  }\n}\n"
             },
             "handler": "@fusebit-int/hubspot-connector"
           },
@@ -133,7 +133,7 @@
               "accessTokenExpirationBuffer": 500
             },
             "files": {
-              "package.json": "{\n  \"scripts\": {\n    \"redeploy\": \"fuse connector rm <%this.name%> && yarn deploy\",\n    \"deploy\": \"fuse connector deploy <%this.name%> -d .\",\n    \"get\": \"fuse connector get <%this.name%> -d .\"\n  },\n  \"dependencies\": {\n    \"@fusebit-int/slack-connector\": \"3.0.1\",\n    \"@fusebit-int/framework\": \"4.0.1\"\n  }\n}\n"
+              "package.json": "{\n  \"scripts\": {\n    \"redeploy\": \"fuse connector rm <%this.name%> && yarn deploy\",\n    \"deploy\": \"fuse connector deploy <%this.name%> -d .\",\n    \"get\": \"fuse connector get <%this.name%> -d .\"\n  },\n  \"dependencies\": {\n    \"@fusebit-int/slack-connector\": \"3.0.1\",\n    \"@fusebit-int/framework\": \"4.0.2\"\n  }\n}\n"
             },
             "handler": "@fusebit-int/oauth-connector"
           },
