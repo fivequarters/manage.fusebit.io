@@ -82,7 +82,7 @@ export const useError = () => {
 
     const text = document.createElement('p');
     text.setAttribute('style', errorTextCss);
-    text.innerHTML = err.response.data.message.split(':')?.[1] || 'There was an error'; // the element 0 shows the key, the 1 show the value, i only want the value so i get the element 1
+    text.innerHTML = err?.response?.data?.message?.split(':')?.[1] || 'There was an error'; // the element 0 shows the key, the 1 show the value, i only want the value so i get the element 1
     error.appendChild(text);
 
     const cross = document.createElement('div');

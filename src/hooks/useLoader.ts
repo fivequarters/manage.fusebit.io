@@ -60,14 +60,22 @@ export const useLoader = () => {
               'get'
             )
               .then((response) => {
+                const errPayload = {
+                  response: {
+                    data: {
+                      message:  `${response?.data?.operationState?.errorCode}: ${response?.data?.operationState?.errorDetails}`,
+                    }
+                  }
+                }
+
                 if (response.data.state === OperationState.active) {
                   if (response.data.operationState.status === OperationStatus.success) {
                     accept({});
                   } else if (response.data.operationState.status === OperationStatus.failed) {
-                    reject({
-                      message: `${response.data.operationState.errorCode}: ${response.data.operationState.errorDetails}`,
-                    });
+                    reject(errPayload);
                   }
+                } else if (response.data.state === OperationState.invalid) {
+                  reject(errPayload);
                 }
               })
               .catch((e: any) => {
