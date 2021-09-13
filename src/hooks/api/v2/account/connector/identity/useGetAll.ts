@@ -5,7 +5,7 @@ import { useAxios } from '../../../../../useAxios';
 export const useAccountConnectorIdentityGetAll = <T>(params: Params) => {
   const { axios } = useAxios();
 
-  const { enabled, ...queryParams } = params
+  const { enabled, ...queryParams } = params;
 
   return useQuery(
     ['accountConnectorIdentityGetAll', queryParams],
