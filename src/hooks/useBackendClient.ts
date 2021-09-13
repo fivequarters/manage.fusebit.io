@@ -12,7 +12,6 @@ export const useBackendClient = () => {
     try {
       createLoader();
       const nonExpiringToken = await createBackendClient(userData);
-      console.log(nonExpiringToken);
       removeLoader();
       return nonExpiringToken;
     } catch (e) {
@@ -35,8 +34,7 @@ export const useBackendClient = () => {
 
   const getBackendClientListener = async () => {
     try {
-      const backendClients = await getBackendClients(userData);
-      return backendClients;
+      return getBackendClients(userData);
     } catch (e) {
       createError(e);
     }

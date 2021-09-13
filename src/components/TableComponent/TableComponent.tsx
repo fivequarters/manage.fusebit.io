@@ -142,8 +142,8 @@ const TableComponent: React.FC<Props> = ({
         title={`Are you sure you want to delete ${integrationText || connectorText || usersText}?`}
         description={
           integrationTable || connectorTable
-            ? `You cannot undo this action and any linked applications may not work as expected`
-            : `Deleting ${usersText} will remove all of their access to Fusebit. You will have to re-add them again`
+            ? `You cannot undo this action and any linked applications may not work as expected.`
+            : `Deleting ${usersText} will remove all of their access to Fusebit. You will have to re-add them again.`
         }
       />
 
