@@ -10,6 +10,6 @@ export const useAccountIntegrationsGetAll = <T>(params: Params) => {
   return useQuery(
     ['accountIntegrationsGetAll', queryParams],
     () => axios<T>(`/v2/account/${queryParams.accountId}/subscription/${queryParams.subscriptionId}/integration`, 'get', params),
-    { enabled: !!params.enabled }
+    { enabled: !!enabled }
   );
 };

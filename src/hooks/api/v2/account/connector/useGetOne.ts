@@ -15,6 +15,6 @@ export const useAccountConnectorsGetOne = <T>(params: Params) => {
         'get',
         params
       ),
-    { enabled: !!params.enabled }
+    { enabled: !!enabled }
   );
 };

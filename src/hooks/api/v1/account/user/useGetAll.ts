@@ -8,6 +8,6 @@ export const useAccountUserGetAll = <T>(params: Params) => {
   const { enabled, ...queryParams } = params
 
   return useQuery(['accountUserGetAll', queryParams], () => axios<T>(`/v1/account/${queryParams.accountId}/user`, 'get', params), {
-    enabled: !!params.enabled,
+    enabled: !!enabled,
   });
 };
