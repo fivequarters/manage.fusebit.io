@@ -10,9 +10,6 @@ export interface Props {
   handleNextCellSelect: Function;
   integrationTable?: boolean;
   connectorTable?: boolean;
-  reloadIntegrations?: Function;
-  reloadConnectors?: Function;
-  reloadUsers?: Function;
   integrations?: {
     data: {
       items: Integration[];

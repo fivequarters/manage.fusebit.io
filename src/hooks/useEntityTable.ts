@@ -12,9 +12,6 @@ import { Account } from '../interfaces/account';
 interface Props {
   headless?: any;
   setHeadless?: Function;
-  reloadIntegrations?: Function;
-  reloadConnectors?: Function;
-  reloadUsers?: Function;
   integrations?: {
     data: {
       items: Integration[];
@@ -30,17 +27,20 @@ interface Props {
       items: Account[];
     };
   };
+  page: number;
+  setPage: (page: number) => void;
+  rowsPerPage: number;
 }
 
 export const useEntityTable = ({
   headless,
   setHeadless,
-  reloadIntegrations,
-  reloadConnectors,
-  reloadUsers,
   integrations,
   connectors,
   users,
+  page,
+  setPage,
+  rowsPerPage
 }: Props) => {
   const history = useHistory();
   const [selected, setSelected] = useState<string[]>([]);
@@ -121,7 +121,14 @@ export const useEntityTable = ({
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
   const handleRowDelete = async () => {
-    massiveDelete(selected, isIntegration.current ? 'I' : window.location.href.indexOf('connector') >= 0 ? 'C' : 'A');
+    massiveDelete(selected, isIntegration.current ? 'I' : window.location.href.indexOf('connector') >= 0 ? 'C' : 'A', () => {
+      const computedPages = Math.ceil((rows.length - selected.length) / rowsPerPage) - 1
+
+      if (page > 0 && page > computedPages) {
+        setPage(0);
+      }
+      setSelected([]);
+    });
   };
 
   const handleRowClick = (event: any, href: string) => {

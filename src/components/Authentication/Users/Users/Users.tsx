@@ -7,7 +7,7 @@ import TableComponent from '../../../TableComponent';
 
 const Authentication: React.FC = () => {
   const { userData } = useContext();
-  const { data: users, refetch: reloadUsers } = useAccountUserGetAll<{ items: Account[] }>({
+  const { data: users } = useAccountUserGetAll<{ items: Account[] }>({
     enabled: userData.token,
     accountId: userData.accountId,
     params: 'include=all',
@@ -37,7 +37,6 @@ const Authentication: React.FC = () => {
   return (
     <TableComponent
       users={users}
-      reloadUsers={reloadUsers}
       selectedCell={selectedCell}
       handleNextCellSelect={handleNextCellSelect}
       handlePreviousCellSelect={handlePreviousCellSelect}

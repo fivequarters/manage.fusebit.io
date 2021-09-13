@@ -8,7 +8,7 @@ import TableComponent from '../../../TableComponent';
 
 const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
   const { userData } = useContext();
-  const { data: integrations, refetch: reloadIntegrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({
+  const { data: integrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({
     enabled: userData.token,
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
@@ -41,7 +41,6 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
       headless={headless}
       setHeadless={setHeadless}
       integrations={integrations}
-      reloadIntegrations={reloadIntegrations}
       selectedCell={selectedCell}
       handleNextCellSelect={handleNextCellSelect}
       handlePreviousCellSelect={handlePreviousCellSelect}
