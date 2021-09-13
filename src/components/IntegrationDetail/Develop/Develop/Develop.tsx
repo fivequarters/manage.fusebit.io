@@ -2,7 +2,21 @@ import React from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import * as SC from './styles';
 import * as CSC from '../../../globalStyle';
-import { Button, Modal, Backdrop, Fade, Tooltip } from '@material-ui/core';
+import {
+  Button,
+  ButtonGroup,
+  Modal,
+  Backdrop,
+  Fade,
+  ClickAwayListener,
+  Grow,
+  Paper,
+  Popper,
+  MenuItem,
+  MenuList,
+  Tooltip,
+} from '@material-ui/core';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import AddIcon from '@material-ui/icons/Add';
 import arrow from '../../../../assets/arrow-right-black.svg';
 import Connect from './Connect';
@@ -13,7 +27,8 @@ import { useAccountIntegrationsGetOne } from '../../../../hooks/api/v2/account/i
 import { useAccountConnectorsGetAll } from '../../../../hooks/api/v2/account/connector/useGetAll';
 import { Connector } from '../../../../interfaces/connector';
 import { Integration, InnerConnector } from '../../../../interfaces/integration';
-import Edit from './Edit';
+import EditCli from './EditCli';
+import EditGui from './EditGui';
 import { useGetRedirectLink } from '../../../../hooks/useGetRedirectLink';
 import FeedPicker from '../../../FeedPicker';
 import ListComponent from './ListComponent';
@@ -45,7 +60,8 @@ const Develop: React.FC = () => {
   });
   const { createLoader, removeLoader } = useLoader();
   const { createError } = useError();
-  const [editOpen, setEditOpen] = React.useState(false);
+  const [editCliOpen, setEditCliOpen] = React.useState(false);
+  const [editGuiOpen, setEditGuiOpen] = React.useState(false);
   const [connectOpen, setConnectOpen] = React.useState(false);
   const [connectorListOpen, setConnectorListOpen] = React.useState(false);
   const { getRedirectLink } = useGetRedirectLink();
@@ -73,6 +89,27 @@ const Develop: React.FC = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userData]);
+
+  const editOptions = [
+    { buttonLabel: 'Edit', optionLabel: 'Edit in the in-browser editor', handle: setEditGuiOpen },
+    { buttonLabel: 'CLI', optionLabel: 'Edit with your favorite editor', handle: setEditCliOpen },
+  ];
+  const editOptionAnchor = React.useRef<HTMLDivElement>(null);
+  const [editOption, setEditOption] = React.useState(0);
+  const [editOptionOpen, setEditOptionOpen] = React.useState(false);
+
+  const handleCloseEditOptions = (event: React.MouseEvent<Document, MouseEvent>) => {
+    if (editOptionAnchor.current && editOptionAnchor.current.contains(event.target as HTMLElement)) {
+      return;
+    }
+
+    setEditOptionOpen(false);
+  };
+
+  const handleEditOptionClick = (event: React.MouseEvent<HTMLLIElement, MouseEvent>, index: number) => {
+    setEditOption(index);
+    setEditOptionOpen(false);
+  };
 
   React.useEffect(() => {
     const res = localStorage.getItem('refreshToken');
@@ -310,13 +347,33 @@ const Develop: React.FC = () => {
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        open={editOpen}
-        onClose={() => setEditOpen(false)}
+        open={editCliOpen}
+        onClose={() => setEditCliOpen(false)}
         closeAfterTransition
         BackdropComponent={Backdrop}
       >
-        <Fade in={editOpen}>
-          <Edit open={editOpen} onClose={() => setEditOpen(false)} integration={integrationData?.data.id || ''} />
+        <Fade in={editCliOpen}>
+          <EditCli
+            open={editCliOpen}
+            onClose={() => setEditCliOpen(false)}
+            integrationId={integrationData?.data.id || ''}
+          />
+        </Fade>
+      </Modal>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={editGuiOpen}
+        onClose={() => setEditGuiOpen(false)}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+      >
+        <Fade in={editGuiOpen}>
+          <EditGui
+            open={editGuiOpen}
+            onClose={() => setEditGuiOpen(false)}
+            integrationId={integrationData?.data.id || ''}
+          />
         </Fade>
       </Modal>
       <SC.Flex>
@@ -405,15 +462,71 @@ const Develop: React.FC = () => {
               <SC.CardIntegration>{integrationData?.data.id}</SC.CardIntegration>
             )}
             <SC.CardButtonWrapper>
-              <Button
-                onClick={() => setEditOpen(true)}
-                style={{ width: '200px' }}
-                size="large"
-                variant="contained"
-                color="primary"
+              <ButtonGroup variant="contained" color="primary" ref={editOptionAnchor}>
+                <Button
+                  onClick={() => editOptions[editOption].handle(true)}
+                  style={{ width: '200px' }}
+                  size="large"
+                  variant="contained"
+                  color="primary"
+                >
+                  {editOptions[editOption].buttonLabel}
+                </Button>
+                <Button
+                  color="primary"
+                  size="small"
+                  aria-controls={editOptionOpen ? 'split-button-menu' : undefined}
+                  aria-expanded={editOptionOpen ? 'true' : undefined}
+                  aria-label="select edit action"
+                  aria-haspopup="menu"
+                  onClick={() => setEditOptionOpen((prevOpen) => !prevOpen)}
+                >
+                  <ArrowDropDownIcon />
+                </Button>
+              </ButtonGroup>
+
+              <Popper
+                open={editOptionOpen}
+                anchorEl={editOptionAnchor.current}
+                role={undefined}
+                transition
+                disablePortal
               >
-                Edit
-              </Button>
+                {({ TransitionProps, placement }) => (
+                  <Grow
+                    {...TransitionProps}
+                    style={{
+                      transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
+                    }}
+                  >
+                    <Paper>
+                      <ClickAwayListener onClickAway={handleCloseEditOptions}>
+                        <MenuList id="split-button-menu">
+                          {editOptions.map(
+                            (
+                              option: {
+                                buttonLabel: string;
+                                optionLabel: string;
+                                handle: React.Dispatch<React.SetStateAction<boolean>>;
+                              },
+                              index: number
+                            ) => (
+                              <MenuItem
+                                key={option.buttonLabel}
+                                disabled={index === 2}
+                                selected={index === editOption}
+                                onClick={(event) => handleEditOptionClick(event, index)}
+                              >
+                                {option.optionLabel}
+                              </MenuItem>
+                            )
+                          )}
+                        </MenuList>
+                      </ClickAwayListener>
+                    </Paper>
+                  </Grow>
+                )}
+              </Popper>
             </SC.CardButtonWrapper>
           </SC.Card>
           <SC.LinkWrapper>

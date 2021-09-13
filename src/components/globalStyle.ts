@@ -1,4 +1,4 @@
-import { createGlobalStyle, keyframes } from 'styled-components';
+import { createGlobalStyle, css, keyframes } from 'styled-components';
 import styled from 'styled-components';
 import spinner from '../assets/spinner.svg';
 import cross from '../assets/cross.svg';
@@ -113,7 +113,7 @@ export const Flex = styled.div<{ margin?: string; flexDown?: boolean; width?: st
   margin: ${(props) => props.margin && props.margin};
 `;
 
-export const Close = styled.div`
+export const CloseIconMixin = css`
   height: 12px;
   width: 12px;
   object-fit: contain;
@@ -141,4 +141,8 @@ export const Copy = styled.div<{ margin?: string }>`
   &:hover {
     cursor: pointer;
   }
+`;
+
+export const Close = styled.div`
+  ${CloseIconMixin}
 `;
