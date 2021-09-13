@@ -121,18 +121,7 @@ export const useEntityTable = ({
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
   const handleRowDelete = async () => {
-    massiveDelete(
-      selected,
-      isIntegration.current ? 'I' : window.location.href.indexOf('connector') >= 0 ? 'C' : 'A',
-      () => {
-        isIntegration.current
-          ? reloadIntegrations && reloadIntegrations()
-          : reloadConnectors
-          ? reloadConnectors()
-          : reloadUsers && reloadUsers();
-        setSelected([]);
-      }
-    );
+    massiveDelete(selected, isIntegration.current ? 'I' : window.location.href.indexOf('connector') >= 0 ? 'C' : 'A');
   };
 
   const handleRowClick = (event: any, href: string) => {
