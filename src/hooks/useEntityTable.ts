@@ -40,7 +40,7 @@ export const useEntityTable = ({
   users,
   page,
   setPage,
-  rowsPerPage
+  rowsPerPage,
 }: Props) => {
   const history = useHistory();
   const [selected, setSelected] = useState<string[]>([]);
@@ -121,14 +121,18 @@ export const useEntityTable = ({
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
   const handleRowDelete = async () => {
-    massiveDelete(selected, isIntegration.current ? 'I' : window.location.href.indexOf('connector') >= 0 ? 'C' : 'A', () => {
-      const computedPages = Math.ceil((rows.length - selected.length) / rowsPerPage) - 1
+    massiveDelete(
+      selected,
+      isIntegration.current ? 'I' : window.location.href.indexOf('connector') >= 0 ? 'C' : 'A',
+      () => {
+        const computedPages = Math.ceil((rows.length - selected.length) / rowsPerPage) - 1;
 
-      if (page > 0 && page > computedPages) {
-        setPage(0);
+        if (page > 0 && page > computedPages) {
+          setPage(0);
+        }
+        setSelected([]);
       }
-      setSelected([]);
-    });
+    );
   };
 
   const handleRowClick = (event: any, href: string) => {

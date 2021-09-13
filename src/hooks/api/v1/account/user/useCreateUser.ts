@@ -5,7 +5,7 @@ import { ACCOUNT_USER_GET_ALL } from './useGetAll';
 
 export const useAccountUserCreateUser = <T>() => {
   const { axios } = useAxios();
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   return useMutation(
     (params: Params) => {
@@ -13,11 +13,11 @@ export const useAccountUserCreateUser = <T>() => {
       return axios<T>(`/v1/account/${accountId}/user`, 'post', data);
     },
     {
-      onMutate: (_: Params) => () => { },
+      onMutate: (_: Params) => () => {},
       onError: (_, __, rollback) => rollback?.(),
-      onSettled: () => { },
+      onSettled: () => {},
       onSuccess: () => {
-        queryClient.invalidateQueries(ACCOUNT_USER_GET_ALL)
+        queryClient.invalidateQueries(ACCOUNT_USER_GET_ALL);
       },
     }
   );

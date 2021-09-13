@@ -1,48 +1,48 @@
-import { useQueryClient, QueryKey, UseMutationOptions } from 'react-query'
-import { Params } from '../interfaces/api'
+import { useQueryClient, QueryKey, UseMutationOptions } from 'react-query';
+import { Params } from '../interfaces/api';
 
 type Props = {
-    queryKey: QueryKey
-}
+  queryKey: QueryKey;
+};
 
-const useOptimisticDelete = ({ queryKey }: Props): Partial<UseMutationOptions<unknown, unknown, Params, () => void>> => {
-    const queryClient = useQueryClient()
+const useOptimisticDelete = ({
+  queryKey,
+}: Props): Partial<UseMutationOptions<unknown, unknown, Params, () => void>> => {
+  const queryClient = useQueryClient();
 
-    return {
-        onMutate: async ({ id }: Params) => {
-            await queryClient.cancelQueries(queryKey)
+  return {
+    onMutate: async ({ id }: Params) => {
+      await queryClient.cancelQueries(queryKey);
 
-            const previous = queryClient.getQueryData<any>(queryKey)
+      const previous = queryClient.getQueryData<any>(queryKey);
 
-            const newItems = [...(previous?.data?.items || [])]
+      const newItems = [...(previous?.data?.items || [])];
 
-            const index = newItems.findIndex(item => item.id === id)
+      const index = newItems.findIndex((item) => item.id === id);
 
-            newItems.splice(index, 1)
+      newItems.splice(index, 1);
 
-            queryClient.setQueryData(queryKey, (old: any) => {
-                const { total = null } = previous?.data || {}
+      queryClient.setQueryData(queryKey, (old: any) => {
+        const { total = null } = previous?.data || {};
 
-                return {
-                    ...old, data: {
-                        items: newItems,
-                        total: total ? total - 1 : null
-                    }
-                }
-            })
+        return {
+          ...old,
+          data: {
+            items: newItems,
+            total: total ? total - 1 : null,
+          },
+        };
+      });
 
-            return () => {
-                queryClient.setQueryData(queryKey, previous)
-            }
-        },
-        onSettled: () => {
-            queryClient.invalidateQueries(queryKey)
-        },
-        onError: (_, __, rollback) => rollback?.(),
-    }
-}
+      return () => {
+        queryClient.setQueryData(queryKey, previous);
+      };
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(queryKey);
+    },
+    onError: (_, __, rollback) => rollback?.(),
+  };
+};
 
-export default useOptimisticDelete
-
-
-
+export default useOptimisticDelete;
