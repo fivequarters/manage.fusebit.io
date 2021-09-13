@@ -63,10 +63,10 @@ export const useLoader = () => {
                 const errPayload = {
                   response: {
                     data: {
-                      message:  `${response?.data?.operationState?.errorCode}: ${response?.data?.operationState?.errorDetails}`,
-                    }
-                  }
-                }
+                      message: `${response?.data?.operationState?.errorCode}: ${response?.data?.operationState?.errorDetails}`,
+                    },
+                  },
+                };
 
                 if (response.data.state === OperationState.active) {
                   if (response.data.operationState.status === OperationStatus.success) {
