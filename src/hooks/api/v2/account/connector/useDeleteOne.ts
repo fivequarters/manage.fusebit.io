@@ -1,18 +1,19 @@
 import { useMutation } from 'react-query';
 import { Params } from '../../../../../interfaces/api';
 import { useAxios } from '../../../../useAxios';
+import { useContext } from '../../../../useContext';
+import useOptimisticDelete from '../../../../useOptimisticDelete';
+import { ACCOUNT_CONNECTORS_GET_ALL } from './useGetAll';
 
 export const useAccountConnectorDeleteConnector = <T>() => {
   const { axios } = useAxios();
+  const { userData } = useContext();
+  const optimisticDelete = useOptimisticDelete({
+    queryKey: [ACCOUNT_CONNECTORS_GET_ALL, { accountId: userData.accountId, subscriptionId: userData.subscriptionId }],
+  });
 
-  return useMutation(
-    (params: Params) => {
-      const { accountId, subscriptionId, ...data } = params;
-      return axios<T>(`/v2/account/${accountId}/subscription/${subscriptionId}/connector/${data.id}`, 'delete');
-    },
-    {
-      onMutate: (_: Params) => () => {},
-      onError: (_, __, rollback) => rollback?.(),
-    }
-  );
+  return useMutation((params: Params) => {
+    const { accountId, subscriptionId, ...data } = params;
+    return axios<T>(`/v2/account/${accountId}/subscription/${subscriptionId}/connector/${data.id}`, 'delete');
+  }, optimisticDelete);
 };

@@ -8,7 +8,7 @@ import TableComponent from '../../../TableComponent';
 
 const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
   const { userData } = useContext();
-  const { data: connectors, refetch: reloadConnectors } = useAccountConnectorsGetAll<{ items: Connector[] }>({
+  const { data: connectors } = useAccountConnectorsGetAll<{ items: Connector[] }>({
     enabled: userData.token,
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
@@ -37,7 +37,6 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
       headless={headless}
       setHeadless={setHeadless}
       connectors={connectors}
-      reloadConnectors={reloadConnectors}
       selectedCell={selectedCell}
       handleNextCellSelect={handleNextCellSelect}
       handlePreviousCellSelect={handlePreviousCellSelect}
