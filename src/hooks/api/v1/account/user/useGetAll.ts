@@ -10,7 +10,8 @@ export const useAccountUserGetAll = <T>(params: Params) => {
   const { enabled, ...queryParams } = params;
 
   return useQuery(
-    [ACCOUNT_USER_GET_ALL, queryParams],
+    // TODO: When dynamic queryparams are integrated include them in the key. Now 'include=all' is hardcoded.
+    [ACCOUNT_USER_GET_ALL, { accountId: queryParams.accountId }],
     () => axios<T>(`/v1/account/${queryParams.accountId}/user`, 'get', params),
     {
       enabled: !!enabled,
