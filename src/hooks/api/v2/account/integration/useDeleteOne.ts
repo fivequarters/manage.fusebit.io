@@ -7,8 +7,13 @@ import { useContext } from '../../../../useContext';
 
 export const useAccountIntegrationDeleteIntegration = <T>() => {
   const { axios } = useAxios();
-  const { userData } = useContext()
-  const optimisticDelete = useOptimisticDelete({ queryKey: [ACCOUNT_INTEGRATIONS_GET_ALL, { accountId: userData.accountId, subscriptionId: userData.subscriptionId }] });
+  const { userData } = useContext();
+  const optimisticDelete = useOptimisticDelete({
+    queryKey: [
+      ACCOUNT_INTEGRATIONS_GET_ALL,
+      { accountId: userData.accountId, subscriptionId: userData.subscriptionId },
+    ],
+  });
 
   return useMutation((params: Params) => {
     const { accountId, subscriptionId, ...data } = params;

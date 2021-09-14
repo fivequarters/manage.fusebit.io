@@ -7,7 +7,7 @@ import { useContext } from '../../../../useContext';
 
 export const useAccountUserDeleteOne = <T>() => {
   const { axios } = useAxios();
-  const { userData } = useContext()
+  const { userData } = useContext();
   const optimisticDelete = useOptimisticDelete({ queryKey: [ACCOUNT_USER_GET_ALL, { accountId: userData.accountId }] });
 
   return useMutation((params: Params) => {
