@@ -72,6 +72,10 @@ export const useEntityTable = ({
     isIntegration.current = window.location.href.indexOf('integration') >= 0;
     if (integrations && integrations.data.items) {
       setLoading(false);
+
+      //If there are no Integrations when we first visit the integrations tab we open the integrations modal
+      integrations.data.items.length === 0 && headless.current && setAddIntegrationOpen(true);
+
       // If there are integrations to show or if all of the integrations where deleted we call the setItems function
       (integrations.data.items.length > 0 || !headless.current) && setItems();
 
@@ -79,6 +83,10 @@ export const useEntityTable = ({
       headless.current && checkQuery();
     } else if (connectors && connectors.data.items) {
       setLoading(false);
+
+      //If there are no connectors when we first visit the connectors tab we open the connectors modal
+      connectors.data.items.length === 0 && headless.current && setAddConnectorOpen(true);
+
       // If there are connectors to show or if all of the connectors where deleted we call the setItems function
       (connectors.data.items.length > 0 || !headless.current) && setItems();
 
@@ -125,11 +133,13 @@ export const useEntityTable = ({
       selected,
       isIntegration.current ? 'I' : window.location.href.indexOf('connector') >= 0 ? 'C' : 'A',
       () => {
-        isIntegration.current
-          ? reloadIntegrations && reloadIntegrations()
-          : reloadConnectors
-          ? reloadConnectors()
-          : reloadUsers && reloadUsers();
+        if (isIntegration.current) {
+          reloadIntegrations && reloadIntegrations();
+          integrations?.data.items.length === selected.length && setAddIntegrationOpen(true);
+        } else {
+          reloadConnectors ? reloadConnectors() : reloadUsers && reloadUsers();
+          connectors?.data.items.length === selected.length && setAddConnectorOpen(true);
+        }
         setSelected([]);
       }
     );

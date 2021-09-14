@@ -1,118 +1,212 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as SC from './styles';
 import * as CSC from '../../../../globalStyle';
-import { Button } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
-import LinkIcon from '@material-ui/icons/Link';
+import { Button, Input } from '@material-ui/core';
 import { Props } from '../../../../../interfaces/connect';
-import { Decoded } from '../../../../../interfaces/decoded';
-import { useContext } from '../../../../../hooks/useContext';
-import jwt_decode from 'jwt-decode';
 import CopyLine from '../../../../CopyLine';
-import { getAuthLink } from '../../../../../utils/utils';
+import { useCopy } from '../../../../../hooks/useCopy';
+import ConfirmationPrompt from '../../../../ConfirmationPrompt';
+import { useContext } from '../../../../../hooks/useContext';
+import { patchBackendClients } from '../../../../../utils/backendClients';
 
-const Connect = React.forwardRef(({ onClose, open }: Props, ref) => {
-  const { userData } = useContext();
-  const [expDate, setExpDate] = React.useState('');
+const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
-  const handleRefresh = () => {
-    localStorage.setItem('refreshToken', 'true');
-    localStorage.setItem('refreshTokenUrl', window.location.pathname);
-    window.location.href = getAuthLink();
-  };
+const Connect = React.forwardRef(
+  (
+    {
+      id,
+      name,
+      token,
+      onClose,
+      onChange,
+      onDelete,
+      open,
+      setKeyIsCopied,
+      keyIsCopied,
+      setShowWarning,
+      showWarning,
+      disableCopy,
+    }: Props,
+    ref
+  ) => {
+    const { userData } = useContext();
+    const [editMode, setEditMode] = useState(false);
+    const [editedBackendClientId, setEditedBackendClientId] = useState(name);
+    const [backendClientId, setBackendClientId] = useState(name);
+    const { handleCopy, copiedLine } = useCopy();
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [saving, setSaving] = useState(false);
 
-  React.useEffect(() => {
-    if (userData) {
-      const token = userData.token;
-      if (token !== undefined) {
-        const decoded: Decoded = jwt_decode(token);
-        const exp = decoded.exp;
-        const expInmilliseconds = exp * 1000;
-        const dateObject = new Date(expInmilliseconds);
-        const localExpDate = dateObject.toLocaleString();
-        setExpDate(localExpDate);
+    const handleClose = () => {
+      if (disableCopy) {
+        onClose();
+      } else if (setShowWarning) {
+        keyIsCopied || showWarning ? onClose() : setShowWarning(true);
       }
-    }
-  }, [userData]);
+    };
 
-  return (
-    <SC.Card open={open}>
-      <CSC.Close onClick={() => onClose()} />
-      <CSC.ModalTitle>Connect your application</CSC.ModalTitle>
-      <CSC.Flex>
-        <CSC.LineTitle>Access Token</CSC.LineTitle>
-      </CSC.Flex>
-      <CSC.ModalDescription>Expires on {expDate}</CSC.ModalDescription>
-      <CopyLine text={userData.token || ''} />
-      <SC.ButtonWrapper>
-        <Button onClick={handleRefresh} style={{ width: '200px' }} size="large" variant="outlined" color="primary">
-          Refresh Your Token
-        </Button>
-      </SC.ButtonWrapper>
+    const handleSave = async () => {
+      setSaving(true);
+      await patchBackendClients(id, userData, { name: editedBackendClientId });
+      disableCopy && onChange?.(); //if its the first time its created, we dont call onChange
+      setBackendClientId(editedBackendClientId);
+      setEditMode(false);
+      setSaving(false);
+    };
 
-      <CSC.Flex>
-        <CSC.LineTitle margin="16px">Integration Base URL</CSC.LineTitle>
-      </CSC.Flex>
-      <CopyLine text={process.env.REACT_APP_FUSEBIT_DEPLOYMENT + '/v2' + window.location.pathname} />
-      <CSC.ModalDescription margin="24px 0 24px 0">
-        To connect your application, use the values above and follow the instructions in the{' '}
-        <a
-          target="_blank"
-          rel="noreferrer"
-          href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
-        >
-          following document.
-        </a>
-      </CSC.ModalDescription>
-      <SC.ButtonWrapper>
-        <Button onClick={() => onClose()} style={{ width: '200px' }} size="large" variant="contained" color="primary">
-          Ok
-        </Button>
-      </SC.ButtonWrapper>
-      {false && (
-        <>
-          <CSC.ModalTitle>Development</CSC.ModalTitle>
-          <SC.CardButtonsContainer>
+    const handleCancel = () => {
+      setEditedBackendClientId(backendClientId);
+      setEditMode(false);
+    };
+
+    return deleteModalOpen ? (
+      <ConfirmationPrompt
+        open={deleteModalOpen}
+        setOpen={setDeleteModalOpen}
+        handleConfirmation={() => onDelete({ isApplication: true, id: id })}
+        title={'Are you sure you want to delete this application?'}
+        description={
+          'This will cause all integrations in your application to stop working. You will be able to fix this by generating a new key and authenticating with Fusebit again.'
+        }
+        confirmationButtonText={'Delete'}
+      />
+    ) : (
+      <SC.Card open={open}>
+        <SC.Wrapper>
+          <CSC.Close onClick={handleClose} />
+
+          <CSC.ModalTitle margin="0 0 42px 0">{backendClientId}</CSC.ModalTitle>
+          <SC.SmallTitleWrapper>
+            <SC.SmallTitle>
+              <strong>Key Name:</strong>
+            </SC.SmallTitle>
+            {!editMode ? (
+              <>
+                <SC.SmallTitle>&nbsp; {backendClientId}</SC.SmallTitle>
+                <Button
+                  style={{ marginLeft: '24px' }}
+                  onClick={() => setEditMode(true)}
+                  variant="outlined"
+                  color="primary"
+                  size="small"
+                >
+                  Edit
+                </Button>
+              </>
+            ) : (
+              <>
+                <Input
+                  id="standard-adornment-weight"
+                  value={editedBackendClientId}
+                  onChange={(e) => setEditedBackendClientId(e.target.value)}
+                  aria-describedby="standard-backend-Client-Id-helper-text"
+                  style={{ width: '214px', marginLeft: '8.5px' }}
+                  inputProps={{
+                    'aria-label': 'Name',
+                  }}
+                />
+                <Button
+                  disabled={saving}
+                  style={{ marginLeft: '24px', width: '70px' }}
+                  onClick={handleSave}
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                >
+                  {saving ? 'Saving...' : 'Save'}
+                </Button>
+                <Button
+                  style={{ marginLeft: '16px' }}
+                  onClick={handleCancel}
+                  variant="outlined"
+                  color="primary"
+                  size="small"
+                >
+                  Cancel
+                </Button>
+              </>
+            )}
+          </SC.SmallTitleWrapper>
+          <SC.SmallTitleWrapper>
+            <SC.SmallTitle>
+              <strong>Integration Base URL:</strong> {REACT_APP_FUSEBIT_DEPLOYMENT}
+            </SC.SmallTitle>
+            <CSC.Copy onClick={() => handleCopy('https://api.us-west-2...')} margin="0 0 0 20px" />
+            <SC.CopySuccess copy={copiedLine}>Copied to clipboard!</SC.CopySuccess>
+          </SC.SmallTitleWrapper>
+
+          <SC.Subtitle>Key</SC.Subtitle>
+          <CopyLine
+            disableCopy={disableCopy}
+            warning={showWarning && !keyIsCopied}
+            onCopy={() => setKeyIsCopied && setKeyIsCopied(true)}
+            text={token}
+          />
+          {showWarning && !keyIsCopied ? (
+            <SC.WarningWrapper>
+              <SC.WarningIcon />
+              You did not copy the key above. It will be lost after you close this window.
+            </SC.WarningWrapper>
+          ) : (
+            !disableCopy && (
+              <CSC.Flex margin="0 0 10px 0">
+                <SC.DisclaimerIcon />
+                <SC.Disclaimer>
+                  For security reasons, <strong>this is the last time you will see this key.</strong>
+                </SC.Disclaimer>
+              </CSC.Flex>
+            )
+          )}
+
+          <SC.Subtitle>Connect your Backend</SC.Subtitle>
+          <CSC.Flex margin="32px 0 0 0">
+            <CSC.Flex flexDown width="293px" margin="0 0 auto 0">
+              <Button
+                target="_blank"
+                rel="noopener"
+                href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
+                variant="outlined"
+                color="primary"
+                size="large"
+              >
+                Follow guide
+              </Button>
+              <CSC.Flex>
+                <SC.TimeIcon />
+                <SC.TimeDescription>10 minutes</SC.TimeDescription>
+              </CSC.Flex>
+            </CSC.Flex>
+            <SC.Or>or</SC.Or>
+            <CSC.Flex flexDown width="293px">
+              <Button variant="outlined" color="primary" size="large">
+                Download sample
+              </Button>
+              <CSC.Flex>
+                <SC.TimeIcon />
+                <SC.TimeDescription>2 minutes</SC.TimeDescription>
+              </CSC.Flex>
+              <SC.TimeDescription margin="0">Already configured to work with this integration</SC.TimeDescription>
+            </CSC.Flex>
+          </CSC.Flex>
+
+          <CSC.Flex margin="50px 0 0 auto" width="max-content">
             <Button
-              startIcon={<AddIcon />}
-              style={{ marginBottom: '16px' }}
-              size="large"
+              onClick={() => setDeleteModalOpen(true)}
+              style={{ width: '200px', marginRight: '32px' }}
               variant="outlined"
               color="primary"
-            >
-              Generate API Key
-            </Button>
-            <Button startIcon={<AddIcon />} size="large" variant="outlined" color="primary">
-              Refresh Your Token
-            </Button>
-          </SC.CardButtonsContainer>
-          <CSC.ModalTitle>Production</CSC.ModalTitle>
-          <SC.CardButtonsContainer>
-            <Button
-              startIcon={<AddIcon />}
-              style={{ marginBottom: '16px' }}
               size="large"
-              variant="outlined"
-              color="primary"
             >
-              Create Client
+              Delete
             </Button>
-            <Button startIcon={<LinkIcon />} size="large" variant="outlined" color="primary">
-              Link existing client
+            <Button onClick={handleClose} style={{ width: '200px' }} variant="contained" color="primary" size="large">
+              OK
             </Button>
-          </SC.CardButtonsContainer>
-          <SC.CardActionButtons>
-            <Button style={{ marginRight: '16px' }} size="medium" variant="outlined" color="primary">
-              Reset
-            </Button>
-            <Button size="medium" variant="contained" color="primary">
-              Save
-            </Button>
-          </SC.CardActionButtons>
-        </>
-      )}
-    </SC.Card>
-  );
-});
+          </CSC.Flex>
+        </SC.Wrapper>
+      </SC.Card>
+    );
+  }
+);
 
 export default Connect;
