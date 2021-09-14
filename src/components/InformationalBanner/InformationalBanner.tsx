@@ -17,6 +17,7 @@ const InformationalBanner: React.FC<Props> = ({ active, description, highlighted
           {description + ' '}
           <strong>
             {highlightedDescription.split(' ').map((word: string, index, array) => {
+              // we get the last higlighted word and use it as our link
               if (word === array[array.length - 1]) {
                 return (
                   <a href={href} target="_blank" rel="noreferrer">
