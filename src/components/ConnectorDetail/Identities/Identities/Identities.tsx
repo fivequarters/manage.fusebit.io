@@ -8,6 +8,7 @@ import { useContext } from '../../../../hooks/useContext';
 import { Identity } from '../../../../interfaces/identities';
 import { useEntityApi } from '../../../../hooks/useEntityApi';
 import ConfirmationPrompt from '../../../ConfirmationPrompt/ConfirmationPrompt';
+import CodeBlock from '../../../CodeBlock';
 
 const Identities: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -33,6 +34,7 @@ const Identities: React.FC = () => {
 
   return (
     <SC.Wrapper>
+      <CodeBlock />
       <ConfirmationPrompt
         open={deleteOpen}
         setOpen={setDeleteOpen}
