@@ -200,7 +200,7 @@ const Overview: React.FC = () => {
         setOpen={setDeleteOpen}
         handleConfirmation={handleDelete}
         title={`Are you sure you want to delete this user?`}
-        description={`You cannot undo this action.`}
+        description={`Deleting this user will remove all of their access to Fusebit. You will have to re-add them again`}
       />
       <Modal
         aria-labelledby="transition-modal-title"

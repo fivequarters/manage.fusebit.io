@@ -307,7 +307,8 @@ const TableComponent: React.FC<Props> = ({
       ) : (
         !loading && (
           <SC.NoIntegrationWrapper>
-            Your {integrationTable ? 'integrations' : 'connectors'} list is empty, please create an integration
+            Your {integrationTable ? 'integrations' : 'connectors'} list is empty, please create{' '}
+            {integrationTable ? 'an integration' : 'a connector'}
           </SC.NoIntegrationWrapper>
         )
       )}
