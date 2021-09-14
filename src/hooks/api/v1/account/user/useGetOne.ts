@@ -5,7 +5,13 @@ import { useAxios } from '../../../../useAxios';
 export const useAccountUserGetOne = <T>(params: Params) => {
   const { axios } = useAxios();
 
-  return useQuery('accountUserGetOne', () => axios<T>(`/v1/account/${params.accountId}/user/${params.userId}`, 'get'), {
-    enabled: !!params.enabled,
-  });
+  const { enabled, ...queryParams } = params;
+
+  return useQuery(
+    ['accountUserGetOne', queryParams],
+    () => axios<T>(`/v1/account/${queryParams.accountId}/user/${queryParams.userId}`, 'get'),
+    {
+      enabled: !!enabled,
+    }
+  );
 };
