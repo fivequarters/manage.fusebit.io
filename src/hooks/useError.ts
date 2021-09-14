@@ -53,11 +53,10 @@ const errorCross = `
     cursor: pointer;
     `;
 
-
 const errorMessageContainer = `
  display: flex;
  align-items: flex-start;
-`
+`;
 
 export const useError = () => {
   const location = useLocation();
