@@ -4,17 +4,17 @@ import * as SC from './styles';
 interface Props {
   active: boolean;
   description: string;
-  highlightedDescription: string;
+  highlightedDescription?: string;
   href: string;
 }
 
-const InformationalBanner: React.FC<Props> = ({ active, description, highlightedDescription, href }) => {
-  if (active) {
-    return (
-      <SC.Banner>
-        <SC.InfoIcon />
-        <SC.Description>
-          {description + ' '}
+const InformationalBanner: React.FC<Props> = ({ description, highlightedDescription, href }) => {
+  return (
+    <SC.Banner>
+      <SC.InfoIcon />
+      <SC.Description>
+        {description + ' '}
+        {highlightedDescription && (
           <strong>
             {highlightedDescription.split(' ').map((word: string, index, array) => {
               // we get the last higlighted word and use it as our link
@@ -28,12 +28,10 @@ const InformationalBanner: React.FC<Props> = ({ active, description, highlighted
               return word + ' ';
             })}
           </strong>
-        </SC.Description>
-      </SC.Banner>
-    );
-  }
-
-  return null;
+        )}
+      </SC.Description>
+    </SC.Banner>
+  );
 };
 
 export default InformationalBanner;
