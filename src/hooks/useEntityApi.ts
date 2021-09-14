@@ -58,11 +58,10 @@ export const useEntityApi = (preventLoader?: boolean) => {
     await waitForEntityStateChange(entity.entityType, [entity.id]);
   };
 
-  const _createUser = async (data: Account, reloadUsers?: Function) => {
+  const _createUser = async (data: Account) => {
     try {
       createLoader();
       const response = await createUser.mutateAsync({ ...data, accountId: userData.accountId });
-      if (reloadUsers) reloadUsers();
       if (response.data.id) {
         const token = await _createToken(response.data.id);
         return token;
