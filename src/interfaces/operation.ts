@@ -23,6 +23,7 @@ export enum OperationType {
 export enum OperationState {
   active = 'active',
   processing = 'processing',
+  invalid = 'invalid',
 }
 
 export enum OperationStatus {
