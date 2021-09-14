@@ -14,6 +14,7 @@ import {
   Popper,
   MenuItem,
   MenuList,
+  Tooltip,
 } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import AddIcon from '@material-ui/icons/Add';
@@ -30,7 +31,7 @@ import EditCli from './EditCli';
 import EditGui from './EditGui';
 import { useGetRedirectLink } from '../../../../hooks/useGetRedirectLink';
 import FeedPicker from '../../../FeedPicker';
-import ConnectorComponent from './ConnectorComponent';
+import ListComponent from './ListComponent';
 import { Entity, Feed } from '../../../../interfaces/feed';
 import { Data } from '../../../../interfaces/feedPicker';
 import { useReplaceMustache } from '../../../../hooks/useReplaceMustache';
@@ -38,6 +39,8 @@ import { FinalConnector } from '../../../../interfaces/integrationDetailDevelop'
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useEntityApi } from '../../../../hooks/useEntityApi';
+import { useBackendClient } from '../../../../hooks/useBackendClient';
+import { BackendClient } from '../../../../interfaces/backendClient';
 
 const Develop: React.FC = () => {
   const history = useHistory();
@@ -65,7 +68,27 @@ const Develop: React.FC = () => {
   const [connectorPickerOpen, setConnectorPickerOpen] = React.useState(false);
   const { replaceMustache } = useReplaceMustache();
   const [loading, setLoading] = React.useState(false);
+  const [backendClientsLoading, setBackendClientsLoading] = React.useState(true);
   const { toggleConnector, createEntity } = useEntityApi(true);
+  const [keyIsCopied, setKeyIsCopied] = useState(false);
+  const [showWarning, setShowWarning] = useState(false);
+  const { getBackendClientListener, registerBackend, removeBackendClientListener } = useBackendClient();
+  const [backendClients, setBackendClients] = useState<BackendClient[]>([]);
+  const [backendClient, setBackendClient] = useState<BackendClient>();
+  const [connectHover, setConnectHover] = useState(false);
+
+  const getBackendClients = async () => {
+    const backendClients = await getBackendClientListener();
+    backendClients && setBackendClients(backendClients);
+    setBackendClientsLoading(false);
+  };
+
+  React.useEffect(() => {
+    if (userData.accountId) {
+      getBackendClients();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userData]);
 
   const editOptions = [
     { buttonLabel: 'Edit', optionLabel: 'Edit in the in-browser editor', handle: setEditGuiOpen },
@@ -127,8 +150,14 @@ const Develop: React.FC = () => {
     setConnectorListOpen(false);
   };
 
-  const handleConnectorDelete = async (connector: Entity) => {
-    _toggleConnector(connector, false);
+  const handleListComponentDelete = async (connector: Entity) => {
+    if (connector.isApplication) {
+      setConnectOpen(false);
+      await removeBackendClientListener(connector.id);
+      await getBackendClients();
+    } else {
+      _toggleConnector(connector, false);
+    }
   };
 
   const linkConnector = async (connector: Entity) => {
@@ -217,6 +246,25 @@ const Develop: React.FC = () => {
     return true;
   };
 
+  const onConnectClose = async () => {
+    if (keyIsCopied || showWarning) {
+      await getBackendClients();
+      setConnectOpen(false);
+      setTimeout(() => {
+        setShowWarning(false);
+        setKeyIsCopied(false);
+      }, 250);
+    } else {
+      setShowWarning(true);
+    }
+  };
+
+  const handleConnectOpen = async () => {
+    const backendClient = await registerBackend();
+    setBackendClient(backendClient);
+    setConnectOpen(true);
+  };
+
   return (
     <SC.Background>
       <Modal
@@ -239,12 +287,24 @@ const Develop: React.FC = () => {
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         open={connectOpen}
-        onClose={() => setConnectOpen(false)}
+        onClose={onConnectClose}
         closeAfterTransition
         BackdropComponent={Backdrop}
       >
         <Fade in={connectOpen}>
-          <Connect open={connectOpen} onClose={() => setConnectOpen(false)} />
+          <Connect
+            onDelete={handleListComponentDelete}
+            name={backendClient?.name || ''}
+            id={backendClient?.id || ''}
+            onChange={getBackendClients}
+            token={backendClient?.token || ''}
+            showWarning={showWarning}
+            setShowWarning={setShowWarning}
+            keyIsCopied={keyIsCopied}
+            setKeyIsCopied={setKeyIsCopied}
+            open={connectOpen}
+            onClose={onConnectClose}
+          />
         </Fade>
       </Modal>
       <Modal
@@ -271,12 +331,12 @@ const Develop: React.FC = () => {
                 })
                 .map((connector: Connector, index: number) => {
                   return (
-                    <ConnectorComponent
+                    <ListComponent
                       onLinkConnectorClick={(connector: any) => linkConnector(connector)}
                       linkConnector={true}
-                      key={index}
+                      key={connector.id}
                       connector={connector}
-                      onConnectorDelete={(connector: Entity) => handleConnectorDelete(connector)}
+                      onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
                     />
                   );
                 })}
@@ -321,17 +381,58 @@ const Develop: React.FC = () => {
         <SC.FlexDown>
           <SC.Card>
             <SC.CardTitle>Your Application</SC.CardTitle>
+            {backendClients.length > 0 ? (
+              backendClients.map((client: BackendClient) => (
+                <ListComponent
+                  onChange={getBackendClients}
+                  connector={{ ...client, isApplication: true }}
+                  onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
+                />
+              ))
+            ) : !backendClientsLoading ? (
+              <SC.NoApplicationsConfiguredWrapper>
+                <SC.Flex>
+                  <SC.DashedBox />
+                  <SC.NoApplicationsConfiguredTitle>
+                    No application connections configured
+                  </SC.NoApplicationsConfiguredTitle>
+                </SC.Flex>
+                <SC.NoApplicationsConfiguredDescription>
+                  Once you have tested your integration, click “Connect” to see how to call it from your application.
+                </SC.NoApplicationsConfiguredDescription>
+              </SC.NoApplicationsConfiguredWrapper>
+            ) : (
+              <CSC.LoaderContainer>
+                <CSC.Spinner />
+              </CSC.LoaderContainer>
+            )}
+
             <SC.CardButtonWrapper>
-              <Button
-                onClick={() => setConnectOpen(true)}
-                startIcon={<AddIcon />}
-                style={{ width: '200px' }}
-                size="large"
-                variant="outlined"
-                color="primary"
+              <Tooltip
+                PopperProps={{
+                  disablePortal: true,
+                }}
+                disableFocusListener
+                disableHoverListener
+                disableTouchListener
+                open={connectHover && backendClients.length >= 5}
+                title="You can't add more than 5 applications"
+                aria-label="You can't add more than 5 applications"
               >
-                Connect
-              </Button>
+                <div onMouseEnter={() => setConnectHover(true)} onMouseLeave={() => setConnectHover(false)}>
+                  <Button
+                    onClick={handleConnectOpen}
+                    startIcon={<AddIcon />}
+                    disabled={backendClients.length >= 5}
+                    style={{ width: '200px' }}
+                    size="large"
+                    variant="outlined"
+                    color="primary"
+                  >
+                    Connect
+                  </Button>
+                </div>
+              </Tooltip>
             </SC.CardButtonWrapper>
           </SC.Card>
           <SC.LinkWrapper>
@@ -460,10 +561,10 @@ const Develop: React.FC = () => {
                 filterConnectors().map((connector: FinalConnector, index: number) => {
                   if (index < 5) {
                     return (
-                      <ConnectorComponent
+                      <ListComponent
                         key={index}
                         connector={connector}
-                        onConnectorDelete={(connector: Entity) => handleConnectorDelete(connector)}
+                        onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
                       />
                     );
                   }
