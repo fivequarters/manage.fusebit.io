@@ -10,6 +10,7 @@ import { APP_TITLE } from './utils/constants';
 import { RouteItem } from './interfaces/router';
 import { ContextProvider } from './hooks/useContext';
 import { validateToken } from './utils/utils';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 function App() {
   const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ function App() {
         </Helmet>
         <ContextProvider>
           <QueryClientProvider client={queryClient}>
+            {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />}
             <ThemeProvider theme={responsiveFontSizes(createMuiTheme(lightTheme))}>
               <CookieConsent
                 location="bottom"

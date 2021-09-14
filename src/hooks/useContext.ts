@@ -38,6 +38,7 @@ const _useContext = () => {
     localStorage.setItem(LS_KEY, JSON.stringify(__userData));
   };
 
+
   const logout = () => {
     localStorage.setItem(LS_KEY, JSON.stringify({}));
     setUserData({ picture: userData.picture });

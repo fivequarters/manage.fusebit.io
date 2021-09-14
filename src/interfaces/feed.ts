@@ -24,6 +24,7 @@ interface EntityComponent {
 export interface Entity {
   entityType: string;
   id: string;
+  isApplication?: boolean;
   data: {
     id?: string;
     files?: { [key: string]: any };

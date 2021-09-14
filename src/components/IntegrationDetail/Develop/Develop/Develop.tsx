@@ -2,7 +2,21 @@ import React from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import * as SC from './styles';
 import * as CSC from '../../../globalStyle';
-import { Button, Modal, Backdrop, Fade } from '@material-ui/core';
+import {
+  Button,
+  ButtonGroup,
+  Modal,
+  Backdrop,
+  Fade,
+  ClickAwayListener,
+  Grow,
+  Paper,
+  Popper,
+  MenuItem,
+  MenuList,
+  Tooltip,
+} from '@material-ui/core';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import AddIcon from '@material-ui/icons/Add';
 import arrow from '../../../../assets/arrow-right-black.svg';
 import Connect from './Connect';
@@ -13,10 +27,11 @@ import { useAccountIntegrationsGetOne } from '../../../../hooks/api/v2/account/i
 import { useAccountConnectorsGetAll } from '../../../../hooks/api/v2/account/connector/useGetAll';
 import { Connector } from '../../../../interfaces/connector';
 import { Integration, InnerConnector } from '../../../../interfaces/integration';
-import Edit from './Edit';
+import EditCli from './EditCli';
+import EditGui from './EditGui';
 import { useGetRedirectLink } from '../../../../hooks/useGetRedirectLink';
 import FeedPicker from '../../../FeedPicker';
-import ConnectorComponent from './ConnectorComponent';
+import ListComponent from './ListComponent';
 import { Entity, Feed } from '../../../../interfaces/feed';
 import { Data } from '../../../../interfaces/feedPicker';
 import { useReplaceMustache } from '../../../../hooks/useReplaceMustache';
@@ -24,6 +39,8 @@ import { FinalConnector } from '../../../../interfaces/integrationDetailDevelop'
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useEntityApi } from '../../../../hooks/useEntityApi';
+import { useBackendClient } from '../../../../hooks/useBackendClient';
+import { BackendClient } from '../../../../interfaces/backendClient';
 
 const Develop: React.FC = () => {
   const history = useHistory();
@@ -43,14 +60,56 @@ const Develop: React.FC = () => {
   });
   const { createLoader, removeLoader } = useLoader();
   const { createError } = useError();
-  const [editOpen, setEditOpen] = React.useState(false);
+  const [editCliOpen, setEditCliOpen] = React.useState(false);
+  const [editGuiOpen, setEditGuiOpen] = React.useState(false);
   const [connectOpen, setConnectOpen] = React.useState(false);
   const [connectorListOpen, setConnectorListOpen] = React.useState(false);
   const { getRedirectLink } = useGetRedirectLink();
   const [connectorPickerOpen, setConnectorPickerOpen] = React.useState(false);
   const { replaceMustache } = useReplaceMustache();
   const [loading, setLoading] = React.useState(false);
+  const [backendClientsLoading, setBackendClientsLoading] = React.useState(true);
   const { toggleConnector, createEntity } = useEntityApi(true);
+  const [keyIsCopied, setKeyIsCopied] = useState(false);
+  const [showWarning, setShowWarning] = useState(false);
+  const { getBackendClientListener, registerBackend, removeBackendClientListener } = useBackendClient();
+  const [backendClients, setBackendClients] = useState<BackendClient[]>([]);
+  const [backendClient, setBackendClient] = useState<BackendClient>();
+  const [connectHover, setConnectHover] = useState(false);
+
+  const getBackendClients = async () => {
+    const backendClients = await getBackendClientListener();
+    backendClients && setBackendClients(backendClients);
+    setBackendClientsLoading(false);
+  };
+
+  React.useEffect(() => {
+    if (userData.accountId) {
+      getBackendClients();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userData]);
+
+  const editOptions = [
+    { buttonLabel: 'Edit', optionLabel: 'Edit in the in-browser editor', handle: setEditGuiOpen },
+    { buttonLabel: 'CLI', optionLabel: 'Edit with your favorite editor', handle: setEditCliOpen },
+  ];
+  const editOptionAnchor = React.useRef<HTMLDivElement>(null);
+  const [editOption, setEditOption] = React.useState(0);
+  const [editOptionOpen, setEditOptionOpen] = React.useState(false);
+
+  const handleCloseEditOptions = (event: React.MouseEvent<Document, MouseEvent>) => {
+    if (editOptionAnchor.current && editOptionAnchor.current.contains(event.target as HTMLElement)) {
+      return;
+    }
+
+    setEditOptionOpen(false);
+  };
+
+  const handleEditOptionClick = (event: React.MouseEvent<HTMLLIElement, MouseEvent>, index: number) => {
+    setEditOption(index);
+    setEditOptionOpen(false);
+  };
 
   React.useEffect(() => {
     const res = localStorage.getItem('refreshToken');
@@ -91,8 +150,14 @@ const Develop: React.FC = () => {
     setConnectorListOpen(false);
   };
 
-  const handleConnectorDelete = async (connector: Entity) => {
-    _toggleConnector(connector, false);
+  const handleListComponentDelete = async (connector: Entity) => {
+    if (connector.isApplication) {
+      setConnectOpen(false);
+      await removeBackendClientListener(connector.id);
+      await getBackendClients();
+    } else {
+      _toggleConnector(connector, false);
+    }
   };
 
   const linkConnector = async (connector: Entity) => {
@@ -181,6 +246,25 @@ const Develop: React.FC = () => {
     return true;
   };
 
+  const onConnectClose = async () => {
+    if (keyIsCopied || showWarning) {
+      await getBackendClients();
+      setConnectOpen(false);
+      setTimeout(() => {
+        setShowWarning(false);
+        setKeyIsCopied(false);
+      }, 250);
+    } else {
+      setShowWarning(true);
+    }
+  };
+
+  const handleConnectOpen = async () => {
+    const backendClient = await registerBackend();
+    setBackendClient(backendClient);
+    setConnectOpen(true);
+  };
+
   return (
     <SC.Background>
       <Modal
@@ -203,12 +287,24 @@ const Develop: React.FC = () => {
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         open={connectOpen}
-        onClose={() => setConnectOpen(false)}
+        onClose={onConnectClose}
         closeAfterTransition
         BackdropComponent={Backdrop}
       >
         <Fade in={connectOpen}>
-          <Connect open={connectOpen} onClose={() => setConnectOpen(false)} />
+          <Connect
+            onDelete={handleListComponentDelete}
+            name={backendClient?.name || ''}
+            id={backendClient?.id || ''}
+            onChange={getBackendClients}
+            token={backendClient?.token || ''}
+            showWarning={showWarning}
+            setShowWarning={setShowWarning}
+            keyIsCopied={keyIsCopied}
+            setKeyIsCopied={setKeyIsCopied}
+            open={connectOpen}
+            onClose={onConnectClose}
+          />
         </Fade>
       </Modal>
       <Modal
@@ -235,12 +331,12 @@ const Develop: React.FC = () => {
                 })
                 .map((connector: Connector, index: number) => {
                   return (
-                    <ConnectorComponent
+                    <ListComponent
                       onLinkConnectorClick={(connector: any) => linkConnector(connector)}
                       linkConnector={true}
-                      key={index}
+                      key={connector.id}
                       connector={connector}
-                      onConnectorDelete={(connector: Entity) => handleConnectorDelete(connector)}
+                      onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
                     />
                   );
                 })}
@@ -251,13 +347,33 @@ const Develop: React.FC = () => {
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        open={editOpen}
-        onClose={() => setEditOpen(false)}
+        open={editCliOpen}
+        onClose={() => setEditCliOpen(false)}
         closeAfterTransition
         BackdropComponent={Backdrop}
       >
-        <Fade in={editOpen}>
-          <Edit open={editOpen} onClose={() => setEditOpen(false)} integration={integrationData?.data.id || ''} />
+        <Fade in={editCliOpen}>
+          <EditCli
+            open={editCliOpen}
+            onClose={() => setEditCliOpen(false)}
+            integrationId={integrationData?.data.id || ''}
+          />
+        </Fade>
+      </Modal>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={editGuiOpen}
+        onClose={() => setEditGuiOpen(false)}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+      >
+        <Fade in={editGuiOpen}>
+          <EditGui
+            open={editGuiOpen}
+            onClose={() => setEditGuiOpen(false)}
+            integrationId={integrationData?.data.id || ''}
+          />
         </Fade>
       </Modal>
       <SC.Flex>
@@ -265,17 +381,58 @@ const Develop: React.FC = () => {
         <SC.FlexDown>
           <SC.Card>
             <SC.CardTitle>Your Application</SC.CardTitle>
+            {backendClients.length > 0 ? (
+              backendClients.map((client: BackendClient) => (
+                <ListComponent
+                  onChange={getBackendClients}
+                  connector={{ ...client, isApplication: true }}
+                  onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
+                />
+              ))
+            ) : !backendClientsLoading ? (
+              <SC.NoApplicationsConfiguredWrapper>
+                <SC.Flex>
+                  <SC.DashedBox />
+                  <SC.NoApplicationsConfiguredTitle>
+                    No application connections configured
+                  </SC.NoApplicationsConfiguredTitle>
+                </SC.Flex>
+                <SC.NoApplicationsConfiguredDescription>
+                  Once you have tested your integration, click “Connect” to see how to call it from your application.
+                </SC.NoApplicationsConfiguredDescription>
+              </SC.NoApplicationsConfiguredWrapper>
+            ) : (
+              <CSC.LoaderContainer>
+                <CSC.Spinner />
+              </CSC.LoaderContainer>
+            )}
+
             <SC.CardButtonWrapper>
-              <Button
-                onClick={() => setConnectOpen(true)}
-                startIcon={<AddIcon />}
-                style={{ width: '200px' }}
-                size="large"
-                variant="outlined"
-                color="primary"
+              <Tooltip
+                PopperProps={{
+                  disablePortal: true,
+                }}
+                disableFocusListener
+                disableHoverListener
+                disableTouchListener
+                open={connectHover && backendClients.length >= 5}
+                title="You can't add more than 5 applications"
+                aria-label="You can't add more than 5 applications"
               >
-                Connect
-              </Button>
+                <div onMouseEnter={() => setConnectHover(true)} onMouseLeave={() => setConnectHover(false)}>
+                  <Button
+                    onClick={handleConnectOpen}
+                    startIcon={<AddIcon />}
+                    disabled={backendClients.length >= 5}
+                    style={{ width: '200px' }}
+                    size="large"
+                    variant="outlined"
+                    color="primary"
+                  >
+                    Connect
+                  </Button>
+                </div>
+              </Tooltip>
             </SC.CardButtonWrapper>
           </SC.Card>
           <SC.LinkWrapper>
@@ -305,15 +462,71 @@ const Develop: React.FC = () => {
               <SC.CardIntegration>{integrationData?.data.id}</SC.CardIntegration>
             )}
             <SC.CardButtonWrapper>
-              <Button
-                onClick={() => setEditOpen(true)}
-                style={{ width: '200px' }}
-                size="large"
-                variant="contained"
-                color="primary"
+              <ButtonGroup variant="contained" color="primary" ref={editOptionAnchor}>
+                <Button
+                  onClick={() => editOptions[editOption].handle(true)}
+                  style={{ width: '200px' }}
+                  size="large"
+                  variant="contained"
+                  color="primary"
+                >
+                  {editOptions[editOption].buttonLabel}
+                </Button>
+                <Button
+                  color="primary"
+                  size="small"
+                  aria-controls={editOptionOpen ? 'split-button-menu' : undefined}
+                  aria-expanded={editOptionOpen ? 'true' : undefined}
+                  aria-label="select edit action"
+                  aria-haspopup="menu"
+                  onClick={() => setEditOptionOpen((prevOpen) => !prevOpen)}
+                >
+                  <ArrowDropDownIcon />
+                </Button>
+              </ButtonGroup>
+
+              <Popper
+                open={editOptionOpen}
+                anchorEl={editOptionAnchor.current}
+                role={undefined}
+                transition
+                disablePortal
               >
-                Edit
-              </Button>
+                {({ TransitionProps, placement }) => (
+                  <Grow
+                    {...TransitionProps}
+                    style={{
+                      transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
+                    }}
+                  >
+                    <Paper>
+                      <ClickAwayListener onClickAway={handleCloseEditOptions}>
+                        <MenuList id="split-button-menu">
+                          {editOptions.map(
+                            (
+                              option: {
+                                buttonLabel: string;
+                                optionLabel: string;
+                                handle: React.Dispatch<React.SetStateAction<boolean>>;
+                              },
+                              index: number
+                            ) => (
+                              <MenuItem
+                                key={option.buttonLabel}
+                                disabled={index === 2}
+                                selected={index === editOption}
+                                onClick={(event) => handleEditOptionClick(event, index)}
+                              >
+                                {option.optionLabel}
+                              </MenuItem>
+                            )
+                          )}
+                        </MenuList>
+                      </ClickAwayListener>
+                    </Paper>
+                  </Grow>
+                )}
+              </Popper>
             </SC.CardButtonWrapper>
           </SC.Card>
           <SC.LinkWrapper>
@@ -348,10 +561,10 @@ const Develop: React.FC = () => {
                 filterConnectors().map((connector: FinalConnector, index: number) => {
                   if (index < 5) {
                     return (
-                      <ConnectorComponent
+                      <ListComponent
                         key={index}
                         connector={connector}
-                        onConnectorDelete={(connector: Entity) => handleConnectorDelete(connector)}
+                        onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
                       />
                     );
                   }

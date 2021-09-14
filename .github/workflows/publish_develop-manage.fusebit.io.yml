@@ -58,7 +58,7 @@ jobs:
         run: aws s3 ls
       - name: Build for manage.fusebit.io
         env:
-          REACT_APP_DEPLOYMENT_KEY: Stage
+          REACT_APP_DEPLOYMENT_KEY: Develop
           REACT_APP_FUSEBIT_DEPLOYMENT: https://stage.us-west-2.fusebit.io
           REACT_APP_AUTH0_DOMAIN: https://fusebit.auth0.com
           REACT_APP_AUTH0_CLIENT_ID: dimuls6VLYgXpD7UYCo6yPdKAXPXjQng
@@ -71,7 +71,7 @@ jobs:
         run: ./scripts/build_tree.sh
       - name: Publish - website
         env:
-          CLOUDFRONT_ID: EBDYJ0OF13PS7
+          CLOUDFRONT_ID: ET3QONFRTHB70
           S3_BUCKET: develop-manage.fusebit.io
         run: ./scripts/publish_website.sh
       - name: Notify slack success
