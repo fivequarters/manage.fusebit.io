@@ -20,5 +20,6 @@ export const usePagination = () => {
     page,
     rowsPerPage,
     ROWS_PER_PAGE_OPTIONS,
+    setPage,
   };
 };

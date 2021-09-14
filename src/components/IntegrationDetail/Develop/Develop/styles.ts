@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import dottedBox from '../../../../assets/dotted-box.svg';
 
 export const Background = styled.div`
   padding-bottom: 76px;
@@ -283,4 +284,36 @@ export const ConnectorList = styled.div`
     max-height: 350px;
     overflow: auto;
   }
+`;
+
+export const NoApplicationsConfiguredWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 24px;
+`;
+
+export const DashedBox = styled.div`
+  height: 72px;
+  width: 72px;
+  background-image: url(${dottedBox});
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: 24px;
+`;
+
+export const NoApplicationsConfiguredTitle = styled.h4`
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 500;
+  color: var(--black);
+  max-width: 190px;
+`;
+
+export const NoApplicationsConfiguredDescription = styled.p`
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 300;
+  color: var(--black);
+  margin-top: 24px;
+  max-width: 315px;
 `;

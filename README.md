@@ -12,6 +12,21 @@
 
 If you are running the portal locally against a local function-api stack, read the instuctions [here](https://docs.google.com/document/d/1dkI4UdRgaD840HWc-sGi6_qz4JY8AHts97MD-1O4SpY/edit#heading=h.gtoda0wgke4n).
 
+### Localhost over Stage
+
+If you are running the portal locally against the Stage deployment, configure .env as follows:
+
+```
+REACT_APP_FUSEBIT_DEPLOYMENT=https://stage.us-west-2.fusebit.io
+REACT_APP_AUTH0_AUDIENCE=https://stage.us-west-2.fusebit.io
+REACT_APP_AUTH0_DOMAIN=https://fusebit.auth0.com
+REACT_APP_AUTH0_CLIENT_ID=dimuls6VLYgXpD7UYCo6yPdKAXPXjQng
+REACT_APP_LOGOUT_REDIRECT_URL=https://fusebit.io
+REACT_APP_SEGMENT_KEY=VJm74fG8GSNVZHwQ3xAbMIaM2upyXSjT
+REACT_APP_INTEGRATIONS_FEED_URL=http://localhost:3000/feed/integrationsFeed.json
+REACT_APP_CONNECTORS_FEED_URL=http://localhost:3000/feed/connectorsFeed.json
+```
+
 ### Localhost over Production
 
 If you are running the portal locally against the production Fusebit deployment, configure .env as follows:
