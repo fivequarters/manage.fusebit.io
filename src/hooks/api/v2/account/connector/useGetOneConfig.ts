@@ -5,14 +5,16 @@ import { useAxios } from '../../../../useAxios';
 export const useAccountConnectorsGetOneConfig = <T>(params: Params) => {
   const { axios } = useAxios();
 
+  const { enabled, ...queryParams } = params;
+
   return useQuery(
-    'accountConnectorsGetOneConfig',
+    ['accountConnectorsGetOneConfig', queryParams],
     () =>
       axios<T>(
-        `/v2/account/${params.accountId}/subscription/${params.subscriptionId}/connector/${params.id}/api/configure`,
+        `/v2/account/${queryParams.accountId}/subscription/${queryParams.subscriptionId}/connector/${queryParams.id}/api/configure`,
         'get',
         params
       ),
-    { enabled: !!params.enabled }
+    { enabled: !!enabled }
   );
 };

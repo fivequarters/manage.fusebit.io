@@ -2,6 +2,7 @@ import { createGlobalStyle, css, keyframes } from 'styled-components';
 import styled from 'styled-components';
 import spinner from '../assets/spinner.svg';
 import cross from '../assets/cross.svg';
+import copy from '../assets/copy.svg';
 
 export default createGlobalStyle`
    :root {
@@ -9,12 +10,23 @@ export default createGlobalStyle`
         --secondary-color: rgba(215, 229, 255, 0.4);
         --black: #333333;
         --grey: #959595;
+        --yellow: #FFC940;
     }
     a {
         text-decoration: none;
         span {
             display: block;
         }
+    }
+
+    #pendo-text-7f2119cd { // this is pendo launch guide, for some reason it doesnt have cursor pointer by default ):
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    #_pendo-badge_jF5N6MCHUdDHNs8d6qkdUArNI6M { // this is pendo launch guide wrapper
+      z-index: 0 !important;
     }
 `;
 
@@ -93,10 +105,12 @@ export const LineTitle = styled.h4<{ margin?: string }>`
   }
 `;
 
-export const Flex = styled.div`
+export const Flex = styled.div<{ margin?: string; flexDown?: boolean; width?: string }>`
   display: flex;
-  align-items: center;
-  width: 100%;
+  flex-direction: ${(props) => props.flexDown && 'column'};
+  align-items: ${(props) => !props.flexDown && 'center'};
+  width: ${(props) => (props.width ? props.width : '100%')};
+  margin: ${(props) => props.margin && props.margin};
 `;
 
 export const CloseIconMixin = css`
@@ -113,6 +127,19 @@ export const CloseIconMixin = css`
   &:hover {
     cursor: pointer;
     transform: rotate(90deg);
+  }
+`;
+
+export const Copy = styled.div<{ margin?: string }>`
+  height: 12px;
+  width: 12px;
+  background-image: url(${copy});
+  background-repeat: no-repeat;
+  background-size: contain;
+  margin: ${(props) => props.margin && props.margin};
+
+  &:hover {
+    cursor: pointer;
   }
 `;
 

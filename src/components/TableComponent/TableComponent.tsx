@@ -133,9 +133,11 @@ const TableComponent: React.FC<Props> = ({
         setOpen={setDeleteModalOpen}
         handleConfirmation={handleRowDelete}
         title={`Are you sure you want to delete ${integrationText || connectorText || usersText}?`}
-        description={`You cannot undo this action ${
-          integrationTable || connectorTable ? 'and any linked applications may not work as expected.' : ''
-        }`}
+        description={
+          integrationTable || connectorTable
+            ? `You cannot undo this action and any linked applications may not work as expected.`
+            : `Deleting ${usersText} will remove all of their access to Fusebit. You will have to re-add them again.`
+        }
       />
 
       <SC.ButtonContainer>
@@ -300,7 +302,8 @@ const TableComponent: React.FC<Props> = ({
       ) : (
         !loading && (
           <SC.NoIntegrationWrapper>
-            Your {integrationTable ? 'integrations' : 'connectors'} list is empty, please create an integration
+            Your {integrationTable ? 'integrations' : 'connectors'} list is empty, please create{' '}
+            {integrationTable ? 'an integration' : 'a connector'}
           </SC.NoIntegrationWrapper>
         )
       )}

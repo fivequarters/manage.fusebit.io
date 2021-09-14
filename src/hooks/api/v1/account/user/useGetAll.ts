@@ -7,7 +7,13 @@ export const ACCOUNT_USER_GET_ALL = 'accountUserGetAll';
 export const useAccountUserGetAll = <T>(params: Params) => {
   const { axios } = useAxios();
 
-  return useQuery(ACCOUNT_USER_GET_ALL, () => axios<T>(`/v1/account/${params.accountId}/user`, 'get', params), {
-    enabled: !!params.enabled,
-  });
+  const { enabled, ...queryParams } = params;
+
+  return useQuery(
+    [ACCOUNT_USER_GET_ALL, queryParams],
+    () => axios<T>(`/v1/account/${queryParams.accountId}/user`, 'get', params),
+    {
+      enabled: !!enabled,
+    }
+  );
 };

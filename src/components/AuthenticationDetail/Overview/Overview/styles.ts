@@ -102,18 +102,6 @@ export const UserId = styled.div`
   strong {
     font-weight: 700;
   }
-
-  img {
-    height: 12px;
-    width: 12px;
-    margin-right: 6px;
-    object-fit: contain;
-    margin-left: auto;
-
-    &:hover {
-      cursor: pointer;
-    }
-  }
 `;
 
 export const CopySuccess = styled.p<{ copy: boolean }>`
