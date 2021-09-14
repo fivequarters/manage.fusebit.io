@@ -71,7 +71,7 @@ jobs:
         run: ./scripts/build_tree.sh
       - name: Publish - website
         env:
-          CLOUDFRONT_ID: EBDYJ0OF13PS7
+          CLOUDFRONT_ID: ET3QONFRTHB70
           S3_BUCKET: develop-manage.fusebit.io
         run: ./scripts/publish_website.sh
       - name: Notify slack success
