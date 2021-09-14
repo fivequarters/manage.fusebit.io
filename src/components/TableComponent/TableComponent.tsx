@@ -27,7 +27,6 @@ import { usePagination } from '../../hooks/usePagination';
 import { useEntityTable } from '../../hooks/useEntityTable';
 import { Props } from '../../interfaces/tableComponent';
 import { useEntityApi } from '../../hooks/useEntityApi';
-import { Account } from '../../interfaces/account';
 import NewUser from '../Authentication/Users/Users/NewUser';
 import { Row } from '../../interfaces/tableRow';
 import ConfirmationPrompt from '../ConfirmationPrompt/ConfirmationPrompt';
@@ -43,11 +42,9 @@ const TableComponent: React.FC<Props> = ({
   integrations,
   connectors,
   users,
-  reloadIntegrations,
-  reloadConnectors,
-  reloadUsers,
 }) => {
-  const { page, rowsPerPage, handleChangePage, handleChangeRowsPerPage, ROWS_PER_PAGE_OPTIONS } = usePagination();
+  const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage, ROWS_PER_PAGE_OPTIONS } =
+    usePagination();
   const { _createUser } = useEntityApi();
   const {
     handleSelectAllCheck,
@@ -71,12 +68,12 @@ const TableComponent: React.FC<Props> = ({
   } = useEntityTable({
     headless,
     setHeadless,
-    reloadIntegrations,
     integrations,
-    reloadConnectors,
     connectors,
-    reloadUsers,
     users,
+    page,
+    setPage,
+    rowsPerPage,
   });
 
   const isPlural = selected.length > 1;
@@ -127,11 +124,7 @@ const TableComponent: React.FC<Props> = ({
           closeAfterTransition
           BackdropComponent={Backdrop}
         >
-          <NewUser
-            createUser={(data: Account) => _createUser(data, reloadUsers)}
-            open={newUserOpen}
-            onClose={() => setNewUserOpen(false)}
-          />
+          <NewUser createUser={_createUser} open={newUserOpen} onClose={() => setNewUserOpen(false)} />
         </Modal>
       )}
 

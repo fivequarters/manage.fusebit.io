@@ -39,7 +39,7 @@ const errorTitleCss = `
 const errorTextCss = `
     font-size: 14px;
     line-height: 16px;
-    margin-left: 5px;
+    margin-left: 10px;
     margin-right: 15px;
     `;
 
@@ -52,6 +52,11 @@ const errorCross = `
     margin-left: auto;
     cursor: pointer;
     `;
+
+const errorMessageContainer = `
+ display: flex;
+ align-items: flex-start;
+`;
 
 export const useError = () => {
   const location = useLocation();
@@ -75,15 +80,19 @@ export const useError = () => {
     warning.setAttribute('style', errorWarningImage);
     error.appendChild(warning);
 
-    const title = document.createElement('div');
+    const messageContainer = document.createElement('div');
+    messageContainer.setAttribute('style', errorMessageContainer);
+    error.appendChild(messageContainer);
+
+    const title = document.createElement('p');
     title.setAttribute('style', errorTitleCss);
     title.innerHTML = 'Error:';
-    error.appendChild(title);
+    messageContainer.appendChild(title);
 
     const text = document.createElement('p');
     text.setAttribute('style', errorTextCss);
-    text.innerHTML = err.response.data.message.split(':')?.[1] || 'There was an error'; // the element 0 shows the key, the 1 show the value, i only want the value so i get the element 1
-    error.appendChild(text);
+    text.innerHTML = err?.response?.data?.message?.split(':')?.[1] || 'There was an error'; // the element 0 shows the key, the 1 show the value, i only want the value so i get the element 1
+    messageContainer.appendChild(text);
 
     const cross = document.createElement('div');
     cross.setAttribute('id', 'errorCross');
