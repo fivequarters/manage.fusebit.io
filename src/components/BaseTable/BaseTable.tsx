@@ -41,8 +41,8 @@ interface Props {
   emptyTableText: string;
   handleChangePage: (e: any, newPage: number) => void;
   handleChangeRowsPerPage: (e: any) => void;
-  toggleTrigger?: string;
-  isToggleable?: boolean;
+  collapseTrigger?: string;
+  isCollapsible?: boolean;
 }
 
 const BaseTable: React.FC<Props> = ({
@@ -61,8 +61,8 @@ const BaseTable: React.FC<Props> = ({
   emptyTableText,
   handleChangePage,
   handleChangeRowsPerPage,
-  isToggleable,
-  toggleTrigger,
+  isCollapsible,
+  collapseTrigger,
 }) => {
   const computedRowsPerPage = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   const isMobile = useMediaQuery('(max-width: 880px)');
@@ -130,8 +130,8 @@ const BaseTable: React.FC<Props> = ({
                       currentMobileRow={mobileArrowColumns[mobileColumnIndex]}
                       onSelectRow={onSelectRow}
                       row={row}
-                      isToggleable={isToggleable}
-                      toggleTrigger={toggleTrigger}
+                      isCollapsible={isCollapsible}
+                      collapseTrigger={collapseTrigger}
                     />
                   ))}
                 </TableBody>
@@ -164,8 +164,8 @@ const BaseTable: React.FC<Props> = ({
                       currentMobileRow={mobileArrowColumns[mobileColumnIndex]}
                       onSelectRow={onSelectRow}
                       row={row}
-                      isToggleable={isToggleable}
-                      toggleTrigger={toggleTrigger}
+                      isCollapsible={isCollapsible}
+                      collapseTrigger={collapseTrigger}
                     />
                   ))}
                 </TableBody>

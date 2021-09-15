@@ -8,11 +8,11 @@ interface Props {
   onSelectRow: (e: any, id: string) => void;
   checked: boolean;
   currentMobileRow: string | React.ReactNode;
-  toggleTrigger?: string;
-  isToggleable?: boolean;
+  collapseTrigger?: string;
+  isCollapsible?: boolean;
 }
 
-const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, toggleTrigger, isToggleable }: Props) => {
+const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTrigger, isCollapsible }: Props) => {
   const isMobile = useMediaQuery('(max-width: 880px)');
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -52,7 +52,7 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, toggleTrigg
           <TableCell
             component="th"
             scope="row"
-            onClick={toggleTrigger === headers[0] ? () => setIsExpanded(!isExpanded) : undefined}
+            onClick={collapseTrigger === headers[0] ? () => setIsExpanded(!isExpanded) : undefined}
           >
             {row[headers[0]]}
           </TableCell>
@@ -60,7 +60,7 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, toggleTrigg
             {currentMobileRow}
           </TableCell>
         </SC.TableRow>
-        {isToggleable && renderCollapsable(row)}
+        {isCollapsible && renderCollapsable(row)}
       </>
     );
   };
@@ -74,13 +74,13 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, toggleTrigg
             <TableCell
               component="th"
               scope="row"
-              onClick={toggleTrigger === header ? () => setIsExpanded(!isExpanded) : undefined}
+              onClick={collapseTrigger === header ? () => setIsExpanded(!isExpanded) : undefined}
             >
               {row[header]}
             </TableCell>
           ))}
         </SC.TableRow>
-        {isToggleable && renderCollapsable(row)}
+        {isCollapsible && renderCollapsable(row)}
       </>
     );
   };
