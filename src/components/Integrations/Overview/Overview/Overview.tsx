@@ -5,6 +5,7 @@ import { Integration } from '../../../../interfaces/integration';
 import { OverviewProps } from '../../../../interfaces/integrations';
 import { IntegrationCells } from '../../../../interfaces/tableRow';
 import TableComponent from '../../../TableComponent';
+import IntegrationsTable from '../../IntegrationsTable/IntegrationsTable';
 
 const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
   const { userData } = useContext();
@@ -36,15 +37,18 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
   };
 
   return (
-    <TableComponent
-      integrationTable={true}
-      headless={headless}
-      setHeadless={setHeadless}
-      integrations={integrations}
-      selectedCell={selectedCell}
-      handleNextCellSelect={handleNextCellSelect}
-      handlePreviousCellSelect={handlePreviousCellSelect}
-    />
+    <>
+      <IntegrationsTable headless={headless} setHeadless={setHeadless} integrations={integrations} />
+      <TableComponent
+        integrationTable={true}
+        headless={headless}
+        setHeadless={setHeadless}
+        integrations={integrations}
+        selectedCell={selectedCell}
+        handleNextCellSelect={handleNextCellSelect}
+        handlePreviousCellSelect={handlePreviousCellSelect}
+      />
+    </>
   );
 };
 
