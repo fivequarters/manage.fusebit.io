@@ -5,6 +5,7 @@ import { usePagination } from '../../../../hooks/usePagination';
 import { useParams } from 'react-router-dom';
 import { useAccountConnectorIdentityGetAll } from '../../../../hooks/api/v2/account/connector/identity/useGetAll';
 import { Identity } from '../../../../interfaces/identities';
+import { format } from 'date-fns';
 
 const IntegrationsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -20,6 +21,7 @@ const IntegrationsTable = () => {
       id,
     },
     {
+      // TODO: This is a workaround to calculate the select all checkbox
       onSuccess: (res) => setRows(res?.data?.items || []),
     }
   );
@@ -29,7 +31,7 @@ const IntegrationsTable = () => {
   const rows = items.map((identity) => ({
     installID: identity.id,
     id: identity.id,
-    dateCreated: identity.dateAdded,
+    dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
     associatedIdentities: identity.dateAdded,
     listOfTags: identity.id,
     collapsableContent: <div>asdsad</div>,

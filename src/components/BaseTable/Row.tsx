@@ -53,6 +53,7 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
             isMain
             component="th"
             scope="row"
+            isClickable
             onClick={collapseTrigger === headers[0] ? () => setIsExpanded(!isExpanded) : undefined}
           >
             {row[headers[0]]}
@@ -74,6 +75,7 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
           {headers.map((header: any, i: number) => (
             <SC.TableCell
               isMain={i === 0}
+              isClickable={collapseTrigger === header}
               component="th"
               scope="row"
               onClick={collapseTrigger === header ? () => setIsExpanded(!isExpanded) : undefined}
