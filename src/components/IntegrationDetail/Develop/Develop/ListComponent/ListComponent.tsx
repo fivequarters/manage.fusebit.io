@@ -81,7 +81,7 @@ const ListComponent: React.FC<ListComponentProps> = ({
         }
         description={
           connector.isApplication
-            ? 'This will cause all integrations in your application to stop working. You will be able to fix this by generating a new key and authenticating with Fusebit again.'
+            ? 'All calls from your application to Fusebit that use this key will fail. Before deleting this key, make sure your application is no longer using this key.'
             : 'This will break the integration for your application and it will not work until you re-link this connector back'
         }
         confirmationButtonText={connector.isApplication ? 'Delete' : 'Remove'}
