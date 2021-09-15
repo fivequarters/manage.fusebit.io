@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import { useAccountIntegrationInstanceGetAll } from '../../../../hooks/api/v2/account/integration/instance/useGetAll';
 import { Identity } from '../../../../interfaces/identities';
 import { format } from 'date-fns';
+import CodeBlock from '../../../CodeBlock';
 
 const InstallsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -34,7 +35,7 @@ const InstallsTable = () => {
     dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
     associatedIdentities: identity.dateAdded,
     listOfTags: identity.id,
-    collapsableContent: <div>asdsad</div>,
+    collapsableContent: <CodeBlock code={JSON.stringify('json', null, ' ')} />,
   }));
 
   return (
