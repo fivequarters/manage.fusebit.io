@@ -8,7 +8,7 @@ interface Props {
 
 const Tag: React.FC<Props> = ({ children, onClick }) => {
   return (
-    <SC.Wrapper cursorPointer={!!onClick} onClick={onClick && onClick}>
+    <SC.Wrapper cursorPointer={!!onClick} onClick={() => onClick?.()}>
       <SC.Tag>{children}</SC.Tag>
     </SC.Wrapper>
   );
