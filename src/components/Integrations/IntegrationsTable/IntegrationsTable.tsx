@@ -32,6 +32,7 @@ const IntegrationsTable = ({ headless, setHeadless, integrations }: Props) => {
     name: row.id,
     installs: <GetInstances id={row.id} />,
     test: row.id,
+    collapsableContent: <GetInstances id={row.id} />,
   }));
 
   return (
@@ -51,6 +52,8 @@ const IntegrationsTable = ({ headless, setHeadless, integrations }: Props) => {
       onSelectRow={handleCheck}
       isSelected={isSelected}
       selected={selected}
+      isToggleable
+      toggleTrigger="name"
     />
   );
 };
