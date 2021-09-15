@@ -66,7 +66,7 @@ const Connect = React.forwardRef(
         handleConfirmation={() => onDelete({ isApplication: true, id: id })}
         title={'Are you sure you want to delete this application?'}
         description={
-          'This will cause all integrations in your application to stop working. You will be able to fix this by generating a new key and authenticating with Fusebit again.'
+          'All calls from your application to Fusebit that use this key will fail. Before deleting this key, make sure your application is no longer using this key.'
         }
         confirmationButtonText={'Delete'}
       />
