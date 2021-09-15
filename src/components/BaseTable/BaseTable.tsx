@@ -19,17 +19,19 @@ import { ROWS_PER_PAGE_OPTIONS } from '../../hooks/usePagination';
 import arrowRight from '../../assets/arrow-right.svg';
 import arrowLeft from '../../assets/arrow-left.svg';
 import { useMediaQuery } from '@material-ui/core';
+import Row from './Row';
 
 interface Props {
   selected: string[];
   loading: boolean;
   rows: {
     id: string;
-    [x: string]: React.ReactNode | string;
+    collapsableContent?: React.ReactNode | React.ReactText;
+    [x: string]: React.ReactNode | React.ReactText;
   }[];
   onSelectAll: (e: any) => void;
   onDeleteAll: () => void;
-  onClickNew: () => void;
+  onClickNew?: () => void;
   headers: string[];
   entityName: string;
   onSelectRow: (e: any, id: string) => void;
@@ -39,6 +41,8 @@ interface Props {
   emptyTableText: string;
   handleChangePage: (e: any, newPage: number) => void;
   handleChangeRowsPerPage: (e: any) => void;
+  toggleTrigger?: string;
+  isToggleable?: boolean;
 }
 
 const BaseTable: React.FC<Props> = ({
@@ -57,6 +61,8 @@ const BaseTable: React.FC<Props> = ({
   emptyTableText,
   handleChangePage,
   handleChangeRowsPerPage,
+  isToggleable,
+  toggleTrigger,
 }) => {
   const computedRowsPerPage = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   const isMobile = useMediaQuery('(max-width: 880px)');
@@ -66,57 +72,6 @@ const BaseTable: React.FC<Props> = ({
   const handleNextCellSelect = () => setMobileColumnIndex(mobileColumnIndex + 1);
 
   const handlePreviousCellSelect = () => setMobileColumnIndex(mobileColumnIndex - 1);
-
-  const renderCheckbox = (id: string) => {
-    return (
-      <TableCell style={{ cursor: 'default' }} padding="checkbox" id={`enhanced-table-cell-checkbox-${id}`}>
-        <Checkbox
-          color="primary"
-          onClick={(e) => onSelectRow(e, id)}
-          checked={isSelected(id)}
-          inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${id}` }}
-          id={`enhanced-table-checkbox-${id}`}
-        />
-      </TableCell>
-    );
-  };
-
-  const renderBody = () => {
-    return (
-      <>
-        {isMobile ? (
-          <TableBody>
-            {computedRowsPerPage.map((row) => {
-              return (
-                <SC.TableRow key={row.id}>
-                  {renderCheckbox(row.id)}
-                  <TableCell component="th" scope="row">
-                    {row[headers[0]]}
-                  </TableCell>
-                  <TableCell component="th" scope="row">
-                    {row[mobileArrowColumns[mobileColumnIndex]]}
-                  </TableCell>
-                </SC.TableRow>
-              );
-            })}
-          </TableBody>
-        ) : (
-          <TableBody>
-            {computedRowsPerPage.map((row) => (
-              <SC.TableRow key={row.id}>
-                {renderCheckbox(row.id)}
-                {headers.map((header) => (
-                  <TableCell component="th" scope="row">
-                    {row[header]}
-                  </TableCell>
-                ))}
-              </SC.TableRow>
-            ))}
-          </TableBody>
-        )}
-      </>
-    );
-  };
 
   const renderContent = () => {
     const hasDataToShow = rows.length > 0;
@@ -167,7 +122,19 @@ const BaseTable: React.FC<Props> = ({
                     </TableCell>
                   </TableRow>
                 </TableHead>
-                {renderBody()}
+                <TableBody>
+                  {computedRowsPerPage.map((row) => (
+                    <Row
+                      headers={headers}
+                      checked={isSelected(row.id)}
+                      currentMobileRow={mobileArrowColumns[mobileColumnIndex]}
+                      onSelectRow={onSelectRow}
+                      row={row}
+                      isToggleable={isToggleable}
+                      toggleTrigger={toggleTrigger}
+                    />
+                  ))}
+                </TableBody>
               </Table>
             </div>
           ) : (
@@ -189,7 +156,19 @@ const BaseTable: React.FC<Props> = ({
                     ))}
                   </TableRow>
                 </TableHead>
-                {renderBody()}
+                <TableBody>
+                  {computedRowsPerPage.map((row) => (
+                    <Row
+                      headers={headers}
+                      checked={isSelected(row.id)}
+                      currentMobileRow={mobileArrowColumns[mobileColumnIndex]}
+                      onSelectRow={onSelectRow}
+                      row={row}
+                      isToggleable={isToggleable}
+                      toggleTrigger={toggleTrigger}
+                    />
+                  ))}
+                </TableBody>
               </Table>
             </div>
           )}
