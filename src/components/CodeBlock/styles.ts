@@ -11,7 +11,7 @@ export const Wrapper = styled.div`
     color: #b35e14;
   }
 
-  code {
+  pre {
     font-size: 15px;
     line-height: 19px;
     padding: 40px;
