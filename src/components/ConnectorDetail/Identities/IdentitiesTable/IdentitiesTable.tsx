@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import { useAccountConnectorIdentityGetAll } from '../../../../hooks/api/v2/account/connector/identity/useGetAll';
 import { Identity } from '../../../../interfaces/identities';
 import { format } from 'date-fns';
+import CodeBlock from '../../../CodeBlock';
 
 const IdentitiesTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -28,14 +29,26 @@ const IdentitiesTable = () => {
 
   const { items = [] } = data?.data || {};
 
-  const rows = items.map((identity) => ({
-    installID: identity.id,
-    id: identity.id,
-    dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
-    associatedIdentities: identity.dateAdded,
-    listOfTags: identity.id,
-    collapsableContent: <div>asdsad</div>,
-  }));
+  const rows = items.map((identity) => {
+    const json = {
+      id: identity.id,
+      data: identity.data,
+      tags: identity.tags,
+      version: identity.version,
+      expires: identity.expires,
+      dateAdded: identity.dateAdded,
+      dateModified: identity.dateModified,
+    };
+
+    return {
+      installID: identity.id,
+      id: identity.id,
+      dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
+      associatedIdentities: 'associatedIdentities',
+      listOfTags: 'listOfTags',
+      collapsableContent: <CodeBlock code={JSON.stringify(json, null, ' ')} />,
+    };
+  });
 
   return (
     <BaseTable
