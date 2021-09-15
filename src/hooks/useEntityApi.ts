@@ -199,7 +199,7 @@ export const useEntityApi = (preventLoader?: boolean) => {
           await deleteAccount.mutateAsync({ userId: ids[i], accountId: userData.accountId });
         } else if (type === 'Identity') {
           await deleteIndentity.mutateAsync({
-            id: ids[i]
+            id: ids[i],
           });
         }
       }

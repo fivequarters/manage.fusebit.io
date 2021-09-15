@@ -7,8 +7,8 @@ import { useContext } from '../../../../../useContext';
 export const useAccountConnectorIdentityDeleteOne = <T>() => {
   const { axios } = useAxios();
   const queryClient = useQueryClient();
-  const { userData } = useContext()
-  const { id: connectorId } = useParams<{ id: string }>()
+  const { userData } = useContext();
+  const { id: connectorId } = useParams<{ id: string }>();
 
   return useMutation(
     (params: Params) => {
@@ -18,7 +18,7 @@ export const useAccountConnectorIdentityDeleteOne = <T>() => {
       );
     },
     {
-      onMutate: (_: Params) => () => { },
+      onMutate: (_: Params) => () => {},
       onError: (_, __, rollback) => rollback?.(),
       onSuccess: () => queryClient.removeQueries('accountConnectorIdentityGetAll'),
     }

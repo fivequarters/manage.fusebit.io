@@ -134,16 +134,16 @@ export const TableRow = styled(MUITableRow)`
   height: 65px;
 `;
 
-export const TableCell = styled(MUICellRow) <{ isMain?: boolean, isClickable?: boolean }>`
+export const TableCell = styled(MUICellRow)<{ isMain?: boolean; isClickable?: boolean }>`
   ${(props) =>
     props.isMain &&
     css`
       color: var(--primary-color);
     `}
 
-    ${(props) =>
+  ${(props) =>
     props.isClickable &&
     css`
-      cursor: pointer
+      cursor: pointer;
     `}
 `;

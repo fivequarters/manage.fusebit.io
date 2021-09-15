@@ -3,7 +3,10 @@ import { Params } from '../../../../../../interfaces/api';
 import { ApiResponse, useAxios } from '../../../../../useAxios';
 import { useContext } from '../../../../../useContext';
 
-export const useAccountConnectorIdentityGetAll = <T>({ id }: Params, options?: UseQueryOptions<unknown, unknown, ApiResponse<T>>) => {
+export const useAccountConnectorIdentityGetAll = <T>(
+  { id }: Params,
+  options?: UseQueryOptions<unknown, unknown, ApiResponse<T>>
+) => {
   const { axios } = useAxios();
   const { userData } = useContext();
 
@@ -11,7 +14,7 @@ export const useAccountConnectorIdentityGetAll = <T>({ id }: Params, options?: U
     id,
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
-  }
+  };
 
   return useQuery(
     ['accountConnectorIdentityGetAll', params],
@@ -23,7 +26,7 @@ export const useAccountConnectorIdentityGetAll = <T>({ id }: Params, options?: U
       ),
     {
       enabled: !!userData.token,
-      ...options
+      ...options,
     }
   );
 };
