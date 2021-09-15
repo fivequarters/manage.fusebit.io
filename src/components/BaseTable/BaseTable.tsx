@@ -19,7 +19,7 @@ import { ROWS_PER_PAGE_OPTIONS } from '../../hooks/usePagination';
 import arrowRight from '../../assets/arrow-right.svg';
 import arrowLeft from '../../assets/arrow-left.svg';
 import { useMediaQuery } from '@material-ui/core';
-import Row from './Row'
+import Row from './Row';
 interface Props {
   selected: string[];
   loading: boolean;

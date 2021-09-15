@@ -1,6 +1,6 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import arrow from '../../assets/table-arrow.svg';
-import { TableRow as MUITableRow } from '@material-ui/core';
+import { TableRow as MUITableRow, TableCell as MUICellRow } from '@material-ui/core';
 
 export const Wrapper = styled.div`
   padding-bottom: 80px;
@@ -137,3 +137,9 @@ export const TableRow = styled(MUITableRow)`
     cursor: pointer;
   }
 `;
+
+export const TableCell = styled(MUICellRow)<{ isMain: boolean }>`
+  ${props => props.isMain && css`
+    color: var(--primary-color)
+  `}
+`
