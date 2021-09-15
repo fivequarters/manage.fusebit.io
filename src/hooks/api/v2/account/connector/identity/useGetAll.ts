@@ -1,20 +1,29 @@
-import { useQuery } from 'react-query';
+import { useQuery, UseQueryOptions } from 'react-query';
 import { Params } from '../../../../../../interfaces/api';
-import { useAxios } from '../../../../../useAxios';
+import { ApiResponse, useAxios } from '../../../../../useAxios';
+import { useContext } from '../../../../../useContext';
 
-export const useAccountConnectorIdentityGetAll = <T>(params: Params) => {
+export const useAccountConnectorIdentityGetAll = <T>({ id }: Params, options?: UseQueryOptions<unknown, unknown, ApiResponse<T>>) => {
   const { axios } = useAxios();
+  const { userData } = useContext();
 
-  const { enabled, ...queryParams } = params;
+  const params = {
+    id,
+    accountId: userData.accountId,
+    subscriptionId: userData.subscriptionId,
+  }
 
   return useQuery(
-    ['accountConnectorIdentityGetAll', queryParams],
+    ['accountConnectorIdentityGetAll', params],
     () =>
       axios<T>(
-        `/v2/account/${queryParams.accountId}/subscription/${queryParams.subscriptionId}/connector/${queryParams.id}/identity`,
+        `/v2/account/${params.accountId}/subscription/${params.subscriptionId}/connector/${params.id}/identity`,
         'get',
         params
       ),
-    { enabled: !!enabled }
+    {
+      enabled: !!userData.token,
+      ...options
+    }
   );
 };
