@@ -41,11 +41,11 @@ const IntegrationsTable = () => {
     };
 
     return {
-      installID: identity.id,
       id: identity.id,
+      installID: identity.id,
       dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
-      associatedIdentities: 'associatedIdentities',
-      listOfTags: 'listOfTags',
+      associatedInstalls: 'associatedIdentities',
+      associatedIntegrations: 'associatedIntegrations',
       collapsableContent: <CodeBlock code={JSON.stringify(json, null, ' ')} />,
     };
   });
@@ -57,7 +57,7 @@ const IntegrationsTable = () => {
       handleChangeRowsPerPage={handleChangeRowsPerPage}
       page={page}
       rowsPerPage={rowsPerPage}
-      headers={['installID', 'dateCreated', 'associatedIdentities', 'listOfTags']}
+      headers={['installID', 'dateCreated', 'associatedInstalls', 'associatedIntegrations']}
       loading={isLoading}
       onDeleteAll={() => handleRowDelete('Identity')}
       onSelectAll={handleSelectAllCheck}
