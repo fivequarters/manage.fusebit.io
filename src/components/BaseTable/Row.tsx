@@ -49,13 +49,14 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
       <>
         <SC.TableRow key={row.id}>
           {renderCheckbox(row.id)}
-          <TableCell
+          <SC.TableCell
+            isMain
             component="th"
             scope="row"
             onClick={collapseTrigger === headers[0] ? () => setIsExpanded(!isExpanded) : undefined}
           >
             {row[headers[0]]}
-          </TableCell>
+          </SC.TableCell>
           <TableCell component="th" scope="row">
             {currentMobileRow}
           </TableCell>
@@ -70,14 +71,15 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
       <>
         <SC.TableRow key={row.id}>
           {renderCheckbox(row.id)}
-          {headers.map((header: any) => (
-            <TableCell
+          {headers.map((header: any, i: number) => (
+            <SC.TableCell
+              isMain={i === 0}
               component="th"
               scope="row"
               onClick={collapseTrigger === header ? () => setIsExpanded(!isExpanded) : undefined}
             >
               {row[header]}
-            </TableCell>
+            </SC.TableCell>
           ))}
         </SC.TableRow>
         {isCollapsible && renderCollapsable(row)}
