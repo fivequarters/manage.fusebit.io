@@ -28,6 +28,12 @@ export default createGlobalStyle`
     #_pendo-badge_jF5N6MCHUdDHNs8d6qkdUArNI6M { // this is pendo launch guide wrapper
       z-index: 0 !important;
     }
+
+    button {
+      &:hover {
+        cursor: pointer;
+      }
+    }
 `;
 
 const rotate = keyframes`
