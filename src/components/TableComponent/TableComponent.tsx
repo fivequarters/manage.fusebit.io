@@ -23,7 +23,7 @@ import { Feed } from '../../interfaces/feed';
 import FeedPicker from '../FeedPicker';
 import { Data } from '../../interfaces/feedPicker';
 import TableRowComponent from '../TableRowComponent';
-import { usePagination } from '../../hooks/usePagination';
+import { ROWS_PER_PAGE_OPTIONS, usePagination } from '../../hooks/usePagination';
 import { useEntityTable } from '../../hooks/useEntityTable';
 import { Props } from '../../interfaces/tableComponent';
 import { useEntityApi } from '../../hooks/useEntityApi';
@@ -43,8 +43,7 @@ const TableComponent: React.FC<Props> = ({
   connectors,
   users,
 }) => {
-  const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage, ROWS_PER_PAGE_OPTIONS } =
-    usePagination();
+  const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
   const { _createUser } = useEntityApi();
   const {
     handleSelectAllCheck,
