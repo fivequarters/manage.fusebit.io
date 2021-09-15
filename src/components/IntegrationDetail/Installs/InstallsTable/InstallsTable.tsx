@@ -3,11 +3,11 @@ import BaseTable from '../../../BaseTable';
 import { useEntityTable } from '../../../../hooks/useEntityTable';
 import { usePagination } from '../../../../hooks/usePagination';
 import { useParams } from 'react-router-dom';
-import { useAccountConnectorIdentityGetAll } from '../../../../hooks/api/v2/account/connector/identity/useGetAll';
+import { useAccountIntegrationInstanceGetAll } from '../../../../hooks/api/v2/account/integration/instance/useGetAll';
 import { Identity } from '../../../../interfaces/identities';
 import { format } from 'date-fns';
 
-const IdentitiesTable = () => {
+const InstallsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
   const { id } = useParams<{ id: string }>();
   const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete, setRows } = useEntityTable({
@@ -16,7 +16,7 @@ const IdentitiesTable = () => {
     rowsPerPage,
   });
 
-  const { data, isLoading } = useAccountConnectorIdentityGetAll<Identity>(
+  const { data, isLoading } = useAccountIntegrationInstanceGetAll<Identity>(
     {
       id,
     },
@@ -58,4 +58,4 @@ const IdentitiesTable = () => {
   );
 };
 
-export default IdentitiesTable;
+export default InstallsTable;
