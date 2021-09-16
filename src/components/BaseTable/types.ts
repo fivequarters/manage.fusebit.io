@@ -10,7 +10,7 @@ export interface BaseTableProps {
   onDeleteAll: () => void;
   onClickNew?: () => void;
   headers: string[];
-  entityName: string;
+  entityName?: string;
   onSelectRow: (e: any, id: string) => void;
   isSelected: (id: string) => boolean;
   rowsPerPage: any;
