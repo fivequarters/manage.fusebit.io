@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import * as SC from './styles';
-import * as CSC from '../globalStyle';
 import {
   Table,
   TableBody,
@@ -12,14 +10,17 @@ import {
   IconButton,
   Tooltip,
   TablePagination,
+  useMediaQuery,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Row from './Row';
 import { ROWS_PER_PAGE_OPTIONS } from '../../hooks/usePagination';
 import arrowRight from '../../assets/arrow-right.svg';
 import arrowLeft from '../../assets/arrow-left.svg';
-import { useMediaQuery } from '@material-ui/core';
-import Row from './Row';
+import * as SC from './styles';
+import * as CSC from '../globalStyle';
+
 interface Props {
   selected: string[];
   loading: boolean;
