@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import arrow from '../../assets/table-arrow.svg';
+import upArrowPrimary from '../../assets/up-arrow-primary.svg';
 import { TableRow as MUITableRow, TableCell as MUICellRow } from '@material-ui/core';
 
 export const Wrapper = styled.div`
@@ -135,6 +136,8 @@ export const TableRow = styled(MUITableRow)`
 `;
 
 export const TableCell = styled(MUICellRow)<{ isMain?: boolean; isClickable?: boolean }>`
+  position: relative;
+
   ${(props) =>
     props.isMain &&
     css`
@@ -146,4 +149,18 @@ export const TableCell = styled(MUICellRow)<{ isMain?: boolean; isClickable?: bo
     css`
       cursor: pointer;
     `}
+`;
+
+export const TriggerArrow = styled.div<{ active: boolean; isMain?: boolean }>`
+  width: 14px;
+  margin-left: 10px;
+  height: 10px;
+  background-image: url(${upArrowPrimary});
+  background-size: contain;
+  background-repeat: no-repeat;
+  transform: ${(props) => props.active && 'rotate(180deg)'};
+  transition: all 0.25s linear;
+  filter: ${(props) =>
+    !props.isMain &&
+    'invert(0%) sepia(0%) saturate(0%) hue-rotate(279deg) brightness(95%) contrast(101%);'}; // this is #333333 converted to a filter
 `;

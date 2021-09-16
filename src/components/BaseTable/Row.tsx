@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import * as SC from './styles';
+import * as CSC from '../globalStyle';
 import { Checkbox, TableCell, TableRow, Collapse, useMediaQuery } from '@material-ui/core';
 
 interface Props {
@@ -15,6 +16,10 @@ interface Props {
 const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTrigger, isCollapsible }: Props) => {
   const isMobile = useMediaQuery('(max-width: 880px)');
   const [isExpanded, setIsExpanded] = useState(false);
+
+  const isCollapsibleTrigger = (stringToCompare: string) => {
+    return collapseTrigger === stringToCompare;
+  };
 
   const renderCollapsable = (row: any) => {
     return (
@@ -54,9 +59,10 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
             component="th"
             scope="row"
             isClickable
-            onClick={collapseTrigger === headers[0] ? () => setIsExpanded(!isExpanded) : undefined}
+            onClick={isCollapsibleTrigger(headers[0]) ? () => setIsExpanded(!isExpanded) : undefined}
           >
             {row[headers[0]]}
+            {isCollapsibleTrigger(headers[0]) && <SC.TriggerArrow active={isExpanded} isMain />}
           </SC.TableCell>
           <TableCell component="th" scope="row">
             {currentMobileRow}
@@ -75,12 +81,15 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
           {headers.map((header: any, i: number) => (
             <SC.TableCell
               isMain={i === 0}
-              isClickable={collapseTrigger === header}
+              isClickable={isCollapsibleTrigger(header)}
               component="th"
               scope="row"
-              onClick={collapseTrigger === header ? () => setIsExpanded(!isExpanded) : undefined}
+              onClick={isCollapsibleTrigger(header) ? () => setIsExpanded(!isExpanded) : undefined}
             >
-              {row[header]}
+              <CSC.Flex>
+                {row[header]}
+                {isCollapsibleTrigger(header) && <SC.TriggerArrow active={isExpanded} isMain={i === 0} />}
+              </CSC.Flex>
             </SC.TableCell>
           ))}
         </SC.TableRow>

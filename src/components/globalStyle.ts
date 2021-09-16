@@ -111,7 +111,7 @@ export const LineTitle = styled.h4<{ margin?: string }>`
   }
 `;
 
-export const Flex = styled.div<{ margin?: string; flexDown?: boolean; width?: string }>`
+export const Flex = styled.div<{ margin?: string; flexDown?: boolean; alignCenter?: boolean; width?: string }>`
   display: flex;
   flex-direction: ${(props) => props.flexDown && 'column'};
   align-items: ${(props) => !props.flexDown && 'center'};
