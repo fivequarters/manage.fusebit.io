@@ -56,9 +56,7 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
           >
             {row[headers[0].id]}
           </SC.TableCell>
-          <TableCell component="th" scope="row">
-            {currentMobileRow}
-          </TableCell>
+          <TableCell scope="row">{currentMobileRow}</TableCell>
         </SC.TableRow>
         {isCollapsible && renderCollapsable(row)}
       </>

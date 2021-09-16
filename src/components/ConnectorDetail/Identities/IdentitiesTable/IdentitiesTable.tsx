@@ -8,7 +8,7 @@ import { Identity } from '../../../../interfaces/identities';
 import { format } from 'date-fns';
 import CodeBlock from '../../../CodeBlock';
 import ConfirmationPrompt from '../../../ConfirmationPrompt';
-import * as SC from './styles';
+import InformationalBanner from '../../../InformationalBanner';
 
 const IntegrationsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -57,7 +57,7 @@ const IntegrationsTable = () => {
 
   return (
     <div id="identities-table">
-      <SC.Banner
+      <InformationalBanner
         description="An identity is a unique relationship your tenant has with a connector. It is used to authenticate on behalf of them when running an integration."
         href="https://developer.fusebit.io/docs"
         highlightedDescription="Learn more about Identities here."
