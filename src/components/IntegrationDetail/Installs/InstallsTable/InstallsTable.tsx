@@ -36,7 +36,7 @@ const InstallsTable = () => {
     dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
     associatedIdentities: <Tag children={identity.dateAdded} />,
     listOfTags: <Tag children={identity.tags['session.master']} />,
-    collapsableContent: <CodeBlock code={JSON.stringify(identity.data, null, ' ')} />,
+    collapsableContent: <CodeBlock code={JSON.stringify(identity, null, ' ')} />,
   }));
 
   return (
