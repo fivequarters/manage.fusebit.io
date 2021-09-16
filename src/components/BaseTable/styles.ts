@@ -131,11 +131,11 @@ export const noBorderMixin = css`
     `}
 `;
 
-export const ExpandableRow = styled(MUITableRow) <{ noBorder?: boolean }>`
+export const ExpandableRow = styled(MUITableRow)<{ noBorder?: boolean }>`
   ${noBorderMixin}
 `;
 
-export const TableRow = styled(MUITableRow) <{ noBorder?: boolean }>`
+export const TableRow = styled(MUITableRow)<{ noBorder?: boolean }>`
   display: table-row;
   outline: 0;
   vertical-align: middle;
@@ -146,7 +146,7 @@ export const TableRow = styled(MUITableRow) <{ noBorder?: boolean }>`
   ${noBorderMixin}
 `;
 
-export const TableCell = styled(MUICellRow) <{ isMain?: boolean; isClickable?: boolean }>`
+export const TableCell = styled(MUICellRow)<{ isMain?: boolean; isClickable?: boolean }>`
   position: relative;
 
   ${(props) =>
@@ -187,7 +187,7 @@ export const TriggerArrow = styled.div<{ active: boolean; isMain?: boolean }>`
 
   @media only screen and (max-width: 880px) {
     margin-left: 5px;
-  }  
+  }
 `;
 
 export const TableContainer = styled.div`
