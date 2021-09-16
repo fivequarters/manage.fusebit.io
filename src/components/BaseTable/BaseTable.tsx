@@ -21,7 +21,7 @@ import arrowLeft from '../../assets/arrow-left.svg';
 import * as SC from './styles';
 import * as CSC from '../globalStyle';
 
-interface Props {
+export interface BaseTableProps {
   selected: string[];
   loading: boolean;
   rows: {
@@ -45,7 +45,7 @@ interface Props {
   isCollapsible?: boolean;
 }
 
-const BaseTable: React.FC<Props> = ({
+const BaseTable: React.FC<BaseTableProps> = ({
   selected,
   loading,
   rows,
