@@ -5,7 +5,6 @@ import { TableRow as MUITableRow, TableCell as MUICellRow } from '@material-ui/c
 
 export const Wrapper = styled.div`
   padding-bottom: 80px;
-  min-height: 600px;
 `;
 
 export const DeleteWrapper = styled.div<{ active: boolean }>`
@@ -115,23 +114,39 @@ export const LoaderContainer = styled.tr`
   margin-top: 24px;
 `;
 
-export const NoIntegrationWrapper = styled.div`
+export const NoData = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
 `;
 
-export const TableRow = styled(MUITableRow)`
+export const noBorderMixin = css`
+  ${(props: { noBorder?: boolean }) =>
+    props.noBorder &&
+    css`
+      & > td {
+        border-bottom: 0;
+      }
+    `}
+`;
+
+export const ExpandableRow = styled(MUITableRow) <{ noBorder?: boolean }>`
+  ${noBorderMixin}
+`;
+
+export const TableRow = styled(MUITableRow) <{ noBorder?: boolean }>`
   display: table-row;
   outline: 0;
   vertical-align: middle;
   color: inherit;
   text-decoration: none;
   height: 65px;
+
+  ${noBorderMixin}
 `;
 
-export const TableCell = styled(MUICellRow)<{ isMain?: boolean; isClickable?: boolean }>`
+export const TableCell = styled(MUICellRow) <{ isMain?: boolean; isClickable?: boolean }>`
   position: relative;
 
   ${(props) =>
@@ -159,4 +174,8 @@ export const TriggerArrow = styled.div<{ active: boolean; isMain?: boolean }>`
   filter: ${(props) =>
     !props.isMain &&
     'invert(0%) sepia(0%) saturate(0%) hue-rotate(279deg) brightness(95%) contrast(101%);'}; // this is #333333 converted to a filter
+    `
+    
+export const TableContainer = styled.div`
+  overflow: auto;
 `;

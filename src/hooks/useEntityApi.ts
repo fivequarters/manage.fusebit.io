@@ -179,7 +179,7 @@ export const useEntityApi = (preventLoader?: boolean) => {
     }
   };
 
-  const massiveDelete = async (ids: string[], type: EntitiesType, callback?: Function) => {
+  const massiveDelete = async (ids: string[], type: EntitiesType, callback?: Function, errorContainer?: string) => {
     try {
       createLoader();
       for (let i = 0; i < ids.length; i++) {
@@ -212,7 +212,7 @@ export const useEntityApi = (preventLoader?: boolean) => {
       // }
       if (callback) callback();
     } catch (e) {
-      createError(e);
+      createError(e, errorContainer);
     } finally {
       removeLoader();
     }

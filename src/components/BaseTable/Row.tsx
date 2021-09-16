@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import * as SC from './styles';
-import * as CSC from '../globalStyle';
-import { Checkbox, TableCell, TableRow, Collapse, useMediaQuery } from '@material-ui/core';
+import { Checkbox, TableCell, Collapse, useMediaQuery } from '@material-ui/core';
+import { BaseTableProps } from './types';
 
 interface Props {
   row: any;
-  headers: any;
+  headers: BaseTableProps['headers'];
   onSelectRow: (e: any, id: string) => void;
   checked: boolean;
   currentMobileRow: string | React.ReactNode;
@@ -23,15 +23,13 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
 
   const renderCollapsable = (row: any) => {
     return (
-      <>
-        <TableRow>
-          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={headers.length + 1}>
-            <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-              {row.collapsableContent}
-            </Collapse>
-          </TableCell>
-        </TableRow>
-      </>
+      <SC.ExpandableRow noBorder={isExpanded}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={headers.length + 1}>
+          <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+            {row.collapsableContent}
+          </Collapse>
+        </TableCell>
+      </SC.ExpandableRow>
     );
   };
 
@@ -52,21 +50,18 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
   const renderMobile = () => {
     return (
       <>
-        <SC.TableRow key={row.id}>
+        <SC.TableRow noBorder={isCollapsible}>
           {renderCheckbox(row.id)}
           <SC.TableCell
             isMain
-            component="th"
             scope="row"
             isClickable
-            onClick={isCollapsibleTrigger(headers[0].id) ? () => setIsExpanded(!isExpanded) : undefined}
+            onClick={collapseTrigger === headers[0].id ? () => setIsExpanded(!isExpanded) : undefined}
           >
             {row[headers[0].id]}
             {isCollapsibleTrigger(headers[0].id) && <SC.TriggerArrow active={isExpanded} isMain />}
           </SC.TableCell>
-          <TableCell component="th" scope="row">
-            {currentMobileRow}
-          </TableCell>
+          <TableCell scope="row">{currentMobileRow}</TableCell>
         </SC.TableRow>
         {isCollapsible && renderCollapsable(row)}
       </>
@@ -76,20 +71,17 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
   const renderDesktop = () => {
     return (
       <>
-        <SC.TableRow key={row.id}>
+        <SC.TableRow noBorder={isCollapsible}>
           {renderCheckbox(row.id)}
-          {headers.map((header: { id: string; value: string }, i: number) => (
+          {headers.map((header, i: number) => (
             <SC.TableCell
               isMain={i === 0}
-              isClickable={isCollapsibleTrigger(header.id)}
-              component="th"
+              isClickable={collapseTrigger === header.id}
               scope="row"
-              onClick={isCollapsibleTrigger(header.id) ? () => setIsExpanded(!isExpanded) : undefined}
+              onClick={collapseTrigger === header.id ? () => setIsExpanded(!isExpanded) : undefined}
             >
-              <CSC.Flex>
-                {row[header.id]}
-                {isCollapsibleTrigger(header.id) && <SC.TriggerArrow active={isExpanded} isMain={i === 0} />}
-              </CSC.Flex>
+              {row[header.id]}
+              {isCollapsibleTrigger(headers[0].id) && <SC.TriggerArrow active={isExpanded} isMain />}
             </SC.TableCell>
           ))}
         </SC.TableRow>

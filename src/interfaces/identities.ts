@@ -40,6 +40,6 @@ interface IdentityInstance {
 export interface Identity {
   items: IdentityInstance[];
   total: number;
-  sucess: true;
+  success: boolean;
   next?: string;
 }
