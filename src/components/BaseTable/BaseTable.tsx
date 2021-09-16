@@ -76,117 +76,117 @@ const BaseTable: React.FC<BaseTableProps> = ({
   const renderContent = () => {
     const hasDataToShow = rows.length > 0;
 
-    if (hasDataToShow) {
-      return (
-        <>
-          {isMobile ? (
-            <div>
-              <Table size="small" aria-label="Overview Table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        color="primary"
-                        checked={rows.length > 0 && selected.length === rows.length}
-                        onChange={onSelectAll}
-                      />
-                    </TableCell>
-                    <TableCell>{headers[0]}</TableCell>
-                    <TableCell align="left">
-                      <SC.TableCellMobile>
-                        <p>{mobileArrowColumns[mobileColumnIndex]}</p>
-                        {mobileArrowColumns.length > 1 && (
-                          <>
-                            {!!mobileArrowColumns[mobileColumnIndex - 1] && (
-                              <SC.LeftArrow
-                                onClick={handlePreviousCellSelect}
-                                src={arrowLeft}
-                                alt="previous-cell"
-                                height="16"
-                                width="16"
-                              />
-                            )}
-
-                            {!!mobileArrowColumns[mobileColumnIndex + 1] && (
-                              <SC.RightArrow
-                                onClick={handleNextCellSelect}
-                                src={arrowRight}
-                                alt="next-cell"
-                                height="16"
-                                width="16"
-                              />
-                            )}
-                          </>
-                        )}
-                      </SC.TableCellMobile>
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {computedRowsPerPage.map((row) => (
-                    <Row
-                      headers={headers}
-                      checked={isSelected(row.id)}
-                      currentMobileRow={mobileArrowColumns[mobileColumnIndex]}
-                      onSelectRow={onSelectRow}
-                      row={row}
-                      isCollapsible={isCollapsible}
-                      collapseTrigger={collapseTrigger}
-                    />
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          ) : (
-            <div>
-              <Table size="small" aria-label="Overview Table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        color="primary"
-                        checked={rows.length > 0 && selected.length === rows.length}
-                        onChange={onSelectAll}
-                      />
-                    </TableCell>
-                    {headers.map((header, index) => (
-                      <TableCell key={index} align="left">
-                        {header}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {computedRowsPerPage.map((row) => (
-                    <Row
-                      headers={headers}
-                      checked={isSelected(row.id)}
-                      currentMobileRow={mobileArrowColumns[mobileColumnIndex]}
-                      onSelectRow={onSelectRow}
-                      row={row}
-                      isCollapsible={isCollapsible}
-                      collapseTrigger={collapseTrigger}
-                    />
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          )}
-
-          <TablePagination
-            rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
-            component="div"
-            count={rows.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onChangePage={handleChangePage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
-          />
-        </>
-      );
-    } else {
-      return <SC.NoIntegrationWrapper>{emptyTableText}</SC.NoIntegrationWrapper>;
+    if (!hasDataToShow) {
+      return <SC.NoData>{emptyTableText}</SC.NoData>;
     }
+
+    return (
+      <>
+        {isMobile ? (
+          <div>
+            <Table size="small" aria-label="Overview Table">
+              <TableHead>
+                <TableRow>
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      color="primary"
+                      checked={rows.length > 0 && selected.length === rows.length}
+                      onChange={onSelectAll}
+                    />
+                  </TableCell>
+                  <TableCell>{headers[0]}</TableCell>
+                  <TableCell align="left">
+                    <SC.TableCellMobile>
+                      <p>{mobileArrowColumns[mobileColumnIndex]}</p>
+                      {mobileArrowColumns.length > 1 && (
+                        <>
+                          {!!mobileArrowColumns[mobileColumnIndex - 1] && (
+                            <SC.LeftArrow
+                              onClick={handlePreviousCellSelect}
+                              src={arrowLeft}
+                              alt="previous-cell"
+                              height="16"
+                              width="16"
+                            />
+                          )}
+
+                          {!!mobileArrowColumns[mobileColumnIndex + 1] && (
+                            <SC.RightArrow
+                              onClick={handleNextCellSelect}
+                              src={arrowRight}
+                              alt="next-cell"
+                              height="16"
+                              width="16"
+                            />
+                          )}
+                        </>
+                      )}
+                    </SC.TableCellMobile>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {computedRowsPerPage.map((row) => (
+                  <Row
+                    headers={headers}
+                    checked={isSelected(row.id)}
+                    currentMobileRow={mobileArrowColumns[mobileColumnIndex]}
+                    onSelectRow={onSelectRow}
+                    row={row}
+                    isCollapsible={isCollapsible}
+                    collapseTrigger={collapseTrigger}
+                  />
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        ) : (
+          <div>
+            <Table size="small" aria-label="Overview Table">
+              <TableHead>
+                <TableRow>
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      color="primary"
+                      checked={rows.length > 0 && selected.length === rows.length}
+                      onChange={onSelectAll}
+                    />
+                  </TableCell>
+                  {headers.map((header, index) => (
+                    <TableCell key={index} align="left">
+                      {header}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {computedRowsPerPage.map((row) => (
+                  <Row
+                    headers={headers}
+                    checked={isSelected(row.id)}
+                    currentMobileRow={mobileArrowColumns[mobileColumnIndex]}
+                    onSelectRow={onSelectRow}
+                    row={row}
+                    isCollapsible={isCollapsible}
+                    collapseTrigger={collapseTrigger}
+                  />
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
+
+        <TablePagination
+          rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
+          component="div"
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+        />
+      </>
+    );
   };
 
   return (
