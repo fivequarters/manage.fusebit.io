@@ -52,11 +52,11 @@ const IntegrationsTable = () => {
 
   const handleDelete = () => {
     setDeleteOpen(false);
-    handleRowDelete('Identity');
+    handleRowDelete('Identity', 'identities-table');
   };
 
   return (
-    <>
+    <div id="identities-table">
       <SC.Banner
         description="An identity is a unique relationship your tenant has with a connector. It is used to authenticate on behalf of them when running an integration."
         href="https://developer.fusebit.io/docs"
@@ -89,7 +89,7 @@ const IntegrationsTable = () => {
         isCollapsible
         collapseTrigger="identityId"
       />
-    </>
+    </div>
   );
 };
 

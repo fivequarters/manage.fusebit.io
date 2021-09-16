@@ -129,7 +129,7 @@ export const useEntityTable = ({
 
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
-  const handleRowDelete = async (type?: EntitiesType) => {
+  const handleRowDelete = async (type?: EntitiesType, errorContainer?: string) => {
     massiveDelete(
       selected,
       type || (isIntegration.current ? 'I' : window.location.href.indexOf('connector') >= 0 ? 'C' : 'A'),
@@ -147,7 +147,8 @@ export const useEntityTable = ({
         }
 
         setSelected([]);
-      }
+      },
+      errorContainer
     );
   };
 

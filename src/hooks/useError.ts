@@ -70,7 +70,7 @@ export const useError = () => {
     if (error) error.remove();
   };
 
-  const createError = (err: any) => {
+  const createError = (err: any, errorContainer?: string) => {
     removeError(); // we dont want 2 errors at the same time
     const error = document.createElement('div');
     error.setAttribute('id', 'error');
@@ -100,6 +100,14 @@ export const useError = () => {
     error.appendChild(cross);
 
     cross.addEventListener('click', removeError);
+
+    if (errorContainer) {
+      error.style.position = 'static';
+      error.style.transform = 'none';
+      error.style.margin = '0 auto 20px auto';
+      document.getElementById(errorContainer)?.prepend(error);
+      return
+    }
 
     document.body.appendChild(error);
   };

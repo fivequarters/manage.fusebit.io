@@ -4,11 +4,6 @@ import { TableRow as MUITableRow, TableCell as MUICellRow } from '@material-ui/c
 
 export const Wrapper = styled.div`
   padding-bottom: 80px;
-  min-height: 600px;
-
-  thead {
-    text-transform: capitalize;
-  }
 `;
 
 export const DeleteWrapper = styled.div<{ active: boolean }>`
@@ -125,16 +120,32 @@ export const NoData = styled.div`
   width: 100%;
 `;
 
-export const TableRow = styled(MUITableRow)`
+export const noBorderMixin = css`
+  ${(props: { noBorder?: boolean }) =>
+    (props.noBorder) &&
+    css`
+      & > td {
+        border-bottom: 0;
+      }
+    `}
+`
+
+export const ExpandableRow = styled(MUITableRow) <{ noBorder?: boolean }>`
+ ${noBorderMixin}
+`
+
+export const TableRow = styled(MUITableRow) <{ noBorder?: boolean }>`
   display: table-row;
   outline: 0;
   vertical-align: middle;
   color: inherit;
   text-decoration: none;
   height: 65px;
+
+  ${noBorderMixin}
 `;
 
-export const TableCell = styled(MUICellRow)<{ isMain?: boolean; isClickable?: boolean }>`
+export const TableCell = styled(MUICellRow) <{ isMain?: boolean; isClickable?: boolean }>`
   ${(props) =>
     props.isMain &&
     css`

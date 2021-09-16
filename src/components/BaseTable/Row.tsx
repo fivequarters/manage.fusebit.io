@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import * as SC from './styles';
-import { Checkbox, TableCell, TableRow, Collapse, useMediaQuery } from '@material-ui/core';
+import { Checkbox, TableCell, Collapse, useMediaQuery } from '@material-ui/core';
 import { BaseTableProps } from './types';
 
 interface Props {
@@ -19,13 +19,13 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
 
   const renderCollapsable = (row: any) => {
     return (
-      <TableRow>
+      <SC.ExpandableRow noBorder={isExpanded}>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={headers.length + 1}>
           <Collapse in={isExpanded} timeout="auto" unmountOnExit>
             {row.collapsableContent}
           </Collapse>
         </TableCell>
-      </TableRow>
+      </SC.ExpandableRow>
     );
   };
 
@@ -46,11 +46,10 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
   const renderMobile = () => {
     return (
       <>
-        <SC.TableRow key={row.id}>
+        <SC.TableRow noBorder={isCollapsible}>
           {renderCheckbox(row.id)}
           <SC.TableCell
             isMain
-            component="th"
             scope="row"
             isClickable
             onClick={collapseTrigger === headers[0].id ? () => setIsExpanded(!isExpanded) : undefined}
@@ -69,13 +68,12 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
   const renderDesktop = () => {
     return (
       <>
-        <SC.TableRow key={row.id}>
+        <SC.TableRow noBorder={isCollapsible}>
           {renderCheckbox(row.id)}
           {headers.map((header, i: number) => (
             <SC.TableCell
               isMain={i === 0}
               isClickable={collapseTrigger === header.id}
-              component="th"
               scope="row"
               onClick={collapseTrigger === header.id ? () => setIsExpanded(!isExpanded) : undefined}
             >
