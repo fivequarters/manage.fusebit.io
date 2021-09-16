@@ -20,7 +20,7 @@ const BaseTableHead = ({
         </TableCell>
         {headers.map((header, index) => (
           <TableCell key={index} align="left">
-            {header}
+            {header.value}
           </TableCell>
         ))}
       </TableRow>

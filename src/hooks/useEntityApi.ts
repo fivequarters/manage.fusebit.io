@@ -21,6 +21,7 @@ import { findMatchingConnectorFeed } from '../utils/utils';
 import { useAccountUserCreateUser } from './api/v1/account/user/useCreateUser';
 import { Account } from '../interfaces/account';
 import { useCreateToken } from './useCreateToken';
+import { EntitiesType } from '../interfaces/entities';
 
 export const useEntityApi = (preventLoader?: boolean) => {
   const { userData } = useContext();
@@ -162,10 +163,7 @@ export const useEntityApi = (preventLoader?: boolean) => {
       await Promise.all(
         (data.items || []).map(async (item) => {
           const params = {
-            data: item,
-            id: id,
-            accountId: userData.accountId,
-            subscriptionId: userData.subscriptionId,
+            id: item.id,
           };
           isIdentity ? await deleteIndentity.mutateAsync(params) : await deleteInstall.mutateAsync(params);
           // return waitForEntityStateChange(isIdentity ? `integration/${id}/instance` : `connector/${id}/identity`, [
@@ -181,7 +179,7 @@ export const useEntityApi = (preventLoader?: boolean) => {
     }
   };
 
-  const massiveDelete = async (ids: string[], type: 'I' | 'C' | 'A', callback?: Function) => {
+  const massiveDelete = async (ids: string[], type: EntitiesType, callback?: Function, errorContainer?: string) => {
     try {
       createLoader();
       for (let i = 0; i < ids.length; i++) {
@@ -199,6 +197,10 @@ export const useEntityApi = (preventLoader?: boolean) => {
           });
         } else if (type === 'A') {
           await deleteAccount.mutateAsync({ userId: ids[i], accountId: userData.accountId });
+        } else if (type === 'Identity') {
+          await deleteIndentity.mutateAsync({
+            id: ids[i],
+          });
         }
       }
       // if (type !== 'A') {
@@ -206,7 +208,7 @@ export const useEntityApi = (preventLoader?: boolean) => {
       // }
       if (callback) callback();
     } catch (e) {
-      createError(e);
+      createError(e, errorContainer);
     } finally {
       removeLoader();
     }

@@ -7,8 +7,8 @@ export const Banner = styled.div`
   padding: 24px;
   border-radius: 8px;
   background-color: #dae8ff;
-  margin-bottom: 48px;
-  width: 912px;
+  max-width: 912px;
+  margin: 0 auto 48px;
 `;
 
 export const InfoIcon = styled.div`
@@ -18,6 +18,7 @@ export const InfoIcon = styled.div`
   background-size: contain;
   background-repeat: no-repeat;
   margin-right: 18px;
+  flex-shrink: 0;
 `;
 
 export const Description = styled.p`
@@ -26,6 +27,7 @@ export const Description = styled.p`
   font-weight: 400;
   color: var(--black);
   max-width: 760px;
+  margin: 0;
 
   & > strong {
     font-weight: 500;

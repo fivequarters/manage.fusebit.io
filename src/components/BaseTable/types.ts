@@ -9,7 +9,10 @@ export interface BaseTableProps {
   onSelectAll: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onDeleteAll: () => void;
   onClickNew?: () => void;
-  headers: string[];
+  headers: {
+    id: string;
+    value: string;
+  }[];
   entityName?: string;
   onSelectRow: (e: any, id: string) => void;
   isSelected: (id: string) => boolean;

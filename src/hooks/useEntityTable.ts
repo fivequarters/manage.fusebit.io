@@ -8,6 +8,7 @@ import { useCreateDataFromFeed } from './useCreateDataFromFeed';
 import { useQuery } from './useQuery';
 import { useEntityApi } from './useEntityApi';
 import { Account } from '../interfaces/account';
+import { EntitiesType } from '../interfaces/entities';
 
 interface Props {
   headless?: any;
@@ -128,10 +129,10 @@ export const useEntityTable = ({
 
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
-  const handleRowDelete = async () => {
+  const handleRowDelete = async (type?: EntitiesType, errorContainer?: string) => {
     massiveDelete(
       selected,
-      isIntegration.current ? 'I' : window.location.href.indexOf('connector') >= 0 ? 'C' : 'A',
+      type || (isIntegration.current ? 'I' : window.location.href.indexOf('connector') >= 0 ? 'C' : 'A'),
       () => {
         const computedPages = Math.ceil((rows.length - selected.length) / rowsPerPage) - 1;
 
@@ -146,7 +147,8 @@ export const useEntityTable = ({
         }
 
         setSelected([]);
-      }
+      },
+      errorContainer
     );
   };
 
@@ -189,5 +191,6 @@ export const useEntityTable = ({
     selected,
     deleteModalOpen,
     setDeleteModalOpen,
+    setRows,
   };
 };
