@@ -46,7 +46,7 @@ const IntegrationsTable = () => {
       id: identity.id,
       identityId: identity.id,
       dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
-      collapsableContent: <CodeBlock code={JSON.stringify(json, null, ' ')} />,
+      collapsableContent: <CodeBlock code={json} />,
     };
   });
 
