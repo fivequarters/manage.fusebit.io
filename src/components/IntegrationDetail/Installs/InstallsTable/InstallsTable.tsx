@@ -41,6 +41,13 @@ const InstallsTable = () => {
     collapsableContent: <CodeBlock code={JSON.stringify(identity, null, ' ')} />,
   }));
 
+  const headers = [
+    { id: 'installID', value: 'Installs ID' },
+    { id: 'dateCreated', value: 'Date Created' },
+    { id: 'associatedIdentities', value: 'Associated Identities' },
+    { id: 'listOfTags', value: 'List of tags' },
+  ];
+
   const handleDelete = () => {
     setDeleteOpen(false);
     handleRowDelete('Install');
@@ -61,12 +68,7 @@ const InstallsTable = () => {
         handleChangeRowsPerPage={handleChangeRowsPerPage}
         page={page}
         rowsPerPage={rowsPerPage}
-        headers={[
-          { id: 'installID', value: 'Installs ID' },
-          { id: 'dateCreated', value: 'Date Created' },
-          { id: 'associatedIdentities', value: 'Associated Identities' },
-          { id: 'listOfTags', value: 'List of tags' },
-        ]}
+        headers={headers}
         loading={isLoading}
         onDeleteAll={() => setDeleteOpen(true)}
         onSelectAll={handleSelectAllCheck}
