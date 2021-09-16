@@ -43,7 +43,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
     }
 
     return (
-      <div>
+      <SC.TableContainer>
         <Table size="small" aria-label="Overview Table">
           {isMobile ? (
             <MobileBaseTableHeader
@@ -64,7 +64,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
               <Row
                 headers={headers}
                 checked={isSelected(row.id)}
-                currentMobileRow={mobileArrowColumns[mobileColumnIndex]}
+                currentMobileRow={mobileArrowColumns[mobileColumnIndex].value}
                 onSelectRow={onSelectRow}
                 row={row}
                 isCollapsible={isCollapsible}
@@ -73,7 +73,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
             ))}
           </TableBody>
         </Table>
-      </div>
+      </SC.TableContainer>
     );
   };
 

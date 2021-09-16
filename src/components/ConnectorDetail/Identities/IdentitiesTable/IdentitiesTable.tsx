@@ -69,7 +69,10 @@ const IntegrationsTable = () => {
         handleChangeRowsPerPage={handleChangeRowsPerPage}
         page={page}
         rowsPerPage={rowsPerPage}
-        headers={['installID', 'dateCreated']}
+        headers={[
+          { id: 'installID', value: 'Install Id' },
+          { id: 'dateCreated', value: 'Date Created' },
+        ]}
         loading={isLoading}
         onDeleteAll={() => setDeleteOpen(true)}
         onSelectAll={handleSelectAllCheck}

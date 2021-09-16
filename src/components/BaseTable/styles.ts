@@ -134,7 +134,7 @@ export const TableRow = styled(MUITableRow)`
   height: 65px;
 `;
 
-export const TableCell = styled(MUICellRow)<{ isMain?: boolean; isClickable?: boolean }>`
+export const TableCell = styled(MUICellRow) <{ isMain?: boolean; isClickable?: boolean }>`
   ${(props) =>
     props.isMain &&
     css`
@@ -147,3 +147,8 @@ export const TableCell = styled(MUICellRow)<{ isMain?: boolean; isClickable?: bo
       cursor: pointer;
     `}
 `;
+
+
+export const TableContainer = styled.div`
+  overflow: auto;
+`

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import * as SC from './styles';
 import { Checkbox, TableCell, TableRow, Collapse, useMediaQuery } from '@material-ui/core';
+import { BaseTableProps } from './types';
 
 interface Props {
   row: any;
-  headers: any;
+  headers: BaseTableProps['headers'];
   onSelectRow: (e: any, id: string) => void;
   checked: boolean;
   currentMobileRow: string | React.ReactNode;
@@ -52,9 +53,9 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
             component="th"
             scope="row"
             isClickable
-            onClick={collapseTrigger === headers[0] ? () => setIsExpanded(!isExpanded) : undefined}
+            onClick={collapseTrigger === headers[0].id ? () => setIsExpanded(!isExpanded) : undefined}
           >
-            {row[headers[0]]}
+            {row[headers[0].id]}
           </SC.TableCell>
           <TableCell component="th" scope="row">
             {currentMobileRow}
@@ -70,15 +71,15 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
       <>
         <SC.TableRow key={row.id}>
           {renderCheckbox(row.id)}
-          {headers.map((header: any, i: number) => (
+          {headers.map((header, i: number) => (
             <SC.TableCell
               isMain={i === 0}
-              isClickable={collapseTrigger === header}
+              isClickable={collapseTrigger === header.id}
               component="th"
               scope="row"
-              onClick={collapseTrigger === header ? () => setIsExpanded(!isExpanded) : undefined}
+              onClick={collapseTrigger === header.id ? () => setIsExpanded(!isExpanded) : undefined}
             >
-              {row[header]}
+              {row[header.id]}
             </SC.TableCell>
           ))}
         </SC.TableRow>

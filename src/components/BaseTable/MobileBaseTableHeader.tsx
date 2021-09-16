@@ -1,4 +1,3 @@
-import React from 'react';
 import { TableCell, TableHead, TableRow, Checkbox } from '@material-ui/core';
 import arrowRight from '../../assets/arrow-right.svg';
 import arrowLeft from '../../assets/arrow-left.svg';
@@ -15,7 +14,7 @@ const MobileBaseTableHeader = ({
   onNextCellSelect,
   onPreviousCellSelect,
 }: Pick<BaseTableProps, 'rows' | 'selected' | 'onSelectAll' | 'headers'> & {
-  mobileArrowColumns: string[];
+  mobileArrowColumns: BaseTableProps['headers'];
   mobileColumnIndex: number;
   onPreviousCellSelect: () => void;
   onNextCellSelect: () => void;
@@ -30,10 +29,10 @@ const MobileBaseTableHeader = ({
             onChange={onSelectAll}
           />
         </TableCell>
-        <TableCell>{headers[0]}</TableCell>
+        <TableCell>{headers[0].value}</TableCell>
         <TableCell align="left">
           <SC.TableCellMobile>
-            <p>{mobileArrowColumns[mobileColumnIndex]}</p>
+            <p>{mobileArrowColumns[mobileColumnIndex].value}</p>
             {mobileArrowColumns.length > 1 && (
               <>
                 {!!mobileArrowColumns[mobileColumnIndex - 1] && (
