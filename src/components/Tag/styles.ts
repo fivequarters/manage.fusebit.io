@@ -5,6 +5,7 @@ export const Wrapper = styled.div<{ cursorPointer: boolean }>`
   background-color: rgba(33, 33, 33, 0.08);
   border-radius: 16px;
   width: max-content;
+  margin-right: 8px;
 
   &:hover {
     cursor: ${(props) => (props.cursorPointer ? 'pointer' : 'default')};

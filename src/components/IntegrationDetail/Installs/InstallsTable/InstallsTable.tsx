@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import { useAccountIntegrationInstanceGetAll } from '../../../../hooks/api/v2/account/integration/instance/useGetAll';
 import { format } from 'date-fns';
 import CodeBlock from '../../../CodeBlock';
-import { Install } from '../../../../interfaces/install';
+import { Install, InstallInstance } from '../../../../interfaces/install';
 import Tag from '../../../Tag';
 import ConfirmationPrompt from '../../../ConfirmationPrompt';
 
@@ -29,19 +29,26 @@ const InstallsTable = () => {
 
   const { items = [] } = data?.data || {};
 
+  const Tags = (identity: InstallInstance) => {
+    const tags: any[] = [];
+    Object.keys(identity.tags).forEach((key) => {
+      tags.push(<Tag children={key + ': ' + identity.tags[key]} />);
+    });
+
+    return tags;
+  };
+
   const rows = items.map((identity) => ({
     installID: identity.id,
     id: identity.id,
     dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
-    associatedIdentities: <Tag children={identity.dateAdded} />,
-    listOfTags: <Tag children={identity.tags['session.master']} />,
+    listOfTags: Tags(identity),
     collapsableContent: <CodeBlock code={JSON.stringify(identity, null, ' ')} />,
   }));
 
   const headers = [
     { id: 'installID', value: 'Installs ID' },
     { id: 'dateCreated', value: 'Date Created' },
-    { id: 'associatedIdentities', value: 'Associated Identities' },
     { id: 'listOfTags', value: 'List of tags' },
   ];
 

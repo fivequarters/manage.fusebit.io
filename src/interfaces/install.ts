@@ -4,7 +4,7 @@ interface Tags {
   'fusebit.tenantId'?: string;
 }
 
-interface InstallInstance {
+export interface InstallInstance {
   id: string;
   data: {
     [key: string]: {
