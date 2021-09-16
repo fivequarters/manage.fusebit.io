@@ -6,10 +6,6 @@ import { TableRow as MUITableRow, TableCell as MUICellRow } from '@material-ui/c
 export const Wrapper = styled.div`
   padding-bottom: 80px;
   min-height: 600px;
-
-  thead {
-    text-transform: capitalize;
-  }
 `;
 
 export const DeleteWrapper = styled.div<{ active: boolean }>`

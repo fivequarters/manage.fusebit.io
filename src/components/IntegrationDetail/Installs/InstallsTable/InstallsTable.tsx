@@ -46,7 +46,12 @@ const InstallsTable = () => {
       handleChangeRowsPerPage={handleChangeRowsPerPage}
       page={page}
       rowsPerPage={rowsPerPage}
-      headers={['installID', 'dateCreated', 'associatedIdentities', 'listOfTags']}
+      headers={[
+        { id: 'installID', value: 'Installs ID' },
+        { id: 'dateCreated', value: 'Date Created' },
+        { id: 'associatedIdentities', value: 'Associated Identities' },
+        { id: 'listOfTags', value: 'List of tags' },
+      ]}
       loading={isLoading}
       onDeleteAll={() => handleRowDelete('Install')}
       onSelectAll={handleSelectAllCheck}

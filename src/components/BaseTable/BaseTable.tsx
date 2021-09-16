@@ -31,7 +31,7 @@ interface Props {
   onSelectAll: (e: any) => void;
   onDeleteAll: () => void;
   onClickNew?: () => void;
-  headers: string[];
+  headers: { id: string; value: string }[];
   entityName?: string;
   onSelectRow: (e: any, id: string) => void;
   isSelected: (id: string) => boolean;
@@ -66,6 +66,7 @@ const BaseTable: React.FC<Props> = ({
   const computedRowsPerPage = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   const isMobile = useMediaQuery('(max-width: 880px)');
   const mobileArrowColumns = headers.slice(1);
+  console.log(headers);
   const [mobileColumnIndex, setMobileColumnIndex] = useState(0);
 
   const handleNextCellSelect = () => setMobileColumnIndex(mobileColumnIndex + 1);
@@ -90,7 +91,7 @@ const BaseTable: React.FC<Props> = ({
                         onChange={onSelectAll}
                       />
                     </TableCell>
-                    <TableCell>{headers[0]}</TableCell>
+                    <TableCell>{headers[0].value}</TableCell>
                     <TableCell align="left">
                       <SC.TableCellMobile>
                         <p>{mobileArrowColumns[mobileColumnIndex]}</p>
@@ -150,7 +151,7 @@ const BaseTable: React.FC<Props> = ({
                     </TableCell>
                     {headers.map((header, index) => (
                       <TableCell key={index} align="left">
-                        {header}
+                        {header.value}
                       </TableCell>
                     ))}
                   </TableRow>

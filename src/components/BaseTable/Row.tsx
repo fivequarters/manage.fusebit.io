@@ -59,10 +59,10 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
             component="th"
             scope="row"
             isClickable
-            onClick={isCollapsibleTrigger(headers[0]) ? () => setIsExpanded(!isExpanded) : undefined}
+            onClick={isCollapsibleTrigger(headers[0].id) ? () => setIsExpanded(!isExpanded) : undefined}
           >
-            {row[headers[0]]}
-            {isCollapsibleTrigger(headers[0]) && <SC.TriggerArrow active={isExpanded} isMain />}
+            {row[headers[0].id]}
+            {isCollapsibleTrigger(headers[0].id) && <SC.TriggerArrow active={isExpanded} isMain />}
           </SC.TableCell>
           <TableCell component="th" scope="row">
             {currentMobileRow}
@@ -78,17 +78,17 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
       <>
         <SC.TableRow key={row.id}>
           {renderCheckbox(row.id)}
-          {headers.map((header: any, i: number) => (
+          {headers.map((header: { id: string; value: string }, i: number) => (
             <SC.TableCell
               isMain={i === 0}
-              isClickable={isCollapsibleTrigger(header)}
+              isClickable={isCollapsibleTrigger(header.id)}
               component="th"
               scope="row"
-              onClick={isCollapsibleTrigger(header) ? () => setIsExpanded(!isExpanded) : undefined}
+              onClick={isCollapsibleTrigger(header.id) ? () => setIsExpanded(!isExpanded) : undefined}
             >
               <CSC.Flex>
-                {row[header]}
-                {isCollapsibleTrigger(header) && <SC.TriggerArrow active={isExpanded} isMain={i === 0} />}
+                {row[header.id]}
+                {isCollapsibleTrigger(header.id) && <SC.TriggerArrow active={isExpanded} isMain={i === 0} />}
               </CSC.Flex>
             </SC.TableCell>
           ))}
