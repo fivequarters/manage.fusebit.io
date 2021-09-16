@@ -10,6 +10,7 @@ import { Install } from '../../../../interfaces/install';
 import Tag from '../../../Tag';
 import ConfirmationPrompt from '../../../ConfirmationPrompt';
 import * as SC from './style';
+import InformationalBanner from '../../../InformationalBanner';
 
 const InstallsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -57,6 +58,11 @@ const InstallsTable = () => {
 
   return (
     <div id="installs-table">
+      <InformationalBanner
+        description="Every time a tenant installs an integration, it will show up here for you to see."
+        href="https://developer.fusebit.io/docs"
+        highlightedDescription="Learn more about Installations in the docs here."
+      />
       <ConfirmationPrompt
         open={deleteOpen}
         setOpen={setDeleteOpen}
