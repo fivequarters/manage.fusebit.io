@@ -43,7 +43,7 @@ const IntegrationsTable = () => {
 
     return {
       id: identity.id,
-      installID: identity.id,
+      identityId: identity.id,
       dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
       collapsableContent: <CodeBlock code={JSON.stringify(json, null, ' ')} />,
     };
@@ -70,7 +70,7 @@ const IntegrationsTable = () => {
         page={page}
         rowsPerPage={rowsPerPage}
         headers={[
-          { id: 'installID', value: 'Install Id' },
+          { id: 'identityId', value: 'Identity ID' },
           { id: 'dateCreated', value: 'Date Created' },
         ]}
         loading={isLoading}
@@ -81,7 +81,7 @@ const IntegrationsTable = () => {
         isSelected={isSelected}
         selected={selected}
         isCollapsible
-        collapseTrigger="installID"
+        collapseTrigger="identityId"
       />
     </>
   );

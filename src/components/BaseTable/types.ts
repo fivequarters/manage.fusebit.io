@@ -23,4 +23,4 @@ export interface BaseTableProps {
   handleChangeRowsPerPage: (e: any) => void;
   collapseTrigger?: string;
   isCollapsible?: boolean;
-};
+}
