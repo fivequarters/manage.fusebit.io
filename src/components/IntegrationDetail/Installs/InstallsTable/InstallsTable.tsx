@@ -7,6 +7,7 @@ import { useAccountIntegrationInstanceGetAll } from '../../../../hooks/api/v2/ac
 import { format } from 'date-fns';
 import CodeBlock from '../../../CodeBlock';
 import { Install } from '../../../../interfaces/install';
+import Tag from '../../../Tag';
 
 const InstallsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -33,8 +34,8 @@ const InstallsTable = () => {
     installID: identity.id,
     id: identity.id,
     dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
-    associatedIdentities: identity.dateAdded,
-    listOfTags: identity.tags['session.master'],
+    associatedIdentities: <Tag children={identity.dateAdded} />,
+    listOfTags: <Tag children={identity.tags['session.master']} />,
     collapsableContent: <CodeBlock code={JSON.stringify(identity.data, null, ' ')} />,
   }));
 
