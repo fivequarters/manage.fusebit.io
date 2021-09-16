@@ -34,22 +34,20 @@ const InstallsTable = () => {
     id: identity.id,
     dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
     associatedIdentities: identity.dateAdded,
-    listOfTags: identity.id,
-    collapsableContent: <CodeBlock code={JSON.stringify('json', null, ' ')} />,
+    listOfTags: identity.tags['session.master'],
+    collapsableContent: <CodeBlock code={JSON.stringify(identity.data, null, ' ')} />,
   }));
-
-  console.log(data);
 
   return (
     <BaseTable
-      emptyTableText="Your identities list is empty"
+      emptyTableText="Your installs list is empty"
       handleChangePage={handleChangePage}
       handleChangeRowsPerPage={handleChangeRowsPerPage}
       page={page}
       rowsPerPage={rowsPerPage}
       headers={['installID', 'dateCreated', 'associatedIdentities', 'listOfTags']}
       loading={isLoading}
-      onDeleteAll={() => handleRowDelete('Identity')}
+      onDeleteAll={() => handleRowDelete('Install')}
       onSelectAll={handleSelectAllCheck}
       rows={rows}
       onSelectRow={handleCheck}
