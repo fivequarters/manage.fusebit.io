@@ -20,6 +20,6 @@ export const Wrapper = styled.div`
     background-color: rgba(51, 51, 51, 0.05);
     border-radius: 4px;
     max-height: 346px;
-    overflow: scroll;
+    overflow: auto;
   }
 `;

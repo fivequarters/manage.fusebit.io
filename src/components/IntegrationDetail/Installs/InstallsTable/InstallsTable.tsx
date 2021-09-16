@@ -6,9 +6,10 @@ import { useParams } from 'react-router-dom';
 import { useAccountIntegrationInstanceGetAll } from '../../../../hooks/api/v2/account/integration/instance/useGetAll';
 import { format } from 'date-fns';
 import CodeBlock from '../../../CodeBlock';
-import { Install, InstallInstance } from '../../../../interfaces/install';
+import { Install } from '../../../../interfaces/install';
 import Tag from '../../../Tag';
 import ConfirmationPrompt from '../../../ConfirmationPrompt';
+import * as SC from './style';
 
 const InstallsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -29,21 +30,18 @@ const InstallsTable = () => {
 
   const { items = [] } = data?.data || {};
 
-  const Tags = (identity: InstallInstance) => {
-    const tags: any[] = [];
-    Object.keys(identity.tags).forEach((key) => {
-      tags.push(<Tag children={key + ': ' + identity.tags[key]} />);
-    });
-
-    return tags;
-  };
-
   const rows = items.map((identity) => ({
     installID: identity.id,
     id: identity.id,
     dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
-    listOfTags: Tags(identity),
-    collapsableContent: <CodeBlock code={JSON.stringify(identity, null, ' ')} />,
+    listOfTags: (
+      <SC.TagsContainer>
+        {Object.keys(identity.tags).map((key) => {
+          return <Tag>{key + ': ' + identity.tags[key]}</Tag>;
+        })}
+      </SC.TagsContainer>
+    ),
+    collapsableContent: <CodeBlock code={identity} />,
   }));
 
   const headers = [

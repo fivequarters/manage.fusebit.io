@@ -162,6 +162,15 @@ export const TableCell = styled(MUICellRow) <{ isMain?: boolean; isClickable?: b
     `}
 `;
 
+export const CellContent = styled.div<{ isClickable?: boolean }>`
+  ${(props) =>
+    props.isClickable &&
+    css`
+      display: flex;
+      align-items: center;
+    `}
+`;
+
 export const TriggerArrow = styled.div<{ active: boolean; isMain?: boolean }>`
   width: 14px;
   margin-left: 10px;
@@ -171,11 +180,16 @@ export const TriggerArrow = styled.div<{ active: boolean; isMain?: boolean }>`
   background-repeat: no-repeat;
   transform: ${(props) => props.active && 'rotate(180deg)'};
   transition: all 0.25s linear;
+  flex-shrink: 0;
   filter: ${(props) =>
     !props.isMain &&
     'invert(0%) sepia(0%) saturate(0%) hue-rotate(279deg) brightness(95%) contrast(101%);'}; // this is #333333 converted to a filter
-    `
-    
+
+  @media only screen and (max-width: 880px) {
+    margin-left: 5px;
+  }  
+`;
+
 export const TableContainer = styled.div`
   overflow: auto;
 `;

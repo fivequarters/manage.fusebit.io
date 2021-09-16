@@ -65,7 +65,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
               <Row
                 headers={headers}
                 checked={isSelected(row.id)}
-                currentMobileRow={mobileArrowColumns[mobileColumnIndex].value}
+                currentMobileRow={mobileArrowColumns[mobileColumnIndex].id}
                 onSelectRow={onSelectRow}
                 row={row}
                 isCollapsible={isCollapsible}
