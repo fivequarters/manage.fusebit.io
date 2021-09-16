@@ -18,15 +18,13 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
 
   const renderCollapsable = (row: any) => {
     return (
-      <>
-        <TableRow>
-          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={headers.length + 1}>
-            <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-              {row.collapsableContent}
-            </Collapse>
-          </TableCell>
-        </TableRow>
-      </>
+      <TableRow>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={headers.length + 1}>
+          <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+            {row.collapsableContent}
+          </Collapse>
+        </TableCell>
+      </TableRow>
     );
   };
 

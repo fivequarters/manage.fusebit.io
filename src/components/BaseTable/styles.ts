@@ -118,7 +118,7 @@ export const LoaderContainer = styled.tr`
   margin-top: 24px;
 `;
 
-export const NoIntegrationWrapper = styled.div`
+export const NoData = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
