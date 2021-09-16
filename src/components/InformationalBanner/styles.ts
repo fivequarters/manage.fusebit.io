@@ -8,7 +8,7 @@ export const Banner = styled.div`
   border-radius: 8px;
   background-color: #dae8ff;
   max-width: 912px;
-  margin: 0 auto 48px 0;
+  margin: 0 auto 48px;
 `;
 
 export const InfoIcon = styled.div`
