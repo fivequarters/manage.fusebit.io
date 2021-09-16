@@ -4,9 +4,9 @@ import { useEntityTable } from '../../../../hooks/useEntityTable';
 import { usePagination } from '../../../../hooks/usePagination';
 import { useParams } from 'react-router-dom';
 import { useAccountIntegrationInstanceGetAll } from '../../../../hooks/api/v2/account/integration/instance/useGetAll';
-import { Identity } from '../../../../interfaces/identities';
 import { format } from 'date-fns';
 import CodeBlock from '../../../CodeBlock';
+import { Install } from '../../../../interfaces/install';
 
 const InstallsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -17,7 +17,7 @@ const InstallsTable = () => {
     rowsPerPage,
   });
 
-  const { data, isLoading } = useAccountIntegrationInstanceGetAll<Identity>(
+  const { data, isLoading } = useAccountIntegrationInstanceGetAll<Install>(
     {
       id,
     },
@@ -37,6 +37,8 @@ const InstallsTable = () => {
     listOfTags: identity.id,
     collapsableContent: <CodeBlock code={JSON.stringify('json', null, ' ')} />,
   }));
+
+  console.log(data);
 
   return (
     <BaseTable

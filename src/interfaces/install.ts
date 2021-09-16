@@ -1,9 +1,31 @@
+interface Tags {
+  [key: string]: string | undefined;
+  'session.master'?: string;
+  'fusebit.tenantId'?: string;
+}
+
 interface InstallInstance {
   id: string;
-  data: object;
-  tags: object;
+  data: {
+    [key: string]: {
+      tags: Tags;
+      entityId: string;
+      accountId: string;
+      entityType: string;
+      parentEntityId: string;
+      subscriptionId: string;
+      parentEntityType: string;
+    };
+  };
+  tags: Tags;
   version: string;
-  expires: string;
+  state: string;
+  operationState: {
+    message: string;
+    statusCode: number;
+  };
+  dateAdded: string;
+  dateModified: string;
 }
 
 export interface Install {
