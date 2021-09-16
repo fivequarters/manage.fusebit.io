@@ -44,8 +44,8 @@ const IdentitiesTable = () => {
       installID: identity.id,
       id: identity.id,
       dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
-      associatedIdentities: 'associatedIdentities',
-      listOfTags: 'listOfTags',
+      associatedInstalls: 'associatedIdentities',
+      associatedIntegrations: 'listOfTags',
       collapsableContent: <CodeBlock code={JSON.stringify(json, null, ' ')} />,
     };
   });
@@ -58,10 +58,10 @@ const IdentitiesTable = () => {
       page={page}
       rowsPerPage={rowsPerPage}
       headers={[
-        { id: 'installID', value: 'Installs ID' },
+        { id: 'installID', value: 'Identity ID' },
         { id: 'dateCreated', value: 'Date Created' },
-        { id: 'associatedIdentities', value: 'Associated Identities' },
-        { id: 'listOfTags', value: 'List of tags' },
+        { id: 'associatedInstalls', value: 'Associated Installs' },
+        { id: 'associatedIntegrations', value: 'Associated Integrations' },
       ]}
       loading={isLoading}
       onDeleteAll={() => handleRowDelete('Identity')}
