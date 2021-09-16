@@ -29,7 +29,7 @@ export interface BaseTableProps {
     collapsableContent?: React.ReactNode | React.ReactText;
     [x: string]: React.ReactNode | React.ReactText;
   }[];
-  onSelectAll: (e: any) => void;
+  onSelectAll: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onDeleteAll: () => void;
   onClickNew?: () => void;
   headers: string[];
