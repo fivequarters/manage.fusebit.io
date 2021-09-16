@@ -2,15 +2,15 @@ import React from 'react';
 import * as SC from './styles';
 
 interface Props {
-  active: boolean;
   description: string;
   highlightedDescription?: string;
   href: string;
+  className?: string;
 }
 
-const InformationalBanner: React.FC<Props> = ({ description, highlightedDescription, href }) => {
+const InformationalBanner: React.FC<Props> = ({ description, highlightedDescription, href, className }) => {
   return (
-    <SC.Banner>
+    <SC.Banner className={className}>
       <SC.InfoIcon />
       <SC.Description>
         {description + ' '}

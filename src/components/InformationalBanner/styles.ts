@@ -8,7 +8,8 @@ export const Banner = styled.div`
   border-radius: 8px;
   background-color: #dae8ff;
   margin-bottom: 48px;
-  width: 912px;
+  max-width: 912px;
+  margin: 0 auto;
 `;
 
 export const InfoIcon = styled.div`
@@ -26,6 +27,7 @@ export const Description = styled.p`
   font-weight: 400;
   color: var(--black);
   max-width: 760px;
+  margin: 0;
 
   & > strong {
     font-weight: 500;
