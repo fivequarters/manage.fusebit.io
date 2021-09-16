@@ -4,7 +4,7 @@
     "name": "HubSpot",
     "smallIcon": "/images/hubspot.svg",
     "largeIcon": "/images/hubspot.svg",
-    "version": "1.0.0",
+    "version": "5.1.1",
     "description": "This Connector facilitates authentication, authorization, and API calls between Fusebit and HubSpot on your behalf.\n\n[Learn more](https://developer.fusebit.io/docs/hubspot)!\n",
     "tags": {
       "catalog": "hubspot,crm,sales,intro,popular"
@@ -56,7 +56,7 @@
               "accessTokenExpirationBuffer": 500
             },
             "files": {
-              "package.json": "{\n  \"scripts\": {\n    \"redeploy\": \"fuse connector rm <%this.name%> && yarn deploy\",\n    \"deploy\": \"fuse connector deploy <%this.name%> -d .\",\n    \"get\": \"fuse connector get <%this.name%> -d .\"\n  },\n  \"dependencies\": {\n    \"@fusebit-int/hubspot-connector\": \"5.1.0\",\n    \"@fusebit-int/framework\": \"5.1.0\"\n  }\n}\n"
+              "package.json": "{\n  \"scripts\": {\n    \"redeploy\": \"fuse connector rm <%this.name%> && yarn deploy\",\n    \"deploy\": \"fuse connector deploy <%this.name%> -d .\",\n    \"get\": \"fuse connector get <%this.name%> -d .\"\n  },\n  \"dependencies\": {\n    \"@fusebit-int/hubspot-connector\": \"5.1.1\",\n    \"@fusebit-int/framework\": \"5.1.1\"\n  }\n}\n"
             },
             "handler": "@fusebit-int/hubspot-connector"
           },
@@ -81,7 +81,7 @@
     "name": "Slack",
     "smallIcon": "/images/slack.svg",
     "largeIcon": "/images/slack.svg",
-    "version": "1.0.0",
+    "version": "5.1.1",
     "description": "This Connector facilitates authentication, authorization, and API calls between Fusebit and Slack on your behalf.\n\n[Learn more](https://developer.fusebit.io/docs/slack)!\n",
     "tags": {
       "catalog": "slack,intro,popular"
@@ -133,7 +133,7 @@
               "accessTokenExpirationBuffer": 500
             },
             "files": {
-              "package.json": "{\n  \"scripts\": {\n    \"redeploy\": \"fuse connector rm <%this.name%> && yarn deploy\",\n    \"deploy\": \"fuse connector deploy <%this.name%> -d .\",\n    \"get\": \"fuse connector get <%this.name%> -d .\"\n  },\n  \"dependencies\": {\n    \"@fusebit-int/slack-connector\": \"5.1.0\",\n    \"@fusebit-int/framework\": \"5.1.0\"\n  }\n}\n"
+              "package.json": "{\n  \"scripts\": {\n    \"redeploy\": \"fuse connector rm <%this.name%> && yarn deploy\",\n    \"deploy\": \"fuse connector deploy <%this.name%> -d .\",\n    \"get\": \"fuse connector get <%this.name%> -d .\"\n  },\n  \"dependencies\": {\n    \"@fusebit-int/slack-connector\": \"5.1.1\",\n    \"@fusebit-int/framework\": \"5.1.1\"\n  }\n}\n"
             },
             "handler": "@fusebit-int/oauth-connector"
           },
