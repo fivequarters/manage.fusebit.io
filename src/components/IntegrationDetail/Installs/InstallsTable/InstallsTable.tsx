@@ -52,11 +52,11 @@ const InstallsTable = () => {
 
   const handleDelete = () => {
     setDeleteOpen(false);
-    handleRowDelete('Install');
+    handleRowDelete('Install', 'installs-table');
   };
 
   return (
-    <>
+    <div id="installs-table">
       <ConfirmationPrompt
         open={deleteOpen}
         setOpen={setDeleteOpen}
@@ -83,7 +83,7 @@ const InstallsTable = () => {
         isCollapsible
         collapseTrigger="installID"
       />
-    </>
+    </div>
   );
 };
 
