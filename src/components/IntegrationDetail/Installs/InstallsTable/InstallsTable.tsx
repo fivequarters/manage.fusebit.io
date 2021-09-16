@@ -21,11 +21,8 @@ const InstallsTable = () => {
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   const { data, isLoading } = useAccountIntegrationInstanceGetAll<Install>(
+    { id },
     {
-      id,
-    },
-    {
-      // TODO: This is a workaround to calculate the select all checkbox
       onSuccess: (res) => setRows(res?.data?.items || []),
     }
   );
@@ -59,8 +56,10 @@ const InstallsTable = () => {
         open={deleteOpen}
         setOpen={setDeleteOpen}
         handleConfirmation={handleDelete}
-        title={`Are you sure you want to delete this Install?`}
-        description={`You will lose your install.`}
+        title={`​Are you sure you want to delete this ${selected.length > 1 ? 'Installs?' : 'Install?'}`}
+        description={`Your tenants will have to re-install ${
+          selected.length > 1 ? 'these integrations' : ' this integration'
+        } in their account.`}
       />
       <BaseTable
         emptyTableText="Your installs list is empty"

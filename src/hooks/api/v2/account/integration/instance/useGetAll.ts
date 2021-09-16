@@ -13,9 +13,9 @@ export const useAccountIntegrationInstanceGetAll = <T>(
   const { userData } = useContext();
 
   const params = {
-    id,
-    accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
+    accountId: userData.accountId,
+    id,
   };
 
   return useQuery(

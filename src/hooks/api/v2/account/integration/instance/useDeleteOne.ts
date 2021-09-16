@@ -13,7 +13,7 @@ export const useAccountIntegrationInstanceDeleteOne = <T>() => {
   const optimisticDelete = useOptimisticDelete({
     queryKey: [
       ACCOUNT_INTEGRATION_INSTANCE_GET_ALL,
-      { accountId: userData.accountId, subscriptionId: userData.subscriptionId },
+      { accountId: userData.accountId, subscriptionId: userData.subscriptionId, id: integrationId },
     ],
   });
 
