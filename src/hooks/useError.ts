@@ -106,7 +106,7 @@ export const useError = () => {
       error.style.transform = 'none';
       error.style.margin = '0 auto 20px auto';
       document.getElementById(errorContainer)?.prepend(error);
-      return
+      return;
     }
 
     document.body.appendChild(error);

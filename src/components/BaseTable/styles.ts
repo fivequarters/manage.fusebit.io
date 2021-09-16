@@ -122,19 +122,19 @@ export const NoData = styled.div`
 
 export const noBorderMixin = css`
   ${(props: { noBorder?: boolean }) =>
-    (props.noBorder) &&
+    props.noBorder &&
     css`
       & > td {
         border-bottom: 0;
       }
     `}
-`
+`;
 
-export const ExpandableRow = styled(MUITableRow) <{ noBorder?: boolean }>`
- ${noBorderMixin}
-`
+export const ExpandableRow = styled(MUITableRow)<{ noBorder?: boolean }>`
+  ${noBorderMixin}
+`;
 
-export const TableRow = styled(MUITableRow) <{ noBorder?: boolean }>`
+export const TableRow = styled(MUITableRow)<{ noBorder?: boolean }>`
   display: table-row;
   outline: 0;
   vertical-align: middle;
@@ -145,7 +145,7 @@ export const TableRow = styled(MUITableRow) <{ noBorder?: boolean }>`
   ${noBorderMixin}
 `;
 
-export const TableCell = styled(MUICellRow) <{ isMain?: boolean; isClickable?: boolean }>`
+export const TableCell = styled(MUICellRow)<{ isMain?: boolean; isClickable?: boolean }>`
   ${(props) =>
     props.isMain &&
     css`
