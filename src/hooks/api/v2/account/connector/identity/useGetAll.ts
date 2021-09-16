@@ -3,6 +3,8 @@ import { Params } from '../../../../../../interfaces/api';
 import { ApiResponse, useAxios } from '../../../../../useAxios';
 import { useContext } from '../../../../../useContext';
 
+export const ACCOUNT_CONNECTOR_IDENTITY_GET_ALL = 'accountConnectorIdentityGetAll';
+
 export const useAccountConnectorIdentityGetAll = <T>(
   { id }: Params,
   options?: UseQueryOptions<unknown, unknown, ApiResponse<T>>
@@ -17,7 +19,7 @@ export const useAccountConnectorIdentityGetAll = <T>(
   };
 
   return useQuery(
-    ['accountConnectorIdentityGetAll', params],
+    [ACCOUNT_CONNECTOR_IDENTITY_GET_ALL, params],
     () =>
       axios<T>(
         `/v2/account/${params.accountId}/subscription/${params.subscriptionId}/connector/${params.id}/identity`,

@@ -52,7 +52,7 @@ const IntegrationsTable = () => {
 
   const handleDelete = () => {
     setDeleteOpen(false);
-    handleRowDelete('Install');
+    handleRowDelete('Identity');
   };
 
   return (
