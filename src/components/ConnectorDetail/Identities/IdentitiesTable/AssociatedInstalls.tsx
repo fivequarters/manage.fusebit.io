@@ -1,6 +1,5 @@
-import React from 'react';
 import { useAccountConnectorIdentityInstallsGetAll } from '../../../../hooks/api/v2/account/connector/identity/installs/useGetAll';
-import * as CSC from '../../../../components/globalStyle';
+import AsyncTags from '../../../AsyncTags';
 
 interface Props {
   identityId?: string;
@@ -9,7 +8,7 @@ interface Props {
 const AssociatedInstalls = ({ identityId }: Props) => {
   const { isLoading, data } = useAccountConnectorIdentityInstallsGetAll({ identityId }, { enabled: !!identityId });
 
-  return <>{isLoading ? <CSC.Spinner /> : <div>{data?.[0].id}</div>}</>;
+  return <AsyncTags isLoading={isLoading} tags={(data || [])?.map((i) => i.id)} />;
 };
 
 export default AssociatedInstalls;

@@ -9,8 +9,8 @@ import CodeBlock from '../../../CodeBlock';
 import { Install } from '../../../../interfaces/install';
 import Tag from '../../../Tag';
 import ConfirmationPrompt from '../../../ConfirmationPrompt';
-import * as SC from './style';
 import InformationalBanner from '../../../InformationalBanner';
+import List from '../../../List';
 
 const InstallsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -36,11 +36,11 @@ const InstallsTable = () => {
     id: identity.id,
     dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
     listOfTags: (
-      <SC.TagsContainer>
+      <List>
         {Object.keys(identity.tags).map((key) => {
           return <Tag>{key + ': ' + identity.tags[key]}</Tag>;
         })}
-      </SC.TagsContainer>
+      </List>
     ),
     collapsableContent: <CodeBlock code={identity} />,
   }));
