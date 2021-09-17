@@ -8,7 +8,7 @@ interface Props {
   headers: BaseTableProps['headers'];
   onSelectRow: (e: any, id: string) => void;
   checked: boolean;
-  currentMobileRow: string | React.ReactNode;
+  currentMobileRow: string;
   collapseTrigger?: string;
   isCollapsible?: boolean;
 }
@@ -44,6 +44,8 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
   };
 
   const renderMobile = () => {
+    const isClickable = collapseTrigger === headers[0].id;
+
     return (
       <>
         <SC.TableRow noBorder={isCollapsible}>
@@ -52,11 +54,14 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
             isMain
             scope="row"
             isClickable
-            onClick={collapseTrigger === headers[0].id ? () => setIsExpanded(!isExpanded) : undefined}
+            onClick={isClickable ? () => setIsExpanded(!isExpanded) : undefined}
           >
-            {row[headers[0].id]}
+            <SC.CellContent isClickable={isClickable}>
+              {row[headers[0].id]}
+              {isClickable && <SC.TriggerArrow active={isExpanded} isMain />}
+            </SC.CellContent>
           </SC.TableCell>
-          <TableCell scope="row">{currentMobileRow}</TableCell>
+          <TableCell scope="row">{row[currentMobileRow]}</TableCell>
         </SC.TableRow>
         {isCollapsible && renderCollapsable(row)}
       </>
@@ -68,16 +73,23 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
       <>
         <SC.TableRow noBorder={isCollapsible}>
           {renderCheckbox(row.id)}
-          {headers.map((header, i: number) => (
-            <SC.TableCell
-              isMain={i === 0}
-              isClickable={collapseTrigger === header.id}
-              scope="row"
-              onClick={collapseTrigger === header.id ? () => setIsExpanded(!isExpanded) : undefined}
-            >
-              {row[header.id]}
-            </SC.TableCell>
-          ))}
+          {headers.map((header, i: number) => {
+            const isClickable = collapseTrigger === header.id;
+
+            return (
+              <SC.TableCell
+                isMain={i === 0}
+                isClickable={isClickable}
+                scope="row"
+                onClick={isClickable ? () => setIsExpanded(!isExpanded) : undefined}
+              >
+                <SC.CellContent isClickable={isClickable}>
+                  {row[header.id]}
+                  {header.id === collapseTrigger && <SC.TriggerArrow active={isExpanded} isMain />}
+                </SC.CellContent>
+              </SC.TableCell>
+            );
+          })}
         </SC.TableRow>
         {isCollapsible && renderCollapsable(row)}
       </>

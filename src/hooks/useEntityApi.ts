@@ -201,6 +201,10 @@ export const useEntityApi = (preventLoader?: boolean) => {
           await deleteIndentity.mutateAsync({
             id: ids[i],
           });
+        } else if (type === 'Install') {
+          await deleteInstall.mutateAsync({
+            id: ids[i],
+          });
         }
       }
       // if (type !== 'A') {
