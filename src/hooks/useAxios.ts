@@ -10,6 +10,13 @@ export interface ApiResponse<T> {
   success?: boolean;
 }
 
+export type FusebitAxios = <T extends {}>(
+  endpoint: string,
+  method: 'post' | 'delete' | 'put' | 'get' | 'patch',
+  params?: any,
+  headers?: any
+) => Promise<ApiResponse<T>>;
+
 axios.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -33,12 +40,12 @@ axios.interceptors.response.use(
 export const useAxios = () => {
   const { userData } = useContext();
 
-  const _axios = async <T extends {}>(
+  const _axios: FusebitAxios = async <T extends {}>(
     endpoint: string,
     method: 'post' | 'delete' | 'put' | 'get' | 'patch',
     params: any = {},
     headers: any = {}
-  ): Promise<ApiResponse<T>> => {
+  ) => {
     const config: AxiosRequestConfig = {
       method,
       url: `${REACT_APP_FUSEBIT_DEPLOYMENT}${endpoint}`,

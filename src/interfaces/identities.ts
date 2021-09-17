@@ -1,3 +1,5 @@
+import { Tags } from './tags';
+
 interface IdentityInstance {
   id: string;
   data: {
@@ -21,11 +23,7 @@ interface IdentityInstance {
       is_enterprise_install: boolean;
     };
   };
-  tags: {
-    [key: string]: string | undefined;
-    'session.master'?: string;
-    'fusebit.tenantId'?: string;
-  };
+  tags: Tags;
   version: string;
   state: string;
   operationState: {

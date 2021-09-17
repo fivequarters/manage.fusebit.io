@@ -1,7 +1,9 @@
-interface InstallInstance {
+import { Tags } from './tags';
+
+export interface InstallInstance {
   id: string;
   data: object;
-  tags: object;
+  tags: Tags;
   version: string;
   expires: string;
 }
