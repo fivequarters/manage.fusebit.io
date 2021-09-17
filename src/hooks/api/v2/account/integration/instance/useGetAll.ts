@@ -1,7 +1,15 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import { Params } from '../../../../../../interfaces/api';
-import { ApiResponse, useAxios } from '../../../../../useAxios';
+import { ApiResponse, FusebitAxios, useAxios } from '../../../../../useAxios';
 import { useContext } from '../../../../../useContext';
+
+export const getAllInstances = <T>(axiosInstance: FusebitAxios, params: Params) => {
+  return axiosInstance<T>(
+    `/v2/account/${params.accountId}/subscription/${params.subscriptionId}/integration/${params.id}/instance`,
+    'get',
+    params
+  );
+};
 
 export const ACCOUNT_INTEGRATION_INSTANCE_GET_ALL = 'accountIntegrationInstanceGetAll';
 
@@ -18,17 +26,8 @@ export const useAccountIntegrationInstanceGetAll = <T>(
     id,
   };
 
-  return useQuery(
-    [ACCOUNT_INTEGRATION_INSTANCE_GET_ALL, params],
-    () =>
-      axios<T>(
-        `/v2/account/${params.accountId}/subscription/${params.subscriptionId}/integration/${params.id}/instance`,
-        'get',
-        params
-      ),
-    {
-      enabled: !!userData.token,
-      ...options,
-    }
-  );
+  return useQuery([ACCOUNT_INTEGRATION_INSTANCE_GET_ALL, params], () => getAllInstances<T>(axios, params), {
+    enabled: !!userData.token,
+    ...options,
+  });
 };

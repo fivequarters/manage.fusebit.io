@@ -9,6 +9,7 @@ import { format } from 'date-fns';
 import CodeBlock from '../../../CodeBlock';
 import ConfirmationPrompt from '../../../ConfirmationPrompt';
 import InformationalBanner from '../../../InformationalBanner';
+import AssociatedInstalls from './AssociatedInstalls';
 
 const IntegrationsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -36,6 +37,7 @@ const IntegrationsTable = () => {
       id: identity.id,
       identityId: identity.id,
       dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
+      associatedInstalls: <AssociatedInstalls identityId={identity.tags['fusebit.tenantId']} />,
       collapsableContent: <CodeBlock code={identity} />,
     };
   });
@@ -68,6 +70,7 @@ const IntegrationsTable = () => {
         headers={[
           { id: 'identityId', value: 'Identity ID' },
           { id: 'dateCreated', value: 'Date Created' },
+          { id: 'associatedInstalls', value: 'Associated Installs' },
         ]}
         loading={isLoading}
         onDeleteAll={() => setDeleteOpen(true)}
