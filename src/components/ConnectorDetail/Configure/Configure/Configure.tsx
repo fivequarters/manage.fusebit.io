@@ -66,6 +66,7 @@ const Configure: React.FC = () => {
       updateEntity(connectorData, data);
     }
   };
+  console.log(connectorData);
 
   return (
     <SC.Flex>
@@ -75,7 +76,7 @@ const Configure: React.FC = () => {
             <JsonForms
               schema={config?.data.schema}
               uischema={config?.data.uischema}
-              data={config?.data.data}
+              data={connectorData?.data.data.configuration}
               renderers={materialRenderers}
               cells={materialCells}
               onChange={({ errors, data }) => {
