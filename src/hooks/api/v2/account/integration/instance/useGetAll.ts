@@ -1,20 +1,34 @@
-import { useQuery } from 'react-query';
+import { useQuery, UseQueryOptions } from 'react-query';
 import { Params } from '../../../../../../interfaces/api';
-import { useAxios } from '../../../../../useAxios';
+import { ApiResponse, useAxios } from '../../../../../useAxios';
+import { useContext } from '../../../../../useContext';
 
-export const useAccountIntegrationInstanceGetAll = <T>(params: Params) => {
+export const ACCOUNT_INTEGRATION_INSTANCE_GET_ALL = 'accountIntegrationInstanceGetAll';
+
+export const useAccountIntegrationInstanceGetAll = <T>(
+  { id }: Params,
+  options?: UseQueryOptions<unknown, unknown, ApiResponse<T>>
+) => {
   const { axios } = useAxios();
+  const { userData } = useContext();
 
-  const { enabled, ...queryParams } = params;
+  const params = {
+    subscriptionId: userData.subscriptionId,
+    accountId: userData.accountId,
+    id,
+  };
 
   return useQuery(
-    ['accountIntegrationInstanceGetAll', queryParams],
+    [ACCOUNT_INTEGRATION_INSTANCE_GET_ALL, params],
     () =>
       axios<T>(
-        `/v2/account/${queryParams.accountId}/subscription/${queryParams.subscriptionId}/integration/${queryParams.id}/instance`,
+        `/v2/account/${params.accountId}/subscription/${params.subscriptionId}/integration/${params.id}/instance`,
         'get',
         params
       ),
-    { enabled: !!enabled }
+    {
+      enabled: !!userData.token,
+      ...options,
+    }
   );
 };

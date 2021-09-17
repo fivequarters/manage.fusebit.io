@@ -1,7 +1,6 @@
 import React from 'react';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import TabComponent from '../../TabComponent';
-// import Identities from './Identities';
 import IdentitiesTable from './IdentitiesTable/IdentitiesTable';
 import { Props } from '../../../interfaces/connector';
 
