@@ -26,13 +26,8 @@ export const useAccountIntegrationInstanceGetAll = <T>(
     id,
   };
 
-  return useQuery(
-    [ACCOUNT_INTEGRATION_INSTANCE_GET_ALL, params],
-    () =>
-      getAllInstances<T>(axios, params),
-    {
-      enabled: !!userData.token,
-      ...options,
-    }
-  );
+  return useQuery([ACCOUNT_INTEGRATION_INSTANCE_GET_ALL, params], () => getAllInstances<T>(axios, params), {
+    enabled: !!userData.token,
+    ...options,
+  });
 };

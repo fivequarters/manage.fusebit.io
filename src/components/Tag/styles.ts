@@ -8,10 +8,11 @@ export const Wrapper = styled.div<{ cursorPointer: boolean }>`
   white-space: nowrap;
 
   &:hover {
-  ${props => props.cursorPointer && css`
-  
-  cursor: pointer;
-  `}
+    ${(props) =>
+      props.cursorPointer &&
+      css`
+        cursor: pointer;
+      `}
   }
 `;
 
