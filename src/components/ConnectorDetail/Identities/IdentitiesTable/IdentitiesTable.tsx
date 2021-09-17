@@ -33,22 +33,12 @@ const IntegrationsTable = () => {
   const { items = [] } = data?.data || {};
 
   const rows = items.map((identity) => {
-    const json = {
-      id: identity.id,
-      data: identity.data,
-      tags: identity.tags,
-      version: identity.version,
-      expires: identity.expires,
-      dateAdded: identity.dateAdded,
-      dateModified: identity.dateModified,
-    };
-
     return {
       id: identity.id,
       identityId: identity.id,
       dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
-      collapsableContent: <CodeBlock code={json} />,
       associatedInstalls: <AssociatedInstalls identityId={identity.tags['fusebit.tenantId']} />,
+      collapsableContent: <CodeBlock code={identity} />,
     };
   });
 
