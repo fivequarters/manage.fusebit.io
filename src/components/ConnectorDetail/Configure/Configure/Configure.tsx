@@ -66,7 +66,6 @@ const Configure: React.FC = () => {
       updateEntity(connectorData, data);
     }
   };
-  console.log(connectorData);
 
   return (
     <SC.Flex>
