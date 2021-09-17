@@ -152,7 +152,9 @@ export const TableCell = styled(MUICellRow)<{ isMain?: boolean; isClickable?: bo
   ${(props) =>
     props.isMain &&
     css`
-      color: var(--primary-color);
+      & > div {
+        color: var(--primary-color);
+      }
     `}
 
   ${(props) =>
