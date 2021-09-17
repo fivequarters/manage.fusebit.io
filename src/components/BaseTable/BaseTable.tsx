@@ -29,7 +29,6 @@ const BaseTable: React.FC<BaseTableProps> = ({
   const computedRowsPerPage = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   const isMobile = useMediaQuery('(max-width: 880px)');
   const mobileArrowColumns = headers.slice(1);
-  console.log(headers);
   const [mobileColumnIndex, setMobileColumnIndex] = useState(0);
 
   const handleNextCellSelect = () => setMobileColumnIndex(mobileColumnIndex + 1);
