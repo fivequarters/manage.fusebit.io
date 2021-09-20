@@ -36,7 +36,7 @@ const InstallsTable = () => {
     installID: identity.id,
     id: identity.id,
     dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
-    associatedInstalls: <AssociatedIdentities instanceId={identity.tags['fusebit.tenantId']} />,
+    associatedIdentities: <AssociatedIdentities instanceId={identity.tags['fusebit.tenantId']} />,
     listOfTags: (
       <List>
         {Object.keys(identity.tags).map((key) => {
@@ -50,7 +50,7 @@ const InstallsTable = () => {
   const headers = [
     { id: 'installID', value: 'Installs ID' },
     { id: 'dateCreated', value: 'Date Created' },
-    { id: 'associatedInstalls', value: 'Associated Installs' },
+    { id: 'associatedIdentities', value: 'Associated Identities' },
     { id: 'listOfTags', value: 'List of tags' },
   ];
 
