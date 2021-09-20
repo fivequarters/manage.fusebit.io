@@ -31,18 +31,18 @@ const InstallsTable = () => {
 
   const { items = [] } = data?.data || {};
 
-  const rows = items.map((identity) => ({
-    installID: identity.id,
-    id: identity.id,
-    dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
+  const rows = items.map((install) => ({
+    installID: install.id,
+    id: install.id,
+    dateCreated: format(new Date(install.dateAdded), 'MM/dd/yyyy'),
     listOfTags: (
       <List>
-        {Object.keys(identity.tags).map((key) => {
-          return <Tag>{key + ': ' + identity.tags[key]}</Tag>;
+        {Object.keys(install.tags).map((key) => {
+          return <Tag>{key + ': ' + install.tags[key]}</Tag>;
         })}
       </List>
     ),
-    collapsableContent: <CodeBlock code={identity} />,
+    collapsableContent: <CodeBlock code={install} />,
   }));
 
   const headers = [
