@@ -42,7 +42,6 @@ const InstallsTable = () => {
     { id: 'installID', value: 'Install ID' },
     { id: 'tenantID', value: 'Tenant ID' },
     { id: 'dateCreated', value: 'Date Created' },
-    { id: 'associatedIdentities', value: 'Associated Identities' },
   ];
 
   const handleDelete = () => {
