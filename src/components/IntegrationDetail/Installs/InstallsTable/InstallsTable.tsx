@@ -10,7 +10,6 @@ import { Install } from '../../../../interfaces/install';
 import Tag from '../../../Tag';
 import ConfirmationPrompt from '../../../ConfirmationPrompt';
 import InformationalBanner from '../../../InformationalBanner';
-import List from '../../../List';
 import AssociatedIdentities from './AssociatedIdentities';
 
 const InstallsTable = () => {
@@ -33,25 +32,19 @@ const InstallsTable = () => {
   const { items = [] } = data?.data || {};
 
   const rows = items.map((identity) => ({
-    installID: identity.id,
     id: identity.id,
+    installID: identity.id,
+    tenantID: <Tag>{identity.tags['fusebit.tenantId']}</Tag>,
     dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
     associatedIdentities: <AssociatedIdentities instanceId={identity.tags['fusebit.tenantId']} />,
-    listOfTags: (
-      <List>
-        {Object.keys(identity.tags).map((key) => {
-          return <Tag>{key + ': ' + identity.tags[key]}</Tag>;
-        })}
-      </List>
-    ),
     collapsableContent: <CodeBlock code={identity} />,
   }));
 
   const headers = [
-    { id: 'installID', value: 'Installs ID' },
+    { id: 'installID', value: 'Install ID' },
+    { id: 'tenantID', value: 'Tenant ID' },
     { id: 'dateCreated', value: 'Date Created' },
     { id: 'associatedIdentities', value: 'Associated Identities' },
-    { id: 'listOfTags', value: 'List of tags' },
   ];
 
   const handleDelete = () => {
