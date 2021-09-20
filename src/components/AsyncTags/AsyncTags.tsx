@@ -5,7 +5,10 @@ import * as CSC from '../globalStyle';
 
 interface Props {
   isLoading: boolean;
-  tags: string[];
+  tags: {
+    value: string;
+    onClick?: (id: string) => void;
+  }[];
 }
 
 const AsyncTags: React.FC<Props> = ({ isLoading, tags }) => {
@@ -16,7 +19,7 @@ const AsyncTags: React.FC<Props> = ({ isLoading, tags }) => {
       ) : (
         <List>
           {tags.map((tag) => {
-            return <Tag> {tag} </Tag>;
+            return <Tag onClick={() => tag.onClick?.(tag.value)}> {tag.value} </Tag>;
           })}
         </List>
       )}

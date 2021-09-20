@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import * as SC from './styles';
 import { Checkbox, TableCell, Collapse, useMediaQuery } from '@material-ui/core';
 import { BaseTableProps } from './types';
+import { useQuery } from '../../hooks/useQuery';
 
 interface Props {
   row: any;
@@ -15,7 +16,8 @@ interface Props {
 
 const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTrigger, isCollapsible }: Props) => {
   const isMobile = useMediaQuery('(max-width: 880px)');
-  const [isExpanded, setIsExpanded] = useState(false);
+  const query = useQuery();
+  const [isExpanded, setIsExpanded] = useState(query.get('expanded')?.split(',').includes(row.id) || false);
 
   const renderCollapsable = (row: any) => {
     return (

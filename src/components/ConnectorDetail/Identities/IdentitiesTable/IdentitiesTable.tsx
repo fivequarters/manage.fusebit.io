@@ -10,6 +10,7 @@ import CodeBlock from '../../../CodeBlock';
 import ConfirmationPrompt from '../../../ConfirmationPrompt';
 import InformationalBanner from '../../../InformationalBanner';
 import AssociatedInstalls from './AssociatedInstalls';
+import Tag from '../../../Tag';
 
 const IntegrationsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -36,6 +37,7 @@ const IntegrationsTable = () => {
     return {
       id: identity.id,
       identityId: identity.id,
+      tenantId: <Tag>{identity.tags['fusebit.tenantId']}</Tag>,
       dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
       associatedInstalls: <AssociatedInstalls identityId={identity.tags['fusebit.tenantId']} />,
       collapsableContent: <CodeBlock code={identity} />,
@@ -69,6 +71,7 @@ const IntegrationsTable = () => {
         rowsPerPage={rowsPerPage}
         headers={[
           { id: 'identityId', value: 'Identity ID' },
+          { id: 'tenantId', value: 'Tenant ID' },
           { id: 'dateCreated', value: 'Date Created' },
           { id: 'associatedInstalls', value: 'Associated Installs' },
         ]}

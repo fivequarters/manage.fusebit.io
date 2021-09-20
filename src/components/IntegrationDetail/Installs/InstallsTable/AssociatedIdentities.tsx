@@ -8,7 +8,14 @@ interface Props {
 const AssociatedIdentities = ({ instanceId }: Props) => {
   const { isLoading, data } = useAccountIntegrationInstanceIdentitiesGetAll({ instanceId }, { enabled: !!instanceId });
 
-  return <AsyncTags isLoading={isLoading} tags={(data || [])?.map((i) => i.id)} />;
+  return (
+    <AsyncTags
+      isLoading={isLoading}
+      tags={(data || [])?.map((i) => ({
+        value: i.id,
+      }))}
+    />
+  );
 };
 
 export default AssociatedIdentities;
