@@ -19,7 +19,7 @@ export const useAccountIntegrationInstanceIdentitiesGetAll = (
   const { userData } = useContext();
   const { createError } = useError();
 
-  const getAllIdentitysFromInstalls = async () => {
+  const getAllIdentitiesFromInstalls = async () => {
     try {
       const userParams = {
         accountId: userData.accountId,
@@ -41,9 +41,9 @@ export const useAccountIntegrationInstanceIdentitiesGetAll = (
 
       return identitiesPromises
         .map((res) => {
-          const { data } = res;
-
-          const { items } = data;
+          const {
+            data: { items },
+          } = res;
 
           return items.filter((i) => i.tags['fusebit.tenantId'] === instanceId);
         })
@@ -54,7 +54,7 @@ export const useAccountIntegrationInstanceIdentitiesGetAll = (
     }
   };
 
-  return useQuery([ACCOUNT_INTEGRATION_INSTANCE_IDENTITIES_GET_ALL, { instanceId }], getAllIdentitysFromInstalls, {
+  return useQuery([ACCOUNT_INTEGRATION_INSTANCE_IDENTITIES_GET_ALL, { instanceId }], getAllIdentitiesFromInstalls, {
     enabled: !!userData.token,
     ...options,
   });
