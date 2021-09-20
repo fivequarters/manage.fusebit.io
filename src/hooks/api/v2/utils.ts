@@ -1,14 +1,13 @@
 export const entityLoopThrough = async <T = any>(get: (next?: string) => Promise<any>) => {
-    let next: string | undefined
-    const pages: T[][] = []
+  let next: string | undefined;
+  const pages: T[][] = [];
 
-    do {
-        const { data } = await get(next)
+  do {
+    const { data } = await get(next);
 
-        next = data.next
-        pages.push(data.items)
+    next = data.next;
+    pages.push(data.items);
+  } while (!!next);
 
-    } while (!!next)
-
-    return pages.flat()
-}
+  return pages.flat();
+};
