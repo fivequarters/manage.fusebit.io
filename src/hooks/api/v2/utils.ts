@@ -1,4 +1,6 @@
-export const entityLoopThrough = async <T = any>(get: (next?: string) => Promise<any>) => {
+import { ApiResponse } from "../../useAxios";
+
+export const entityLoopThrough = async <T = any>(get: (next?: string) => Promise<ApiResponse<{ next: string, items: T[] }>>) => {
   let next: string | undefined;
   const pages: T[][] = [];
 
