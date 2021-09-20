@@ -15,7 +15,9 @@ const AsyncTags: React.FC<Props> = ({ isLoading, tags }) => {
         <CSC.Spinner />
       ) : (
         <List>
-          <Tag>{tags}</Tag>
+          {tags.map((tag) => {
+            return <Tag> {tag} </Tag>;
+          })}
         </List>
       )}
     </>

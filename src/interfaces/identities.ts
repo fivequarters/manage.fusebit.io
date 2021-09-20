@@ -1,6 +1,6 @@
 import { Tags } from './tags';
 
-interface IdentityInstance {
+export interface IdentityInstance {
   id: string;
   data: {
     token: {

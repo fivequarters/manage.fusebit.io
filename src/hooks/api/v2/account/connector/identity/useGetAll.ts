@@ -1,7 +1,15 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import { Params } from '../../../../../../interfaces/api';
-import { ApiResponse, useAxios } from '../../../../../useAxios';
+import { ApiResponse, FusebitAxios, useAxios } from '../../../../../useAxios';
 import { useContext } from '../../../../../useContext';
+
+export const getAllIdentities = <T>(axiosInstance: FusebitAxios, params: Params) => {
+  return axiosInstance<T>(
+    `/v2/account/${params.accountId}/subscription/${params.subscriptionId}/connector/${params.id}/identity`,
+    'get',
+    params
+  );
+};
 
 export const ACCOUNT_CONNECTOR_IDENTITY_GET_ALL = 'accountConnectorIdentityGetAll';
 

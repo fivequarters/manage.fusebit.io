@@ -11,6 +11,7 @@ import Tag from '../../../Tag';
 import ConfirmationPrompt from '../../../ConfirmationPrompt';
 import InformationalBanner from '../../../InformationalBanner';
 import List from '../../../List';
+import AssociatedIdentities from './AssociatedIdentities';
 
 const InstallsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -35,6 +36,7 @@ const InstallsTable = () => {
     installID: identity.id,
     id: identity.id,
     dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
+    associatedInstalls: <AssociatedIdentities instanceId={identity.tags['fusebit.tenantId']} />,
     listOfTags: (
       <List>
         {Object.keys(identity.tags).map((key) => {
@@ -48,6 +50,7 @@ const InstallsTable = () => {
   const headers = [
     { id: 'installID', value: 'Installs ID' },
     { id: 'dateCreated', value: 'Date Created' },
+    { id: 'associatedInstalls', value: 'Associated Installs' },
     { id: 'listOfTags', value: 'List of tags' },
   ];
 
