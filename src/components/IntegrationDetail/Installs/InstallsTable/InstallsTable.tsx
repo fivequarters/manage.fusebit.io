@@ -10,6 +10,7 @@ import { Install } from '../../../../interfaces/install';
 import Tag from '../../../Tag';
 import ConfirmationPrompt from '../../../ConfirmationPrompt';
 import InformationalBanner from '../../../InformationalBanner';
+import AssociatedIdentities from './AssociatedIdentities';
 
 const InstallsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -31,10 +32,11 @@ const InstallsTable = () => {
   const { items = [] } = data?.data || {};
 
   const rows = items.map((identity) => ({
-    installID: identity.id,
     id: identity.id,
+    installID: identity.id,
     tenantID: <Tag>{identity.tags['fusebit.tenantId']}</Tag>,
     dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
+    associatedIdentities: <AssociatedIdentities instanceId={identity.tags['fusebit.tenantId']} />,
     collapsableContent: <CodeBlock code={identity} />,
   }));
 
@@ -42,6 +44,7 @@ const InstallsTable = () => {
     { id: 'installID', value: 'Install ID' },
     { id: 'tenantID', value: 'Tenant ID' },
     { id: 'dateCreated', value: 'Date Created' },
+    { id: 'associatedIdentities', value: 'Associated Identities' },
   ];
 
   const handleDelete = () => {

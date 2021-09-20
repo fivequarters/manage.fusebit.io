@@ -41,9 +41,9 @@ export const useAccountConnectorIdentityInstallsGetAll = (
 
       return instancePromises
         .map((res) => {
-          const { data } = res;
-
-          const { items } = data;
+          const {
+            data: { items },
+          } = res;
 
           return items.filter((i) => i.tags['fusebit.tenantId'] === identityId);
         })

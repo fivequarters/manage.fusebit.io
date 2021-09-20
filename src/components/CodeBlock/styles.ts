@@ -8,7 +8,8 @@ export const Wrapper = styled.div`
   }
 
   .hljs-string,
-  .hljs-number {
+  .hljs-number,
+  .hljs-literal {
     color: #b35e14;
   }
 
