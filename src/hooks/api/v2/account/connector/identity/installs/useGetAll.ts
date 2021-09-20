@@ -8,6 +8,7 @@ import { getAllInstances } from '../../../integration/instance/useGetAll';
 import { Integration } from '../../../../../../../interfaces/integration';
 import { Install, InstallInstance } from '../../../../../../../interfaces/install';
 import { useError } from '../../../../../../useError';
+import { entityLoopThrough } from '../../../../utils'
 
 export const ACCOUNT_CONNECTOR_IDENTITY_INSTALLS_GET_ALL = 'accountConnectorIdentityInstallsGetAll';
 
@@ -26,9 +27,10 @@ export const useAccountConnectorIdentityInstallsGetAll = (
         subscriptionId: userData.subscriptionId,
       };
 
-      const { data } = await getAllIntegrations<{ items: Integration[] }>(axios, userParams);
 
-      const { items: integrations } = data;
+      const integrations = await entityLoopThrough<Integration>((next) => getAllIntegrations(axios, userParams, {
+        next,
+      }))
 
       const instancePromises = await Promise.all(
         (integrations || []).map((integration) => {
