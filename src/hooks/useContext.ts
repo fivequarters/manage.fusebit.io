@@ -36,10 +36,12 @@ const _useContext = () => {
       } as Object);
     });
     localStorage.setItem(LS_KEY, JSON.stringify(__userData));
+    localStorage.setItem('firstTimeVisitor', 'true');
   };
 
   const logout = () => {
     localStorage.setItem(LS_KEY, JSON.stringify({}));
+    localStorage.removeItem('firstTimeVisitor');
     setUserData({ picture: userData.picture });
     window.location.href = `${REACT_APP_AUTH0_DOMAIN}/v2/logout?returnTo=${REACT_APP_LOGOUT_REDIRECT_URL}`;
   };
