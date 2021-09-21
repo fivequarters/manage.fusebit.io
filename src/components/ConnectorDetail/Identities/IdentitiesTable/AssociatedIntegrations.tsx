@@ -7,7 +7,7 @@ interface Props {
   tenantId?: string;
 }
 
-const AssociatedInstalls = ({ tenantId }: Props) => {
+const AssociatedIntegrations = ({ tenantId }: Props) => {
   const { isLoading, data } = useAccountConnectorIdentityInstallsGetAll({ tenantId }, { enabled: !!tenantId });
   const history = useHistory();
   const { getRedirectLink } = useGetRedirectLink();
@@ -16,12 +16,11 @@ const AssociatedInstalls = ({ tenantId }: Props) => {
     <AsyncTags
       isLoading={isLoading}
       tags={(data || [])?.map((i) => ({
-        value: i.id,
-        onClick: () =>
-          history.push(getRedirectLink(`/integration/${i.tags['fusebit.parentEntityId']}/installs?expanded=${i.id}`)),
+        value: i.tags['fusebit.parentEntityId'] || '',
+        onClick: () => history.push(getRedirectLink(`/integration/${i.tags['fusebit.parentEntityId']}/develop`)),
       }))}
     />
   );
 };
 
-export default AssociatedInstalls;
+export default AssociatedIntegrations;

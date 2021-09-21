@@ -36,7 +36,7 @@ const InstallsTable = () => {
     installID: identity.id,
     tenantID: <Tag>{identity.tags['fusebit.tenantId']}</Tag>,
     dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
-    associatedIdentities: <AssociatedIdentities instanceId={identity.tags['fusebit.tenantId']} />,
+    associatedIdentities: <AssociatedIdentities tenantId={identity.tags['fusebit.tenantId']} />,
     collapsableContent: <CodeBlock code={identity} />,
   }));
 
