@@ -14,7 +14,8 @@ export type FusebitAxios = <T extends {}>(
   endpoint: string,
   method: 'post' | 'delete' | 'put' | 'get' | 'patch',
   params?: any,
-  headers?: any
+  headers?: any,
+  queryParams?: Record<string, any>
 ) => Promise<ApiResponse<T>>;
 
 axios.interceptors.response.use(
@@ -44,13 +45,15 @@ export const useAxios = () => {
     endpoint: string,
     method: 'post' | 'delete' | 'put' | 'get' | 'patch',
     params: any = {},
-    headers: any = {}
+    headers: any = {},
+    queryParams = {}
   ) => {
     const config: AxiosRequestConfig = {
       method,
       url: `${REACT_APP_FUSEBIT_DEPLOYMENT}${endpoint}`,
       data: params,
       headers,
+      params: queryParams,
     };
     if (userData.token) {
       config.headers.Authorization = `Bearer ${userData.token}`;

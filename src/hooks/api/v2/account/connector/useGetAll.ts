@@ -4,11 +4,13 @@ import { FusebitAxios, useAxios } from '../../../../useAxios';
 
 export const ACCOUNT_CONNECTORS_GET_ALL = 'accountConnectorsGetAll';
 
-export const getAllConnectors = <T>(axiosInstance: FusebitAxios, params: Params) => {
+export const getAllConnectors = <T>(axiosInstance: FusebitAxios, params: Params, queryParams?: Params) => {
   return axiosInstance<T>(
     `/v2/account/${params.accountId}/subscription/${params.subscriptionId}/connector`,
     'get',
-    params
+    params,
+    {},
+    queryParams
   );
 };
 
