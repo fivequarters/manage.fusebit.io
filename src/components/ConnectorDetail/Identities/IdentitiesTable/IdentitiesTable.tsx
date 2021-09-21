@@ -10,6 +10,7 @@ import CodeBlock from '../../../CodeBlock';
 import ConfirmationPrompt from '../../../ConfirmationPrompt';
 import InformationalBanner from '../../../InformationalBanner';
 import AssociatedInstalls from './AssociatedInstalls';
+import AssociatedIntegrations from './AssociatedIntegrations';
 import Tag from '../../../Tag';
 
 const IntegrationsTable = () => {
@@ -39,7 +40,8 @@ const IntegrationsTable = () => {
       identityId: identity.id,
       tenantId: <Tag>{identity.tags['fusebit.tenantId']}</Tag>,
       dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
-      associatedInstalls: <AssociatedInstalls identityId={identity.tags['fusebit.tenantId']} />,
+      associatedInstalls: <AssociatedInstalls tenantId={identity.tags['fusebit.tenantId']} />,
+      associatedIntegrations: <AssociatedIntegrations tenantId={identity.tags['fusebit.tenantId']} />,
       collapsableContent: <CodeBlock code={identity} />,
     };
   });
@@ -71,8 +73,9 @@ const IntegrationsTable = () => {
         rowsPerPage={rowsPerPage}
         headers={[
           { id: 'identityId', value: 'Identity ID' },
-          { id: 'tenantId', value: 'Tenant ID' },
           { id: 'dateCreated', value: 'Date Created' },
+          { id: 'tenantId', value: 'Tenant ID' },
+          { id: 'associatedIntegrations', value: 'Associated Integrations' },
           { id: 'associatedInstalls', value: 'Associated Installs' },
         ]}
         loading={isLoading}

@@ -2,11 +2,11 @@ import { useAccountIntegrationInstanceIdentitiesGetAll } from '../../../../hooks
 import AsyncTags from '../../../AsyncTags';
 
 interface Props {
-  instanceId?: string;
+  tenantId?: string;
 }
 
-const AssociatedIdentities = ({ instanceId }: Props) => {
-  const { isLoading, data } = useAccountIntegrationInstanceIdentitiesGetAll({ instanceId }, { enabled: !!instanceId });
+const AssociatedIdentities = ({ tenantId }: Props) => {
+  const { isLoading, data } = useAccountIntegrationInstanceIdentitiesGetAll({ tenantId }, { enabled: !!tenantId });
 
   return (
     <AsyncTags

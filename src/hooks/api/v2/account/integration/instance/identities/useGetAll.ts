@@ -13,7 +13,7 @@ import { entityLoopThrough } from '../../../../utils';
 export const ACCOUNT_INTEGRATION_INSTANCE_IDENTITIES_GET_ALL = 'accountIntegrationInstanceIdentitiesGetAll';
 
 export const useAccountIntegrationInstanceIdentitiesGetAll = (
-  { instanceId }: Params,
+  { tenantId }: Params,
   options?: UseQueryOptions<unknown, unknown, IdentityInstance[]>
 ) => {
   const { axios } = useAxios();
@@ -34,7 +34,7 @@ export const useAccountIntegrationInstanceIdentitiesGetAll = (
         })
       );
 
-      const identitiesPromises = await Promise.all(
+      const identities = await Promise.all(
         (connectors || []).map((connector) => {
           return getAllIdentities<Identity>(axios, {
             ...userParams,
@@ -43,13 +43,13 @@ export const useAccountIntegrationInstanceIdentitiesGetAll = (
         })
       );
 
-      return identitiesPromises
+      return identities
         .map((res) => {
           const {
             data: { items },
           } = res;
 
-          return items.filter((i) => i.tags['fusebit.tenantId'] === instanceId);
+          return items.filter((i) => i.tags['fusebit.tenantId'] === tenantId);
         })
         .filter((arr) => arr.length > 0)
         .flat();
@@ -58,7 +58,7 @@ export const useAccountIntegrationInstanceIdentitiesGetAll = (
     }
   };
 
-  return useQuery([ACCOUNT_INTEGRATION_INSTANCE_IDENTITIES_GET_ALL, { instanceId }], getAllIdentitiesFromInstalls, {
+  return useQuery([ACCOUNT_INTEGRATION_INSTANCE_IDENTITIES_GET_ALL, { tenantId }], getAllIdentitiesFromInstalls, {
     enabled: !!userData.token,
     ...options,
   });
