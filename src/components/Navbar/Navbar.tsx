@@ -163,7 +163,9 @@ const Navbar: React.FC<Props> = ({
                     >
                       <SC.SectionDropdownMenu>
                         <SC.Flex>
-                          <SC.SectionDropdownTitle>Integrations</SC.SectionDropdownTitle>
+                          <Link style={{ marginRight: 'auto' }} to={getRedirectLink('/integrations/overview')}>
+                            <SC.SectionDropdownTitle>Integrations</SC.SectionDropdownTitle>
+                          </Link>
                           <Link to={getRedirectLink('/integrations/overview')}>
                             <SC.SectionDropdownSeeMore>
                               See all
@@ -180,7 +182,9 @@ const Navbar: React.FC<Props> = ({
                           </Link>
                         ))}
                         <SC.Flex>
-                          <SC.SectionDropdownTitle>Connectors</SC.SectionDropdownTitle>
+                          <Link style={{ marginRight: 'auto' }} to={getRedirectLink('/connectors/overview')}>
+                            <SC.SectionDropdownTitle>Connectors</SC.SectionDropdownTitle>
+                          </Link>
                           <Link to={getRedirectLink('/connectors/overview')}>
                             <SC.SectionDropdownSeeMore>
                               See all
@@ -201,7 +205,9 @@ const Navbar: React.FC<Props> = ({
                     <Drawer anchor={'bottom'} open={drawerBottomOpen} onClose={() => setDrawerBottomOpen(false)}>
                       <SC.SectionDropdownMenu>
                         <SC.Flex>
-                          <SC.SectionDropdownTitle>Integrations</SC.SectionDropdownTitle>
+                          <Link style={{ marginRight: 'auto' }} to={getRedirectLink('/integrations/overview')}>
+                            <SC.SectionDropdownTitle>Integrations</SC.SectionDropdownTitle>
+                          </Link>
                           <Link to={getRedirectLink('/integrations/overview')}>
                             <SC.SectionDropdownSeeMore>
                               See all
@@ -218,7 +224,9 @@ const Navbar: React.FC<Props> = ({
                           </Link>
                         ))}
                         <SC.Flex>
-                          <SC.SectionDropdownTitle>Connectors</SC.SectionDropdownTitle>
+                          <Link style={{ marginRight: 'auto' }} to={getRedirectLink('/connectors/overview')}>
+                            <SC.SectionDropdownTitle>Connectors</SC.SectionDropdownTitle>
+                          </Link>
                           <Link to={getRedirectLink('/connectors/overview')}>
                             <SC.SectionDropdownSeeMore>
                               See all
@@ -249,7 +257,9 @@ const Navbar: React.FC<Props> = ({
                     >
                       <SC.SectionDropdownMenu>
                         <SC.Flex>
-                          <SC.SectionDropdownTitle>Accounts</SC.SectionDropdownTitle>
+                          <Link style={{ marginRight: 'auto' }} to={getRedirectLink('/connectors/overview')}>
+                            <SC.SectionDropdownTitle>Accounts</SC.SectionDropdownTitle>
+                          </Link>
                           <Link to={getRedirectLink('/authentication/users')}>
                             <SC.SectionDropdownSeeMore>
                               See all
@@ -276,7 +286,9 @@ const Navbar: React.FC<Props> = ({
                     <Drawer anchor={'bottom'} open={drawerBottomOpen} onClose={() => setDrawerBottomOpen(false)}>
                       <SC.SectionDropdownMenu>
                         <SC.Flex>
-                          <SC.SectionDropdownTitle>Accounts</SC.SectionDropdownTitle>
+                          <Link style={{ marginRight: 'auto' }} to={getRedirectLink('/authentication/users')}>
+                            <SC.SectionDropdownTitle>Accounts</SC.SectionDropdownTitle>
+                          </Link>
                           <Link to={getRedirectLink('/authentication/users')}>
                             <SC.SectionDropdownSeeMore>
                               See all
