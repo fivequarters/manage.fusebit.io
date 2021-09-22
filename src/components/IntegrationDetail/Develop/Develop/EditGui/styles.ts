@@ -122,34 +122,90 @@ export const OutlinedButtonWrapper = styled.div`
 `;
 
 export const EditorContainer = styled.div`
-  --closeHeaderHeight: 30px;
+  .fusebit-theme-light.fusebit-shell {
+    position: relative;
+    padding: 0 48px;
+    padding-bottom: 60px;
+    height: calc(100vh - 191px);
+    background-color: #eff5ff;
+  }
+
+  .fusebit-action-container,
+  .fusebit-status-container {
+    display: none;
+  }
+
+  .fusebit-theme-light .fusebit-main {
+    height: 100%;
+  }
 `;
 
 export const Close = styled.div`
   ${CloseIconMixin}
   z-index: 1;
-  top: calc(var(--closeHeaderHeight) / 2);
   height: 18px;
   width: 18px;
   background-size: cover;
-  transform: translateY(-50%);
-
-  &:hover {
-    transform: translateY(-50%) rotate(90deg);
-  }
 `;
 
 export const CloseHeader = styled.div`
-  position: absolute;
-  top: 0;
-  height: var(--closeHeaderHeight);
   width: 100%;
-  background: white;
+  height: 90px;
+  z-index: 10;
+  padding: 32px 48px;
+  background-color: #f7faff;
+
+  h3 {
+    display: inline-block;
+    margin: 0;
+    font-size: 20px;
+    line-height: 26px;
+    font-weight: 600;
+    color: var(--black);
+  }
+`;
+
+export const Actions = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 101px;
+  background-color: #eff5ff;
+  padding: 41px 48px 24px 48px;
+`;
+
+export const ActionsHelpWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+`;
+
+export const ActionsHelpLink = styled.a`
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--black);
+  text-decoration: underline;
+  margin-right: 10px;
+`;
+
+export const ActionsHelpImage = styled.img`
+  height: 16px;
+  width: 16px;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const FusebitEditorContainer = styled.div`
+  position: relative;
+`;
+
+export const FusebitEditorLogo = styled.img`
   position: absolute;
-  transform: translateY(var(--closeHeaderHeight));
-  width: 100%;
-  height: calc(100vh - var(--closeHeaderHeight));
+  bottom: 24px;
+  right: 48px;
+  height: 20px;
+  width: 80px;
+  object-fit: contain;
 `;
