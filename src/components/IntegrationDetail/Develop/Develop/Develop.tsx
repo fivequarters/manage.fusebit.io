@@ -95,7 +95,11 @@ const Develop: React.FC = () => {
 
   const editOptions = [
     { buttonLabel: 'Edit', optionLabel: 'Edit in the in-browser editor', handle: setEditGuiOpen },
-    { buttonLabel: 'CLI', optionLabel: 'Edit with your favorite editor', handle: setEditCliOpen },
+    {
+      buttonLabel: isOnlineEditorEnabled ? 'CLI' : 'Edit',
+      optionLabel: 'Edit with your favorite editor',
+      handle: setEditCliOpen,
+    },
   ];
   const editOptionAnchor = React.useRef<HTMLDivElement>(null);
   const [editOption, setEditOption] = React.useState(isOnlineEditorEnabled ? 0 : 1);
