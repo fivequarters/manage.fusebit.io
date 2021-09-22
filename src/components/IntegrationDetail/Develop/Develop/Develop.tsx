@@ -494,48 +494,50 @@ const Develop: React.FC = () => {
                 )}
               </ButtonGroup>
 
-              <Popper
-                open={editOptionOpen}
-                anchorEl={editOptionAnchor.current}
-                role={undefined}
-                transition
-                disablePortal
-              >
-                {({ TransitionProps, placement }) => (
-                  <Grow
-                    {...TransitionProps}
-                    style={{
-                      transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
-                    }}
-                  >
-                    <Paper>
-                      <ClickAwayListener onClickAway={handleCloseEditOptions}>
-                        <MenuList id="split-button-menu">
-                          {editOptions.map(
-                            (
-                              option: {
-                                buttonLabel: string;
-                                optionLabel: string;
-                                handle: React.Dispatch<React.SetStateAction<boolean>>;
-                              },
-                              index: number
-                            ) => (
-                              <MenuItem
-                                key={option.buttonLabel}
-                                disabled={index === 2}
-                                selected={index === editOption}
-                                onClick={(event) => handleEditOptionClick(event, index)}
-                              >
-                                {option.optionLabel}
-                              </MenuItem>
-                            )
-                          )}
-                        </MenuList>
-                      </ClickAwayListener>
-                    </Paper>
-                  </Grow>
-                )}
-              </Popper>
+              {isOnlineEditorEnabled && (
+                <Popper
+                  open={editOptionOpen}
+                  anchorEl={editOptionAnchor.current}
+                  role={undefined}
+                  transition
+                  disablePortal
+                >
+                  {({ TransitionProps, placement }) => (
+                    <Grow
+                      {...TransitionProps}
+                      style={{
+                        transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
+                      }}
+                    >
+                      <Paper>
+                        <ClickAwayListener onClickAway={handleCloseEditOptions}>
+                          <MenuList id="split-button-menu">
+                            {editOptions.map(
+                              (
+                                option: {
+                                  buttonLabel: string;
+                                  optionLabel: string;
+                                  handle: React.Dispatch<React.SetStateAction<boolean>>;
+                                },
+                                index: number
+                              ) => (
+                                <MenuItem
+                                  key={option.buttonLabel}
+                                  disabled={index === 2}
+                                  selected={index === editOption}
+                                  onClick={(event) => handleEditOptionClick(event, index)}
+                                >
+                                  {option.optionLabel}
+                                </MenuItem>
+                              )
+                            )}
+                          </MenuList>
+                        </ClickAwayListener>
+                      </Paper>
+                    </Grow>
+                  )}
+                </Popper>
+              )}
             </SC.CardButtonWrapper>
           </SC.Card>
           <SC.LinkWrapper>
