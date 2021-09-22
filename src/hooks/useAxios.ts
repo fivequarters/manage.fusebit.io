@@ -52,7 +52,10 @@ export const useAxios = () => {
       method,
       url: `${REACT_APP_FUSEBIT_DEPLOYMENT}${endpoint}`,
       data: params,
-      headers,
+      headers: {
+        ...headers,
+        'User-Agent': `fusebit-portal/${process.env.REACT_APP_VERSION} ${navigator.userAgent}`,
+      },
       params: queryParams,
     };
     if (userData.token) {

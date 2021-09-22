@@ -31,7 +31,10 @@ const IntegrationsPage: FC<{}> = (): ReactElement => {
     let picture = '';
     try {
       const response = await axios.get(`${REACT_APP_AUTH0_DOMAIN}/userinfo`, {
-        headers: { Authorization: `Bearer ${userData.token}` },
+        headers: {
+          Authorization: `Bearer ${userData.token}`,
+          'User-Agent': `fusebit-portal/${process.env.REACT_APP_VERSION} ${navigator.userAgent}`,
+        },
       });
       return response.data.picture;
     } catch (e) {}
