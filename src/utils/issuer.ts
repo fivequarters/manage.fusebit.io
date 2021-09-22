@@ -8,7 +8,7 @@ const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
 const axiosNo404MiddlewareInstance = axios.create({
   headers: {
-    'User-Agent': `fusebit-portal/${process.env.REACT_APP_VERSION} ${navigator.userAgent}`,
+    userAgent: `fusebit-portal/${process.env.REACT_APP_VERSION} ${navigator.userAgent}`,
   },
 });
 

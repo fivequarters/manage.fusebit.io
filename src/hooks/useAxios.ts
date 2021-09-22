@@ -54,13 +54,15 @@ export const useAxios = () => {
       data: params,
       headers: {
         ...headers,
-        'User-Agent': `fusebit-portal/${process.env.REACT_APP_VERSION} ${navigator.userAgent}`,
+        userAgent: `fusebit-portal/${process.env.REACT_APP_VERSION} ${navigator.userAgent}`,
       },
       params: queryParams,
     };
+
     if (userData.token) {
       config.headers.Authorization = `Bearer ${userData.token}`;
     }
+
     const response = await axios(config);
     return { success: true, data: response.data as T };
   };
