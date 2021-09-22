@@ -42,6 +42,9 @@ import { useEntityApi } from '../../../../hooks/useEntityApi';
 import { useBackendClient } from '../../../../hooks/useBackendClient';
 import { BackendClient } from '../../../../interfaces/backendClient';
 
+const { REACT_APP_ENABLE_ONLINE_EDITOR } = process.env;
+const isOnlineEditorEnabled = REACT_APP_ENABLE_ONLINE_EDITOR === 'true';
+
 const Develop: React.FC = () => {
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
@@ -92,10 +95,14 @@ const Develop: React.FC = () => {
 
   const editOptions = [
     { buttonLabel: 'Edit', optionLabel: 'Edit in the in-browser editor', handle: setEditGuiOpen },
-    { buttonLabel: 'CLI', optionLabel: 'Edit with your favorite editor', handle: setEditCliOpen },
+    {
+      buttonLabel: isOnlineEditorEnabled ? 'CLI' : 'Edit',
+      optionLabel: 'Edit with your favorite editor',
+      handle: setEditCliOpen,
+    },
   ];
   const editOptionAnchor = React.useRef<HTMLDivElement>(null);
-  const [editOption, setEditOption] = React.useState(0);
+  const [editOption, setEditOption] = React.useState(isOnlineEditorEnabled ? 0 : 1);
   const [editOptionOpen, setEditOptionOpen] = React.useState(false);
 
   const handleCloseEditOptions = (event: React.MouseEvent<Document, MouseEvent>) => {
@@ -472,61 +479,65 @@ const Develop: React.FC = () => {
                 >
                   {editOptions[editOption].buttonLabel}
                 </Button>
-                <Button
-                  color="primary"
-                  size="small"
-                  aria-controls={editOptionOpen ? 'split-button-menu' : undefined}
-                  aria-expanded={editOptionOpen ? 'true' : undefined}
-                  aria-label="select edit action"
-                  aria-haspopup="menu"
-                  onClick={() => setEditOptionOpen((prevOpen) => !prevOpen)}
-                >
-                  <ArrowDropDownIcon />
-                </Button>
+                {isOnlineEditorEnabled && (
+                  <Button
+                    color="primary"
+                    size="small"
+                    aria-controls={editOptionOpen ? 'split-button-menu' : undefined}
+                    aria-expanded={editOptionOpen ? 'true' : undefined}
+                    aria-label="select edit action"
+                    aria-haspopup="menu"
+                    onClick={() => setEditOptionOpen((prevOpen) => !prevOpen)}
+                  >
+                    <ArrowDropDownIcon />
+                  </Button>
+                )}
               </ButtonGroup>
 
-              <Popper
-                open={editOptionOpen}
-                anchorEl={editOptionAnchor.current}
-                role={undefined}
-                transition
-                disablePortal
-              >
-                {({ TransitionProps, placement }) => (
-                  <Grow
-                    {...TransitionProps}
-                    style={{
-                      transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
-                    }}
-                  >
-                    <Paper>
-                      <ClickAwayListener onClickAway={handleCloseEditOptions}>
-                        <MenuList id="split-button-menu">
-                          {editOptions.map(
-                            (
-                              option: {
-                                buttonLabel: string;
-                                optionLabel: string;
-                                handle: React.Dispatch<React.SetStateAction<boolean>>;
-                              },
-                              index: number
-                            ) => (
-                              <MenuItem
-                                key={option.buttonLabel}
-                                disabled={index === 2}
-                                selected={index === editOption}
-                                onClick={(event) => handleEditOptionClick(event, index)}
-                              >
-                                {option.optionLabel}
-                              </MenuItem>
-                            )
-                          )}
-                        </MenuList>
-                      </ClickAwayListener>
-                    </Paper>
-                  </Grow>
-                )}
-              </Popper>
+              {isOnlineEditorEnabled && (
+                <Popper
+                  open={editOptionOpen}
+                  anchorEl={editOptionAnchor.current}
+                  role={undefined}
+                  transition
+                  disablePortal
+                >
+                  {({ TransitionProps, placement }) => (
+                    <Grow
+                      {...TransitionProps}
+                      style={{
+                        transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
+                      }}
+                    >
+                      <Paper>
+                        <ClickAwayListener onClickAway={handleCloseEditOptions}>
+                          <MenuList id="split-button-menu">
+                            {editOptions.map(
+                              (
+                                option: {
+                                  buttonLabel: string;
+                                  optionLabel: string;
+                                  handle: React.Dispatch<React.SetStateAction<boolean>>;
+                                },
+                                index: number
+                              ) => (
+                                <MenuItem
+                                  key={option.buttonLabel}
+                                  disabled={index === 2}
+                                  selected={index === editOption}
+                                  onClick={(event) => handleEditOptionClick(event, index)}
+                                >
+                                  {option.optionLabel}
+                                </MenuItem>
+                              )
+                            )}
+                          </MenuList>
+                        </ClickAwayListener>
+                      </Paper>
+                    </Grow>
+                  )}
+                </Popper>
+              )}
             </SC.CardButtonWrapper>
           </SC.Card>
           <SC.LinkWrapper>
