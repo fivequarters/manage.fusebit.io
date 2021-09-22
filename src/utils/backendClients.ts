@@ -10,8 +10,11 @@ import { Storage } from '../interfaces/storage';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
-const axiosNo404MiddlewareInstance = axios.create();
-const UserAgent = `fusebit-portal/${process.env.REACT_APP_VERSION} ${navigator.userAgent}`;
+const axiosNo404MiddlewareInstance = axios.create({
+  headers: {
+    'User-Agent': `fusebit-portal/${process.env.REACT_APP_VERSION} ${navigator.userAgent}`,
+  },
+});
 
 export async function createBackendClient(user: User): Promise<BackendClient> {
   const backendClients = await getBackendClients(user);
@@ -60,7 +63,6 @@ export async function getBackendClients(user: User): Promise<BackendClient[]> {
     const clientsResponse = await axiosNo404MiddlewareInstance.get<Storage<BackendClient>>(clientsPaths, {
       headers: {
         Authorization: `Bearer ${token}`,
-        'User-Agent': UserAgent,
       },
     });
     return clientsResponse.data.data;
@@ -81,7 +83,6 @@ async function putBackendClients(user: User, backendClients: BackendClient[]): P
     {
       headers: {
         Authorization: `Bearer ${token}`,
-        'User-Agent': UserAgent,
       },
     }
   );
@@ -108,7 +109,6 @@ export async function patchBackendClients(
     {
       headers: {
         Authorization: `Bearer ${token}`,
-        'User-Agent': UserAgent,
       },
     }
   );
