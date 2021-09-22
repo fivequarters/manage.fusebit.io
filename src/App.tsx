@@ -17,7 +17,6 @@ function App() {
 
   useEffect(() => {
     validateToken();
-    console.log(`fusebit-portal/${process.env.REACT_APP_VERSION} ${navigator.userAgent}`);
   }, []);
 
   return (
