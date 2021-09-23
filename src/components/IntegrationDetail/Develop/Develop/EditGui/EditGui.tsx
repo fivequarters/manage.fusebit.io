@@ -107,7 +107,7 @@ const EditGui = React.forwardRef(({ onClose, integrationId }: Props) => {
             >
               Save
             </Button>
-            <h3>Edit hbspotIntegration-298</h3>
+            <h3>Edit {integrationId}</h3>
             <SC.ActionsHelpWrapper>
               <SC.ActionsHelpLink href="/">Edit Locally</SC.ActionsHelpLink>
               <SC.ActionsHelpImage src={question} alt="question" height="16" width="16" />
