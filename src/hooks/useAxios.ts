@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import { X_USER_AGENT } from '../utils/constants';
 import { readLocalData, validateToken } from '../utils/utils';
 import { useContext } from './useContext';
 
@@ -52,12 +53,17 @@ export const useAxios = () => {
       method,
       url: `${REACT_APP_FUSEBIT_DEPLOYMENT}${endpoint}`,
       data: params,
-      headers,
+      headers: {
+        ...headers,
+        'X-User-Agent': X_USER_AGENT,
+      },
       params: queryParams,
     };
+
     if (userData.token) {
       config.headers.Authorization = `Bearer ${userData.token}`;
     }
+
     const response = await axios(config);
     return { success: true, data: response.data as T };
   };

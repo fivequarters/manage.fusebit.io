@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { User } from '../interfaces/user';
 import { addClientIdentity, createClient, patchClient, removeClient } from './clients';
-import { BACKEND_LIST_STORAGE_ID } from './constants';
+import { BACKEND_LIST_STORAGE_ID, X_USER_AGENT } from './constants';
 import { generateKeyPair } from './crypto';
 import { generateNonExpiringToken } from './jwt';
 import { createIssuer, removeIssuer } from './issuer';
@@ -10,7 +10,11 @@ import { Storage } from '../interfaces/storage';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
-const axiosNo404MiddlewareInstance = axios.create();
+const axiosNo404MiddlewareInstance = axios.create({
+  headers: {
+    'X-User-Agent': X_USER_AGENT,
+  },
+});
 
 export async function createBackendClient(user: User): Promise<BackendClient> {
   const backendClients = await getBackendClients(user);
@@ -57,7 +61,9 @@ export async function getBackendClients(user: User): Promise<BackendClient[]> {
     const { accountId, subscriptionId, token } = user;
     const clientsPaths = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/subscription/${subscriptionId}/storage/${BACKEND_LIST_STORAGE_ID}`;
     const clientsResponse = await axiosNo404MiddlewareInstance.get<Storage<BackendClient>>(clientsPaths, {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
     return clientsResponse.data.data;
   } catch (err: any) {
@@ -75,7 +81,9 @@ async function putBackendClients(user: User, backendClients: BackendClient[]): P
     clientsPaths,
     { data: backendClients },
     {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     }
   );
   return response.data;
@@ -99,7 +107,9 @@ export async function patchBackendClients(
     clientsPaths,
     { data: backendClients },
     {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     }
   );
   return response.data;
