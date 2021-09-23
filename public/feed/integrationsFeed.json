@@ -101,7 +101,7 @@
             "handler": "@fusebit-int/hubspot-connector"
           },
           "id": "<%this.id%>",
-          "tags": { "fusebit.provider": "hubspot" }
+          "tags": {}
         },
         "hubspotIntegration": {
           "entityType": "integration",
@@ -233,7 +233,7 @@
             "handler": "@fusebit-int/slack-connector"
           },
           "id": "<%this.id%>",
-          "tags": { "fusebit.provider": "slack" }
+          "tags": {}
         },
         "slackIntegration": {
           "entityType": "integration",
