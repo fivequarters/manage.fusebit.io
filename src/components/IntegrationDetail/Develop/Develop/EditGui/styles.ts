@@ -135,20 +135,42 @@ export const EditorContainer = styled.div`
     display: none;
   }
 
-  .fusebit-theme-light .fusebit-main {
-    height: 100%;
+  .fusebit-theme-light {
+    .fusebit-main {
+      height: 100%;
+    }
+
+    .fusebit-editor-container {
+      padding-top: 0;
+    }
+
+    .fusebit-nav-splitter {
+      opacity: 0;
+      width: 8px;
+    }
+
+    .fusebit-logs-splitter {
+      opacity: 0;
+      height: 8px;
+    }
   }
 `;
 
 export const Close = styled.div`
   ${CloseIconMixin}
+  top: 0;
+  right: 0;
+  position: relative;
   z-index: 1;
   height: 18px;
   width: 18px;
+  margin-left: auto;
   background-size: cover;
 `;
 
 export const CloseHeader = styled.div`
+  display: flex;
+  align-items: center;
   width: 100%;
   height: 90px;
   z-index: 10;
