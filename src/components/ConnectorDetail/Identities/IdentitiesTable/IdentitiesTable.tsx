@@ -35,13 +35,17 @@ const IntegrationsTable = () => {
   const { items = [] } = data?.data || {};
 
   const rows = items.map((identity) => {
+    const connectorId = identity.tags['fusebit.parentEntityId'];
+
     return {
       id: identity.id,
       identityId: identity.id,
       tenantId: <Tag>{identity.tags['fusebit.tenantId']}</Tag>,
       dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
-      associatedInstalls: <AssociatedInstalls tenantId={identity.tags['fusebit.tenantId']} />,
-      associatedIntegrations: <AssociatedIntegrations tenantId={identity.tags['fusebit.tenantId']} />,
+      associatedInstalls: <AssociatedInstalls tenantId={identity.tags['fusebit.tenantId']} connectorId={connectorId} />,
+      associatedIntegrations: (
+        <AssociatedIntegrations tenantId={identity.tags['fusebit.tenantId']} connectorId={connectorId} />
+      ),
       collapsableContent: <CodeBlock code={identity} />,
     };
   });

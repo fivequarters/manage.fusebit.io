@@ -3,6 +3,7 @@ import { FinalConnector } from '../interfaces/integrationDetailDevelop';
 import { integrationsFeed, connectorsFeed } from '../static/feed';
 import { Decoded } from '../interfaces/decoded';
 import jwt_decode from 'jwt-decode';
+import { InstallInstance } from '../interfaces/install';
 
 const { REACT_APP_AUTH0_DOMAIN, REACT_APP_AUTH0_CLIENT_ID, REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 export const LS_KEY = `T29M03eleloegehOxGtpEPel18JfM3djp5pUL4Jm`;
@@ -63,3 +64,6 @@ export const validateToken = ({ onValid }: { onValid?: () => void } = {}) => {
     onValid?.();
   }
 };
+
+export const getConnectorsFromInstall = (install: InstallInstance) =>
+  Object.keys(install.data).map((key) => install?.data[key]?.parentEntityId);

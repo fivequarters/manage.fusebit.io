@@ -5,10 +5,14 @@ import AsyncTags from '../../../AsyncTags';
 
 interface Props {
   tenantId?: string;
+  connectorId?: string;
 }
 
-const AssociatedIntegrations = ({ tenantId }: Props) => {
-  const { isLoading, data } = useAccountConnectorIdentityInstallsGetAll({ tenantId }, { enabled: !!tenantId });
+const AssociatedIntegrations = ({ tenantId, connectorId }: Props) => {
+  const { isLoading, data } = useAccountConnectorIdentityInstallsGetAll(
+    { tenantId, connectorId },
+    { enabled: !!tenantId && !!connectorId }
+  );
   const history = useHistory();
   const { getRedirectLink } = useGetRedirectLink();
 
