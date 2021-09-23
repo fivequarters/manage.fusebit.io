@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 import { CloseIconMixin } from '../../../../globalStyle';
+import file from '../../../../../assets/file.svg';
+import cogs from '../../../../../assets/cogs.svg';
+import clock from '../../../../../assets/clock.svg';
+import playEditor from '../../../../../assets/play-editor.svg';
 
 export const Card = styled.div<{ open: boolean }>`
   position: absolute;
@@ -122,6 +126,26 @@ export const OutlinedButtonWrapper = styled.div`
 `;
 
 export const EditorContainer = styled.div`
+  .fa {
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    &-file {
+      background-image: url(${file});
+    }
+
+    &-cogs {
+      background-image: url(${cogs});
+    }
+
+    &-clock {
+      background-image: url(${clock});
+    }
+
+    &-play {
+      background-image: url(${playEditor});
+    }
+  }
   .fusebit-theme-light.fusebit-shell {
     position: relative;
     padding: 0 48px;
@@ -141,17 +165,89 @@ export const EditorContainer = styled.div`
     }
 
     .fusebit-editor-container {
-      padding-top: 0;
+      padding-top: 20px;
+      background-color: #ffffff;
+      border-radius: 4px;
     }
 
-    .fusebit-nav-splitter {
-      opacity: 0;
-      width: 8px;
+    .fusebit-new-file-input {
+      font-family: 'Poppins';
+      font-size: 14px;
+      line-height: 20px;
+      border: 0;
+      padding: 0;
+      background: none;
+      border-bottom: 1px solid var(--black);
     }
 
-    .fusebit-logs-splitter {
-      opacity: 0;
-      height: 8px;
+    .fusebit-nav {
+      &-container {
+        padding: 32px;
+        background-color: rgba(255, 255, 255, 0.5);
+        border-radius: 4px;
+      }
+
+      &-splitter {
+        opacity: 0;
+        width: 8px;
+      }
+
+      &-category {
+        font-family: 'Poppins';
+        font-size: 16px;
+        line-height: 18px;
+        font-weight: 600;
+        padding: 0;
+        color: var(--black);
+        margin-bottom: 16px;
+      }
+
+      &-file,
+      &-new-file,
+      &-item {
+        font-family: 'Poppins';
+        font-size: 14px;
+        line-height: 20px;
+        color: var(--black);
+        margin-bottom: 12px;
+        padding: 0;
+        transition: all 0.1s linear;
+
+        &:hover {
+          background: none;
+          font-weight: 700;
+        }
+      }
+
+      &-icon {
+        margin-right: 18px;
+
+        > svg {
+          width: 16px;
+          height: 16px;
+          > path {
+            display: none;
+          }
+        }
+      }
+
+      &-item-selected {
+        background: none;
+        font-weight: 700;
+      }
+    }
+
+    .fusebit-logs {
+      &-splitter {
+        opacity: 0;
+        height: 8px;
+      }
+
+      &-container {
+        font-family: courier;
+        background-color: #ffffff;
+        border-radius: 4px;
+      }
     }
   }
 `;
