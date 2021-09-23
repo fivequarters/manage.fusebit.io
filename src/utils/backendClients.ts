@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { User } from '../interfaces/user';
 import { addClientIdentity, createClient, patchClient, removeClient } from './clients';
-import { BACKEND_LIST_STORAGE_ID } from './constants';
+import { BACKEND_LIST_STORAGE_ID, X_USER_AGENT } from './constants';
 import { generateKeyPair } from './crypto';
 import { generateNonExpiringToken } from './jwt';
 import { createIssuer, removeIssuer } from './issuer';
@@ -12,7 +12,7 @@ const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
 const axiosNo404MiddlewareInstance = axios.create({
   headers: {
-    'X-User-Agent': `fusebit-portal/${process.env.REACT_APP_VERSION} ${navigator.userAgent}`,
+    'X-User-Agent': X_USER_AGENT,
   },
 });
 

@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import { X_USER_AGENT } from '../utils/constants';
 import { readLocalData, validateToken } from '../utils/utils';
 import { useContext } from './useContext';
 
@@ -54,7 +55,7 @@ export const useAxios = () => {
       data: params,
       headers: {
         ...headers,
-        'X-User-Agent': `fusebit-portal/${process.env.REACT_APP_VERSION} ${navigator.userAgent}`,
+        'X-User-Agent': X_USER_AGENT,
       },
       params: queryParams,
     };

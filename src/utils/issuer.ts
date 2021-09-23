@@ -3,12 +3,13 @@ import { User } from '../interfaces/user';
 import { Client } from '../interfaces/client';
 import { Issuer } from '../interfaces/issuer';
 import { KeyPair } from '../interfaces/keyPair';
+import { X_USER_AGENT } from './constants';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
 const axiosNo404MiddlewareInstance = axios.create({
   headers: {
-    'X-User-Agent': `fusebit-portal/${process.env.REACT_APP_VERSION} ${navigator.userAgent}`,
+    'X-User-Agent': X_USER_AGENT,
   },
 });
 
