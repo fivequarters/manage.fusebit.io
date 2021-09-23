@@ -25,6 +25,7 @@ REACT_APP_LOGOUT_REDIRECT_URL=https://fusebit.io
 REACT_APP_SEGMENT_KEY=VJm74fG8GSNVZHwQ3xAbMIaM2upyXSjT
 REACT_APP_INTEGRATIONS_FEED_URL=http://localhost:3000/feed/integrationsFeed.json
 REACT_APP_CONNECTORS_FEED_URL=http://localhost:3000/feed/connectorsFeed.json
+REACT_APP_VERSION=$npm_package_version
 ```
 
 ### Localhost over Production
@@ -39,6 +40,7 @@ REACT_APP_AUTH0_CLIENT_ID=NIfqE4hpPOXuIhllkxndlafSKcKesEfc
 REACT_APP_LOGOUT_REDIRECT_URL=http://localhost:3000
 REACT_APP_INTEGRATIONS_FEED_URL=http://localhost:3000/feed/integrationsFeed.json
 REACT_APP_CONNECTORS_FEED_URL=http://localhost:3000/feed/connectorsFeed.json
+REACT_APP_VERSION=$npm_package_version
 ```
 
 ### Vercel over Production
@@ -50,6 +52,7 @@ REACT_APP_AUTH0_CLIENT_ID=NIfqE4hpPOXuIhllkxndlafSKcKesEfc
 REACT_APP_LOGOUT_REDIRECT_URL=https://fusebit.io
 REACT_APP_INTEGRATIONS_FEED_URL=https://portal-fusebit-io.vercel.app/feed/connectorsFeed.json
 REACT_APP_CONNECTORS_FEED_URL=https://portal-fusebit-io.vercel.app/feed/connectorsFeed.json
+REACT_APP_VERSION=$npm_package_version
 ```
 
 ## Running and serving a dev build
