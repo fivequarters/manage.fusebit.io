@@ -146,11 +146,21 @@ export const EditorContainer = styled.div`
       background-image: url(${playEditor});
     }
   }
+
+  .fusebit-code-action-add-btn {
+    height: 1px;
+    width: 1px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+  }
+
   .fusebit-theme-light.fusebit-shell {
     position: relative;
     padding: 0 48px;
     padding-bottom: 60px;
-    height: calc(100vh - 191px);
+    height: calc(100vh - 96px);
     background-color: #eff5ff;
   }
 
@@ -162,6 +172,15 @@ export const EditorContainer = styled.div`
   .fusebit-theme-light {
     .fusebit-main {
       height: 100%;
+    }
+
+    .fusebit-modal {
+      border-radius: 8px;
+
+      &-container {
+        height: 100vh;
+        transform: translateY(-96px);
+      }
     }
 
     .fusebit-editor-container {
@@ -185,6 +204,7 @@ export const EditorContainer = styled.div`
         padding: 32px;
         background-color: rgba(255, 255, 255, 0.5);
         border-radius: 4px;
+        width: 253px;
       }
 
       &-splitter {
@@ -225,6 +245,9 @@ export const EditorContainer = styled.div`
         > svg {
           width: 16px;
           height: 16px;
+          margin-bottom: -1px;
+          background-size: cover;
+          background-repeat: no-repeat;
           > path {
             display: none;
           }
@@ -258,22 +281,27 @@ export const Close = styled.div`
   right: 0;
   position: relative;
   z-index: 1;
-  height: 18px;
-  width: 18px;
+  height: 12px;
+  width: 12px;
   margin-left: auto;
   background-size: cover;
 `;
 
 export const CloseHeader = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   width: 100%;
-  height: 90px;
+  height: 96px;
   z-index: 10;
   padding: 32px 48px;
-  background-color: #f7faff;
+  background-color: #eff5ff;
 
   h3 {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     display: inline-block;
     margin: 0;
     font-size: 20px;
@@ -283,19 +311,13 @@ export const CloseHeader = styled.div`
   }
 `;
 
-export const Actions = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: 101px;
-  background-color: #eff5ff;
-  padding: 41px 48px 24px 48px;
-`;
-
 export const ActionsHelpWrapper = styled.div`
+  position: absolute;
+  right: 94px;
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
   align-items: center;
-  margin-left: auto;
 `;
 
 export const ActionsHelpLink = styled.a`
