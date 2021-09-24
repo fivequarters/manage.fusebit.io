@@ -125,7 +125,10 @@ export const OutlinedButtonWrapper = styled.div`
   }
 `;
 
-export const EditorContainer = styled.div`
+export const EditorContainer = styled.div<{ open: boolean }>`
+  height: ${(props) => (props.open ? '200px' : '0')};
+  transition: all 5s linear;
+
   .fa {
     background-size: cover;
     background-repeat: no-repeat;

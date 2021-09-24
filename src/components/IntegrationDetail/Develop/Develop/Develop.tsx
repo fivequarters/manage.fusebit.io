@@ -40,9 +40,49 @@ import { useEffect } from 'react';
 import { useEntityApi } from '../../../../hooks/useEntityApi';
 import { useBackendClient } from '../../../../hooks/useBackendClient';
 import { BackendClient } from '../../../../interfaces/backendClient';
+import { useSpring, animated } from 'react-spring';
 
 const { REACT_APP_ENABLE_ONLINE_EDITOR } = process.env;
 const isOnlineEditorEnabled = REACT_APP_ENABLE_ONLINE_EDITOR === 'true';
+
+interface FadeProps {
+  children?: React.ReactElement;
+  in: boolean;
+  mounted: boolean;
+  onEnter?: () => {};
+  onExited?: () => {};
+}
+
+const FadeSpring = React.forwardRef<HTMLDivElement, FadeProps>(function Fade(props, ref) {
+  const { in: open, mounted, children, onEnter, onExited, ...other } = props;
+  const style = useSpring({
+    transform: mounted ? 'translateY(0vh)' : 'translateY(100vh)',
+    config: { mass: 4, tension: 500, friction: 70 },
+
+    onStart: () => {
+      if (open && onEnter) {
+        onEnter();
+      }
+    },
+    onRest: () => {
+      if (!open && onExited) {
+        onExited();
+      }
+    },
+  });
+
+  return (
+    <animated.div
+      ref={ref}
+      style={{
+        transform: style.transform.to((transform) => transform),
+      }}
+      {...other}
+    >
+      {children}
+    </animated.div>
+  );
+});
 
 const Develop: React.FC = () => {
   const history = useHistory();
@@ -77,6 +117,7 @@ const Develop: React.FC = () => {
   const [backendClients, setBackendClients] = useState<BackendClient[]>([]);
   const [backendClient, setBackendClient] = useState<BackendClient>();
   const [connectHover, setConnectHover] = useState(false);
+  const [editUiMounted, setEditUiMounted] = useState(false);
 
   const getBackendClients = async () => {
     const backendClients = await getBackendClientListener();
@@ -353,17 +394,24 @@ const Develop: React.FC = () => {
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         open={editGuiOpen}
-        onClose={() => setEditGuiOpen(false)}
+        onClose={() => {
+          setEditGuiOpen(false);
+          setEditUiMounted(false);
+        }}
         closeAfterTransition
         BackdropComponent={Backdrop}
       >
-        <Fade in={editGuiOpen}>
+        <FadeSpring in={editGuiOpen} mounted={editUiMounted}>
           <EditGui
             open={editGuiOpen}
-            onClose={() => setEditGuiOpen(false)}
+            onMount={() => setEditUiMounted(true)}
+            onClose={() => {
+              setEditGuiOpen(false);
+              setEditUiMounted(false);
+            }}
             integrationId={integrationData?.data.id || ''}
           />
-        </Fade>
+        </FadeSpring>
       </Modal>
       <SC.Flex>
         <SC.CardSeparator />

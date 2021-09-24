@@ -34,7 +34,7 @@ const addNewIcon = `
     background-repeat: no-repeat;
 `;
 
-const EditGui = React.forwardRef(({ onClose, integrationId }: Props) => {
+const EditGui = React.forwardRef(({ onClose, onMount, open, integrationId }: Props) => {
   const { userData } = useContext();
   const [isMounted, setIsMounted] = useState(false);
   const { createLoader, removeLoader } = useLoader();
@@ -69,6 +69,7 @@ const EditGui = React.forwardRef(({ onClose, integrationId }: Props) => {
 
     if (isMounted) {
       removeLoader();
+      open && onMount();
       const items = document.getElementsByClassName('fusebit-nav-file');
       const lastItem = items?.[items.length - 1];
       if (!document.getElementById('addNewItem')) {
@@ -77,11 +78,11 @@ const EditGui = React.forwardRef(({ onClose, integrationId }: Props) => {
     } else {
       createLoader();
     }
-  }, [isMounted, createLoader, removeLoader]);
+  }, [isMounted, open, onMount, createLoader, removeLoader]);
 
   return (
     <>
-      <SC.EditorContainer>
+      <SC.EditorContainer open={open}>
         {isMounted && (
           <SC.CloseHeader>
             <ButtonGroup variant="contained" style={{ marginRight: '16px' }}>
