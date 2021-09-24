@@ -41,6 +41,7 @@ import { useEntityApi } from '../../../../hooks/useEntityApi';
 import { useBackendClient } from '../../../../hooks/useBackendClient';
 import { BackendClient } from '../../../../interfaces/backendClient';
 import { useSpring, animated } from 'react-spring';
+import EditCli from './EditCli';
 
 const { REACT_APP_ENABLE_ONLINE_EDITOR } = process.env;
 const isOnlineEditorEnabled = REACT_APP_ENABLE_ONLINE_EDITOR === 'true';
@@ -118,6 +119,7 @@ const Develop: React.FC = () => {
   const [backendClient, setBackendClient] = useState<BackendClient>();
   const [connectHover, setConnectHover] = useState(false);
   const [editUiMounted, setEditUiMounted] = useState(false);
+  const [editCliOpen, setEditCliOpen] = React.useState(false);
 
   const getBackendClients = async () => {
     const backendClients = await getBackendClientListener();
@@ -137,7 +139,7 @@ const Develop: React.FC = () => {
     {
       buttonLabel: isOnlineEditorEnabled ? 'CLI' : 'Edit',
       optionLabel: 'Edit with your favorite editor',
-      handle: setEditGuiOpen,
+      handle: setEditCliOpen,
     },
   ];
   const editOptionAnchor = React.useRef<HTMLDivElement>(null);
@@ -350,6 +352,22 @@ const Develop: React.FC = () => {
             setKeyIsCopied={setKeyIsCopied}
             open={connectOpen}
             onClose={onConnectClose}
+          />
+        </Fade>
+      </Modal>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={editCliOpen}
+        onClose={() => setEditCliOpen(false)}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+      >
+        <Fade in={editCliOpen}>
+          <EditCli
+            open={editCliOpen}
+            onClose={() => setEditCliOpen(false)}
+            integrationId={integrationData?.data.id || ''}
           />
         </Fade>
       </Modal>
