@@ -3,11 +3,13 @@ import { Params } from '../../../../../../interfaces/api';
 import { ApiResponse, FusebitAxios, useAxios } from '../../../../../useAxios';
 import { useContext } from '../../../../../useContext';
 
-export const getAllInstances = <T>(axiosInstance: FusebitAxios, params: Params) => {
+export const getAllInstances = <T>(axiosInstance: FusebitAxios, params: Params, queryParams?: Params) => {
   return axiosInstance<T>(
     `/v2/account/${params.accountId}/subscription/${params.subscriptionId}/integration/${params.id}/instance`,
     'get',
-    params
+    params,
+    {},
+    queryParams
   );
 };
 

@@ -1,3 +1,5 @@
+import { Tags } from "./tags";
+
 export interface IntegrationData {
   components: InnerConnector[];
   componentTags: {
@@ -18,9 +20,7 @@ export interface InnerConnector {
 export interface Integration {
   id: string;
   data: IntegrationData;
-  tags?: {
-    [key: string]: any;
-  };
+  tags?: Tags;
 }
 
 export interface Props {

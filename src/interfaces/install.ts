@@ -1,9 +1,4 @@
-interface Tags {
-  [key: string]: string | undefined;
-  'session.master'?: string;
-  'fusebit.tenantId'?: string;
-  'fusebit.parentEntityId'?: string;
-}
+import { Tags } from "./tags";
 
 export interface InstallInstance {
   id: string;

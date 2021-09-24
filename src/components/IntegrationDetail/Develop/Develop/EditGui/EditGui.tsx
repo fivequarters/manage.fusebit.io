@@ -11,6 +11,7 @@ import save from '../../../../../assets/save.svg';
 import question from '../../../../../assets/question.svg';
 import logo from '../../../../../assets/logo.svg';
 import add from '../../../../../assets/add.svg';
+import useRunner from './useRunner';
 
 const addNewStyles = `
   position: relative;
@@ -38,6 +39,7 @@ const EditGui = React.forwardRef(({ onClose, integrationId }: Props) => {
   const { userData } = useContext();
   const [isMounted, setIsMounted] = useState(false);
   const { createLoader, removeLoader } = useLoader();
+  const { run } = useRunner();
 
   useEffect(() => {
     const createAddNewItemElement = (lastItem: Element) => {
@@ -90,6 +92,7 @@ const EditGui = React.forwardRef(({ onClose, integrationId }: Props) => {
                 size="small"
                 variant="contained"
                 color="primary"
+                onClick={run}
               >
                 Run
               </Button>
