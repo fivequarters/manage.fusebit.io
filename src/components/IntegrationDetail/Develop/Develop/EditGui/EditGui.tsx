@@ -39,34 +39,34 @@ const EditGui = React.forwardRef(({ onClose, integrationId }: Props) => {
   const [isMounted, setIsMounted] = useState(false);
   const { createLoader, removeLoader } = useLoader();
 
-  const createAddNewItemElement = (lastItem: Element) => {
-    const addNew = document.createElement('div');
-    addNew.setAttribute('id', 'addNewItem');
-    addNew.setAttribute('style', addNewStyles);
-    addNew.onclick = (e) => {
-      e.stopPropagation();
-      const el = document.getElementsByClassName('fusebit-code-action-add-btn')?.[0];
-      if (el instanceof HTMLElement) {
-        el?.click();
-        document.getElementById('addNewItem')?.remove();
-        const input = document.getElementsByClassName('fusebit-nav-new-file')?.[0];
-        createAddNewItemElement(input);
-      }
+  useEffect(() => {
+    const createAddNewItemElement = (lastItem: Element) => {
+      const addNew = document.createElement('div');
+      addNew.setAttribute('id', 'addNewItem');
+      addNew.setAttribute('style', addNewStyles);
+      addNew.onclick = (e) => {
+        e.stopPropagation();
+        const el = document.querySelector('.fusebit-code-action-add-btn');
+        if (el instanceof HTMLElement) {
+          el?.click();
+          document.getElementById('addNewItem')?.remove();
+          const input = document.querySelector('.fusebit-nav-new-file');
+          input && createAddNewItemElement(input);
+        }
+      };
+
+      const p = document.createElement('p');
+      p.setAttribute('style', 'margin: 0; margin-left: 32px;');
+      p.innerText = 'New File';
+      addNew.appendChild(p);
+
+      const icon = document.createElement('div');
+      icon.setAttribute('style', addNewIcon);
+      addNew.appendChild(icon);
+
+      lastItem.parentNode?.insertBefore(addNew, lastItem.nextSibling);
     };
 
-    const p = document.createElement('p');
-    p.setAttribute('style', 'margin: 0; margin-left: 32px;');
-    p.innerText = 'New File';
-    addNew.appendChild(p);
-
-    const icon = document.createElement('div');
-    icon.setAttribute('style', addNewIcon);
-    addNew.appendChild(icon);
-
-    lastItem.parentNode?.insertBefore(addNew, lastItem.nextSibling);
-  };
-
-  useEffect(() => {
     if (isMounted) {
       removeLoader();
       const items = document.getElementsByClassName('fusebit-nav-file');

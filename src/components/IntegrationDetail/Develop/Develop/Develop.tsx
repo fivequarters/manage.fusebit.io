@@ -27,7 +27,6 @@ import { useAccountIntegrationsGetOne } from '../../../../hooks/api/v2/account/i
 import { useAccountConnectorsGetAll } from '../../../../hooks/api/v2/account/connector/useGetAll';
 import { Connector } from '../../../../interfaces/connector';
 import { Integration, InnerConnector } from '../../../../interfaces/integration';
-import EditCli from './EditCli';
 import EditGui from './EditGui';
 import { useGetRedirectLink } from '../../../../hooks/useGetRedirectLink';
 import FeedPicker from '../../../FeedPicker';
@@ -63,7 +62,6 @@ const Develop: React.FC = () => {
   });
   const { createLoader, removeLoader } = useLoader();
   const { createError } = useError();
-  const [editCliOpen, setEditCliOpen] = React.useState(false);
   const [editGuiOpen, setEditGuiOpen] = React.useState(false);
   const [connectOpen, setConnectOpen] = React.useState(false);
   const [connectorListOpen, setConnectorListOpen] = React.useState(false);
@@ -98,7 +96,7 @@ const Develop: React.FC = () => {
     {
       buttonLabel: isOnlineEditorEnabled ? 'CLI' : 'Edit',
       optionLabel: 'Edit with your favorite editor',
-      handle: setEditCliOpen,
+      handle: setEditGuiOpen,
     },
   ];
   const editOptionAnchor = React.useRef<HTMLDivElement>(null);
@@ -349,22 +347,6 @@ const Develop: React.FC = () => {
                 })}
             </div>
           </SC.ConnectorList>
-        </Fade>
-      </Modal>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={editCliOpen}
-        onClose={() => setEditCliOpen(false)}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-      >
-        <Fade in={editCliOpen}>
-          <EditCli
-            open={editCliOpen}
-            onClose={() => setEditCliOpen(false)}
-            integrationId={integrationData?.data.id || ''}
-          />
         </Fade>
       </Modal>
       <Modal
