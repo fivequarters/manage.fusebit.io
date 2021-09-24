@@ -57,7 +57,7 @@ const FadeSpring = React.forwardRef<HTMLDivElement, FadeProps>(function Fade(pro
   const { in: open, mounted, children, onEnter, onExited, ...other } = props;
   const style = useSpring({
     transform: mounted ? 'translateY(0vh)' : 'translateY(100vh)',
-    config: { mass: 4, tension: 500, friction: 70 },
+    config: { mass: 3, tension: 500, friction: 70 },
 
     onStart: () => {
       if (open && onEnter) {
