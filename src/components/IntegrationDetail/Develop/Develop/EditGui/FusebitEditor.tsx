@@ -1,4 +1,5 @@
 import React from 'react';
+import { Context } from '../../../../../interfaces/editGui';
 
 export default class FusebitEditor extends React.Component<any> {
   private el: any;
@@ -13,10 +14,14 @@ export default class FusebitEditor extends React.Component<any> {
       //@ts-ignore
       window.fusebit
         .createEditor(this.el, this.props.boundaryId, this.props.functionId, this.props.account, this.props.options)
-        .then((editorContext: any) => {
+        .then((editorContext: Context) => {
           this.editorContext = editorContext;
           if (this.props.onLoaded) {
             this.props.onLoaded(editorContext);
+            const close = document.getElementById('guiClose');
+            close?.addEventListener('click', () => {
+              this.props.onClose(this.editorContext);
+            });
           }
         })
         .catch((e: any) => {

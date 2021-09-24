@@ -11,6 +11,8 @@ import save from '../../../../../assets/save.svg';
 import question from '../../../../../assets/question.svg';
 import logo from '../../../../../assets/logo.svg';
 import add from '../../../../../assets/add.svg';
+import { Context } from '../../../../../interfaces/editGui';
+import ConfirmationPrompt from '../../../../ConfirmationPrompt';
 
 const addNewStyles = `
   position: relative;
@@ -37,6 +39,7 @@ const addNewIcon = `
 const EditGui = React.forwardRef(({ onClose, onMount, open, integrationId }: Props) => {
   const { userData } = useContext();
   const [isMounted, setIsMounted] = useState(false);
+  const [unsavedWarning, setUnsavedWarning] = useState(false);
   const { createLoader, removeLoader } = useLoader();
 
   useEffect(() => {
@@ -82,6 +85,14 @@ const EditGui = React.forwardRef(({ onClose, onMount, open, integrationId }: Pro
 
   return (
     <>
+      <ConfirmationPrompt
+        open={unsavedWarning}
+        setOpen={setUnsavedWarning}
+        handleConfirmation={onClose}
+        title={`​Are you sure you want to discard unsaved changes?`}
+        description={`You have made some unsaved changes to your Integration. Closing this window will discard those changes.`}
+        confirmationButtonText={`Discard`}
+      />
       <SC.EditorContainer open={open}>
         {isMounted && (
           <SC.CloseHeader>
@@ -111,7 +122,7 @@ const EditGui = React.forwardRef(({ onClose, onMount, open, integrationId }: Pro
               <SC.ActionsHelpLink href="/">Edit Locally</SC.ActionsHelpLink>
               <SC.ActionsHelpImage src={question} alt="question" height="16" width="16" />
             </SC.ActionsHelpWrapper>
-            <SC.Close onClick={onClose} />
+            <SC.Close id="guiClose" />
           </SC.CloseHeader>
         )}
         <SC.FusebitEditorContainer>
@@ -125,7 +136,10 @@ const EditGui = React.forwardRef(({ onClose, onMount, open, integrationId }: Pro
               accessToken: userData.token,
             }}
             options={{ entityType: 'integration' }}
-            onLoaded={() => setIsMounted(true)}
+            onLoaded={() => {
+              setIsMounted(true);
+            }}
+            onClose={(context: Context) => (context.dirtyState ? setUnsavedWarning(true) : onClose())}
           />
           {isMounted && <SC.FusebitEditorLogo src={logo} alt="fusebit logo" height="20" width="80" />}
         </SC.FusebitEditorContainer>
