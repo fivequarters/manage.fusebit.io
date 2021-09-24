@@ -69,7 +69,7 @@ const EditGui = React.forwardRef(({ onClose, onMount, open, integrationId }: Pro
 
     if (isMounted) {
       removeLoader();
-      open && onMount();
+      open && onMount?.();
       const items = document.getElementsByClassName('fusebit-nav-file');
       const lastItem = items?.[items.length - 1];
       if (!document.getElementById('addNewItem')) {

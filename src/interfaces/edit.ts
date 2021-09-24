@@ -1,6 +1,6 @@
 export interface Props {
   open: boolean;
   onClose: () => void;
-  onMount: () => void;
+  onMount?: () => void;
   integrationId: string;
 }
