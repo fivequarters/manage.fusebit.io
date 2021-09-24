@@ -77,8 +77,6 @@ const EditGui = React.forwardRef(({ onClose, integrationId }: Props) => {
     } else {
       createLoader();
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMounted, createLoader, removeLoader]);
 
   return (
