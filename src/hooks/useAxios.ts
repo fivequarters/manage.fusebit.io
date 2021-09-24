@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import { X_USER_AGENT } from '../utils/constants';
 import { readLocalData, validateToken } from '../utils/utils';
 import { useContext } from './useContext';
 
@@ -9,6 +10,14 @@ export interface ApiResponse<T> {
   data: T;
   success?: boolean;
 }
+
+export type FusebitAxios = <T extends {}>(
+  endpoint: string,
+  method: 'post' | 'delete' | 'put' | 'get' | 'patch',
+  params?: any,
+  headers?: any,
+  queryParams?: Record<string, any>
+) => Promise<ApiResponse<T>>;
 
 axios.interceptors.response.use(
   (response) => response,
@@ -33,21 +42,28 @@ axios.interceptors.response.use(
 export const useAxios = () => {
   const { userData } = useContext();
 
-  const _axios = async <T extends {}>(
+  const _axios: FusebitAxios = async <T extends {}>(
     endpoint: string,
     method: 'post' | 'delete' | 'put' | 'get' | 'patch',
     params: any = {},
-    headers: any = {}
-  ): Promise<ApiResponse<T>> => {
+    headers: any = {},
+    queryParams = {}
+  ) => {
     const config: AxiosRequestConfig = {
       method,
       url: `${REACT_APP_FUSEBIT_DEPLOYMENT}${endpoint}`,
       data: params,
-      headers,
+      headers: {
+        ...headers,
+        'X-User-Agent': X_USER_AGENT,
+      },
+      params: queryParams,
     };
+
     if (userData.token) {
       config.headers.Authorization = `Bearer ${userData.token}`;
     }
+
     const response = await axios(config);
     return { success: true, data: response.data as T };
   };

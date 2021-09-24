@@ -8,6 +8,7 @@ import { useCreateDataFromFeed } from './useCreateDataFromFeed';
 import { useQuery } from './useQuery';
 import { useEntityApi } from './useEntityApi';
 import { Account } from '../interfaces/account';
+import { EntitiesType } from '../interfaces/entities';
 
 interface Props {
   headless?: any;
@@ -58,6 +59,7 @@ export const useEntityTable = ({
   const setItems = () => {
     const items = isIntegration.current ? integrations?.data.items : connectors?.data.items;
     items && setRows(items);
+    localStorage.removeItem('firstTimeVisitor'); // we delete this key, to, in case the user logs in to an account that has items and creates a new one, we now that we dont have to show them the modal
   };
 
   const checkQuery = () => {
@@ -74,7 +76,10 @@ export const useEntityTable = ({
       setLoading(false);
 
       //If there are no Integrations when we first visit the integrations tab we open the integrations modal
-      integrations.data.items.length === 0 && headless.current && setAddIntegrationOpen(true);
+      if (integrations.data.items.length === 0 && localStorage.getItem('firstTimeVisitor')) {
+        setAddIntegrationOpen(true);
+        localStorage.removeItem('firstTimeVisitor');
+      }
 
       // If there are integrations to show or if all of the integrations where deleted we call the setItems function
       (integrations.data.items.length > 0 || !headless.current) && setItems();
@@ -85,7 +90,10 @@ export const useEntityTable = ({
       setLoading(false);
 
       //If there are no connectors when we first visit the connectors tab we open the connectors modal
-      connectors.data.items.length === 0 && headless.current && setAddConnectorOpen(true);
+      if (connectors.data.items.length === 0 && localStorage.getItem('firstTimeVisitor')) {
+        setAddConnectorOpen(true);
+        localStorage.removeItem('firstTimeVisitor');
+      }
 
       // If there are connectors to show or if all of the connectors where deleted we call the setItems function
       (connectors.data.items.length > 0 || !headless.current) && setItems();
@@ -128,10 +136,10 @@ export const useEntityTable = ({
 
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
-  const handleRowDelete = async () => {
+  const handleRowDelete = async (type?: EntitiesType, errorContainer?: string) => {
     massiveDelete(
       selected,
-      isIntegration.current ? 'I' : window.location.href.indexOf('connector') >= 0 ? 'C' : 'A',
+      type || (isIntegration.current ? 'I' : window.location.href.indexOf('connector') >= 0 ? 'C' : 'A'),
       () => {
         const computedPages = Math.ceil((rows.length - selected.length) / rowsPerPage) - 1;
 
@@ -139,15 +147,11 @@ export const useEntityTable = ({
           setPage(0);
         }
 
-        if (isIntegration.current) {
-          integrations?.data.items.length === selected.length && setAddIntegrationOpen(true);
-        } else {
-          connectors?.data.items.length === selected.length && setAddConnectorOpen(true);
-        }
-
         setSelected([]);
-      }
+      },
+      errorContainer
     );
+    localStorage.removeItem('firstTimeVisitor'); // so we dont show the user the modal when he had some integrations or connector already
   };
 
   const handleRowClick = (event: any, href: string) => {
@@ -189,5 +193,6 @@ export const useEntityTable = ({
     selected,
     deleteModalOpen,
     setDeleteModalOpen,
+    setRows,
   };
 };

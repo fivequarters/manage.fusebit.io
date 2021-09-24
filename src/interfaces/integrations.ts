@@ -2,7 +2,7 @@ import { Row } from './tableRow';
 
 export interface OverviewProps {
   headless: any;
-  setHeadless: Function;
+  setHeadless: (value: boolean) => void;
 }
 
 export interface RowProps {

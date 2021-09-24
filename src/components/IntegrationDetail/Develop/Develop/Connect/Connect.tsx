@@ -198,7 +198,7 @@ const Connect = React.forwardRef(
             <SC.Or>or</SC.Or>
             <CSC.Flex flexDown width="293px">
               <Button variant="outlined" color="primary" size="large">
-                Download sample
+                Launch sample app
               </Button>
               <CSC.Flex>
                 <SC.TimeIcon />
