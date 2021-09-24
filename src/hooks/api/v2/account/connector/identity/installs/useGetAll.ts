@@ -9,11 +9,12 @@ import { Integration } from '../../../../../../../interfaces/integration';
 import { Install, InstallInstance } from '../../../../../../../interfaces/install';
 import { useError } from '../../../../../../useError';
 import { entityLoopThrough } from '../../../../utils';
+import { getConnectorsFromInstall } from '../../../../../../../utils/utils';
 
 export const ACCOUNT_CONNECTOR_IDENTITY_INSTALLS_GET_ALL = 'accountConnectorIdentityInstallsGetAll';
 
 export const useAccountConnectorIdentityInstallsGetAll = (
-  { tenantId }: Params,
+  { tenantId, connectorId }: Params,
   options?: UseQueryOptions<unknown, unknown, InstallInstance[]>
 ) => {
   const { axios } = useAxios();
@@ -48,7 +49,13 @@ export const useAccountConnectorIdentityInstallsGetAll = (
             data: { items },
           } = res;
 
-          return items.filter((i) => i.tags['fusebit.tenantId'] === tenantId);
+          const isRelated = (i: InstallInstance) => {
+            const connectorIds = getConnectorsFromInstall(i)
+
+            return i.tags['fusebit.tenantId'] === tenantId && connectorIds.includes(connectorId);
+          }
+
+          return items.filter(isRelated);
         })
         .filter((arr) => arr.length > 0)
         .flat();
@@ -57,7 +64,7 @@ export const useAccountConnectorIdentityInstallsGetAll = (
     }
   };
 
-  return useQuery([ACCOUNT_CONNECTOR_IDENTITY_INSTALLS_GET_ALL, { tenantId }], getAllInstallsFromIdentity, {
+  return useQuery([ACCOUNT_CONNECTOR_IDENTITY_INSTALLS_GET_ALL, { tenantId, connectorId }], getAllInstallsFromIdentity, {
     enabled: !!userData.token,
     ...options,
   });

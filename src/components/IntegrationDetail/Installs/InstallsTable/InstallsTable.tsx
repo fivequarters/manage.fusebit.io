@@ -11,6 +11,7 @@ import Tag from '../../../Tag';
 import ConfirmationPrompt from '../../../ConfirmationPrompt';
 import InformationalBanner from '../../../InformationalBanner';
 import AssociatedIdentities from './AssociatedIdentities';
+import { getConnectorsFromInstall } from '../../../../utils/utils';
 
 const InstallsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -31,14 +32,20 @@ const InstallsTable = () => {
 
   const { items = [] } = data?.data || {};
 
-  const rows = items.map((identity) => ({
-    id: identity.id,
-    installID: identity.id,
-    tenantID: <Tag>{identity.tags['fusebit.tenantId']}</Tag>,
-    dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
-    associatedIdentities: <AssociatedIdentities tenantId={identity.tags['fusebit.tenantId']} />,
-    collapsableContent: <CodeBlock code={identity} />,
-  }));
+  const rows = items.map((install) => {
+    const connectorIds = getConnectorsFromInstall(install);
+
+    return {
+      id: install.id,
+      installID: install.id,
+      tenantID: <Tag>{install.tags['fusebit.tenantId']}</Tag>,
+      dateCreated: format(new Date(install.dateAdded), 'MM/dd/yyyy'),
+      associatedIdentities: (
+        <AssociatedIdentities tenantId={install.tags['fusebit.tenantId']} connectorIds={connectorIds} />
+      ),
+      collapsableContent: <CodeBlock code={install} />,
+    };
+  });
 
   const headers = [
     { id: 'installID', value: 'Install ID' },
