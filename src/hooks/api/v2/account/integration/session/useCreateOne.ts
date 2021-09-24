@@ -5,24 +5,27 @@ import { useAxios } from '../../../../../useAxios';
 import { useContext } from '../../../../../useContext';
 
 export const useAccountIntegrationCreateSession = () => {
-    const { axios } = useAxios();
-    const { userData } = useContext();
+  const { axios } = useAxios();
+  const { userData } = useContext();
 
-    return useMutation(
-        (params: Params) => {
-            const { id, tenantId } = params;
-            return axios<CreateSessionPayload>(`/v2/account/${userData.accountId}/subscription/${userData.subscriptionId}/integration/${id}/session`, 'post', {
-                redirectUrl: `${window.location.origin}${window.location.pathname}`,
-                tags: {
-                    'fusebit.tenantId': tenantId
-                }
-            }
-            );
-        },
+  return useMutation(
+    (params: Params) => {
+      const { id, tenantId } = params;
+      return axios<CreateSessionPayload>(
+        `/v2/account/${userData.accountId}/subscription/${userData.subscriptionId}/integration/${id}/session`,
+        'post',
         {
-            onSuccess: (res) => {
-                window.location.href = res.data.targetUrl;
-            }
+          redirectUrl: `${window.location.origin}${window.location.pathname}`,
+          tags: {
+            'fusebit.tenantId': tenantId,
+          },
         }
-    );
+      );
+    },
+    {
+      onSuccess: (res) => {
+        window.location.href = res.data.targetUrl;
+      },
+    }
+  );
 };

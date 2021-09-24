@@ -1,4 +1,4 @@
-import { Tags } from "./tags";
+import { Tags } from './tags';
 
 export interface IntegrationData {
   components: InnerConnector[];
