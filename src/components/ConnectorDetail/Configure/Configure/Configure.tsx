@@ -6,6 +6,7 @@ import { useAccountConnectorsGetOne } from '../../../../hooks/api/v2/account/con
 import { useAccountConnectorsGetOneConfig } from '../../../../hooks/api/v2/account/connector/useGetOneConfig';
 import { useContext } from '../../../../hooks/useContext';
 import { Connector, ConnectorConfig } from '../../../../interfaces/connector';
+import LabelBanner from '../../../LabelBanner';
 
 import { Button } from '@material-ui/core';
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
@@ -72,6 +73,12 @@ const Configure: React.FC = () => {
       <SC.FlexDown>
         {config?.data && !loading ? (
           <SC.FormWrapper>
+            <LabelBanner
+              description="By default, Connectors use Fusebit demonstration credentials, which are intended for testing only. When you are ready for production use supply your own credentials below, as described in"
+              href="https://developer.fusebit.io/docs/slack#creating-your-own-slack-app"
+              highlightedDescription="this guide."
+              linkedWords={2}
+            />
             <JsonForms
               schema={config?.data.schema}
               uischema={config?.data.uischema}
