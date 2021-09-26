@@ -33,6 +33,7 @@ const Configure: React.FC = () => {
     subscriptionId: userData.subscriptionId,
   });
   const [data, setData] = React.useState<any>();
+  const [jsonFormsInputs, setJsonFormsInputs] = React.useState<any>();
   const [errors, setErrors] = React.useState<object[]>([]);
   const [validationMode, setValidationMode] = React.useState<ValidationMode>('ValidateAndHide');
   const [loading, setLoading] = React.useState(false);
@@ -82,12 +83,35 @@ const Configure: React.FC = () => {
             <JsonForms
               schema={config?.data.schema}
               uischema={config?.data.uischema}
-              data={config?.data.data}
+              data={jsonFormsInputs || config?.data.data}
               renderers={materialRenderers}
               cells={materialCells}
-              onChange={({ errors, data }) => {
+              onChange={({ errors, data: newData }) => {
+                // Clear the clientId and clientSecret when going from non-prod to production.
+                if (
+                  newData.mode.useProduction !== config?.data.data?.mode?.useProduction &&
+                  newData.mode.useProduction !== data?.mode?.useProduction &&
+                  newData.mode.useProduction
+                ) {
+                  newData.clientId = '';
+                  newData.clientSecret = '';
+                }
+
+                if (
+                  !newData.mode?.useProduction &&
+                  !(newData.clientId?.length > 0 && newData.clientSecret?.length > 0)
+                ) {
+                  const random = () => {
+                    const randBuffer = [...window.crypto.getRandomValues(new Uint8Array(32))];
+                    return randBuffer.map((x) => x.toString(16).padStart(2, '0')).join('');
+                  };
+                  newData.clientId = random();
+                  newData.clientSecret = random();
+                }
+
                 errors && setErrors(errors);
-                setData(data);
+                setJsonFormsInputs(newData);
+                setData(newData);
               }}
               validationMode={validationMode}
             />
