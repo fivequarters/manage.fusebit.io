@@ -61,6 +61,6 @@
     "@types/segment-analytics": "0.0.34",
     "@types/styled-components": "^5.1.10",
     "husky": "^7.0.1",
-    "prettier": "^2.0.5"
+    "prettier": "2.0.5"
   }
 }
