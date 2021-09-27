@@ -35,7 +35,7 @@ const addNewIcon = `
     background-repeat: no-repeat;
 `;
 
-const EditGui = React.forwardRef(({ onClose, onMount, open, integrationId }: Props) => {
+const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props) => {
   const { userData } = useContext();
   const [isMounted, setIsMounted] = useState(false);
   const [unsavedWarning, setUnsavedWarning] = useState(false);
@@ -71,7 +71,6 @@ const EditGui = React.forwardRef(({ onClose, onMount, open, integrationId }: Pro
 
     if (isMounted) {
       removeLoader();
-      open && onMount?.();
       const items = document.getElementsByClassName('fusebit-nav-file');
       const lastItem = items?.[items.length - 1];
       if (!document.getElementById('addNewItem')) {
@@ -80,7 +79,14 @@ const EditGui = React.forwardRef(({ onClose, onMount, open, integrationId }: Pro
     } else {
       createLoader();
     }
-  }, [isMounted, open, onMount, createLoader, removeLoader]);
+  }, [isMounted, onMount, createLoader, removeLoader]);
+
+  useEffect(() => {
+    if (isMounted) {
+      onMount?.();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMounted]);
 
   const handleSave = () => {
     const context = window.editor;

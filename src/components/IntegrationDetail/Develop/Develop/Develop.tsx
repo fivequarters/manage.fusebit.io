@@ -407,7 +407,6 @@ const Develop: React.FC = () => {
         >
           <SlideUpSpring in={editGuiOpen} mounted={editGuiMounted}>
             <EditGui
-              open={editGuiOpen}
               onMount={() => setEditGuiMounted(true)}
               onClose={() => {
                 setEditGuiOpen(false);
