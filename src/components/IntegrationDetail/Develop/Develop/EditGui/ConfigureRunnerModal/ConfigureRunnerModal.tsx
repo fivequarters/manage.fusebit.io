@@ -8,10 +8,17 @@ interface Props {
   setOpen: (open: boolean) => void;
 }
 
+const Verbs = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
+
 const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
   const [verbSelectorActive, setVerbSelectorActive] = useState(false);
+  const [selectedVerb, setSelectedVerb] = useState(Verbs[0]);
+  const [url, setUrl] = useState('');
+  const [payload, setPayload] = useState('');
 
   const handleSave = () => {
+    console.log(url); // to avoid vercel unused var crash
+    console.log(payload); // to avoid vercel unused var crash
     setOpen(false);
   };
 
@@ -31,17 +38,24 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
           <CSC.Flex width="max-content" margin="0 48px 0 0" flexDown>
             <SC.Subtitle>Verb</SC.Subtitle>
             <SC.VerbSelector onClick={() => setVerbSelectorActive(!verbSelectorActive)}>
-              GET <SC.VerbArrow active={verbSelectorActive} />
+              {selectedVerb} <SC.VerbArrow active={verbSelectorActive} />
+              <SC.VerbOptionsWrapper active={verbSelectorActive}>
+                {Verbs.map((verb) => (
+                  <SC.VerbOption onClick={() => setSelectedVerb(verb)} key={verb} selected={verb === selectedVerb}>
+                    {verb}
+                  </SC.VerbOption>
+                ))}
+              </SC.VerbOptionsWrapper>
             </SC.VerbSelector>
           </CSC.Flex>
           <CSC.Flex flexDown>
-            <SC.Subtitle>Verb</SC.Subtitle>
-            <SC.Textarea />
+            <SC.Subtitle>URL</SC.Subtitle>
+            <SC.Textarea onChange={(e) => setUrl(e.target.value)} />
           </CSC.Flex>
         </CSC.DefaultFlex>
         <CSC.Flex margin="49px 0 0 0" flexDown>
           <SC.Subtitle>Payload</SC.Subtitle>
-          <SC.Textarea height="137px" />
+          <SC.Textarea onChange={(e) => setPayload(e.target.value)} height="137px" />
         </CSC.Flex>
         <SC.ButtonsWrapper>
           <Button

@@ -64,6 +64,34 @@ export const VerbArrow = styled.div<{ active: boolean }>`
   transition: all 0.25s linear;
 `;
 
+export const VerbOptionsWrapper = styled.div<{ active: boolean }>`
+  position: absolute;
+  top: 35px;
+  left: 0;
+  opacity: ${(props) => (props.active ? 1 : 0)};
+  visibility: ${(props) => (props.active ? 'visible' : 'hidden')};
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: white;
+  width: 110px;
+  transition: all 0.25s linear;
+`;
+
+export const VerbOption = styled.div<{ selected: boolean }>`
+  font-size: 14px;
+  line-height: 20px;
+  color: ${(props) => (props.selected ? 'var(--black)' : 'var(--grey)')};
+  background-color: ${(props) => props.selected && 'var(--secondary-color)'};
+  padding: 8px;
+  transition: all 0.25s linear;
+
+  &:hover {
+    cursor: pointer;
+    color: var(--black);
+    background-color: var(--secondary-color);
+  }
+`;
+
 export const Textarea = styled.textarea<{ height?: string }>`
   font-family: courier;
   font-size: 16px;
