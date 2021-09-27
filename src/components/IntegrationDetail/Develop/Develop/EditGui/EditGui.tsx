@@ -11,7 +11,7 @@ import save from '../../../../../assets/save.svg';
 import question from '../../../../../assets/question.svg';
 import logo from '../../../../../assets/logo.svg';
 import add from '../../../../../assets/add.svg';
-import useRunner from './useRunner';
+import useEditor from './useEditor';
 
 const addNewStyles = `
   position: relative;
@@ -39,7 +39,7 @@ const EditGui = React.forwardRef(({ onClose, integrationId }: Props) => {
   const { userData } = useContext();
   const [isMounted, setIsMounted] = useState(false);
   const { createLoader, removeLoader } = useLoader();
-  const { handleRun } = useRunner();
+  const { handleRun } = useEditor();
 
   useEffect(() => {
     const createAddNewItemElement = (lastItem: Element) => {

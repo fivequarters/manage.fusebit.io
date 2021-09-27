@@ -22,7 +22,7 @@ export type FusebitAxios = <T extends {}>(
 axios.interceptors.response.use(
   (response) => response,
   (error) => {
-    const statusCode = Number(error.response.status);
+    const statusCode = Number(error?.response?.status);
     const __userData = readLocalData();
     if (statusCode === 403) {
       validateToken();
@@ -65,7 +65,7 @@ export const useAxios = () => {
     }
 
     const response = await axios(config);
-    return { success: true, data: response.data as T };
+    return { success: true, data: response.data as T, fullResponse: response };
   };
 
   return {

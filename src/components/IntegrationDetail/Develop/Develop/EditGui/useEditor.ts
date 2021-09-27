@@ -11,7 +11,7 @@ import { useQuery } from '../../../../../hooks/useQuery';
 
 export const STATIC_TENANT_ID = 'user-1';
 
-const useRunner = () => {
+const useEditor = () => {
   const { id } = useParams<{ id: string }>();
   const { userData } = useContext();
   const { axios } = useAxios();
@@ -44,7 +44,6 @@ const useRunner = () => {
 
     const test = async () => {
       try {
-
         const hasInstance = await findInstance();
 
         if (!hasInstance) {
@@ -53,9 +52,8 @@ const useRunner = () => {
           await testIntegration({ id, tenantId: STATIC_TENANT_ID });
         }
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-
     };
 
     if (sessionId) {
@@ -73,7 +71,6 @@ const useRunner = () => {
       } else {
         await createSesssion({ id, tenantId: STATIC_TENANT_ID });
       }
-
     } catch (error) {
       console.log(error);
     }
@@ -84,4 +81,4 @@ const useRunner = () => {
   };
 };
 
-export default useRunner;
+export default useEditor;
