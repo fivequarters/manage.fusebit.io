@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { X_USER_AGENT } from '../utils/constants';
 import { readLocalData, validateToken } from '../utils/utils';
 import { useContext } from './useContext';
@@ -9,6 +9,7 @@ export interface ApiResponse<T> {
   error?: string;
   data: T;
   success?: boolean;
+  fullResponse: AxiosResponse<T>;
 }
 
 export type FusebitAxios = <T extends {}>(

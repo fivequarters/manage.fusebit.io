@@ -18,16 +18,13 @@ export const useAccountIntegrationTestIntegration = () => {
     },
     {
       onMutate: (params: Params) => {
-        //@ts-ignore
-        window.test.startRun(`${params.method || 'post'}`.toUpperCase());
+        window.editor.startRun(`${params.method || 'post'}`.toUpperCase());
       },
       onError: (err) => {
-        //@ts-ignore
-        window.test.finishRun(JSON.stringify(err));
+        window.editor.finishRun(JSON.stringify(err));
       },
       onSuccess: (res) => {
-        //@ts-ignore
-        window.test.finishRun(null, { ...(res?.fullResponse || {}), text: JSON.stringify(res.data) });
+        window.editor.finishRun(undefined, { ...(res?.fullResponse || {}), text: JSON.stringify(res.data) });
       },
     }
   );
