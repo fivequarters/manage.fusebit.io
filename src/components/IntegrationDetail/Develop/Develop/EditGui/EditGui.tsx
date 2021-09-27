@@ -11,6 +11,7 @@ import save from '../../../../../assets/save.svg';
 import question from '../../../../../assets/question.svg';
 import logo from '../../../../../assets/logo.svg';
 import add from '../../../../../assets/add.svg';
+import ConfigureRunnerModal from './ConfigureRunnerModal';
 
 const addNewStyles = `
   position: relative;
@@ -37,6 +38,7 @@ const addNewIcon = `
 const EditGui = React.forwardRef(({ onClose, integrationId }: Props) => {
   const { userData } = useContext();
   const [isMounted, setIsMounted] = useState(false);
+  const [configureRunnerActive, setConfigureRunnerActive] = useState(false);
   const { createLoader, removeLoader } = useLoader();
 
   useEffect(() => {
@@ -82,6 +84,7 @@ const EditGui = React.forwardRef(({ onClose, integrationId }: Props) => {
   return (
     <>
       <SC.EditorContainer>
+        <ConfigureRunnerModal open={configureRunnerActive} setOpen={setConfigureRunnerActive} />
         {isMounted && (
           <SC.CloseHeader>
             <ButtonGroup variant="contained" style={{ marginRight: '16px' }}>
@@ -93,7 +96,7 @@ const EditGui = React.forwardRef(({ onClose, integrationId }: Props) => {
               >
                 Run
               </Button>
-              <Button size="small" variant="contained" color="primary">
+              <Button onClick={() => setConfigureRunnerActive(true)} size="small" variant="contained" color="primary">
                 <img src={settings} alt="settings" height="16" width="16" />
               </Button>
             </ButtonGroup>
