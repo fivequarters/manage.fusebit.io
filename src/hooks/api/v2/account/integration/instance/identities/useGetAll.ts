@@ -13,7 +13,7 @@ import { entityLoopThrough } from '../../../../utils';
 export const ACCOUNT_INTEGRATION_INSTANCE_IDENTITIES_GET_ALL = 'accountIntegrationInstanceIdentitiesGetAll';
 
 export const useAccountIntegrationInstanceIdentitiesGetAll = (
-  { tenantId }: Params,
+  { tenantId, connectorIds }: Params,
   options?: UseQueryOptions<unknown, unknown, IdentityInstance[]>
 ) => {
   const { axios } = useAxios();
@@ -49,7 +49,10 @@ export const useAccountIntegrationInstanceIdentitiesGetAll = (
             data: { items },
           } = res;
 
-          return items.filter((i) => i.tags['fusebit.tenantId'] === tenantId);
+          const isRelated = (i: IdentityInstance) =>
+            i.tags['fusebit.tenantId'] === tenantId && connectorIds.includes(i.tags['fusebit.parentEntityId']);
+
+          return items.filter(isRelated);
         })
         .filter((arr) => arr.length > 0)
         .flat();
@@ -58,8 +61,12 @@ export const useAccountIntegrationInstanceIdentitiesGetAll = (
     }
   };
 
-  return useQuery([ACCOUNT_INTEGRATION_INSTANCE_IDENTITIES_GET_ALL, { tenantId }], getAllIdentitiesFromInstalls, {
-    enabled: !!userData.token,
-    ...options,
-  });
+  return useQuery(
+    [ACCOUNT_INTEGRATION_INSTANCE_IDENTITIES_GET_ALL, { tenantId, connectorIds }],
+    getAllIdentitiesFromInstalls,
+    {
+      enabled: !!userData.token,
+      ...options,
+    }
+  );
 };

@@ -159,7 +159,26 @@ const Connect = React.forwardRef(
           )}
 
           <SC.Subtitle style={{ margin: '32px auto 16px' }}>Connect your Backend</SC.Subtitle>
-          <CSC.Flex margin="32px 0 0 0">
+          <CSC.Flex flexDown>
+            <Button
+              style={{ margin: '0 auto', width: '293px' }}
+              target="_blank"
+              rel="noopener"
+              href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
+              variant="outlined"
+              color="primary"
+              size="large"
+            >
+              Follow guide
+            </Button>
+            <CSC.Flex>
+              <div style={{ display: 'flex', alignItems: 'center', margin: '0 auto' }}>
+                <SC.TimeIcon />
+                <SC.TimeDescription>10 minutes</SC.TimeDescription>
+              </div>
+            </CSC.Flex>
+          </CSC.Flex>
+          {/* <CSC.Flex margin="32px 0 0 0">
             <CSC.Flex flexDown width="293px" margin="0 0 auto 0">
               <Button
                 target="_blank"
@@ -187,7 +206,7 @@ const Connect = React.forwardRef(
               </CSC.Flex>
               <SC.TimeDescription margin="0">Already configured to work with this integration</SC.TimeDescription>
             </CSC.Flex>
-          </CSC.Flex>
+          </CSC.Flex> */}
 
           <CSC.Flex margin="50px 0 0 auto" width="max-content">
             <Button
