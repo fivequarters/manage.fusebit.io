@@ -11,7 +11,6 @@ interface Props {
 const InformationalBanner: React.FC<Props> = ({ description, highlightedDescription, href, className }) => {
   return (
     <SC.Banner className={className}>
-      <SC.InfoIcon />
       <SC.Description>
         {description + ' '}
         {highlightedDescription && (
