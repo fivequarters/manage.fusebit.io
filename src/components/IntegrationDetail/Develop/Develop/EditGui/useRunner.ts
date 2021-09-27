@@ -1,15 +1,12 @@
-import { useQueryClient } from 'react-query';
-import { useLocation, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { getAllInstances } from '../../../../../hooks/api/v2/account/integration/instance/useGetAll';
 import { useAccountIntegrationCreateSession } from '../../../../../hooks/api/v2/account/integration/session/useCreateOne';
 import { useAccountIntegrationCommitSession } from '../../../../../hooks/api/v2/account/integration/session/useCommitOne';
 import { useAccountIntegrationTestIntegration } from '../../../../../hooks/api/v2/account/integration/useTestOne';
-import { ACCOUNT_INTEGRATIONS_GET_ONE } from '../../../../../hooks/api/v2/account/integration/useGetOne';
-import { ApiResponse, useAxios } from '../../../../../hooks/useAxios';
+import { useAxios } from '../../../../../hooks/useAxios';
 import { useContext } from '../../../../../hooks/useContext';
 import { Install } from '../../../../../interfaces/install';
-import { Integration } from '../../../../../interfaces/integration';
-import { useEffect } from 'react';
 import { useQuery } from '../../../../../hooks/useQuery';
 
 export const STATIC_TENANT_ID = 'user-1';
@@ -18,25 +15,20 @@ const useRunner = () => {
   const { id } = useParams<{ id: string }>();
   const { userData } = useContext();
   const { axios } = useAxios();
-  const queryClient = useQueryClient();
   const { mutateAsync: createSesssion } = useAccountIntegrationCreateSession();
   const { mutateAsync: testIntegration } = useAccountIntegrationTestIntegration();
-  const { mutate: commitSession } = useAccountIntegrationCommitSession();
+  const { mutateAsync: commitSession } = useAccountIntegrationCommitSession();
 
   const query = useQuery();
 
-  const baseParams = {
-    subscriptionId: userData.subscriptionId,
-    accountId: userData.accountId,
-  };
-
-  const getInstance = async () => {
+  const findInstance = async () => {
     const {
       data: { items },
     } = await getAllInstances<Install>(
       axios,
       {
-        ...baseParams,
+        subscriptionId: userData.subscriptionId,
+        accountId: userData.accountId,
         id,
       },
       {
@@ -50,36 +42,45 @@ const useRunner = () => {
   useEffect(() => {
     const sessionId = query.get('session');
 
-    const post = async () => {
-      const instance = await getInstance();
+    const test = async () => {
+      try {
 
-      if (!instance) {
-        commitSession({ id, sessionId });
+        const hasInstance = await findInstance();
+
+        if (!hasInstance) {
+          await commitSession({ id, sessionId });
+
+          await testIntegration({ id, tenantId: STATIC_TENANT_ID });
+        }
+      } catch (error) {
+        console.log(error)
       }
+
     };
 
-    if (!!sessionId) {
-      post();
+    if (sessionId) {
+      test();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [commitSession, id]);
+  }, []);
 
-  const run = async () => {
-    console.log('running');
+  const handleRun = async () => {
+    try {
+      const hasInstance = await findInstance();
 
-    const instance = await getInstance();
+      if (hasInstance) {
+        await testIntegration({ id, tenantId: STATIC_TENANT_ID });
+      } else {
+        await createSesssion({ id, tenantId: STATIC_TENANT_ID });
+      }
 
-    if (instance) {
-      console.log('testing');
-      await testIntegration({ id, tenantId: STATIC_TENANT_ID });
-    } else {
-      console.log('createSesssion');
-      await createSesssion({ id, tenantId: STATIC_TENANT_ID });
+    } catch (error) {
+      console.log(error);
     }
   };
 
   return {
-    run,
+    handleRun,
   };
 };
 

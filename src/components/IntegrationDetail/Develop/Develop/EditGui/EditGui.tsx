@@ -39,7 +39,7 @@ const EditGui = React.forwardRef(({ onClose, integrationId }: Props) => {
   const { userData } = useContext();
   const [isMounted, setIsMounted] = useState(false);
   const { createLoader, removeLoader } = useLoader();
-  const { run } = useRunner();
+  const { handleRun } = useRunner();
 
   useEffect(() => {
     const createAddNewItemElement = (lastItem: Element) => {
@@ -92,7 +92,7 @@ const EditGui = React.forwardRef(({ onClose, integrationId }: Props) => {
                 size="small"
                 variant="contained"
                 color="primary"
-                onClick={run}
+                onClick={handleRun}
               >
                 Run
               </Button>
