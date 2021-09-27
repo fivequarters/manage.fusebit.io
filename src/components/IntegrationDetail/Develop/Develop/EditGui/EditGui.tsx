@@ -87,6 +87,10 @@ const EditGui = React.forwardRef(({ onClose, onMount, open, integrationId }: Pro
     context._server.saveFunction(context);
   };
 
+  const handleClose = () => {
+    window.editor.dirtyState ? setUnsavedWarning(true) : onClose();
+  };
+
   return (
     <>
       <ConfirmationPrompt
@@ -128,7 +132,7 @@ const EditGui = React.forwardRef(({ onClose, onMount, open, integrationId }: Pro
               <SC.ActionsHelpLink href="/">Edit Locally</SC.ActionsHelpLink>
               <SC.ActionsHelpImage src={question} alt="question" height="16" width="16" />
             </SC.ActionsHelpWrapper>
-            <SC.Close onClick={() => (window.editor.dirtyState ? setUnsavedWarning(true) : onClose())} />
+            <SC.Close onClick={handleClose} />
           </SC.CloseHeader>
         )}
         <SC.FusebitEditorContainer>
