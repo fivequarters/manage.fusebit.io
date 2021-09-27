@@ -5,6 +5,7 @@ import { useContext } from '../../../../../hooks/useContext';
 
 import FusebitEditor from './FusebitEditor';
 import { useLoader } from '../../../../../hooks/useLoader';
+import ConfigureRunnerModal from './ConfigureRunnerModal';
 
 const EditGui = React.forwardRef(({ onClose, integrationId }: Props) => {
   const { userData } = useContext();
@@ -21,6 +22,7 @@ const EditGui = React.forwardRef(({ onClose, integrationId }: Props) => {
 
   return (
     <>
+      <ConfigureRunnerModal open={true} setOpen={(open: boolean) => {}} />
       <SC.EditorContainer>
         {isMounted && (
           <SC.CloseHeader>

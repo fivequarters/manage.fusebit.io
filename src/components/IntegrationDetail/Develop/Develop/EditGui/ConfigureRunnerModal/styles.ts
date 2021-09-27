@@ -1,0 +1,87 @@
+import styled from 'styled-components';
+import arrow from '../../../../../../assets/arrow-down-thin.svg';
+
+export const Card = styled.div<{ open: boolean }>`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  opacity: ${(props) => (props.open ? 1 : 0)};
+  padding: 64px;
+  width: 795px;
+  border-radius: 8px;
+  box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
+  outline: transparent;
+  transition: all 1s linear;
+
+  @media only screen and (max-width: 550px) {
+    width: 100%;
+    left: 0;
+    top: auto;
+    bottom: 0;
+    transform: translate(0, 0);
+  }
+`;
+
+export const GeneralWrapper = styled.div`
+  display: flex;
+`;
+
+export const Subtitle = styled.h4`
+  font-size: 16px;
+  line-height: 18px;
+  font-weight: 600;
+  color: var(--black);
+  margin-bottom: 16px;
+`;
+
+export const VerbSelector = styled.div`
+  display: flex;
+  position: relative;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--grey);
+  border-bottom: 1px solid var(--black);
+  padding-bottom: 7px;
+  width: 110px;
+  margin-top: auto;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+export const VerbArrow = styled.div<{ active: boolean }>`
+  height: 16px;
+  width: 16px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url(${arrow});
+  margin-left: auto;
+  margin-top: 3px;
+  transform: ${(props) => props.active && 'rotate(180deg)'};
+  transition: all 0.25s linear;
+`;
+
+export const Textarea = styled.textarea<{ height?: string }>`
+  font-family: courier;
+  font-size: 16px;
+  line-height: 18.5px;
+  color: var(--black);
+  padding: 16px;
+  background-color: var(--secondary-color);
+  width: 100%;
+  border: none;
+  resize: none;
+  border-radius: 4px;
+  height: ${(props) => (props.height ? props.height : '50px')};
+  outline: rgba(255, 255, 255, 0);
+`;
+
+export const ButtonsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+`;
