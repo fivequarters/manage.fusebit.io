@@ -1,12 +1,18 @@
+import { ServerResponse } from 'http';
+
 export interface Context {
   boundaryId: string;
-  dirtyState: boolean;
+  dirtyState: { [key: string]: any };
   functionId: string;
-  listeners: object;
-  metadata: object;
+  listeners: { [key: string]: any };
+  metadata: { [key: string]: any };
   readOnly: boolean;
   selectedFileName: string;
-  specification: object;
-  _monaco: object;
-  _server: object;
+  specification: { [key: string]: any };
+  _monaco: { [key: string]: any };
+  _server: {
+    saveFunction: (Context: Context) => void;
+    runFunction: (Context: Context) => Promise<ServerResponse>;
+    [key: string]: any;
+  };
 }

@@ -11,7 +11,6 @@ import save from '../../../../../assets/save.svg';
 import question from '../../../../../assets/question.svg';
 import logo from '../../../../../assets/logo.svg';
 import add from '../../../../../assets/add.svg';
-import { Context } from '../../../../../interfaces/editGui';
 import ConfirmationPrompt from '../../../../ConfirmationPrompt';
 
 const addNewStyles = `
@@ -83,6 +82,11 @@ const EditGui = React.forwardRef(({ onClose, onMount, open, integrationId }: Pro
     }
   }, [isMounted, open, onMount, createLoader, removeLoader]);
 
+  const handleSave = () => {
+    const context = window.editor;
+    context._server.saveFunction(context);
+  };
+
   return (
     <>
       <ConfirmationPrompt
@@ -96,7 +100,17 @@ const EditGui = React.forwardRef(({ onClose, onMount, open, integrationId }: Pro
       <SC.EditorContainer open={open}>
         {isMounted && (
           <SC.CloseHeader>
-            <ButtonGroup variant="contained" style={{ marginRight: '16px' }}>
+            <Button
+              style={{ marginRight: '16px' }}
+              startIcon={<img src={save} alt="play" height="16" width="16" />}
+              onClick={handleSave}
+              size="small"
+              variant="outlined"
+              color="primary"
+            >
+              Save
+            </Button>
+            <ButtonGroup variant="contained">
               <Button
                 startIcon={<img src={play} alt="play" height="16" width="16" />}
                 size="small"
@@ -109,20 +123,12 @@ const EditGui = React.forwardRef(({ onClose, onMount, open, integrationId }: Pro
                 <img src={settings} alt="settings" height="16" width="16" />
               </Button>
             </ButtonGroup>
-            <Button
-              startIcon={<img src={save} alt="play" height="16" width="16" />}
-              size="small"
-              variant="outlined"
-              color="primary"
-            >
-              Save
-            </Button>
             <h3>{integrationId}</h3>
             <SC.ActionsHelpWrapper>
               <SC.ActionsHelpLink href="/">Edit Locally</SC.ActionsHelpLink>
               <SC.ActionsHelpImage src={question} alt="question" height="16" width="16" />
             </SC.ActionsHelpWrapper>
-            <SC.Close id="guiClose" />
+            <SC.Close onClick={() => (window.editor.dirtyState ? setUnsavedWarning(true) : onClose())} />
           </SC.CloseHeader>
         )}
         <SC.FusebitEditorContainer>
@@ -139,7 +145,6 @@ const EditGui = React.forwardRef(({ onClose, onMount, open, integrationId }: Pro
             onLoaded={() => {
               setIsMounted(true);
             }}
-            onClose={(context: Context) => (context.dirtyState ? setUnsavedWarning(true) : onClose())}
           />
           {isMounted && <SC.FusebitEditorLogo src={logo} alt="fusebit logo" height="20" width="80" />}
         </SC.FusebitEditorContainer>
