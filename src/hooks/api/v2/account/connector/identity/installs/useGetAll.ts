@@ -50,10 +50,10 @@ export const useAccountConnectorIdentityInstallsGetAll = (
           } = res;
 
           const isRelated = (i: InstallInstance) => {
-            const connectorIds = getConnectorsFromInstall(i)
+            const connectorIds = getConnectorsFromInstall(i);
 
             return i.tags['fusebit.tenantId'] === tenantId && connectorIds.includes(connectorId);
-          }
+          };
 
           return items.filter(isRelated);
         })
@@ -64,8 +64,12 @@ export const useAccountConnectorIdentityInstallsGetAll = (
     }
   };
 
-  return useQuery([ACCOUNT_CONNECTOR_IDENTITY_INSTALLS_GET_ALL, { tenantId, connectorId }], getAllInstallsFromIdentity, {
-    enabled: !!userData.token,
-    ...options,
-  });
+  return useQuery(
+    [ACCOUNT_CONNECTOR_IDENTITY_INSTALLS_GET_ALL, { tenantId, connectorId }],
+    getAllInstallsFromIdentity,
+    {
+      enabled: !!userData.token,
+      ...options,
+    }
+  );
 };

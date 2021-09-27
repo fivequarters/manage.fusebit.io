@@ -49,7 +49,8 @@ export const useAccountIntegrationInstanceIdentitiesGetAll = (
             data: { items },
           } = res;
 
-          const isRelated = (i: IdentityInstance) => i.tags['fusebit.tenantId'] === tenantId && connectorIds.includes(i.tags['fusebit.parentEntityId'])
+          const isRelated = (i: IdentityInstance) =>
+            i.tags['fusebit.tenantId'] === tenantId && connectorIds.includes(i.tags['fusebit.parentEntityId']);
 
           return items.filter(isRelated);
         })
@@ -60,8 +61,12 @@ export const useAccountIntegrationInstanceIdentitiesGetAll = (
     }
   };
 
-  return useQuery([ACCOUNT_INTEGRATION_INSTANCE_IDENTITIES_GET_ALL, { tenantId, connectorIds }], getAllIdentitiesFromInstalls, {
-    enabled: !!userData.token,
-    ...options,
-  });
+  return useQuery(
+    [ACCOUNT_INTEGRATION_INSTANCE_IDENTITIES_GET_ALL, { tenantId, connectorIds }],
+    getAllIdentitiesFromInstalls,
+    {
+      enabled: !!userData.token,
+      ...options,
+    }
+  );
 };

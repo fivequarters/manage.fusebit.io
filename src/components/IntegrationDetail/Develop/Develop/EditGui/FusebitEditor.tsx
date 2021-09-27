@@ -5,9 +5,7 @@ export default class FusebitEditor extends React.Component<any> {
   private editorContext: any;
 
   render() {
-    return (
-      <div style={{ width: '100%', height: 'calc(100vh - var(--closeHeaderHeight))' }} ref={(el) => (this.el = el)} />
-    );
+    return <div ref={(el) => (this.el = el)} />;
   }
 
   componentDidMount() {
