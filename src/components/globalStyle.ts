@@ -119,11 +119,6 @@ export const Flex = styled.div<{ margin?: string; flexDown?: boolean; alignCente
   margin: ${(props) => props.margin && props.margin};
 `;
 
-export const DefaultFlex = styled.div<{ margin?: string }>`
-  display: flex;
-  margin: ${(props) => props.margin && props.margin};
-`;
-
 export const CloseIconMixin = css`
   height: 12px;
   width: 12px;

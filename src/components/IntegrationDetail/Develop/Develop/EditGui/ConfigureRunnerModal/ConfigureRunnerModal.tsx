@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Modal, Backdrop } from '@material-ui/core';
+import { Button, Modal, Backdrop, Box } from '@material-ui/core';
 import * as SC from './styles';
 import * as CSC from '../../../../../globalStyle';
 
@@ -34,7 +34,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
       <SC.Card open={open}>
         <CSC.Close onClick={() => setOpen(false)} />
         <CSC.ModalTitle margin="0 0 16px 0">Configure runner</CSC.ModalTitle>
-        <CSC.DefaultFlex>
+        <Box style={{ display: 'flex' }}>
           <CSC.Flex width="max-content" margin="0 48px 0 0" flexDown>
             <SC.Subtitle>Verb</SC.Subtitle>
             <SC.VerbSelector onClick={() => setVerbSelectorActive(!verbSelectorActive)}>
@@ -52,7 +52,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
             <SC.Subtitle>URL</SC.Subtitle>
             <SC.Textarea onChange={(e) => setUrl(e.target.value)} />
           </CSC.Flex>
-        </CSC.DefaultFlex>
+        </Box>
         <CSC.Flex margin="49px 0 0 0" flexDown>
           <SC.Subtitle>Payload</SC.Subtitle>
           <SC.Textarea onChange={(e) => setPayload(e.target.value)} height="137px" />
