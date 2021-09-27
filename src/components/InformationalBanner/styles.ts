@@ -4,7 +4,6 @@ import info from '../../assets/info.svg';
 export const Banner = styled.div`
   display: flex;
   align-items: center;
-  padding: 24px;
   border-radius: 8px;
   margin-bottom: 48px;
 `;
