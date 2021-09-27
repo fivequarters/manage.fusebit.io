@@ -97,7 +97,7 @@ const EditGui = React.forwardRef(({ onClose, onMount, open, integrationId }: Pro
         description={`You have made some unsaved changes to your Integration. Closing this window will discard those changes.`}
         confirmationButtonText={`Discard`}
       />
-      <SC.EditorContainer open={open}>
+      <SC.EditorContainer>
         {isMounted && (
           <SC.CloseHeader>
             <Button
