@@ -41,6 +41,7 @@ import { useEntityApi } from '../../../../hooks/useEntityApi';
 import { useBackendClient } from '../../../../hooks/useBackendClient';
 import { BackendClient } from '../../../../interfaces/backendClient';
 import EditCli from './EditCli';
+import { useQuery } from '../../../../hooks/useQuery';
 
 const { REACT_APP_ENABLE_ONLINE_EDITOR } = process.env;
 const isOnlineEditorEnabled = REACT_APP_ENABLE_ONLINE_EDITOR === 'true';
@@ -63,6 +64,7 @@ const Develop: React.FC = () => {
   });
   const { createLoader, removeLoader } = useLoader();
   const { createError } = useError();
+  const query = useQuery();
   const [editGuiOpen, setEditGuiOpen] = React.useState(false);
   const [connectOpen, setConnectOpen] = React.useState(false);
   const [connectorListOpen, setConnectorListOpen] = React.useState(false);
@@ -79,6 +81,15 @@ const Develop: React.FC = () => {
   const [backendClient, setBackendClient] = useState<BackendClient>();
   const [connectHover, setConnectHover] = useState(false);
   const [editCliOpen, setEditCliOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!!query.get('session')) {
+      setTimeout(() => {
+        setEditGuiOpen(true);
+      }, 1000);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const getBackendClients = async () => {
     const backendClients = await getBackendClientListener();
