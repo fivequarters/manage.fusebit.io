@@ -9,9 +9,7 @@ interface Props {
 const InformationalBanner: React.FC<Props> = ({ children, className }) => {
   return (
     <SC.Banner className={className}>
-      <SC.Description>
-        <p>{children}</p>
-      </SC.Description>
+      <SC.Description>{children}</SC.Description>
     </SC.Banner>
   );
 };
