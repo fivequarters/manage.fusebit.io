@@ -103,7 +103,6 @@ const Overview: React.FC = () => {
   useEffect(() => {
     if (accountData && accountData.data) {
       setData(accountData.data);
-      console.log(accountData);
     }
   }, [accountData]);
 
@@ -128,7 +127,6 @@ const Overview: React.FC = () => {
         lastName: capitalize(data?.lastName || ''),
         primaryEmail: data?.primaryEmail?.toLowerCase(),
       };
-      console.log(dataToSubmit);
       await _updateUser(dataToSubmit);
       setEditInformation(false);
       setIsSubmitting(false);
