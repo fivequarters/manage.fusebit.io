@@ -8,7 +8,6 @@ import { useAccountGetOne } from '../hooks/api/v1/account/useGetOne';
 import { User } from '../interfaces/user';
 import { Account } from '../interfaces/account';
 import axios from 'axios';
-import { X_USER_AGENT } from '../utils/constants';
 
 const {
   REACT_APP_AUTH0_DOMAIN,
@@ -34,7 +33,6 @@ const IntegrationsPage: FC<{}> = (): ReactElement => {
       const response = await axios.get(`${REACT_APP_AUTH0_DOMAIN}/userinfo`, {
         headers: {
           Authorization: `Bearer ${userData.token}`,
-          'X-User-Agent': X_USER_AGENT,
         },
       });
       return response.data.picture;
