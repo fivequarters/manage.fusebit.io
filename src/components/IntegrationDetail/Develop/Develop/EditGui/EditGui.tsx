@@ -13,7 +13,6 @@ import logo from '../../../../../assets/logo.svg';
 import useEditor from './useEditor';
 import ConfigureRunnerModal from './ConfigureRunnerModal';
 
-
 const EditGui = React.forwardRef(({ onClose, integrationId }: Props) => {
   const { userData } = useContext();
   const [isMounted, setIsMounted] = useState(false);

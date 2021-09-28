@@ -23,7 +23,14 @@ export const useAccountIntegrationCreateSession = () => {
       );
     },
     {
-      onSuccess: (res) => {
+      onSuccess: (res, variables) => {
+        localStorage.setItem(variables.id, JSON.stringify({
+          runner: {
+            method: 'get',
+            url: '/api/tenant/:tenantId/test',
+            payload: '',
+          }
+        }));
         window.location.href = res.data.targetUrl;
       },
     }

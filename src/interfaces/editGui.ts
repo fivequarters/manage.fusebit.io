@@ -15,6 +15,6 @@ export interface Context {
     runFunction: (Context: Context) => Promise<ServerResponse>;
     [key: string]: any;
   };
-  startRun: (url: string) => void
-  finishRun: (error?: string, res?: Record<string, any> & { text: string }) => void
+  startRun: (url: string) => void;
+  finishRun: (error?: string, res?: Record<string, any> & { text: string }) => void;
 }
