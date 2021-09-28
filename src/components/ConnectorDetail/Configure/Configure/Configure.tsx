@@ -88,7 +88,7 @@ const Configure: React.FC = () => {
     }
   };
 
-  const configureAppDocUrl: string | undefined = feed?.resources?.configureAppDocUrl || 'https://developers.fusebit.io';
+  const configureAppDocUrl: string | undefined = feed?.resources?.configureAppDocUrl;
 
   return (
     <SC.Flex>
