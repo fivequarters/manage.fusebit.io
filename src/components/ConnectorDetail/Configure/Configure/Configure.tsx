@@ -6,7 +6,6 @@ import { useAccountConnectorsGetOne } from '../../../../hooks/api/v2/account/con
 import { useAccountConnectorsGetOneConfig } from '../../../../hooks/api/v2/account/connector/useGetOneConfig';
 import { useContext } from '../../../../hooks/useContext';
 import { Connector, ConnectorConfig } from '../../../../interfaces/connector';
-import LabelBanner from '../../../LabelBanner';
 import { integrationsFeed, connectorsFeed } from '../../../../static/feed';
 import { Feed } from '../../../../interfaces/feed';
 
@@ -16,6 +15,7 @@ import { JsonForms } from '@jsonforms/react';
 import { ValidationMode } from '@jsonforms/core';
 import { useEffect } from 'react';
 import { useEntityApi } from '../../../../hooks/useEntityApi';
+import InformationalBanner from '../../../InformationalBanner';
 
 const Configure: React.FC = () => {
   const history = useHistory();
@@ -88,7 +88,7 @@ const Configure: React.FC = () => {
     }
   };
 
-  const configureAppDocUrl: string | undefined = feed?.resources?.configureAppDocUrl;
+  const configureAppDocUrl: string | undefined = feed?.resources?.configureAppDocUrl || 'https://developers.fusebit.io';
 
   return (
     <SC.Flex>
@@ -96,21 +96,15 @@ const Configure: React.FC = () => {
         {config?.data && !loading ? (
           <SC.FormWrapper>
             {configureAppDocUrl ? (
-              <LabelBanner
-                description={
-                  'By default, Connectors use Fusebit demonstration credentials, which are intended for testing only.' +
-                  ' When you are ready for production use, supply your own credentials below, as described in'
-                }
-                href={configureAppDocUrl}
-                highlightedDescription={'this guide.'}
-                linkedWords={2}
-              />
+              <InformationalBanner>
+                By default, Connectors use Fusebit demonstration credentials, which are intended for testing only. When
+                you are ready for production use, supply your own credentials below, as described in{' '}
+                <a href={configureAppDocUrl}>this guide</a>.
+              </InformationalBanner>
             ) : (
-              <LabelBanner
-                description={
-                  'By default, Connectors use Fusebit demonstration credentials, which are intended for testing only.'
-                }
-              />
+              <InformationalBanner>
+                By default, Connectors use Fusebit demonstration credentials, which are intended for testing only..
+              </InformationalBanner>
             )}
             <JsonForms
               schema={config?.data.schema}
