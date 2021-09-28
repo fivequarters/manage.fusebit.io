@@ -11,7 +11,11 @@ export const useAccountIntegrationTestIntegration = () => {
   return useMutation(
     (params: Params) => {
       const { id, tenantId } = params;
-      const { method = 'post', payload, url = `/api/tenant/${encodeURIComponent(tenantId)}/test` } = getIntegrationConfig(id).runner;
+      const {
+        method = 'post',
+        payload,
+        url = `/api/tenant/${encodeURIComponent(tenantId)}/test`,
+      } = getIntegrationConfig(id).runner;
 
       return axios(
         `/v2/account/${userData.accountId}/subscription/${userData.subscriptionId}/integration/${id}${url}`,
