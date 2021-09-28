@@ -7,6 +7,8 @@ import { useAccountConnectorsGetOneConfig } from '../../../../hooks/api/v2/accou
 import { useContext } from '../../../../hooks/useContext';
 import { Connector, ConnectorConfig } from '../../../../interfaces/connector';
 import LabelBanner from '../../../LabelBanner';
+import { integrationsFeed, connectorsFeed } from '../../../../static/feed';
+import { Feed } from '../../../../interfaces/feed';
 
 import { Button } from '@material-ui/core';
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
@@ -38,6 +40,7 @@ const Configure: React.FC = () => {
   const [validationMode, setValidationMode] = React.useState<ValidationMode>('ValidateAndHide');
   const [loading, setLoading] = React.useState(false);
   const { updateEntity } = useEntityApi();
+  const [feed, setFeedEntry] = useState<Feed>();
 
   useEffect(() => {
     const unlisten = history.listen((location) => {
@@ -61,6 +64,22 @@ const Configure: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectorId]);
 
+  const isConnectorFeedSource = connectorData?.data.tags['fusebit.feedType'] === 'connector';
+  const isIntegrationFeedSource = connectorData?.data.tags['fusebit.feedType'] === 'integration';
+  const connectorFeedId = connectorData?.data.tags['fusebit.feedId'];
+
+  useEffect(() => {
+    const findFeedEntry = (feeds: Feed[]) => setFeedEntry(feeds.find((f: Feed) => f.id === connectorFeedId));
+
+    if (isIntegrationFeedSource) {
+      integrationsFeed().then((feeds) => findFeedEntry(feeds));
+    } else if (isConnectorFeedSource) {
+      connectorsFeed().then((feeds) => findFeedEntry(feeds));
+    } else {
+      setFeedEntry(undefined);
+    }
+  }, [isConnectorFeedSource, isIntegrationFeedSource, connectorFeedId]);
+
   const handleSubmit = () => {
     if (errors.length > 0) {
       setValidationMode('ValidateAndShow');
@@ -69,17 +88,30 @@ const Configure: React.FC = () => {
     }
   };
 
+  const configureAppDocUrl: string | undefined = feed?.resources?.configureAppDocUrl;
+
   return (
     <SC.Flex>
       <SC.FlexDown>
         {config?.data && !loading ? (
           <SC.FormWrapper>
-            <LabelBanner
-              description="By default, Connectors use Fusebit demonstration credentials, which are intended for testing only. When you are ready for production use supply your own credentials below, as described in"
-              href="https://developer.fusebit.io/docs/slack#creating-your-own-slack-app"
-              highlightedDescription="this guide."
-              linkedWords={2}
-            />
+            {configureAppDocUrl ? (
+              <LabelBanner
+                description={
+                  'By default, Connectors use Fusebit demonstration credentials, which are intended for testing only.' +
+                  ' When you are ready for production use, supply your own credentials below, as described in'
+                }
+                href={configureAppDocUrl}
+                highlightedDescription={'this guide.'}
+                linkedWords={2}
+              />
+            ) : (
+              <LabelBanner
+                description={
+                  'By default, Connectors use Fusebit demonstration credentials, which are intended for testing only.'
+                }
+              />
+            )}
             <JsonForms
               schema={config?.data.schema}
               uischema={config?.data.uischema}
@@ -89,9 +121,9 @@ const Configure: React.FC = () => {
               onChange={({ errors, data: newData }) => {
                 // Clear the clientId and clientSecret when going from non-prod to production.
                 if (
-                  newData.mode.useProduction !== config?.data.data?.mode?.useProduction &&
-                  newData.mode.useProduction !== data?.mode?.useProduction &&
-                  newData.mode.useProduction
+                  newData.mode?.useProduction !== config?.data.data?.mode?.useProduction &&
+                  newData.mode?.useProduction !== data?.mode?.useProduction &&
+                  newData.mode?.useProduction
                 ) {
                   newData.clientId = '';
                   newData.clientSecret = '';
@@ -107,6 +139,7 @@ const Configure: React.FC = () => {
                   };
                   newData.clientId = random();
                   newData.clientSecret = random();
+                  newData.mode = { ...(newData.mode || {}), useProduction: false };
                 }
 
                 errors && setErrors(errors);

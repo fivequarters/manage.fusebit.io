@@ -4,7 +4,7 @@ import * as SC from './styles';
 interface Props {
   description: string;
   highlightedDescription?: string;
-  href: string;
+  href?: string;
   linkedWords?: number;
   className?: string;
 }

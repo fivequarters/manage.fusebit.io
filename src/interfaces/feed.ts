@@ -53,6 +53,9 @@ export interface Feed {
     service: string;
     catalog: string;
   };
+  resources: {
+    configureAppDocUrl: string;
+  };
   configuration: {
     title: string;
     schema: {
