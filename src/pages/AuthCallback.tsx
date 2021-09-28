@@ -77,10 +77,9 @@ const IntegrationsPage: FC<{}> = (): ReactElement => {
           userId: REACT_APP_FUSEBIT_USER_ID,
         });
       } else {
-        const decoded =
-          jwt_decode<{ 'https://fusebit.io/profile': { accountId: string; subscriptionId: string; userId: string } }>(
-            token
-          );
+        const decoded = jwt_decode<{
+          'https://fusebit.io/profile': { accountId: string; subscriptionId: string; userId: string };
+        }>(token);
         auth({ token, ...decoded['https://fusebit.io/profile'] });
       }
     } catch {

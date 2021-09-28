@@ -3,9 +3,10 @@ import info from '../../assets/info.svg';
 
 export const Banner = styled.div`
   display: flex;
-  align-items: center;
+  align-items: left;
   border-radius: 8px;
-  margin-bottom: 48px;
+  width: 100%;
+  margin: 0 auto 24px;
 `;
 
 export const InfoIcon = styled.div`

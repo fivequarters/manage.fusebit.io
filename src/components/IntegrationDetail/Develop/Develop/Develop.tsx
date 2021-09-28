@@ -15,6 +15,8 @@ import {
   MenuItem,
   MenuList,
   Tooltip,
+  useMediaQuery,
+  Drawer,
 } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import AddIcon from '@material-ui/icons/Add';
@@ -27,7 +29,6 @@ import { useAccountIntegrationsGetOne } from '../../../../hooks/api/v2/account/i
 import { useAccountConnectorsGetAll } from '../../../../hooks/api/v2/account/connector/useGetAll';
 import { Connector } from '../../../../interfaces/connector';
 import { Integration, InnerConnector } from '../../../../interfaces/integration';
-import EditCli from './EditCli';
 import EditGui from './EditGui';
 import { useGetRedirectLink } from '../../../../hooks/useGetRedirectLink';
 import FeedPicker from '../../../FeedPicker';
@@ -41,6 +42,11 @@ import { useEffect } from 'react';
 import { useEntityApi } from '../../../../hooks/useEntityApi';
 import { useBackendClient } from '../../../../hooks/useBackendClient';
 import { BackendClient } from '../../../../interfaces/backendClient';
+import EditCli from './EditCli';
+import { useQuery } from '../../../../hooks/useQuery';
+import play from '../../../../assets/play.svg';
+import info from '../../../../assets/info.svg';
+import SlideUpSpring from '../../../Animations/SlideUpSpring';
 
 const { REACT_APP_ENABLE_ONLINE_EDITOR } = process.env;
 const isOnlineEditorEnabled = REACT_APP_ENABLE_ONLINE_EDITOR === 'true';
@@ -63,7 +69,7 @@ const Develop: React.FC = () => {
   });
   const { createLoader, removeLoader } = useLoader();
   const { createError } = useError();
-  const [editCliOpen, setEditCliOpen] = React.useState(false);
+  const query = useQuery();
   const [editGuiOpen, setEditGuiOpen] = React.useState(false);
   const [connectOpen, setConnectOpen] = React.useState(false);
   const [connectorListOpen, setConnectorListOpen] = React.useState(false);
@@ -79,6 +85,18 @@ const Develop: React.FC = () => {
   const [backendClients, setBackendClients] = useState<BackendClient[]>([]);
   const [backendClient, setBackendClient] = useState<BackendClient>();
   const [connectHover, setConnectHover] = useState(false);
+  const [editGuiMounted, setEditGuiMounted] = useState(false);
+  const [editCliOpen, setEditCliOpen] = React.useState(false);
+  const isMobile = useMediaQuery('(max-width: 850px)');
+
+  React.useEffect(() => {
+    if (!!query.get('session')) {
+      setTimeout(() => {
+        setEditGuiOpen(true);
+      }, 1000);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const getBackendClients = async () => {
     const backendClients = await getBackendClientListener();
@@ -317,6 +335,22 @@ const Develop: React.FC = () => {
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
+        open={editCliOpen}
+        onClose={() => setEditCliOpen(false)}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+      >
+        <Fade in={editCliOpen}>
+          <EditCli
+            open={editCliOpen}
+            onClose={() => setEditCliOpen(false)}
+            integrationId={integrationData?.data.id || ''}
+          />
+        </Fade>
+      </Modal>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
         open={connectorListOpen}
         onClose={() => setConnectorListOpen(false)}
         closeAfterTransition
@@ -351,38 +385,49 @@ const Develop: React.FC = () => {
           </SC.ConnectorList>
         </Fade>
       </Modal>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={editCliOpen}
-        onClose={() => setEditCliOpen(false)}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-      >
-        <Fade in={editCliOpen}>
-          <EditCli
-            open={editCliOpen}
-            onClose={() => setEditCliOpen(false)}
-            integrationId={integrationData?.data.id || ''}
-          />
-        </Fade>
-      </Modal>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={editGuiOpen}
-        onClose={() => setEditGuiOpen(false)}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-      >
-        <Fade in={editGuiOpen}>
-          <EditGui
-            open={editGuiOpen}
-            onClose={() => setEditGuiOpen(false)}
-            integrationId={integrationData?.data.id || ''}
-          />
-        </Fade>
-      </Modal>
+      {isMobile ? (
+        <Drawer anchor={'bottom'} open={editGuiOpen} onClose={() => setEditGuiOpen(false)}>
+          <SC.GuiMobileWrapper>
+            <CSC.Close onClick={() => setEditGuiOpen(false)} />
+            <Button
+              startIcon={<img src={play} alt="play" height="16" width="16" />}
+              style={{ width: '200px' }}
+              size="large"
+              variant="contained"
+              color="primary"
+            >
+              Run
+            </Button>
+            <SC.GuiMobileNotSupportedWrapper>
+              <SC.GuiMobileNotSupportedIcon src={info} alt="not supported" height="16" width="16" />
+              <SC.GuiMobileNotSupportedText>Editing is not supported on this device</SC.GuiMobileNotSupportedText>
+            </SC.GuiMobileNotSupportedWrapper>
+          </SC.GuiMobileWrapper>
+        </Drawer>
+      ) : (
+        <Modal
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          open={editGuiOpen}
+          onClose={() => {
+            setEditGuiOpen(false);
+            setEditGuiMounted(false);
+          }}
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+        >
+          <SlideUpSpring in={editGuiOpen} mounted={editGuiMounted}>
+            <EditGui
+              onMount={() => setEditGuiMounted(true)}
+              onClose={() => {
+                setEditGuiOpen(false);
+                setEditGuiMounted(false);
+              }}
+              integrationId={integrationData?.data.id || ''}
+            />
+          </SlideUpSpring>
+        </Modal>
+      )}
       <SC.Flex>
         <SC.CardSeparator />
         <SC.FlexDown>

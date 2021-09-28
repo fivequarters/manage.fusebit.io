@@ -1,13 +1,18 @@
 import React from 'react';
+import { Context } from '../../../../../interfaces/editGui';
+
+declare global {
+  interface Window {
+    editor: Context;
+  }
+}
 
 export default class FusebitEditor extends React.Component<any> {
   private el: any;
   private editorContext: any;
 
   render() {
-    return (
-      <div style={{ width: '100%', height: 'calc(100vh - var(--closeHeaderHeight))' }} ref={(el) => (this.el = el)} />
-    );
+    return <div ref={(el) => (this.el = el)} />;
   }
 
   componentDidMount() {
@@ -15,10 +20,12 @@ export default class FusebitEditor extends React.Component<any> {
       //@ts-ignore
       window.fusebit
         .createEditor(this.el, this.props.boundaryId, this.props.functionId, this.props.account, this.props.options)
-        .then((editorContext: any) => {
+        .then((editorContext: Context) => {
           this.editorContext = editorContext;
+          window.editor = this.editorContext;
           if (this.props.onLoaded) {
-            this.props.onLoaded(editorContext);
+            window.editor = this.editorContext;
+            this.props.onLoaded();
           }
         })
         .catch((e: any) => {
