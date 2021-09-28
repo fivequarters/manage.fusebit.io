@@ -24,6 +24,7 @@ export default class FusebitEditor extends React.Component<any> {
           this.editorContext = editorContext;
           window.editor = this.editorContext;
           if (this.props.onLoaded) {
+            window.editor = this.editorContext;
             this.props.onLoaded();
           }
         })

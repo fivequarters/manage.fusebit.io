@@ -12,11 +12,13 @@ import question from '../../../../../assets/question.svg';
 import logo from '../../../../../assets/logo.svg';
 import useEditor from './useEditor';
 import ConfigureRunnerModal from './ConfigureRunnerModal';
+import ConfirmationPrompt from '../../../../ConfirmationPrompt';
 
-const EditGui = React.forwardRef(({ onClose, integrationId }: Props) => {
+const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props) => {
   const { userData } = useContext();
   const [isMounted, setIsMounted] = useState(false);
   const [configureRunnerActive, setConfigureRunnerActive] = useState(false);
+  const [unsavedWarning, setUnsavedWarning] = useState(false);
   const { createLoader, removeLoader } = useLoader();
   const { handleRun } = useEditor();
 
@@ -58,15 +60,49 @@ const EditGui = React.forwardRef(({ onClose, integrationId }: Props) => {
     } else {
       createLoader();
     }
-  }, [isMounted, createLoader, removeLoader]);
+  }, [isMounted, onMount, createLoader, removeLoader]);
+
+  useEffect(() => {
+    if (isMounted) {
+      onMount?.();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMounted]);
+
+  const handleSave = () => {
+    const context = window.editor;
+    context._server.saveFunction(context);
+  };
+
+  const handleClose = () => {
+    window.editor.dirtyState ? setUnsavedWarning(true) : onClose();
+  };
 
   return (
     <>
+      <ConfirmationPrompt
+        open={unsavedWarning}
+        setOpen={setUnsavedWarning}
+        handleConfirmation={onClose}
+        title={`​Are you sure you want to discard unsaved changes?`}
+        description={`You have made some unsaved changes to your Integration. Closing this window will discard those changes.`}
+        confirmationButtonText={`Discard`}
+      />
       <SC.EditorContainer>
         <ConfigureRunnerModal open={configureRunnerActive} setOpen={setConfigureRunnerActive} />
         {isMounted && (
           <SC.CloseHeader>
-            <ButtonGroup variant="contained" style={{ marginRight: '16px' }}>
+            <Button
+              style={{ marginRight: '16px' }}
+              startIcon={<img src={save} alt="play" height="16" width="16" />}
+              onClick={handleSave}
+              size="small"
+              variant="outlined"
+              color="primary"
+            >
+              Save
+            </Button>
+            <ButtonGroup variant="contained">
               <Button
                 startIcon={<img src={play} alt="play" height="16" width="16" />}
                 size="small"
@@ -80,20 +116,12 @@ const EditGui = React.forwardRef(({ onClose, integrationId }: Props) => {
                 <img src={settings} alt="settings" height="16" width="16" />
               </Button>
             </ButtonGroup>
-            <Button
-              startIcon={<img src={save} alt="play" height="16" width="16" />}
-              size="small"
-              variant="outlined"
-              color="primary"
-            >
-              Save
-            </Button>
             <h3>{integrationId}</h3>
             <SC.ActionsHelpWrapper>
               <SC.ActionsHelpLink href="/">Edit Locally</SC.ActionsHelpLink>
               <SC.ActionsHelpImage src={question} alt="question" height="16" width="16" />
             </SC.ActionsHelpWrapper>
-            <SC.Close onClick={onClose} />
+            <SC.Close onClick={handleClose} />
           </SC.CloseHeader>
         )}
         <SC.FusebitEditorContainer>
@@ -107,7 +135,9 @@ const EditGui = React.forwardRef(({ onClose, integrationId }: Props) => {
               accessToken: userData.token,
             }}
             options={{ entityType: 'integration' }}
-            onLoaded={() => setIsMounted(true)}
+            onLoaded={() => {
+              setIsMounted(true);
+            }}
           />
           {isMounted && <SC.FusebitEditorLogo src={logo} alt="fusebit logo" height="20" width="80" />}
         </SC.FusebitEditorContainer>
