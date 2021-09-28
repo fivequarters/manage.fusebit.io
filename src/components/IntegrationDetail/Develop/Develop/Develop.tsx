@@ -391,6 +391,7 @@ const Develop: React.FC = () => {
             {backendClients.length > 0 ? (
               backendClients.map((client: BackendClient) => (
                 <ListComponent
+                  key={client.id}
                   onChange={getBackendClients}
                   connector={{ ...client, isApplication: true }}
                   onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}

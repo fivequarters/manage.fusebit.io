@@ -5,7 +5,7 @@ import { Button } from '@material-ui/core';
 import { Props } from '../../../../../interfaces/edit';
 import CopyLine from '../../../../CopyLine';
 
-const Edit = React.forwardRef(({ open, onClose, integrationId }: Props) => {
+const Edit = React.forwardRef(({ open, onClose, integrationId }: Props, ref) => {
   return (
     <SC.Card open={open}>
       <CSC.Close onClick={() => onClose()} />

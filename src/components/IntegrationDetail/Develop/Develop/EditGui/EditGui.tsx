@@ -6,7 +6,7 @@ import { useContext } from '../../../../../hooks/useContext';
 import FusebitEditor from './FusebitEditor';
 import { useLoader } from '../../../../../hooks/useLoader';
 
-const EditGui = React.forwardRef(({ onClose, integrationId }: Props) => {
+const EditGui = React.forwardRef(({ onClose, integrationId }: Props, ref) => {
   const { userData } = useContext();
   const [isMounted, setIsMounted] = useState(false);
   const { createLoader, removeLoader } = useLoader();
