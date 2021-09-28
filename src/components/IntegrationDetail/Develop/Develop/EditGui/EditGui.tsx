@@ -10,42 +10,21 @@ import settings from '../../../../../assets/settings.svg';
 import save from '../../../../../assets/save.svg';
 import question from '../../../../../assets/question.svg';
 import logo from '../../../../../assets/logo.svg';
-import add from '../../../../../assets/add.svg';
+import useEditor from './useEditor';
 import ConfigureRunnerModal from './ConfigureRunnerModal';
-
-const addNewStyles = `
-  position: relative;
-  font-family: 'Poppins';
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 20px;
-  color: #333333;
-  cursor: pointer;
-`;
-
-const addNewIcon = `
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    height: 16px;
-    width: 16px;
-    background-image: url(${add});
-    background-size: contain;
-    background-repeat: no-repeat;
-`;
 
 const EditGui = React.forwardRef(({ onClose, integrationId }: Props) => {
   const { userData } = useContext();
   const [isMounted, setIsMounted] = useState(false);
   const [configureRunnerActive, setConfigureRunnerActive] = useState(false);
   const { createLoader, removeLoader } = useLoader();
+  const { handleRun } = useEditor();
 
   useEffect(() => {
     const createAddNewItemElement = (lastItem: Element) => {
       const addNew = document.createElement('div');
       addNew.setAttribute('id', 'addNewItem');
-      addNew.setAttribute('style', addNewStyles);
+      addNew.setAttribute('style', SC.addNewStyles);
       addNew.onclick = (e) => {
         e.stopPropagation();
         const el = document.querySelector('.fusebit-code-action-add-btn');
@@ -63,7 +42,7 @@ const EditGui = React.forwardRef(({ onClose, integrationId }: Props) => {
       addNew.appendChild(p);
 
       const icon = document.createElement('div');
-      icon.setAttribute('style', addNewIcon);
+      icon.setAttribute('style', SC.addNewIcon);
       addNew.appendChild(icon);
 
       lastItem.parentNode?.insertBefore(addNew, lastItem.nextSibling);
@@ -93,6 +72,7 @@ const EditGui = React.forwardRef(({ onClose, integrationId }: Props) => {
                 size="small"
                 variant="contained"
                 color="primary"
+                onClick={handleRun}
               >
                 Run
               </Button>

@@ -4,6 +4,7 @@ import file from '../../../../../assets/file.svg';
 import cogs from '../../../../../assets/cogs.svg';
 import clock from '../../../../../assets/clock.svg';
 import playEditor from '../../../../../assets/play-editor.svg';
+import add from '../../../../../assets/add.svg';
 
 export const Card = styled.div<{ open: boolean }>`
   position: absolute;
@@ -348,4 +349,26 @@ export const FusebitEditorLogo = styled.img`
   height: 20px;
   width: 80px;
   object-fit: contain;
+`;
+
+export const addNewStyles = `
+  position: relative;
+  font-family: 'Poppins';
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #333333;
+  cursor: pointer;
+`;
+
+export const addNewIcon = `
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 16px;
+    width: 16px;
+    background-image: url(${add});
+    background-size: contain;
+    background-repeat: no-repeat;
 `;
