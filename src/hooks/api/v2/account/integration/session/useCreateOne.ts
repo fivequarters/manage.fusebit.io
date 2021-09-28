@@ -26,8 +26,8 @@ export const useAccountIntegrationCreateSession = () => {
       onSuccess: (res, variables) => {
         localStorage.setItem(variables.id, JSON.stringify({
           runner: {
-            method: 'get',
-            url: '/api/tenant/:tenantId/test',
+            method: 'post',
+            url: `/api/tenant/${variables.tenantId}/test`,
             payload: '',
           }
         }));
