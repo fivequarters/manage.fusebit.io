@@ -27,7 +27,6 @@ import { useAccountIntegrationsGetOne } from '../../../../hooks/api/v2/account/i
 import { useAccountConnectorsGetAll } from '../../../../hooks/api/v2/account/connector/useGetAll';
 import { Connector } from '../../../../interfaces/connector';
 import { Integration, InnerConnector } from '../../../../interfaces/integration';
-import EditCli from './EditCli';
 import EditGui from './EditGui';
 import { useGetRedirectLink } from '../../../../hooks/useGetRedirectLink';
 import FeedPicker from '../../../FeedPicker';
@@ -41,6 +40,7 @@ import { useEffect } from 'react';
 import { useEntityApi } from '../../../../hooks/useEntityApi';
 import { useBackendClient } from '../../../../hooks/useBackendClient';
 import { BackendClient } from '../../../../interfaces/backendClient';
+import EditCli from './EditCli';
 
 const { REACT_APP_ENABLE_ONLINE_EDITOR } = process.env;
 const isOnlineEditorEnabled = REACT_APP_ENABLE_ONLINE_EDITOR === 'true';
@@ -63,7 +63,6 @@ const Develop: React.FC = () => {
   });
   const { createLoader, removeLoader } = useLoader();
   const { createError } = useError();
-  const [editCliOpen, setEditCliOpen] = React.useState(false);
   const [editGuiOpen, setEditGuiOpen] = React.useState(false);
   const [connectOpen, setConnectOpen] = React.useState(false);
   const [connectorListOpen, setConnectorListOpen] = React.useState(false);
@@ -79,6 +78,7 @@ const Develop: React.FC = () => {
   const [backendClients, setBackendClients] = useState<BackendClient[]>([]);
   const [backendClient, setBackendClient] = useState<BackendClient>();
   const [connectHover, setConnectHover] = useState(false);
+  const [editCliOpen, setEditCliOpen] = React.useState(false);
 
   const getBackendClients = async () => {
     const backendClients = await getBackendClientListener();
@@ -317,6 +317,22 @@ const Develop: React.FC = () => {
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
+        open={editCliOpen}
+        onClose={() => setEditCliOpen(false)}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+      >
+        <Fade in={editCliOpen}>
+          <EditCli
+            open={editCliOpen}
+            onClose={() => setEditCliOpen(false)}
+            integrationId={integrationData?.data.id || ''}
+          />
+        </Fade>
+      </Modal>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
         open={connectorListOpen}
         onClose={() => setConnectorListOpen(false)}
         closeAfterTransition
@@ -349,22 +365,6 @@ const Develop: React.FC = () => {
                 })}
             </div>
           </SC.ConnectorList>
-        </Fade>
-      </Modal>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={editCliOpen}
-        onClose={() => setEditCliOpen(false)}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-      >
-        <Fade in={editCliOpen}>
-          <EditCli
-            open={editCliOpen}
-            onClose={() => setEditCliOpen(false)}
-            integrationId={integrationData?.data.id || ''}
-          />
         </Fade>
       </Modal>
       <Modal
