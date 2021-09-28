@@ -6,9 +6,9 @@ import { JsonForms } from '@jsonforms/react';
 import { ValidationMode } from '@jsonforms/core';
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
 import { NewUserData } from '../../../../../interfaces/newUserData';
-import { useCapitalize } from '../../../../../hooks/useCapitalize';
 import CopyLine from '../../../../CopyLine';
 import * as CSC from '../../../../globalStyle';
+import { capitalize } from '../../../../../utils/utils';
 
 const schema = {
   type: 'object',
@@ -70,7 +70,6 @@ const NewUser = React.forwardRef(({ open, onClose, createUser }: Props, ref) => 
   const [userCreated, setUserCreated] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [token, setToken] = React.useState('');
-  const { capitalize } = useCapitalize();
 
   const handleSubmit = async () => {
     if (errors.length > 0) {

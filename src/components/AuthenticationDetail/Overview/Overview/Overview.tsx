@@ -17,12 +17,12 @@ import { Operation } from '../../../../interfaces/operation';
 import { Account } from '../../../../interfaces/account';
 import { useLoader } from '../../../../hooks/useLoader';
 import { useError } from '../../../../hooks/useError';
-import { useCapitalize } from '../../../../hooks/useCapitalize';
 import { useCreateToken } from '../../../../hooks/useCreateToken';
 import { useAccountUserDeleteOne } from '../../../../hooks/api/v1/account/user/useDeleteOne';
 import { useGetRedirectLink } from '../../../../hooks/useGetRedirectLink';
 import { useCopy } from '../../../../hooks/useCopy';
 import ConfirmationPrompt from '../../../ConfirmationPrompt/ConfirmationPrompt';
+import { capitalize } from '../../../../utils/utils';
 
 const schema = {
   type: 'object',
@@ -94,7 +94,6 @@ const Overview: React.FC = () => {
   const [token, setToken] = React.useState('');
   const { createLoader, removeLoader } = useLoader();
   const { createError } = useError();
-  const { capitalize } = useCapitalize();
   const { _createToken } = useCreateToken();
   const deleteAccount = useAccountUserDeleteOne<Operation>();
   const { getRedirectLink } = useGetRedirectLink();
