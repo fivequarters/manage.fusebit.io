@@ -17,7 +17,6 @@ import { Operation } from '../../../../interfaces/operation';
 import { Account } from '../../../../interfaces/account';
 import { useLoader } from '../../../../hooks/useLoader';
 import { useError } from '../../../../hooks/useError';
-import { useCreateToken } from '../../../../hooks/useCreateToken';
 import { useAccountUserDeleteOne } from '../../../../hooks/api/v1/account/user/useDeleteOne';
 import { useGetRedirectLink } from '../../../../hooks/useGetRedirectLink';
 import { useCopy } from '../../../../hooks/useCopy';
@@ -91,10 +90,8 @@ const Overview: React.FC = () => {
   const [cliOpen, setCliOpen] = React.useState(false);
   const [deleteOpen, setDeleteOpen] = React.useState(false);
   const [popperOpen, setPopperOpen] = React.useState(false);
-  const [token, setToken] = React.useState('');
   const { createLoader, removeLoader } = useLoader();
   const { createError } = useError();
-  const { _createToken } = useCreateToken();
   const deleteAccount = useAccountUserDeleteOne<Operation>();
   const { getRedirectLink } = useGetRedirectLink();
   const { handleCopy, copiedLine } = useCopy();
@@ -139,23 +136,6 @@ const Overview: React.FC = () => {
     setData(accountData?.data);
   };
 
-  const handleCliOpen = async () => {
-    if (token === '') {
-      try {
-        createLoader();
-        const token = await _createToken(accountData?.data.id || '');
-        setToken(token);
-        setCliOpen(true);
-      } catch (e) {
-        createError(e);
-      } finally {
-        removeLoader();
-      }
-    } else {
-      setCliOpen(true);
-    }
-  };
-
   const handleDelete = async () => {
     try {
       createLoader();
@@ -194,7 +174,7 @@ const Overview: React.FC = () => {
         closeAfterTransition
         BackdropComponent={Backdrop}
       >
-        <CliAccess token={token} open={cliOpen} onClose={() => setCliOpen(false)} />
+        <CliAccess open={cliOpen} onClose={() => setCliOpen(false)} />
       </Modal>
       {accountData?.data.id === userId ? (
         <SC.UserCard>
@@ -298,7 +278,7 @@ const Overview: React.FC = () => {
       <SC.CLIAccesWrapper>
         <SC.CLIAccess>Command Line (CLI) Access</SC.CLIAccess>
         <Button
-          onClick={handleCliOpen}
+          onClick={() => setCliOpen(true)}
           style={{ width: '200px' }}
           fullWidth={false}
           size="large"

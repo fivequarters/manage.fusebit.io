@@ -7,7 +7,7 @@ import CopyLine from '../../../../CopyLine';
 
 const Edit = React.forwardRef(({ open, onClose, integrationId }: Props) => {
   return (
-    <SC.Card open={open}>
+    <SC.Card open={!!open}>
       <CSC.Close onClick={() => onClose()} />
       <CSC.ModalTitle>Edit {integrationId}</CSC.ModalTitle>
 

@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { X_USER_AGENT } from '../utils/constants';
 import { readLocalData, validateToken } from '../utils/utils';
 import { useContext } from './useContext';
@@ -9,6 +9,7 @@ export interface ApiResponse<T> {
   error?: string;
   data: T;
   success?: boolean;
+  fullResponse: AxiosResponse<T>;
 }
 
 export type FusebitAxios = <T extends {}>(
@@ -22,7 +23,7 @@ export type FusebitAxios = <T extends {}>(
 axios.interceptors.response.use(
   (response) => response,
   (error) => {
-    const statusCode = Number(error.response.status);
+    const statusCode = Number(error?.response?.status);
     const __userData = readLocalData();
     if (statusCode === 403) {
       validateToken();
@@ -65,7 +66,7 @@ export const useAxios = () => {
     }
 
     const response = await axios(config);
-    return { success: true, data: response.data as T };
+    return { success: true, data: response.data as T, fullResponse: response };
   };
 
   return {
