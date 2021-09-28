@@ -80,6 +80,18 @@ const TableComponent: React.FC<Props> = ({
   const connectorText = connectorTable && (isPlural ? 'these Connectors' : 'this Connector');
   const usersText = !integrationTable && !connectorTable && (isPlural ? 'these Users' : 'this User');
 
+  const allSelected = () => {
+    let allSelected = false;
+
+    if (rows.length > 1 && users) {
+      allSelected = selected.length === rows.length - 1;
+    } else if (rows.length > 0) {
+      allSelected = selected.length === rows.length;
+    }
+
+    return allSelected;
+  };
+
   return (
     <SC.Wrapper>
       {integrationTable ? (
@@ -182,7 +194,7 @@ const TableComponent: React.FC<Props> = ({
                   <TableCell padding="checkbox">
                     <Checkbox
                       color="primary"
-                      checked={rows.length > 0 && selected.length === rows.length}
+                      checked={allSelected()}
                       onChange={handleSelectAllCheck}
                       inputProps={{
                         'aria-label': `select all ${
@@ -234,7 +246,7 @@ const TableComponent: React.FC<Props> = ({
                   <TableCell padding="checkbox">
                     <Checkbox
                       color="primary"
-                      checked={rows.length > 0 && selected.length === rows.length}
+                      checked={allSelected()}
                       onChange={handleSelectAllCheck}
                       inputProps={{
                         'aria-label': `select all ${
