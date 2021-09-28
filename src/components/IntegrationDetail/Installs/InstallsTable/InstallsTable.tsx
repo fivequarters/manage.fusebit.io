@@ -61,11 +61,10 @@ const InstallsTable = () => {
 
   return (
     <div id="installs-table">
-      <InformationalBanner
-        description="Every time a tenant installs an integration, it will show up here for you to see."
-        href="https://developer.fusebit.io/docs"
-        highlightedDescription="Learn more about Installations in the docs here."
-      />
+      <InformationalBanner>
+        Every time a tenant installs an integration, it will show up here for you to see.{' '}
+        <a href="https://developer.fusebit.io/docs">Learn more about Installations in the docs here</a>.
+      </InformationalBanner>
       <ConfirmationPrompt
         open={deleteOpen}
         setOpen={setDeleteOpen}

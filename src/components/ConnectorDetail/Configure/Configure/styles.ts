@@ -66,6 +66,7 @@ export const FormWrapper = styled.form`
 `;
 
 export const FormInputWrapper = styled.div`
+  margin-top: 24px;
   margin-bottom: 49px;
 
   @media only screen and (max-width: 880px) {
