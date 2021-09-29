@@ -61,6 +61,13 @@ export const validateToken = ({ onValid }: { onValid?: () => void } = {}) => {
   if (expired) {
     window.location.href = getAuthLink(); //refreshing the token
   } else {
+    analytics.ready(() => {
+      const user = readLocalData();
+      if (!user || user === {}) return;
+      analytics.identify(user.id, {
+        ...user,
+      } as Object);
+    });
     onValid?.();
   }
 };

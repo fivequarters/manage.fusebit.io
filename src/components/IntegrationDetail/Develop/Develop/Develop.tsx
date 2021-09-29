@@ -46,7 +46,11 @@ import { useQuery } from '../../../../hooks/useQuery';
 import play from '../../../../assets/play.svg';
 import info from '../../../../assets/info.svg';
 import SlideUpSpring from '../../../Animations/SlideUpSpring';
+<<<<<<< HEAD
 import { SteppedLineTo } from 'react-lineto';
+=======
+import { trackEvent } from '../../../../utils/analytics';
+>>>>>>> 9258fb0deaa724b4b7bae537d9419b770fea4c9a
 
 const { REACT_APP_ENABLE_ONLINE_EDITOR } = process.env;
 const isOnlineEditorEnabled = REACT_APP_ENABLE_ONLINE_EDITOR === 'true';
@@ -113,11 +117,21 @@ const Develop: React.FC = () => {
   }, [userData]);
 
   const editOptions = [
-    { buttonLabel: 'Edit', optionLabel: 'Edit in the in-browser editor', handle: setEditGuiOpen },
+    {
+      buttonLabel: 'Edit',
+      optionLabel: 'Edit in the in-browser editor',
+      handle: (isOpen: boolean) => {
+        trackEvent('Develop Edit Web Button Clicked', 'Integration');
+        setEditGuiOpen(isOpen);
+      },
+    },
     {
       buttonLabel: isOnlineEditorEnabled ? 'CLI' : 'Edit',
       optionLabel: 'Edit with your favorite editor',
-      handle: setEditCliOpen,
+      handle: (isOpen: boolean) => {
+        trackEvent('Develop Edit CLI Button Clicked', 'Integration');
+        setEditCliOpen(isOpen);
+      },
     },
   ];
   const editOptionAnchor = React.useRef<HTMLDivElement>(null);
@@ -286,6 +300,7 @@ const Develop: React.FC = () => {
   };
 
   const handleConnectOpen = async () => {
+    trackEvent('Develop Connect Button Clicked', 'Integration');
     const backendClient = await registerBackend();
     setBackendClient(backendClient);
     setConnectOpen(true);
@@ -573,7 +588,7 @@ const Develop: React.FC = () => {
                                 option: {
                                   buttonLabel: string;
                                   optionLabel: string;
-                                  handle: React.Dispatch<React.SetStateAction<boolean>>;
+                                  handle: (isOpen: boolean) => void;
                                 },
                                 index: number
                               ) => (
@@ -673,7 +688,10 @@ const Develop: React.FC = () => {
 
             <SC.CardConnectorButtonsWrapper>
               <Button
-                onClick={() => setConnectorPickerOpen(true)}
+                onClick={() => {
+                  trackEvent('Develop Add New Button Clicked', 'Integration');
+                  setConnectorPickerOpen(true);
+                }}
                 startIcon={<AddIcon />}
                 style={{ width: '160px', marginTop: '24px' }}
                 size="large"
@@ -683,7 +701,10 @@ const Develop: React.FC = () => {
                 Add New
               </Button>
               <Button
-                onClick={() => setConnectorListOpen(true)}
+                onClick={() => {
+                  trackEvent('Develop Link Existing Clicked', 'Integration');
+                  setConnectorListOpen(true);
+                }}
                 startIcon={<AddIcon />}
                 style={{ width: '160px', marginTop: '24px' }}
                 size="large"
@@ -697,7 +718,10 @@ const Develop: React.FC = () => {
 
             <SC.CardConnectorButtonsWrapperMobile>
               <Button
-                onClick={() => setConnectorPickerOpen(true)}
+                onClick={() => {
+                  trackEvent('Develop Add New Button Clicked', 'Integration');
+                  setConnectorPickerOpen(true);
+                }}
                 startIcon={<AddIcon />}
                 style={{ width: '135px', marginTop: '10px' }}
                 size="medium"
@@ -707,7 +731,10 @@ const Develop: React.FC = () => {
                 Add New
               </Button>
               <Button
-                onClick={() => setConnectorListOpen(true)}
+                onClick={() => {
+                  trackEvent('Develop Link Existing Clicked', 'Integration');
+                  setConnectorListOpen(true);
+                }}
                 startIcon={<AddIcon />}
                 style={{ width: '140px', marginTop: '10px' }}
                 size="medium"

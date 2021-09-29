@@ -56,7 +56,14 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
             isMain
             scope="row"
             isClickable
-            onClick={isClickable ? () => setIsExpanded(!isExpanded) : undefined}
+            onClick={
+              isClickable
+                ? () => {
+                    if (!isExpanded) row.collapsableContentOpened();
+                    setIsExpanded(!isExpanded);
+                  }
+                : undefined
+            }
           >
             <SC.CellContent isClickable={isClickable}>
               {row[headers[0].id]}
@@ -83,7 +90,14 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
                 isMain={i === 0}
                 isClickable={isClickable}
                 scope="row"
-                onClick={isClickable ? () => setIsExpanded(!isExpanded) : undefined}
+                onClick={
+                  isClickable
+                    ? () => {
+                        if (!isExpanded) row.collapsableContentOpened();
+                        setIsExpanded(!isExpanded);
+                      }
+                    : undefined
+                }
               >
                 <SC.CellContent isClickable={isClickable}>
                   {row[header.id]}

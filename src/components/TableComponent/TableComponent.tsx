@@ -30,6 +30,7 @@ import { useEntityApi } from '../../hooks/useEntityApi';
 import NewUser from '../Authentication/Users/Users/NewUser';
 import { Row } from '../../interfaces/tableRow';
 import ConfirmationPrompt from '../ConfirmationPrompt/ConfirmationPrompt';
+import { trackEvent } from '../../utils/analytics';
 
 const TableComponent: React.FC<Props> = ({
   headless,
@@ -142,13 +143,18 @@ const TableComponent: React.FC<Props> = ({
       <SC.ButtonContainer>
         <SC.ButtonMargin>
           <Button
-            onClick={() =>
-              integrationTable
-                ? setAddIntegrationOpen(true)
-                : connectorTable
-                ? setAddConnectorOpen(true)
-                : setNewUserOpen(true)
-            }
+            onClick={() => {
+              if (integrationTable) {
+                trackEvent('New Integration Button Clicked', 'Integrations');
+                return setAddIntegrationOpen(true);
+              }
+              if (connectorTable) {
+                trackEvent('New Connector Button Clicked', 'Connectors');
+                return setAddConnectorOpen(true);
+              }
+              trackEvent('New User Button Clicked', 'Users');
+              return setNewUserOpen(true);
+            }}
             startIcon={<AddIcon />}
             variant="outlined"
             color="primary"

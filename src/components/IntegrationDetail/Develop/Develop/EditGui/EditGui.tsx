@@ -13,6 +13,8 @@ import logo from '../../../../../assets/logo.svg';
 import useEditor from './useEditor';
 import ConfigureRunnerModal from './ConfigureRunnerModal';
 import ConfirmationPrompt from '../../../../ConfirmationPrompt';
+import { useTrackPage } from '../../../../../hooks/useTrackPage';
+import { trackEvent } from '../../../../../utils/analytics';
 
 const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props) => {
   const { userData } = useContext();
@@ -21,6 +23,8 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props) =>
   const [unsavedWarning, setUnsavedWarning] = useState(false);
   const { createLoader, removeLoader } = useLoader();
   const { handleRun } = useEditor();
+
+  useTrackPage('Web Editor', 'Web Editor');
 
   useEffect(() => {
     const createAddNewItemElement = (lastItem: Element) => {
@@ -71,6 +75,7 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props) =>
 
   const handleSave = () => {
     const context = window.editor;
+    trackEvent('Save Button Clicked', 'Web Editor');
     context._server.saveFunction(context);
   };
 
