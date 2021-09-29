@@ -95,6 +95,11 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
   const feedTypeName = isIntegration ? 'Integration' : 'Connector';
 
   const handleTemplateChange = (template: Feed) => {
+    if (isIntegration) {
+      trackEvent(`New Integration Catalog ${template.name} Clicked`, 'Integrations');
+    } else {
+      trackEvent(`New Connector Catalog ${template.name} Clicked`, 'Connectors');
+    }
     setRawActiveTemplate(template);
     replaceMustache(data, template).then((template) => {
       setActiveTemplate(template);
