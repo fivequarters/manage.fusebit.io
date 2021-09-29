@@ -442,16 +442,18 @@ const Develop: React.FC = () => {
                     connector={{ ...client, isApplication: true }}
                     onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
                   />
-                  <SteppedLineTo
-                    from={client.id}
-                    fromAnchor="right"
-                    to="fusebit"
-                    toAnchor="left"
-                    orientation="h"
-                    borderStyle="dashed"
-                    borderColor="#333333"
-                    delay={100}
-                  />
+                  {!areCardsCollapsing && (
+                    <SteppedLineTo
+                      from={client.id}
+                      fromAnchor="right"
+                      to="fusebit"
+                      toAnchor="left"
+                      orientation="h"
+                      borderStyle="dashed"
+                      borderColor="#333333"
+                      delay={100}
+                    />
+                  )}
                 </>
               ))
             ) : !backendClientsLoading ? (
@@ -516,6 +518,7 @@ const Develop: React.FC = () => {
         </SC.FlexDown>
         <SC.FlexDown>
           <SC.FusebitCard
+            className="fusebit"
             display="flex"
             flexDirection="column"
             alignItems="center"
@@ -638,16 +641,18 @@ const Develop: React.FC = () => {
                           connector={connector}
                           onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
                         />
-                        <SteppedLineTo
-                          from={connector.id}
-                          fromAnchor="left"
-                          to="fusebit"
-                          toAnchor="right"
-                          orientation="h"
-                          borderStyle="dashed"
-                          borderColor="#333333"
-                          delay={100}
-                        />
+                        {!areCardsCollapsing && (
+                          <SteppedLineTo
+                            from={connector.id}
+                            fromAnchor="left"
+                            to="fusebit"
+                            toAnchor="right"
+                            orientation="h"
+                            borderStyle="dashed"
+                            borderColor="#333333"
+                            delay={100}
+                          />
+                        )}
                       </>
                     );
                   }
