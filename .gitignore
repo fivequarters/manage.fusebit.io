@@ -27,3 +27,4 @@ yarn.lock
 
 # vim temporary files
 .*.sw?
+public/feed

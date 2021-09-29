@@ -234,22 +234,6 @@ export const Bullet = styled.div`
   transition: all 0.25s linear;
 `;
 
-export const LinkWrapper = styled.div<{ marginBottom?: string }>`
-  margin-top: auto;
-  margin-bottom: ${(props) => props.marginBottom && props.marginBottom};
-  @media only screen and (max-width: 1250px) {
-    display: none;
-  }
-`;
-
-export const LinkWrapperMobile = styled.div`
-  display: none;
-  @media only screen and (max-width: 1250px) {
-    display: flex;
-    flex-direction: column;
-  }
-`;
-
 export const LinkTitle = styled.h5`
   font-size: 12px;
   line-height: 14px;
