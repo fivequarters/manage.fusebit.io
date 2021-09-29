@@ -8,6 +8,7 @@ import { useAxios } from '../../../../../hooks/useAxios';
 import { useContext } from '../../../../../hooks/useContext';
 import { Install } from '../../../../../interfaces/install';
 import { useQuery } from '../../../../../hooks/useQuery';
+import { trackEvent } from '../../../../../utils/analytics';
 
 export const STATIC_TENANT_ID = 'user-1';
 
@@ -63,6 +64,7 @@ const useEditor = () => {
   }, []);
 
   const handleRun = async () => {
+    trackEvent('Run Button Clicked', 'Web Editor');
     try {
       const hasInstance = await findInstance();
 

@@ -14,6 +14,7 @@ import useEditor from './useEditor';
 import ConfigureRunnerModal from './ConfigureRunnerModal';
 import ConfirmationPrompt from '../../../../ConfirmationPrompt';
 import { useTrackPage } from '../../../../../hooks/useTrackPage';
+import { trackEvent } from '../../../../../utils/analytics';
 
 const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props) => {
   const { userData } = useContext();
@@ -74,6 +75,7 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props) =>
 
   const handleSave = () => {
     const context = window.editor;
+    trackEvent('Save Button Clicked', 'Web Editor');
     context._server.saveFunction(context);
   };
 
