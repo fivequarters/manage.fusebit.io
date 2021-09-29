@@ -87,7 +87,7 @@ const Develop: React.FC = () => {
   const [editGuiMounted, setEditGuiMounted] = useState(false);
   const [editCliOpen, setEditCliOpen] = React.useState(false);
   const isMobile = useMediaQuery('(max-width: 850px)');
-  const linksMobile = useMediaQuery('(max-width: 1250px)');
+  const areCardsCollapsing = useMediaQuery('(max-width: 1250px)');
 
   React.useEffect(() => {
     if (!!query.get('session')) {
@@ -486,7 +486,7 @@ const Develop: React.FC = () => {
               </Tooltip>
             </SC.CardButtonWrapper>
           </SC.Card>
-          {!linksMobile && (
+          {!areCardsCollapsing && (
             <Box mt="auto">
               <SC.LinkTitle>Learn More:</SC.LinkTitle>
               <SC.Link
@@ -501,8 +501,16 @@ const Develop: React.FC = () => {
           )}
         </SC.FlexDown>
         <SC.FlexDown>
-          <SC.FusebitCard>
-            <SC.FusebitLogo />
+          <SC.FusebitCard
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+            mb="80px"
+            mt="65px"
+            padding="32px"
+          >
+            <SC.FusebitLogo mb="32px" />
             {integrationData?.data.id === undefined && !loading ? (
               <CSC.LoaderContainer>
                 <CSC.Spinner />
@@ -571,7 +579,7 @@ const Develop: React.FC = () => {
               )}
             </SC.CardButtonWrapper>
           </SC.FusebitCard>
-          {!linksMobile && (
+          {!areCardsCollapsing && (
             <Box display="flex" flexDirection="column" mt="auto" mb="-31.5px">
               <SC.LinkTitle>Learn More:</SC.LinkTitle>
               <SC.Link
@@ -679,7 +687,7 @@ const Develop: React.FC = () => {
               </Button>
             </SC.CardConnectorButtonsWrapperMobile>
           </SC.Card>
-          {linksMobile && (
+          {areCardsCollapsing && (
             <Box display="flex" flexDirection="column">
               <SC.LinkTitle>Learn More:</SC.LinkTitle>
               <SC.Link
