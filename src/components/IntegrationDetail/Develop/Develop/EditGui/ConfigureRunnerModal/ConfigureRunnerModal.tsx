@@ -87,7 +87,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
       <SC.Card open={open}>
         <CSC.Close onClick={() => setOpen(false)} />
         <CSC.ModalTitle margin="0 0 16px 0">Configure runner</CSC.ModalTitle>
-        <Box style={{ display: 'flex' }}>
+        <Box css={{ display: 'flex', marginTop: 30 }}>
           <CSC.Flex width="max-content" margin="0 48px 0 0" flexDown>
             <SC.Subtitle>Verb</SC.Subtitle>
             <SC.VerbSelector
@@ -131,7 +131,13 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
             </div>
           </CSC.Flex>
         </Box>
-        <CSC.Flex margin="49px 0 0 0" flexDown>
+        <Box
+          css={{
+            display: 'flex',
+            marginTop: 15,
+            flexDirection: 'column',
+          }}
+        >
           <SC.Subtitle>Payload</SC.Subtitle>
           <div>
             <SC.Textarea
@@ -143,15 +149,15 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
               }}
               value={formValues?.payload}
               onBlur={() => validateForm()}
-              height="137px"
+              height="250px"
             />
             {formErrors.payload && <SC.ErrorMessage>{formErrors.payload}</SC.ErrorMessage>}
           </div>
-        </CSC.Flex>
+        </Box>
         <SC.ButtonsWrapper>
           <Button
             onClick={handleSave}
-            style={{ width: '200px', marginLeft: 'auto', marginTop: '42px' }}
+            style={{ width: '200px', marginLeft: 'auto' }}
             size="large"
             variant="contained"
             color="primary"

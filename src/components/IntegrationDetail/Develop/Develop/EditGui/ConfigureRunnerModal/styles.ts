@@ -44,6 +44,7 @@ export const Subtitle = styled.h4`
   font-weight: 600;
   color: var(--black);
   margin-bottom: 16px;
+  margin-top: 0;
 `;
 
 export const VerbSelector = styled.div<{ hasError?: boolean }>`
@@ -127,7 +128,7 @@ export const ButtonsWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 40px;
+  margin-top: 15px;
 `;
 
 export const ErrorMessage = styled.p`

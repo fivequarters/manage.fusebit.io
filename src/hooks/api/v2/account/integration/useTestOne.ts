@@ -28,13 +28,22 @@ export const useAccountIntegrationTestIntegration = () => {
     },
     {
       onMutate: (params: Params) => {
-        window.editor.startRun(`${params.method || 'post'}`.toUpperCase());
+        const {
+          method,
+          url,
+        } = getIntegrationConfig(params.id).runner;
+
+        window.editor.serverLogsEntry(JSON.stringify({ msg: `Sending ${method.toUpperCase()} request to ${url}`, level: 30 }))
       },
       onError: (err) => {
         window.editor.finishRun(JSON.stringify(err));
       },
       onSuccess: (res) => {
-        window.editor.finishRun(undefined, { ...(res?.fullResponse || {}), text: JSON.stringify(res.data) });
+        const data = res.data ? ` \n${JSON.stringify(res.data, null, ' ')}` : ""
+        
+        window.editor.serverLogsEntry(JSON.stringify({
+          msg: `Received response status ${res?.fullResponse.status}${data}`, level: 30
+        }))
       },
     }
   );
