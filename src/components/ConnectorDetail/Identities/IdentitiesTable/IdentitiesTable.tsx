@@ -49,7 +49,7 @@ const IntegrationsTable = () => {
       ),
       collapsableContent: <CodeBlock code={identity} />,
       collapsableContentOpened: () => {
-        trackEvent('Identities Expand Identity', 'Connector');
+        trackEvent('Identities Expand Identity Clicked', 'Connector');
       },
     };
   });
