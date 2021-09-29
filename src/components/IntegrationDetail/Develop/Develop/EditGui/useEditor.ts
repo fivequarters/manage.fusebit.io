@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { getAllInstances } from '../../../../../hooks/api/v2/account/integration/instance/useGetAll';
 import { useAccountIntegrationCreateSession } from '../../../../../hooks/api/v2/account/integration/session/useCreateOne';
@@ -7,7 +7,6 @@ import { useAccountIntegrationTestIntegration } from '../../../../../hooks/api/v
 import { useAxios } from '../../../../../hooks/useAxios';
 import { useContext } from '../../../../../hooks/useContext';
 import { Install } from '../../../../../interfaces/install';
-import { useQuery } from '../../../../../hooks/useQuery';
 
 export const STATIC_TENANT_ID = 'user-1';
 
@@ -19,9 +18,7 @@ const useEditor = () => {
   const { mutateAsync: testIntegration } = useAccountIntegrationTestIntegration();
   const { mutateAsync: commitSession } = useAccountIntegrationCommitSession();
 
-  const query = useQuery();
-
-  const findInstance = async () => {
+  const findInstance = useCallback(async () => {
     const {
       data: { items },
     } = await getAllInstances<Install>(
@@ -37,33 +34,49 @@ const useEditor = () => {
     );
 
     return (items || [])[0];
-  };
+  }, [axios, id, userData]);
 
   useEffect(() => {
-    const sessionId = query.get('session');
+    const prevSessionId = localStorage.getItem('session');
 
-    const test = async () => {
-      try {
-        const hasInstance = await findInstance();
+    const handleChangeStorage = () => {
+      const sessionId = localStorage.getItem('session');
 
-        if (!hasInstance) {
-          await commitSession({ id, sessionId });
+      const runFirstTest = async () => {
+        try {
+          const hasInstance = await findInstance();
 
-          await testIntegration({ id, tenantId: STATIC_TENANT_ID });
+          if (!hasInstance) {
+            await commitSession({ id, sessionId });
+
+            await testIntegration({ id, tenantId: STATIC_TENANT_ID });
+          }
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
-      }
-    };
+      };
 
-    if (sessionId) {
-      test();
+      if (prevSessionId !== sessionId) {
+        runFirstTest()
+      }
+    }
+
+    window.addEventListener('storage', handleChangeStorage)
+
+    return () => {
+      window.removeEventListener('storage', handleChangeStorage);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
+
 
   const handleRun = async () => {
     try {
+
+      if (window.editor.dirtyState) {
+        await window.editor._server.saveFunction(window.editor)
+      }
+
       const hasInstance = await findInstance();
 
       if (hasInstance) {
