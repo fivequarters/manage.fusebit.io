@@ -26,8 +26,6 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
   const [formValues, setFormValues] = useState(getIntegrationConfig(id).runner);
   const [formErrors, setFormErrors] = useState<Partial<Errors>>({});
 
-  console.log('formValues', formValues);
-
   useEffect(() => {
     return () => {
       setFormValues(getIntegrationConfig(id).runner);
@@ -39,8 +37,6 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
     const { method, url, payload } = newValues || formValues || {};
     let errors = {} as Errors;
     let valid = true;
-
-    console.log('newValues', newValues);
 
     if (!method) {
       errors.method = 'Method is required';
