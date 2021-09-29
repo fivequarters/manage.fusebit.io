@@ -16,6 +16,7 @@ import {
   Tooltip,
   useMediaQuery,
   Drawer,
+  Box,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import arrow from '../../../../assets/arrow-right-black.svg';
@@ -567,7 +568,7 @@ const Develop: React.FC = () => {
               )}
             </SC.CardButtonWrapper>
           </SC.FusebitCard>
-          <SC.LinkWrapper marginBottom="-31.5px">
+          <Box display="flex" flexDirection="column" mt="auto" mb="-31.5px">
             <SC.LinkTitle>Learn More:</SC.LinkTitle>
             <SC.Link target="_blank" rel="noopener_noreferrer" href="https://developer.fusebit.io/docs/getting-started">
               <SC.Bullet />
@@ -581,7 +582,7 @@ const Develop: React.FC = () => {
               <SC.Bullet />
               Integration Programming Model
             </SC.Link>
-          </SC.LinkWrapper>
+          </Box>
         </SC.FlexDown>
         <SC.FlexDown>
           <SC.Card>
