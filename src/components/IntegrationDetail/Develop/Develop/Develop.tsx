@@ -46,6 +46,7 @@ import { useQuery } from '../../../../hooks/useQuery';
 import play from '../../../../assets/play.svg';
 import info from '../../../../assets/info.svg';
 import SlideUpSpring from '../../../Animations/SlideUpSpring';
+import LineTo from 'react-lineto';
 
 const { REACT_APP_ENABLE_ONLINE_EDITOR } = process.env;
 const isOnlineEditorEnabled = REACT_APP_ENABLE_ONLINE_EDITOR === 'true';
