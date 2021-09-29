@@ -4,7 +4,6 @@ import * as SC from './styles';
 import * as CSC from '../../../globalStyle';
 import {
   Button,
-  ButtonGroup,
   Modal,
   Backdrop,
   Fade,
@@ -16,7 +15,6 @@ import {
   MenuList,
   Tooltip,
 } from '@material-ui/core';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import AddIcon from '@material-ui/icons/Add';
 import arrow from '../../../../assets/arrow-right-black.svg';
 import Connect from './Connect';
@@ -384,7 +382,6 @@ const Develop: React.FC = () => {
         </Fade>
       </Modal>
       <SC.Flex>
-        <SC.CardSeparator />
         <SC.FlexDown>
           <SC.Card>
             <SC.CardTitle>Your Application</SC.CardTitle>
@@ -455,8 +452,8 @@ const Develop: React.FC = () => {
           </SC.LinkWrapper>
         </SC.FlexDown>
         <SC.FlexDown>
-          <SC.Card>
-            <SC.CardTitle>Fusebit</SC.CardTitle>
+          <SC.FusebitCard>
+            <SC.FusebitLogo />
             {integrationData?.data.id === undefined && !loading ? (
               <CSC.LoaderContainer>
                 <CSC.Spinner />
@@ -466,33 +463,18 @@ const Develop: React.FC = () => {
                 <CSC.Spinner />
               </CSC.LoaderContainer>
             ) : (
-              <SC.CardIntegration>{integrationData?.data.id}</SC.CardIntegration>
+              <SC.FusebitIntegration>{integrationData?.data.id}</SC.FusebitIntegration>
             )}
             <SC.CardButtonWrapper>
-              <ButtonGroup variant="contained" color="primary" ref={editOptionAnchor}>
-                <Button
-                  onClick={() => editOptions[editOption].handle(true)}
-                  style={{ width: '200px' }}
-                  size="large"
-                  variant="contained"
-                  color="primary"
-                >
-                  {editOptions[editOption].buttonLabel}
-                </Button>
-                {isOnlineEditorEnabled && (
-                  <Button
-                    color="primary"
-                    size="small"
-                    aria-controls={editOptionOpen ? 'split-button-menu' : undefined}
-                    aria-expanded={editOptionOpen ? 'true' : undefined}
-                    aria-label="select edit action"
-                    aria-haspopup="menu"
-                    onClick={() => setEditOptionOpen((prevOpen) => !prevOpen)}
-                  >
-                    <ArrowDropDownIcon />
-                  </Button>
-                )}
-              </ButtonGroup>
+              <Button
+                onClick={() => editOptions[editOption].handle(true)}
+                style={{ width: '200px' }}
+                size="large"
+                variant="contained"
+                color="primary"
+              >
+                {editOptions[editOption].buttonLabel}
+              </Button>
 
               {isOnlineEditorEnabled && (
                 <Popper
@@ -539,8 +521,8 @@ const Develop: React.FC = () => {
                 </Popper>
               )}
             </SC.CardButtonWrapper>
-          </SC.Card>
-          <SC.LinkWrapper>
+          </SC.FusebitCard>
+          <SC.LinkWrapper marginBottom="-31.5px">
             <SC.LinkTitle>Learn More:</SC.LinkTitle>
             <SC.Link target="_blank" rel="noopener_noreferrer" href="https://developer.fusebit.io/docs/getting-started">
               <SC.Bullet />
