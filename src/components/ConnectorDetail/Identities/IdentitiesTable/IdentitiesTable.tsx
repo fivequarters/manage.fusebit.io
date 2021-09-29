@@ -12,6 +12,7 @@ import InformationalBanner from '../../../InformationalBanner';
 import AssociatedInstalls from './AssociatedInstalls';
 import AssociatedIntegrations from './AssociatedIntegrations';
 import Tag from '../../../Tag';
+import { trackEvent } from '../../../../utils/analytics';
 
 const IntegrationsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -47,10 +48,14 @@ const IntegrationsTable = () => {
         <AssociatedIntegrations tenantId={identity.tags['fusebit.tenantId']} connectorId={connectorId} />
       ),
       collapsableContent: <CodeBlock code={identity} />,
+      collapsableContentOpened: () => {
+        trackEvent('Identities Expand Identity', 'Connector');
+      },
     };
   });
 
   const handleDelete = () => {
+    trackEvent('Identities Delete Identity Clicked', 'Connector');
     setDeleteOpen(false);
     handleRowDelete('Identity', 'identities-table');
   };
@@ -66,7 +71,7 @@ const IntegrationsTable = () => {
         open={deleteOpen}
         setOpen={setDeleteOpen}
         handleConfirmation={handleDelete}
-        title={`​Are you sure you want to delete this ${selected.length > 1 ? 'Identity?' : 'Identities?'}`}
+        title={`​Are you sure you want to delete ${selected.length > 1 ? 'these Identities?' : 'this Identity?'}`}
         description="Your tenants will have to re-authenticate themselves in their account"
       />
       <BaseTable

@@ -13,6 +13,8 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { useQuery } from '../../hooks/useQuery';
 import { useReplaceMustache } from '../../hooks/useReplaceMustache';
+import { trackEvent } from '../../utils/analytics';
+import debounce from 'lodash.debounce';
 
 enum Filters {
   ALL = 'All',
@@ -33,6 +35,15 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
   const [searchFilter, setSearchFilter] = React.useState('');
   const query = useQuery();
   const { replaceMustache } = useReplaceMustache();
+
+  const debouncedSetSearchFilter = debounce((keyword: string) => {
+    if (isIntegration) {
+      trackEvent('New Integration Search Submitted', 'Integrations');
+    } else {
+      trackEvent('New Connector Search Submitted', 'Connectors');
+    }
+    setSearchFilter(keyword);
+  }, 500);
 
   const handleSubmit = () => {
     if (errors.length > 0) {
@@ -79,6 +90,11 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
   const feedTypeName = isIntegration ? 'Integration' : 'Connector';
 
   const handleTemplateChange = (template: Feed) => {
+    if (isIntegration) {
+      trackEvent(`New Integration Catalog ${template.name} Clicked`, 'Integrations');
+    } else {
+      trackEvent(`New Connector Catalog ${template.name} Clicked`, 'Connectors');
+    }
     setRawActiveTemplate(template);
     replaceMustache(data, template).then((template) => {
       setActiveTemplate(template);
@@ -127,7 +143,7 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
           <SC.ColumnSearchWrapper>
             <TextField
               style={{ width: '100%' }}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchFilter(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => debouncedSetSearchFilter(e.target.value)}
               label="Search"
             />
             <SC.ColumnSearchIcon src={search} alt={`Search ${feedTypeName}`} height="24" width="24" />
@@ -173,6 +189,9 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
                 renderers={materialRenderers}
                 cells={materialCells}
                 onChange={({ errors, data }) => {
+                  if (data?.ui?.toggle && activeTemplate) {
+                    trackEvent(`New Integration Customize ${activeTemplate.name} Clicked`, 'Integrations');
+                  }
                   errors && setErrors(errors);
                   setData(data);
                 }}

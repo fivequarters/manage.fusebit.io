@@ -13,6 +13,7 @@ import logo from '../../../../../assets/logo.svg';
 import useEditor from './useEditor';
 import ConfigureRunnerModal from './ConfigureRunnerModal';
 import ConfirmationPrompt from '../../../../ConfirmationPrompt';
+import { useTrackPage } from '../../../../../hooks/useTrackPage';
 
 const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props) => {
   const { userData } = useContext();
@@ -21,6 +22,8 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props) =>
   const [unsavedWarning, setUnsavedWarning] = useState(false);
   const { createLoader, removeLoader } = useLoader();
   const { handleRun } = useEditor();
+
+  useTrackPage('Web Editor Viewed', 'Web Editor');
 
   useEffect(() => {
     const createAddNewItemElement = (lastItem: Element) => {
