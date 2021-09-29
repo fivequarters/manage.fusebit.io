@@ -34,7 +34,7 @@ export const useAccountIntegrationCreateSession = () => {
             },
           })
         );
-        window.location.href = res.data.targetUrl;
+        window.open(res.data.targetUrl);
       },
     }
   );
