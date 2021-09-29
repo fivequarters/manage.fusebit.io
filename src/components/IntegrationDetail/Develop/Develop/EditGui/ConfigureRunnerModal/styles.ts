@@ -1,5 +1,15 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import arrow from '../../../../../../assets/arrow-down-thin.svg';
+
+const withError = css<{ hasError?: boolean }>`
+  margin-bottom: 25px;
+
+  ${(props) =>
+    props.hasError &&
+    `
+  margin-bottom: 0px;
+`}
+`;
 
 export const Card = styled.div<{ open: boolean }>`
   position: absolute;
@@ -34,9 +44,10 @@ export const Subtitle = styled.h4`
   font-weight: 600;
   color: var(--black);
   margin-bottom: 16px;
+  margin-top: 0;
 `;
 
-export const VerbSelector = styled.div`
+export const VerbSelector = styled.div<{ hasError?: boolean }>`
   display: flex;
   position: relative;
   font-size: 14px;
@@ -46,10 +57,13 @@ export const VerbSelector = styled.div`
   padding-bottom: 7px;
   width: 110px;
   margin-top: auto;
+  text-transform: uppercase;
 
   &:hover {
     cursor: pointer;
   }
+
+  ${withError}
 `;
 
 export const VerbArrow = styled.div<{ active: boolean }>`
@@ -84,6 +98,7 @@ export const VerbOption = styled.div<{ selected: boolean }>`
   background-color: ${(props) => props.selected && 'var(--secondary-color)'};
   padding: 8px;
   transition: all 0.25s linear;
+  text-transform: uppercase;
 
   &:hover {
     cursor: pointer;
@@ -92,7 +107,7 @@ export const VerbOption = styled.div<{ selected: boolean }>`
   }
 `;
 
-export const Textarea = styled.textarea<{ height?: string }>`
+export const Textarea = styled.textarea<{ height?: string; hasError?: boolean }>`
   font-family: courier;
   font-size: 16px;
   line-height: 18.5px;
@@ -105,11 +120,19 @@ export const Textarea = styled.textarea<{ height?: string }>`
   border-radius: 4px;
   height: ${(props) => (props.height ? props.height : '50px')};
   outline: rgba(255, 255, 255, 0);
+
+  ${withError}
 `;
 
 export const ButtonsWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 40px;
+  margin-top: 15px;
+`;
+
+export const ErrorMessage = styled.p`
+  line-height: 20px;
+  margin: 5px 0 0 0;
+  color: var(--primary-color);
 `;
