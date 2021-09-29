@@ -66,12 +66,17 @@ const useEditor = () => {
     return () => {
       window.removeEventListener('storage', handleChangeStorage);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
 
   const handleRun = async () => {
     try {
+
+      if (window.editor.dirtyState) {
+        await window.editor._server.saveFunction(window.editor)
+      }
+
       const hasInstance = await findInstance();
 
       if (hasInstance) {

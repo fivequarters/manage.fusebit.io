@@ -11,7 +11,7 @@ export interface Context {
   specification: { [key: string]: any };
   _monaco: { [key: string]: any };
   _server: {
-    saveFunction: (Context: Context) => void;
+    saveFunction: (Context: Context) => Promise<void>;
     runFunction: (Context: Context) => Promise<ServerResponse>;
     [key: string]: any;
   };
