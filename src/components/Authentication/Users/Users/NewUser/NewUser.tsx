@@ -8,7 +8,7 @@ import { materialRenderers, materialCells } from '@jsonforms/material-renderers'
 import { NewUserData } from '../../../../../interfaces/newUserData';
 import CopyLine from '../../../../CopyLine';
 import * as CSC from '../../../../globalStyle';
-import { capitalize } from '../../../../../utils/utils';
+import { startCase } from '../../../../../utils/utils';
 
 const schema = {
   type: 'object',
@@ -77,8 +77,8 @@ const NewUser = React.forwardRef(({ open, onClose, createUser }: Props, ref) => 
     } else {
       setIsSubmitting(true);
       const dataToSubmit = {
-        firstName: capitalize(data.firstName || ''),
-        lastName: capitalize(data.lastName || ''),
+        firstName: startCase(data.firstName || ''),
+        lastName: startCase(data.lastName || ''),
         primaryEmail: data.primaryEmail?.toLowerCase(),
       };
       const token = await createUser(dataToSubmit);
@@ -128,7 +128,7 @@ const NewUser = React.forwardRef(({ open, onClose, createUser }: Props, ref) => 
       ) : (
         <>
           <CSC.ModalTitle margin="0 0 100px 0">
-            User {capitalize(data.firstName || '')} {capitalize(data.lastName || '')} Created!
+            User {startCase(data.firstName || '')} {startCase(data.lastName || '')} Created!
           </CSC.ModalTitle>
           <CSC.ModalDescription>
             Securely share the following link with the user. The one-time use token included in the link expires in
