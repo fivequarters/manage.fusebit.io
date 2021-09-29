@@ -18,7 +18,7 @@ const ConnectorDetailIdentitiesPage: FC<{}> = (): ReactElement => {
     subscriptionId: userData.subscriptionId,
   });
 
-  useTrackPage('Connector Installs', 'Connector');
+  useTrackPage('Connector Identities', 'Connector');
 
   return (
     <Layout>
