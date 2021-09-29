@@ -450,6 +450,7 @@ const Develop: React.FC = () => {
                     orientation="h"
                     borderStyle="dashed"
                     borderColor="#333333"
+                    delay={100}
                   />
                 </>
               ))
@@ -637,6 +638,7 @@ const Develop: React.FC = () => {
                           orientation="h"
                           borderStyle="dashed"
                           borderColor="#333333"
+                          delay={100}
                         />
                       </>
                     );
