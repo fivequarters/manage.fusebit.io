@@ -83,7 +83,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
       <SC.Card open={open}>
         <CSC.Close onClick={() => setOpen(false)} />
         <CSC.ModalTitle margin="0 0 16px 0">Configure runner</CSC.ModalTitle>
-        <Box css={{ display: 'flex', marginTop: 30 }}>
+        <Box display="flex" mt="30px">
           <CSC.Flex width="max-content" margin="0 48px 0 0" flexDown>
             <SC.Subtitle>Verb</SC.Subtitle>
             <SC.VerbSelector
@@ -127,13 +127,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
             </div>
           </CSC.Flex>
         </Box>
-        <Box
-          css={{
-            display: 'flex',
-            marginTop: 15,
-            flexDirection: 'column',
-          }}
-        >
+        <Box display="flex" mt="15px" flexDirection="column">
           <SC.Subtitle>Payload</SC.Subtitle>
           <div>
             <SC.Textarea
