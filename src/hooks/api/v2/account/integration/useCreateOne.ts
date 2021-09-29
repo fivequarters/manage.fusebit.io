@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from 'react-query';
 import { Params } from '../../../../../interfaces/api';
+import { STATIC_TENANT_ID } from '../../../../../utils/constants';
 import { useAxios } from '../../../../useAxios';
 
 export const useAccountIntegrationCreateIntegration = <T>() => {
@@ -12,9 +13,23 @@ export const useAccountIntegrationCreateIntegration = <T>() => {
       return axios<T>(`/v2/account/${accountId}/subscription/${subscriptionId}/integration/${data.id}`, 'post', data);
     },
     {
-      onMutate: (_: Params) => () => {},
+      onMutate: (_: Params) => () => { },
       onError: (_, __, rollback) => rollback?.(),
-      onSuccess: () => queryClient.removeQueries('accountIntegrationsGetAll'),
+      onSuccess: (_, { id }) => {
+
+        localStorage.setItem(
+          id,
+          JSON.stringify({
+            runner: {
+              method: 'post',
+              url: `/api/tenant/${STATIC_TENANT_ID}/test`,
+              payload: '',
+            },
+          })
+        );
+
+        queryClient.removeQueries('accountIntegrationsGetAll')
+      },
     }
   );
 };
