@@ -434,11 +434,15 @@ const Develop: React.FC = () => {
             <SC.CardTitle>Your Application</SC.CardTitle>
             {backendClients.length > 0 ? (
               backendClients.map((client: BackendClient) => (
-                <ListComponent
-                  onChange={getBackendClients}
-                  connector={{ ...client, isApplication: true }}
-                  onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
-                />
+                <>
+                  <ListComponent
+                    className={client.id}
+                    onChange={getBackendClients}
+                    connector={{ ...client, isApplication: true }}
+                    onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
+                  />
+                  <LineTo from={client.id} fromAnchor="right" to="fusebit" toAnchor="left" />
+                </>
               ))
             ) : !backendClientsLoading ? (
               <SC.NoApplicationsConfiguredWrapper>
@@ -499,7 +503,7 @@ const Develop: React.FC = () => {
           </SC.LinkWrapper>
         </SC.FlexDown>
         <SC.FlexDown>
-          <SC.FusebitCard>
+          <SC.FusebitCard className="fusebit">
             <SC.FusebitLogo />
             {integrationData?.data.id === undefined && !loading ? (
               <CSC.LoaderContainer>
