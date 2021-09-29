@@ -117,7 +117,7 @@ const Develop: React.FC = () => {
       buttonLabel: 'Edit',
       optionLabel: 'Edit in the in-browser editor',
       handle: (isOpen: boolean) => {
-        trackEvent('Develop Edit Button Clicked', 'Integration');
+        trackEvent('Develop Edit Web Button Clicked', 'Integration');
         setEditGuiOpen(isOpen);
       },
     },
@@ -125,7 +125,7 @@ const Develop: React.FC = () => {
       buttonLabel: isOnlineEditorEnabled ? 'CLI' : 'Edit',
       optionLabel: 'Edit with your favorite editor',
       handle: (isOpen: boolean) => {
-        trackEvent('Develop Edit Button Clicked', 'Integration');
+        trackEvent('Develop Edit CLI Button Clicked', 'Integration');
         setEditCliOpen(isOpen);
       },
     },
