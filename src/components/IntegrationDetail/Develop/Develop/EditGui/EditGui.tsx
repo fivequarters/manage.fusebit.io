@@ -24,7 +24,7 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props) =>
   const { createLoader, removeLoader } = useLoader();
   const { handleRun } = useEditor();
 
-  useTrackPage('Web Editor Viewed', 'Web Editor');
+  useTrackPage('Web Editor', 'Web Editor');
 
   useEffect(() => {
     const createAddNewItemElement = (lastItem: Element) => {
