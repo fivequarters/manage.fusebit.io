@@ -13,6 +13,9 @@ import { JsonForms } from '@jsonforms/react';
 import { ValidationMode } from '@jsonforms/core';
 import { useEffect } from 'react';
 import { useEntityApi } from '../../../../hooks/useEntityApi';
+import { useGetFeedById } from '../../../../hooks/useGetFeedById';
+
+import LabelBanner from '../../../LabelBanner';
 
 const Configure: React.FC = () => {
   const history = useHistory();
@@ -32,10 +35,15 @@ const Configure: React.FC = () => {
     subscriptionId: userData.subscriptionId,
   });
   const [data, setData] = React.useState<any>();
+  const [jsonFormsInputs, setJsonFormsInputs] = React.useState<any>();
   const [errors, setErrors] = React.useState<object[]>([]);
   const [validationMode, setValidationMode] = React.useState<ValidationMode>('ValidateAndHide');
   const [loading, setLoading] = React.useState(false);
   const { updateEntity } = useEntityApi();
+  const { feed } = useGetFeedById({
+    id: connectorData?.data.tags['fusebit.feedId'],
+    type: connectorData?.data.tags['fusebit.feedType'],
+  });
 
   useEffect(() => {
     const unlisten = history.listen((location) => {
@@ -67,20 +75,62 @@ const Configure: React.FC = () => {
     }
   };
 
+  const configureAppDocUrl: string | undefined = feed?.resources?.configureAppDocUrl;
+
+  // Adjust for older or manually created connectors that don't have mode set.
+  if (config?.data.data && (!config.data.data.mode || !('useProduction' in config.data.data.mode))) {
+    config.data.data.mode = { ...(config.data.data.mode || {}), useProduction: true };
+  }
+
   return (
     <SC.Flex>
       <SC.FlexDown>
         {config?.data && !loading ? (
           <SC.FormWrapper>
+            {configureAppDocUrl ? (
+              <LabelBanner>
+                By default, Connectors use Fusebit demonstration credentials, which are intended for testing only. When
+                you are ready for production use, supply your own credentials below, as described in{' '}
+                <a href={configureAppDocUrl}>this guide</a>.
+              </LabelBanner>
+            ) : (
+              <LabelBanner>
+                By default, Connectors use Fusebit demonstration credentials, which are intended for testing only.
+              </LabelBanner>
+            )}
             <JsonForms
               schema={config?.data.schema}
               uischema={config?.data.uischema}
-              data={config?.data.data}
+              data={jsonFormsInputs || config?.data.data}
               renderers={materialRenderers}
               cells={materialCells}
-              onChange={({ errors, data }) => {
+              onChange={({ errors, data: newData }) => {
+                // Clear the clientId and clientSecret when going from non-prod to production.
+                if (
+                  newData.mode?.useProduction !== config?.data.data?.mode?.useProduction &&
+                  newData.mode?.useProduction !== data?.mode?.useProduction &&
+                  newData.mode?.useProduction
+                ) {
+                  newData.clientId = '';
+                  newData.clientSecret = '';
+                }
+
+                if (
+                  !newData.mode?.useProduction &&
+                  !(newData.clientId?.length > 0 && newData.clientSecret?.length > 0)
+                ) {
+                  const random = () => {
+                    const randBuffer = [...window.crypto.getRandomValues(new Uint8Array(32))];
+                    return randBuffer.map((x) => x.toString(16).padStart(2, '0')).join('');
+                  };
+                  newData.clientId = random();
+                  newData.clientSecret = random();
+                  newData.mode = { ...(newData.mode || {}), useProduction: false };
+                }
+
                 errors && setErrors(errors);
-                setData(data);
+                setJsonFormsInputs(newData);
+                setData(newData);
               }}
               validationMode={validationMode}
             />

@@ -40,7 +40,7 @@ axios.interceptors.response.use(
   }
 );
 
-export const useAxios = () => {
+export const useAxios = ({ ignoreInterceptors } = {} as { ignoreInterceptors?: boolean }) => {
   const { userData } = useContext();
 
   const _axios: FusebitAxios = async <T extends {}>(
@@ -65,7 +65,14 @@ export const useAxios = () => {
       config.headers.Authorization = `Bearer ${userData.token}`;
     }
 
-    const response = await axios(config);
+    let response;
+
+    if (ignoreInterceptors) {
+      response = await axios.create()(config);
+    } else {
+      response = await axios(config);
+    }
+
     return { success: true, data: response.data as T, fullResponse: response };
   };
 

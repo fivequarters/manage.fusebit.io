@@ -1,6 +1,6 @@
 {
   "name": "fusebit-portal",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Fusebit portal",
   "scripts": {
     "start": "react-scripts start",
@@ -13,12 +13,12 @@
   "author": "Litebox",
   "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
-    "@jsonforms/core": "^2.5.2",
-    "@jsonforms/material-renderers": "^2.5.2",
-    "@jsonforms/react": "^2.5.2",
+    "@jsonforms/core": "3.0.0-alpha.1",
+    "@jsonforms/material-renderers": "3.0.0-alpha.1",
+    "@jsonforms/react": "3.0.0-alpha.1",
     "@material-ui/core": "^4.11.2",
     "@material-ui/icons": "^4.11.2",
-    "@types/pendo-io-browser": "^2.16.4",
+    "@material-ui/pickers": "^3.3.10",
     "axios": "^0.21.1",
     "constate": "^3.2.0",
     "date-fns": "^2.23.0",
@@ -67,6 +67,7 @@
     "@types/material-ui": "^0.21.8",
     "@types/mustache": "^4.1.2",
     "@types/node": "^12.0.0",
+    "@types/pendo-io-browser": "^2.16.4",
     "@types/react": "^16.9.53",
     "@types/react-dom": "^16.9.8",
     "@types/react-highlight": "^0.12.2",
@@ -74,6 +75,6 @@
     "@types/segment-analytics": "0.0.34",
     "@types/styled-components": "^5.1.10",
     "husky": "^7.0.1",
-    "prettier": "^2.0.5"
+    "prettier": "2.0.5"
   }
 }
