@@ -16,6 +16,7 @@ import { useEntityApi } from '../../../../hooks/useEntityApi';
 import { useGetFeedById } from '../../../../hooks/useGetFeedById';
 
 import LabelBanner from '../../../LabelBanner';
+import { trackEvent } from '../../../../utils/analytics';
 
 const Configure: React.FC = () => {
   const history = useHistory();
@@ -71,6 +72,7 @@ const Configure: React.FC = () => {
     if (errors.length > 0) {
       setValidationMode('ValidateAndShow');
     } else {
+      trackEvent('Configure Save Button Clicked', 'Connector');
       updateEntity(connectorData, data);
     }
   };

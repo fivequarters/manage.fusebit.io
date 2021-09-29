@@ -6,6 +6,7 @@ import { useContext } from '../hooks/useContext';
 import { Integration } from '../interfaces/integration';
 import IntegrationDetailDevelop from '../components/IntegrationDetail/Develop';
 import Navbar from '../components/Navbar';
+import { useTrackPage } from '../hooks/useTrackPage';
 
 const IntegrationDetailDevelopPage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
@@ -16,6 +17,8 @@ const IntegrationDetailDevelopPage: FC<{}> = (): ReactElement => {
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
   });
+
+  useTrackPage('Integration Develop', 'Integration');
 
   return (
     <Layout>

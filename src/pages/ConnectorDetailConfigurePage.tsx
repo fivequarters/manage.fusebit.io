@@ -6,6 +6,7 @@ import { useContext } from '../hooks/useContext';
 import { Connector } from '../interfaces/connector';
 import Configure from '../components/ConnectorDetail/Configure';
 import Navbar from '../components/Navbar';
+import { useTrackPage } from '../hooks/useTrackPage';
 
 const ConnectorDetailConfigurePage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
@@ -16,6 +17,8 @@ const ConnectorDetailConfigurePage: FC<{}> = (): ReactElement => {
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
   });
+
+  useTrackPage('Connector Configure', 'Connector');
 
   return (
     <Layout>

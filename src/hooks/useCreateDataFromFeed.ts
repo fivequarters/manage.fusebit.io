@@ -8,6 +8,7 @@ import { useLoader } from './useLoader';
 import { useError } from './useError';
 import { useHistory } from 'react-router-dom';
 import { useEntityApi } from './useEntityApi';
+import { trackEvent } from '../utils/analytics';
 
 export const useCreateDataFromFeed = () => {
   const history = useHistory();
@@ -35,6 +36,12 @@ export const useCreateDataFromFeed = () => {
           'fusebit.feedType': isConnector ? 'connector' : 'integration',
           'fusebit.feedId': activeFeed.id,
         };
+
+        if (isConnector) {
+          trackEvent(`New Connector Create Button ${commonTags['fusebit.feedId']} Clicked`, 'Connectors');
+        } else {
+          trackEvent(`New Integration Create Button ${commonTags['fusebit.feedId']} Clicked`, 'Integrations');
+        }
 
         await Promise.all([
           ...parsedFeed.configuration.entities.map(async (entity: Entity) => {
