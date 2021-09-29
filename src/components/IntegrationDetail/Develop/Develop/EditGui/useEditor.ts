@@ -7,8 +7,7 @@ import { useAccountIntegrationTestIntegration } from '../../../../../hooks/api/v
 import { useAxios } from '../../../../../hooks/useAxios';
 import { useContext } from '../../../../../hooks/useContext';
 import { Install } from '../../../../../interfaces/install';
-
-export const STATIC_TENANT_ID = 'user-1';
+import { STATIC_TENANT_ID } from '../../../../../utils/constants';
 
 const useEditor = () => {
   const { id } = useParams<{ id: string }>();
