@@ -46,11 +46,8 @@ import { useQuery } from '../../../../hooks/useQuery';
 import play from '../../../../assets/play.svg';
 import info from '../../../../assets/info.svg';
 import SlideUpSpring from '../../../Animations/SlideUpSpring';
-<<<<<<< HEAD
 import { SteppedLineTo } from 'react-lineto';
-=======
 import { trackEvent } from '../../../../utils/analytics';
->>>>>>> 9258fb0deaa724b4b7bae537d9419b770fea4c9a
 
 const { REACT_APP_ENABLE_ONLINE_EDITOR } = process.env;
 const isOnlineEditorEnabled = REACT_APP_ENABLE_ONLINE_EDITOR === 'true';
