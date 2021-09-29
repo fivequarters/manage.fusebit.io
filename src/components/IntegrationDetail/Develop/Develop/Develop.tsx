@@ -87,6 +87,7 @@ const Develop: React.FC = () => {
   const [editGuiMounted, setEditGuiMounted] = useState(false);
   const [editCliOpen, setEditCliOpen] = React.useState(false);
   const isMobile = useMediaQuery('(max-width: 850px)');
+  const linksMobile = useMediaQuery('(max-width: 1250px)');
 
   React.useEffect(() => {
     if (!!query.get('session')) {
@@ -485,17 +486,19 @@ const Develop: React.FC = () => {
               </Tooltip>
             </SC.CardButtonWrapper>
           </SC.Card>
-          <SC.LinkWrapper>
-            <SC.LinkTitle>Learn More:</SC.LinkTitle>
-            <SC.Link
-              target="_blank"
-              rel="noopener_noreferrer"
-              href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
-            >
-              <SC.Bullet />
-              Connecting Fusebit with Your Application
-            </SC.Link>
-          </SC.LinkWrapper>
+          {!linksMobile && (
+            <Box mt="auto">
+              <SC.LinkTitle>Learn More:</SC.LinkTitle>
+              <SC.Link
+                target="_blank"
+                rel="noopener_noreferrer"
+                href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
+              >
+                <SC.Bullet />
+                Connecting Fusebit with Your Application
+              </SC.Link>
+            </Box>
+          )}
         </SC.FlexDown>
         <SC.FlexDown>
           <SC.FusebitCard>
@@ -568,21 +571,27 @@ const Develop: React.FC = () => {
               )}
             </SC.CardButtonWrapper>
           </SC.FusebitCard>
-          <Box display="flex" flexDirection="column" mt="auto" mb="-31.5px">
-            <SC.LinkTitle>Learn More:</SC.LinkTitle>
-            <SC.Link target="_blank" rel="noopener_noreferrer" href="https://developer.fusebit.io/docs/getting-started">
-              <SC.Bullet />
-              Getting Started
-            </SC.Link>
-            <SC.Link
-              target="_blank"
-              rel="noopener_noreferrer"
-              href="https://developer.fusebit.io/docs/integration-programming-model"
-            >
-              <SC.Bullet />
-              Integration Programming Model
-            </SC.Link>
-          </Box>
+          {!linksMobile && (
+            <Box display="flex" flexDirection="column" mt="auto" mb="-31.5px">
+              <SC.LinkTitle>Learn More:</SC.LinkTitle>
+              <SC.Link
+                target="_blank"
+                rel="noopener_noreferrer"
+                href="https://developer.fusebit.io/docs/getting-started"
+              >
+                <SC.Bullet />
+                Getting Started
+              </SC.Link>
+              <SC.Link
+                target="_blank"
+                rel="noopener_noreferrer"
+                href="https://developer.fusebit.io/docs/integration-programming-model"
+              >
+                <SC.Bullet />
+                Integration Programming Model
+              </SC.Link>
+            </Box>
+          )}
         </SC.FlexDown>
         <SC.FlexDown>
           <SC.Card>
@@ -670,29 +679,35 @@ const Develop: React.FC = () => {
               </Button>
             </SC.CardConnectorButtonsWrapperMobile>
           </SC.Card>
-          <SC.LinkWrapperMobile>
-            <SC.LinkTitle>Learn More:</SC.LinkTitle>
-            <SC.Link
-              target="_blank"
-              rel="noopener_noreferrer"
-              href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
-            >
-              <SC.Bullet />
-              Connecting Fusebit with Your Application
-            </SC.Link>
-            <SC.Link target="_blank" rel="noopener_noreferrer" href="https://developer.fusebit.io/docs/getting-started">
-              <SC.Bullet />
-              Getting Started
-            </SC.Link>
-            <SC.Link
-              target="_blank"
-              rel="noopener_noreferrer"
-              href="https://developer.fusebit.io/docs/integration-programming-model"
-            >
-              <SC.Bullet />
-              Integration Programming Model
-            </SC.Link>
-          </SC.LinkWrapperMobile>
+          {linksMobile && (
+            <Box display="flex" flexDirection="column">
+              <SC.LinkTitle>Learn More:</SC.LinkTitle>
+              <SC.Link
+                target="_blank"
+                rel="noopener_noreferrer"
+                href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
+              >
+                <SC.Bullet />
+                Connecting Fusebit with Your Application
+              </SC.Link>
+              <SC.Link
+                target="_blank"
+                rel="noopener_noreferrer"
+                href="https://developer.fusebit.io/docs/getting-started"
+              >
+                <SC.Bullet />
+                Getting Started
+              </SC.Link>
+              <SC.Link
+                target="_blank"
+                rel="noopener_noreferrer"
+                href="https://developer.fusebit.io/docs/integration-programming-model"
+              >
+                <SC.Bullet />
+                Integration Programming Model
+              </SC.Link>
+            </Box>
+          )}
         </SC.FlexDown>
       </SC.Flex>
     </SC.Background>
