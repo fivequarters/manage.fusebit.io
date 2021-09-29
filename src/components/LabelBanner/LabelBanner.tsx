@@ -6,7 +6,7 @@ interface Props {
   className?: string;
 }
 
-const InformationalBanner: React.FC<Props> = ({ children, className }) => {
+const LabelBanner: React.FC<Props> = ({ children, className }) => {
   return (
     <SC.Banner className={className}>
       <SC.Description>
@@ -16,4 +16,4 @@ const InformationalBanner: React.FC<Props> = ({ children, className }) => {
   );
 };
 
-export default InformationalBanner;
+export default LabelBanner;

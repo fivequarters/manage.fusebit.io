@@ -66,7 +66,7 @@ export async function getBackendClients(user: User): Promise<BackendClient[]> {
       },
     });
     return clientsResponse.data.data;
-  } catch (err: any) {
+  } catch (err) {
     if (err?.response?.status === 404) {
       return [];
     }
