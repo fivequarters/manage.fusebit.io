@@ -46,7 +46,7 @@ import { useQuery } from '../../../../hooks/useQuery';
 import play from '../../../../assets/play.svg';
 import info from '../../../../assets/info.svg';
 import SlideUpSpring from '../../../Animations/SlideUpSpring';
-import LineTo from 'react-lineto';
+import { SteppedLineTo } from 'react-lineto';
 
 const { REACT_APP_ENABLE_ONLINE_EDITOR } = process.env;
 const isOnlineEditorEnabled = REACT_APP_ENABLE_ONLINE_EDITOR === 'true';
@@ -442,7 +442,15 @@ const Develop: React.FC = () => {
                     connector={{ ...client, isApplication: true }}
                     onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
                   />
-                  <LineTo from={client.id} fromAnchor="right" to="fusebit" toAnchor="left" />
+                  <SteppedLineTo
+                    from={client.id}
+                    fromAnchor="right"
+                    to="fusebit"
+                    toAnchor="left"
+                    orientation="h"
+                    borderStyle="dashed"
+                    borderColor="#333333"
+                  />
                 </>
               ))
             ) : !backendClientsLoading ? (
@@ -614,11 +622,23 @@ const Develop: React.FC = () => {
                 filterConnectors().map((connector: FinalConnector, index: number) => {
                   if (index < 5) {
                     return (
-                      <ListComponent
-                        key={index}
-                        connector={connector}
-                        onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
-                      />
+                      <>
+                        <ListComponent
+                          className={connector.id}
+                          key={index}
+                          connector={connector}
+                          onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
+                        />
+                        <SteppedLineTo
+                          from={connector.id}
+                          fromAnchor="left"
+                          to="fusebit"
+                          toAnchor="right"
+                          orientation="h"
+                          borderStyle="dashed"
+                          borderColor="#333333"
+                        />
+                      </>
                     );
                   }
                   return null;
