@@ -16,7 +16,7 @@ import ConfirmationPrompt from '../../../../ConfirmationPrompt';
 import { useTrackPage } from '../../../../../hooks/useTrackPage';
 import { trackEvent } from '../../../../../utils/analytics';
 
-const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props) => {
+const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, ref) => {
   const { userData } = useContext();
   const [isMounted, setIsMounted] = useState(false);
   const [configureRunnerActive, setConfigureRunnerActive] = useState(false);

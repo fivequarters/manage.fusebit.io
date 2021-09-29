@@ -6,7 +6,6 @@ import { useAccountConnectorsGetOne } from '../../../../hooks/api/v2/account/con
 import { useAccountConnectorsGetOneConfig } from '../../../../hooks/api/v2/account/connector/useGetOneConfig';
 import { useContext } from '../../../../hooks/useContext';
 import { Connector, ConnectorConfig } from '../../../../interfaces/connector';
-
 import { Button } from '@material-ui/core';
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
 import { JsonForms } from '@jsonforms/react';
@@ -14,9 +13,8 @@ import { ValidationMode } from '@jsonforms/core';
 import { useEffect } from 'react';
 import { useEntityApi } from '../../../../hooks/useEntityApi';
 import { useGetFeedById } from '../../../../hooks/useGetFeedById';
-
-import LabelBanner from '../../../LabelBanner';
 import { trackEvent } from '../../../../utils/analytics';
+import InformationalBanner from '../../../InformationalBanner';
 
 const Configure: React.FC = () => {
   const history = useHistory();
@@ -65,6 +63,8 @@ const Configure: React.FC = () => {
       }
     };
     reloadData();
+
+    return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectorId]);
 
@@ -90,15 +90,15 @@ const Configure: React.FC = () => {
         {config?.data && !loading ? (
           <SC.FormWrapper>
             {configureAppDocUrl ? (
-              <LabelBanner>
+              <InformationalBanner>
                 By default, Connectors use Fusebit demonstration credentials, which are intended for testing only. When
                 you are ready for production use, supply your own credentials below, as described in{' '}
                 <a href={configureAppDocUrl}>this guide</a>.
-              </LabelBanner>
+              </InformationalBanner>
             ) : (
-              <LabelBanner>
+              <InformationalBanner>
                 By default, Connectors use Fusebit demonstration credentials, which are intended for testing only.
-              </LabelBanner>
+              </InformationalBanner>
             )}
             <JsonForms
               schema={config?.data.schema}
