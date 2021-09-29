@@ -58,25 +58,23 @@ const useEditor = () => {
       };
 
       if (prevSessionId !== sessionId) {
-        runFirstTest()
+        runFirstTest();
       }
-    }
+    };
 
-    window.addEventListener('storage', handleChangeStorage)
+    window.addEventListener('storage', handleChangeStorage);
 
     return () => {
       window.removeEventListener('storage', handleChangeStorage);
-    }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
+  }, []);
 
   const handleRun = async () => {
     trackEvent('Run Button Clicked', 'Web Editor');
     try {
-
       if (window.editor.dirtyState) {
-        await window.editor._server.saveFunction(window.editor)
+        await window.editor._server.saveFunction(window.editor);
       }
 
       const hasInstance = await findInstance();
