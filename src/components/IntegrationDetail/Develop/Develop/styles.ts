@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import dottedBox from '../../../../assets/dotted-box.svg';
 import fusebitLogo from '../../../../assets/fusebit-logo.svg';
+import { Box } from '@material-ui/core';
 
 export const Background = styled.div`
   padding-bottom: 76px;
@@ -55,13 +56,8 @@ export const Card = styled.div`
   }
 `;
 
-export const FusebitCard = styled.div`
+export const FusebitCard = styled(Box)`
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 32px;
   height: 260px;
   width: 285px;
   border-radius: 8px;
@@ -69,17 +65,14 @@ export const FusebitCard = styled.div`
   box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
   border: 2px solid #f83420;
   z-index: 1;
-  margin-top: 65px;
-  margin-bottom: 80px;
 `;
 
-export const FusebitLogo = styled.div`
+export const FusebitLogo = styled(Box)`
   width: 109px;
   height: 28px;
   background-image: url(${fusebitLogo});
   background-size: contain;
   background-repeat: no-repeat;
-  margin-bottom: 32px;
 `;
 
 export const FusebitIntegration = styled.h3`
