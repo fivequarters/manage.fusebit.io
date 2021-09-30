@@ -56,8 +56,9 @@ export const VerbSelector = styled.div<{ hasError?: boolean }>`
   border-bottom: 1px solid var(--black);
   padding-bottom: 7px;
   width: 110px;
-  margin-top: auto;
+  align-items: flex-end;
   text-transform: uppercase;
+  height: 50px;
 
   &:hover {
     cursor: pointer;
@@ -80,7 +81,7 @@ export const VerbArrow = styled.div<{ active: boolean }>`
 
 export const VerbOptionsWrapper = styled.div<{ active: boolean }>`
   position: absolute;
-  top: 35px;
+  top: 20px;
   left: 0;
   opacity: ${(props) => (props.active ? 1 : 0)};
   visibility: ${(props) => (props.active ? 'visible' : 'hidden')};

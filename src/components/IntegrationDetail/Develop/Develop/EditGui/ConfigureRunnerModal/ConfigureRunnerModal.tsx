@@ -151,6 +151,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
             size="large"
             variant="contained"
             color="primary"
+            disabled={Object.keys(formErrors).length > 0}
           >
             Save
           </Button>

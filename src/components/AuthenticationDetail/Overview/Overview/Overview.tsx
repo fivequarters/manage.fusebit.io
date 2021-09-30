@@ -17,11 +17,11 @@ import { Operation } from '../../../../interfaces/operation';
 import { Account } from '../../../../interfaces/account';
 import { useLoader } from '../../../../hooks/useLoader';
 import { useError } from '../../../../hooks/useError';
-import { useCapitalize } from '../../../../hooks/useCapitalize';
 import { useAccountUserDeleteOne } from '../../../../hooks/api/v1/account/user/useDeleteOne';
 import { useGetRedirectLink } from '../../../../hooks/useGetRedirectLink';
 import { useCopy } from '../../../../hooks/useCopy';
 import ConfirmationPrompt from '../../../ConfirmationPrompt/ConfirmationPrompt';
+import { startCase } from '../../../../utils/utils';
 
 const schema = {
   type: 'object',
@@ -92,7 +92,6 @@ const Overview: React.FC = () => {
   const [popperOpen, setPopperOpen] = React.useState(false);
   const { createLoader, removeLoader } = useLoader();
   const { createError } = useError();
-  const { capitalize } = useCapitalize();
   const deleteAccount = useAccountUserDeleteOne<Operation>();
   const { getRedirectLink } = useGetRedirectLink();
   const { handleCopy, copiedLine } = useCopy();
@@ -120,8 +119,8 @@ const Overview: React.FC = () => {
       setIsSubmitting(true);
       const dataToSubmit: Account = {
         id: accountData?.data.id || '',
-        firstName: capitalize(data?.firstName || ''),
-        lastName: capitalize(data?.lastName || ''),
+        firstName: startCase(data?.firstName || ''),
+        lastName: startCase(data?.lastName || ''),
         primaryEmail: data?.primaryEmail?.toLowerCase(),
       };
       await _updateUser(dataToSubmit);
