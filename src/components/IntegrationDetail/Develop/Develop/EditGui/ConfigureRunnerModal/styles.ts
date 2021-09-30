@@ -52,7 +52,7 @@ export const VerbSelector = styled.div<{ hasError?: boolean }>`
   position: relative;
   font-size: 14px;
   line-height: 20px;
-  color: var(--black);;
+  color: var(--black);
   border-bottom: 1px solid var(--black);
   padding-bottom: 7px;
   width: 110px;
@@ -109,28 +109,28 @@ export const VerbOption = styled.div<{ selected: boolean }>`
 `;
 
 export const Input = css<{ height?: string }>`
-font-family: courier;
-font-size: 16px;
-line-height: 18.5px;
-color: var(--black);
-padding: 16px;
-background-color: var(--secondary-color);
-width: 100%;
-border: none;
-resize: none;
-border-radius: 4px;
-height: ${(props) => (props.height ? props.height : '50px')};
-outline: rgba(255, 255, 255, 0);
+  font-family: courier;
+  font-size: 16px;
+  line-height: 18.5px;
+  color: var(--black);
+  padding: 16px;
+  background-color: var(--secondary-color);
+  width: 100%;
+  border: none;
+  resize: none;
+  border-radius: 4px;
+  height: ${(props) => (props.height ? props.height : '50px')};
+  outline: rgba(255, 255, 255, 0);
 
-${withError}
-`
+  ${withError}
+`;
 
 export const TextField = styled.input<{ height?: string; hasError?: boolean }>`
-${Input}
-`
+  ${Input}
+`;
 
 export const Textarea = styled.textarea<{ height?: string; hasError?: boolean }>`
-${Input}
+  ${Input}
 `;
 
 export const ButtonsWrapper = styled.div`

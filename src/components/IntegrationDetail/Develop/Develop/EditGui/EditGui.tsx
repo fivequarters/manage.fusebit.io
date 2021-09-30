@@ -15,6 +15,7 @@ import ConfigureRunnerModal from './ConfigureRunnerModal';
 import ConfirmationPrompt from '../../../../ConfirmationPrompt';
 import { useTrackPage } from '../../../../../hooks/useTrackPage';
 import { trackEvent } from '../../../../../utils/analytics';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, ref) => {
   const { userData } = useContext();
@@ -22,7 +23,10 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
   const [configureRunnerActive, setConfigureRunnerActive] = useState(false);
   const [unsavedWarning, setUnsavedWarning] = useState(false);
   const { createLoader, removeLoader } = useLoader();
-  const { handleRun } = useEditor();
+  const [loginFlowModalOpen, setLoginFlowModalOpen] = useState(false);
+  const { handleRun, handleNoInstanceFound, isFindingInstance } = useEditor({
+    onNoInstanceFound: () => setLoginFlowModalOpen(true),
+  });
 
   useTrackPage('Web Editor', 'Web Editor');
 
@@ -93,6 +97,15 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
         description={`You have made some unsaved changes to your Integration. Closing this window will discard those changes.`}
         confirmationButtonText={`Discard`}
       />
+      <ConfirmationPrompt
+        open={loginFlowModalOpen}
+        setOpen={setLoginFlowModalOpen}
+        handleConfirmation={handleNoInstanceFound}
+        title="Start login flow?"
+        description="The integration needs to know the Identity of the user on whose behalf to execute. For development purposes, please log in as your own user."
+        confirmationButtonText="Start"
+        hideCancelButton
+      />
       <SC.EditorContainer>
         <ConfigureRunnerModal open={configureRunnerActive} setOpen={setConfigureRunnerActive} />
         {isMounted && (
@@ -114,8 +127,9 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
                 variant="contained"
                 color="primary"
                 onClick={handleRun}
+                disabled={isFindingInstance}
               >
-                Run
+                {isFindingInstance ? <CircularProgress size={20} /> : 'Run'}
               </Button>
               <Button onClick={() => setConfigureRunnerActive(true)} size="small" variant="contained" color="primary">
                 <img src={settings} alt="settings" height="16" width="16" />

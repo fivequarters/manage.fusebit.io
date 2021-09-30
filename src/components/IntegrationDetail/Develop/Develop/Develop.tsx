@@ -44,7 +44,7 @@ import EditCli from './EditCli';
 import { useQuery } from '../../../../hooks/useQuery';
 import SlideUpSpring from '../../../Animations/SlideUpSpring';
 import { trackEvent } from '../../../../utils/analytics';
-import MobileDrawer from './MobileDrawer/MobileDrawer';
+import MobileDrawer from './MobileDrawer';
 
 const { REACT_APP_ENABLE_ONLINE_EDITOR } = process.env;
 const isOnlineEditorEnabled = REACT_APP_ENABLE_ONLINE_EDITOR === 'true';

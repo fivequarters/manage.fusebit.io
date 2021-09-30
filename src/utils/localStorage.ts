@@ -1,4 +1,4 @@
-import { STATIC_TENANT_ID } from "./constants";
+import { STATIC_TENANT_ID } from './constants';
 
 export interface IntegrationConfig {
   runner: {
