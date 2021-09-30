@@ -1,3 +1,5 @@
+import { STATIC_TENANT_ID } from './constants';
+
 export interface IntegrationConfig {
   runner: {
     method: 'post' | 'delete' | 'put' | 'get' | 'patch';
@@ -6,11 +8,11 @@ export interface IntegrationConfig {
   };
 }
 
-const DEFAULT_INTEGRATION_CONFIG: IntegrationConfig = {
+export const DEFAULT_INTEGRATION_CONFIG: IntegrationConfig = {
   runner: {
-    method: 'get',
-    url: '',
-    payload: '',
+    method: 'post',
+    url: `/api/tenant/${STATIC_TENANT_ID}/test`,
+    payload: '{}',
   },
 };
 

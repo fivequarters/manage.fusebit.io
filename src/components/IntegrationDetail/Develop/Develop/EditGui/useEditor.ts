@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getAllInstances } from '../../../../../hooks/api/v2/account/integration/instance/useGetAll';
 import { useAccountIntegrationCreateSession } from '../../../../../hooks/api/v2/account/integration/session/useCreateOne';
@@ -8,33 +8,43 @@ import { useAxios } from '../../../../../hooks/useAxios';
 import { useContext } from '../../../../../hooks/useContext';
 import { Install } from '../../../../../interfaces/install';
 import { trackEvent } from '../../../../../utils/analytics';
+import { STATIC_TENANT_ID } from '../../../../../utils/constants';
 
-export const STATIC_TENANT_ID = 'user-1';
+interface Props {
+  onNoInstanceFound?: () => void;
+}
 
-const useEditor = () => {
+const useEditor = ({ onNoInstanceFound } = {} as Props) => {
   const { id } = useParams<{ id: string }>();
   const { userData } = useContext();
   const { axios } = useAxios();
-  const { mutateAsync: createSesssion } = useAccountIntegrationCreateSession();
-  const { mutateAsync: testIntegration } = useAccountIntegrationTestIntegration();
-  const { mutateAsync: commitSession } = useAccountIntegrationCommitSession();
+  const { mutateAsync: createSesssion, isLoading: isCreatingSession } = useAccountIntegrationCreateSession();
+  const { mutateAsync: testIntegration, isLoading: isTesting } = useAccountIntegrationTestIntegration();
+  const { mutateAsync: commitSession, isLoading: isCommiting } = useAccountIntegrationCommitSession();
+  const [isFindingInstance, setIsFindingInstance] = useState(false);
 
   const findInstance = useCallback(async () => {
-    const {
-      data: { items },
-    } = await getAllInstances<Install>(
-      axios,
-      {
-        subscriptionId: userData.subscriptionId,
-        accountId: userData.accountId,
-        id,
-      },
-      {
-        tag: `fusebit.tenantId=${STATIC_TENANT_ID}`,
-      }
-    );
+    try {
+      setIsFindingInstance(true);
 
-    return (items || [])[0];
+      const {
+        data: { items },
+      } = await getAllInstances<Install>(
+        axios,
+        {
+          subscriptionId: userData.subscriptionId,
+          accountId: userData.accountId,
+          id,
+        },
+        {
+          tag: `fusebit.tenantId=${STATIC_TENANT_ID}`,
+        }
+      );
+
+      return (items || [])[0];
+    } finally {
+      setIsFindingInstance(false);
+    }
   }, [axios, id, userData]);
 
   useEffect(() => {
@@ -45,13 +55,9 @@ const useEditor = () => {
 
       const runFirstTest = async () => {
         try {
-          const hasInstance = await findInstance();
+          await commitSession({ id, sessionId });
 
-          if (!hasInstance) {
-            await commitSession({ id, sessionId });
-
-            await testIntegration({ id, tenantId: STATIC_TENANT_ID });
-          }
+          await testIntegration({ id, tenantId: STATIC_TENANT_ID });
         } catch (error) {
           console.log(error);
         }
@@ -70,6 +76,8 @@ const useEditor = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleNoInstanceFound = () => createSesssion({ id, tenantId: STATIC_TENANT_ID });
+
   const handleRun = async () => {
     trackEvent('Run Button Clicked', 'Web Editor');
     try {
@@ -82,7 +90,11 @@ const useEditor = () => {
       if (hasInstance) {
         await testIntegration({ id, tenantId: STATIC_TENANT_ID });
       } else {
-        await createSesssion({ id, tenantId: STATIC_TENANT_ID });
+        if (onNoInstanceFound) {
+          onNoInstanceFound();
+        } else {
+          await handleNoInstanceFound();
+        }
       }
     } catch (error) {
       console.log(error);
@@ -91,6 +103,12 @@ const useEditor = () => {
 
   return {
     handleRun,
+    handleNoInstanceFound,
+    isFindingInstance,
+    isCreatingSession,
+    isTesting,
+    isCommiting,
+    isRunning: isFindingInstance || isCreatingSession || isTesting || isCommiting,
   };
 };
 

@@ -52,7 +52,7 @@ export const VerbSelector = styled.div<{ hasError?: boolean }>`
   position: relative;
   font-size: 14px;
   line-height: 20px;
-  color: var(--grey);
+  color: var(--black);
   border-bottom: 1px solid var(--black);
   padding-bottom: 7px;
   width: 110px;
@@ -81,7 +81,7 @@ export const VerbArrow = styled.div<{ active: boolean }>`
 
 export const VerbOptionsWrapper = styled.div<{ active: boolean }>`
   position: absolute;
-  top: 20px;
+  top: 0;
   left: 0;
   opacity: ${(props) => (props.active ? 1 : 0)};
   visibility: ${(props) => (props.active ? 'visible' : 'hidden')};
@@ -95,7 +95,7 @@ export const VerbOptionsWrapper = styled.div<{ active: boolean }>`
 export const VerbOption = styled.div<{ selected: boolean }>`
   font-size: 14px;
   line-height: 20px;
-  color: ${(props) => (props.selected ? 'var(--black)' : 'var(--grey)')};
+  color: var(--black);
   background-color: ${(props) => props.selected && 'var(--secondary-color)'};
   padding: 8px;
   transition: all 0.25s linear;
@@ -108,7 +108,7 @@ export const VerbOption = styled.div<{ selected: boolean }>`
   }
 `;
 
-export const Textarea = styled.textarea<{ height?: string; hasError?: boolean }>`
+export const Input = css<{ height?: string }>`
   font-family: courier;
   font-size: 16px;
   line-height: 18.5px;
@@ -123,6 +123,14 @@ export const Textarea = styled.textarea<{ height?: string; hasError?: boolean }>
   outline: rgba(255, 255, 255, 0);
 
   ${withError}
+`;
+
+export const TextField = styled.input<{ height?: string; hasError?: boolean }>`
+  ${Input}
+`;
+
+export const Textarea = styled.textarea<{ height?: string; hasError?: boolean }>`
+  ${Input}
 `;
 
 export const ButtonsWrapper = styled.div`
