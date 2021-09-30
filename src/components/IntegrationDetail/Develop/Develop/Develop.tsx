@@ -41,7 +41,6 @@ import { useEntityApi } from '../../../../hooks/useEntityApi';
 import { useBackendClient } from '../../../../hooks/useBackendClient';
 import { BackendClient } from '../../../../interfaces/backendClient';
 import EditCli from './EditCli';
-import { useQuery } from '../../../../hooks/useQuery';
 import SlideUpSpring from '../../../Animations/SlideUpSpring';
 import { trackEvent } from '../../../../utils/analytics';
 import MobileDrawer from './MobileDrawer';
@@ -67,7 +66,6 @@ const Develop: React.FC = () => {
   });
   const { createLoader, removeLoader } = useLoader();
   const { createError } = useError();
-  const query = useQuery();
   const [editGuiOpen, setEditGuiOpen] = React.useState(false);
   const [connectOpen, setConnectOpen] = React.useState(false);
   const [connectorListOpen, setConnectorListOpen] = React.useState(false);
@@ -87,15 +85,6 @@ const Develop: React.FC = () => {
   const [editCliOpen, setEditCliOpen] = React.useState(false);
   const isMobile = useMediaQuery('(max-width: 850px)');
   const areCardsCollapsing = useMediaQuery('(max-width: 1250px)');
-
-  React.useEffect(() => {
-    if (!!query.get('session')) {
-      setTimeout(() => {
-        setEditGuiOpen(true);
-      }, 1000);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const getBackendClients = async () => {
     const backendClients = await getBackendClientListener();
