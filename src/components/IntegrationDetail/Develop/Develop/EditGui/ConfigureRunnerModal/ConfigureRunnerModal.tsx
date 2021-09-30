@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, Backdrop, Box } from '@material-ui/core';
+import { Button, Modal, Backdrop, Box, Select, MenuItem } from '@material-ui/core';
 import * as SC from './styles';
 import * as CSC from '../../../../../globalStyle';
 import { getIntegrationConfig } from '../../../../../../utils/localStorage';
@@ -22,7 +22,6 @@ const Verbs = ['get', 'post', 'put', 'patch', 'delete'];
 
 const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
   const { id } = useParams<{ id: string }>();
-  const [verbSelectorActive, setVerbSelectorActive] = useState(false);
   const [formValues, setFormValues] = useState(getIntegrationConfig(id).runner);
   const [formErrors, setFormErrors] = useState<Partial<Errors>>({});
 
@@ -71,6 +70,12 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
     }
   };
 
+  const handleVerbChange = (event: any) => {
+    const newValues = { ...formValues, method: event.target.value as 'post' | 'delete' | 'put' | 'get' | 'patch' };
+    validateForm(newValues);
+    setFormValues(newValues);
+  };
+
   return (
     <Modal
       aria-labelledby="transition-modal-title"
@@ -86,28 +91,17 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
         <Box display="flex" mt="30px">
           <CSC.Flex width="max-content" margin="0 48px 0 0" flexDown>
             <SC.Subtitle>Verb</SC.Subtitle>
-            <SC.VerbSelector
-              onBlur={() => validateForm()}
-              onClick={() => setVerbSelectorActive(!verbSelectorActive)}
-              hasError={!!formErrors.method}
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={formValues?.method}
+              onChange={handleVerbChange}
+              style={{ width: '110px', marginTop: '16px' }}
             >
-              {formValues?.method} <SC.VerbArrow active={verbSelectorActive} />
-              <SC.VerbOptionsWrapper active={verbSelectorActive}>
-                {Verbs.map((verb) => (
-                  <SC.VerbOption
-                    onClick={() => {
-                      const newValues = { ...formValues, method: verb as 'post' | 'delete' | 'put' | 'get' | 'patch' };
-                      validateForm(newValues);
-                      setFormValues(newValues);
-                    }}
-                    key={verb}
-                    selected={verb === formValues?.method}
-                  >
-                    {verb}
-                  </SC.VerbOption>
-                ))}
-              </SC.VerbOptionsWrapper>
-            </SC.VerbSelector>
+              {Verbs.map((verb) => (
+                <MenuItem value={verb}>{verb.toLocaleUpperCase()}</MenuItem>
+              ))}
+            </Select>
             {formErrors.method && <SC.ErrorMessage>{formErrors.method}</SC.ErrorMessage>}
           </CSC.Flex>
           <CSC.Flex flexDown>
