@@ -13,7 +13,7 @@ export const FlexDown = styled.div`
   &:not(:last-child)  {
     margin-right: auto;
 
-    @media only screen and (max-width: 1250px) {
+    @media only screen and (max-width: 1200px) {
       margin-right: 0;
     }
   }
@@ -23,7 +23,7 @@ export const Flex = styled.div`
   position: relative;
   display: flex;
 
-  @media only screen and (max-width: 1250px) {
+  @media only screen and (max-width: 1200px) {
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -40,8 +40,6 @@ export const Card = styled.div`
   box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
   width: 389px;
   min-height: 392px;
-  z-index: 1;
-  margin-bottom: 40px;
 
   @media only screen and (max-width: 450px) {
     width: 340px;
@@ -64,7 +62,6 @@ export const FusebitCard = styled(Box)`
   background-color: white;
   box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
   border: 2px solid #f83420;
-  z-index: 1;
 `;
 
 export const FusebitLogo = styled(Box)`
