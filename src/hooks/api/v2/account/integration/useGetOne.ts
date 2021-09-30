@@ -1,14 +1,17 @@
 import { useQuery } from 'react-query';
 import { Params } from '../../../../../interfaces/api';
+import { Integration } from '../../../../../interfaces/integration';
 import { useAxios } from '../../../../useAxios';
 
-export const useAccountIntegrationsGetOne = <T>(params: Params) => {
+export const ACCOUNT_INTEGRATIONS_GET_ONE = 'ACCOUNT_INTEGRATIONS_GET_ONE';
+
+export const useAccountIntegrationsGetOne = <T = Integration>(params: Params) => {
   const { axios } = useAxios();
 
   const { enabled, ...queryParams } = params;
 
   return useQuery(
-    ['accountIntegrationsGetOne', queryParams],
+    [ACCOUNT_INTEGRATIONS_GET_ONE, queryParams],
     () =>
       axios<T>(
         `/v2/account/${queryParams.accountId}/subscription/${queryParams.subscriptionId}/integration/${queryParams.id}`,

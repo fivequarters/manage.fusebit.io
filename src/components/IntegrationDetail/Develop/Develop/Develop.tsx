@@ -4,7 +4,6 @@ import * as SC from './styles';
 import * as CSC from '../../../globalStyle';
 import {
   Button,
-  ButtonGroup,
   Modal,
   Backdrop,
   Fade,
@@ -15,8 +14,10 @@ import {
   MenuItem,
   MenuList,
   Tooltip,
+  useMediaQuery,
+  Drawer,
+  Box,
 } from '@material-ui/core';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import AddIcon from '@material-ui/icons/Add';
 import arrow from '../../../../assets/arrow-right-black.svg';
 import Connect from './Connect';
@@ -41,6 +42,11 @@ import { useEntityApi } from '../../../../hooks/useEntityApi';
 import { useBackendClient } from '../../../../hooks/useBackendClient';
 import { BackendClient } from '../../../../interfaces/backendClient';
 import EditCli from './EditCli';
+import { useQuery } from '../../../../hooks/useQuery';
+import play from '../../../../assets/play.svg';
+import info from '../../../../assets/info.svg';
+import SlideUpSpring from '../../../Animations/SlideUpSpring';
+import { trackEvent } from '../../../../utils/analytics';
 
 const { REACT_APP_ENABLE_ONLINE_EDITOR } = process.env;
 const isOnlineEditorEnabled = REACT_APP_ENABLE_ONLINE_EDITOR === 'true';
@@ -63,6 +69,7 @@ const Develop: React.FC = () => {
   });
   const { createLoader, removeLoader } = useLoader();
   const { createError } = useError();
+  const query = useQuery();
   const [editGuiOpen, setEditGuiOpen] = React.useState(false);
   const [connectOpen, setConnectOpen] = React.useState(false);
   const [connectorListOpen, setConnectorListOpen] = React.useState(false);
@@ -78,7 +85,19 @@ const Develop: React.FC = () => {
   const [backendClients, setBackendClients] = useState<BackendClient[]>([]);
   const [backendClient, setBackendClient] = useState<BackendClient>();
   const [connectHover, setConnectHover] = useState(false);
+  const [editGuiMounted, setEditGuiMounted] = useState(false);
   const [editCliOpen, setEditCliOpen] = React.useState(false);
+  const isMobile = useMediaQuery('(max-width: 850px)');
+  const areCardsCollapsing = useMediaQuery('(max-width: 1250px)');
+
+  React.useEffect(() => {
+    if (!!query.get('session')) {
+      setTimeout(() => {
+        setEditGuiOpen(true);
+      }, 1000);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const getBackendClients = async () => {
     const backendClients = await getBackendClientListener();
@@ -94,11 +113,21 @@ const Develop: React.FC = () => {
   }, [userData]);
 
   const editOptions = [
-    { buttonLabel: 'Edit', optionLabel: 'Edit in the in-browser editor', handle: setEditGuiOpen },
+    {
+      buttonLabel: 'Edit',
+      optionLabel: 'Edit in the in-browser editor',
+      handle: (isOpen: boolean) => {
+        trackEvent('Develop Edit Web Button Clicked', 'Integration');
+        setEditGuiOpen(isOpen);
+      },
+    },
     {
       buttonLabel: isOnlineEditorEnabled ? 'CLI' : 'Edit',
       optionLabel: 'Edit with your favorite editor',
-      handle: setEditCliOpen,
+      handle: (isOpen: boolean) => {
+        trackEvent('Develop Edit CLI Button Clicked', 'Integration');
+        setEditCliOpen(isOpen);
+      },
     },
   ];
   const editOptionAnchor = React.useRef<HTMLDivElement>(null);
@@ -267,6 +296,7 @@ const Develop: React.FC = () => {
   };
 
   const handleConnectOpen = async () => {
+    trackEvent('Develop Connect Button Clicked', 'Integration');
     const backendClient = await registerBackend();
     setBackendClient(backendClient);
     setConnectOpen(true);
@@ -367,30 +397,57 @@ const Develop: React.FC = () => {
           </SC.ConnectorList>
         </Fade>
       </Modal>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={editGuiOpen}
-        onClose={() => setEditGuiOpen(false)}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-      >
-        <Fade in={editGuiOpen}>
-          <EditGui
-            open={editGuiOpen}
-            onClose={() => setEditGuiOpen(false)}
-            integrationId={integrationData?.data.id || ''}
-          />
-        </Fade>
-      </Modal>
+      {isMobile ? (
+        <Drawer anchor={'bottom'} open={editGuiOpen} onClose={() => setEditGuiOpen(false)}>
+          <SC.GuiMobileWrapper>
+            <CSC.Close onClick={() => setEditGuiOpen(false)} />
+            <Button
+              startIcon={<img src={play} alt="play" height="16" width="16" />}
+              style={{ width: '200px' }}
+              size="large"
+              variant="contained"
+              color="primary"
+            >
+              Run
+            </Button>
+            <SC.GuiMobileNotSupportedWrapper>
+              <SC.GuiMobileNotSupportedIcon src={info} alt="not supported" height="16" width="16" />
+              <SC.GuiMobileNotSupportedText>Editing is not supported on this device</SC.GuiMobileNotSupportedText>
+            </SC.GuiMobileNotSupportedWrapper>
+          </SC.GuiMobileWrapper>
+        </Drawer>
+      ) : (
+        <Modal
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          open={editGuiOpen}
+          onClose={() => {
+            setEditGuiOpen(false);
+            setEditGuiMounted(false);
+          }}
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+        >
+          <SlideUpSpring in={editGuiOpen} mounted={editGuiMounted}>
+            <EditGui
+              onMount={() => setEditGuiMounted(true)}
+              onClose={() => {
+                setEditGuiOpen(false);
+                setEditGuiMounted(false);
+              }}
+              integrationId={integrationData?.data.id || ''}
+            />
+          </SlideUpSpring>
+        </Modal>
+      )}
       <SC.Flex>
-        <SC.CardSeparator />
         <SC.FlexDown>
           <SC.Card>
             <SC.CardTitle>Your Application</SC.CardTitle>
             {backendClients.length > 0 ? (
               backendClients.map((client: BackendClient) => (
                 <ListComponent
+                  key={client.id}
                   onChange={getBackendClients}
                   connector={{ ...client, isApplication: true }}
                   onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
@@ -442,21 +499,31 @@ const Develop: React.FC = () => {
               </Tooltip>
             </SC.CardButtonWrapper>
           </SC.Card>
-          <SC.LinkWrapper>
-            <SC.LinkTitle>Learn More:</SC.LinkTitle>
-            <SC.Link
-              target="_blank"
-              rel="noopener_noreferrer"
-              href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
-            >
-              <SC.Bullet />
-              Connecting Fusebit with Your Application
-            </SC.Link>
-          </SC.LinkWrapper>
+          {!areCardsCollapsing && (
+            <Box mt="auto">
+              <SC.LinkTitle>Learn More:</SC.LinkTitle>
+              <SC.Link
+                target="_blank"
+                rel="noopener_noreferrer"
+                href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
+              >
+                <SC.Bullet />
+                Connecting Fusebit with Your Application
+              </SC.Link>
+            </Box>
+          )}
         </SC.FlexDown>
         <SC.FlexDown>
-          <SC.Card>
-            <SC.CardTitle>Fusebit</SC.CardTitle>
+          <SC.FusebitCard
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+            mb="80px"
+            mt="65px"
+            padding="32px"
+          >
+            <SC.FusebitLogo mb="32px" />
             {integrationData?.data.id === undefined && !loading ? (
               <CSC.LoaderContainer>
                 <CSC.Spinner />
@@ -466,33 +533,18 @@ const Develop: React.FC = () => {
                 <CSC.Spinner />
               </CSC.LoaderContainer>
             ) : (
-              <SC.CardIntegration>{integrationData?.data.id}</SC.CardIntegration>
+              <SC.FusebitIntegration>{integrationData?.data.id}</SC.FusebitIntegration>
             )}
             <SC.CardButtonWrapper>
-              <ButtonGroup variant="contained" color="primary" ref={editOptionAnchor}>
-                <Button
-                  onClick={() => editOptions[editOption].handle(true)}
-                  style={{ width: '200px' }}
-                  size="large"
-                  variant="contained"
-                  color="primary"
-                >
-                  {editOptions[editOption].buttonLabel}
-                </Button>
-                {isOnlineEditorEnabled && (
-                  <Button
-                    color="primary"
-                    size="small"
-                    aria-controls={editOptionOpen ? 'split-button-menu' : undefined}
-                    aria-expanded={editOptionOpen ? 'true' : undefined}
-                    aria-label="select edit action"
-                    aria-haspopup="menu"
-                    onClick={() => setEditOptionOpen((prevOpen) => !prevOpen)}
-                  >
-                    <ArrowDropDownIcon />
-                  </Button>
-                )}
-              </ButtonGroup>
+              <Button
+                onClick={() => editOptions[editOption].handle(true)}
+                style={{ width: '200px' }}
+                size="large"
+                variant="contained"
+                color="primary"
+              >
+                {editOptions[editOption].buttonLabel}
+              </Button>
 
               {isOnlineEditorEnabled && (
                 <Popper
@@ -517,7 +569,7 @@ const Develop: React.FC = () => {
                                 option: {
                                   buttonLabel: string;
                                   optionLabel: string;
-                                  handle: React.Dispatch<React.SetStateAction<boolean>>;
+                                  handle: (isOpen: boolean) => void;
                                 },
                                 index: number
                               ) => (
@@ -539,22 +591,28 @@ const Develop: React.FC = () => {
                 </Popper>
               )}
             </SC.CardButtonWrapper>
-          </SC.Card>
-          <SC.LinkWrapper>
-            <SC.LinkTitle>Learn More:</SC.LinkTitle>
-            <SC.Link target="_blank" rel="noopener_noreferrer" href="https://developer.fusebit.io/docs/getting-started">
-              <SC.Bullet />
-              Getting Started
-            </SC.Link>
-            <SC.Link
-              target="_blank"
-              rel="noopener_noreferrer"
-              href="https://developer.fusebit.io/docs/integration-programming-model"
-            >
-              <SC.Bullet />
-              Integration Programming Model
-            </SC.Link>
-          </SC.LinkWrapper>
+          </SC.FusebitCard>
+          {!areCardsCollapsing && (
+            <Box display="flex" flexDirection="column" mt="auto" mb="-31.5px">
+              <SC.LinkTitle>Learn More:</SC.LinkTitle>
+              <SC.Link
+                target="_blank"
+                rel="noopener_noreferrer"
+                href="https://developer.fusebit.io/docs/getting-started"
+              >
+                <SC.Bullet />
+                Getting Started
+              </SC.Link>
+              <SC.Link
+                target="_blank"
+                rel="noopener_noreferrer"
+                href="https://developer.fusebit.io/docs/integration-programming-model"
+              >
+                <SC.Bullet />
+                Integration Programming Model
+              </SC.Link>
+            </Box>
+          )}
         </SC.FlexDown>
         <SC.FlexDown>
           <SC.Card>
@@ -596,7 +654,10 @@ const Develop: React.FC = () => {
 
             <SC.CardConnectorButtonsWrapper>
               <Button
-                onClick={() => setConnectorPickerOpen(true)}
+                onClick={() => {
+                  trackEvent('Develop Add New Button Clicked', 'Integration');
+                  setConnectorPickerOpen(true);
+                }}
                 startIcon={<AddIcon />}
                 style={{ width: '160px', marginTop: '24px' }}
                 size="large"
@@ -606,7 +667,10 @@ const Develop: React.FC = () => {
                 Add New
               </Button>
               <Button
-                onClick={() => setConnectorListOpen(true)}
+                onClick={() => {
+                  trackEvent('Develop Link Existing Clicked', 'Integration');
+                  setConnectorListOpen(true);
+                }}
                 startIcon={<AddIcon />}
                 style={{ width: '160px', marginTop: '24px' }}
                 size="large"
@@ -620,7 +684,10 @@ const Develop: React.FC = () => {
 
             <SC.CardConnectorButtonsWrapperMobile>
               <Button
-                onClick={() => setConnectorPickerOpen(true)}
+                onClick={() => {
+                  trackEvent('Develop Add New Button Clicked', 'Integration');
+                  setConnectorPickerOpen(true);
+                }}
                 startIcon={<AddIcon />}
                 style={{ width: '135px', marginTop: '10px' }}
                 size="medium"
@@ -630,7 +697,10 @@ const Develop: React.FC = () => {
                 Add New
               </Button>
               <Button
-                onClick={() => setConnectorListOpen(true)}
+                onClick={() => {
+                  trackEvent('Develop Link Existing Clicked', 'Integration');
+                  setConnectorListOpen(true);
+                }}
                 startIcon={<AddIcon />}
                 style={{ width: '140px', marginTop: '10px' }}
                 size="medium"
@@ -642,29 +712,35 @@ const Develop: React.FC = () => {
               </Button>
             </SC.CardConnectorButtonsWrapperMobile>
           </SC.Card>
-          <SC.LinkWrapperMobile>
-            <SC.LinkTitle>Learn More:</SC.LinkTitle>
-            <SC.Link
-              target="_blank"
-              rel="noopener_noreferrer"
-              href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
-            >
-              <SC.Bullet />
-              Connecting Fusebit with Your Application
-            </SC.Link>
-            <SC.Link target="_blank" rel="noopener_noreferrer" href="https://developer.fusebit.io/docs/getting-started">
-              <SC.Bullet />
-              Getting Started
-            </SC.Link>
-            <SC.Link
-              target="_blank"
-              rel="noopener_noreferrer"
-              href="https://developer.fusebit.io/docs/integration-programming-model"
-            >
-              <SC.Bullet />
-              Integration Programming Model
-            </SC.Link>
-          </SC.LinkWrapperMobile>
+          {areCardsCollapsing && (
+            <Box display="flex" flexDirection="column">
+              <SC.LinkTitle>Learn More:</SC.LinkTitle>
+              <SC.Link
+                target="_blank"
+                rel="noopener_noreferrer"
+                href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
+              >
+                <SC.Bullet />
+                Connecting Fusebit with Your Application
+              </SC.Link>
+              <SC.Link
+                target="_blank"
+                rel="noopener_noreferrer"
+                href="https://developer.fusebit.io/docs/getting-started"
+              >
+                <SC.Bullet />
+                Getting Started
+              </SC.Link>
+              <SC.Link
+                target="_blank"
+                rel="noopener_noreferrer"
+                href="https://developer.fusebit.io/docs/integration-programming-model"
+              >
+                <SC.Bullet />
+                Integration Programming Model
+              </SC.Link>
+            </Box>
+          )}
         </SC.FlexDown>
       </SC.Flex>
     </SC.Background>

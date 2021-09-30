@@ -19,6 +19,11 @@ export const lightTheme: Theme = createMuiTheme({
         marginBottom: '20px',
       },
     },
+    MuiDrawer: {
+      paperAnchorBottom: {
+        borderRadius: '8px 8px 0 0',
+      },
+    },
   },
   props: {
     MuiCheckbox: {
