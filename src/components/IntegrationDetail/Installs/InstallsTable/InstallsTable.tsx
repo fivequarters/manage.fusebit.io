@@ -63,7 +63,7 @@ const InstallsTable = () => {
     <div id="installs-table">
       <InformationalBanner
         description="Every time a tenant installs an integration, it will show up here for you to see."
-        href="https://developer.fusebit.io/docs"
+        href="https://developer.fusebit.io/docs/fusebit-system-architecture#installation-lifecycle"
         highlightedDescription="Learn more about Installations in the docs here."
       />
       <ConfirmationPrompt

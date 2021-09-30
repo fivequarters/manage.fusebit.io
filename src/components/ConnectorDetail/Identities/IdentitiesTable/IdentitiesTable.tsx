@@ -59,7 +59,7 @@ const IntegrationsTable = () => {
     <div id="identities-table">
       <InformationalBanner
         description="An identity is a unique relationship your tenant has with a connector. It is used to authenticate on behalf of them when running an integration."
-        href="https://developer.fusebit.io/docs"
+        href="https://developer.fusebit.io/docs/fusebit-system-architecture#installation-lifecycle"
         highlightedDescription="Learn more about Identities here."
       />
       <ConfirmationPrompt
