@@ -6,6 +6,7 @@ const xarrowProps: Partial<xarrowPropsType> = {
   strokeWidth: 1,
   headSize: 10,
   tailSize: 10,
+  zIndex: 1,
   showTail: true,
   showHead: true,
   path: 'grid',

@@ -529,8 +529,7 @@ const Develop: React.FC = () => {
             flexDirection="column"
             alignItems="center"
             justifyContent="center"
-            mb="80px"
-            mt="65px"
+            margin="68px 0"
             padding="32px"
           >
             <SC.FusebitLogo mb="32px" />
@@ -601,6 +600,17 @@ const Develop: React.FC = () => {
                 </Popper>
               )}
             </SC.CardButtonWrapper>
+            {!areCardsCollapsing &&
+              filterConnectors().map((connector: FinalConnector, index: number) => {
+                if (index < 5) {
+                  return (
+                    <>
+                      <LineConnector start="fusebit" startAnchor="right" end={connector.id} endAnchor="left" />
+                    </>
+                  );
+                }
+                return null;
+              })}
           </SC.FusebitCard>
           {!areCardsCollapsing && (
             <Box display="flex" flexDirection="column" mt="auto" mb="-31.5px">
@@ -647,9 +657,6 @@ const Develop: React.FC = () => {
                           connector={connector}
                           onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
                         />
-                        {!areCardsCollapsing && (
-                          <LineConnector start={connector.id} startAnchor="left" end="fusebit" endAnchor="right" />
-                        )}
                       </>
                     );
                   }
@@ -728,7 +735,7 @@ const Develop: React.FC = () => {
               </Button>
             </SC.CardConnectorButtonsWrapperMobile>
             {areCardsCollapsing && (
-              <LineConnector start="connectors" startAnchor="top" end="fusebit" endAnchor="bottom" />
+              <LineConnector start="fusebit" startAnchor="bottom" end="connectors" endAnchor="top" />
             )}
           </SC.Card>
           {areCardsCollapsing && (
