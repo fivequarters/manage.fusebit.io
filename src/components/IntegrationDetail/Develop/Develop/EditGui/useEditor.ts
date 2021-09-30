@@ -76,9 +76,7 @@ const useEditor = ({ onNoInstanceFound } = {} as Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-
-  const handleNoInstanceFound = () =>
-    createSesssion({ id, tenantId: STATIC_TENANT_ID });
+  const handleNoInstanceFound = () => createSesssion({ id, tenantId: STATIC_TENANT_ID });
 
   const handleRun = async () => {
     trackEvent('Run Button Clicked', 'Web Editor');
@@ -90,19 +88,18 @@ const useEditor = ({ onNoInstanceFound } = {} as Props) => {
       const hasInstance = await findInstance();
 
       if (hasInstance) {
-        await testIntegration({ id, tenantId: STATIC_TENANT_ID })
+        await testIntegration({ id, tenantId: STATIC_TENANT_ID });
       } else {
         if (onNoInstanceFound) {
           onNoInstanceFound();
         } else {
-          await handleNoInstanceFound()
+          await handleNoInstanceFound();
         }
       }
     } catch (error) {
       console.log(error);
     }
   };
-
 
   return {
     handleRun,
