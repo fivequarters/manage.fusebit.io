@@ -15,7 +15,6 @@ import {
   MenuList,
   Tooltip,
   useMediaQuery,
-  Drawer,
   Box,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
@@ -43,10 +42,9 @@ import { useBackendClient } from '../../../../hooks/useBackendClient';
 import { BackendClient } from '../../../../interfaces/backendClient';
 import EditCli from './EditCli';
 import { useQuery } from '../../../../hooks/useQuery';
-import play from '../../../../assets/play.svg';
-import info from '../../../../assets/info.svg';
 import SlideUpSpring from '../../../Animations/SlideUpSpring';
 import { trackEvent } from '../../../../utils/analytics';
+import MobileDrawer from './MobileDrawer/MobileDrawer';
 
 const { REACT_APP_ENABLE_ONLINE_EDITOR } = process.env;
 const isOnlineEditorEnabled = REACT_APP_ENABLE_ONLINE_EDITOR === 'true';
@@ -398,24 +396,7 @@ const Develop: React.FC = () => {
         </Fade>
       </Modal>
       {isMobile ? (
-        <Drawer anchor={'bottom'} open={editGuiOpen} onClose={() => setEditGuiOpen(false)}>
-          <SC.GuiMobileWrapper>
-            <CSC.Close onClick={() => setEditGuiOpen(false)} />
-            <Button
-              startIcon={<img src={play} alt="play" height="16" width="16" />}
-              style={{ width: '200px' }}
-              size="large"
-              variant="contained"
-              color="primary"
-            >
-              Run
-            </Button>
-            <SC.GuiMobileNotSupportedWrapper>
-              <SC.GuiMobileNotSupportedIcon src={info} alt="not supported" height="16" width="16" />
-              <SC.GuiMobileNotSupportedText>Editing is not supported on this device</SC.GuiMobileNotSupportedText>
-            </SC.GuiMobileNotSupportedWrapper>
-          </SC.GuiMobileWrapper>
-        </Drawer>
+        <MobileDrawer open={editGuiOpen} onClose={() => setEditGuiOpen(false)} />
       ) : (
         <Modal
           aria-labelledby="transition-modal-title"

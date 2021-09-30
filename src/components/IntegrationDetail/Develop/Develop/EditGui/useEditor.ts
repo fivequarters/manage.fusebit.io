@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getAllInstances } from '../../../../../hooks/api/v2/account/integration/instance/useGetAll';
 import { useAccountIntegrationCreateSession } from '../../../../../hooks/api/v2/account/integration/session/useCreateOne';
@@ -15,26 +15,34 @@ const useEditor = () => {
   const { id } = useParams<{ id: string }>();
   const { userData } = useContext();
   const { axios } = useAxios();
-  const { mutateAsync: createSesssion } = useAccountIntegrationCreateSession();
-  const { mutateAsync: testIntegration } = useAccountIntegrationTestIntegration();
-  const { mutateAsync: commitSession } = useAccountIntegrationCommitSession();
+  const { mutateAsync: createSesssion, isLoading: isCreatingSession } = useAccountIntegrationCreateSession();
+  const { mutateAsync: testIntegration, isLoading: isTesting } = useAccountIntegrationTestIntegration();
+  const { mutateAsync: commitSession, isLoading: isCommiting } = useAccountIntegrationCommitSession();
+  const [isFindingInstance, setIsFindingInstance] = useState(false)
 
   const findInstance = useCallback(async () => {
-    const {
-      data: { items },
-    } = await getAllInstances<Install>(
-      axios,
-      {
-        subscriptionId: userData.subscriptionId,
-        accountId: userData.accountId,
-        id,
-      },
-      {
-        tag: `fusebit.tenantId=${STATIC_TENANT_ID}`,
-      }
-    );
+    try {
+      setIsFindingInstance(true)
 
-    return (items || [])[0];
+      const {
+        data: { items },
+      } = await getAllInstances<Install>(
+        axios,
+        {
+          subscriptionId: userData.subscriptionId,
+          accountId: userData.accountId,
+          id,
+        },
+        {
+          tag: `fusebit.tenantId=${STATIC_TENANT_ID}`,
+        }
+      );
+
+      return (items || [])[0];
+    } finally {
+      setIsFindingInstance(false)
+    }
+
   }, [axios, id, userData]);
 
   useEffect(() => {
@@ -91,6 +99,7 @@ const useEditor = () => {
 
   return {
     handleRun,
+    isRunning: isFindingInstance || isCreatingSession || isTesting || isCommiting
   };
 };
 

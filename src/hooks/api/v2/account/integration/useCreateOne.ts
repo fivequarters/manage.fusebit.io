@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from 'react-query';
 import { Params } from '../../../../../interfaces/api';
-import { STATIC_TENANT_ID } from '../../../../../utils/constants';
+import { DEFAULT_INTEGRATION_CONFIG } from '../../../../../utils/localStorage';
 import { useAxios } from '../../../../useAxios';
 
 export const useAccountIntegrationCreateIntegration = <T>() => {
@@ -19,13 +19,7 @@ export const useAccountIntegrationCreateIntegration = <T>() => {
 
         localStorage.setItem(
           id,
-          JSON.stringify({
-            runner: {
-              method: 'post',
-              url: `/api/tenant/${STATIC_TENANT_ID}/test`,
-              payload: '',
-            },
-          })
+          JSON.stringify(DEFAULT_INTEGRATION_CONFIG)
         );
 
         queryClient.removeQueries('accountIntegrationsGetAll')
