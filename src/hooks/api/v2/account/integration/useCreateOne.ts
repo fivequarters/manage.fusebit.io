@@ -13,10 +13,9 @@ export const useAccountIntegrationCreateIntegration = <T>() => {
       return axios<T>(`/v2/account/${accountId}/subscription/${subscriptionId}/integration/${data.id}`, 'post', data);
     },
     {
-      onMutate: (_: Params) => () => { },
+      onMutate: (_: Params) => () => {},
       onError: (_, __, rollback) => rollback?.(),
       onSuccess: (_, { id }) => {
-
         localStorage.setItem(
           id,
           JSON.stringify({
@@ -28,7 +27,7 @@ export const useAccountIntegrationCreateIntegration = <T>() => {
           })
         );
 
-        queryClient.removeQueries('accountIntegrationsGetAll')
+        queryClient.removeQueries('accountIntegrationsGetAll');
       },
     }
   );
