@@ -1,6 +1,6 @@
 export interface ListComponentProps {
   connector: FinalConnector;
-  className?: string;
+  id?: string;
   onChange?: () => void;
   onConnectorDelete: Function;
   onLinkConnectorClick?: Function;

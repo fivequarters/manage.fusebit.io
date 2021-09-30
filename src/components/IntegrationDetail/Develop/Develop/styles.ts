@@ -13,7 +13,7 @@ export const FlexDown = styled.div`
   &:not(:last-child)  {
     margin-right: auto;
 
-    @media only screen and (max-width: 1250px) {
+    @media only screen and (max-width: 1200px) {
       margin-right: 0;
     }
   }
@@ -23,7 +23,7 @@ export const Flex = styled.div`
   position: relative;
   display: flex;
 
-  @media only screen and (max-width: 1250px) {
+  @media only screen and (max-width: 1200px) {
     flex-direction: column;
     align-items: center;
     justify-content: center;

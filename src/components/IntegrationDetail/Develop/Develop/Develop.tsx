@@ -46,8 +46,8 @@ import { useQuery } from '../../../../hooks/useQuery';
 import play from '../../../../assets/play.svg';
 import info from '../../../../assets/info.svg';
 import SlideUpSpring from '../../../Animations/SlideUpSpring';
-import { SteppedLineTo } from 'react-lineto';
 import { trackEvent } from '../../../../utils/analytics';
+import LineConnector from '../../../LineConnector';
 
 const { REACT_APP_ENABLE_ONLINE_EDITOR } = process.env;
 const isOnlineEditorEnabled = REACT_APP_ENABLE_ONLINE_EDITOR === 'true';
@@ -89,7 +89,7 @@ const Develop: React.FC = () => {
   const [editGuiMounted, setEditGuiMounted] = useState(false);
   const [editCliOpen, setEditCliOpen] = React.useState(false);
   const isMobile = useMediaQuery('(max-width: 850px)');
-  const areCardsCollapsing = useMediaQuery('(max-width: 1250px)');
+  const areCardsCollapsing = useMediaQuery('(max-width: 1200px)');
 
   React.useEffect(() => {
     if (!!query.get('session')) {
@@ -443,28 +443,19 @@ const Develop: React.FC = () => {
       )}
       <SC.Flex>
         <SC.FlexDown>
-          <SC.Card>
+          <SC.Card id="yourApplication">
             <SC.CardTitle>Your Application</SC.CardTitle>
             {backendClients.length > 0 ? (
               backendClients.map((client: BackendClient) => (
                 <>
                   <ListComponent
-                    className={client.id}
+                    id={client.id}
                     onChange={getBackendClients}
                     connector={{ ...client, isApplication: true }}
                     onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
                   />
                   {!areCardsCollapsing && (
-                    <SteppedLineTo
-                      from={client.id}
-                      fromAnchor="right"
-                      to="fusebit"
-                      toAnchor="left"
-                      orientation="h"
-                      borderStyle="dashed"
-                      borderColor="#333333"
-                      delay={100}
-                    />
+                    <LineConnector start={client.id} startAnchor="right" end="fusebit" endAnchor="left" />
                   )}
                 </>
               ))
@@ -513,6 +504,9 @@ const Develop: React.FC = () => {
                 </div>
               </Tooltip>
             </SC.CardButtonWrapper>
+            {areCardsCollapsing && (
+              <LineConnector start="yourApplication" startAnchor="bottom" end="fusebit" endAnchor="top" />
+            )}
           </SC.Card>
           {!areCardsCollapsing && (
             <Box mt="auto">
@@ -530,7 +524,7 @@ const Develop: React.FC = () => {
         </SC.FlexDown>
         <SC.FlexDown>
           <SC.FusebitCard
-            className="fusebit"
+            id="fusebit"
             display="flex"
             flexDirection="column"
             alignItems="center"
@@ -631,7 +625,7 @@ const Develop: React.FC = () => {
           )}
         </SC.FlexDown>
         <SC.FlexDown>
-          <SC.Card>
+          <SC.Card id="connectors">
             <SC.CardTitle>Connectors</SC.CardTitle>
             <SC.CardConnectorWrapper>
               {connectors?.data.items === undefined && !loading ? (
@@ -648,22 +642,13 @@ const Develop: React.FC = () => {
                     return (
                       <>
                         <ListComponent
-                          className={connector.id}
+                          id={connector.id}
                           key={index}
                           connector={connector}
                           onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
                         />
                         {!areCardsCollapsing && (
-                          <SteppedLineTo
-                            from={connector.id}
-                            fromAnchor="left"
-                            to="fusebit"
-                            toAnchor="right"
-                            orientation="h"
-                            borderStyle="dashed"
-                            borderColor="#333333"
-                            delay={100}
-                          />
+                          <LineConnector start={connector.id} startAnchor="left" end="fusebit" endAnchor="right" />
                         )}
                       </>
                     );
@@ -742,6 +727,9 @@ const Develop: React.FC = () => {
                 Link Existing
               </Button>
             </SC.CardConnectorButtonsWrapperMobile>
+            {areCardsCollapsing && (
+              <LineConnector start="connectors" startAnchor="top" end="fusebit" endAnchor="bottom" />
+            )}
           </SC.Card>
           {areCardsCollapsing && (
             <Box display="flex" flexDirection="column">
