@@ -113,7 +113,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
           <CSC.Flex flexDown>
             <SC.Subtitle>URL</SC.Subtitle>
             <div>
-              <SC.Textarea
+              <SC.TextField
                 hasError={!!formErrors.url}
                 onChange={(e) => {
                   const newValues = { ...formValues, url: e.target.value };
@@ -127,23 +127,25 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
             </div>
           </CSC.Flex>
         </Box>
-        <Box display="flex" mt="15px" flexDirection="column">
-          <SC.Subtitle>Payload</SC.Subtitle>
-          <div>
-            <SC.Textarea
-              hasError={!!formErrors.payload}
-              onChange={(e) => {
-                const newValues = { ...formValues, payload: e.target.value };
-                validateForm(newValues);
-                setFormValues(newValues);
-              }}
-              value={formValues?.payload}
-              onBlur={() => validateForm()}
-              height="250px"
-            />
-            {formErrors.payload && <SC.ErrorMessage>{formErrors.payload}</SC.ErrorMessage>}
-          </div>
-        </Box>
+        {formValues?.method !== 'get' && (
+          <Box display="flex" mt="15px" flexDirection="column">
+            <SC.Subtitle>Payload</SC.Subtitle>
+            <div>
+              <SC.Textarea
+                hasError={!!formErrors.payload}
+                onChange={(e) => {
+                  const newValues = { ...formValues, payload: e.target.value };
+                  validateForm(newValues);
+                  setFormValues(newValues);
+                }}
+                value={formValues?.payload}
+                onBlur={() => validateForm()}
+                height="250px"
+              />
+              {formErrors.payload && <SC.ErrorMessage>{formErrors.payload}</SC.ErrorMessage>}
+            </div>
+          </Box>
+        )}
         <SC.ButtonsWrapper>
           <Button
             onClick={handleSave}
