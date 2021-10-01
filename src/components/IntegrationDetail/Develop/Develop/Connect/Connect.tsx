@@ -75,7 +75,7 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
         confirmationButtonText="Delete"
       />
     ) : (
-      <SC.Card open={open} ref={ref}>
+      <SC.Card open={open} ref={ref} tabIndex={-1}>
         <SC.Wrapper>
           <CSC.Close onClick={handleClose} />
 

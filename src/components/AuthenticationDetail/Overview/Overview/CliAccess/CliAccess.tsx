@@ -7,7 +7,7 @@ import CopyLine from '../../../../CopyLine';
 
 const CliAccess = React.forwardRef<HTMLDivElement, Props>(({ open, onClose }, ref) => {
   return (
-    <SC.Card open={open} ref={ref}>
+    <SC.Card open={open} ref={ref} tabIndex={-1}>
       <CSC.Close onClick={() => onClose()} />
       <CSC.ModalTitle>Grant CLI Access</CSC.ModalTitle>
 

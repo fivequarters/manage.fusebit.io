@@ -36,7 +36,7 @@ const ConfirmationPrompt: React.FC<Props> = ({
       closeAfterTransition
       BackdropComponent={Backdrop}
     >
-      <SC.Card open={open}>
+      <SC.Card open={open} tabIndex={-1}>
         <CSC.Close onClick={() => setOpen(false)} />
         <CSC.ModalTitle margin="0 0 16px 0">{title}</CSC.ModalTitle>
         <CSC.ModalDescription textAlign="center">{description}</CSC.ModalDescription>

@@ -92,7 +92,7 @@ const NewUser = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, create
   };
 
   return (
-    <SC.Card open={open} ref={ref}>
+    <SC.Card open={open} ref={ref} tabIndex={-1}>
       <CSC.Close onClick={() => onClose()} />
       {!userCreated ? (
         <>

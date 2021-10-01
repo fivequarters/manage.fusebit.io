@@ -80,7 +80,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
       closeAfterTransition
       BackdropComponent={Backdrop}
     >
-      <SC.Card open={open}>
+      <SC.Card open={open} tabIndex={-1}>
         <CSC.Close onClick={() => setOpen(false)} />
         <CSC.ModalTitle margin="0 0 16px 0">Configure runner</CSC.ModalTitle>
         <Box display="flex" mt="30px">
