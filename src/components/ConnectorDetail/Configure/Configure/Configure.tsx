@@ -10,7 +10,6 @@ import { useAccountConnectorsGetOne } from '../../../../hooks/api/v2/account/con
 import { useAccountConnectorsGetOneConfig } from '../../../../hooks/api/v2/account/connector/useGetOneConfig';
 import { useContext } from '../../../../hooks/useContext';
 import { Connector, ConnectorConfig } from '../../../../interfaces/connector';
-
 import { useEntityApi } from '../../../../hooks/useEntityApi';
 import { useGetFeedById } from '../../../../hooks/useGetFeedById';
 import { trackEvent } from '../../../../utils/analytics';
