@@ -341,7 +341,8 @@ export const ActionsHelpImage = styled.img`
 export const FusebitEditorContainer = styled.div`
   position: relative;
 
-  [data-type='runnerSettings'], [data-type='scheduleSettings'] {
+  [data-type='runnerSettings'],
+  [data-type='scheduleSettings'] {
     display: none;
   }
 `;
