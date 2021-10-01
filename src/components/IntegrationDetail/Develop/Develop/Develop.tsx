@@ -421,7 +421,7 @@ const Develop: React.FC = () => {
             <SC.CardTitle>Your Application</SC.CardTitle>
             {backendClients.length > 0 ? (
               backendClients.map((client: BackendClient) => (
-                <>
+                <React.Fragment key={client.id}>
                   <ListComponent
                     id={client.id}
                     onChange={getBackendClients}
@@ -431,7 +431,7 @@ const Develop: React.FC = () => {
                   {!areCardsCollapsing && (
                     <LineConnector start={client.id} startAnchor="right" end="fusebit" endAnchor="left" />
                   )}
-                </>
+                </React.Fragment>
               ))
             ) : !backendClientsLoading ? (
               <SC.NoApplicationsConfiguredWrapper>
@@ -557,8 +557,7 @@ const Develop: React.FC = () => {
                                 index: number
                               ) => (
                                 <MenuItem
-                                  // eslint-disable-next-line react/no-array-index-key
-                                  key={index}
+                                  key={option.optionLabel}
                                   disabled={index === 2}
                                   selected={index === editOption}
                                   onClick={(event) => handleEditOptionClick(event, index)}
@@ -579,9 +578,13 @@ const Develop: React.FC = () => {
               filterConnectors().map((connector: FinalConnector, index: number) => {
                 if (index < 5) {
                   return (
-                    <>
-                      <LineConnector start="fusebit" startAnchor="right" end={connector.id} endAnchor="left" />
-                    </>
+                    <LineConnector
+                      key={connector.id}
+                      start="fusebit"
+                      startAnchor="right"
+                      end={connector.id}
+                      endAnchor="left"
+                    />
                   );
                 }
                 return null;
@@ -625,14 +628,12 @@ const Develop: React.FC = () => {
                 filterConnectors().map((connector: FinalConnector, index: number) => {
                   if (index < 5) {
                     return (
-                      <>
-                        <ListComponent
-                          id={connector.id}
-                          key={connector.id}
-                          connector={connector}
-                          onConnectorDelete={(_connector: Entity) => handleListComponentDelete(_connector)}
-                        />
-                      </>
+                      <ListComponent
+                        id={connector.id}
+                        key={connector.id}
+                        connector={connector}
+                        onConnectorDelete={(_connector: Entity) => handleListComponentDelete(_connector)}
+                      />
                     );
                   }
                   return null;
