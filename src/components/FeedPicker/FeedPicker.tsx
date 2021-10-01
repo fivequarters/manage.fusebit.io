@@ -107,7 +107,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
   };
 
   return (
-    <SC.Card onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)} open={open} ref={ref}>
+    <SC.Card onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)} open={open} ref={ref} tabIndex={-1}>
       <SC.Close onClick={() => onClose()} src={cross} alt="close" height="12" width="12" />
       <SC.Title>{`New ${feedTypeName}`}</SC.Title>
       <SC.Flex>
