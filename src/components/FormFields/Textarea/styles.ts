@@ -8,9 +8,9 @@ const customBlue = css`
   overflow: scroll !important;
 `;
 
-export const MUITextarea = styled(TextareaAutosize)<{ fieldVariant: 'default' | 'customBlue'; hasError?: boolean }>`
+export const MUITextarea = styled(TextareaAutosize)<{ $fieldVariant: 'default' | 'customBlue'; $hasError?: boolean }>`
   ${(props) =>
-    props.fieldVariant === 'customBlue' &&
+    props.$fieldVariant === 'customBlue' &&
     `
         ${customBlue}
         ${InputMixin}
