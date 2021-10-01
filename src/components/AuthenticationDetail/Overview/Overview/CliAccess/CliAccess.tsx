@@ -5,9 +5,9 @@ import * as CSC from '../../../../globalStyle';
 import { Props } from '../../../../../interfaces/cliAccess';
 import CopyLine from '../../../../CopyLine';
 
-const CliAccess = React.forwardRef(({ open, onClose }: Props, ref) => {
+const CliAccess = React.forwardRef<HTMLDivElement, Props>(({ open, onClose }, ref) => {
   return (
-    <SC.Card open={open}>
+    <SC.Card open={open} ref={ref}>
       <CSC.Close onClick={() => onClose()} />
       <CSC.ModalTitle>Grant CLI Access</CSC.ModalTitle>
 

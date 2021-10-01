@@ -74,7 +74,7 @@ const IntegrationsTable = () => {
         open={deleteOpen}
         setOpen={setDeleteOpen}
         handleConfirmation={handleDelete}
-        title={`​Are you sure you want to delete ${selected.length > 1 ? 'these Identities?' : 'this Identity?'}`}
+        title={`Are you sure you want to delete ${selected.length > 1 ? 'these Identities?' : 'this Identity?'}`}
         description="Your tenants will have to re-authenticate themselves in their account"
       />
       <BaseTable

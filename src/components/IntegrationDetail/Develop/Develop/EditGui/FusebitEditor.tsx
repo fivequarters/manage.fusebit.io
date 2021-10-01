@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 import React from 'react';
 import { Context } from '../../../../../interfaces/editGui';
 
@@ -11,10 +12,6 @@ export default class FusebitEditor extends React.Component<any> {
   private el: any;
 
   private editorContext: any;
-
-  render() {
-    return <div ref={(el) => (this.el = el)} />;
-  }
 
   componentDidMount() {
     const initializeEditor = () => {
@@ -63,5 +60,15 @@ export default class FusebitEditor extends React.Component<any> {
       this.editorContext.dispose();
       this.editorContext = undefined;
     }
+  }
+
+  render() {
+    return (
+      <div
+        ref={(el) => {
+          this.el = el;
+        }}
+      />
+    );
   }
 }

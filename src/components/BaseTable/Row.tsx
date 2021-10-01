@@ -19,12 +19,12 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
   const query = useQuery();
   const [isExpanded, setIsExpanded] = useState(query.get('expanded')?.split(',').includes(row.id) || false);
 
-  const renderCollapsable = (row: any) => {
+  const renderCollapsable = (_row: any) => {
     return (
       <SC.ExpandableRow noBorder={isExpanded}>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={headers.length + 1}>
           <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-            {row.collapsableContent}
+            {_row.collapsableContent}
           </Collapse>
         </TableCell>
       </SC.ExpandableRow>
@@ -87,6 +87,7 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
 
             return (
               <SC.TableCell
+                key={header.id}
                 isMain={i === 0}
                 isClickable={isClickable}
                 scope="row"

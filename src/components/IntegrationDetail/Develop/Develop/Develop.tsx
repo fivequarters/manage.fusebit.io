@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import {
@@ -48,6 +49,8 @@ import MobileDrawer from './MobileDrawer';
 const { REACT_APP_ENABLE_ONLINE_EDITOR } = process.env;
 const isOnlineEditorEnabled = REACT_APP_ENABLE_ONLINE_EDITOR === 'true';
 
+// TODO: Split this component and refactor ternary logic
+
 const Develop: React.FC = () => {
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
@@ -87,8 +90,10 @@ const Develop: React.FC = () => {
   const areCardsCollapsing = useMediaQuery('(max-width: 1200px)');
 
   const getBackendClients = async () => {
-    const backendClients = await getBackendClientListener();
-    backendClients && setBackendClients(backendClients);
+    const _backendClients = await getBackendClientListener();
+    if (_backendClients) {
+      setBackendClients(_backendClients);
+    }
     setBackendClientsLoading(false);
   };
 
@@ -284,8 +289,8 @@ const Develop: React.FC = () => {
 
   const handleConnectOpen = async () => {
     trackEvent('Develop Connect Button Clicked', 'Integration');
-    const backendClient = await registerBackend();
-    setBackendClient(backendClient);
+    const _backendClient = await registerBackend();
+    setBackendClient(_backendClient);
     setConnectOpen(true);
   };
 
@@ -369,14 +374,14 @@ const Develop: React.FC = () => {
                   });
                   return returnItem;
                 })
-                .map((connector: Connector, index: number) => {
+                .map((connector: Connector) => {
                   return (
                     <ListComponent
-                      onLinkConnectorClick={(connector: any) => linkConnector(connector)}
+                      onLinkConnectorClick={(_connector: any) => linkConnector(_connector)}
                       linkConnector={true}
                       key={connector.id}
                       connector={connector}
-                      onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
+                      onConnectorDelete={(_connector: Entity) => handleListComponentDelete(_connector)}
                     />
                   );
                 })}
@@ -552,7 +557,8 @@ const Develop: React.FC = () => {
                                 index: number
                               ) => (
                                 <MenuItem
-                                  key={option.buttonLabel}
+                                  // eslint-disable-next-line react/no-array-index-key
+                                  key={index}
                                   disabled={index === 2}
                                   selected={index === editOption}
                                   onClick={(event) => handleEditOptionClick(event, index)}
@@ -622,9 +628,9 @@ const Develop: React.FC = () => {
                       <>
                         <ListComponent
                           id={connector.id}
-                          key={index}
+                          key={connector.id}
                           connector={connector}
-                          onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
+                          onConnectorDelete={(_connector: Entity) => handleListComponentDelete(_connector)}
                         />
                       </>
                     );
@@ -633,16 +639,14 @@ const Develop: React.FC = () => {
                 })
               )}
             </SC.CardConnectorWrapper>
-            {integrationData?.data.data.components.length
-              ? integrationData?.data.data.components.length >= 5 && (
-                  <Link to={getRedirectLink('/connectors')}>
+            {(integrationData?.data?.data?.components || []).length >= 5 && (
+              <Link to={getRedirectLink('/connectors')}>
                 <SC.CardConnectorSeeMore href={getRedirectLink('/connectors')}>
-                      See all
-                      <img src={arrow} alt="see more" height="10" width="10" />
-                    </SC.CardConnectorSeeMore>
+                  See all
+                  <img src={arrow} alt="see more" height="10" width="10" />
+                </SC.CardConnectorSeeMore>
               </Link>
-                )
-              : null}
+            )}
 
             <SC.CardConnectorButtonsWrapper>
               <Button

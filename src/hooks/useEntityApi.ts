@@ -53,9 +53,13 @@ export const useEntityApi = (preventLoader?: boolean) => {
       accountId: userData.accountId,
       subscriptionId: userData.subscriptionId,
     };
-    entity.entityType === 'connector'
-      ? await createConnector.mutateAsync(obj)
-      : await createIntegration.mutateAsync(obj);
+
+    if (entity.entityType === 'connector') {
+      await createConnector.mutateAsync(obj);
+    } else {
+      await createIntegration.mutateAsync(obj);
+    }
+
     await waitForEntityStateChange(entity.entityType, [entity.id]);
   };
 
@@ -165,7 +169,11 @@ export const useEntityApi = (preventLoader?: boolean) => {
           const params = {
             id: item.id,
           };
-          isIdentity ? await deleteIndentity.mutateAsync(params) : await deleteInstall.mutateAsync(params);
+          if (isIdentity) {
+            await deleteIndentity.mutateAsync(params);
+          } else {
+            await deleteInstall.mutateAsync(params);
+          }
           // return waitForEntityStateChange(isIdentity ? `integration/${id}/instance` : `connector/${id}/identity`, [
           //   item.id,
           // ]);

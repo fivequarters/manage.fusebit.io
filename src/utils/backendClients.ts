@@ -16,6 +16,39 @@ const axiosNo404MiddlewareInstance = axios.create({
   },
 });
 
+export async function getBackendClients(user: User): Promise<BackendClient[]> {
+  try {
+    const { accountId, subscriptionId, token } = user;
+    const clientsPaths = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/subscription/${subscriptionId}/storage/${BACKEND_LIST_STORAGE_ID}`;
+    const clientsResponse = await axiosNo404MiddlewareInstance.get<Storage<BackendClient>>(clientsPaths, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return clientsResponse.data.data;
+  } catch (err) {
+    if (err?.response?.status === 404) {
+      return [];
+    }
+    throw err;
+  }
+}
+
+async function putBackendClients(user: User, backendClients: BackendClient[]): Promise<Storage<BackendClient>> {
+  const { accountId, subscriptionId, token } = user;
+  const clientsPaths = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/subscription/${subscriptionId}/storage/${BACKEND_LIST_STORAGE_ID}`;
+  const response = await axiosNo404MiddlewareInstance.put<Storage<BackendClient>>(
+    clientsPaths,
+    { data: backendClients },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+}
+
 export async function createBackendClient(user: User): Promise<BackendClient> {
   const backendClients = await getBackendClients(user);
 
@@ -54,39 +87,6 @@ export async function removedBackendClient(user: User, clientId: string): Promis
   await removeIssuer(user, clientId);
   await removeClient(user, clientId);
   await putBackendClients(user, filteredClients);
-}
-
-export async function getBackendClients(user: User): Promise<BackendClient[]> {
-  try {
-    const { accountId, subscriptionId, token } = user;
-    const clientsPaths = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/subscription/${subscriptionId}/storage/${BACKEND_LIST_STORAGE_ID}`;
-    const clientsResponse = await axiosNo404MiddlewareInstance.get<Storage<BackendClient>>(clientsPaths, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return clientsResponse.data.data;
-  } catch (err) {
-    if (err?.response?.status === 404) {
-      return [];
-    }
-    throw err;
-  }
-}
-
-async function putBackendClients(user: User, backendClients: BackendClient[]): Promise<Storage<BackendClient>> {
-  const { accountId, subscriptionId, token } = user;
-  const clientsPaths = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/subscription/${subscriptionId}/storage/${BACKEND_LIST_STORAGE_ID}`;
-  const response = await axiosNo404MiddlewareInstance.put<Storage<BackendClient>>(
-    clientsPaths,
-    { data: backendClients },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-  return response.data;
 }
 
 export async function patchBackendClients(

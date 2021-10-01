@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import { TableCell, Checkbox } from '@material-ui/core';
 import * as SC from './styles';
@@ -8,6 +9,8 @@ import { useContext } from '../../hooks/useContext';
 import client from '../../assets/client.jpg';
 import GetInstances from './GetInstances';
 import GetIdentities from './GetIdentities';
+
+// TODO: Delete and use BaseTable instead.
 
 const TableRowComponent: React.FC<Props> = ({
   row,

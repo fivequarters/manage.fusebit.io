@@ -11,7 +11,9 @@ const CopyLine: React.FC<Props> = ({ text, highlightedText, horizontalScrollbar,
   const handleClick = () => {
     if (!disableCopy) {
       handleCopy(text);
-      onCopy && onCopy();
+      if (onCopy) {
+        onCopy();
+      }
     }
   };
 

@@ -21,6 +21,7 @@ const checkIfEntitiesAreValid = (parsedFeed: Feed) => {
       statusCode: 403,
       message: 'Entities cant be an array',
     };
+    // eslint-disable-next-line @typescript-eslint/no-throw-literal
     throw err;
   }
 };
@@ -49,7 +50,7 @@ export const useReplaceMustache = () => {
             endpoint: process.env.REACT_APP_FUSEBIT_DEPLOYMENT,
             integrationId: () => {
               const integration: any = Object.entries(feed.configuration.entities as Record<string, Entity>).find(
-                ([name, entity]: [string, Entity]) => entity.entityType === 'integration'
+                ([, entity]: [string, Entity]) => entity.entityType === 'integration'
               );
               return integration ? global.entities[integration[0]]?.id() || integration[1].id : '';
             },

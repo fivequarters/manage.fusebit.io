@@ -1,5 +1,29 @@
 import { KeyPair } from '../interfaces/keyPair';
 
+function arrayBufferToBase64(arrayBuffer: ArrayBuffer): string {
+  const byteArray = new Uint8Array(arrayBuffer);
+  let byteString = '';
+  byteArray.forEach((byte) => {
+    byteString += String.fromCharCode(byte);
+  });
+  return btoa(byteString);
+}
+
+function breakPemIntoMultipleLines(pem: string): string {
+  const charsPerLine = 64;
+  let pemContents = '';
+  while (pem.length > 0) {
+    pemContents += `${pem.substring(0, charsPerLine)}\n`;
+    pem = pem.substring(64);
+  }
+  return pemContents;
+}
+
+function toPem(key: ArrayBuffer, type: 'private' | 'public'): string {
+  const pemContents = breakPemIntoMultipleLines(arrayBufferToBase64(key));
+  return `-----BEGIN ${type.toUpperCase()} KEY-----\n${pemContents}-----END ${type.toUpperCase()} KEY-----`;
+}
+
 export async function generateKeyPair(): Promise<KeyPair> {
   const generatedKeyPair: CryptoKeyPair = await crypto.subtle.generateKey(
     {
@@ -23,28 +47,4 @@ export async function generateKeyPair(): Promise<KeyPair> {
     publicKeyPem,
     privateKeyPem,
   };
-}
-
-function arrayBufferToBase64(arrayBuffer: ArrayBuffer): string {
-  const byteArray = new Uint8Array(arrayBuffer);
-  let byteString = '';
-  byteArray.forEach((byte) => {
-    byteString += String.fromCharCode(byte);
-  });
-  return btoa(byteString);
-}
-
-function breakPemIntoMultipleLines(pem: string): string {
-  const charsPerLine = 64;
-  let pemContents = '';
-  while (pem.length > 0) {
-    pemContents += `${pem.substring(0, charsPerLine)}\n`;
-    pem = pem.substring(64);
-  }
-  return pemContents;
-}
-
-function toPem(key: ArrayBuffer, type: 'private' | 'public'): string {
-  const pemContents = breakPemIntoMultipleLines(arrayBufferToBase64(key));
-  return `-----BEGIN ${type.toUpperCase()} KEY-----\n${pemContents}-----END ${type.toUpperCase()} KEY-----`;
 }

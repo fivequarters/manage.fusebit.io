@@ -102,9 +102,9 @@ const Overview: React.FC = () => {
     }
   }, [accountData]);
 
-  const _updateUser = async (data: Account) => {
+  const _updateUser = async (_data: Account) => {
     try {
-      await updateUser.mutateAsync({ data, accountId: userData.accountId, userId: data.id });
+      await updateUser.mutateAsync({ _data, accountId: userData.accountId, userId: _data.id });
       reloadAccount();
     } catch (e) {
       createError(e);
@@ -243,9 +243,11 @@ const Overview: React.FC = () => {
                 data={data}
                 renderers={materialRenderers}
                 cells={materialCells}
-                onChange={({ errors, data }) => {
-                  errors && setErrors(errors);
-                  setData(data);
+                onChange={({ errors: _errors, data: _data }) => {
+                  if (_errors) {
+                    setErrors(_errors);
+                  }
+                  setData(_data);
                 }}
                 validationMode={validationMode}
               />

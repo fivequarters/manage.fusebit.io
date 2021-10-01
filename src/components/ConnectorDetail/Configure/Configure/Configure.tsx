@@ -106,7 +106,7 @@ const Configure: React.FC = () => {
               data={jsonFormsInputs || config?.data.data}
               renderers={materialRenderers}
               cells={materialCells}
-              onChange={({ errors, data: newData }) => {
+              onChange={({ errors: _errors, data: newData }) => {
                 // Clear the clientId and clientSecret when going from non-prod to production.
                 if (
                   newData.mode?.useProduction !== config?.data.data?.mode?.useProduction &&
@@ -130,7 +130,10 @@ const Configure: React.FC = () => {
                   newData.mode = { ...(newData.mode || {}), useProduction: false };
                 }
 
-                errors && setErrors(errors);
+                if (_errors) {
+                  setErrors(_errors);
+                }
+
                 setJsonFormsInputs(newData);
                 setData(newData);
               }}

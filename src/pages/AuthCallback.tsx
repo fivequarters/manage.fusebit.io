@@ -36,7 +36,10 @@ const IntegrationsPage: FC<{}> = (): ReactElement => {
         },
       });
       return response.data.picture;
-    } catch (e) {}
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.log(e);
+    }
     return picture;
   };
 

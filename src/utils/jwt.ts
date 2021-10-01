@@ -5,12 +5,20 @@ import { TokenPayload } from '../interfaces/tokenPayload';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
-export function generateNonExpiringToken(keyPair: KeyPair, client: Client, issuer: Issuer): Promise<string> {
-  const tokenPayload = {
-    sub: client.id,
-    aud: REACT_APP_FUSEBIT_DEPLOYMENT as string,
-  };
-  return signJwt(tokenPayload, issuer, keyPair.privateKey);
+function base64ToUint8Array(base64Contents: string): Uint8Array {
+  base64Contents = base64Contents.replace(/-/g, '+').replace(/_/g, '/').replace(/\s/g, '');
+  const content = atob(base64Contents);
+  return new Uint8Array(content.split('').map((c) => c.charCodeAt(0)));
+}
+
+function stringToUint8Array(contents: string): Uint8Array {
+  const encoded = btoa(unescape(encodeURIComponent(contents)));
+  return base64ToUint8Array(encoded);
+}
+
+function uint8ArrayToString(unsignedArray: Uint8Array): string {
+  const base64string = btoa(String.fromCharCode(...unsignedArray));
+  return base64string.replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
 }
 
 export async function signJwt(tokenPayload: TokenPayload, issuer: Issuer, privateKey: CryptoKey): Promise<string> {
@@ -53,18 +61,10 @@ export async function signJwt(tokenPayload: TokenPayload, issuer: Issuer, privat
   return `${headerAndPayload}.${base64Signature}`;
 }
 
-function uint8ArrayToString(unsignedArray: Uint8Array): string {
-  const base64string = btoa(String.fromCharCode(...unsignedArray));
-  return base64string.replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
-}
-
-function base64ToUint8Array(base64Contents: string): Uint8Array {
-  base64Contents = base64Contents.replace(/-/g, '+').replace(/_/g, '/').replace(/\s/g, '');
-  const content = atob(base64Contents);
-  return new Uint8Array(content.split('').map((c) => c.charCodeAt(0)));
-}
-
-function stringToUint8Array(contents: string): Uint8Array {
-  const encoded = btoa(unescape(encodeURIComponent(contents)));
-  return base64ToUint8Array(encoded);
+export function generateNonExpiringToken(keyPair: KeyPair, client: Client, issuer: Issuer): Promise<string> {
+  const tokenPayload = {
+    sub: client.id,
+    aud: REACT_APP_FUSEBIT_DEPLOYMENT as string,
+  };
+  return signJwt(tokenPayload, issuer, keyPair.privateKey);
 }

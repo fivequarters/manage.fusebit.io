@@ -11,7 +11,7 @@ import { patchBackendClients } from '../../../../../utils/backendClients';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
-const Connect = React.forwardRef(
+const Connect = React.forwardRef<HTMLDivElement, Props>(
   (
     {
       id,
@@ -26,7 +26,7 @@ const Connect = React.forwardRef(
       setShowWarning,
       showWarning,
       disableCopy,
-    }: Props,
+    },
     ref
   ) => {
     const { userData } = useContext();
@@ -41,14 +41,20 @@ const Connect = React.forwardRef(
       if (disableCopy) {
         onClose();
       } else if (setShowWarning) {
-        keyIsCopied || showWarning ? onClose() : setShowWarning(true);
+        if (keyIsCopied || showWarning) {
+          onClose();
+        } else {
+          setShowWarning(true);
+        }
       }
     };
 
     const handleSave = async () => {
       setSaving(true);
       await patchBackendClients(id, userData, { name: editedBackendClientId });
-      disableCopy && onChange?.(); // if its the first time its created, we dont call onChange
+      if (disableCopy) {
+        onChange?.(); // if its the first time its created, we dont call onChange
+      }
       setBackendClientId(editedBackendClientId);
       setEditMode(false);
       setSaving(false);
@@ -69,7 +75,7 @@ const Connect = React.forwardRef(
         confirmationButtonText="Delete"
       />
     ) : (
-      <SC.Card open={open}>
+      <SC.Card open={open} ref={ref}>
         <SC.Wrapper>
           <CSC.Close onClick={handleClose} />
 

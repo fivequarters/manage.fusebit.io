@@ -77,7 +77,7 @@ const InstallsTable = () => {
         open={deleteOpen}
         setOpen={setDeleteOpen}
         handleConfirmation={handleDelete}
-        title={`​Are you sure you want to delete ${selected.length > 1 ? 'these Installs?' : 'this Install?'}`}
+        title={`Are you sure you want to delete ${selected.length > 1 ? 'these Installs?' : 'this Install?'}`}
         description={`Your tenants will have to re-install ${
           selected.length > 1 ? 'these integrations' : ' this integration'
         } in their account.`}

@@ -5,9 +5,9 @@ import * as CSC from '../../../../globalStyle';
 import { Props } from '../../../../../interfaces/edit';
 import CopyLine from '../../../../CopyLine';
 
-const Edit = React.forwardRef(({ open, onClose, integrationId }: Props, ref) => {
+const Edit = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, integrationId }, ref) => {
   return (
-    <SC.Card open={!!open}>
+    <SC.Card open={!!open} ref={ref}>
       <CSC.Close onClick={() => onClose()} />
       <CSC.ModalTitle>Edit {integrationId}</CSC.ModalTitle>
 

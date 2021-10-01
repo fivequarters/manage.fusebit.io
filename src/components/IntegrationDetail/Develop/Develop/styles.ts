@@ -10,7 +10,7 @@ export const Background = styled.div`
 export const FlexDown = styled.div`
   display: flex;
   flex-direction: column;
-  &:not(:last-child)  {
+  &:not(:last-child) {
     margin-right: auto;
 
     @media only screen and (max-width: 1200px) {

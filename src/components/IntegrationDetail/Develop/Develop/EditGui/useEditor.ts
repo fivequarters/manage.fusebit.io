@@ -59,6 +59,7 @@ const useEditor = ({ onNoInstanceFound } = {} as Props) => {
 
           await testIntegration({ id, tenantId: STATIC_TENANT_ID });
         } catch (error) {
+          // eslint-disable-next-line no-console
           console.log(error);
         }
       };
@@ -95,6 +96,7 @@ const useEditor = ({ onNoInstanceFound } = {} as Props) => {
         await handleNoInstanceFound();
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log(error);
     }
   };

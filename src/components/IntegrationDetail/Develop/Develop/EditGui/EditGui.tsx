@@ -17,7 +17,7 @@ import ConfirmationPrompt from '../../../../ConfirmationPrompt';
 import { useTrackPage } from '../../../../../hooks/useTrackPage';
 import { trackEvent } from '../../../../../utils/analytics';
 
-const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, ref) => {
+const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, onMount, integrationId }, ref) => {
   const { userData } = useContext();
   const [isMounted, setIsMounted] = useState(false);
   const [configureRunnerActive, setConfigureRunnerActive] = useState(false);
@@ -42,7 +42,10 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
           el?.click();
           document.getElementById('addNewItem')?.remove();
           const input = document.querySelector('.fusebit-nav-new-file');
-          input && createAddNewItemElement(input);
+
+          if (input) {
+            createAddNewItemElement(input);
+          }
         }
       };
 
@@ -84,7 +87,11 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
   };
 
   const handleClose = () => {
-    window.editor.dirtyState ? setUnsavedWarning(true) : onClose();
+    if (window.editor.dirtyState) {
+      setUnsavedWarning(true);
+    } else {
+      onClose();
+    }
   };
 
   return (
@@ -106,7 +113,7 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
         confirmationButtonText="Start"
         hideCancelButton
       />
-      <SC.EditorContainer>
+      <SC.EditorContainer ref={ref}>
         <ConfigureRunnerModal open={configureRunnerActive} setOpen={setConfigureRunnerActive} />
         {isMounted && (
           <SC.CloseHeader>

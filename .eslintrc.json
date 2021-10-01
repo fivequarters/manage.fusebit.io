@@ -56,12 +56,20 @@
     "no-constant-condition": "warn",
     "@typescript-eslint/no-empty-function": "warn",
     "@typescript-eslint/ban-ts-comment": "off",
-    "react/jsx-closing-bracket-location": [1, { "selfClosing": "line-aligned", "nonEmpty": "after-props" }],
+    "react/jsx-closing-bracket-location": "off",
     "@typescript-eslint/ban-types": "off",
     "prettier/prettier": ["error", { "endOfLine": "auto" }],
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "react/react-in-jsx-scope": "off",
     "no-underscore-dangle": "off",
+    "@typescript-eslint/naming-convention": "off",
+    "react/jsx-curly-newline": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "no-param-reassign": "off",
+    "prefer-promise-reject-errors": "off",
+    "consistent-return": "off",
+    "no-await-in-loop": "off",
     "@typescript-eslint/no-explicit-any": "off" // Temporary until all types fixed
   }
 }

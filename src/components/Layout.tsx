@@ -5,7 +5,7 @@ import GlobalStyle from './globalStyle';
 
 import { useContext } from '../hooks/useContext';
 
-const useStyles = makeStyles((_) =>
+const useStyles = makeStyles(() =>
   createStyles({
     root: {
       flex: 1,

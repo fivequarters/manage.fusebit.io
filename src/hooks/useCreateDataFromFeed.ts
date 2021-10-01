@@ -23,14 +23,14 @@ export const useCreateDataFromFeed = () => {
     async (activeFeed: Feed, data: Data, isConnector?: boolean) => {
       try {
         createLoader();
-        let firstIntegration: Entity | undefined;
-        let firstConnector: Entity | undefined;
 
         const parsedFeed = await replaceMustache(data, activeFeed);
-        firstIntegration = parsedFeed.configuration.entities.find(
+        const firstIntegration = parsedFeed.configuration.entities.find(
           (entity: Entity) => entity.entityType === 'integration'
         );
-        firstConnector = parsedFeed.configuration.entities.find((entity: Entity) => entity.entityType === 'connector');
+        const firstConnector = parsedFeed.configuration.entities.find(
+          (entity: Entity) => entity.entityType === 'connector'
+        );
 
         const commonTags = {
           'fusebit.feedType': isConnector ? 'connector' : 'integration',

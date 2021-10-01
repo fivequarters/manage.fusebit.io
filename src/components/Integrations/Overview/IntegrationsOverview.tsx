@@ -8,7 +8,15 @@ const IntegrationsOverview: React.FC = () => {
   return (
     <TabComponent
       tabNames={['Overview']}
-      tabObjects={[<Overview headless={headless} setHeadless={(value: boolean) => (headless.current = value)} />]}
+      tabObjects={[
+        <Overview
+          headless={headless}
+          setHeadless={(value: boolean) => {
+            headless.current = value;
+          }}
+          key="overview"
+        />,
+      ]}
     />
   );
 };

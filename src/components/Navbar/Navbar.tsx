@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useState, useEffect } from 'react';
 import { Container, Button, Menu, Drawer } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -19,6 +20,8 @@ import burguer from '../../assets/burguer.svg';
 import cross from '../../assets/cross.svg';
 
 import { useGetRedirectLink } from '../../hooks/useGetRedirectLink';
+
+// TOOD: Refactor nested ternary expressions
 
 const Navbar: React.FC<Props> = ({
   sectionName,
@@ -173,10 +176,10 @@ const Navbar: React.FC<Props> = ({
                             </SC.SectionDropdownSeeMore>
                           </Link>
                         </SC.Flex>
-                        {integrations?.data?.items?.map((integration, index) => (
-                          <Link key={index} to={getRedirectLink(`/integration/${integration.id}/develop`)}>
-                            <SC.SectionDropdownIntegration active={sectionName === integration.id}>
-                              {integration.id}
+                        {integrations?.data?.items?.map((_integration) => (
+                          <Link key={_integration.id} to={getRedirectLink(`/integration/${_integration.id}/develop`)}>
+                            <SC.SectionDropdownIntegration active={sectionName === _integration.id}>
+                              {_integration.id}
                               <img src={check} alt="check" height="16" width="16" />
                             </SC.SectionDropdownIntegration>
                           </Link>
@@ -192,10 +195,10 @@ const Navbar: React.FC<Props> = ({
                             </SC.SectionDropdownSeeMore>
                           </Link>
                         </SC.Flex>
-                        {connectors?.data?.items?.map((connector, index) => (
-                          <Link key={index} to={getRedirectLink(`/connector/${connector.id}/configure`)}>
-                            <SC.SectionDropdownIntegration active={sectionName === connector.id}>
-                              {connector.id}
+                        {connectors?.data?.items?.map((_connector) => (
+                          <Link key={_connector.id} to={getRedirectLink(`/connector/${_connector.id}/configure`)}>
+                            <SC.SectionDropdownIntegration active={sectionName === _connector.id}>
+                              {_connector.id}
                               <img src={check} alt="check" height="16" width="16" />
                             </SC.SectionDropdownIntegration>
                           </Link>
@@ -215,10 +218,10 @@ const Navbar: React.FC<Props> = ({
                             </SC.SectionDropdownSeeMore>
                           </Link>
                         </SC.Flex>
-                        {integrations?.data?.items?.map((integration, index) => (
-                          <Link key={index} to={getRedirectLink(`/integration/${integration.id}/develop`)}>
-                            <SC.SectionDropdownIntegration active={sectionName === integration.id}>
-                              {integration.id}
+                        {integrations?.data?.items?.map((_integration) => (
+                          <Link key={_integration.id} to={getRedirectLink(`/integration/${_integration.id}/develop`)}>
+                            <SC.SectionDropdownIntegration active={sectionName === _integration.id}>
+                              {_integration.id}
                               <img src={check} alt="check" height="16" width="16" />
                             </SC.SectionDropdownIntegration>
                           </Link>
@@ -234,10 +237,10 @@ const Navbar: React.FC<Props> = ({
                             </SC.SectionDropdownSeeMore>
                           </Link>
                         </SC.Flex>
-                        {connectors?.data?.items?.map((connector, index) => (
-                          <Link key={index} to={getRedirectLink(`/connector/${connector.id}/configure`)}>
-                            <SC.SectionDropdownIntegration active={sectionName === connector.id}>
-                              {connector.id}
+                        {connectors?.data?.items?.map((_connector) => (
+                          <Link key={_connector.id} to={getRedirectLink(`/connector/${_connector.id}/configure`)}>
+                            <SC.SectionDropdownIntegration active={sectionName === _connector.id}>
+                              {_connector.id}
                               <img src={check} alt="check" height="16" width="16" />
                             </SC.SectionDropdownIntegration>
                           </Link>

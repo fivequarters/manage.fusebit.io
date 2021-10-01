@@ -66,7 +66,9 @@ const ListComponent: React.FC<ListComponentProps> = ({
             setConnectOpen(true);
           }
         } else if (linkConnector) {
-          onLinkConnectorClick && onLinkConnectorClick(connector);
+          if (onLinkConnectorClick) {
+            onLinkConnectorClick(connector);
+          }
         } else if (!e.target.id && !deleteModalOpen) {
           history.push(getRedirectLink(`/connector/${connector.id}/configure`));
         }

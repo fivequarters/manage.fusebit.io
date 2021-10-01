@@ -23,7 +23,7 @@ enum Filters {
   CALENDAR = 'Calendar',
 }
 
-const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }: Props, ref) => {
+const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onSubmit, isIntegration }, ref) => {
   const [data, setData] = React.useState<any>({});
   const [errors, setErrors] = React.useState<object[]>([]);
   const [validationMode, setValidationMode] = React.useState<ValidationMode>('ValidateAndHide');
@@ -74,17 +74,17 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
   useEffect(() => {
     const key = query.get('key');
 
-    (isIntegration ? integrationsFeed() : connectorsFeed()).then((feed) => {
-      setFeed(feed);
-      for (let i = 0; i < feed.length; i++) {
-        if (feed[i].id === key) {
-          replaceMustache(data, feed[i]).then((template) => setActiveTemplate(template));
+    (isIntegration ? integrationsFeed() : connectorsFeed()).then((_feed) => {
+      setFeed(_feed);
+      for (let i = 0; i < _feed.length; i++) {
+        if (_feed[i].id === key) {
+          replaceMustache(data, _feed[i]).then((template) => setActiveTemplate(template));
           return;
         }
       }
 
-      setRawActiveTemplate(feed[0]);
-      replaceMustache(data, feed[0]).then((template) => {
+      setRawActiveTemplate(_feed[0]);
+      replaceMustache(data, _feed[0]).then((template) => {
         setActiveTemplate(template);
       });
     });
@@ -95,8 +95,8 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
 
   const handleTemplateChange = (template: Feed) => {
     setRawActiveTemplate(template);
-    replaceMustache(data, template).then((template) => {
-      setActiveTemplate(template);
+    replaceMustache(data, template).then((_template) => {
+      setActiveTemplate(_template);
     });
   };
 
@@ -107,7 +107,7 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
   };
 
   return (
-    <SC.Card onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)} open={open}>
+    <SC.Card onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)} open={open} ref={ref}>
       <SC.Close onClick={() => onClose()} src={cross} alt="close" height="12" width="12" />
       <SC.Title>{`New ${feedTypeName}`}</SC.Title>
       <SC.Flex>
@@ -160,7 +160,8 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
                 <SC.ColumnItem
                   key={feedEntry.id}
                   onClick={() => handleTemplateChange(feedEntry)}
-                  active={feedEntry.id === activeTemplate?.id}>
+                  active={feedEntry.id === activeTemplate?.id}
+                >
                   <SC.ColumnItemImage src={feedEntry.smallIcon} alt="slack" height="18" width="18" />
                   {feedEntry.name}
                 </SC.ColumnItem>
@@ -177,7 +178,7 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
             <SC.ConnectorVersion>{activeTemplate?.version}</SC.ConnectorVersion>
           </SC.ConnectorTitleWrapper>
           <SC.GeneralInfoWrapper>
-            <SC.ConnectorDescription children={activeTemplate?.description || ''} />
+            <SC.ConnectorDescription>{activeTemplate?.description || ''}</SC.ConnectorDescription>
             <SC.FormWrapper>
               <JsonForms
                 schema={activeTemplate?.configuration.schema}
@@ -185,12 +186,14 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
                 data={data}
                 renderers={materialRenderers}
                 cells={materialCells}
-                onChange={({ errors, data }) => {
-                  if (data?.ui?.toggle && activeTemplate) {
+                onChange={({ errors: _errors, data: _data }) => {
+                  if (_data?.ui?.toggle && activeTemplate) {
                     trackEvent(`New Integration Customize ${activeTemplate.name} Clicked`, 'Integrations');
                   }
-                  errors && setErrors(errors);
-                  setData(data);
+                  if (_errors) {
+                    setErrors(_errors);
+                  }
+                  setData(_data);
                 }}
                 validationMode={validationMode}
               />

@@ -10,7 +10,7 @@ const ConnectorDetailIdentities: React.FC<Props> = ({ id }) => {
   return (
     <TabComponent
       tabNames={['Configure', 'Identities']}
-      tabObjects={[getRedirectLink(`/connector/${id}/configure`), <IdentitiesTable />]}
+      tabObjects={[getRedirectLink(`/connector/${id}/configure`), <IdentitiesTable key="identities" />]}
     />
   );
 };
