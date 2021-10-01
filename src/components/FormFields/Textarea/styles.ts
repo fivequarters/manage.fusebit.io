@@ -5,7 +5,7 @@ import { InputMixin } from '../../globalStyle';
 const customBlue = css`
   height: 173px !important;
   padding: 16px !important;
-  overflow: scroll !important;
+  overflow-y: auto !important;
 `;
 
 export const MUITextarea = styled(TextareaAutosize)<{ $fieldVariant: 'default' | 'customBlue'; $hasError?: boolean }>`
