@@ -111,7 +111,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
             <Label>URL</Label>
             <Box mb="40px" position="relative">
               <TextField
-                fieldVariant="modal"
+                fieldVariant="customBlue"
                 hasError={!!formErrors.url}
                 onChange={(e) => {
                   const newValues = { ...formValues, url: e.target.value };
@@ -130,7 +130,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
             <Label>Payload</Label>
             <Box mb="40px" position="relative">
               <Textarea
-                fieldVariant="modal"
+                fieldVariant="customBlue"
                 hasError={!!formErrors.payload}
                 onChange={(e) => {
                   const newValues = { ...formValues, payload: e.target.value };

@@ -3,7 +3,7 @@ import React from 'react';
 import * as SC from './styles';
 
 interface FieldVariant {
-  fieldVariant: 'default' | 'modal';
+  fieldVariant: 'default' | 'customBlue';
   hasError?: boolean;
 }
 

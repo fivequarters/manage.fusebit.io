@@ -1,11 +1,17 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { TextareaAutosize } from '@material-ui/core';
-import { TextareaInputMixin } from '../../globalStyle';
+import { InputMixin } from '../../globalStyle';
 
-export const MUITextarea = styled(TextareaAutosize)<{ fieldVariant: 'default' | 'modal'; hasError?: boolean }>`
+const customBlue = css`
+  height: 173px !important;
+  padding: 16px !important;
+`;
+
+export const MUITextarea = styled(TextareaAutosize)<{ fieldVariant: 'default' | 'customBlue'; hasError?: boolean }>`
   ${(props) =>
-    props.fieldVariant === 'modal' &&
+    props.fieldVariant === 'customBlue' &&
     `
-        ${TextareaInputMixin}
+        ${customBlue}
+        ${InputMixin}
     `}
 `;

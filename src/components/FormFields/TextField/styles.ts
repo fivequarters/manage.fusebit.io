@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import { TextField } from '@material-ui/core';
-import { TextFieldInputMixin } from '../../globalStyle';
+import { InputMixin } from '../../globalStyle';
 
-export const MUITextField = styled(TextField)<{ fieldVariant: 'default' | 'modal'; hasError?: boolean }>`
+export const MUITextField = styled(TextField)<{ fieldVariant: 'default' | 'customBlue'; hasError?: boolean }>`
   ${(props) =>
-    props.fieldVariant === 'modal' &&
+    props.fieldVariant === 'customBlue' &&
     `
-        ${TextFieldInputMixin}
+        ${InputMixin}
     `}
 `;

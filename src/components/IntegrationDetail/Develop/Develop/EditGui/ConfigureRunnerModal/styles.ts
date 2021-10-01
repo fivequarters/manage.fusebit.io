@@ -125,14 +125,6 @@ export const Input = css<{ height?: string }>`
   ${withError}
 `;
 
-export const TextField = styled.input<{ height?: string; hasError?: boolean }>`
-  ${Input}
-`;
-
-export const Textarea = styled.textarea<{ height?: string; hasError?: boolean }>`
-  ${Input}
-`;
-
 export const ButtonsWrapper = styled.div`
   display: flex;
   align-items: center;
