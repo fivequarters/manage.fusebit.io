@@ -6,6 +6,7 @@ import { getIntegrationConfig } from '../../../../../../utils/localStorage';
 import { useParams } from 'react-router-dom';
 import TextField from '../../../../../FormFields/TextField';
 import Label from '../../../../../FormFields/Label';
+import Textarea from '../../../../../FormFields/Textarea';
 
 interface Props {
   open: boolean;
@@ -128,7 +129,8 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
           <Box display="flex" mt="15px" flexDirection="column">
             <Label>Payload</Label>
             <Box mb="40px" position="relative">
-              <SC.Textarea
+              <Textarea
+                fieldVariant="modal"
                 hasError={!!formErrors.payload}
                 onChange={(e) => {
                   const newValues = { ...formValues, payload: e.target.value };
@@ -137,7 +139,6 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
                 }}
                 value={formValues?.payload}
                 onBlur={() => validateForm()}
-                height="250px"
               />
               {formErrors.payload && <SC.ErrorMessage>{formErrors.payload}</SC.ErrorMessage>}
             </Box>
