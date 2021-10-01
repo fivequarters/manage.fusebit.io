@@ -33,6 +33,7 @@ const Identities: React.FC = () => {
         setOpen={setDeleteOpen}
         handleConfirmation={handleDelete}
         title={`Are you sure you want to delete ${
+          // eslint-disable-next-line no-nested-ternary
           identitiesData ? (identitiesData?.data.total > 1 ? 'these Identities?' : 'this Identity?') : ''
         }`}
         description="Your tenants will have to re-authenticate themselves in their account."
