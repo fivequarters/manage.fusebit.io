@@ -5,6 +5,7 @@ import * as CSC from '../../../../../globalStyle';
 import { getIntegrationConfig } from '../../../../../../utils/localStorage';
 import { useParams } from 'react-router-dom';
 import TextField from '../../../../../FormFields/TextField';
+import Label from '../../../../../FormFields/Label';
 
 interface Props {
   open: boolean;
@@ -91,7 +92,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
         <CSC.ModalTitle margin="0 0 16px 0">Configure runner</CSC.ModalTitle>
         <Box display="flex" mt="30px">
           <CSC.Flex width="max-content" margin="0 48px 0 0" flexDown>
-            <SC.Subtitle>Verb</SC.Subtitle>
+            <Label>Verb</Label>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
@@ -106,7 +107,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
             {formErrors.method && <SC.ErrorMessage>{formErrors.method}</SC.ErrorMessage>}
           </CSC.Flex>
           <CSC.Flex flexDown>
-            <SC.Subtitle>URL</SC.Subtitle>
+            <Label>URL</Label>
             <Box mb="40px" position="relative">
               <TextField
                 fieldVariant="modal"
@@ -125,7 +126,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
         </Box>
         {formValues?.method !== 'get' && (
           <Box display="flex" mt="15px" flexDirection="column">
-            <SC.Subtitle>Payload</SC.Subtitle>
+            <Label>Payload</Label>
             <Box mb="40px" position="relative">
               <SC.Textarea
                 hasError={!!formErrors.payload}

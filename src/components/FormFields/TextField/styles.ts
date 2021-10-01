@@ -6,7 +6,6 @@ export const MUITextField = styled(TextField)<{ fieldVariant: 'default' | 'modal
   ${(props) =>
     props.fieldVariant === 'modal' &&
     `
-  // estilos de Lu
-    ${TextFieldInputMixin}
-`}
+        ${TextFieldInputMixin}
+    `}
 `;
