@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { Button, ButtonGroup } from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import * as SC from './styles';
 import { Props } from '../../../../../interfaces/edit';
 import { useContext } from '../../../../../hooks/useContext';
 import FusebitEditor from './FusebitEditor';
 import { useLoader } from '../../../../../hooks/useLoader';
-import { Button, ButtonGroup } from '@material-ui/core';
 import play from '../../../../../assets/play.svg';
 import settings from '../../../../../assets/settings.svg';
 import save from '../../../../../assets/save.svg';
@@ -15,7 +16,6 @@ import ConfigureRunnerModal from './ConfigureRunnerModal';
 import ConfirmationPrompt from '../../../../ConfirmationPrompt';
 import { useTrackPage } from '../../../../../hooks/useTrackPage';
 import { trackEvent } from '../../../../../utils/analytics';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, ref) => {
   const { userData } = useContext();
@@ -93,9 +93,9 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
         open={unsavedWarning}
         setOpen={setUnsavedWarning}
         handleConfirmation={onClose}
-        title={`​Are you sure you want to discard unsaved changes?`}
-        description={`You have made some unsaved changes to your Integration. Closing this window will discard those changes.`}
-        confirmationButtonText={`Discard`}
+        title="​Are you sure you want to discard unsaved changes?"
+        description="You have made some unsaved changes to your Integration. Closing this window will discard those changes."
+        confirmationButtonText="Discard"
       />
       <ConfirmationPrompt
         open={loginFlowModalOpen}
@@ -145,7 +145,7 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
         )}
         <SC.FusebitEditorContainer>
           <FusebitEditor
-            boundaryId={'integration'}
+            boundaryId="integration"
             functionId={integrationId}
             account={{
               accountId: userData.accountId,

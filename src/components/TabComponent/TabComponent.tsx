@@ -1,10 +1,10 @@
-import React from 'react';
-import * as SC from './styles';
+import React, { useEffect } from 'react';
 import { Container, Tabs, Tab } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { Props } from '../../interfaces/TabComponent';
-import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { Props } from '../../interfaces/TabComponent';
+
+import * as SC from './styles';
 
 const TabPanel = (props: any) => {
   const { children, value, index, ...other } = props;

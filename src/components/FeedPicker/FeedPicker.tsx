@@ -1,20 +1,19 @@
-import React from 'react';
-import * as SC from './styles';
-import { Props } from '../../interfaces/feedPicker';
+import React, { useState, useEffect } from 'react';
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
 import { JsonForms } from '@jsonforms/react';
 import { ValidationMode } from '@jsonforms/core';
 import { Button, TextField } from '@material-ui/core';
+import debounce from 'lodash.debounce';
+import * as SC from './styles';
+import { Props } from '../../interfaces/feedPicker';
 import { integrationsFeed, connectorsFeed } from '../../static/feed';
 import search from '../../assets/search.svg';
 import cross from '../../assets/cross.svg';
 import { Feed } from '../../interfaces/feed';
-import { useState } from 'react';
-import { useEffect } from 'react';
+
 import { useQuery } from '../../hooks/useQuery';
 import { useReplaceMustache } from '../../hooks/useReplaceMustache';
 import { trackEvent } from '../../utils/analytics';
-import debounce from 'lodash.debounce';
 
 enum Filters {
   ALL = 'All',
@@ -49,16 +48,16 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
     if (errors.length > 0) {
       setValidationMode('ValidateAndShow');
     } else {
-      //normalize data
+      // normalize data
       const keys = Object.keys(data);
       for (let i = 0; keys.length > i; i++) {
-        const id: any = data[keys[i]].id;
+        const { id } = data[keys[i]];
         if (typeof id === 'string') {
           data[keys[i]].id = id.replace(/\s/g, '');
         }
       }
 
-      //send data with customized form
+      // send data with customized form
       onSubmit(rawActiveTemplate, { ...data });
     }
   };
@@ -161,15 +160,13 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
                 <SC.ColumnItem
                   key={feedEntry.id}
                   onClick={() => handleTemplateChange(feedEntry)}
-                  active={feedEntry.id === activeTemplate?.id}
-                >
+                  active={feedEntry.id === activeTemplate?.id}>
                   <SC.ColumnItemImage src={feedEntry.smallIcon} alt="slack" height="18" width="18" />
                   {feedEntry.name}
                 </SC.ColumnItem>
               );
-            } else {
-              return null;
             }
+            return null;
           })}
         </SC.Column>
         <SC.ColumnBr />

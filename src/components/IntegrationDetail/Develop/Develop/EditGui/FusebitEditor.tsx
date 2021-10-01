@@ -9,6 +9,7 @@ declare global {
 
 export default class FusebitEditor extends React.Component<any> {
   private el: any;
+
   private editorContext: any;
 
   render() {
@@ -17,7 +18,7 @@ export default class FusebitEditor extends React.Component<any> {
 
   componentDidMount() {
     const initializeEditor = () => {
-      //@ts-ignore
+      // @ts-ignore
       window.fusebit
         .createEditor(this.el, this.props.boundaryId, this.props.functionId, this.props.account, this.props.options)
         .then((editorContext: Context) => {
@@ -36,7 +37,7 @@ export default class FusebitEditor extends React.Component<any> {
           }
         });
     };
-    let fusebitLibUrl = `https://cdn.fusebit.io/fusebit/js/fusebit-editor/${(this.props.version || 'latest').replace(
+    const fusebitLibUrl = `https://cdn.fusebit.io/fusebit/js/fusebit-editor/${(this.props.version || 'latest').replace(
       /\./g,
       '/'
     )}/fusebit-editor.min.js`;
@@ -50,7 +51,7 @@ export default class FusebitEditor extends React.Component<any> {
     if (hasFusebitLib) {
       return initializeEditor();
     }
-    let script = document.createElement('script');
+    const script = document.createElement('script');
     script.src = fusebitLibUrl;
     script.async = true;
     script.onload = () => initializeEditor();

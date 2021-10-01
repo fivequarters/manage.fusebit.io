@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import * as SC from './styles';
-import * as CSC from '../../../globalStyle';
 import { Button } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
+import * as SC from './styles';
+import * as CSC from '../../../globalStyle';
 import { useAccountConnectorIdentityGetAll } from '../../../../hooks/api/v2/account/connector/identity/useGetAll';
 import { Identity } from '../../../../interfaces/identities';
 import { useEntityApi } from '../../../../hooks/useEntityApi';
@@ -35,7 +35,7 @@ const Identities: React.FC = () => {
         title={`Are you sure you want to delete ${
           identitiesData ? (identitiesData?.data.total > 1 ? 'these Identities?' : 'this Identity?') : ''
         }`}
-        description={`Your tenants will have to re-authenticate themselves in their account.`}
+        description="Your tenants will have to re-authenticate themselves in their account."
       />
       <SC.Header>
         Total Identities: {identitiesData ? identitiesData?.data.total : <CSC.Spinner margin="0 0 0 5px" />}

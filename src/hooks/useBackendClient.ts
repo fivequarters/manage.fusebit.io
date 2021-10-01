@@ -34,7 +34,7 @@ export const useBackendClient = () => {
 
   const getBackendClientListener = async () => {
     try {
-      return getBackendClients(userData);
+      return await getBackendClients(userData);
     } catch (e) {
       createError(e);
     }

@@ -89,12 +89,10 @@ const useEditor = ({ onNoInstanceFound } = {} as Props) => {
 
       if (hasInstance) {
         await testIntegration({ id, tenantId: STATIC_TENANT_ID });
+      } else if (onNoInstanceFound) {
+        onNoInstanceFound();
       } else {
-        if (onNoInstanceFound) {
-          onNoInstanceFound();
-        } else {
-          await handleNoInstanceFound();
-        }
+        await handleNoInstanceFound();
       }
     } catch (error) {
       console.log(error);

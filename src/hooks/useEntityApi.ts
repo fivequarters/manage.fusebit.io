@@ -105,7 +105,7 @@ export const useEntityApi = (preventLoader?: boolean) => {
     try {
       if (!preventLoader) createLoader();
       const data = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
-      let newData = data;
+      const newData = data;
       if (isAdding) {
         const feedtype = connector.tags['fusebit.feedType'];
         const item: Feed = await findMatchingConnectorFeed(connector);

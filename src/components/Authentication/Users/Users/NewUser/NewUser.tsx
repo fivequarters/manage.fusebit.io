@@ -1,10 +1,10 @@
 import React from 'react';
-import { Props } from '../../../../../interfaces/newUser';
-import * as SC from './styles';
 import { Button } from '@material-ui/core';
 import { JsonForms } from '@jsonforms/react';
 import { ValidationMode } from '@jsonforms/core';
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
+import * as SC from './styles';
+import { Props } from '../../../../../interfaces/newUser';
 import { NewUserData } from '../../../../../interfaces/newUserData';
 import CopyLine from '../../../../CopyLine';
 import * as CSC from '../../../../globalStyle';

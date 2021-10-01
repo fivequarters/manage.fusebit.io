@@ -50,7 +50,7 @@ export async function signJwt(tokenPayload: TokenPayload, issuer: Issuer, privat
 
   const base64Signature = uint8ArrayToString(new Uint8Array(signature));
 
-  return headerAndPayload + '.' + base64Signature;
+  return `${headerAndPayload}.${base64Signature}`;
 }
 
 function uint8ArrayToString(unsignedArray: Uint8Array): string {

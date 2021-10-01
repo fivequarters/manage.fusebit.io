@@ -38,7 +38,7 @@ function breakPemIntoMultipleLines(pem: string): string {
   const charsPerLine = 64;
   let pemContents = '';
   while (pem.length > 0) {
-    pemContents += pem.substring(0, charsPerLine) + '\n';
+    pemContents += `${pem.substring(0, charsPerLine)}\n`;
     pem = pem.substring(64);
   }
   return pemContents;

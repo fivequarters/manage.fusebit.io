@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import * as SC from './styles';
 import { Checkbox, TableCell, Collapse, useMediaQuery } from '@material-ui/core';
+import * as SC from './styles';
 import { BaseTableProps } from './types';
 import { useQuery } from '../../hooks/useQuery';
 

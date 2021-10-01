@@ -102,7 +102,7 @@ export async function patchBackendClients(
   };
   const { accountId, subscriptionId, token } = user;
   const clientsPaths = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/subscription/${subscriptionId}/storage/${BACKEND_LIST_STORAGE_ID}`;
-  await patchClient(user, { id: id, displayName: backendClient.name });
+  await patchClient(user, { id, displayName: backendClient.name });
   const response = await axiosNo404MiddlewareInstance.put<Storage<BackendClient>>(
     clientsPaths,
     { data: backendClients },

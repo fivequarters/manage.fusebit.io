@@ -1,7 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
-import * as SC from './styles';
-import * as CSC from '../../../globalStyle';
 import {
   Button,
   Modal,
@@ -18,6 +16,8 @@ import {
   Box,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import * as SC from './styles';
+import * as CSC from '../../../globalStyle';
 import arrow from '../../../../assets/arrow-right-black.svg';
 import Connect from './Connect';
 import { useLoader } from '../../../../hooks/useLoader';
@@ -35,8 +35,7 @@ import { Entity, Feed } from '../../../../interfaces/feed';
 import { Data } from '../../../../interfaces/feedPicker';
 import { useReplaceMustache } from '../../../../hooks/useReplaceMustache';
 import { FinalConnector } from '../../../../interfaces/integrationDetailDevelop';
-import { useState } from 'react';
-import { useEffect } from 'react';
+
 import { useEntityApi } from '../../../../hooks/useEntityApi';
 import { useBackendClient } from '../../../../hooks/useBackendClient';
 import { BackendClient } from '../../../../interfaces/backendClient';
@@ -226,7 +225,7 @@ const Develop: React.FC = () => {
       return returnItem;
     });
 
-    let finalConnectorsList: FinalConnector[] | undefined = filteredConnectors;
+    const finalConnectorsList: FinalConnector[] | undefined = filteredConnectors;
 
     if (
       integrationData &&
@@ -637,11 +636,11 @@ const Develop: React.FC = () => {
             {integrationData?.data.data.components.length
               ? integrationData?.data.data.components.length >= 5 && (
                   <Link to={getRedirectLink('/connectors')}>
-                    <SC.CardConnectorSeeMore href={getRedirectLink('/connectors')}>
+                <SC.CardConnectorSeeMore href={getRedirectLink('/connectors')}>
                       See all
                       <img src={arrow} alt="see more" height="10" width="10" />
                     </SC.CardConnectorSeeMore>
-                  </Link>
+              </Link>
                 )
               : null}
 

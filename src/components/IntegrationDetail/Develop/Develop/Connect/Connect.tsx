@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import { Button, Input } from '@material-ui/core';
 import * as SC from './styles';
 import * as CSC from '../../../../globalStyle';
-import { Button, Input } from '@material-ui/core';
 import { Props } from '../../../../../interfaces/connect';
 import CopyLine from '../../../../CopyLine';
 import { useCopy } from '../../../../../hooks/useCopy';
@@ -48,7 +48,7 @@ const Connect = React.forwardRef(
     const handleSave = async () => {
       setSaving(true);
       await patchBackendClients(id, userData, { name: editedBackendClientId });
-      disableCopy && onChange?.(); //if its the first time its created, we dont call onChange
+      disableCopy && onChange?.(); // if its the first time its created, we dont call onChange
       setBackendClientId(editedBackendClientId);
       setEditMode(false);
       setSaving(false);
@@ -63,12 +63,10 @@ const Connect = React.forwardRef(
       <ConfirmationPrompt
         open={deleteModalOpen}
         setOpen={setDeleteModalOpen}
-        handleConfirmation={() => onDelete({ isApplication: true, id: id })}
-        title={'Are you sure you want to delete this application?'}
-        description={
-          'All calls from your application to Fusebit that use this key will fail. Before deleting this key, make sure your application is no longer using this key.'
-        }
-        confirmationButtonText={'Delete'}
+        handleConfirmation={() => onDelete({ isApplication: true, id })}
+        title="Are you sure you want to delete this application?"
+        description="All calls from your application to Fusebit that use this key will fail. Before deleting this key, make sure your application is no longer using this key."
+        confirmationButtonText="Delete"
       />
     ) : (
       <SC.Card open={open}>

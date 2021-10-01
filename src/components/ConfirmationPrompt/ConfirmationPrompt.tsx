@@ -1,7 +1,7 @@
 import React from 'react';
+import { Button, Modal, Backdrop } from '@material-ui/core';
 import * as SC from './styles';
 import * as CSC from '../globalStyle';
-import { Button, Modal, Backdrop } from '@material-ui/core';
 
 interface Props {
   open: boolean;
@@ -53,7 +53,7 @@ const ConfirmationPrompt: React.FC<Props> = ({
             </Button>
           )}
           <Button onClick={onConfirm} style={{ width: '77px' }} size="medium" variant="contained" color="primary">
-            {confirmationButtonText ? confirmationButtonText : 'Delete'}
+            {confirmationButtonText || 'Delete'}
           </Button>
         </SC.ButtonsWrapper>
       </SC.Card>

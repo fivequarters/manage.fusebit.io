@@ -1,6 +1,4 @@
 import React from 'react';
-import * as SC from './styles';
-import * as CSC from '../globalStyle';
 import {
   Table,
   TableBody,
@@ -17,6 +15,8 @@ import {
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
+import * as CSC from '../globalStyle';
+import * as SC from './styles';
 import arrowRight from '../../assets/arrow-right.svg';
 import arrowLeft from '../../assets/arrow-left.svg';
 import { Feed } from '../../interfaces/feed';

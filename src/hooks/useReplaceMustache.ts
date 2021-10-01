@@ -1,14 +1,14 @@
 import React from 'react';
-import { useContext } from './useContext';
 import Mustache from 'mustache';
+import { useContext } from './useContext';
 import { Data } from '../interfaces/feedPicker';
 import { Feed, Entity } from '../interfaces/feed';
 
 const walkObjectStrings = (obj: any, func: (value: string) => string): any => {
   Object.entries(obj).forEach(([key, value]: [string, any]) => {
-    if (typeof value == 'string') {
+    if (typeof value === 'string') {
       obj[key] = func(value);
-    } else if (typeof value == 'object') {
+    } else if (typeof value === 'object') {
       walkObjectStrings(value, func);
     }
   });
@@ -40,7 +40,7 @@ export const useReplaceMustache = () => {
         // Disable html escaping because these values are all trusted
         Mustache.escape = (s: string) => s;
 
-        let global: any = {
+        const global: any = {
           entities: {},
           consts: {
             userId: userData.userId,

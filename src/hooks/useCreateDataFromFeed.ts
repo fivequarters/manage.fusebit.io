@@ -1,12 +1,12 @@
-import { useContext } from './useContext';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { useContext } from './useContext';
 import { useReplaceMustache } from './useReplaceMustache';
 import { useGetRedirectLink } from './useGetRedirectLink';
 import { Entity, Feed } from '../interfaces/feed';
 import { Data } from '../interfaces/feedPicker';
 import { useLoader } from './useLoader';
 import { useError } from './useError';
-import { useHistory } from 'react-router-dom';
 import { useEntityApi } from './useEntityApi';
 import { trackEvent } from '../utils/analytics';
 
@@ -51,8 +51,8 @@ export const useCreateDataFromFeed = () => {
         removeLoader();
         history.push(
           isConnector
-            ? getRedirectLink('/connector/' + firstConnector?.id + '/configure')
-            : getRedirectLink('/integration/' + firstIntegration?.id + '/develop')
+            ? getRedirectLink(`/connector/${firstConnector?.id}/configure`)
+            : getRedirectLink(`/integration/${firstIntegration?.id}/develop`)
         );
       } catch (e) {
         createError(e);

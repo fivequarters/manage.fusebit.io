@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import { Button } from '@material-ui/core';
+import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
+import { JsonForms } from '@jsonforms/react';
+import { ValidationMode } from '@jsonforms/core';
 import * as SC from './styles';
 import * as CSC from '../../../globalStyle';
 import { useAccountConnectorsGetOne } from '../../../../hooks/api/v2/account/connector/useGetOne';
 import { useAccountConnectorsGetOneConfig } from '../../../../hooks/api/v2/account/connector/useGetOneConfig';
 import { useContext } from '../../../../hooks/useContext';
 import { Connector, ConnectorConfig } from '../../../../interfaces/connector';
-import { Button } from '@material-ui/core';
-import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
-import { JsonForms } from '@jsonforms/react';
-import { ValidationMode } from '@jsonforms/core';
-import { useEffect } from 'react';
+
 import { useEntityApi } from '../../../../hooks/useEntityApi';
 import { useGetFeedById } from '../../../../hooks/useGetFeedById';
 import { trackEvent } from '../../../../utils/analytics';

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import warning from '../assets/warning.svg';
 import cross from '../assets/cross-warning.svg';
-import { useLocation } from 'react-router-dom';
 
 const errorCss = `
     display: flex;

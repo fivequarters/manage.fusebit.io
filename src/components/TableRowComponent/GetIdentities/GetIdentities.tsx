@@ -12,7 +12,7 @@ const GetIdentities: React.FC<Props> = ({ id }) => {
   const { userData } = useContext();
   const { data: identitiesData } = useAccountConnectorIdentityGetAll<Identity>({
     enabled: userData.token,
-    id: id,
+    id,
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
   });
