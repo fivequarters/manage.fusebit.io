@@ -30,6 +30,7 @@ import { useEntityApi } from '../../hooks/useEntityApi';
 import NewUser from '../Authentication/Users/Users/NewUser';
 import { Row } from '../../interfaces/tableRow';
 import ConfirmationPrompt from '../ConfirmationPrompt/ConfirmationPrompt';
+import { trackEvent } from '../../utils/analytics';
 
 const TableComponent: React.FC<Props> = ({
   headless,
@@ -79,6 +80,18 @@ const TableComponent: React.FC<Props> = ({
   const integrationText = integrationTable && (isPlural ? 'these Integrations' : 'this Integration');
   const connectorText = connectorTable && (isPlural ? 'these Connectors' : 'this Connector');
   const usersText = !integrationTable && !connectorTable && (isPlural ? 'these Users' : 'this User');
+
+  const allSelected = () => {
+    let allSelected = false;
+
+    if (rows.length > 1 && users) {
+      allSelected = selected.length === rows.length - 1;
+    } else if (rows.length > 0) {
+      allSelected = selected.length === rows.length;
+    }
+
+    return allSelected;
+  };
 
   return (
     <SC.Wrapper>
@@ -142,13 +155,18 @@ const TableComponent: React.FC<Props> = ({
       <SC.ButtonContainer>
         <SC.ButtonMargin>
           <Button
-            onClick={() =>
-              integrationTable
-                ? setAddIntegrationOpen(true)
-                : connectorTable
-                ? setAddConnectorOpen(true)
-                : setNewUserOpen(true)
-            }
+            onClick={() => {
+              if (integrationTable) {
+                trackEvent('New Integration Button Clicked', 'Integrations');
+                return setAddIntegrationOpen(true);
+              }
+              if (connectorTable) {
+                trackEvent('New Connector Button Clicked', 'Connectors');
+                return setAddConnectorOpen(true);
+              }
+              trackEvent('New User Button Clicked', 'Users');
+              return setNewUserOpen(true);
+            }}
             startIcon={<AddIcon />}
             variant="outlined"
             color="primary"
@@ -182,7 +200,7 @@ const TableComponent: React.FC<Props> = ({
                   <TableCell padding="checkbox">
                     <Checkbox
                       color="primary"
-                      checked={rows.length > 0 && selected.length === rows.length}
+                      checked={allSelected()}
                       onChange={handleSelectAllCheck}
                       inputProps={{
                         'aria-label': `select all ${
@@ -234,7 +252,7 @@ const TableComponent: React.FC<Props> = ({
                   <TableCell padding="checkbox">
                     <Checkbox
                       color="primary"
-                      checked={rows.length > 0 && selected.length === rows.length}
+                      checked={allSelected()}
                       onChange={handleSelectAllCheck}
                       inputProps={{
                         'aria-label': `select all ${

@@ -9,6 +9,7 @@ import { useQuery } from './useQuery';
 import { useEntityApi } from './useEntityApi';
 import { Account } from '../interfaces/account';
 import { EntitiesType } from '../interfaces/entities';
+import { useContext } from '../hooks/useContext';
 
 interface Props {
   headless?: any;
@@ -55,6 +56,7 @@ export const useEntityTable = ({
   const query = useQuery();
   const isIntegration = useRef(false);
   const { massiveDelete } = useEntityApi();
+  const { userData } = useContext();
 
   const setItems = () => {
     const items = isIntegration.current ? integrations?.data.items : connectors?.data.items;
@@ -110,7 +112,15 @@ export const useEntityTable = ({
 
   const handleSelectAllCheck = (event: any) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((row) => row.id);
+      const newSelecteds = rows
+        .map((row) => {
+          if (row.id !== userData.userId) {
+            return row.id;
+          }
+          return null;
+        })
+        .filter((selected) => selected !== null);
+      //@ts-ignore the computer thinks this is a null[]
       setSelected(newSelecteds);
       return;
     }
@@ -118,20 +128,22 @@ export const useEntityTable = ({
   };
 
   const handleCheck = (event: any, id: string) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected: string[] = [];
+    if (id !== userData.userId) {
+      const selectedIndex = selected.indexOf(id);
+      let newSelected: string[] = [];
 
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
+      if (selectedIndex === -1) {
+        newSelected = newSelected.concat(selected, id);
+      } else if (selectedIndex === 0) {
+        newSelected = newSelected.concat(selected.slice(1));
+      } else if (selectedIndex === selected.length - 1) {
+        newSelected = newSelected.concat(selected.slice(0, -1));
+      } else if (selectedIndex > 0) {
+        newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
+      }
+
+      setSelected(newSelected);
     }
-
-    setSelected(newSelected);
   };
 
   const isSelected = (name: string) => selected.indexOf(name) !== -1;

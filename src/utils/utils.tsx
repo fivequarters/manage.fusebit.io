@@ -4,6 +4,7 @@ import { integrationsFeed, connectorsFeed } from '../static/feed';
 import { Decoded } from '../interfaces/decoded';
 import jwt_decode from 'jwt-decode';
 import { InstallInstance } from '../interfaces/install';
+import { default as _startCase } from 'lodash.startcase';
 
 const { REACT_APP_AUTH0_DOMAIN, REACT_APP_AUTH0_CLIENT_ID, REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 export const LS_KEY = `T29M03eleloegehOxGtpEPel18JfM3djp5pUL4Jm`;
@@ -61,8 +62,19 @@ export const validateToken = ({ onValid }: { onValid?: () => void } = {}) => {
   if (expired) {
     window.location.href = getAuthLink(); //refreshing the token
   } else {
+    analytics.ready(() => {
+      const user = readLocalData();
+      if (!user || user === {}) return;
+      analytics.identify(user.id, {
+        ...user,
+      } as Object);
+    });
     onValid?.();
   }
+};
+
+export const startCase = (str: string) => {
+  return _startCase(str.toLowerCase());
 };
 
 export const getConnectorsFromInstall = (install: InstallInstance) =>

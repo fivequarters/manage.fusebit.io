@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { useAccountIntegrationsGetOne } from '../hooks/api/v2/account/integration/useGetOne';
 import { useContext } from '../hooks/useContext';
+import { useTrackPage } from '../hooks/useTrackPage';
 import { Integration } from '../interfaces/integration';
 import IntegrationDetailInstalls from '../components/IntegrationDetail/Installs';
 import Navbar from '../components/Navbar';
@@ -16,6 +17,8 @@ const IntegrationDetailInstallsPage: FC<{}> = (): ReactElement => {
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
   });
+
+  useTrackPage('Integration Installs', 'Integration');
 
   return (
     <Layout>

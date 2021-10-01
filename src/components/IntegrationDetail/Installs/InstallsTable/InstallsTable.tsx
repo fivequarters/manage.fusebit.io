@@ -12,6 +12,7 @@ import ConfirmationPrompt from '../../../ConfirmationPrompt';
 import InformationalBanner from '../../../InformationalBanner';
 import AssociatedIdentities from './AssociatedIdentities';
 import { getConnectorsFromInstall } from '../../../../utils/utils';
+import { trackEvent } from '../../../../utils/analytics';
 
 const InstallsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -44,6 +45,9 @@ const InstallsTable = () => {
         <AssociatedIdentities tenantId={install.tags['fusebit.tenantId']} connectorIds={connectorIds} />
       ),
       collapsableContent: <CodeBlock code={install} />,
+      collapsableContentOpened: () => {
+        trackEvent('Installs Expand Tenant Clicked', 'Integration');
+      },
     };
   });
 
@@ -55,22 +59,25 @@ const InstallsTable = () => {
   ];
 
   const handleDelete = () => {
+    trackEvent('Installs Delete Tenant Clicked', 'Integration');
     setDeleteOpen(false);
     handleRowDelete('Install', 'installs-table');
   };
 
   return (
     <div id="installs-table">
-      <InformationalBanner
-        description="Every time a tenant installs an integration, it will show up here for you to see."
-        href="https://developer.fusebit.io/docs"
-        highlightedDescription="Learn more about Installations in the docs here."
-      />
+      <InformationalBanner>
+        Every time a tenant installs an integration, it will show up here for you to see.{' '}
+        <a href="https://developer.fusebit.io/docs/fusebit-system-architecture#installation-lifecycle">
+          Learn more about Installations in the docs here
+        </a>
+        .
+      </InformationalBanner>
       <ConfirmationPrompt
         open={deleteOpen}
         setOpen={setDeleteOpen}
         handleConfirmation={handleDelete}
-        title={`​Are you sure you want to delete this ${selected.length > 1 ? 'Installs?' : 'Install?'}`}
+        title={`​Are you sure you want to delete ${selected.length > 1 ? 'these Installs?' : 'this Install?'}`}
         description={`Your tenants will have to re-install ${
           selected.length > 1 ? 'these integrations' : ' this integration'
         } in their account.`}

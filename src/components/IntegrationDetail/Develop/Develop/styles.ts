@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import dottedBox from '../../../../assets/dotted-box.svg';
+import fusebitLogo from '../../../../assets/fusebit-logo.svg';
+import { Box } from '@material-ui/core';
 
 export const Background = styled.div`
   padding-bottom: 76px;
@@ -11,7 +13,7 @@ export const FlexDown = styled.div`
   &:not(:last-child)  {
     margin-right: auto;
 
-    @media only screen and (max-width: 1250px) {
+    @media only screen and (max-width: 1200px) {
       margin-right: 0;
     }
   }
@@ -21,26 +23,10 @@ export const Flex = styled.div`
   position: relative;
   display: flex;
 
-  @media only screen and (max-width: 1250px) {
+  @media only screen and (max-width: 1200px) {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-  }
-`;
-
-export const CardSeparator = styled.div`
-  position: absolute;
-  top: 186px;
-  left: 0;
-  height: 1px;
-  width: 100%;
-  background-color: var(--black);
-
-  @media only screen and (max-width: 1250px) {
-    height: calc(100% - 420px);
-    width: 1px;
-    left: 50%;
-    transform: translateX(-50%);
   }
 `;
 
@@ -54,8 +40,6 @@ export const Card = styled.div`
   box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
   width: 389px;
   min-height: 392px;
-  z-index: 1;
-  margin-bottom: 40px;
 
   @media only screen and (max-width: 450px) {
     width: 340px;
@@ -68,6 +52,32 @@ export const Card = styled.div`
   @media only screen and (max-width: 330px) {
     width: 300px;
   }
+`;
+
+export const FusebitCard = styled(Box)`
+  position: relative;
+  height: 260px;
+  width: 285px;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
+  border: 2px solid #f83420;
+`;
+
+export const FusebitLogo = styled(Box)`
+  width: 109px;
+  height: 28px;
+  background-image: url(${fusebitLogo});
+  background-size: contain;
+  background-repeat: no-repeat;
+`;
+
+export const FusebitIntegration = styled.h3`
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--black);
 `;
 
 export const CardTitle = styled.h4`
@@ -212,20 +222,6 @@ export const Bullet = styled.div`
   background-color: var(--black);
   margin-right: 10px;
   transition: all 0.25s linear;
-`;
-
-export const LinkWrapper = styled.div`
-  @media only screen and (max-width: 1250px) {
-    display: none;
-  }
-`;
-
-export const LinkWrapperMobile = styled.div`
-  display: none;
-  @media only screen and (max-width: 1250px) {
-    display: flex;
-    flex-direction: column;
-  }
 `;
 
 export const LinkTitle = styled.h5`

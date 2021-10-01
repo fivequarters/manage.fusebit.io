@@ -19,6 +19,7 @@ const ListComponent: React.FC<ListComponentProps> = ({
   onConnectorDelete,
   onLinkConnectorClick,
   linkConnector,
+  id,
 }) => {
   const history = useHistory();
   const { getRedirectLink } = useGetRedirectLink();
@@ -58,6 +59,7 @@ const ListComponent: React.FC<ListComponentProps> = ({
   };
   return (
     <SC.CardConnector
+      id={id}
       onClick={(e: any) => {
         if (connector.isApplication) {
           if (!e.target.id && !connectOpen && !deleteModalOpen) {

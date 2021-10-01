@@ -12,6 +12,7 @@ import InformationalBanner from '../../../InformationalBanner';
 import AssociatedInstalls from './AssociatedInstalls';
 import AssociatedIntegrations from './AssociatedIntegrations';
 import Tag from '../../../Tag';
+import { trackEvent } from '../../../../utils/analytics';
 
 const IntegrationsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -47,26 +48,33 @@ const IntegrationsTable = () => {
         <AssociatedIntegrations tenantId={identity.tags['fusebit.tenantId']} connectorId={connectorId} />
       ),
       collapsableContent: <CodeBlock code={identity} />,
+      collapsableContentOpened: () => {
+        trackEvent('Identities Expand Identity Clicked', 'Connector');
+      },
     };
   });
 
   const handleDelete = () => {
+    trackEvent('Identities Delete Identity Clicked', 'Connector');
     setDeleteOpen(false);
     handleRowDelete('Identity', 'identities-table');
   };
 
   return (
     <div id="identities-table">
-      <InformationalBanner
-        description="An identity is a unique relationship your tenant has with a connector. It is used to authenticate on behalf of them when running an integration."
-        href="https://developer.fusebit.io/docs"
-        highlightedDescription="Learn more about Identities here."
-      />
+      <InformationalBanner>
+        An identity is a unique relationship your tenant has with a connector. It is used to authenticate on behalf of
+        them when running an integration.{' '}
+        <a href="https://developer.fusebit.io/docs/fusebit-system-architecture#installation-lifecycle">
+          Learn more about Identities here
+        </a>
+        .
+      </InformationalBanner>
       <ConfirmationPrompt
         open={deleteOpen}
         setOpen={setDeleteOpen}
         handleConfirmation={handleDelete}
-        title={`​Are you sure you want to delete this ${selected.length > 1 ? 'Identity?' : 'Identities?'}`}
+        title={`​Are you sure you want to delete ${selected.length > 1 ? 'these Identities?' : 'this Identity?'}`}
         description="Your tenants will have to re-authenticate themselves in their account"
       />
       <BaseTable
