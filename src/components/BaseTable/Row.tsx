@@ -21,7 +21,7 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
 
   const renderCollapsable = (_row: any) => {
     return (
-      <SC.ExpandableRow noBorder={isExpanded}>
+      <SC.ExpandableRow $noBorder={isExpanded}>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={headers.length + 1}>
           <Collapse in={isExpanded} timeout="auto" unmountOnExit>
             {_row.collapsableContent}
@@ -50,12 +50,12 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
 
     return (
       <>
-        <SC.TableRow noBorder={isCollapsible}>
+        <SC.TableRow $noBorder={isCollapsible}>
           {renderCheckbox(row.id)}
           <SC.TableCell
-            isMain
+            $isMain
             scope="row"
-            isClickable
+            $isClickable
             onClick={
               isClickable
                 ? () => {
@@ -65,9 +65,9 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
                 : undefined
             }
           >
-            <SC.CellContent isClickable={isClickable}>
+            <SC.CellContent $isClickable={isClickable}>
               {row[headers[0].id]}
-              {isClickable && <SC.TriggerArrow active={isExpanded} isMain />}
+              {isClickable && <SC.TriggerArrow $active={isExpanded} $isMain />}
             </SC.CellContent>
           </SC.TableCell>
           <TableCell scope="row">{row[currentMobileRow]}</TableCell>
@@ -80,7 +80,7 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
   const renderDesktop = () => {
     return (
       <>
-        <SC.TableRow noBorder={isCollapsible}>
+        <SC.TableRow $noBorder={isCollapsible}>
           {renderCheckbox(row.id)}
           {headers.map((header, i: number) => {
             const isClickable = collapseTrigger === header.id;
@@ -88,8 +88,8 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
             return (
               <SC.TableCell
                 key={header.id}
-                isMain={i === 0}
-                isClickable={isClickable}
+                $isMain={i === 0}
+                $isClickable={isClickable}
                 scope="row"
                 onClick={
                   isClickable
@@ -100,9 +100,9 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
                     : undefined
                 }
               >
-                <SC.CellContent isClickable={isClickable}>
+                <SC.CellContent $isClickable={isClickable}>
                   {row[header.id]}
-                  {header.id === collapseTrigger && <SC.TriggerArrow active={isExpanded} isMain />}
+                  {header.id === collapseTrigger && <SC.TriggerArrow $active={isExpanded} $isMain />}
                 </SC.CellContent>
               </SC.TableCell>
             );
