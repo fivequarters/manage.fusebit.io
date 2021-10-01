@@ -4,6 +4,7 @@ import * as SC from './styles';
 import * as CSC from '../../../../../globalStyle';
 import { getIntegrationConfig } from '../../../../../../utils/localStorage';
 import { useParams } from 'react-router-dom';
+import TextField from '../../../../../FormFields/TextField';
 
 interface Props {
   open: boolean;
@@ -106,8 +107,9 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
           </CSC.Flex>
           <CSC.Flex flexDown>
             <SC.Subtitle>URL</SC.Subtitle>
-            <div>
-              <SC.TextField
+            <Box mb="40px" position="relative">
+              <TextField
+                fieldVariant="modal"
                 hasError={!!formErrors.url}
                 onChange={(e) => {
                   const newValues = { ...formValues, url: e.target.value };
@@ -118,13 +120,13 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
                 value={formValues?.url}
               />
               {formErrors.url && <SC.ErrorMessage>{formErrors.url}</SC.ErrorMessage>}
-            </div>
+            </Box>
           </CSC.Flex>
         </Box>
         {formValues?.method !== 'get' && (
           <Box display="flex" mt="15px" flexDirection="column">
             <SC.Subtitle>Payload</SC.Subtitle>
-            <div>
+            <Box mb="40px" position="relative">
               <SC.Textarea
                 hasError={!!formErrors.payload}
                 onChange={(e) => {
@@ -137,7 +139,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
                 height="250px"
               />
               {formErrors.payload && <SC.ErrorMessage>{formErrors.payload}</SC.ErrorMessage>}
-            </div>
+            </Box>
           </Box>
         )}
         <SC.ButtonsWrapper>
