@@ -5,7 +5,7 @@ import { BaseFieldProps } from '../../../interfaces/baseFieldProps';
 
 type Props = TextareaAutosizeProps & BaseFieldProps;
 
-const Textarea: React.FC<Props> = ({ fieldVariant, hasError, ...props }) => {
+const Textarea: React.FC<Props> = ({ fieldVariant = 'default', hasError, ...props }) => {
   return <SC.MUITextarea $fieldVariant={fieldVariant} $hasError={hasError} {...props} />;
 };
 

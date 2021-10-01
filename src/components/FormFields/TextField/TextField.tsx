@@ -5,7 +5,7 @@ import { BaseFieldProps } from '../../../interfaces/baseFieldProps';
 
 type Props = TextFieldProps & BaseFieldProps;
 
-const TextField: React.FC<Props> = ({ fieldVariant, hasError, ...props }) => {
+const TextField: React.FC<Props> = ({ fieldVariant = 'default', hasError, ...props }) => {
   return <SC.MUITextField $fieldVariant={fieldVariant} $hasError={hasError} {...props} />;
 };
 
