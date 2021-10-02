@@ -131,7 +131,7 @@ const Connect = React.forwardRef(
             <SC.SmallTitle>
               <strong>Integration Base URL:</strong> {REACT_APP_FUSEBIT_DEPLOYMENT}
             </SC.SmallTitle>
-            <CSC.Copy onClick={() => handleCopy('https://api.us-west-2...')} margin="0 0 0 20px" />
+            <CSC.Copy onClick={() => handleCopy(REACT_APP_FUSEBIT_DEPLOYMENT as string)} margin="0 0 0 20px" />
             <SC.CopySuccess copy={copiedLine}>Copied to clipboard!</SC.CopySuccess>
           </SC.SmallTitleWrapper>
 
