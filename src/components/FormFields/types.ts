@@ -1,5 +1,4 @@
 export interface BaseFieldProps {
-    fieldVariant: 'default' | 'customBlue';
-    hasError?: boolean;
-  }
-  
+  fieldVariant: 'default' | 'customBlue';
+  hasError?: boolean;
+}
