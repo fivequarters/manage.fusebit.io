@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react"
 
-type UseModalData = [open: boolean, setOpen: (open: boolean) => void, toogle: () => void]
+type UseModalData = [boolean, (open: boolean) => void, () => void]
 
 export const useModal = (defaultOpen?: boolean): UseModalData => {
     const [open, setOpen] = useState(!!defaultOpen)
