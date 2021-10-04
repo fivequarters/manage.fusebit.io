@@ -2,8 +2,9 @@ import isEqual from 'lodash.isequal';
 
 type TrackEventHandler = (eventName: string, objectLocation: string, extraProperties?: { [key: string]: any }) => void;
 
+// utility to memoize the original trackEvent function to avoid noise
 const memoize = (originalFunction: TrackEventHandler) => {
-  let lastParamsUsed: { [key: string]: any };
+  let lastParamsUsed: any[];
   const memoizedFunction: TrackEventHandler = (...args) => {
     if (isEqual(lastParamsUsed, args)) {
       return;
@@ -14,6 +15,7 @@ const memoize = (originalFunction: TrackEventHandler) => {
   return memoizedFunction;
 };
 
+// original trackEvent function that gets called to offload events to Segment
 const trackEventHandler: TrackEventHandler = (eventName, objectLocation, extraProperties = {}) => {
   analytics.track(eventName, {
     objectLocation,
@@ -22,4 +24,5 @@ const trackEventHandler: TrackEventHandler = (eventName, objectLocation, extraPr
   });
 };
 
+// trackEvent is memoized because React re-rendering process makes it get called multiple times for the same event
 export const trackEvent = memoize(trackEventHandler);
