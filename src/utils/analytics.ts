@@ -5,7 +5,9 @@ type TrackEventHandler = (eventName: string, objectLocation: string, extraProper
 const memoize = (originalFunction: TrackEventHandler) => {
   let lastParamsUsed: { [key: string]: any };
   const memoizedFunction: TrackEventHandler = (...args) => {
-    if (isEqual(lastParamsUsed, args)) return;
+    if (isEqual(lastParamsUsed, args)) {
+      return;
+    }
     lastParamsUsed = args;
     originalFunction(...args);
   };
