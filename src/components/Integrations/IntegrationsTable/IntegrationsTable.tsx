@@ -4,6 +4,7 @@ import { usePagination } from '../../../hooks/usePagination';
 import { Integration } from '../../../interfaces/integration';
 import GetInstances from '../../TableRowComponent/GetInstances';
 import NewIntegrationModal from '../NewIntegrationModal';
+import DeleteIntegrationModal from '../DeleteIntegrationModal';
 import { useModal } from '../../../hooks/useModal';
 import { BaseTableRow } from '../../BaseTable/types';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
@@ -23,6 +24,7 @@ interface Props {
 const IntegrationsTable = ({ headless, setHeadless, integrations }: Props) => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
   const [newModalOpen, , toggleNewModal] = useModal();
+  const [deleteModalOpen, setDeleteModal, toggleDeleteModal] = useModal();
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
 
@@ -51,20 +53,26 @@ const IntegrationsTable = ({ headless, setHeadless, integrations }: Props) => {
   return (
     <>
       <NewIntegrationModal onClose={toggleNewModal} open={newModalOpen} />
+      <DeleteIntegrationModal
+        onConfirm={handleRowDelete}
+        setOpen={setDeleteModal}
+        open={deleteModalOpen}
+        selected={selected}
+      />
       <BaseTable
         emptyTableText="Your integrations list is empty, please create an integration"
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
         page={page}
         rowsPerPage={rowsPerPage}
-        entityName="integrations"
+        entityName="integration"
         headers={[
           { id: 'name', value: 'Name' },
           { id: 'installs', value: 'Installs' },
         ]}
         loading={loading}
         onClickNew={handleNewIntegration}
-        onDeleteAll={() => handleRowDelete('Integration')}
+        onDeleteAll={toggleDeleteModal}
         onSelectAll={handleSelectAllCheck}
         rows={tableRows}
         onSelectRow={handleCheck}
