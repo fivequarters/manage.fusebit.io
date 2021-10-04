@@ -65,9 +65,9 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
 
   const handleFilterChange = (filter: Filters) => {
     if (isIntegration) {
-      trackEvent(`New Integration Catalog ${filter} Clicked`, 'Integrations');
+      trackEvent('New Integration Catalog Clicked', 'Integrations', { tag: filter });
     } else {
-      trackEvent(`New Connector Catalog ${filter} Clicked`, 'Connectors');
+      trackEvent('New Connector Catalog Clicked', 'Connectors', { tag: filter });
     }
     setActiveFilter(filter);
   };
@@ -190,7 +190,9 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
                 cells={materialCells}
                 onChange={({ errors, data }) => {
                   if (data?.ui?.toggle && activeTemplate) {
-                    trackEvent(`New Integration Customize ${activeTemplate.name} Clicked`, 'Integrations');
+                    trackEvent('New Integration Customize Clicked', 'Integrations', {
+                      integration: activeTemplate.name,
+                    });
                   }
                   errors && setErrors(errors);
                   setData(data);

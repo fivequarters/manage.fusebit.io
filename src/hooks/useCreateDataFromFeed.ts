@@ -38,9 +38,9 @@ export const useCreateDataFromFeed = () => {
         };
 
         if (isConnector) {
-          trackEvent(`New Connector Create Button ${commonTags['fusebit.feedId']} Clicked`, 'Connectors');
+          trackEvent('New Connector Create Button Clicked', 'Connectors', { connector: commonTags['fusebit.feedId'] });
         } else {
-          trackEvent(`New Integration Create Button ${commonTags['fusebit.feedId']} Clicked`, 'Integrations');
+          trackEvent('New Integration Create Button Clicked', 'Integrations', { integration: commonTags['fusebit.feedId'] });
         }
 
         await Promise.all([
