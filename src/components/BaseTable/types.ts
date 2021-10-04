@@ -1,11 +1,14 @@
+export interface BaseTableRow {
+  id: string;
+  collapsableContent?: React.ReactNode | React.ReactText;
+  collapsableContentOpened?: () => void;
+  [x: string]: React.ReactNode | React.ReactText;
+}
+
 export interface BaseTableProps {
   selected: string[];
   loading: boolean;
-  rows: {
-    id: string;
-    collapsableContent?: React.ReactNode | React.ReactText;
-    [x: string]: React.ReactNode | React.ReactText;
-  }[];
+  rows: BaseTableRow[];
   onSelectAll: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onDeleteAll: () => void;
   onClickNew?: () => void;
@@ -19,8 +22,9 @@ export interface BaseTableProps {
   rowsPerPage: any;
   page: any;
   emptyTableText: string;
-  handleChangePage: (e: any, newPage: number) => void;
-  handleChangeRowsPerPage: (e: any) => void;
+  onChangePage?: (e: any, newPage: number) => void;
+  onChangeRowsPerPage?: (e: any) => void;
   collapseTrigger?: string;
   isCollapsible?: boolean;
+  onClickRow?: (row: BaseTableRow, columnId: string) => void;
 }

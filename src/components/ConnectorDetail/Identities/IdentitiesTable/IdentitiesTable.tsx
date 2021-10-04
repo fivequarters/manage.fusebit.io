@@ -79,8 +79,8 @@ const IntegrationsTable = () => {
       />
       <BaseTable
         emptyTableText="Your identities list is empty"
-        handleChangePage={handleChangePage}
-        handleChangeRowsPerPage={handleChangeRowsPerPage}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
         page={page}
         rowsPerPage={rowsPerPage}
         headers={[

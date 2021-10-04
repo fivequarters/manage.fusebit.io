@@ -183,7 +183,7 @@ export const useEntityApi = (preventLoader?: boolean) => {
     try {
       createLoader();
       for (let i = 0; i < ids.length; i++) {
-        if (type === 'I') {
+        if (type === 'Integration') {
           await deleteIntegration.mutateAsync({
             id: ids[i],
             accountId: userData.accountId,
