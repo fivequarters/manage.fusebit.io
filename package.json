@@ -1,6 +1,6 @@
 {
   "name": "fusebit-portal",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Fusebit portal",
   "scripts": {
     "start": "react-scripts start",
@@ -25,6 +25,7 @@
     "dotenv": "^8.2.0",
     "jwt-decode": "^3.1.2",
     "lodash.debounce": "^4.0.8",
+    "lodash.isequal": "^4.5.0",
     "lodash.startcase": "^4.4.0",
     "mustache": "^4.2.0",
     "react": "^17.0.1",
@@ -67,6 +68,7 @@
     "@testing-library/user-event": "^12.1.10",
     "@types/jest": "^26.0.15",
     "@types/lodash.debounce": "^4.0.6",
+    "@types/lodash.isequal": "^4.5.5",
     "@types/lodash.startcase": "^4.4.6",
     "@types/material-ui": "^0.21.8",
     "@types/mustache": "^4.1.2",
