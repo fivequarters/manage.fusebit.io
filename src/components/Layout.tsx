@@ -36,6 +36,8 @@ const Layout: FC<Props> = ({ children }) => {
           // creationDate: // Optional
         },
       });
+
+      window.Intercom('update');
     }
   }, [userData]);
 

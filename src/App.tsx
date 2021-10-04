@@ -17,6 +17,9 @@ function App() {
 
   useEffect(() => {
     validateToken();
+    window.Intercom('boot', {
+      app_id: 'v9ncq3ml',
+    });
   }, []);
 
   return (
