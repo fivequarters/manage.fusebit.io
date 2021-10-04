@@ -1,7 +1,7 @@
 import { TextareaAutosizeProps } from '@material-ui/core';
 import React from 'react';
 import * as SC from './styles';
-import { BaseFieldProps } from '../../../interfaces/baseFieldProps';
+import { BaseFieldProps } from '../types';
 
 type Props = TextareaAutosizeProps & BaseFieldProps;
 
