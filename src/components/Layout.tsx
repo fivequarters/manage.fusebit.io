@@ -4,6 +4,7 @@ import { CssBaseline } from '@material-ui/core';
 import GlobalStyle from './globalStyle';
 import { useEffect } from 'react';
 import { useContext } from '../hooks/useContext';
+import { updateIntercom } from '../utils/utils';
 
 const useStyles = makeStyles((_) =>
   createStyles({
@@ -36,9 +37,8 @@ const Layout: FC<Props> = ({ children }) => {
           // creationDate: // Optional
         },
       });
-
-      window.Intercom('update');
     }
+    updateIntercom();
   }, [userData]);
 
   return (

@@ -9,7 +9,7 @@ import { routes } from './config';
 import { APP_TITLE } from './utils/constants';
 import { RouteItem } from './interfaces/router';
 import { ContextProvider } from './hooks/useContext';
-import { validateToken } from './utils/utils';
+import { initIntercom, validateToken } from './utils/utils';
 import { ReactQueryDevtools } from 'react-query/devtools';
 
 function App() {
@@ -17,9 +17,7 @@ function App() {
 
   useEffect(() => {
     validateToken();
-    window.Intercom('boot', {
-      app_id: 'v9ncq3ml',
-    });
+    initIntercom();
   }, []);
 
   return (
