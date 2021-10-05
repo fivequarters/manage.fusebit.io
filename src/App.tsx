@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { createMuiTheme, responsiveFontSizes, ThemeProvider } from '@material-ui/core/styles';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import CookieConsent from 'react-cookie-consent';
 import { lightTheme } from './theme/appTheme';
@@ -49,13 +49,11 @@ function App() {
                   This website uses cookies to enhance the user experience.
                 </p>
               </CookieConsent>
-              <Router>
-                <Switch>
-                  {routes.map((route: RouteItem) => (
-                    <Route key={`${route.key}`} path={`${route.path}`} component={route.component} exact />
-                  ))}
-                </Switch>
-              </Router>
+              <Switch>
+                {routes.map((route: RouteItem) => (
+                  <Route key={`${route.key}`} path={`${route.path}`} component={route.component} exact />
+                ))}
+              </Switch>
             </ThemeProvider>
           </QueryClientProvider>
         </ContextProvider>
