@@ -127,7 +127,7 @@ export const Or = styled.h4`
 
 export const CopySuccess = styled.p<{ copy: boolean }>`
   position: absolute;
-  bottom: -15px;
+  bottom: -35px;
   font-size: 14px;
   line-height: 16px;
   color: var(--grey);
