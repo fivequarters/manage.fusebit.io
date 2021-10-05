@@ -2,6 +2,7 @@ import { Entity, Feed } from '../interfaces/feed';
 import { FinalConnector } from '../interfaces/integrationDetailDevelop';
 import { integrationsFeed, connectorsFeed } from '../static/feed';
 import { Decoded } from '../interfaces/decoded';
+import { EntityComponent } from '../interfaces/feed';
 import jwt_decode from 'jwt-decode';
 import { InstallInstance } from '../interfaces/install';
 import { default as _startCase } from 'lodash.startcase';
@@ -79,3 +80,46 @@ export const startCase = (str: string) => {
 
 export const getConnectorsFromInstall = (install: InstallInstance) =>
   Object.keys(install.data).map((key) => install?.data[key]?.parentEntityId);
+
+export const getAllDependenciesFromFeed = (feed: Feed) => {
+  const { entities } = feed?.configuration || {};
+
+  const dependencies = Object.keys(entities).reduce<Record<string, string>>((acc, curr) => {
+    const currDependencies = JSON.parse(entities[curr].data.files['package.json']).dependencies;
+
+    Object.keys(currDependencies).forEach((key) => {
+      acc[key] = currDependencies[key];
+    });
+
+    return acc;
+  }, {});
+
+  return dependencies;
+};
+
+const LINKED_DEPENDENCIES = {
+  provider: 'connector',
+};
+
+export const linkPackageJson = (
+  currPkgJson: Record<string, string>,
+  dependencies: Record<string, string>,
+  component: EntityComponent
+) => {
+  const newPackageJson = { ...currPkgJson };
+
+  const [prefix, suffix] = component.provider.split('/');
+
+  const [name, type] = suffix.split('-');
+
+  const dependencyBaseName = `${prefix}/${name}`;
+
+  const dependencyName = `${dependencyBaseName}-${
+    LINKED_DEPENDENCIES[type as keyof typeof LINKED_DEPENDENCIES] || LINKED_DEPENDENCIES.provider
+  }`;
+
+  // @ts-ignore
+  newPackageJson.dependencies[component.provider] = dependencies[dependencyName];
+
+  return newPackageJson;
+};
