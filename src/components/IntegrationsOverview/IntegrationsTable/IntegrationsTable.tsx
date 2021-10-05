@@ -10,23 +10,27 @@ import { BaseTableRow } from '../../BaseTable/types';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import { useHistory } from 'react-router-dom';
 import { trackEvent } from '../../../utils/analytics';
+import { useContext } from '../../../hooks/useContext';
+import { useAccountIntegrationsGetAll } from '../../../hooks/api/v2/account/integration/useGetAll';
 
 interface Props {
   headless: boolean;
   setHeadless: (value: boolean) => void;
-  integrations?: {
-    data: {
-      items: Integration[];
-    };
-  };
 }
 
-const IntegrationsTable = ({ headless, setHeadless, integrations }: Props) => {
+const IntegrationsTable = ({ headless, setHeadless }: Props) => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
   const [newModalOpen, , toggleNewModal] = useModal();
   const [deleteModalOpen, setDeleteModal, toggleDeleteModal] = useModal();
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
+  const { userData } = useContext();
+
+  const { data: integrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({
+    enabled: userData.token,
+    accountId: userData.accountId,
+    subscriptionId: userData.subscriptionId,
+  });
 
   const { loading, rows, selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
     headless,

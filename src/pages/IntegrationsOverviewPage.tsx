@@ -1,6 +1,6 @@
-import React, { FC, ReactElement } from 'react';
+import { FC, ReactElement } from 'react';
 import Layout from '../components/Layout';
-import IntegrationsOverview from '../components/Integrations/Overview/IntegrationsOverview';
+import IntegrationsOverview from '../components/IntegrationsOverview/IntegrationsOverview';
 import Navbar from '../components/Navbar';
 import { useTrackPage } from '../hooks/useTrackPage';
 
