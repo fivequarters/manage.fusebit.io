@@ -113,6 +113,15 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, onMount, int
         confirmationButtonText="Start"
         hideCancelButton
       />
+      <ConfirmationPrompt
+        open={loginFlowModalOpen}
+        setOpen={setLoginFlowModalOpen}
+        handleConfirmation={handleNoInstanceFound}
+        title="Start login flow?"
+        description="The integration needs to know the Identity of the user on whose behalf to execute. For development purposes, please log in as your own user."
+        confirmationButtonText="Start"
+        hideCancelButton
+      />
       <SC.EditorContainer ref={ref}>
         <ConfigureRunnerModal open={configureRunnerActive} setOpen={setConfigureRunnerActive} />
         {isMounted && (

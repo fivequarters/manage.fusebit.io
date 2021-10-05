@@ -87,7 +87,7 @@ const Develop: React.FC = () => {
   const [editGuiMounted, setEditGuiMounted] = useState(false);
   const [editCliOpen, setEditCliOpen] = React.useState(false);
   const isMobile = useMediaQuery('(max-width: 850px)');
-  const areCardsCollapsing = useMediaQuery('(max-width: 1200px)');
+  const areCardsCollapsing = useMediaQuery('(max-width: 1250px)');
 
   const getBackendClients = async () => {
     const _backendClients = await getBackendClientListener();
