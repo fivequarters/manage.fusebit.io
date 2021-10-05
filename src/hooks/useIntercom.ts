@@ -6,7 +6,7 @@ export const useIntercom = () => {
 
   useEffect(() => {
     window.Intercom('boot', {
-      app_id: 'v9ncq3ml',
+      app_id: process.env.REACT_APP_INTERCOM_APP_ID,
     });
   }, []);
 
