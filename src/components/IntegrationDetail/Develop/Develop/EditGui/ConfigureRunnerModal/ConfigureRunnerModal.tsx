@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Modal, Backdrop, Box, Select, MenuItem } from '@material-ui/core';
+import { useParams } from 'react-router-dom';
 import * as SC from './styles';
 import * as CSC from '../../../../../globalStyle';
 import { getIntegrationConfig } from '../../../../../../utils/localStorage';
-import { useParams } from 'react-router-dom';
 import TextField from '../../../../../FormFields/TextField';
 import Label from '../../../../../FormFields/Label';
 import Textarea from '../../../../../FormFields/Textarea';
@@ -102,7 +102,9 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
               style={{ width: '110px', marginTop: '16px' }}
             >
               {Verbs.map((verb) => (
-                <MenuItem value={verb}>{verb.toLocaleUpperCase()}</MenuItem>
+                <MenuItem key={verb} value={verb}>
+                  {verb.toLocaleUpperCase()}
+                </MenuItem>
               ))}
             </Select>
             {formErrors.method && <SC.ErrorMessage>{formErrors.method}</SC.ErrorMessage>}
