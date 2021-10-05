@@ -1,6 +1,6 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable react/jsx-closing-bracket-location */
 import React from 'react';
-import * as SC from './styles';
-import * as CSC from '../globalStyle';
 import {
   Table,
   TableBody,
@@ -17,6 +17,8 @@ import {
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
+import * as CSC from '../globalStyle';
+import * as SC from './styles';
 import arrowRight from '../../assets/arrow-right.svg';
 import arrowLeft from '../../assets/arrow-left.svg';
 import { Feed } from '../../interfaces/feed';
@@ -31,6 +33,8 @@ import NewUser from '../Authentication/Users/Users/NewUser';
 import { Row } from '../../interfaces/tableRow';
 import ConfirmationPrompt from '../ConfirmationPrompt/ConfirmationPrompt';
 import { trackEvent } from '../../utils/analytics';
+
+// TODO: Delete and use BaseTable instead.
 
 const TableComponent: React.FC<Props> = ({
   headless,
@@ -82,15 +86,15 @@ const TableComponent: React.FC<Props> = ({
   const usersText = !integrationTable && !connectorTable && (isPlural ? 'these Users' : 'this User');
 
   const allSelected = () => {
-    let allSelected = false;
+    let _allSelected = false;
 
     if (rows.length > 1 && users) {
-      allSelected = selected.length === rows.length - 1;
+      _allSelected = selected.length === rows.length - 1;
     } else if (rows.length > 0) {
-      allSelected = selected.length === rows.length;
+      _allSelected = selected.length === rows.length;
     }
 
-    return allSelected;
+    return _allSelected;
   };
 
   return (

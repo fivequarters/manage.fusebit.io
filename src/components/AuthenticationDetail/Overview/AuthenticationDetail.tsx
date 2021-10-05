@@ -5,7 +5,7 @@ import Overview from './Overview/Overview';
 const AuthenticationDetail: React.FC = () => {
   return (
     <>
-      <TabComponent tabNames={['Overview']} tabObjects={[<Overview />]} />
+      <TabComponent tabNames={['Overview']} tabObjects={[<Overview key="overview" />]} />
     </>
   );
 };

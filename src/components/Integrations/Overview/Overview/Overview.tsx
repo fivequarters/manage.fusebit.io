@@ -19,7 +19,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
     if (selectedCell === IntegrationCells.INSTALLS) {
       // setSelectedCell(IntegrationCells.DEPLOYED);
     } else if (selectedCell === IntegrationCells.CREATED) {
-      setSelectedCell(IntegrationCells.INSTALLS); //uncommented to not leave the variable unused
+      setSelectedCell(IntegrationCells.INSTALLS); // uncommented to not leave the variable unused
     } else {
       // setSelectedCell(IntegrationCells.CREATED);
     }

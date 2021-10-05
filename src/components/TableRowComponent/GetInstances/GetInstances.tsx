@@ -12,7 +12,7 @@ const GetInstances: React.FC<Props> = ({ id }) => {
   const { userData } = useContext();
   const { data: installsData } = useAccountIntegrationInstanceGetAll<Install>({
     enabled: userData.token,
-    id: id,
+    id,
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
   });

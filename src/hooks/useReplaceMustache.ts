@@ -1,14 +1,14 @@
 import React from 'react';
-import { useContext } from './useContext';
 import Mustache from 'mustache';
+import { useContext } from './useContext';
 import { Data } from '../interfaces/feedPicker';
 import { Feed, Entity } from '../interfaces/feed';
 
 const walkObjectStrings = (obj: any, func: (value: string) => string): any => {
   Object.entries(obj).forEach(([key, value]: [string, any]) => {
-    if (typeof value == 'string') {
+    if (typeof value === 'string') {
       obj[key] = func(value);
-    } else if (typeof value == 'object') {
+    } else if (typeof value === 'object') {
       walkObjectStrings(value, func);
     }
   });
@@ -21,6 +21,7 @@ const checkIfEntitiesAreValid = (parsedFeed: Feed) => {
       statusCode: 403,
       message: 'Entities cant be an array',
     };
+    // eslint-disable-next-line @typescript-eslint/no-throw-literal
     throw err;
   }
 };
@@ -40,7 +41,7 @@ export const useReplaceMustache = () => {
         // Disable html escaping because these values are all trusted
         Mustache.escape = (s: string) => s;
 
-        let global: any = {
+        const global: any = {
           entities: {},
           consts: {
             userId: userData.userId,
@@ -49,7 +50,7 @@ export const useReplaceMustache = () => {
             endpoint: process.env.REACT_APP_FUSEBIT_DEPLOYMENT,
             integrationId: () => {
               const integration: any = Object.entries(feed.configuration.entities as Record<string, Entity>).find(
-                ([name, entity]: [string, Entity]) => entity.entityType === 'integration'
+                ([, entity]: [string, Entity]) => entity.entityType === 'integration'
               );
               return integration ? global.entities[integration[0]]?.id() || integration[1].id : '';
             },

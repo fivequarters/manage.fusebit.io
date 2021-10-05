@@ -9,7 +9,7 @@ const IntegrationDetailInstalls: React.FC<Props> = ({ id }) => {
   return (
     <TabComponent
       tabNames={['Develop', 'Installs']}
-      tabObjects={[getRedirectLink('/integration/' + id + '/develop'), <Installs />]}
+      tabObjects={[getRedirectLink(`/integration/${id}/develop`), <Installs key="installs" />]}
     />
   );
 };
