@@ -77,5 +77,15 @@ export const startCase = (str: string) => {
   return _startCase(str.toLowerCase());
 };
 
+export const initIntercom = () => {
+  window.Intercom('boot', {
+    app_id: 'v9ncq3ml',
+  });
+};
+
+export const updateIntercom = () => {
+  window.Intercom('update');
+};
+
 export const getConnectorsFromInstall = (install: InstallInstance) =>
   Object.keys(install.data).map((key) => install?.data[key]?.parentEntityId);

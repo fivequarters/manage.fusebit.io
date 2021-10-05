@@ -137,7 +137,9 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
             </ButtonGroup>
             <h3>{integrationId}</h3>
             <SC.ActionsHelpWrapper>
-              <SC.ActionsHelpLink href="/">Edit Locally</SC.ActionsHelpLink>
+              <SC.ActionsHelpLink target="_blank" href="https://developer.fusebit.io/docs/developing-locally">
+                Edit locally
+              </SC.ActionsHelpLink>
               <SC.ActionsHelpImage src={question} alt="question" height="16" width="16" />
             </SC.ActionsHelpWrapper>
             <SC.Close onClick={handleClose} />
@@ -153,7 +155,12 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
               baseUrl: process.env.REACT_APP_FUSEBIT_DEPLOYMENT,
               accessToken: userData.token,
             }}
-            options={{ entityType: 'integration' }}
+            options={{
+              entityType: 'integration',
+              editor: {
+                navigationPanel: { hideRunnerTool: true, hideScheduleSettings: true },
+              },
+            }}
             onLoaded={() => {
               setIsMounted(true);
             }}

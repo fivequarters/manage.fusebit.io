@@ -11,9 +11,11 @@ import { RouteItem } from './interfaces/router';
 import { ContextProvider } from './hooks/useContext';
 import { validateToken } from './utils/utils';
 import { ReactQueryDevtools } from 'react-query/devtools';
+import { useIntercom } from './hooks/useIntercom';
 
 function App() {
   const queryClient = new QueryClient();
+  useIntercom();
 
   useEffect(() => {
     validateToken();
