@@ -1,16 +1,29 @@
-import { FC, ReactElement } from 'react';
+import { FC, ReactElement, useRef } from 'react';
 import Layout from '../components/Layout';
-import IntegrationsOverview from '../components/IntegrationsOverview/IntegrationsOverview';
 import Navbar from '../components/Navbar';
 import { useTrackPage } from '../hooks/useTrackPage';
+import IntegrationsTable from '../components/IntegrationsOverview/IntegrationsTable/IntegrationsTable';
+import TabComponent from '../components/TabComponent';
 
 const IntegrationsOverviewPage: FC<{}> = (): ReactElement => {
   useTrackPage('Integrations Overview', 'Integrations');
+  const headless = useRef(true); // the parent has to have this otherwise the mounting of the overview will open the feed picker if there is a query param.
 
   return (
     <Layout>
       <Navbar dropdown sectionName="Integrations" integration />
-      <IntegrationsOverview />
+      <TabComponent
+        tabNames={['Overview']}
+        tabObjects={[
+          <IntegrationsTable
+            key="integrationsTable"
+            headless={!!headless}
+            setHeadless={(value: boolean) => {
+              headless.current = value;
+            }}
+          />,
+        ]}
+      />
     </Layout>
   );
 };
