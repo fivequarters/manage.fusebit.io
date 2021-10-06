@@ -72,9 +72,9 @@ const useEditor = ({ onNoInstanceFound } = {} as Props) => {
       };
 
       if (!hasSessionChanged.current && prevSessionId !== sessionId) {
-        console.log('hasSessionChanged', hasSessionChanged.current)
-        console.log('prevSessionId', prevSessionId)
-        console.log('sessionId', sessionId)
+        console.log('hasSessionChanged', hasSessionChanged.current);
+        console.log('prevSessionId', prevSessionId);
+        console.log('sessionId', sessionId);
         runFirstTest();
       }
     };
