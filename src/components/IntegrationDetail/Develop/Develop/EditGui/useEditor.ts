@@ -58,7 +58,10 @@ const useEditor = ({ onNoInstanceFound } = {} as Props) => {
           await commitSession({ id, sessionId });
 
           await testIntegration({ id, tenantId: STATIC_TENANT_ID });
+
+          trackEvent('Integration Ran Successfully', 'Web Editor');
         } catch (error) {
+          trackEvent('Integration Ran with Errors', 'Web Editor');
           console.log(error);
         }
       };
