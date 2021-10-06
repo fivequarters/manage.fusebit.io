@@ -83,11 +83,11 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, onMount, int
   const handleSave = () => {
     const context = window.editor;
     trackEvent('Save Button Clicked', 'Web Editor');
-    context._server.saveFunction(context);
+    context?._server.saveFunction(context);
   };
 
   const handleClose = () => {
-    if (window.editor.dirtyState) {
+    if (window.editor?.dirtyState) {
       setUnsavedWarning(true);
     } else {
       onClose();
