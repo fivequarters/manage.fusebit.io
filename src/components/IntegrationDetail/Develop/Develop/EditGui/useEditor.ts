@@ -98,7 +98,7 @@ const useEditor = ({ onNoInstanceFound } = {} as Props) => {
         }
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
