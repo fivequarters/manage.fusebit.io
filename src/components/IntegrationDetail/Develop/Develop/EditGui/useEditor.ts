@@ -87,10 +87,6 @@ const useEditor = ({ onNoInstanceFound, enableListener = true } = {} as Props) =
   const handleRun = async () => {
     trackEvent('Run Button Clicked', 'Web Editor');
     try {
-      if (window.editor?.dirtyState) {
-        await window.editor._server.saveFunction(window.editor);
-      }
-
       const hasInstance = await findInstance();
 
       if (hasInstance) {

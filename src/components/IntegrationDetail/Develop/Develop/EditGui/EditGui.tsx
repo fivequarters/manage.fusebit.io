@@ -27,6 +27,7 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
   const { handleRun, handleNoInstanceFound, isFindingInstance } = useEditor({
     onNoInstanceFound: () => setLoginFlowModalOpen(true),
   });
+  const [isDirty, setIsDirty] = useState(false);
 
   useTrackPage('Web Editor', 'Web Editor');
 
@@ -77,10 +78,13 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMounted]);
 
-  const handleSave = () => {
+  useEffect(() => {}, []);
+
+  const handleSave = async () => {
     const context = window.editor;
     trackEvent('Save Button Clicked', 'Web Editor');
-    context?._server.saveFunction(context);
+    await context?._server.saveFunction(context);
+    setIsDirty(false);
   };
 
   const handleClose = () => {
@@ -91,8 +95,12 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
     }
   };
 
+  const handleType = () => {
+    setIsDirty(true);
+  };
+
   return (
-    <>
+    <div onKeyDownCapture={handleType}>
       <ConfirmationPrompt
         open={unsavedWarning}
         setOpen={setUnsavedWarning}
@@ -131,7 +139,7 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
                 variant="contained"
                 color="primary"
                 onClick={handleRun}
-                disabled={isFindingInstance}
+                disabled={isFindingInstance || isDirty}
               >
                 {isFindingInstance ? <CircularProgress size={20} /> : 'Run'}
               </Button>
@@ -172,7 +180,7 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
           {isMounted && <SC.FusebitEditorLogo src={logo} alt="fusebit logo" height="20" width="80" />}
         </SC.FusebitEditorContainer>
       </SC.EditorContainer>
-    </>
+    </div>
   );
 });
 
