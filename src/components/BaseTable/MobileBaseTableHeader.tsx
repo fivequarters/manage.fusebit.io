@@ -14,7 +14,8 @@ const MobileBaseTableHeader = ({
   onNextCellSelect,
   onPreviousCellSelect,
   isAllChecked,
-}: Pick<BaseTableProps, 'rows' | 'selected' | 'onSelectAll' | 'headers' | 'isAllChecked'> & {
+  hideCheckAll,
+}: Pick<BaseTableProps, 'rows' | 'selected' | 'onSelectAll' | 'headers' | 'isAllChecked' | 'hideCheckAll'> & {
   mobileArrowColumns: BaseTableProps['headers'];
   mobileColumnIndex: number;
   onPreviousCellSelect: () => void;
@@ -24,11 +25,13 @@ const MobileBaseTableHeader = ({
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            checked={isAllChecked || (rows.length > 0 && selected.length === rows.length)}
-            onChange={onSelectAll}
-          />
+          {!hideCheckAll && (
+            <Checkbox
+              color="primary"
+              checked={isAllChecked || (rows.length > 0 && selected.length === rows.length)}
+              onChange={onSelectAll}
+            />
+          )}
         </TableCell>
         <TableCell>{headers[0].value}</TableCell>
         <TableCell align="left">

@@ -81,6 +81,7 @@ const UsersTable = () => {
         selected={selected}
         onClickRow={handleClickRow}
         isAllChecked={tableRows.length > 1 ? selected.length === tableRows.length - 1 : false}
+        hideCheckAll={tableRows.length === 1}
       />
     </>
   );

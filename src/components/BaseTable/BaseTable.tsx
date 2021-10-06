@@ -31,6 +31,8 @@ const BaseTable: React.FC<BaseTableProps> = ({
   onClickRow,
   noMainColumn,
   isAllChecked,
+  headerButtons,
+  hideCheckAll,
 }) => {
   const computedRowsPerPage = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   const isMobile = useMediaQuery('(max-width: 880px)');
@@ -62,6 +64,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
               rows={rows}
               selected={selected}
               isAllChecked={isAllChecked}
+              hideCheckAll={hideCheckAll}
             />
           ) : (
             <BaseTableHead
@@ -70,6 +73,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
               rows={rows}
               selected={selected}
               isAllChecked={isAllChecked}
+              hideCheckAll={hideCheckAll}
             />
           )}
           <TableBody>
@@ -105,13 +109,23 @@ const BaseTable: React.FC<BaseTableProps> = ({
   return (
     <SC.Wrapper>
       {onClickNew && (
-        <SC.ButtonContainer>
-          <SC.ButtonMargin>
-            <Button onClick={onClickNew} startIcon={<AddIcon />} variant="outlined" color="primary" size="large">
-              New {entityName}
+        <SC.ButtonsContainer display="flex" mt="56px" mb="36px" justifyContent="flex-end">
+          {(headerButtons || [])?.map((button) => (
+            <Button
+              key={button.text}
+              onClick={onClickNew}
+              variant="outlined"
+              color="primary"
+              size="large"
+              {...button.props}
+            >
+              {button.text}
             </Button>
-          </SC.ButtonMargin>
-        </SC.ButtonContainer>
+          ))}
+          <Button onClick={onClickNew} startIcon={<AddIcon />} variant="outlined" color="primary" size="large">
+            New {entityName}
+          </Button>
+        </SC.ButtonsContainer>
       )}
 
       <SC.DeleteWrapper active={selected.length > 0}>

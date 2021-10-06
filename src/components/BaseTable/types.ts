@@ -1,3 +1,5 @@
+import { ButtonProps } from '@material-ui/core';
+
 export interface BaseTableRow {
   id: string;
   collapsableContent?: React.ReactNode | React.ReactText;
@@ -30,4 +32,10 @@ export interface BaseTableProps {
   onClickRow?: (row: BaseTableRow, columnId: string) => void;
   noMainColumn?: boolean;
   isAllChecked?: boolean;
+  headerButtons?: {
+    text: string;
+    onClick: () => void;
+    props?: ButtonProps;
+  }[];
+  hideCheckAll?: boolean;
 }
