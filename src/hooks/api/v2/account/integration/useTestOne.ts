@@ -47,6 +47,7 @@ export const useAccountIntegrationTestIntegration = () => {
           })
         );
       },
+      retry: false,
     }
   );
 };

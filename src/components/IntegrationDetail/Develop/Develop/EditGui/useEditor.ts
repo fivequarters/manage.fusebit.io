@@ -57,15 +57,24 @@ const useEditor = ({ onNoInstanceFound } = {} as Props) => {
         hasSessionChanged.current = true;
 
         try {
+          console.log('1');
+
           await commitSession({ id, sessionId });
 
+          console.log('2');
+
           await testIntegration({ id, tenantId: STATIC_TENANT_ID });
+
+          console.log('3');
         } catch (error) {
           console.log(error);
         }
       };
 
       if (!hasSessionChanged.current && prevSessionId !== sessionId) {
+        console.log('hasSessionChanged', hasSessionChanged.current)
+        console.log('prevSessionId', prevSessionId)
+        console.log('sessionId', sessionId)
         runFirstTest();
       }
     };
