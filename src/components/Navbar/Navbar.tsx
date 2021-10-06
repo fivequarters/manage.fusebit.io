@@ -1,8 +1,10 @@
-import React from 'react';
-import * as SC from './styles';
+/* eslint-disable no-nested-ternary */
+import React, { useState, useEffect } from 'react';
 import { Container, Button, Menu, Drawer } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import { Link, useHistory } from 'react-router-dom';
+import * as SC from './styles';
 import client from '../../assets/client.jpg';
 import { Props } from '../../interfaces/Navbar';
 import arrow from '../../assets/down-arrow-white.svg';
@@ -13,12 +15,13 @@ import { useAccountIntegrationsGetAll } from '../../hooks/api/v2/account/integra
 import { useAccountConnectorsGetAll } from '../../hooks/api/v2/account/connector/useGetAll';
 import { Integration } from '../../interfaces/integration';
 import { Connector } from '../../interfaces/connector';
-import { useState } from 'react';
+
 import burguer from '../../assets/burguer.svg';
 import cross from '../../assets/cross.svg';
-import { useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+
 import { useGetRedirectLink } from '../../hooks/useGetRedirectLink';
+
+// TOOD: Refactor nested ternary expressions
 
 const Navbar: React.FC<Props> = ({
   sectionName,
@@ -102,7 +105,7 @@ const Navbar: React.FC<Props> = ({
                 <SC.Flex>
                   {sectionName !== 'Integrations' && sectionName !== 'Connectors' && (
                     <Link to={to}>
-                      <SC.Flex mobileHidden={true}>
+                      <SC.Flex mobileHidden>
                         <SC.SectionLink>
                           {integrationsLink ? 'Integrations' : authenticationLink ? 'Authentication' : 'Connectors'}
                         </SC.SectionLink>
@@ -119,9 +122,9 @@ const Navbar: React.FC<Props> = ({
                     {sectionName !== 'Integrations' && sectionName !== 'Connectors' && (
                       <SC.SectionName>
                         {integration
-                          ? sectionName + ' Integration'
+                          ? `${sectionName} Integration`
                           : connector
-                          ? sectionName + ' Connector'
+                          ? `${sectionName} Connector`
                           : sectionName}
                       </SC.SectionName>
                     )}
@@ -139,9 +142,9 @@ const Navbar: React.FC<Props> = ({
                     {sectionName !== 'Integrations' && sectionName !== 'Connectors' && (
                       <SC.SectionName>
                         {integration
-                          ? sectionName + ' Integration'
+                          ? `${sectionName} Integration`
                           : connector
-                          ? sectionName + ' Connector'
+                          ? `${sectionName} Connector`
                           : sectionName}
                       </SC.SectionName>
                     )}
@@ -173,10 +176,10 @@ const Navbar: React.FC<Props> = ({
                             </SC.SectionDropdownSeeMore>
                           </Link>
                         </SC.Flex>
-                        {integrations?.data?.items?.map((integration, index) => (
-                          <Link key={index} to={getRedirectLink('/integration/' + integration.id + '/develop')}>
-                            <SC.SectionDropdownIntegration active={sectionName === integration.id}>
-                              {integration.id}
+                        {integrations?.data?.items?.map((_integration) => (
+                          <Link key={_integration.id} to={getRedirectLink(`/integration/${_integration.id}/develop`)}>
+                            <SC.SectionDropdownIntegration active={sectionName === _integration.id}>
+                              {_integration.id}
                               <img src={check} alt="check" height="16" width="16" />
                             </SC.SectionDropdownIntegration>
                           </Link>
@@ -192,17 +195,17 @@ const Navbar: React.FC<Props> = ({
                             </SC.SectionDropdownSeeMore>
                           </Link>
                         </SC.Flex>
-                        {connectors?.data?.items?.map((connector, index) => (
-                          <Link key={index} to={getRedirectLink('/connector/' + connector.id + '/configure')}>
-                            <SC.SectionDropdownIntegration active={sectionName === connector.id}>
-                              {connector.id}
+                        {connectors?.data?.items?.map((_connector) => (
+                          <Link key={_connector.id} to={getRedirectLink(`/connector/${_connector.id}/configure`)}>
+                            <SC.SectionDropdownIntegration active={sectionName === _connector.id}>
+                              {_connector.id}
                               <img src={check} alt="check" height="16" width="16" />
                             </SC.SectionDropdownIntegration>
                           </Link>
                         ))}
                       </SC.SectionDropdownMenu>
                     </Menu>
-                    <Drawer anchor={'bottom'} open={drawerBottomOpen} onClose={() => setDrawerBottomOpen(false)}>
+                    <Drawer anchor="bottom" open={drawerBottomOpen} onClose={() => setDrawerBottomOpen(false)}>
                       <SC.SectionDropdownMenu>
                         <SC.Flex>
                           <Link style={{ marginRight: 'auto' }} to={getRedirectLink('/integrations/overview')}>
@@ -215,10 +218,10 @@ const Navbar: React.FC<Props> = ({
                             </SC.SectionDropdownSeeMore>
                           </Link>
                         </SC.Flex>
-                        {integrations?.data?.items?.map((integration, index) => (
-                          <Link key={index} to={getRedirectLink('/integration/' + integration.id + '/develop')}>
-                            <SC.SectionDropdownIntegration active={sectionName === integration.id}>
-                              {integration.id}
+                        {integrations?.data?.items?.map((_integration) => (
+                          <Link key={_integration.id} to={getRedirectLink(`/integration/${_integration.id}/develop`)}>
+                            <SC.SectionDropdownIntegration active={sectionName === _integration.id}>
+                              {_integration.id}
                               <img src={check} alt="check" height="16" width="16" />
                             </SC.SectionDropdownIntegration>
                           </Link>
@@ -234,10 +237,10 @@ const Navbar: React.FC<Props> = ({
                             </SC.SectionDropdownSeeMore>
                           </Link>
                         </SC.Flex>
-                        {connectors?.data?.items?.map((connector, index) => (
-                          <Link key={index} to={getRedirectLink('/connector/' + connector.id + '/configure')}>
-                            <SC.SectionDropdownIntegration active={sectionName === connector.id}>
-                              {connector.id}
+                        {connectors?.data?.items?.map((_connector) => (
+                          <Link key={_connector.id} to={getRedirectLink(`/connector/${_connector.id}/configure`)}>
+                            <SC.SectionDropdownIntegration active={sectionName === _connector.id}>
+                              {_connector.id}
                               <img src={check} alt="check" height="16" width="16" />
                             </SC.SectionDropdownIntegration>
                           </Link>
@@ -268,22 +271,16 @@ const Navbar: React.FC<Props> = ({
                           </Link>
                         </SC.Flex>
                         <Link
-                          to={
-                            '/account/' +
-                            userData.accountId +
-                            '/subscription/' +
-                            userData.subscriptionId +
-                            '/authentication/detail'
-                          }
+                          to={`/account/${userData.accountId}/subscription/${userData.subscriptionId}/authentication/detail`}
                         >
-                          <SC.SectionDropdownIntegration active={true}>
+                          <SC.SectionDropdownIntegration active>
                             {userData.primaryEmail}
                             <img src={check} alt="check" height="16" width="16" />
                           </SC.SectionDropdownIntegration>
                         </Link>
                       </SC.SectionDropdownMenu>
                     </Menu>
-                    <Drawer anchor={'bottom'} open={drawerBottomOpen} onClose={() => setDrawerBottomOpen(false)}>
+                    <Drawer anchor="bottom" open={drawerBottomOpen} onClose={() => setDrawerBottomOpen(false)}>
                       <SC.SectionDropdownMenu>
                         <SC.Flex>
                           <Link style={{ marginRight: 'auto' }} to={getRedirectLink('/authentication/users')}>
@@ -297,15 +294,9 @@ const Navbar: React.FC<Props> = ({
                           </Link>
                         </SC.Flex>
                         <Link
-                          to={
-                            '/account/' +
-                            userData.accountId +
-                            '/subscription/' +
-                            userData.subscriptionId +
-                            '/authentication/detail'
-                          }
+                          to={`/account/${userData.accountId}/subscription/${userData.subscriptionId}/authentication/detail`}
                         >
-                          <SC.SectionDropdownIntegration active={true}>
+                          <SC.SectionDropdownIntegration active>
                             {userData.primaryEmail}
                             <img src={check} alt="check" height="16" width="16" />
                           </SC.SectionDropdownIntegration>
@@ -379,11 +370,11 @@ const Navbar: React.FC<Props> = ({
                   <Link to={getRedirectLink('/authentication/users')}>
                     <SC.UserDropdownLink>Authentication</SC.UserDropdownLink>
                   </Link>
-                  <Link to={'/billing'}>
+                  <Link to="/billing">
                     <SC.UserDropdownLink>Billing</SC.UserDropdownLink>
                   </Link>
-                  <Link to={'/settings'}>
-                    <SC.UserDropdownLink noMargin={true}>Settings</SC.UserDropdownLink>
+                  <Link to="/settings">
+                    <SC.UserDropdownLink noMargin>Settings</SC.UserDropdownLink>
                   </Link>
                 </SC.UserDropdownLinksWrapper>
                 <SC.UserButtonWrapper>
@@ -401,7 +392,7 @@ const Navbar: React.FC<Props> = ({
             </Menu>
           </SC.ButtonWrapper>
           <SC.Menu onClick={() => setDrawerOpen(true)} src={burguer} alt="menu-opener" height="10" width="20" />
-          <Drawer anchor={'right'} open={drawerOpen && !loggingOut} onClose={() => setDrawerOpen(false)}>
+          <Drawer anchor="right" open={drawerOpen && !loggingOut} onClose={() => setDrawerOpen(false)}>
             <SC.DrawerWrapper>
               <SC.Flex>
                 <SC.CompanyName>{userData.company}</SC.CompanyName>
@@ -431,11 +422,11 @@ const Navbar: React.FC<Props> = ({
                 <Link to={getRedirectLink('/authentication/users')}>
                   <SC.UserDropdownLink>Authentication</SC.UserDropdownLink>
                 </Link>
-                <Link to={'/billing'}>
+                <Link to="/billing">
                   <SC.UserDropdownLink>Billing</SC.UserDropdownLink>
                 </Link>
-                <Link to={'/settings'}>
-                  <SC.UserDropdownLink noMargin={true}>Settings</SC.UserDropdownLink>
+                <Link to="/settings">
+                  <SC.UserDropdownLink noMargin>Settings</SC.UserDropdownLink>
                 </Link>
               </SC.UserDropdownLinksWrapper>
 

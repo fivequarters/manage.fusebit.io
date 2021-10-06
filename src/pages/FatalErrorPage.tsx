@@ -6,7 +6,7 @@ import Navbar from '../components/Navbar';
 const LoggedOutErrorPage: FC<{}> = (): ReactElement => {
   return (
     <Layout>
-      <Navbar sectionName="Integrations" integration={true} />
+      <Navbar sectionName="Integrations" integration />
       <FatalError />
     </Layout>
   );

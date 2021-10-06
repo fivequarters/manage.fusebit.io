@@ -13,8 +13,7 @@ export default function ListBackendClients() {
   const getBackendClientListener = async () => {
     try {
       createLoader();
-      const backendClients = await getBackendClients(userData);
-      console.log(backendClients);
+      await getBackendClients(userData);
     } catch (e) {
       createError(e);
     } finally {

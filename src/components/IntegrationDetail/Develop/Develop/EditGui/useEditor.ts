@@ -60,7 +60,11 @@ const useEditor = ({ onNoInstanceFound, enableListener = true } = {} as Props) =
         try {
           await commitSession({ id, sessionId: e.newValue });
           await testIntegration({ id, tenantId: STATIC_TENANT_ID });
+
+          trackEvent('Run Button Execution', 'Web Editor', { runStatus: 'success' });
         } catch (error) {
+          trackEvent('Run Button Execution', 'Web Editor', { runStatus: 'failure' });
+          // eslint-disable-next-line no-console
           console.log(error);
         }
       };
@@ -95,14 +99,13 @@ const useEditor = ({ onNoInstanceFound, enableListener = true } = {} as Props) =
 
       if (hasInstance) {
         await testIntegration({ id, tenantId: STATIC_TENANT_ID });
+      } else if (onNoInstanceFound) {
+        onNoInstanceFound();
       } else {
-        if (onNoInstanceFound) {
-          onNoInstanceFound();
-        } else {
-          await handleNoInstanceFound();
-        }
+        await handleNoInstanceFound();
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log(error);
     }
   };

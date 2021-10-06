@@ -1,19 +1,21 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { createMuiTheme, responsiveFontSizes, ThemeProvider } from '@material-ui/core/styles';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import CookieConsent from 'react-cookie-consent';
+import { ReactQueryDevtools } from 'react-query/devtools';
 import { lightTheme } from './theme/appTheme';
 import { routes } from './config';
 import { APP_TITLE } from './utils/constants';
 import { RouteItem } from './interfaces/router';
 import { ContextProvider } from './hooks/useContext';
 import { validateToken } from './utils/utils';
-import { ReactQueryDevtools } from 'react-query/devtools';
+import { useIntercom } from './hooks/useIntercom';
 
 function App() {
   const queryClient = new QueryClient();
+  useIntercom();
 
   useEffect(() => {
     validateToken();
@@ -47,13 +49,11 @@ function App() {
                   This website uses cookies to enhance the user experience.
                 </p>
               </CookieConsent>
-              <Router>
-                <Switch>
-                  {routes.map((route: RouteItem) => (
-                    <Route key={`${route.key}`} path={`${route.path}`} component={route.component} exact />
-                  ))}
-                </Switch>
-              </Router>
+              <Switch>
+                {routes.map((route: RouteItem) => (
+                  <Route key={`${route.key}`} path={`${route.path}`} component={route.component} exact />
+                ))}
+              </Switch>
             </ThemeProvider>
           </QueryClientProvider>
         </ContextProvider>

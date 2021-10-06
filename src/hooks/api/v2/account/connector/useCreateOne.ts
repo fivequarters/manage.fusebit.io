@@ -12,7 +12,7 @@ export const useAccountConnectorCreateConnector = <T>() => {
       return axios<T>(`/v2/account/${accountId}/subscription/${subscriptionId}/connector/${data.id}`, 'post', data);
     },
     {
-      onMutate: (_: Params) => () => {},
+      onMutate: () => () => {},
       onError: (_, __, rollback) => rollback?.(),
       onSuccess: () => queryClient.removeQueries('accountConnectorsGetAll'),
     }

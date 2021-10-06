@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, TableBody, Button, IconButton, Tooltip, useMediaQuery } from '@material-ui/core';
+import { Table, TableBody, Button, IconButton, Tooltip, useMediaQuery, TablePagination } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Row from './Row';
@@ -8,6 +8,7 @@ import * as SC from './styles';
 import * as CSC from '../globalStyle';
 import MobileBaseTableHeader from './MobileBaseTableHeader';
 import BaseTableHead from './BaseTableHead';
+import { ROWS_PER_PAGE_OPTIONS } from '../../hooks/usePagination';
 
 const BaseTable: React.FC<BaseTableProps> = ({
   selected,
@@ -25,6 +26,13 @@ const BaseTable: React.FC<BaseTableProps> = ({
   emptyTableText,
   isCollapsible,
   collapseTrigger,
+  onChangePage,
+  onChangeRowsPerPage,
+  onClickRow,
+  noMainColumn,
+  isAllChecked,
+  headerButtons,
+  hideCheckAll,
 }) => {
   const computedRowsPerPage = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   const isMobile = useMediaQuery('(max-width: 880px)');
@@ -55,13 +63,24 @@ const BaseTable: React.FC<BaseTableProps> = ({
               onSelectAll={onSelectAll}
               rows={rows}
               selected={selected}
+              isAllChecked={isAllChecked}
+              hideCheckAll={hideCheckAll}
             />
           ) : (
-            <BaseTableHead headers={headers} onSelectAll={onSelectAll} rows={rows} selected={selected} />
+            <BaseTableHead
+              headers={headers}
+              onSelectAll={onSelectAll}
+              rows={rows}
+              selected={selected}
+              isAllChecked={isAllChecked}
+              hideCheckAll={hideCheckAll}
+            />
           )}
           <TableBody>
             {computedRowsPerPage.map((row) => (
               <Row
+                key={row.id}
+                onClick={onClickRow}
                 headers={headers}
                 checked={isSelected(row.id)}
                 currentMobileRow={mobileArrowColumns[mobileColumnIndex].id}
@@ -69,10 +88,20 @@ const BaseTable: React.FC<BaseTableProps> = ({
                 row={row}
                 isCollapsible={isCollapsible}
                 collapseTrigger={collapseTrigger}
+                noMainColumn={noMainColumn}
               />
             ))}
           </TableBody>
         </Table>
+        <TablePagination
+          rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
+          component="div"
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onChangePage={(e, value) => onChangePage?.(e, value)}
+          onChangeRowsPerPage={(e) => onChangeRowsPerPage?.(e)}
+        />
       </SC.TableContainer>
     );
   };
@@ -80,13 +109,23 @@ const BaseTable: React.FC<BaseTableProps> = ({
   return (
     <SC.Wrapper>
       {onClickNew && (
-        <SC.ButtonContainer>
-          <SC.ButtonMargin>
-            <Button onClick={onClickNew} startIcon={<AddIcon />} variant="outlined" color="primary" size="large">
-              New {entityName}
+        <SC.ButtonsContainer display="flex" mt="56px" mb="36px" justifyContent="flex-end">
+          {(headerButtons || [])?.map((button) => (
+            <Button
+              key={button.text}
+              onClick={onClickNew}
+              variant="outlined"
+              color="primary"
+              size="large"
+              {...button.props}
+            >
+              {button.text}
             </Button>
-          </SC.ButtonMargin>
-        </SC.ButtonContainer>
+          ))}
+          <Button onClick={onClickNew} startIcon={<AddIcon />} variant="outlined" color="primary" size="large">
+            New {entityName}
+          </Button>
+        </SC.ButtonsContainer>
       )}
 
       <SC.DeleteWrapper active={selected.length > 0}>
