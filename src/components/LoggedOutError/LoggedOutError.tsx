@@ -1,8 +1,8 @@
 import React from 'react';
+import { Button } from '@material-ui/core';
 import * as SC from './styles';
 import fusebit from '../../assets/fusebit-logo.svg';
 import warning from '../../assets/warning-red.svg';
-import { Button } from '@material-ui/core';
 import { getAuthLink } from '../../utils/utils';
 
 const LoggedOutError: React.FC = () => {

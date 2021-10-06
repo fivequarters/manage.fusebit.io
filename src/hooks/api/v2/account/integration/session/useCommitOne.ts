@@ -3,11 +3,7 @@ import { Params } from '../../../../../../interfaces/api';
 import { useAxios } from '../../../../../useAxios';
 import { useContext } from '../../../../../useContext';
 
-interface Props {
-  skipRun: boolean;
-}
-
-export const useAccountIntegrationCommitSession = ({ skipRun } = {} as Props) => {
+export const useAccountIntegrationCommitSession = () => {
   const { axios } = useAxios();
   const { userData } = useContext();
 

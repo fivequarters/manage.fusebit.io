@@ -74,7 +74,7 @@ export const SectionDropdown = styled.div<{ active: boolean }>`
   display: flex;
   align-items: center;
 
-  &:hover  {
+  &:hover {
     cursor: pointer;
   }
 
@@ -93,7 +93,7 @@ export const SectionDropdownMobile = styled.div<{ active: boolean }>`
   display: none;
   align-items: center;
 
-  &:hover  {
+  &:hover {
     cursor: pointer;
   }
 
