@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useEffect, useCallback, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { getAllInstances } from '../../../../../hooks/api/v2/account/integration/instance/useGetAll';
@@ -15,6 +14,8 @@ interface Props {
   onNoInstanceFound?: () => void;
 }
 
+const LOCALSTORAGE_SESSION_KEY = 'session';
+
 const useEditor = ({ onNoInstanceFound } = {} as Props) => {
   const { id } = useParams<{ id: string }>();
   const { userData } = useContext();
@@ -23,6 +24,7 @@ const useEditor = ({ onNoInstanceFound } = {} as Props) => {
   const { mutateAsync: testIntegration, isLoading: isTesting } = useAccountIntegrationTestIntegration();
   const { mutateAsync: commitSession, isLoading: isCommiting } = useAccountIntegrationCommitSession();
   const [isFindingInstance, setIsFindingInstance] = useState(false);
+  // Prevent beign called multiple times if user has multiple tabs open
   const hasSessionChanged = useRef(false);
 
   const findInstance = useCallback(async () => {
@@ -50,33 +52,21 @@ const useEditor = ({ onNoInstanceFound } = {} as Props) => {
   }, [axios, id, userData]);
 
   useEffect(() => {
-    const prevSessionId = localStorage.getItem('session');
     const handleChangeStorage = (e: any) => {
-      console.log('key changed', e.key);
-      const sessionId = localStorage.getItem('session');
+      const sessionId = e.newValue;
 
       const runFirstTest = async () => {
         hasSessionChanged.current = true;
 
         try {
-          console.log('1');
-
           await commitSession({ id, sessionId });
-
-          console.log('2');
-
           await testIntegration({ id, tenantId: STATIC_TENANT_ID });
-
-          console.log('3');
         } catch (error) {
           console.log(error);
         }
       };
 
-      if (!hasSessionChanged.current && prevSessionId !== sessionId) {
-        console.log('hasSessionChanged', hasSessionChanged.current);
-        console.log('prevSessionId', prevSessionId);
-        console.log('sessionId', sessionId);
+      if (e.key === LOCALSTORAGE_SESSION_KEY && !hasSessionChanged.current) {
         runFirstTest();
       }
     };
@@ -109,9 +99,7 @@ const useEditor = ({ onNoInstanceFound } = {} as Props) => {
           await handleNoInstanceFound();
         }
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   return {
