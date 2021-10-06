@@ -1,5 +1,5 @@
 import { FC, ReactElement } from 'react';
-import UsersTable from '../components/Authentication/AccountsTable';
+import UsersTable from '../components/Authentication/UsersTable';
 import Layout from '../components/Layout';
 import Navbar from '../components/Navbar';
 import TabComponent from '../components/TabComponent';
