@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { getAllInstances } from '../../../../../hooks/api/v2/account/integration/instance/useGetAll';
 import { useAccountIntegrationCreateSession } from '../../../../../hooks/api/v2/account/integration/session/useCreateOne';
@@ -17,11 +17,12 @@ interface Props {
 const useEditor = ({ onNoInstanceFound } = {} as Props) => {
   const { id } = useParams<{ id: string }>();
   const { userData } = useContext();
-  const { axios } = useAxios();
+  const { axios } = useAxios({ ignoreInterceptors: true });
   const { mutateAsync: createSesssion, isLoading: isCreatingSession } = useAccountIntegrationCreateSession();
   const { mutateAsync: testIntegration, isLoading: isTesting } = useAccountIntegrationTestIntegration();
   const { mutateAsync: commitSession, isLoading: isCommiting } = useAccountIntegrationCommitSession();
   const [isFindingInstance, setIsFindingInstance] = useState(false);
+  const hasSessionChanged = useRef(false);
 
   const findInstance = useCallback(async () => {
     try {
@@ -49,11 +50,12 @@ const useEditor = ({ onNoInstanceFound } = {} as Props) => {
 
   useEffect(() => {
     const prevSessionId = localStorage.getItem('session');
-
     const handleChangeStorage = () => {
       const sessionId = localStorage.getItem('session');
 
       const runFirstTest = async () => {
+        hasSessionChanged.current = true;
+
         try {
           await commitSession({ id, sessionId });
 
@@ -64,7 +66,7 @@ const useEditor = ({ onNoInstanceFound } = {} as Props) => {
         }
       };
 
-      if (prevSessionId !== sessionId) {
+      if (!hasSessionChanged.current && prevSessionId !== sessionId) {
         runFirstTest();
       }
     };
@@ -82,7 +84,7 @@ const useEditor = ({ onNoInstanceFound } = {} as Props) => {
   const handleRun = async () => {
     trackEvent('Run Button Clicked', 'Web Editor');
     try {
-      if (window.editor && window.editor.dirtyState) {
+      if (window.editor?.dirtyState) {
         await window.editor._server.saveFunction(window.editor);
       }
 
