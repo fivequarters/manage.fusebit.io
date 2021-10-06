@@ -3,7 +3,6 @@ import BaseTable from '../../BaseTable/BaseTable';
 import { useEntityTable } from '../../../hooks/useEntityTable';
 import { usePagination } from '../../../hooks/usePagination';
 import { Integration } from '../../../interfaces/integration';
-import GetInstances from '../../TableRowComponent/GetInstances';
 import DeleteIntegrationModal from '../DeleteIntegrationModal';
 import { useModal } from '../../../hooks/useModal';
 import { BaseTableRow } from '../../BaseTable/types';
@@ -12,6 +11,7 @@ import { trackEvent } from '../../../utils/analytics';
 import { useContext } from '../../../hooks/useContext';
 import { useAccountIntegrationsGetAll } from '../../../hooks/api/v2/account/integration/useGetAll';
 import NewFeedModal from '../../common/NewFeedModal';
+import GetInstances from '../../ConnectorsOverview/ConnectorsTable/GetInstances';
 
 interface Props {
   headless: boolean;

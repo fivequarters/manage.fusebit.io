@@ -2,6 +2,7 @@ export interface BaseTableRow {
   id: string;
   collapsableContent?: React.ReactNode | React.ReactText;
   collapsableContentOpened?: () => void;
+  hideCheckbox?: boolean;
   [x: string]: React.ReactNode | React.ReactText;
 }
 
@@ -27,4 +28,6 @@ export interface BaseTableProps {
   collapseTrigger?: string;
   isCollapsible?: boolean;
   onClickRow?: (row: BaseTableRow, columnId: string) => void;
+  noMainColumn?: boolean;
+  isAllChecked?: boolean;
 }

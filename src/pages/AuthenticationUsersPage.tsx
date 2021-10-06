@@ -1,5 +1,5 @@
-import React, { FC, ReactElement } from 'react';
-import AuthenticationUsers from '../components/Authentication/Users/AuthenticationUsers';
+import { FC, ReactElement } from 'react';
+import AuthenticationUsers from '../components/Authentication/AuthenticationUsers';
 import Layout from '../components/Layout';
 import Navbar from '../components/Navbar';
 import { useTrackPage } from '../hooks/useTrackPage';

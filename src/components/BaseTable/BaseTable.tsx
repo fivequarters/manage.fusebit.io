@@ -29,6 +29,8 @@ const BaseTable: React.FC<BaseTableProps> = ({
   onChangePage,
   onChangeRowsPerPage,
   onClickRow,
+  noMainColumn,
+  isAllChecked,
 }) => {
   const computedRowsPerPage = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   const isMobile = useMediaQuery('(max-width: 880px)');
@@ -59,9 +61,16 @@ const BaseTable: React.FC<BaseTableProps> = ({
               onSelectAll={onSelectAll}
               rows={rows}
               selected={selected}
+              isAllChecked={isAllChecked}
             />
           ) : (
-            <BaseTableHead headers={headers} onSelectAll={onSelectAll} rows={rows} selected={selected} />
+            <BaseTableHead
+              headers={headers}
+              onSelectAll={onSelectAll}
+              rows={rows}
+              selected={selected}
+              isAllChecked={isAllChecked}
+            />
           )}
           <TableBody>
             {computedRowsPerPage.map((row) => (
@@ -75,6 +84,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
                 row={row}
                 isCollapsible={isCollapsible}
                 collapseTrigger={collapseTrigger}
+                noMainColumn={noMainColumn}
               />
             ))}
           </TableBody>

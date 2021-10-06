@@ -2,18 +2,16 @@ import { useHistory } from 'react-router-dom';
 import BaseTable from '../../BaseTable/BaseTable';
 import { useEntityTable } from '../../../hooks/useEntityTable';
 import { usePagination } from '../../../hooks/usePagination';
-import { Integration } from '../../../interfaces/integration';
-import GetInstances from '../../TableRowComponent/GetInstances';
 import { useModal } from '../../../hooks/useModal';
 import { BaseTableRow } from '../../BaseTable/types';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import { trackEvent } from '../../../utils/analytics';
 import { useContext } from '../../../hooks/useContext';
-import { useAccountIntegrationsGetAll } from '../../../hooks/api/v2/account/integration/useGetAll';
-import NewFeedModal from '../../common/NewFeedModal';
 import { Account } from '../../../interfaces/account';
 import { useAccountUserGetAll } from '../../../hooks/api/v1/account/user/useGetAll';
 import DeleteUserModal from '../DeleteUserModal';
+import NameColumn from './NameColumn';
+import NewUserModal from '../NewUserModal';
 
 const UsersTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -38,12 +36,13 @@ const UsersTable = () => {
 
   const tableRows = (rows as Account[]).map((row) => ({
     id: row.id,
-    name: `${row.firstName} ${row.lastName}`,
+    name: <NameColumn account={row} />,
     email: row.primaryEmail,
     userId: row.id,
+    hideCheckbox: row.id === userData.id,
   }));
 
-  const handleClickRow = (row: BaseTableRow) => history.push(getRedirectLink(`/integration/${row.id}/develop`));
+  const handleClickRow = (row: BaseTableRow) => history.push(getRedirectLink(`/authentication/${row.id}/overview`));
 
   const handleNewIntegration = () => {
     trackEvent('New User Button Clicked', 'Users');
@@ -52,7 +51,7 @@ const UsersTable = () => {
 
   return (
     <>
-      {/* <NewFeedModal onClose={toggleNewModal} open={newModalOpen} isIntegration /> */}
+      <NewUserModal onClose={toggleNewModal} open={newModalOpen} />
       <DeleteUserModal
         onConfirm={() => handleRowDelete('A')}
         setOpen={setDeleteModal}
@@ -60,6 +59,7 @@ const UsersTable = () => {
         selected={selected}
       />
       <BaseTable
+        noMainColumn
         emptyTableText="Your users list is empty, please create a user"
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
@@ -80,6 +80,7 @@ const UsersTable = () => {
         isSelected={isSelected}
         selected={selected}
         onClickRow={handleClickRow}
+        isAllChecked={tableRows.length > 1 ? selected.length === tableRows.length - 1 : false}
       />
     </>
   );
