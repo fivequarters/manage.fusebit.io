@@ -89,3 +89,10 @@ export const updateIntercom = () => {
 
 export const getConnectorsFromInstall = (install: InstallInstance) =>
   Object.keys(install.data).map((key) => install?.data[key]?.parentEntityId);
+
+export const getPluralText = <T = unknown>(list: T[], noun?: string) => {
+  const isPlural = list.length > 1;
+  const pronoun = isPlural ? 'these' : 'this';
+
+  return `${pronoun} ${noun}${isPlural ? 's' : ''}`;
+};

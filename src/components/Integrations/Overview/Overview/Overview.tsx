@@ -37,7 +37,7 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
 
   return (
     <TableComponent
-      integrationTable={true}
+      integrationTable
       headless={headless}
       setHeadless={setHeadless}
       integrations={integrations}

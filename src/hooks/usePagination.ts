@@ -3,7 +3,7 @@ import React from 'react';
 export const ROWS_PER_PAGE_OPTIONS = [5, 10, 25];
 
 export const usePagination = () => {
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(ROWS_PER_PAGE_OPTIONS[0]);
   const [page, setPage] = React.useState(0);
 
   const handleChangePage = (event: any, newPage: number) => {

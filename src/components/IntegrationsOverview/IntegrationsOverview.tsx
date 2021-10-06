@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
-import TabComponent from '../../TabComponent';
-import Overview from './Overview';
+import TabComponent from '../TabComponent';
+import IntegrationsTable from './IntegrationsTable/IntegrationsTable';
 
 const IntegrationsOverview: React.FC = () => {
   const headless = useRef(true); // the parent has to have this otherwise the mounting of the overview will open the feed picker if there is a query param.
@@ -9,12 +9,12 @@ const IntegrationsOverview: React.FC = () => {
     <TabComponent
       tabNames={['Overview']}
       tabObjects={[
-        <Overview
-          headless={headless}
+        <IntegrationsTable
+          key="integrationsTable"
+          headless={!!headless}
           setHeadless={(value: boolean) => {
             headless.current = value;
           }}
-          key="overview"
         />,
       ]}
     />
