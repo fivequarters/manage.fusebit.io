@@ -1,10 +1,10 @@
 import { useMutation } from 'react-query';
+import { useParams } from 'react-router-dom';
 import { Params } from '../../../../../interfaces/api';
 import { useAxios } from '../../../../useAxios';
 import { useContext } from '../../../../useContext';
 import { getIntegrationConfig } from '../../../../../utils/localStorage';
 import { useGetRedirectLink } from '../../../../useGetRedirectLink';
-import { useParams } from 'react-router-dom';
 
 export const useAccountIntegrationTestIntegration = () => {
   const { id: integrationId } = useParams<{ id: string }>();
