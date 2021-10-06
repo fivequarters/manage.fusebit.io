@@ -55,6 +55,10 @@ export const SmallTitle = styled.h4`
   font-weight: 400;
   color: var(--black);
   margin: 0;
+  max-width: 600px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 
   strong {
     font-weight: 600;
