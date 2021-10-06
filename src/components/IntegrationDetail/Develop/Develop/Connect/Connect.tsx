@@ -41,6 +41,8 @@ const Connect = React.forwardRef(
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [saving, setSaving] = useState(false);
 
+    const integrationBaseUrl = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v2${getRedirectLink(`/integration/${integrationId}`)}`;
+
     const handleClose = () => {
       if (disableCopy) {
         onClose();
@@ -133,17 +135,9 @@ const Connect = React.forwardRef(
           </SC.SmallTitleWrapper>
           <SC.SmallTitleWrapper>
             <SC.SmallTitle>
-              <strong>Integration Base URL:</strong> {REACT_APP_FUSEBIT_DEPLOYMENT}/v2
-              {getRedirectLink(`/integration/${integrationId}`)}
+              <strong>Integration Base URL:</strong> {integrationBaseUrl}
             </SC.SmallTitle>
-            <CSC.Copy
-              onClick={() =>
-                handleCopy(
-                  `${REACT_APP_FUSEBIT_DEPLOYMENT}/v2${getRedirectLink(`/integration/${integrationId}`)}` as string
-                )
-              }
-              margin="0 0 0 20px"
-            />
+            <CSC.Copy onClick={() => handleCopy(integrationBaseUrl as string)} margin="0 0 0 20px" />
             <SC.CopySuccess copy={copiedLine}>Copied to clipboard!</SC.CopySuccess>
           </SC.SmallTitleWrapper>
 
