@@ -53,13 +53,11 @@ const useEditor = ({ onNoInstanceFound } = {} as Props) => {
 
   useEffect(() => {
     const handleChangeStorage = (e: any) => {
-      const sessionId = e.newValue;
-
       const runFirstTest = async () => {
         hasSessionChanged.current = true;
 
         try {
-          await commitSession({ id, sessionId });
+          await commitSession({ id, sessionId: e.newValue });
           await testIntegration({ id, tenantId: STATIC_TENANT_ID });
         } catch (error) {
           console.log(error);
@@ -99,7 +97,9 @@ const useEditor = ({ onNoInstanceFound } = {} as Props) => {
           await handleNoInstanceFound();
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   return {
