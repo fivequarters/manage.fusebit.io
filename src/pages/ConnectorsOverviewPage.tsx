@@ -9,7 +9,7 @@ const ConnectorsOverviewPage: FC<{}> = (): ReactElement => {
 
   return (
     <Layout>
-      <Navbar dropdown={true} sectionName="Connectors" connector={true} />
+      <Navbar dropdown sectionName="Connectors" connector />
       <ConnectorsOverview />
     </Layout>
   );

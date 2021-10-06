@@ -40,7 +40,7 @@ const Overview: React.FC<Props> = ({ headless, setHeadless }) => {
     <>
       <ConnectorsTable headless={headless} setHeadless={setHeadless} />
       <TableComponent
-        connectorTable={true}
+        connectorTable
         headless={headless}
         setHeadless={setHeadless}
         connectors={connectors}
