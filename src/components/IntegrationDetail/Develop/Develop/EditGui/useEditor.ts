@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { getAllInstances } from '../../../../../hooks/api/v2/account/integration/instance/useGetAll';
 import { useAccountIntegrationCreateSession } from '../../../../../hooks/api/v2/account/integration/session/useCreateOne';
@@ -12,16 +12,21 @@ import { STATIC_TENANT_ID } from '../../../../../utils/constants';
 
 interface Props {
   onNoInstanceFound?: () => void;
+  enableListener?: boolean;
 }
 
-const useEditor = ({ onNoInstanceFound } = {} as Props) => {
+const LOCALSTORAGE_SESSION_KEY = 'session';
+
+const useEditor = ({ onNoInstanceFound, enableListener = true } = {} as Props) => {
   const { id } = useParams<{ id: string }>();
   const { userData } = useContext();
-  const { axios } = useAxios();
+  const { axios } = useAxios({ ignoreInterceptors: true });
   const { mutateAsync: createSesssion, isLoading: isCreatingSession } = useAccountIntegrationCreateSession();
   const { mutateAsync: testIntegration, isLoading: isTesting } = useAccountIntegrationTestIntegration();
   const { mutateAsync: commitSession, isLoading: isCommiting } = useAccountIntegrationCommitSession();
   const [isFindingInstance, setIsFindingInstance] = useState(false);
+  // Prevent beign called multiple times if user has multiple tabs open
+  const hasSessionChanged = useRef(false);
 
   const findInstance = useCallback(async () => {
     try {
@@ -48,40 +53,41 @@ const useEditor = ({ onNoInstanceFound } = {} as Props) => {
   }, [axios, id, userData]);
 
   useEffect(() => {
-    const prevSessionId = localStorage.getItem('session');
-
-    const handleChangeStorage = () => {
-      const sessionId = localStorage.getItem('session');
-
+    const handleChangeStorage = (e: any) => {
       const runFirstTest = async () => {
-        try {
-          await commitSession({ id, sessionId });
+        hasSessionChanged.current = true;
 
+        try {
+          await commitSession({ id, sessionId: e.newValue });
           await testIntegration({ id, tenantId: STATIC_TENANT_ID });
         } catch (error) {
           console.log(error);
         }
       };
 
-      if (prevSessionId !== sessionId) {
+      if (e.key === LOCALSTORAGE_SESSION_KEY && !hasSessionChanged.current) {
         runFirstTest();
       }
     };
 
-    window.addEventListener('storage', handleChangeStorage);
+    if (enableListener) {
+      window.addEventListener('storage', handleChangeStorage);
+    }
 
     return () => {
-      window.removeEventListener('storage', handleChangeStorage);
+      if (enableListener) {
+        window.removeEventListener('storage', handleChangeStorage);
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [enableListener]);
 
   const handleNoInstanceFound = () => createSesssion({ id, tenantId: STATIC_TENANT_ID });
 
   const handleRun = async () => {
     trackEvent('Run Button Clicked', 'Web Editor');
     try {
-      if (window.editor && window.editor.dirtyState) {
+      if (window.editor?.dirtyState) {
         await window.editor._server.saveFunction(window.editor);
       }
 

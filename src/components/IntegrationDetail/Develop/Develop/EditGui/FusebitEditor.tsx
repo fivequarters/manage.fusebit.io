@@ -3,7 +3,7 @@ import { Context } from '../../../../../interfaces/editGui';
 
 declare global {
   interface Window {
-    editor: Context;
+    editor?: Context;
   }
 }
 
