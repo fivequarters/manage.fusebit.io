@@ -1,9 +1,13 @@
 import React from 'react';
-import { Box, BoxProps, CircularProgress, CircularProgressProps } from '@material-ui/core';
+import { Box, CircularProgress, CircularProgressProps } from '@material-ui/core';
 
-const Loader: React.FC<BoxProps & CircularProgressProps> = ({ size = 20, ...props }) => {
+interface Props extends CircularProgressProps {
+  className?: string;
+}
+
+const Loader: React.FC<Props> = ({ size = 20, className, ...props }) => {
   return (
-    <Box width="100%" display="flex" alignItems="center" justifyContent="center" {...props}>
+    <Box width="100%" display="flex" alignItems="center" justifyContent="center" className={className}>
       <CircularProgress size={size} {...props} />
     </Box>
   );
