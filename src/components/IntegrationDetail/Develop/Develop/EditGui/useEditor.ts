@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useEffect, useCallback, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { getAllInstances } from '../../../../../hooks/api/v2/account/integration/instance/useGetAll';
@@ -13,9 +12,12 @@ import { STATIC_TENANT_ID } from '../../../../../utils/constants';
 
 interface Props {
   onNoInstanceFound?: () => void;
+  enableListener?: boolean;
 }
 
-const useEditor = ({ onNoInstanceFound } = {} as Props) => {
+const LOCALSTORAGE_SESSION_KEY = 'session';
+
+const useEditor = ({ onNoInstanceFound, enableListener = true } = {} as Props) => {
   const { id } = useParams<{ id: string }>();
   const { userData } = useContext();
   const { axios } = useAxios({ ignoreInterceptors: true });
@@ -23,6 +25,7 @@ const useEditor = ({ onNoInstanceFound } = {} as Props) => {
   const { mutateAsync: testIntegration, isLoading: isTesting } = useAccountIntegrationTestIntegration();
   const { mutateAsync: commitSession, isLoading: isCommiting } = useAccountIntegrationCommitSession();
   const [isFindingInstance, setIsFindingInstance] = useState(false);
+  // Prevent beign called multiple times if user has multiple tabs open
   const hasSessionChanged = useRef(false);
 
   const findInstance = useCallback(async () => {
@@ -50,45 +53,35 @@ const useEditor = ({ onNoInstanceFound } = {} as Props) => {
   }, [axios, id, userData]);
 
   useEffect(() => {
-    const prevSessionId = localStorage.getItem('session');
     const handleChangeStorage = (e: any) => {
-      console.log('key changed', e.key);
-      const sessionId = localStorage.getItem('session');
-
       const runFirstTest = async () => {
         hasSessionChanged.current = true;
 
         try {
-          console.log('1');
-
-          await commitSession({ id, sessionId });
-
-          console.log('2');
-
+          await commitSession({ id, sessionId: e.newValue });
           await testIntegration({ id, tenantId: STATIC_TENANT_ID });
-
-          console.log('3');
         } catch (error) {
           // eslint-disable-next-line no-console
           console.log(error);
         }
       };
 
-      if (!hasSessionChanged.current && prevSessionId !== sessionId) {
-        console.log('hasSessionChanged', hasSessionChanged.current);
-        console.log('prevSessionId', prevSessionId);
-        console.log('sessionId', sessionId);
+      if (e.key === LOCALSTORAGE_SESSION_KEY && !hasSessionChanged.current) {
         runFirstTest();
       }
     };
 
-    window.addEventListener('storage', handleChangeStorage);
+    if (enableListener) {
+      window.addEventListener('storage', handleChangeStorage);
+    }
 
     return () => {
-      window.removeEventListener('storage', handleChangeStorage);
+      if (enableListener) {
+        window.removeEventListener('storage', handleChangeStorage);
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [enableListener]);
 
   const handleNoInstanceFound = () => createSesssion({ id, tenantId: STATIC_TENANT_ID });
 
