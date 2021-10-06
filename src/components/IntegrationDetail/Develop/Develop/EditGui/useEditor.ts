@@ -60,7 +60,10 @@ const useEditor = ({ onNoInstanceFound, enableListener = true } = {} as Props) =
         try {
           await commitSession({ id, sessionId: e.newValue });
           await testIntegration({ id, tenantId: STATIC_TENANT_ID });
+
+          trackEvent('Run Button Execution', 'Web Editor', { runStatus: 'success' });
         } catch (error) {
+          trackEvent('Run Button Execution', 'Web Editor', { runStatus: 'failure' });
           console.log(error);
         }
       };
