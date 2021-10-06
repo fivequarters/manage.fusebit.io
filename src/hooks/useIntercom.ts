@@ -1,6 +1,12 @@
 import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 
+declare global {
+  interface Window {
+    Intercom?: any;
+  }
+}
+
 export const useIntercom = () => {
   const location = useLocation();
 
