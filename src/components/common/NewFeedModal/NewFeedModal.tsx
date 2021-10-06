@@ -15,7 +15,7 @@ const NewFeedModal = ({ open, onClose, isIntegration }: Props) => {
   const { createDataFromFeed } = useCreateDataFromFeed();
 
   const handleCreate = async (feed: Feed, data: Data) => {
-    const res = await createDataFromFeed(feed, data, true);
+    const res = await createDataFromFeed(feed, data, !isIntegration);
 
     if (!res) {
       onClose();
