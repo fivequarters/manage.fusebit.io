@@ -9,9 +9,9 @@ import { trackEvent } from '../../../utils/analytics';
 import { useContext } from '../../../hooks/useContext';
 import { useAccountConnectorsGetAll } from '../../../hooks/api/v2/account/connector/useGetAll';
 import { Connector } from '../../../interfaces/connector';
-import GetIdentities from '../../TableRowComponent/GetIdentities';
 import DeleteConnectorModal from '../DeleteConnectorModal';
 import NewFeedModal from '../../common/NewFeedModal';
+import GetIdentities from '../../IntegrationsOverview/IntegrationsTable/GetIdentities';
 
 interface Props {
   headless: boolean;

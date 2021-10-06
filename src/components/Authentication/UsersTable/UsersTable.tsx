@@ -2,23 +2,18 @@ import { useHistory } from 'react-router-dom';
 import BaseTable from '../../BaseTable/BaseTable';
 import { useEntityTable } from '../../../hooks/useEntityTable';
 import { usePagination } from '../../../hooks/usePagination';
-import { Integration } from '../../../interfaces/integration';
-import DeleteIntegrationModal from '../DeleteIntegrationModal';
 import { useModal } from '../../../hooks/useModal';
 import { BaseTableRow } from '../../BaseTable/types';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import { trackEvent } from '../../../utils/analytics';
 import { useContext } from '../../../hooks/useContext';
-import { useAccountIntegrationsGetAll } from '../../../hooks/api/v2/account/integration/useGetAll';
-import NewFeedModal from '../../common/NewFeedModal';
-import GetInstances from '../../ConnectorsOverview/ConnectorsTable/GetInstances';
+import { Account } from '../../../interfaces/account';
+import { useAccountUserGetAll } from '../../../hooks/api/v1/account/user/useGetAll';
+import DeleteUserModal from '../DeleteUserModal';
+import NameColumn from './NameColumn';
+import NewUserModal from '../NewUserModal';
 
-interface Props {
-  headless: boolean;
-  setHeadless: (value: boolean) => void;
-}
-
-const IntegrationsTable = ({ headless, setHeadless }: Props) => {
+const UsersTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
   const [newModalOpen, , toggleNewModal] = useModal();
   const [deleteModalOpen, setDeleteModal, toggleDeleteModal] = useModal();
@@ -26,53 +21,55 @@ const IntegrationsTable = ({ headless, setHeadless }: Props) => {
   const history = useHistory();
   const { userData } = useContext();
 
-  const { data: integrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({
+  const { data: users } = useAccountUserGetAll<{ items: Account[] }>({
     enabled: userData.token,
     accountId: userData.accountId,
-    subscriptionId: userData.subscriptionId,
+    params: 'include=all',
   });
 
   const { loading, rows, selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
-    headless,
-    setHeadless,
-    integrations,
+    users,
     page,
     setPage,
     rowsPerPage,
   });
 
-  const tableRows = (rows as Integration[]).map((row) => ({
+  const tableRows = (rows as Account[]).map((row) => ({
     id: row.id,
-    name: row.id,
-    installs: <GetInstances id={row.id} />,
+    name: <NameColumn account={row} />,
+    email: row.primaryEmail,
+    userId: row.id,
+    hideCheckbox: row.id === userData.id,
   }));
 
-  const handleClickRow = (row: BaseTableRow) => history.push(getRedirectLink(`/integration/${row.id}/develop`));
+  const handleClickRow = (row: BaseTableRow) => history.push(getRedirectLink(`/authentication/${row.id}/overview`));
 
   const handleNewIntegration = () => {
-    trackEvent('New Integration Button Clicked', 'Integrations');
+    trackEvent('New User Button Clicked', 'Users');
     toggleNewModal();
   };
 
   return (
     <>
-      <NewFeedModal onClose={toggleNewModal} open={newModalOpen} isIntegration />
-      <DeleteIntegrationModal
-        onConfirm={() => handleRowDelete('Integration')}
+      <NewUserModal onClose={toggleNewModal} open={newModalOpen} />
+      <DeleteUserModal
+        onConfirm={() => handleRowDelete('A')}
         setOpen={setDeleteModal}
         open={deleteModalOpen}
         selected={selected}
       />
       <BaseTable
-        emptyTableText="Your integrations list is empty, please create an integration"
+        noMainColumn
+        emptyTableText="Your users list is empty, please create a user"
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
         page={page}
         rowsPerPage={rowsPerPage}
-        entityName="integration"
+        entityName="user"
         headers={[
           { id: 'name', value: 'Name' },
-          { id: 'installs', value: 'Installs' },
+          { id: 'email', value: 'Email' },
+          { id: 'userId', value: 'User-ID' },
         ]}
         loading={loading}
         onClickNew={handleNewIntegration}
@@ -83,9 +80,11 @@ const IntegrationsTable = ({ headless, setHeadless }: Props) => {
         isSelected={isSelected}
         selected={selected}
         onClickRow={handleClickRow}
+        isAllChecked={tableRows.length > 1 ? selected.length === tableRows.length - 1 : false}
+        hideCheckAll={tableRows.length === 1}
       />
     </>
   );
 };
 
-export default IntegrationsTable;
+export default UsersTable;

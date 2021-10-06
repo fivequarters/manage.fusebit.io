@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { TableRow as MUITableRow, TableCell as MUICellRow } from '@material-ui/core';
+import { TableRow as MUITableRow, TableCell as MUICellRow, Box } from '@material-ui/core';
 import arrow from '../../assets/table-arrow.svg';
 import upArrowPrimary from '../../assets/up-arrow-primary.svg';
 
@@ -60,7 +60,7 @@ export const Row = styled.tr`
 
 export const ButtonContainer = styled.div`
   display: flex;
-  margin-top: 56px;
+  margin: 56px 0 36px;
   width: 100%;
 `;
 
@@ -195,4 +195,12 @@ export const TriggerArrow = styled.div<{ $active: boolean; $isMain?: boolean }>`
 
 export const TableContainer = styled.div`
   overflow: auto;
+`;
+
+export const ButtonsContainer = styled(Box)`
+  margin-left: -20px;
+
+  & > button {
+    margin-left: 20px;
+  }
 `;

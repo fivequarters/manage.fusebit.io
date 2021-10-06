@@ -13,6 +13,7 @@ interface Props {
   collapseTrigger?: string;
   isCollapsible?: boolean;
   onClick?: (row: BaseTableRow, columnId: string) => void;
+  noMainColumn?: BaseTableProps['noMainColumn'];
 }
 
 const Row = ({
@@ -24,6 +25,7 @@ const Row = ({
   collapseTrigger,
   isCollapsible,
   onClick,
+  noMainColumn,
 }: Props) => {
   const isMobile = useMediaQuery('(max-width: 880px)');
   const query = useQuery();
@@ -56,26 +58,28 @@ const Row = ({
   const renderCheckbox = (id: string) => {
     return (
       <TableCell style={{ cursor: 'default' }} padding="checkbox" id={`enhanced-table-cell-checkbox-${id}`}>
-        <Checkbox
-          color="primary"
-          onClick={(e) => onSelectRow(e, id)}
-          checked={checked}
-          inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${id}` }}
-          id={`enhanced-table-checkbox-${id}`}
-        />
+        {row.hideCheckbox ? null : (
+          <Checkbox
+            color="primary"
+            onClick={(e) => onSelectRow(e, id)}
+            checked={checked}
+            inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${id}` }}
+            id={`enhanced-table-checkbox-${id}`}
+          />
+        )}
       </TableCell>
     );
   };
 
   const renderMobile = () => {
-    const isCollapseTrigger = collapseTrigger === headers[0].id;
+    const isCollapseTrigger = collapseTrigger === headers[0].id && !noMainColumn;
 
     return (
       <>
         <SC.TableRow $noBorder={isCollapsible}>
           {renderCheckbox(row.id)}
           <SC.TableCell
-            $isMain
+            $isMain={!noMainColumn}
             scope="row"
             $isClickable
             onClick={() => handleClickCell(isCollapseTrigger, headers[0].id)}
@@ -104,12 +108,12 @@ const Row = ({
         <SC.TableRow $noBorder={isCollapsible}>
           {renderCheckbox(row.id)}
           {headers.map((header, i: number) => {
-            const isCollapseTrigger = collapseTrigger === header.id;
+            const isCollapseTrigger = collapseTrigger === header.id && !noMainColumn;
 
             return (
               <SC.TableCell
                 key={header.id}
-                $isMain={i === 0}
+                $isMain={i === 0 && !noMainColumn}
                 $isClickable={isCollapseTrigger || !!onClick}
                 scope="row"
                 onClick={() => handleClickCell(isCollapseTrigger, header.id)}

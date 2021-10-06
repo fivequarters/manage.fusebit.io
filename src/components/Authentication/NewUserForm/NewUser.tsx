@@ -4,11 +4,11 @@ import { JsonForms } from '@jsonforms/react';
 import { ValidationMode } from '@jsonforms/core';
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
 import * as SC from './styles';
-import { Props } from '../../../../../interfaces/newUser';
-import { NewUserData } from '../../../../../interfaces/newUserData';
-import CopyLine from '../../../../CopyLine';
-import * as CSC from '../../../../globalStyle';
-import { startCase } from '../../../../../utils/utils';
+import { Props } from '../../../interfaces/newUser';
+import { NewUserData } from '../../../interfaces/newUserData';
+import CopyLine from '../../CopyLine';
+import * as CSC from '../../globalStyle';
+import { startCase } from '../../../utils/utils';
 
 const schema = {
   type: 'object',
@@ -59,7 +59,7 @@ const uischema = {
   ],
 };
 
-const NewUser = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, createUser }, ref) => {
+const NewUserForm = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, createUser }, ref) => {
   const [data, setData] = React.useState<NewUserData>({
     firstName: undefined,
     lastName: undefined,
@@ -155,4 +155,4 @@ const NewUser = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, create
   );
 });
 
-export default NewUser;
+export default NewUserForm;
