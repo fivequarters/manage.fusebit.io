@@ -2,11 +2,16 @@ import React from 'react';
 import { useContext } from '../../../../hooks/useContext';
 import { useAccountConnectorsGetAll } from '../../../../hooks/api/v2/account/connector/useGetAll';
 import { Connector } from '../../../../interfaces/connector';
-import { OverviewProps } from '../../../../interfaces/connectors';
 import { ConnectorCells } from '../../../../interfaces/tableRow';
 import TableComponent from '../../../TableComponent';
+import ConnectorsTable from '../../ConnectorsTable/ConnectorsTable';
 
-const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
+interface Props {
+  headless: boolean;
+  setHeadless: (value: boolean) => void;
+}
+
+const Overview: React.FC<Props> = ({ headless, setHeadless }) => {
   const { userData } = useContext();
   const { data: connectors } = useAccountConnectorsGetAll<{ items: Connector[] }>({
     enabled: userData.token,
@@ -32,15 +37,18 @@ const Overview: React.FC<OverviewProps> = ({ headless, setHeadless }) => {
   };
 
   return (
-    <TableComponent
-      connectorTable={true}
-      headless={headless}
-      setHeadless={setHeadless}
-      connectors={connectors}
-      selectedCell={selectedCell}
-      handleNextCellSelect={handleNextCellSelect}
-      handlePreviousCellSelect={handlePreviousCellSelect}
-    />
+    <>
+      <ConnectorsTable headless={headless} setHeadless={setHeadless} />
+      <TableComponent
+        connectorTable={true}
+        headless={headless}
+        setHeadless={setHeadless}
+        connectors={connectors}
+        selectedCell={selectedCell}
+        handleNextCellSelect={handleNextCellSelect}
+        handlePreviousCellSelect={handlePreviousCellSelect}
+      />
+    </>
   );
 };
 

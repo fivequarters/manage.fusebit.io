@@ -9,7 +9,7 @@ const ConnectorsOverview: React.FC = () => {
       tabNames={['Overview']}
       tabObjects={[
         <Overview
-          headless={headless}
+          headless={!!headless}
           setHeadless={(value: boolean) => {
             headless.current = value;
           }}

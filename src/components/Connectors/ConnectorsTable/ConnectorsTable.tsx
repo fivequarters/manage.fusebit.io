@@ -4,21 +4,23 @@ import { useEntityTable } from '../../../hooks/useEntityTable';
 import { usePagination } from '../../../hooks/usePagination';
 import { Integration } from '../../../interfaces/integration';
 import GetInstances from '../../TableRowComponent/GetInstances';
-import NewIntegrationModal from '../NewIntegrationModal';
-import DeleteIntegrationModal from '../DeleteIntegrationModal';
 import { useModal } from '../../../hooks/useModal';
 import { BaseTableRow } from '../../BaseTable/types';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import { trackEvent } from '../../../utils/analytics';
 import { useContext } from '../../../hooks/useContext';
 import { useAccountIntegrationsGetAll } from '../../../hooks/api/v2/account/integration/useGetAll';
+import { useAccountConnectorsGetAll } from '../../../hooks/api/v2/account/connector/useGetAll';
+import { Connector } from '../../../interfaces/connector';
+import GetIdentities from '../../TableRowComponent/GetIdentities';
+import DeleteConnectorModal from '../DeleteConnectorModal';
 
 interface Props {
   headless: boolean;
   setHeadless: (value: boolean) => void;
 }
 
-const IntegrationsTable = ({ headless, setHeadless }: Props) => {
+const ConnectorsTable = ({ headless, setHeadless }: Props) => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
   const [newModalOpen, , toggleNewModal] = useModal();
   const [deleteModalOpen, setDeleteModal, toggleDeleteModal] = useModal();
@@ -26,7 +28,7 @@ const IntegrationsTable = ({ headless, setHeadless }: Props) => {
   const history = useHistory();
   const { userData } = useContext();
 
-  const { data: integrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({
+  const { data: connectors } = useAccountConnectorsGetAll<{ items: Connector[] }>({
     enabled: userData.token,
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
@@ -35,44 +37,46 @@ const IntegrationsTable = ({ headless, setHeadless }: Props) => {
   const { loading, rows, selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
     headless,
     setHeadless,
-    integrations,
+    connectors,
     page,
     setPage,
     rowsPerPage,
   });
 
-  const tableRows = (rows as Integration[]).map((row) => ({
+  const tableRows = (rows as Connector[]).map((row) => ({
     id: row.id,
     name: row.id,
-    installs: <GetInstances id={row.id} />,
+    type: row.tags['fusebit.provider'],
+    identities: <GetIdentities id={row.id} />,
   }));
 
-  const handleClickRow = (row: BaseTableRow) => history.push(getRedirectLink(`/integration/${row.id}/develop`));
+  const handleClickRow = (row: BaseTableRow) => history.push(getRedirectLink(`/connector/${row.id}/configure`));
 
   const handleNewIntegration = () => {
-    trackEvent('New Integration Button Clicked', 'Integrations');
+    trackEvent('New Connector Button Clicked', 'Connectors');
     toggleNewModal();
   };
 
   return (
     <>
-      <NewIntegrationModal onClose={toggleNewModal} open={newModalOpen} />
-      <DeleteIntegrationModal
-        onConfirm={() => handleRowDelete('Integration')}
+      {/* <NewIntegrationModal onClose={toggleNewModal} open={newModalOpen} /> */}
+      <DeleteConnectorModal
+        onConfirm={() => handleRowDelete('C')}
         setOpen={setDeleteModal}
         open={deleteModalOpen}
         selected={selected}
       />
       <BaseTable
-        emptyTableText="Your integrations list is empty, please create an integration"
+        emptyTableText="Your connectors list is empty, please create an integration"
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
         page={page}
         rowsPerPage={rowsPerPage}
-        entityName="integration"
+        entityName="connector"
         headers={[
           { id: 'name', value: 'Name' },
-          { id: 'installs', value: 'Installs' },
+          { id: 'type', value: 'Type' },
+          { id: 'identities', value: 'Identities' },
         ]}
         loading={loading}
         onClickNew={handleNewIntegration}
@@ -88,4 +92,4 @@ const IntegrationsTable = ({ headless, setHeadless }: Props) => {
   );
 };
 
-export default IntegrationsTable;
+export default ConnectorsTable;
