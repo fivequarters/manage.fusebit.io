@@ -15,6 +15,7 @@ import { useQuery } from '../../hooks/useQuery';
 import { useReplaceMustache } from '../../hooks/useReplaceMustache';
 import { trackEvent } from '../../utils/analytics';
 import debounce from 'lodash.debounce';
+import Loader from '../Loader';
 
 enum Filters {
   ALL = 'All',
@@ -33,6 +34,7 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
   const [activeTemplate, setActiveTemplate] = React.useState<Feed>();
   const [rawActiveTemplate, setRawActiveTemplate] = React.useState<Feed>();
   const [searchFilter, setSearchFilter] = React.useState('');
+  const [loading, setLoading] = React.useState(true);
   const query = useQuery();
   const { replaceMustache } = useReplaceMustache();
 
@@ -77,6 +79,7 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
 
     (isIntegration ? integrationsFeed() : connectorsFeed()).then((feed) => {
       setFeed(feed);
+      setLoading(false);
       for (let i = 0; i < feed.length; i++) {
         if (feed[i].id === key) {
           replaceMustache(data, feed[i]).then((template) => setActiveTemplate(template));
@@ -89,6 +92,8 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
         setActiveTemplate(template);
       });
     });
+
+    return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isIntegration]);
 
@@ -148,83 +153,93 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
             />
             <SC.ColumnSearchIcon src={search} alt={`Search ${feedTypeName}`} height="24" width="24" />
           </SC.ColumnSearchWrapper>
-          {feed.map((feedEntry: Feed) => {
-            const tags = feedEntry.tags.catalog.split(',');
-            let tagIsActive = false;
-            tags.forEach((tag: string) => {
-              if (activeFilter.toUpperCase().match(tag.toUpperCase()) || activeFilter === Filters.ALL) {
-                tagIsActive = true;
+          {loading ? (
+            <Loader />
+          ) : (
+            feed.map((feedEntry: Feed) => {
+              const tags = feedEntry.tags.catalog.split(',');
+              let tagIsActive = false;
+              tags.forEach((tag: string) => {
+                if (activeFilter.toUpperCase().match(tag.toUpperCase()) || activeFilter === Filters.ALL) {
+                  tagIsActive = true;
+                }
+              });
+              if (tagIsActive && feedEntry.name.toUpperCase().includes(searchFilter.toUpperCase())) {
+                return (
+                  <SC.ColumnItem
+                    key={feedEntry.id}
+                    onClick={() => handleTemplateChange(feedEntry)}
+                    active={feedEntry.id === activeTemplate?.id}
+                  >
+                    <SC.ColumnItemImage src={feedEntry.smallIcon} alt="slack" height="18" width="18" />
+                    {feedEntry.name}
+                  </SC.ColumnItem>
+                );
+              } else {
+                return null;
               }
-            });
-            if (tagIsActive && feedEntry.name.toUpperCase().includes(searchFilter.toUpperCase())) {
-              return (
-                <SC.ColumnItem
-                  key={feedEntry.id}
-                  onClick={() => handleTemplateChange(feedEntry)}
-                  active={feedEntry.id === activeTemplate?.id}
-                >
-                  <SC.ColumnItemImage src={feedEntry.smallIcon} alt="slack" height="18" width="18" />
-                  {feedEntry.name}
-                </SC.ColumnItem>
-              );
-            } else {
-              return null;
-            }
-          })}
+            })
+          )}
         </SC.Column>
         <SC.ColumnBr />
         <SC.ConnectorInfo>
-          <SC.ConnectorTitleWrapper>
-            <SC.ConnectorImage src={activeTemplate?.smallIcon} alt="slack" height="28" width="28" />
-            <SC.ConnectorTitle>{activeTemplate?.name}</SC.ConnectorTitle>
-            <SC.ConnectorVersion>{activeTemplate?.version}</SC.ConnectorVersion>
-          </SC.ConnectorTitleWrapper>
-          <SC.GeneralInfoWrapper>
-            <SC.ConnectorDescription children={activeTemplate?.description || ''} />
-            <SC.FormWrapper>
-              <JsonForms
-                schema={activeTemplate?.configuration.schema}
-                uischema={activeTemplate?.configuration.uischema}
-                data={data}
-                renderers={materialRenderers}
-                cells={materialCells}
-                onChange={({ errors, data }) => {
-                  if (data?.ui?.toggle && activeTemplate) {
-                    trackEvent('New Integration Customize Clicked', 'Integrations', {
-                      integration: activeTemplate.name,
-                    });
-                  }
-                  errors && setErrors(errors);
-                  setData(data);
-                }}
-                validationMode={validationMode}
-              />
-            </SC.FormWrapper>
-          </SC.GeneralInfoWrapper>
-          <SC.MobileHidden>
-            <Button
-              onClick={handleSubmit}
-              style={{ width: '200px', marginTop: 'auto', marginLeft: 'auto' }}
-              fullWidth={false}
-              size="large"
-              color="primary"
-              variant="contained"
-            >
-              Create
-            </Button>
-          </SC.MobileHidden>
-          <SC.MobileVisible>
-            <Button
-              onClick={handleSubmit}
-              style={{ width: '200px', margin: 'auto' }}
-              fullWidth={false}
-              size="large"
-              color="primary"
-              variant="contained"
-            >
-              Create
-            </Button>
-          </SC.MobileVisible>
+          {loading ? (
+            <Loader />
+          ) : (
+            <>
+              <SC.ConnectorTitleWrapper>
+                <SC.ConnectorImage src={activeTemplate?.smallIcon} alt="slack" height="28" width="28" />
+                <SC.ConnectorTitle>{activeTemplate?.name}</SC.ConnectorTitle>
+                <SC.ConnectorVersion>{activeTemplate?.version}</SC.ConnectorVersion>
+              </SC.ConnectorTitleWrapper>
+              <SC.GeneralInfoWrapper>
+                <SC.ConnectorDescription children={activeTemplate?.description || ''} />
+                <SC.FormWrapper>
+                  <JsonForms
+                    schema={activeTemplate?.configuration.schema}
+                    uischema={activeTemplate?.configuration.uischema}
+                    data={data}
+                    renderers={materialRenderers}
+                    cells={materialCells}
+                    onChange={({ errors, data }) => {
+                      if (data?.ui?.toggle && activeTemplate) {
+                        trackEvent('New Integration Customize Clicked', 'Integrations', {
+                          integration: activeTemplate.name,
+                        });
+                      }
+                      errors && setErrors(errors);
+                      setData(data);
+                    }}
+                    validationMode={validationMode}
+                  />
+                </SC.FormWrapper>
+              </SC.GeneralInfoWrapper>
+              <SC.MobileHidden>
+                <Button
+                  onClick={handleSubmit}
+                  style={{ width: '200px', marginTop: 'auto', marginLeft: 'auto' }}
+                  fullWidth={false}
+                  size="large"
+                  color="primary"
+                  variant="contained"
+                >
+                  Create
+                </Button>
+              </SC.MobileHidden>
+              <SC.MobileVisible>
+                <Button
+                  onClick={handleSubmit}
+                  style={{ width: '200px', margin: 'auto' }}
+                  fullWidth={false}
+                  size="large"
+                  color="primary"
+                  variant="contained"
+                >
+                  Create
+                </Button>
+              </SC.MobileVisible>
+            </>
+          )}
         </SC.ConnectorInfo>
       </SC.Flex>
     </SC.Card>
