@@ -8,6 +8,8 @@ import { useCopy } from '../../../../../hooks/useCopy';
 import ConfirmationPrompt from '../../../../ConfirmationPrompt';
 import { useContext } from '../../../../../hooks/useContext';
 import { patchBackendClients } from '../../../../../utils/backendClients';
+import { useGetRedirectLink } from '../../../../../hooks/useGetRedirectLink';
+import { useParams } from 'react-router-dom';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
@@ -29,6 +31,8 @@ const Connect = React.forwardRef(
     }: Props,
     ref
   ) => {
+    const { id: integrationId } = useParams<{ id: string }>();
+    const { getRedirectLink } = useGetRedirectLink();
     const { userData } = useContext();
     const [editMode, setEditMode] = useState(false);
     const [editedBackendClientId, setEditedBackendClientId] = useState(name);
@@ -129,9 +133,17 @@ const Connect = React.forwardRef(
           </SC.SmallTitleWrapper>
           <SC.SmallTitleWrapper>
             <SC.SmallTitle>
-              <strong>Integration Base URL:</strong> {REACT_APP_FUSEBIT_DEPLOYMENT}
+              <strong>Integration Base URL:</strong> {REACT_APP_FUSEBIT_DEPLOYMENT}/v2
+              {getRedirectLink(`/integration/${integrationId}`)}
             </SC.SmallTitle>
-            <CSC.Copy onClick={() => handleCopy(REACT_APP_FUSEBIT_DEPLOYMENT as string)} margin="0 0 0 20px" />
+            <CSC.Copy
+              onClick={() =>
+                handleCopy(
+                  `${REACT_APP_FUSEBIT_DEPLOYMENT}/v2${getRedirectLink(`/integration/${integrationId}`)}` as string
+                )
+              }
+              margin="0 0 0 20px"
+            />
             <SC.CopySuccess copy={copiedLine}>Copied to clipboard!</SC.CopySuccess>
           </SC.SmallTitleWrapper>
 
