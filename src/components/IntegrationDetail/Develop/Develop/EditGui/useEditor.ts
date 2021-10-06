@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useEffect, useCallback, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { getAllInstances } from '../../../../../hooks/api/v2/account/integration/instance/useGetAll';
@@ -50,7 +51,8 @@ const useEditor = ({ onNoInstanceFound } = {} as Props) => {
 
   useEffect(() => {
     const prevSessionId = localStorage.getItem('session');
-    const handleChangeStorage = () => {
+    const handleChangeStorage = (e: any) => {
+      console.log('key changed', e.key);
       const sessionId = localStorage.getItem('session');
 
       const runFirstTest = async () => {
