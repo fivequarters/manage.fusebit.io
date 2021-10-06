@@ -12,11 +12,12 @@ import { STATIC_TENANT_ID } from '../../../../../utils/constants';
 
 interface Props {
   onNoInstanceFound?: () => void;
+  enableListener?: boolean
 }
 
 const LOCALSTORAGE_SESSION_KEY = 'session';
 
-const useEditor = ({ onNoInstanceFound } = {} as Props) => {
+const useEditor = ({ onNoInstanceFound, enableListener = true } = {} as Props) => {
   const { id } = useParams<{ id: string }>();
   const { userData } = useContext();
   const { axios } = useAxios({ ignoreInterceptors: true });
@@ -69,13 +70,18 @@ const useEditor = ({ onNoInstanceFound } = {} as Props) => {
       }
     };
 
-    window.addEventListener('storage', handleChangeStorage);
+    if (enableListener) {
+      window.addEventListener('storage', handleChangeStorage);
+    }
+
 
     return () => {
-      window.removeEventListener('storage', handleChangeStorage);
+      if (enableListener) {
+        window.removeEventListener('storage', handleChangeStorage);
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [enableListener]);
 
   const handleNoInstanceFound = () => createSesssion({ id, tenantId: STATIC_TENANT_ID });
 
