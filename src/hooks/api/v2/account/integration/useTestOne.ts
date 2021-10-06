@@ -28,13 +28,11 @@ export const useAccountIntegrationTestIntegration = () => {
     },
     {
       onMutate: (params: Params) => {
-
         const { method, url } = getIntegrationConfig(params.id).runner;
 
         window.editor?.serverLogsEntry(
           JSON.stringify({ msg: `Sending ${method.toUpperCase()} request to ${url}`, level: 30 })
         );
-
       },
       onError: (err) => {
         window.editor?.finishRun(JSON.stringify(err));
@@ -48,7 +46,6 @@ export const useAccountIntegrationTestIntegration = () => {
             level: 30,
           })
         );
-
       },
     }
   );
