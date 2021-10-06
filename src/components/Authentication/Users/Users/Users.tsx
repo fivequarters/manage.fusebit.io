@@ -4,6 +4,7 @@ import { useAccountUserGetAll } from '../../../../hooks/api/v1/account/user/useG
 import { Account } from '../../../../interfaces/account';
 import { UserCells } from '../../../../interfaces/tableRow';
 import TableComponent from '../../../TableComponent';
+import UsersTable from '../../UsersTable/UsersTable';
 
 const Authentication: React.FC = () => {
   const { userData } = useContext();
@@ -35,12 +36,15 @@ const Authentication: React.FC = () => {
   };
 
   return (
-    <TableComponent
-      users={users}
-      selectedCell={selectedCell}
-      handleNextCellSelect={handleNextCellSelect}
-      handlePreviousCellSelect={handlePreviousCellSelect}
-    />
+    <>
+      <UsersTable />
+      <TableComponent
+        users={users}
+        selectedCell={selectedCell}
+        handleNextCellSelect={handleNextCellSelect}
+        handlePreviousCellSelect={handlePreviousCellSelect}
+      />
+    </>
   );
 };
 
