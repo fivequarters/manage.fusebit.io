@@ -17,7 +17,7 @@ import { useAccountIntegrationUpdateIntegration } from './api/v2/account/integra
 import { useAccountIntegrationDeleteIntegration } from './api/v2/account/integration/useDeleteOne';
 import { useAccountConnectorDeleteConnector } from './api/v2/account/connector/useDeleteOne';
 import { useAccountUserDeleteOne } from './api/v1/account/user/useDeleteOne';
-import { findMatchingConnectorFeed } from '../utils/utils';
+import { findMatchingConnectorFeed, getAllDependenciesFromFeed, linkPackageJson } from '../utils/utils';
 import { useAccountUserCreateUser } from './api/v1/account/user/useCreateUser';
 import { Account } from '../interfaces/account';
 import { useCreateToken } from './useCreateToken';
@@ -110,14 +110,25 @@ export const useEntityApi = (preventLoader?: boolean) => {
       if (!preventLoader) createLoader();
       const data = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
       const newData = data;
+
       if (isAdding) {
         const feedtype = connector.tags['fusebit.feedType'];
         const item: Feed = await findMatchingConnectorFeed(connector);
+        const dependencies = getAllDependenciesFromFeed(item);
+
         if (feedtype === 'connector') {
           item.configuration.components?.forEach((component) => {
             component.name = connector.id;
             component.entityId = connector.id;
             newData.data.components.push(component);
+
+            const newPackageJson = linkPackageJson(
+              JSON.parse(newData.data.files['package.json']),
+              dependencies,
+              component
+            );
+
+            newData.data.files['package.json'] = JSON.stringify(newPackageJson);
           });
         } else {
           Object.entries(item.configuration.entities).forEach((entity) => {
