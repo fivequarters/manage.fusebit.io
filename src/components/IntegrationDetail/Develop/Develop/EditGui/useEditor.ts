@@ -12,7 +12,7 @@ import { STATIC_TENANT_ID } from '../../../../../utils/constants';
 
 interface Props {
   onNoInstanceFound?: () => void;
-  enableListener?: boolean
+  enableListener?: boolean;
 }
 
 const LOCALSTORAGE_SESSION_KEY = 'session';
@@ -73,7 +73,6 @@ const useEditor = ({ onNoInstanceFound, enableListener = true } = {} as Props) =
     if (enableListener) {
       window.addEventListener('storage', handleChangeStorage);
     }
-
 
     return () => {
       if (enableListener) {
