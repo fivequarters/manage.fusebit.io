@@ -1,6 +1,6 @@
-import React, { FC, ReactElement } from 'react';
+import { FC, ReactElement } from 'react';
+import ConnectorsOverview from '../components/ConnectorsOverview';
 import Layout from '../components/Layout';
-import ConnectorsOverview from '../components/Connectors/ConnectorsOverview';
 import Navbar from '../components/Navbar';
 import { useTrackPage } from '../hooks/useTrackPage';
 
