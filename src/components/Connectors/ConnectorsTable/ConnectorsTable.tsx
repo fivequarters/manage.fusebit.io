@@ -2,18 +2,16 @@ import { useHistory } from 'react-router-dom';
 import BaseTable from '../../BaseTable/BaseTable';
 import { useEntityTable } from '../../../hooks/useEntityTable';
 import { usePagination } from '../../../hooks/usePagination';
-import { Integration } from '../../../interfaces/integration';
-import GetInstances from '../../TableRowComponent/GetInstances';
 import { useModal } from '../../../hooks/useModal';
 import { BaseTableRow } from '../../BaseTable/types';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import { trackEvent } from '../../../utils/analytics';
 import { useContext } from '../../../hooks/useContext';
-import { useAccountIntegrationsGetAll } from '../../../hooks/api/v2/account/integration/useGetAll';
 import { useAccountConnectorsGetAll } from '../../../hooks/api/v2/account/connector/useGetAll';
 import { Connector } from '../../../interfaces/connector';
 import GetIdentities from '../../TableRowComponent/GetIdentities';
 import DeleteConnectorModal from '../DeleteConnectorModal';
+import NewFeedModal from '../../common/NewFeedModal';
 
 interface Props {
   headless: boolean;
@@ -59,7 +57,7 @@ const ConnectorsTable = ({ headless, setHeadless }: Props) => {
 
   return (
     <>
-      {/* <NewIntegrationModal onClose={toggleNewModal} open={newModalOpen} /> */}
+      <NewFeedModal onClose={toggleNewModal} open={newModalOpen} isIntegration={false} />
       <DeleteConnectorModal
         onConfirm={() => handleRowDelete('C')}
         setOpen={setDeleteModal}
