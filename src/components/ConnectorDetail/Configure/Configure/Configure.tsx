@@ -13,7 +13,7 @@ import { Connector, ConnectorConfig } from '../../../../interfaces/connector';
 import { useEntityApi } from '../../../../hooks/useEntityApi';
 import { useGetFeedById } from '../../../../hooks/useGetFeedById';
 import { trackEvent } from '../../../../utils/analytics';
-import InformationalBanner from '../../../InformationalBanner';
+import InformationalBanner from '../../../common/InformationalBanner';
 
 const Configure: React.FC = () => {
   const history = useHistory();

@@ -8,7 +8,7 @@ import { useAccountIntegrationInstanceGetAll } from '../../../hooks/api/v2/accou
 import { Install } from '../../../interfaces/install';
 import Tag from '../../common/Tag';
 import ConfirmationPrompt from '../../common/ConfirmationPrompt';
-import InformationalBanner from '../../InformationalBanner';
+import InformationalBanner from '../../common/InformationalBanner';
 import AssociatedIdentities from './AssociatedIdentities';
 import { getConnectorsFromInstall } from '../../../utils/utils';
 import { trackEvent } from '../../../utils/analytics';

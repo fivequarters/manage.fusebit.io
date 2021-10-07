@@ -7,7 +7,7 @@ import { usePagination } from '../../../../hooks/usePagination';
 import { useAccountConnectorIdentityGetAll } from '../../../../hooks/api/v2/account/connector/identity/useGetAll';
 import { Identity } from '../../../../interfaces/identities';
 import ConfirmationPrompt from '../../../common/ConfirmationPrompt';
-import InformationalBanner from '../../../InformationalBanner';
+import InformationalBanner from '../../../common/InformationalBanner';
 import AssociatedInstalls from './AssociatedInstalls';
 import AssociatedIntegrations from './AssociatedIntegrations';
 import Tag from '../../../common/Tag';
