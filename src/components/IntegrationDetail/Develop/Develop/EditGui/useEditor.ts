@@ -9,7 +9,7 @@ import { useContext } from '../../../../../hooks/useContext';
 import { Install } from '../../../../../interfaces/install';
 import { trackEvent } from '../../../../../utils/analytics';
 import { STATIC_TENANT_ID } from '../../../../../utils/constants';
-import useIsDirty from './useIsDirty';
+import useIsSaving from './useIsSaving';
 
 interface Props {
   onNoInstanceFound?: () => void;
@@ -29,7 +29,7 @@ const useEditor = ({ onNoInstanceFound, enableListener = true, isMounted = false
   const [isFindingInstance, setIsFindingInstance] = useState(false);
   // Prevent beign called multiple times if user has multiple tabs open
   const hasSessionChanged = useRef(false);
-  const isDirty = useIsDirty({ isMounted });
+  const isSaving = useIsSaving({ isMounted });
 
   const findInstance = useCallback(async () => {
     try {
@@ -96,6 +96,10 @@ const useEditor = ({ onNoInstanceFound, enableListener = true, isMounted = false
     try {
       const hasInstance = await findInstance();
 
+      if (window.editor?.dirtyState) {
+        await window.editor._server.saveFunction(window.editor);
+      }
+
       if (hasInstance) {
         await testIntegration({ id, tenantId: STATIC_TENANT_ID });
       } else if (onNoInstanceFound) {
@@ -117,7 +121,7 @@ const useEditor = ({ onNoInstanceFound, enableListener = true, isMounted = false
     isTesting,
     isCommiting,
     isRunning: isFindingInstance || isCreatingSession || isTesting || isCommiting,
-    isDirty,
+    isSaving,
   };
 };
 

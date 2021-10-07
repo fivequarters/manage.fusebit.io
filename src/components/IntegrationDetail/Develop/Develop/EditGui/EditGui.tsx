@@ -24,7 +24,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, onMount, int
   const [unsavedWarning, setUnsavedWarning] = useState(false);
   const { createLoader, removeLoader } = useLoader();
   const [loginFlowModalOpen, setLoginFlowModalOpen] = useState(false);
-  const { handleRun, handleNoInstanceFound, isFindingInstance, isDirty } = useEditor({
+  const { handleRun, handleNoInstanceFound, isFindingInstance, isSaving } = useEditor({
     onNoInstanceFound: () => setLoginFlowModalOpen(true),
     isMounted,
   });
@@ -146,7 +146,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, onMount, int
                 variant="contained"
                 color="primary"
                 onClick={handleRun}
-                disabled={isFindingInstance || isDirty}
+                disabled={isFindingInstance || isSaving}
               >
                 {isFindingInstance ? <CircularProgress size={20} /> : 'Run'}
               </Button>
