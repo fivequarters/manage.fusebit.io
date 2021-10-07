@@ -119,9 +119,17 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
           <SC.CloseHeader>
             <Button
               style={{ marginRight: '16px' }}
-              startIcon={<img src={save} style={{
-                opacity: isSaving ? 0.4 : 1,
-              }} alt="play" height="16" width="16" />}
+              startIcon={
+                <img
+                  src={save}
+                  style={{
+                    opacity: isSaving ? 0.4 : 1,
+                  }}
+                  alt="play"
+                  height="16"
+                  width="16"
+                />
+              }
               onClick={handleSave}
               size="small"
               variant="outlined"
