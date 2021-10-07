@@ -95,6 +95,10 @@ const useEditor = ({ onNoInstanceFound, enableListener = true, isMounted = false
     try {
       const hasInstance = await findInstance();
 
+      if (window.editor?.dirtyState) {
+        await window.editor._server.saveFunction(window.editor);
+      }
+
       if (hasInstance) {
         await testIntegration({ id, tenantId: STATIC_TENANT_ID });
       } else {
