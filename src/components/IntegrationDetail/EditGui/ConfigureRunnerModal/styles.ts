@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import arrow from '../../../../../../assets/arrow-down-thin.svg';
+import arrow from '../../../../assets/arrow-down-thin.svg';
 
 const withError = css<{ hasError?: boolean }>`
   margin-bottom: 25px;

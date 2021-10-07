@@ -1,14 +1,14 @@
 import { useEffect, useCallback, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { getAllInstances } from '../../../../../hooks/api/v2/account/integration/instance/useGetAll';
-import { useAccountIntegrationCreateSession } from '../../../../../hooks/api/v2/account/integration/session/useCreateOne';
-import { useAccountIntegrationCommitSession } from '../../../../../hooks/api/v2/account/integration/session/useCommitOne';
-import { useAccountIntegrationTestIntegration } from '../../../../../hooks/api/v2/account/integration/useTestOne';
-import { useAxios } from '../../../../../hooks/useAxios';
-import { useContext } from '../../../../../hooks/useContext';
-import { Install } from '../../../../../interfaces/install';
-import { trackEvent } from '../../../../../utils/analytics';
-import { STATIC_TENANT_ID } from '../../../../../utils/constants';
+import { getAllInstances } from '../../../hooks/api/v2/account/integration/instance/useGetAll';
+import { useAccountIntegrationCreateSession } from '../../../hooks/api/v2/account/integration/session/useCreateOne';
+import { useAccountIntegrationCommitSession } from '../../../hooks/api/v2/account/integration/session/useCommitOne';
+import { useAccountIntegrationTestIntegration } from '../../../hooks/api/v2/account/integration/useTestOne';
+import { useAxios } from '../../../hooks/useAxios';
+import { useContext } from '../../../hooks/useContext';
+import { Install } from '../../../interfaces/install';
+import { trackEvent } from '../../../utils/analytics';
+import { STATIC_TENANT_ID } from '../../../utils/constants';
 
 interface Props {
   onNoInstanceFound?: () => void;

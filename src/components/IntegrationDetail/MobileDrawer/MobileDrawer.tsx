@@ -1,9 +1,8 @@
-import React from 'react';
 import { Drawer, Button } from '@material-ui/core';
 import * as SC from './styles';
-import * as CSC from '../../../../globalStyle';
-import play from '../../../../../assets/play.svg';
-import info from '../../../../../assets/info.svg';
+import * as CSC from '../../globalStyle';
+import play from '../../../assets/play.svg';
+import info from '../../../assets/info.svg';
 import useEditor from '../EditGui/useEditor';
 
 interface Props {

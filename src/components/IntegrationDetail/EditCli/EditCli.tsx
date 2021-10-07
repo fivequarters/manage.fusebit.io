@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
 import * as SC from './styles';
-import * as CSC from '../../../../globalStyle';
-import { Props } from '../../../../../interfaces/edit';
-import CopyLine from '../../../../CopyLine';
+import * as CSC from '../../globalStyle';
+import { Props } from '../../../interfaces/edit';
+import CopyLine from '../../CopyLine';
 
 const Edit = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, integrationId }, ref) => {
   return (

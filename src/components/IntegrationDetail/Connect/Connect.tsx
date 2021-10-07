@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Button, Input } from '@material-ui/core';
 import * as SC from './styles';
-import * as CSC from '../../../../globalStyle';
-import { Props } from '../../../../../interfaces/connect';
-import CopyLine from '../../../../CopyLine';
-import { useCopy } from '../../../../../hooks/useCopy';
-import ConfirmationPrompt from '../../../../ConfirmationPrompt';
-import { useContext } from '../../../../../hooks/useContext';
-import { patchBackendClients } from '../../../../../utils/backendClients';
+import * as CSC from '../../globalStyle';
+import { Props } from '../../../interfaces/connect';
+import CopyLine from '../../CopyLine';
+import ConfirmationPrompt from '../../ConfirmationPrompt';
+import { useCopy } from '../../../hooks/useCopy';
+import { patchBackendClients } from '../../../utils/backendClients';
+import { useContext } from '../../../hooks/useContext';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 

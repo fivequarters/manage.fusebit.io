@@ -4,7 +4,7 @@ import Layout from '../components/Layout';
 import { useAccountIntegrationsGetOne } from '../hooks/api/v2/account/integration/useGetOne';
 import { useContext } from '../hooks/useContext';
 import { Integration } from '../interfaces/integration';
-import IntegrationDetailDevelop from '../components/IntegrationDetail/Develop';
+import IntegrationDetailDevelop from '../components/IntegrationDetail';
 import Navbar from '../components/Navbar';
 import { useTrackPage } from '../hooks/useTrackPage';
 
