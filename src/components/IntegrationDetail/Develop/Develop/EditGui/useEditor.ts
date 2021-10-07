@@ -9,15 +9,17 @@ import { useContext } from '../../../../../hooks/useContext';
 import { Install } from '../../../../../interfaces/install';
 import { trackEvent } from '../../../../../utils/analytics';
 import { STATIC_TENANT_ID } from '../../../../../utils/constants';
+import useIsDirty from './useIsDirty';
 
 interface Props {
   onNoInstanceFound?: () => void;
   enableListener?: boolean;
+  isMounted?: boolean;
 }
 
 const LOCALSTORAGE_SESSION_KEY = 'session';
 
-const useEditor = ({ onNoInstanceFound, enableListener = true } = {} as Props) => {
+const useEditor = ({ onNoInstanceFound, enableListener = true, isMounted = false } = {} as Props) => {
   const { id } = useParams<{ id: string }>();
   const { userData } = useContext();
   const { axios } = useAxios({ ignoreInterceptors: true });
@@ -27,6 +29,7 @@ const useEditor = ({ onNoInstanceFound, enableListener = true } = {} as Props) =
   const [isFindingInstance, setIsFindingInstance] = useState(false);
   // Prevent beign called multiple times if user has multiple tabs open
   const hasSessionChanged = useRef(false);
+  const isDirty = useIsDirty({ isMounted });
 
   const findInstance = useCallback(async () => {
     try {
@@ -91,10 +94,6 @@ const useEditor = ({ onNoInstanceFound, enableListener = true } = {} as Props) =
   const handleRun = async () => {
     trackEvent('Run Button Clicked', 'Web Editor');
     try {
-      if (window.editor?.dirtyState) {
-        await window.editor._server.saveFunction(window.editor);
-      }
-
       const hasInstance = await findInstance();
 
       if (hasInstance) {
@@ -118,6 +117,7 @@ const useEditor = ({ onNoInstanceFound, enableListener = true } = {} as Props) =
     isTesting,
     isCommiting,
     isRunning: isFindingInstance || isCreatingSession || isTesting || isCommiting,
+    isDirty,
   };
 };
 
