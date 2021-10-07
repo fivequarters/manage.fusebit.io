@@ -5,7 +5,7 @@ import { useAccountIntegrationsGetOne } from '../hooks/api/v2/account/integratio
 import { useContext } from '../hooks/useContext';
 import { useTrackPage } from '../hooks/useTrackPage';
 import { Integration } from '../interfaces/integration';
-import IntegrationDetailInstalls from '../components/IntegrationDetail/Installs';
+import IntegrationDetailInstalls from '../components/Installs';
 import Navbar from '../components/Navbar';
 
 const IntegrationDetailInstallsPage: FC<{}> = (): ReactElement => {

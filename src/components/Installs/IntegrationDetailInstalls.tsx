@@ -1,8 +1,8 @@
 import React from 'react';
-import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
-import TabComponent from '../../TabComponent';
+import { useGetRedirectLink } from '../../hooks/useGetRedirectLink';
+import TabComponent from '../TabComponent';
 import Installs from './Installs';
-import { Props } from '../../../interfaces/integration';
+import { Props } from '../../interfaces/integration';
 
 const IntegrationDetailInstalls: React.FC<Props> = ({ id }) => {
   const { getRedirectLink } = useGetRedirectLink();

@@ -1,7 +1,7 @@
 import { useHistory } from 'react-router-dom';
-import { useAccountIntegrationInstanceIdentitiesGetAll } from '../../../../hooks/api/v2/account/integration/instance/identities/useGetAll';
-import { useGetRedirectLink } from '../../../../hooks/useGetRedirectLink';
-import AsyncTags from '../../../AsyncTags';
+import { useAccountIntegrationInstanceIdentitiesGetAll } from '../../../hooks/api/v2/account/integration/instance/identities/useGetAll';
+import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
+import AsyncTags from '../../AsyncTags';
 
 interface Props {
   tenantId?: string;
