@@ -9,7 +9,7 @@ import { useContext } from '../../../../../hooks/useContext';
 import { Install } from '../../../../../interfaces/install';
 import { trackEvent } from '../../../../../utils/analytics';
 import { STATIC_TENANT_ID } from '../../../../../utils/constants';
-import useIsDirty from './useIsDirty'
+import useIsDirty from './useIsDirty';
 
 interface Props {
   onNoInstanceFound?: () => void;
@@ -114,7 +114,7 @@ const useEditor = ({ onNoInstanceFound, enableListener = true, isMounted = false
     isTesting,
     isCommiting,
     isRunning: isFindingInstance || isCreatingSession || isTesting || isCommiting,
-    isDirty
+    isDirty,
   };
 };
 
