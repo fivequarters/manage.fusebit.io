@@ -5,15 +5,15 @@ import { ValidationMode } from '@jsonforms/core';
 import { Button, TextField } from '@material-ui/core';
 import debounce from 'lodash.debounce';
 import * as SC from './styles';
-import { Props } from '../../interfaces/feedPicker';
-import { integrationsFeed, connectorsFeed } from '../../static/feed';
-import search from '../../assets/search.svg';
-import cross from '../../assets/cross.svg';
-import { Feed } from '../../interfaces/feed';
+import { Props } from '../../../interfaces/feedPicker';
+import { integrationsFeed, connectorsFeed } from '../../../static/feed';
+import search from '../../../assets/search.svg';
+import cross from '../../../assets/cross.svg';
+import { Feed } from '../../../interfaces/feed';
 
-import { useQuery } from '../../hooks/useQuery';
-import { useReplaceMustache } from '../../hooks/useReplaceMustache';
-import { trackEvent } from '../../utils/analytics';
+import { useQuery } from '../../../hooks/useQuery';
+import { useReplaceMustache } from '../../../hooks/useReplaceMustache';
+import { trackEvent } from '../../../utils/analytics';
 
 enum Filters {
   ALL = 'All',

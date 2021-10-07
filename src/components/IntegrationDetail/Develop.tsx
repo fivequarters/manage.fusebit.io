@@ -30,7 +30,7 @@ import { Connector } from '../../interfaces/connector';
 import { Integration, InnerConnector } from '../../interfaces/integration';
 import EditGui from './EditGui';
 import { useGetRedirectLink } from '../../hooks/useGetRedirectLink';
-import FeedPicker from '../FeedPicker';
+import FeedPicker from '../common/FeedPicker';
 import ListComponent from './ListComponent';
 import { Entity, Feed } from '../../interfaces/feed';
 import { Data } from '../../interfaces/feedPicker';
