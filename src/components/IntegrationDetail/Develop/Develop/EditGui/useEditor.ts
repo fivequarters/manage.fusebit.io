@@ -9,7 +9,7 @@ import { useContext } from '../../../../../hooks/useContext';
 import { Install } from '../../../../../interfaces/install';
 import { trackEvent } from '../../../../../utils/analytics';
 import { STATIC_TENANT_ID } from '../../../../../utils/constants';
-import useIsDirty from './useIsDirty';
+import useIsSaving from './useIsSaving';
 
 interface Props {
   onNoInstanceFound?: () => void;
@@ -29,7 +29,7 @@ const useEditor = ({ onNoInstanceFound, enableListener = true, isMounted = false
   const [isFindingInstance, setIsFindingInstance] = useState(false);
   // Prevent beign called multiple times if user has multiple tabs open
   const hasSessionChanged = useRef(false);
-  const isDirty = useIsDirty({ isMounted: isMounted });
+  const isSaving = useIsSaving({ isMounted: isMounted });
 
   const findInstance = useCallback(async () => {
     try {
@@ -114,7 +114,7 @@ const useEditor = ({ onNoInstanceFound, enableListener = true, isMounted = false
     isTesting,
     isCommiting,
     isRunning: isFindingInstance || isCreatingSession || isTesting || isCommiting,
-    isDirty,
+    isSaving,
   };
 };
 
