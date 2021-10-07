@@ -1,9 +1,11 @@
 import { Button } from '@material-ui/core';
 
-import { useLoader } from '../../hooks/useLoader';
-import { useError } from '../../hooks/useError';
-import { useContext } from '../../hooks/useContext';
-import { getBackendClients } from '../../utils/backendClients';
+import { useLoader } from '../../../hooks/useLoader';
+import { useError } from '../../../hooks/useError';
+import { useContext } from '../../../hooks/useContext';
+import { getBackendClients } from '../../../utils/backendClients';
+
+// TODO: This component is not used. Should we removed it?
 
 export default function ListBackendClients() {
   const { userData } = useContext();
