@@ -24,10 +24,10 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
   const [unsavedWarning, setUnsavedWarning] = useState(false);
   const { createLoader, removeLoader } = useLoader();
   const [loginFlowModalOpen, setLoginFlowModalOpen] = useState(false);
-  const { handleRun, handleNoInstanceFound, isFindingInstance } = useEditor({
+  const { handleRun, handleNoInstanceFound, isFindingInstance, isDirty } = useEditor({
     onNoInstanceFound: () => setLoginFlowModalOpen(true),
+    isMounted,
   });
-  const [isDirty, setIsDirty] = useState(false);
 
   useTrackPage('Web Editor', 'Web Editor');
 
@@ -84,7 +84,6 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
     const context = window.editor;
     trackEvent('Save Button Clicked', 'Web Editor');
     await context?._server.saveFunction(context);
-    setIsDirty(false);
   };
 
   const handleClose = () => {
@@ -95,12 +94,8 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
     }
   };
 
-  const handleType = () => {
-    setIsDirty(true);
-  };
-
   return (
-    <div onKeyDownCapture={handleType}>
+    <>
       <ConfirmationPrompt
         open={unsavedWarning}
         setOpen={setUnsavedWarning}
@@ -118,8 +113,8 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
         confirmationButtonText="Start"
         hideCancelButton
       />
+      <ConfigureRunnerModal open={configureRunnerActive} setOpen={setConfigureRunnerActive} />
       <SC.EditorContainer>
-        <ConfigureRunnerModal open={configureRunnerActive} setOpen={setConfigureRunnerActive} />
         {isMounted && (
           <SC.CloseHeader>
             <Button
@@ -180,7 +175,7 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
           {isMounted && <SC.FusebitEditorLogo src={logo} alt="fusebit logo" height="20" width="80" />}
         </SC.FusebitEditorContainer>
       </SC.EditorContainer>
-    </div>
+    </>
   );
 });
 

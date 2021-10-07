@@ -1,12 +1,6 @@
 import React from 'react';
 import { Context } from '../../../../../interfaces/editGui';
 
-declare global {
-  interface Window {
-    editor?: Context;
-  }
-}
-
 export default class FusebitEditor extends React.Component<any> {
   private el: any;
   private editorContext: any;
