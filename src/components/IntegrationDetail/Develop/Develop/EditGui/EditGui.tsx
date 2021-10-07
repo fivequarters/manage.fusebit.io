@@ -131,11 +131,22 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, onMount, int
           <SC.CloseHeader>
             <Button
               style={{ marginRight: '16px' }}
-              startIcon={<img src={save} alt="play" height="16" width="16" />}
+              startIcon={
+                <img
+                  src={save}
+                  style={{
+                    opacity: isSaving ? 0.4 : 1,
+                  }}
+                  alt="play"
+                  height="16"
+                  width="16"
+                />
+              }
               onClick={handleSave}
               size="small"
               variant="outlined"
               color="primary"
+              disabled={isSaving}
             >
               Save
             </Button>
