@@ -1,7 +1,7 @@
 import React, { FC, ReactElement } from 'react';
 import Layout from '../components/Layout';
 import FatalError from '../components/FatalError';
-import Navbar from '../components/Navbar';
+import Navbar from '../components/common/Navbar';
 
 const LoggedOutErrorPage: FC<{}> = (): ReactElement => {
   return (

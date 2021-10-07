@@ -12,7 +12,7 @@ import useEditor from './useEditor';
 import ConfigureRunnerModal from './ConfigureRunnerModal';
 import { trackEvent } from '../../../utils/analytics';
 import { useLoader } from '../../../hooks/useLoader';
-import ConfirmationPrompt from '../../ConfirmationPrompt';
+import ConfirmationPrompt from '../../common/ConfirmationPrompt';
 import { useContext } from '../../../hooks/useContext';
 import { Props } from '../../../interfaces/edit';
 import { useTrackPage } from '../../../hooks/useTrackPage';

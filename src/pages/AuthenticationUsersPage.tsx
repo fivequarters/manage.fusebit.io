@@ -1,8 +1,8 @@
 import { FC, ReactElement } from 'react';
 import UsersTable from '../components/Authentication/UsersTable';
 import Layout from '../components/Layout';
-import Navbar from '../components/Navbar';
-import TabComponent from '../components/TabComponent';
+import Navbar from '../components/common/Navbar';
+import TabComponent from '../components/common/TabComponent';
 import { useTrackPage } from '../hooks/useTrackPage';
 
 const AuthenticationUsersPage: FC<{}> = (): ReactElement => {

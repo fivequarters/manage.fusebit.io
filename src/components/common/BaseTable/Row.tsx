@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Checkbox, TableCell, Collapse, useMediaQuery } from '@material-ui/core';
 import * as SC from './styles';
 import { BaseTableProps, BaseTableRow } from './types';
-import { useQuery } from '../../hooks/useQuery';
+import { useQuery } from '../../../hooks/useQuery';
 
 interface Props {
   row: BaseTableRow;

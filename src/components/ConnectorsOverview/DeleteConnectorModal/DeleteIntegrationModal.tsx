@@ -1,4 +1,4 @@
-import ConfirmationPrompt from '../../ConfirmationPrompt';
+import ConfirmationPrompt from '../../common/ConfirmationPrompt';
 import { getPluralText } from '../../../utils/utils';
 
 interface Props {

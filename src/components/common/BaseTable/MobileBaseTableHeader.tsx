@@ -1,6 +1,6 @@
 import { TableCell, TableHead, TableRow, Checkbox } from '@material-ui/core';
-import arrowRight from '../../assets/arrow-right.svg';
-import arrowLeft from '../../assets/arrow-left.svg';
+import arrowRight from '../../../assets/arrow-right.svg';
+import arrowLeft from '../../../assets/arrow-left.svg';
 import { BaseTableProps } from './types';
 import * as SC from './styles';
 

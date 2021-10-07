@@ -1,7 +1,7 @@
 import React, { FC, ReactElement } from 'react';
 import AuthenticationDetail from '../components/AuthenticationDetail/Overview/AuthenticationDetail';
 import Layout from '../components/Layout';
-import Navbar from '../components/Navbar';
+import Navbar from '../components/common/Navbar';
 import { useTrackPage } from '../hooks/useTrackPage';
 
 const AuthenticationDetailPage: FC<{}> = (): ReactElement => {

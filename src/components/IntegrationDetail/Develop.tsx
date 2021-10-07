@@ -41,9 +41,9 @@ import { useEntityApi } from '../../hooks/useEntityApi';
 import { useBackendClient } from '../../hooks/useBackendClient';
 import { BackendClient } from '../../interfaces/backendClient';
 import EditCli from './EditCli';
-import SlideUpSpring from '../Animations/SlideUpSpring';
+import SlideUpSpring from '../common/Animations/SlideUpSpring';
 import { trackEvent } from '../../utils/analytics';
-import LineConnector from '../LineConnector';
+import LineConnector from '../common/LineConnector';
 import MobileDrawer from './MobileDrawer';
 
 const { REACT_APP_ENABLE_ONLINE_EDITOR } = process.env;

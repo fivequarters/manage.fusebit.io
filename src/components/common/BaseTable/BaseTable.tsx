@@ -5,10 +5,10 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Row from './Row';
 import { BaseTableProps } from './types';
 import * as SC from './styles';
-import * as CSC from '../globalStyle';
+import * as CSC from '../../globalStyle';
 import MobileBaseTableHeader from './MobileBaseTableHeader';
 import BaseTableHead from './BaseTableHead';
-import { ROWS_PER_PAGE_OPTIONS } from '../../hooks/usePagination';
+import { ROWS_PER_PAGE_OPTIONS } from '../../../hooks/usePagination';
 
 const BaseTable: React.FC<BaseTableProps> = ({
   selected,

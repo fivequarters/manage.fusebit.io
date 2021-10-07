@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import { TableRow as MUITableRow, TableCell as MUICellRow, Box } from '@material-ui/core';
-import arrow from '../../assets/table-arrow.svg';
-import upArrowPrimary from '../../assets/up-arrow-primary.svg';
+import arrow from '../../../assets/table-arrow.svg';
+import upArrowPrimary from '../../../assets/up-arrow-primary.svg';
 
 export const Wrapper = styled.div`
   padding-bottom: 80px;

@@ -6,7 +6,7 @@ import { useContext } from '../hooks/useContext';
 import { useTrackPage } from '../hooks/useTrackPage';
 import { Integration } from '../interfaces/integration';
 import IntegrationDetailInstalls from '../components/Installs';
-import Navbar from '../components/Navbar';
+import Navbar from '../components/common/Navbar';
 
 const IntegrationDetailInstallsPage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();

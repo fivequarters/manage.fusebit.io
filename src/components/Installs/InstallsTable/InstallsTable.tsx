@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { format } from 'date-fns';
-import BaseTable from '../../BaseTable';
+import BaseTable from '../../common/BaseTable';
 import { useEntityTable } from '../../../hooks/useEntityTable';
 import { usePagination } from '../../../hooks/usePagination';
 import { useAccountIntegrationInstanceGetAll } from '../../../hooks/api/v2/account/integration/instance/useGetAll';
-import CodeBlock from '../../CodeBlock';
 import { Install } from '../../../interfaces/install';
-import Tag from '../../Tag';
-import ConfirmationPrompt from '../../ConfirmationPrompt';
+import Tag from '../../common/Tag';
+import ConfirmationPrompt from '../../common/ConfirmationPrompt';
 import InformationalBanner from '../../InformationalBanner';
 import AssociatedIdentities from './AssociatedIdentities';
 import { getConnectorsFromInstall } from '../../../utils/utils';
 import { trackEvent } from '../../../utils/analytics';
+import CodeBlock from '../../common/CodeBlock';
 
 const InstallsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();

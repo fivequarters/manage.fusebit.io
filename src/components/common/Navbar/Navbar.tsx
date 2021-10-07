@@ -5,21 +5,21 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { Link, useHistory } from 'react-router-dom';
 import * as SC from './styles';
-import client from '../../assets/client.jpg';
-import { Props } from '../../interfaces/Navbar';
-import arrow from '../../assets/down-arrow-white.svg';
-import rightArrow from '../../assets/arrow-right-black.svg';
-import check from '../../assets/check.svg';
-import { useContext } from '../../hooks/useContext';
-import { useAccountIntegrationsGetAll } from '../../hooks/api/v2/account/integration/useGetAll';
-import { useAccountConnectorsGetAll } from '../../hooks/api/v2/account/connector/useGetAll';
-import { Integration } from '../../interfaces/integration';
-import { Connector } from '../../interfaces/connector';
+import client from '../../../assets/client.jpg';
+import { Props } from '../../../interfaces/Navbar';
+import arrow from '../../../assets/down-arrow-white.svg';
+import rightArrow from '../../../assets/arrow-right-black.svg';
+import check from '../../../assets/check.svg';
+import { useContext } from '../../../hooks/useContext';
+import { useAccountIntegrationsGetAll } from '../../../hooks/api/v2/account/integration/useGetAll';
+import { useAccountConnectorsGetAll } from '../../../hooks/api/v2/account/connector/useGetAll';
+import { Integration } from '../../../interfaces/integration';
+import { Connector } from '../../../interfaces/connector';
 
-import burguer from '../../assets/burguer.svg';
-import cross from '../../assets/cross.svg';
+import burguer from '../../../assets/burguer.svg';
+import cross from '../../../assets/cross.svg';
 
-import { useGetRedirectLink } from '../../hooks/useGetRedirectLink';
+import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 
 // TOOD: Refactor nested ternary expressions
 

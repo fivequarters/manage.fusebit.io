@@ -3,7 +3,7 @@ import { Button } from '@material-ui/core';
 import * as SC from './styles';
 import * as CSC from '../../../../globalStyle';
 import { Props } from '../../../../../interfaces/cliAccess';
-import CopyLine from '../../../../CopyLine';
+import CopyLine from '../../../../common/CopyLine';
 
 const CliAccess = React.forwardRef<HTMLDivElement, Props>(({ open, onClose }, ref) => {
   return (

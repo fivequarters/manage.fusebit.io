@@ -8,7 +8,7 @@ import cross from '../../../assets/cross.svg';
 import server from '../../../assets/server.svg';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import { findMatchingConnectorFeed } from '../../../utils/utils';
-import ConfirmationPrompt from '../../ConfirmationPrompt/ConfirmationPrompt';
+import ConfirmationPrompt from '../../common/ConfirmationPrompt/ConfirmationPrompt';
 import Connect from '../Connect';
 
 const NOT_FOUND_ICON = '/images/warning-red.svg';

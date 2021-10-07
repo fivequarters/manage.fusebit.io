@@ -6,7 +6,7 @@ import { materialRenderers, materialCells } from '@jsonforms/material-renderers'
 import * as SC from './styles';
 import { Props } from '../../../interfaces/newUser';
 import { NewUserData } from '../../../interfaces/newUserData';
-import CopyLine from '../../CopyLine';
+import CopyLine from '../../common/CopyLine';
 import * as CSC from '../../globalStyle';
 import { startCase } from '../../../utils/utils';
 

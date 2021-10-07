@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import navbarBg from '../../assets/navbar.svg';
-import user from '../../assets/company-logo.svg';
-import arrow from '../../assets/right-arrow-white.svg';
+import navbarBg from '../../../assets/navbar.svg';
+import user from '../../../assets/company-logo.svg';
+import arrow from '../../../assets/right-arrow-white.svg';
 
 export const Background = styled.div`
   width: 100vw;

@@ -20,7 +20,7 @@ import { useError } from '../../../../hooks/useError';
 import { useAccountUserDeleteOne } from '../../../../hooks/api/v1/account/user/useDeleteOne';
 import { useGetRedirectLink } from '../../../../hooks/useGetRedirectLink';
 import { useCopy } from '../../../../hooks/useCopy';
-import ConfirmationPrompt from '../../../ConfirmationPrompt/ConfirmationPrompt';
+import ConfirmationPrompt from '../../../common/ConfirmationPrompt/ConfirmationPrompt';
 import { startCase } from '../../../../utils/utils';
 
 const schema = {

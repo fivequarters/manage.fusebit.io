@@ -6,7 +6,7 @@ import * as CSC from '../../../globalStyle';
 import { useAccountConnectorIdentityGetAll } from '../../../../hooks/api/v2/account/connector/identity/useGetAll';
 import { Identity } from '../../../../interfaces/identities';
 import { useEntityApi } from '../../../../hooks/useEntityApi';
-import ConfirmationPrompt from '../../../ConfirmationPrompt/ConfirmationPrompt';
+import ConfirmationPrompt from '../../../common/ConfirmationPrompt/ConfirmationPrompt';
 
 const Identities: React.FC = () => {
   const { id } = useParams<{ id: string }>();

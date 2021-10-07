@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Container, Tabs, Tab } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
-import { Props } from '../../interfaces/TabComponent';
+import { Props } from '../../../interfaces/TabComponent';
 
 import * as SC from './styles';
 
