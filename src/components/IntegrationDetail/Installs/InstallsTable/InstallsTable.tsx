@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import BaseTable from '../../../BaseTable';
 import { useEntityTable } from '../../../../hooks/useEntityTable';
 import { usePagination } from '../../../../hooks/usePagination';
 import { useParams } from 'react-router-dom';
-import { useAccountIntegrationInstanceGetAll } from '../../../../hooks/api/v2/account/integration/instance/useGetAll';
+import { useAccountIntegrationInstallGetAll } from '../../../../hooks/api/v2/account/integration/install/useGetAll';
 import { format } from 'date-fns';
 import CodeBlock from '../../../CodeBlock';
-import { Install } from '../../../../interfaces/install';
+import { InstallList } from '../../../../interfaces/install';
 import Tag from '../../../Tag';
 import ConfirmationPrompt from '../../../ConfirmationPrompt';
 import InformationalBanner from '../../../InformationalBanner';
@@ -24,7 +24,7 @@ const InstallsTable = () => {
   });
   const [deleteOpen, setDeleteOpen] = useState(false);
 
-  const { data, isLoading } = useAccountIntegrationInstanceGetAll<Install>(
+  const { data, isLoading } = useAccountIntegrationInstallGetAll<InstallList>(
     { id },
     {
       onSuccess: (res) => setRows(res?.data?.items || []),

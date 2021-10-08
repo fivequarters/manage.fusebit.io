@@ -4,22 +4,22 @@ import { Params } from '../../../../../../interfaces/api';
 import { useAxios } from '../../../../../useAxios';
 import { useContext } from '../../../../../useContext';
 import useOptimisticDelete from '../../../../../useOptimisticDelete';
-import { ACCOUNT_INTEGRATION_INSTANCE_GET_ALL } from './useGetAll';
+import { ACCOUNT_INTEGRATION_INSTALL_GET_ALL } from './useGetAll';
 
-export const useAccountIntegrationInstanceDeleteOne = <T>() => {
+export const useAccountIntegrationInstallDeleteOne = <T>() => {
   const { axios } = useAxios();
   const { userData } = useContext();
   const { id: integrationId } = useParams<{ id: string }>();
   const optimisticDelete = useOptimisticDelete({
     queryKey: [
-      ACCOUNT_INTEGRATION_INSTANCE_GET_ALL,
+      ACCOUNT_INTEGRATION_INSTALL_GET_ALL,
       { accountId: userData.accountId, subscriptionId: userData.subscriptionId, id: integrationId },
     ],
   });
 
   return useMutation((params: Params) => {
     return axios<T>(
-      `/v2/account/${userData.accountId}/subscription/${userData.subscriptionId}/integration/${integrationId}/instance/${params.id}`,
+      `/v2/account/${userData.accountId}/subscription/${userData.subscriptionId}/integration/${integrationId}/install/${params.id}`,
       'delete'
     );
   }, optimisticDelete);
