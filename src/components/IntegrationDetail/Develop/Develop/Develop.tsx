@@ -2,21 +2,7 @@ import React from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import * as SC from './styles';
 import * as CSC from '../../../globalStyle';
-import {
-  Button,
-  Modal,
-  Backdrop,
-  Fade,
-  ClickAwayListener,
-  Grow,
-  Paper,
-  Popper,
-  MenuItem,
-  MenuList,
-  Tooltip,
-  useMediaQuery,
-  Box,
-} from '@material-ui/core';
+import { Button, Modal, Backdrop, Fade, Tooltip, useMediaQuery, Box } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import arrow from '../../../../assets/arrow-right-black.svg';
 import Connect from './Connect';
@@ -45,9 +31,6 @@ import SlideUpSpring from '../../../Animations/SlideUpSpring';
 import { trackEvent } from '../../../../utils/analytics';
 import LineConnector from '../../../LineConnector';
 import MobileDrawer from './MobileDrawer';
-
-const { REACT_APP_ENABLE_ONLINE_EDITOR } = process.env;
-const isOnlineEditorEnabled = REACT_APP_ENABLE_ONLINE_EDITOR === 'true';
 
 const Develop: React.FC = () => {
   const history = useHistory();
@@ -100,39 +83,13 @@ const Develop: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userData]);
 
-  const editOptions = [
-    {
-      buttonLabel: 'Edit',
-      optionLabel: 'Edit in the in-browser editor',
-      handle: (isOpen: boolean) => {
-        trackEvent('Develop Edit Web Button Clicked', 'Integration');
-        setEditGuiOpen(isOpen);
-      },
+  const editOptions = {
+    buttonLabel: 'Edit',
+    optionLabel: 'Edit in the in-browser editor',
+    handle: (isOpen: boolean) => {
+      trackEvent('Develop Edit Web Button Clicked', 'Integration');
+      setEditGuiOpen(isOpen);
     },
-    {
-      buttonLabel: isOnlineEditorEnabled ? 'CLI' : 'Edit',
-      optionLabel: 'Edit with your favorite editor',
-      handle: (isOpen: boolean) => {
-        trackEvent('Develop Edit CLI Button Clicked', 'Integration');
-        setEditCliOpen(isOpen);
-      },
-    },
-  ];
-  const editOptionAnchor = React.useRef<HTMLDivElement>(null);
-  const [editOption, setEditOption] = React.useState(isOnlineEditorEnabled ? 0 : 1);
-  const [editOptionOpen, setEditOptionOpen] = React.useState(false);
-
-  const handleCloseEditOptions = (event: React.MouseEvent<Document, MouseEvent>) => {
-    if (editOptionAnchor.current && editOptionAnchor.current.contains(event.target as HTMLElement)) {
-      return;
-    }
-
-    setEditOptionOpen(false);
-  };
-
-  const handleEditOptionClick = (event: React.MouseEvent<HTMLLIElement, MouseEvent>, index: number) => {
-    setEditOption(index);
-    setEditOptionOpen(false);
   };
 
   React.useEffect(() => {
@@ -329,6 +286,7 @@ const Develop: React.FC = () => {
             setKeyIsCopied={setKeyIsCopied}
             open={connectOpen}
             onClose={onConnectClose}
+            integration={integrationData?.data}
           />
         </Fade>
       </Modal>
@@ -423,6 +381,7 @@ const Develop: React.FC = () => {
                     onChange={getBackendClients}
                     connector={{ ...client, isApplication: true }}
                     onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
+                    integration={integrationData?.data}
                   />
                   {!areCardsCollapsing && (
                     <LineConnector start={client.id} startAnchor="right" end="fusebit" endAnchor="left" />
@@ -516,59 +475,14 @@ const Develop: React.FC = () => {
             )}
             <SC.CardButtonWrapper>
               <Button
-                onClick={() => editOptions[editOption].handle(true)}
+                onClick={() => editOptions.handle(true)}
                 style={{ width: '200px' }}
                 size="large"
                 variant="contained"
                 color="primary"
               >
-                {editOptions[editOption].buttonLabel}
+                {editOptions.buttonLabel}
               </Button>
-
-              {isOnlineEditorEnabled && (
-                <Popper
-                  open={editOptionOpen}
-                  anchorEl={editOptionAnchor.current}
-                  role={undefined}
-                  transition
-                  disablePortal
-                >
-                  {({ TransitionProps, placement }) => (
-                    <Grow
-                      {...TransitionProps}
-                      style={{
-                        transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
-                      }}
-                    >
-                      <Paper>
-                        <ClickAwayListener onClickAway={handleCloseEditOptions}>
-                          <MenuList id="split-button-menu">
-                            {editOptions.map(
-                              (
-                                option: {
-                                  buttonLabel: string;
-                                  optionLabel: string;
-                                  handle: (isOpen: boolean) => void;
-                                },
-                                index: number
-                              ) => (
-                                <MenuItem
-                                  key={option.buttonLabel}
-                                  disabled={index === 2}
-                                  selected={index === editOption}
-                                  onClick={(event) => handleEditOptionClick(event, index)}
-                                >
-                                  {option.optionLabel}
-                                </MenuItem>
-                              )
-                            )}
-                          </MenuList>
-                        </ClickAwayListener>
-                      </Paper>
-                    </Grow>
-                  )}
-                </Popper>
-              )}
             </SC.CardButtonWrapper>
             {!areCardsCollapsing &&
               filterConnectors().map((connector: FinalConnector, index: number) => {
