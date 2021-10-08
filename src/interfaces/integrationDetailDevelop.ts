@@ -1,3 +1,5 @@
+import { Integration } from './integration';
+
 export interface ListComponentProps {
   connector: FinalConnector;
   id?: string;
@@ -5,6 +7,7 @@ export interface ListComponentProps {
   onConnectorDelete: Function;
   onLinkConnectorClick?: Function;
   linkConnector?: boolean;
+  integration?: Integration;
 }
 
 export interface FinalConnector {

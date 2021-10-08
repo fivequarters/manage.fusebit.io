@@ -333,6 +333,7 @@ const Develop: React.FC = () => {
             setKeyIsCopied={setKeyIsCopied}
             open={connectOpen}
             onClose={onConnectClose}
+            integration={integrationData?.data}
           />
         </Fade>
       </Modal>
@@ -428,6 +429,7 @@ const Develop: React.FC = () => {
                     onChange={getBackendClients}
                     connector={{ ...client, isApplication: true }}
                     onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
+                    integration={integrationData?.data}
                   />
                   {!areCardsCollapsing && (
                     <LineConnector start={client.id} startAnchor="right" end="fusebit" endAnchor="left" />
@@ -521,13 +523,13 @@ const Develop: React.FC = () => {
             )}
             <SC.CardButtonWrapper>
               <Button
-                onClick={() => editOptions[editOption].handle(true)}
+                onClick={() => editOptions.handle(true)}
                 style={{ width: '200px' }}
                 size="large"
                 variant="contained"
                 color="primary"
               >
-                {editOptions[editOption].buttonLabel}
+                {editOptions.buttonLabel}
               </Button>
 
               {isOnlineEditorEnabled && (

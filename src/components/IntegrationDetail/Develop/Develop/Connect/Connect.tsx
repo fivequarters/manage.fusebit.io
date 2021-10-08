@@ -11,6 +11,8 @@ import { useContext } from '../../../../../hooks/useContext';
 import { patchBackendClients } from '../../../../../utils/backendClients';
 import { useGetRedirectLink } from '../../../../../hooks/useGetRedirectLink';
 
+import { LinkSampleApp } from './LinkSampleApp';
+
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
 const Connect = React.forwardRef<HTMLDivElement, Props>(
@@ -28,6 +30,7 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
       setShowWarning,
       showWarning,
       disableCopy,
+      integration,
     },
     ref
   ) => {
@@ -70,6 +73,8 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
       setEditedBackendClientId(backendClientId);
       setEditMode(false);
     };
+
+    const isSlackIntegration = integration?.tags && integration.tags['fusebit.service'] === 'slack';
 
     return deleteModalOpen ? (
       <ConfirmationPrompt
@@ -170,22 +175,39 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
 
           <SC.Subtitle style={{ margin: '32px auto 16px' }}>Connect your Backend</SC.Subtitle>
           <CSC.Flex flexDown>
-            <Button
-              style={{ margin: '0 auto', width: '293px' }}
-              target="_blank"
-              rel="noopener"
-              href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
-              variant="outlined"
-              color="primary"
-              size="large"
-            >
-              Follow guide
-            </Button>
+            <CSC.Flex>
+              <Button
+                style={{ margin: '0 auto', width: '293px' }}
+                target="_blank"
+                rel="noopener"
+                href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
+                variant="outlined"
+                color="primary"
+                size="large"
+              >
+                Follow guide
+              </Button>
+              {isSlackIntegration && (
+                <React.Fragment>
+                  or
+                  <LinkSampleApp
+                    integrationId={integration?.id}
+                    integrationType={integration!.tags!['fusebit.service']}
+                  />
+                </React.Fragment>
+              )}
+            </CSC.Flex>
             <CSC.Flex>
               <div style={{ display: 'flex', alignItems: 'center', margin: '0 auto' }}>
                 <SC.TimeIcon />
                 <SC.TimeDescription>10 minutes</SC.TimeDescription>
               </div>
+              {isSlackIntegration && (
+                <div style={{ display: 'flex', alignItems: 'center', margin: '0 auto' }}>
+                  <SC.TimeIcon />
+                  <SC.TimeDescription>2 minutes.</SC.TimeDescription>
+                </div>
+              )}
             </CSC.Flex>
           </CSC.Flex>
           {/* <CSC.Flex margin="32px 0 0 0">

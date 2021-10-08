@@ -21,7 +21,12 @@ function uint8ArrayToString(unsignedArray: Uint8Array): string {
   return base64string.replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
 }
 
-export async function signJwt(tokenPayload: TokenPayload, issuer: Issuer, privateKey: CryptoKey): Promise<string> {
+export async function signJwt(
+  tokenPayload: TokenPayload,
+  issuer: Issuer,
+  privateKey: CryptoKey,
+  algorithmOptions: Record<string, string> = {}
+): Promise<string> {
   const header = {
     alg: 'RS256',
     typ: 'JWT',
@@ -51,6 +56,7 @@ export async function signJwt(tokenPayload: TokenPayload, issuer: Issuer, privat
     {
       name: 'RSASSA-PKCS1-v1_5',
       hash: 'SHA-256',
+      ...algorithmOptions,
     },
     privateKey,
     messageAsUint8Array
