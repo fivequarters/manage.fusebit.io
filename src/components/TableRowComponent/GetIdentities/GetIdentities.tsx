@@ -2,7 +2,7 @@ import React from 'react';
 import * as CSC from '../../globalStyle';
 import { useContext } from '../../../hooks/useContext';
 import { useAccountConnectorIdentityGetAll } from '../../../hooks/api/v2/account/connector/identity/useGetAll';
-import { Identity } from '../../../interfaces/identities';
+import { IdentityList } from '../../../interfaces/identities';
 
 interface Props {
   id: string;
@@ -10,7 +10,7 @@ interface Props {
 
 const GetIdentities: React.FC<Props> = ({ id }) => {
   const { userData } = useContext();
-  const { data: identitiesData } = useAccountConnectorIdentityGetAll<Identity>({
+  const { data: identitiesData } = useAccountConnectorIdentityGetAll<IdentityList>({
     enabled: userData.token,
     id: id,
     accountId: userData.accountId,

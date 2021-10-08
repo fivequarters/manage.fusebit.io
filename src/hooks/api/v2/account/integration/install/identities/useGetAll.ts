@@ -6,15 +6,15 @@ import { getAllConnectors } from '../../../connector/useGetAll';
 import { getAllIdentities } from '../../../connector/identity/useGetAll';
 
 import { Connector } from '../../../../../../../interfaces/connector';
-import { Identity, IdentityInstance } from '../../../../../../../interfaces/identities';
+import { Identity, IdentityList } from '../../../../../../../interfaces/identities';
 import { useError } from '../../../../../../useError';
 import { entityLoopThrough } from '../../../../utils';
 
-export const ACCOUNT_INTEGRATION_INSTANCE_IDENTITIES_GET_ALL = 'accountIntegrationInstanceIdentitiesGetAll';
+export const ACCOUNT_INTEGRATION_INSTALL_IDENTITIES_GET_ALL = 'accountIntegrationInstallIdentitiesGetAll';
 
-export const useAccountIntegrationInstanceIdentitiesGetAll = (
+export const useAccountIntegrationInstallIdentitiesGetAll = (
   { tenantId, connectorIds }: Params,
-  options?: UseQueryOptions<unknown, unknown, IdentityInstance[]>
+  options?: UseQueryOptions<unknown, unknown, Identity[]>
 ) => {
   const { axios } = useAxios();
   const { userData } = useContext();
@@ -36,7 +36,7 @@ export const useAccountIntegrationInstanceIdentitiesGetAll = (
 
       const identities = await Promise.all(
         (connectors || []).map((connector) => {
-          return getAllIdentities<Identity>(axios, {
+          return getAllIdentities<IdentityList>(axios, {
             ...userParams,
             id: connector.id,
           });
@@ -49,7 +49,7 @@ export const useAccountIntegrationInstanceIdentitiesGetAll = (
             data: { items },
           } = res;
 
-          const isRelated = (i: IdentityInstance) =>
+          const isRelated = (i: Identity) =>
             i.tags['fusebit.tenantId'] === tenantId && connectorIds.includes(i.tags['fusebit.parentEntityId']);
 
           return items.filter(isRelated);
@@ -62,7 +62,7 @@ export const useAccountIntegrationInstanceIdentitiesGetAll = (
   };
 
   return useQuery(
-    [ACCOUNT_INTEGRATION_INSTANCE_IDENTITIES_GET_ALL, { tenantId, connectorIds }],
+    [ACCOUNT_INTEGRATION_INSTALL_IDENTITIES_GET_ALL, { tenantId, connectorIds }],
     getAllIdentitiesFromInstalls,
     {
       enabled: !!userData.token,

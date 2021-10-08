@@ -1,5 +1,5 @@
 import { useHistory } from 'react-router-dom';
-import { useAccountIntegrationInstanceIdentitiesGetAll } from '../../../../hooks/api/v2/account/integration/instance/identities/useGetAll';
+import { useAccountIntegrationInstallIdentitiesGetAll } from '../../../../hooks/api/v2/account/integration/install/identities/useGetAll';
 import { useGetRedirectLink } from '../../../../hooks/useGetRedirectLink';
 import AsyncTags from '../../../AsyncTags';
 
@@ -9,7 +9,7 @@ interface Props {
 }
 
 const AssociatedIdentities = ({ tenantId, connectorIds }: Props) => {
-  const { isLoading, data } = useAccountIntegrationInstanceIdentitiesGetAll(
+  const { isLoading, data } = useAccountIntegrationInstallIdentitiesGetAll(
     { tenantId, connectorIds },
     { enabled: !!tenantId && (connectorIds || []).length > 0 }
   );

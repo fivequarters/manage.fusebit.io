@@ -4,13 +4,13 @@ import * as CSC from '../../../globalStyle';
 import { Button } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { useAccountConnectorIdentityGetAll } from '../../../../hooks/api/v2/account/connector/identity/useGetAll';
-import { Identity } from '../../../../interfaces/identities';
+import { IdentityList } from '../../../../interfaces/identities';
 import { useEntityApi } from '../../../../hooks/useEntityApi';
 import ConfirmationPrompt from '../../../ConfirmationPrompt/ConfirmationPrompt';
 
 const Identities: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { data: identitiesData, refetch: reloadInstalls } = useAccountConnectorIdentityGetAll<Identity>({
+  const { data: identitiesData, refetch: reloadInstalls } = useAccountConnectorIdentityGetAll<IdentityList>({
     id,
   });
   const { deleteEntity } = useEntityApi();

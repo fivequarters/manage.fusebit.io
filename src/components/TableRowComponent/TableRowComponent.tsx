@@ -6,7 +6,7 @@ import { Props, ConnectorCells, IntegrationCells, UserCells } from '../../interf
 import { useGetRedirectLink } from '../../hooks/useGetRedirectLink';
 import { useContext } from '../../hooks/useContext';
 import client from '../../assets/client.jpg';
-import GetInstances from './GetInstances';
+import GetInstalls from './GetInstalls';
 import GetIdentities from './GetIdentities';
 
 const TableRowComponent: React.FC<Props> = ({
@@ -70,7 +70,7 @@ const TableRowComponent: React.FC<Props> = ({
         )}
         {integrationsTable || connectorsTable ? (
           <TableCell align="left">
-            {integrationsTable ? <GetInstances id={row.id} /> : <GetIdentities id={row.id} />}
+            {integrationsTable ? <GetInstalls id={row.id} /> : <GetIdentities id={row.id} />}
           </TableCell>
         ) : (
           <>
@@ -103,7 +103,7 @@ const TableRowComponent: React.FC<Props> = ({
         )}
         <TableCell align="left">
           {integrationsTable ? (
-            selectedCell === IntegrationCells.INSTALLS && <GetInstances id={row.id} />
+            selectedCell === IntegrationCells.INSTALLS && <GetInstalls id={row.id} />
           ) : connectorsTable ? (
             selectedCell === ConnectorCells.TYPE ? (
               row.tags ? (
