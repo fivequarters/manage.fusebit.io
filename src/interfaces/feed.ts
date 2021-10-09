@@ -52,6 +52,7 @@ export interface Feed {
   smallIcon: string;
   largeIcon: string;
   version: string;
+  outOfPlan: boolean;
   tags: {
     service: string;
     catalog: string;

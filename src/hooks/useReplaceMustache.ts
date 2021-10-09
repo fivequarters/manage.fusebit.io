@@ -67,44 +67,45 @@ export const useReplaceMustache = () => {
 
         const newEntities: Entity[] = [];
 
-        // Populate the global entities first, so that the id is always available and always consistent
-        Object.entries(feed.configuration.entities as Record<string, Entity>).forEach(
-          ([name, entity]: [string, Entity]) => {
-            if (!data[name]) {
-              data[name] = {};
+        if (feed.configuration?.entities) {
+          // Populate the global entities first, so that the id is always available and always consistent
+          Object.entries(feed.configuration.entities as Record<string, Entity>).forEach(
+            ([name, entity]: [string, Entity]) => {
+              if (!data[name]) {
+                data[name] = {};
+              }
+              global.entities[name] = {
+                ...data[name],
+                id: () => {
+                  if (!data[name].id) {
+                    data[name].id = `${
+                      entity.entityType === 'integration' ? 'my-integration' : 'my-connector'
+                    }-${Math.floor(Math.random() * 1000)}`;
+                  }
+                  return data[name].id;
+                },
+              };
             }
-            global.entities[name] = {
-              ...data[name],
-              id: () => {
-                if (!data[name].id) {
-                  data[name].id = `${
-                    entity.entityType === 'integration' ? 'my-integration' : 'my-connector'
-                  }-${Math.floor(Math.random() * 1000)}`;
-                }
-                return data[name].id;
-              },
-            };
-          }
-        );
+          );
 
-        // Now parse each entity, replacing it's strings as appropriate
-        Object.entries(feed.configuration.entities as Record<string, Entity>).forEach(
-          ([name, entity]: [string, Entity]) => {
-            const view = {
-              this: {
-                id: () => global.entities[name].id(),
-                name,
-              },
-              global,
-            };
-            newEntities.push(
-              walkObjectStrings(entity, (value: string) => Mustache.render(value, view, {}, customTags))
-            );
-          }
-        );
+          // Now parse each entity, replacing it's strings as appropriate
+          Object.entries(feed.configuration.entities as Record<string, Entity>).forEach(
+            ([name, entity]: [string, Entity]) => {
+              const view = {
+                this: {
+                  id: () => global.entities[name].id(),
+                  name,
+                },
+                global,
+              };
+              newEntities.push(
+                walkObjectStrings(entity, (value: string) => Mustache.render(value, view, {}, customTags))
+              );
+            }
+          );
 
-        feed.configuration.entities = newEntities;
-
+          feed.configuration.entities = newEntities;
+        }
         feed.description = Mustache.render(feed.description, { global }, {}, customTags);
 
         return feed;

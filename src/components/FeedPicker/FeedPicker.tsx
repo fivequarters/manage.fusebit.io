@@ -38,6 +38,9 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
   const query = useQuery();
   const { replaceMustache } = useReplaceMustache();
 
+  const urlOrSvgToImage = (img?: string) =>
+    img && (img.match('^<svg') ? `data:image/svg+xml;utf8,${encodeURIComponent(img)}` : img);
+
   const debouncedSetSearchFilter = debounce((keyword: string) => {
     if (isIntegration) {
       trackEvent('New Integration Search Submitted', 'Integrations');
@@ -63,6 +66,18 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
       // send data with customized form
       onSubmit(rawActiveTemplate, { ...data });
     }
+  };
+
+  const handlePlanUpsell = () => {
+    if (rawActiveTemplate) {
+      if (isIntegration) {
+        trackEvent('Interest in Integration', 'Integrations', { tag: rawActiveTemplate.id });
+      } else {
+        trackEvent('Interest in Connector', 'Connectors', { tag: rawActiveTemplate.id });
+      }
+      window.Intercom('showNewMessage', `I'm interested in enabling ${rawActiveTemplate.name}`);
+    }
+    onClose();
   };
 
   const handleFilterChange = (filter: Filters) => {
@@ -183,7 +198,12 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
                     onClick={() => handleTemplateChange(feedEntry)}
                     active={feedEntry.id === activeTemplate?.id}
                   >
-                    <SC.ColumnItemImage src={feedEntry.smallIcon} alt="slack" height="18" width="18" />
+                    <SC.ColumnItemImage
+                      src={urlOrSvgToImage(feedEntry.smallIcon)}
+                      alt={feedEntry.name}
+                      height="18"
+                      width="18"
+                    />
                     {feedEntry.name}
                   </SC.ColumnItem>
                 );
@@ -199,56 +219,63 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
           ) : (
             <>
               <SC.ConnectorTitleWrapper>
-                <SC.ConnectorImage src={activeTemplate?.smallIcon} alt="slack" height="28" width="28" />
+                <SC.ConnectorImage
+                  src={urlOrSvgToImage(activeTemplate?.smallIcon)}
+                  alt={activeTemplate?.name || 'slack'}
+                  height="28"
+                  width="28"
+                />
                 <SC.ConnectorTitle>{activeTemplate?.name}</SC.ConnectorTitle>
                 <SC.ConnectorVersion>{activeTemplate?.version}</SC.ConnectorVersion>
               </SC.ConnectorTitleWrapper>
               <SC.GeneralInfoWrapper>
                 <SC.ConnectorDescription>{activeTemplate?.description || ''}</SC.ConnectorDescription>
-                <SC.FormWrapper>
-                  <JsonForms
-                    schema={activeTemplate?.configuration.schema}
-                    uischema={activeTemplate?.configuration.uischema}
-                    data={data}
-                    renderers={materialRenderers}
-                    cells={materialCells}
-                    onChange={({ errors: _errors, data: _data }) => {
-                      if (_data?.ui?.toggle && activeTemplate) {
-                        trackEvent('New Integration Customize Clicked', 'Integrations', {
-                          integration: activeTemplate.name,
-                        });
-                      }
-                      if (_errors) {
-                        setErrors(_errors);
-                      }
-                      setData(_data);
-                    }}
-                    validationMode={validationMode}
-                  />
-                </SC.FormWrapper>
+                {activeTemplate?.outOfPlan || (
+                  <SC.FormWrapper>
+                    <JsonForms
+                      schema={activeTemplate?.configuration.schema}
+                      uischema={activeTemplate?.configuration.uischema}
+                      data={data}
+                      renderers={materialRenderers}
+                      cells={materialCells}
+                      onChange={({ errors: _errors, data: _data }) => {
+                        if (data?.ui?.toggle && activeTemplate) {
+                          trackEvent('New Integration Customize Clicked', 'Integrations', {
+                            integration: activeTemplate.name,
+                          });
+                        }
+                        if (_errors) {
+                          setErrors(_errors);
+                        }
+                        setData(_data);
+                      }}
+                      validationMode={validationMode}
+                    />
+                  </SC.FormWrapper>
+                )}
               </SC.GeneralInfoWrapper>
               <SC.MobileHidden>
                 <Button
-                  onClick={handleSubmit}
+                  onClick={activeTemplate?.outOfPlan ? handlePlanUpsell : handleSubmit}
                   style={{ width: '200px', marginTop: 'auto', marginLeft: 'auto' }}
                   fullWidth={false}
                   size="large"
                   color="primary"
                   variant="contained"
                 >
-                  Create
+                  {activeTemplate?.outOfPlan ? 'Enable' : 'Create'}
                 </Button>
               </SC.MobileHidden>
               <SC.MobileVisible>
                 <Button
-                  onClick={handleSubmit}
+                  onClick={activeTemplate?.outOfPlan ? handlePlanUpsell : handleSubmit}
                   style={{ width: '200px', margin: 'auto' }}
                   fullWidth={false}
                   size="large"
                   color="primary"
                   variant="contained"
                 >
-                  Create
+                  {activeTemplate?.outOfPlan ? 'Enable' : 'Create'}
                 </Button>
               </SC.MobileVisible>
             </>
