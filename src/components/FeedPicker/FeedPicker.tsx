@@ -96,6 +96,9 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
 
   const handleTemplateChange = (template: Feed) => {
     setRawActiveTemplate(template);
+    trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
+      [feedTypeName.toLowerCase()]: template.name,
+    });
     replaceMustache(data, template).then((template) => {
       setActiveTemplate(template);
     });
