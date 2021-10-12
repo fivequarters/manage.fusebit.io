@@ -1,6 +1,6 @@
 import { Tags } from './tags';
 
-export interface InstallInstance {
+export interface Install {
   id: string;
   data: {
     [key: string]: {
@@ -24,8 +24,8 @@ export interface InstallInstance {
   dateModified: string;
 }
 
-export interface Install {
-  items: InstallInstance[];
+export interface InstallList {
+  items: Install[];
   total: number;
   next: string;
 }

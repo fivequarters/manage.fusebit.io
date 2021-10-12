@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import warning from '../assets/warning.svg';
-import cross from '../assets/cross-warning.svg';
 import { useLocation } from 'react-router-dom';
+import warningImg from '../assets/warning.svg';
+import crossImg from '../assets/cross-warning.svg';
 
 const errorCss = `
     display: flex;
@@ -23,7 +23,7 @@ const errorCss = `
 const errorWarningImage = `
     height: 24px;
     width: 24px;
-    background-image: url(${warning});
+    background-image: url(${warningImg});
     background-size: contain;
     background-repeat: no-repeat;
     margin-right: 20px;
@@ -46,7 +46,7 @@ const errorTextCss = `
 const errorCross = `
     height: 10px;
     width: 10px;
-    background-image: url(${cross});
+    background-image: url(${crossImg});
     background-size: contain;
     background-repeat: no-repeat;
     margin-left: auto;
@@ -61,14 +61,14 @@ const errorMessageContainer = `
 export const useError = () => {
   const location = useLocation();
 
-  useEffect(() => {
-    removeError();
-  }, [location]);
-
   const removeError = () => {
     const error = document.getElementById('error');
     if (error) error.remove();
   };
+
+  useEffect(() => {
+    removeError();
+  }, [location]);
 
   const createError = (err: any, errorContainer?: string) => {
     removeError(); // we dont want 2 errors at the same time
