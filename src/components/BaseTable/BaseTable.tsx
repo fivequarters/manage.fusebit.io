@@ -66,8 +66,8 @@ const BaseTable: React.FC<BaseTableProps> = ({
           <TableBody>
             {computedRowsPerPage.map((row) => (
               <Row
-                key={row.id}
                 onClick={onClickRow}
+                key={row.id}
                 headers={headers}
                 checked={isSelected(row.id)}
                 currentMobileRow={mobileArrowColumns[mobileColumnIndex].id}

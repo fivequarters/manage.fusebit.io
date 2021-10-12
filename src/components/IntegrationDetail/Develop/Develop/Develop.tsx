@@ -378,7 +378,7 @@ const Develop: React.FC = () => {
                   return (
                     <ListComponent
                       onLinkConnectorClick={(_connector: any) => linkConnector(_connector)}
-                      linkConnector
+                      linkConnector={true}
                       key={connector.id}
                       connector={connector}
                       onConnectorDelete={(_connector: Entity) => handleListComponentDelete(_connector)}
@@ -396,6 +396,7 @@ const Develop: React.FC = () => {
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"
           open={editGuiOpen}
+          disableEscapeKeyDown
           onClose={() => {
             setEditGuiOpen(false);
             setEditGuiMounted(false);

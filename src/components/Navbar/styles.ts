@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import navbarBg from '../../assets/navbar.svg';
-import user from '../../assets/company-logo.svg';
+import companyLogo from '../../assets/company-logo.svg';
 import arrow from '../../assets/right-arrow-white.svg';
 
 export const Background = styled.div`
@@ -33,7 +33,7 @@ export const CompanyImg = styled.span`
   height: 56px;
   width: 56px;
   background-size: contain;
-  background-image: url(${user});
+  background-image: url(${companyLogo});
   background-repeat: no-repeat;
   margin-right: 24px;
 

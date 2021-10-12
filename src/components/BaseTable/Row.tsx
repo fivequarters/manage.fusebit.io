@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Checkbox, TableCell, Collapse, useMediaQuery } from '@material-ui/core';
-import * as SC from './styles';
 import { BaseTableProps, BaseTableRow } from './types';
+import * as SC from './styles';
 import { useQuery } from '../../hooks/useQuery';
 
 interface Props {
@@ -80,7 +80,7 @@ const Row = ({
             $isClickable
             onClick={() => handleClickCell(isCollapseTrigger, headers[0].id)}
           >
-            <SC.CellContent $isClickable>
+            <SC.CellContent $isClickable={isCollapseTrigger}>
               {row[headers[0].id]}
               {isCollapseTrigger && <SC.TriggerArrow $active={isExpanded} $isMain />}
             </SC.CellContent>

@@ -1,6 +1,6 @@
 import { Tags } from './tags';
 
-export interface IdentityInstance {
+export interface Identity {
   id: string;
   data: {
     token: {
@@ -35,8 +35,8 @@ export interface IdentityInstance {
   expires?: string;
 }
 
-export interface Identity {
-  items: IdentityInstance[];
+export interface IdentityList {
+  items: Identity[];
   total: number;
   success: boolean;
   next?: string;

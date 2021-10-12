@@ -3,7 +3,7 @@ import BaseTable from '../../BaseTable/BaseTable';
 import { useEntityTable } from '../../../hooks/useEntityTable';
 import { usePagination } from '../../../hooks/usePagination';
 import { Integration } from '../../../interfaces/integration';
-import GetInstances from '../../TableRowComponent/GetInstances';
+import NewIntegrationModal from '../NewIntegrationModal';
 import DeleteIntegrationModal from '../DeleteIntegrationModal';
 import { useModal } from '../../../hooks/useModal';
 import { BaseTableRow } from '../../BaseTable/types';
@@ -11,7 +11,7 @@ import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import { trackEvent } from '../../../utils/analytics';
 import { useContext } from '../../../hooks/useContext';
 import { useAccountIntegrationsGetAll } from '../../../hooks/api/v2/account/integration/useGetAll';
-import NewFeedModal from '../../common/NewFeedModal';
+import GetInstalls from '../../TableRowComponent/GetInstalls';
 
 interface Props {
   headless: boolean;
@@ -44,7 +44,7 @@ const IntegrationsTable = ({ headless, setHeadless }: Props) => {
   const tableRows = (rows as Integration[]).map((row) => ({
     id: row.id,
     name: row.id,
-    installs: <GetInstances id={row.id} />,
+    installs: <GetInstalls id={row.id} />,
   }));
 
   const handleClickRow = (row: BaseTableRow) => history.push(getRedirectLink(`/integration/${row.id}/develop`));
@@ -56,9 +56,9 @@ const IntegrationsTable = ({ headless, setHeadless }: Props) => {
 
   return (
     <>
-      <NewFeedModal onClose={toggleNewModal} open={newModalOpen} isIntegration />
+      <NewIntegrationModal onClose={toggleNewModal} open={newModalOpen} />
       <DeleteIntegrationModal
-        onConfirm={() => handleRowDelete('Integration')}
+        onConfirm={handleRowDelete}
         setOpen={setDeleteModal}
         open={deleteModalOpen}
         selected={selected}

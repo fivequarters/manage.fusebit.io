@@ -35,6 +35,7 @@ const _useContext = () => {
   };
 
   const logout = () => {
+    analytics.reset();
     localStorage.setItem(LS_KEY, JSON.stringify({}));
     localStorage.removeItem('firstTimeVisitor');
     setUserData({ picture: userData.picture });
