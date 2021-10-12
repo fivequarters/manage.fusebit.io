@@ -87,6 +87,12 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
       setRawActiveTemplate(feed[0]);
       replaceMustache(data, feed[0]).then((template) => {
         setActiveTemplate(template);
+        setImmediate(() => {
+          trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
+            [feedTypeName.toLowerCase()]: template.name,
+            [`${feedTypeName.toLowerCase()}Default`]: true,
+          });
+        });
       });
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -96,6 +102,10 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
 
   const handleTemplateChange = (template: Feed) => {
     setRawActiveTemplate(template);
+    trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
+      [feedTypeName.toLowerCase()]: template.name,
+      [`${feedTypeName.toLowerCase()}Default`]: false,
+    });
     replaceMustache(data, template).then((template) => {
       setActiveTemplate(template);
     });
