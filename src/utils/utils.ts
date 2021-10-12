@@ -58,6 +58,14 @@ export const isTokenExpired = () => {
   return expInMilliseconds - todayInMiliseconds <= TIME_T0_EXPIRE; // if true it expired
 };
 
+export function isSegmentTrackingEvents() {
+  const user = readLocalData();
+  return (
+    process.env.NODE_ENV !== 'production' ||
+    (!user?.primaryEmail?.endsWith('@fusebit.io') && !user?.primaryEmail?.endsWith('@litebox.ai'))
+  );
+}
+
 export const validateToken = ({ onValid }: { onValid?: () => void } = {}) => {
   const expired = isTokenExpired();
   if (expired) {
@@ -67,6 +75,7 @@ export const validateToken = ({ onValid }: { onValid?: () => void } = {}) => {
       const user = readLocalData();
       const segmentUserId = analytics.user().id();
       if (!user || user === {} || user.id === segmentUserId) return;
+      if (!isSegmentTrackingEvents()) return;
       analytics.identify(user.id, {
         ...user,
       } as Object);
