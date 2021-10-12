@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import TabComponent from '../TabComponent';
+import TabComponent from '../common/TabComponent';
 import IntegrationsTable from './IntegrationsTable/IntegrationsTable';
 
 const IntegrationsOverview: React.FC = () => {

@@ -13,7 +13,7 @@ import question from '../../../../../assets/question.svg';
 import logo from '../../../../../assets/logo.svg';
 import useEditor from './useEditor';
 import ConfigureRunnerModal from './ConfigureRunnerModal';
-import ConfirmationPrompt from '../../../../ConfirmationPrompt';
+import ConfirmationPrompt from '../../../../common/ConfirmationPrompt';
 import { useTrackPage } from '../../../../../hooks/useTrackPage';
 import { trackEvent } from '../../../../../utils/analytics';
 

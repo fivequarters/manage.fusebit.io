@@ -1,7 +1,7 @@
 import { useHistory } from 'react-router-dom';
 import { useAccountConnectorIdentityInstallsGetAll } from '../../../../hooks/api/v2/account/connector/identity/installs/useGetAll';
 import { useGetRedirectLink } from '../../../../hooks/useGetRedirectLink';
-import AsyncTags from '../../../AsyncTags';
+import AsyncTags from '../../../common/AsyncTags';
 
 interface Props {
   tenantId?: string;

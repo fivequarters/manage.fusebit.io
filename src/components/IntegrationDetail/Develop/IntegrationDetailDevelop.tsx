@@ -1,6 +1,6 @@
 import React from 'react';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
-import TabComponent from '../../TabComponent';
+import TabComponent from '../../common/TabComponent';
 import Develop from './Develop/Develop';
 import { Props } from '../../../interfaces/integration';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import TabComponent from '../../TabComponent';
+import TabComponent from '../../common/TabComponent';
 import Overview from './Overview/Overview';
 
 const AuthenticationDetail: React.FC = () => {

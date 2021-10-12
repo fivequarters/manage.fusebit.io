@@ -1,8 +1,8 @@
 import React from 'react';
 import * as SC from './styles';
-import copyIcon from '../../assets/copy.svg';
-import { Props } from '../../interfaces/copyLine';
-import { useCopy } from '../../hooks/useCopy';
+import copyIcon from '../../../assets/copy.svg';
+import { Props } from '../../../interfaces/copyLine';
+import { useCopy } from '../../../hooks/useCopy';
 
 const CopyLine: React.FC<Props> = ({ text, highlightedText, horizontalScrollbar, warning, onCopy, disableCopy }) => {
   const [fadeChange, setFadeChange] = React.useState(false);

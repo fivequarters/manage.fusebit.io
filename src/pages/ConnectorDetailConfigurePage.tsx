@@ -5,7 +5,7 @@ import { useAccountConnectorsGetOne } from '../hooks/api/v2/account/connector/us
 import { useContext } from '../hooks/useContext';
 import { Connector } from '../interfaces/connector';
 import Configure from '../components/ConnectorDetail/Configure';
-import Navbar from '../components/Navbar';
+import Navbar from '../components/common/Navbar';
 import { useTrackPage } from '../hooks/useTrackPage';
 
 const ConnectorDetailConfigurePage: FC<{}> = (): ReactElement => {
