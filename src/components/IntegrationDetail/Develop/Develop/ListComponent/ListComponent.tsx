@@ -12,6 +12,7 @@ import Connect from '../Connect';
 import { Backdrop, Fade, Modal } from '@material-ui/core';
 
 const NOT_FOUND_ICON = '/images/warning-red.svg';
+const CLOSE_ICON_ID = 'close';
 
 const ListComponent: React.FC<ListComponentProps> = ({
   connector,
@@ -62,12 +63,12 @@ const ListComponent: React.FC<ListComponentProps> = ({
       id={id}
       onClick={(e: any) => {
         if (connector.isApplication) {
-          if (!e.target.id && !connectOpen && !deleteModalOpen) {
+          if (e.target.id !== CLOSE_ICON_ID && !connectOpen && !deleteModalOpen) {
             setConnectOpen(true);
           }
         } else if (linkConnector) {
           onLinkConnectorClick && onLinkConnectorClick(connector);
-        } else if (!e.target.id && !deleteModalOpen) {
+        } else if (e.target.id !== CLOSE_ICON_ID && !deleteModalOpen) {
           history.push(getRedirectLink(`/connector/${connector.id}/configure`));
         }
       }}
@@ -119,7 +120,7 @@ const ListComponent: React.FC<ListComponentProps> = ({
       </SC.CardConnectorText>
       {!linkConnector && (
         <SC.CardConnectorCrossContainer id="closeWrapper" onClick={() => setDeleteModalOpen(true)}>
-          <SC.CardConnectorCross id="close" src={cross} alt="close" height="8" width="8" />
+          <SC.CardConnectorCross id={CLOSE_ICON_ID} src={cross} alt={CLOSE_ICON_ID} height="8" width="8" />
         </SC.CardConnectorCrossContainer>
       )}
     </SC.CardConnector>
