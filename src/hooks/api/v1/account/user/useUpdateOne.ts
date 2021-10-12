@@ -12,7 +12,7 @@ export const useAccountUserUpdateOne = <T>() => {
       return axios<T>(`/v1/account/${accountId}/user/${userId}`, 'patch', data);
     },
     {
-      onMutate: (_: Params) => () => {},
+      onMutate: () => () => {},
       onError: (_, __, rollback) => rollback?.(),
       onSuccess: () => queryClient.removeQueries('accountUserUpdateOne'),
     }

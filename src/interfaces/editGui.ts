@@ -18,4 +18,5 @@ export interface Context {
   startRun: (url: string) => void;
   serverLogsEntry: (url: string) => void;
   finishRun: (error?: string, res?: Record<string, any> & { text: string }) => void;
+  on: (event: string, callback: () => void) => void;
 }

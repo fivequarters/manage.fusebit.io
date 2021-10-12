@@ -22,7 +22,7 @@ const IntegrationDetailDevelopPage: FC<{}> = (): ReactElement => {
 
   return (
     <Layout>
-      <Navbar sectionName={integrationData?.data.id || id} dropdown={true} integrationsLink={true} />
+      <Navbar sectionName={integrationData?.data.id || id} dropdown integrationsLink />
       <IntegrationDetailDevelop id={id} />
     </Layout>
   );

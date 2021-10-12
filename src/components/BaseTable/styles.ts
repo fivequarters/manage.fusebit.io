@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
+import { TableRow as MUITableRow, TableCell as MUICellRow, Box } from '@material-ui/core';
 import arrow from '../../assets/table-arrow.svg';
 import upArrowPrimary from '../../assets/up-arrow-primary.svg';
-import { TableRow as MUITableRow, TableCell as MUICellRow } from '@material-ui/core';
 
 export const Wrapper = styled.div`
   padding-bottom: 80px;
@@ -60,7 +60,7 @@ export const Row = styled.tr`
 
 export const ButtonContainer = styled.div`
   display: flex;
-  margin-top: 56px;
+  margin: 56px 0 36px;
   width: 100%;
 `;
 
@@ -122,8 +122,8 @@ export const NoData = styled.div`
 `;
 
 export const noBorderMixin = css`
-  ${(props: { noBorder?: boolean }) =>
-    props.noBorder &&
+  ${(props: { $noBorder?: boolean }) =>
+    props.$noBorder &&
     css`
       & > td {
         border-bottom: 0;
@@ -131,11 +131,11 @@ export const noBorderMixin = css`
     `}
 `;
 
-export const ExpandableRow = styled(MUITableRow)<{ noBorder?: boolean }>`
+export const ExpandableRow = styled(MUITableRow)<{ $noBorder?: boolean }>`
   ${noBorderMixin}
 `;
 
-export const TableRow = styled(MUITableRow)<{ noBorder?: boolean }>`
+export const TableRow = styled(MUITableRow)<{ $noBorder?: boolean }>`
   display: table-row;
   outline: 0;
   vertical-align: middle;
@@ -146,45 +146,46 @@ export const TableRow = styled(MUITableRow)<{ noBorder?: boolean }>`
   ${noBorderMixin}
 `;
 
-export const TableCell = styled(MUICellRow)<{ isMain?: boolean; isClickable?: boolean }>`
+export const TableCell = styled(MUICellRow)<{ $isMain?: boolean; $isClickable?: boolean }>`
   position: relative;
 
   ${(props) =>
-    props.isMain &&
+    props.$isMain &&
     css`
       & > div {
         color: var(--primary-color);
+        font-weight: 500;
       }
     `}
 
   ${(props) =>
-    props.isClickable &&
+    props.$isClickable &&
     css`
       cursor: pointer;
     `}
 `;
 
-export const CellContent = styled.div<{ isClickable?: boolean }>`
+export const CellContent = styled.div<{ $isClickable?: boolean }>`
   ${(props) =>
-    props.isClickable &&
+    props.$isClickable &&
     css`
       display: flex;
       align-items: center;
     `}
 `;
 
-export const TriggerArrow = styled.div<{ active: boolean; isMain?: boolean }>`
+export const TriggerArrow = styled.div<{ $active: boolean; $isMain?: boolean }>`
   width: 14px;
   margin-left: 10px;
   height: 10px;
   background-image: url(${upArrowPrimary});
   background-size: contain;
   background-repeat: no-repeat;
-  transform: ${(props) => props.active && 'rotate(180deg)'};
+  transform: ${(props) => props.$active && 'rotate(180deg)'};
   transition: all 0.25s linear;
   flex-shrink: 0;
   filter: ${(props) =>
-    !props.isMain &&
+    !props.$isMain &&
     'invert(0%) sepia(0%) saturate(0%) hue-rotate(279deg) brightness(95%) contrast(101%);'}; // this is #333333 converted to a filter
 
   @media only screen and (max-width: 880px) {
@@ -194,4 +195,12 @@ export const TriggerArrow = styled.div<{ active: boolean; isMain?: boolean }>`
 
 export const TableContainer = styled.div`
   overflow: auto;
+`;
+
+export const ButtonsContainer = styled(Box)`
+  margin-left: -20px;
+
+  & > button {
+    margin-left: 20px;
+  }
 `;
