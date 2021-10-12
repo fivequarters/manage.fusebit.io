@@ -84,8 +84,8 @@ const InstallsTable = () => {
       />
       <BaseTable
         emptyTableText="Your installs list is empty"
-        handleChangePage={handleChangePage}
-        handleChangeRowsPerPage={handleChangeRowsPerPage}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
         page={page}
         rowsPerPage={rowsPerPage}
         headers={headers}

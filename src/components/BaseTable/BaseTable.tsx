@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, TableBody, Button, IconButton, Tooltip, useMediaQuery } from '@material-ui/core';
+import { Table, TableBody, Button, IconButton, Tooltip, useMediaQuery, TablePagination } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Row from './Row';
@@ -8,6 +8,7 @@ import * as SC from './styles';
 import * as CSC from '../globalStyle';
 import MobileBaseTableHeader from './MobileBaseTableHeader';
 import BaseTableHead from './BaseTableHead';
+import { ROWS_PER_PAGE_OPTIONS } from '../../hooks/usePagination';
 
 const BaseTable: React.FC<BaseTableProps> = ({
   selected,
@@ -25,6 +26,9 @@ const BaseTable: React.FC<BaseTableProps> = ({
   emptyTableText,
   isCollapsible,
   collapseTrigger,
+  onChangePage,
+  onChangeRowsPerPage,
+  onClickRow,
 }) => {
   const computedRowsPerPage = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   const isMobile = useMediaQuery('(max-width: 880px)');
@@ -62,6 +66,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
           <TableBody>
             {computedRowsPerPage.map((row) => (
               <Row
+                onClick={onClickRow}
                 key={row.id}
                 headers={headers}
                 checked={isSelected(row.id)}
@@ -74,6 +79,15 @@ const BaseTable: React.FC<BaseTableProps> = ({
             ))}
           </TableBody>
         </Table>
+        <TablePagination
+          rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
+          component="div"
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onChangePage={(e, value) => onChangePage?.(e, value)}
+          onChangeRowsPerPage={(e) => onChangeRowsPerPage?.(e)}
+        />
       </SC.TableContainer>
     );
   };

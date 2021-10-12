@@ -170,8 +170,9 @@ export const useEntityTable = ({
   const handleRowDelete = async (type?: EntitiesType, errorContainer?: string) => {
     massiveDelete(
       selected,
+      // TODO: Remove the location validation when the tables migration is done
       // eslint-disable-next-line no-nested-ternary
-      type || (isIntegration.current ? 'I' : window.location.href.indexOf('connector') >= 0 ? 'C' : 'A'),
+      type || (isIntegration.current ? 'Integration' : window.location.href.indexOf('connector') >= 0 ? 'C' : 'A'),
       () => {
         const computedPages = Math.ceil((rows.length - selected.length) / rowsPerPage) - 1;
 
