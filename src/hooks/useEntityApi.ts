@@ -53,9 +53,13 @@ export const useEntityApi = (preventLoader?: boolean) => {
       accountId: userData.accountId,
       subscriptionId: userData.subscriptionId,
     };
-    entity.entityType === 'connector'
-      ? await createConnector.mutateAsync(obj)
-      : await createIntegration.mutateAsync(obj);
+
+    if (entity.entityType === 'connector') {
+      await createConnector.mutateAsync(obj);
+    } else {
+      await createIntegration.mutateAsync(obj);
+    }
+
     await waitForEntityStateChange(entity.entityType, [entity.id]);
   };
 
@@ -105,7 +109,7 @@ export const useEntityApi = (preventLoader?: boolean) => {
     try {
       if (!preventLoader) createLoader();
       const data = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
-      let newData = data;
+      const newData = data;
       if (isAdding) {
         const feedtype = connector.tags['fusebit.feedType'];
         const item: Feed = await findMatchingConnectorFeed(connector);
@@ -165,7 +169,11 @@ export const useEntityApi = (preventLoader?: boolean) => {
           const params = {
             id: item.id,
           };
-          isIdentity ? await deleteIndentity.mutateAsync(params) : await deleteInstall.mutateAsync(params);
+          if (isIdentity) {
+            await deleteIndentity.mutateAsync(params);
+          } else {
+            await deleteInstall.mutateAsync(params);
+          }
         })
       );
       if (callback) callback();

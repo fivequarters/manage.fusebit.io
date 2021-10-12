@@ -1,10 +1,10 @@
 import React from 'react';
-import { Props } from '../../../../../interfaces/newUser';
-import * as SC from './styles';
 import { Button } from '@material-ui/core';
 import { JsonForms } from '@jsonforms/react';
 import { ValidationMode } from '@jsonforms/core';
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
+import * as SC from './styles';
+import { Props } from '../../../../../interfaces/newUser';
 import { NewUserData } from '../../../../../interfaces/newUserData';
 import CopyLine from '../../../../CopyLine';
 import * as CSC from '../../../../globalStyle';
@@ -59,7 +59,7 @@ const uischema = {
   ],
 };
 
-const NewUser = React.forwardRef(({ open, onClose, createUser }: Props, ref) => {
+const NewUser = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, createUser }, ref) => {
   const [data, setData] = React.useState<NewUserData>({
     firstName: undefined,
     lastName: undefined,
@@ -81,18 +81,18 @@ const NewUser = React.forwardRef(({ open, onClose, createUser }: Props, ref) => 
         lastName: startCase(data.lastName || ''),
         primaryEmail: data.primaryEmail?.toLowerCase(),
       };
-      const token = await createUser(dataToSubmit);
-      if (token !== null) {
+      const _token = await createUser(dataToSubmit);
+      if (_token !== null) {
         setUserCreated(true);
         setIsSubmitting(false);
-        setToken(token);
+        setToken(_token);
         setData(dataToSubmit);
       }
     }
   };
 
   return (
-    <SC.Card open={open}>
+    <SC.Card open={open} ref={ref} tabIndex={-1}>
       <CSC.Close onClick={() => onClose()} />
       {!userCreated ? (
         <>
@@ -104,9 +104,11 @@ const NewUser = React.forwardRef(({ open, onClose, createUser }: Props, ref) => 
               data={data}
               renderers={materialRenderers}
               cells={materialCells}
-              onChange={({ errors, data }) => {
-                errors && setErrors(errors);
-                setData(data);
+              onChange={({ errors: _errors, data: _data }) => {
+                if (_errors) {
+                  setErrors(_errors);
+                }
+                setData(_data);
               }}
               validationMode={validationMode}
             />

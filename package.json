@@ -8,7 +8,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prettier": "git ls-tree -r `git branch --show-current` --name-only | grep -E \"\\.[tj]?sx?$\" | grep -v public | grep -v build | xargs -P 1 prettier --write",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint": "eslint --max-warnings=0 --ext ts,tsx src",
+    "lint:fix": "eslint --fix ."
   },
   "author": "Litebox",
   "license": "SEE LICENSE IN LICENSE",
@@ -46,11 +48,22 @@
     "typescript": "^4.3.4"
   },
   "eslintConfig": {
-    "extends": ["react-app", "react-app/jest"]
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
-    "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.4",
@@ -70,7 +83,17 @@
     "@types/react-router-dom": "^5.1.6",
     "@types/segment-analytics": "0.0.34",
     "@types/styled-components": "^5.1.10",
+    "@typescript-eslint/eslint-plugin": "^4.11.1",
+    "eslint-config-airbnb-typescript": "^12.0.0",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-json": "^2.1.2",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^3.3.0",
+    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^7.0.1",
-    "prettier": "2.0.5"
+    "prettier": "2.0.5",
+    "prettier-eslint": "^12.0.0"
   }
 }

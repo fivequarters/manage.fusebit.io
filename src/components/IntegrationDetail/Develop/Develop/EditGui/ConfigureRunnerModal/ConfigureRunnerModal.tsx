@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Modal, Backdrop, Box } from '@material-ui/core';
+import { useParams } from 'react-router-dom';
 import * as SC from './styles';
 import * as CSC from '../../../../../globalStyle';
 import { getIntegrationConfig } from '../../../../../../utils/localStorage';
-import { useParams } from 'react-router-dom';
 
 interface Props {
   open: boolean;
@@ -35,7 +35,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
 
   const validateForm = (newValues?: any) => {
     const { method, url, payload } = newValues || formValues || {};
-    let errors = {} as Errors;
+    const errors = {} as Errors;
     let valid = true;
 
     if (!method) {
@@ -80,7 +80,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
       closeAfterTransition
       BackdropComponent={Backdrop}
     >
-      <SC.Card open={open}>
+      <SC.Card open={open} tabIndex={-1}>
         <CSC.Close onClick={() => setOpen(false)} />
         <CSC.ModalTitle margin="0 0 16px 0">Configure runner</CSC.ModalTitle>
         <Box display="flex" mt="30px">

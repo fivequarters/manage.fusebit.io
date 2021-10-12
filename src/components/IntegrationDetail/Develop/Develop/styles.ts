@@ -1,7 +1,7 @@
 import styled from 'styled-components';
+import { Box } from '@material-ui/core';
 import dottedBox from '../../../../assets/dotted-box.svg';
 import fusebitLogo from '../../../../assets/fusebit-logo.svg';
-import { Box } from '@material-ui/core';
 
 export const Background = styled.div`
   padding-bottom: 76px;
@@ -10,7 +10,7 @@ export const Background = styled.div`
 export const FlexDown = styled.div`
   display: flex;
   flex-direction: column;
-  &:not(:last-child)  {
+  &:not(:last-child) {
     margin-right: auto;
 
     @media only screen and (max-width: 1200px) {

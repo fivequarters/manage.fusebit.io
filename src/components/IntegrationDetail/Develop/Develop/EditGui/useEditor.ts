@@ -64,6 +64,7 @@ const useEditor = ({ onNoInstallFound, enableListener = true } = {} as Props) =>
           trackEvent('Run Button Execution', 'Web Editor', { runStatus: 'success' });
         } catch (error) {
           trackEvent('Run Button Execution', 'Web Editor', { runStatus: 'failure' });
+          // eslint-disable-next-line no-console
           console.log(error);
         }
       };
@@ -98,14 +99,13 @@ const useEditor = ({ onNoInstallFound, enableListener = true } = {} as Props) =>
 
       if (hasInstall) {
         await testIntegration({ id, tenantId: STATIC_TENANT_ID });
+      } else if (onNoInstallFound) {
+        onNoInstallFound();
       } else {
-        if (onNoInstallFound) {
-          onNoInstallFound();
-        } else {
-          await handleNoInstallFound();
-        }
+        await handleNoInstallFound();
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log(error);
     }
   };
