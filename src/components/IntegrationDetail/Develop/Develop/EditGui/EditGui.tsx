@@ -24,8 +24,9 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, onMount, int
   const [unsavedWarning, setUnsavedWarning] = useState(false);
   const { createLoader, removeLoader } = useLoader();
   const [loginFlowModalOpen, setLoginFlowModalOpen] = useState(false);
-  const { handleRun, handleNoInstallFound, isFindingInstall } = useEditor({
+  const { handleRun, handleNoInstallFound, isFindingInstall, isSaving } = useEditor({
     onNoInstallFound: () => setLoginFlowModalOpen(true),
+    isMounted,
   });
 
   useTrackPage('Web Editor', 'Web Editor');
@@ -80,10 +81,12 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, onMount, int
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMounted]);
 
-  const handleSave = () => {
+  useEffect(() => {}, []);
+
+  const handleSave = async () => {
     const context = window.editor;
     trackEvent('Save Button Clicked', 'Web Editor');
-    context?._server.saveFunction(context);
+    await context?._server.saveFunction(context);
   };
 
   const handleClose = () => {
@@ -113,17 +116,28 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, onMount, int
         confirmationButtonText="Start"
         hideCancelButton
       />
+      <ConfigureRunnerModal open={configureRunnerActive} setOpen={setConfigureRunnerActive} />
       <SC.EditorContainer ref={ref}>
-        <ConfigureRunnerModal open={configureRunnerActive} setOpen={setConfigureRunnerActive} />
         {isMounted && (
           <SC.CloseHeader>
             <Button
               style={{ marginRight: '16px' }}
-              startIcon={<img src={save} alt="play" height="16" width="16" />}
+              startIcon={
+                <img
+                  src={save}
+                  style={{
+                    opacity: isSaving ? 0.4 : 1,
+                  }}
+                  alt="play"
+                  height="16"
+                  width="16"
+                />
+              }
               onClick={handleSave}
               size="small"
               variant="outlined"
               color="primary"
+              disabled={isSaving}
             >
               Save
             </Button>
@@ -134,7 +148,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, onMount, int
                 variant="contained"
                 color="primary"
                 onClick={handleRun}
-                disabled={isFindingInstall}
+                disabled={isFindingInstall || isSaving}
               >
                 {isFindingInstall ? <CircularProgress size={20} /> : 'Run'}
               </Button>

@@ -9,15 +9,17 @@ import { useContext } from '../../../../../hooks/useContext';
 import { InstallList } from '../../../../../interfaces/install';
 import { trackEvent } from '../../../../../utils/analytics';
 import { STATIC_TENANT_ID } from '../../../../../utils/constants';
+import useIsSaving from './useIsSaving';
 
 interface Props {
   onNoInstallFound?: () => void;
   enableListener?: boolean;
+  isMounted?: boolean;
 }
 
 const LOCALSTORAGE_SESSION_KEY = 'session';
 
-const useEditor = ({ onNoInstallFound, enableListener = true } = {} as Props) => {
+const useEditor = ({ onNoInstallFound, enableListener = true, isMounted = false } = {} as Props) => {
   const { id } = useParams<{ id: string }>();
   const { userData } = useContext();
   const { axios } = useAxios({ ignoreInterceptors: true });
@@ -27,6 +29,7 @@ const useEditor = ({ onNoInstallFound, enableListener = true } = {} as Props) =>
   const [isFindingInstall, setIsFindingInstall] = useState(false);
   // Prevent beign called multiple times if user has multiple tabs open
   const hasSessionChanged = useRef(false);
+  const isSaving = useIsSaving({ isMounted });
 
   const findInstall = useCallback(async () => {
     try {
@@ -91,11 +94,11 @@ const useEditor = ({ onNoInstallFound, enableListener = true } = {} as Props) =>
   const handleRun = async () => {
     trackEvent('Run Button Clicked', 'Web Editor');
     try {
+      const hasInstall = await findInstall();
+
       if (window.editor?.dirtyState) {
         await window.editor._server.saveFunction(window.editor);
       }
-
-      const hasInstall = await findInstall();
 
       if (hasInstall) {
         await testIntegration({ id, tenantId: STATIC_TENANT_ID });
@@ -117,6 +120,7 @@ const useEditor = ({ onNoInstallFound, enableListener = true } = {} as Props) =>
     isCreatingSession,
     isTesting,
     isCommiting,
+    isSaving,
     isRunning: isFindingInstall || isCreatingSession || isTesting || isCommiting,
   };
 };
