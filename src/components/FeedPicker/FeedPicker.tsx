@@ -73,6 +73,8 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
     setActiveFilter(filter);
   };
 
+  const feedTypeName = isIntegration ? 'Integration' : 'Connector';
+
   useEffect(() => {
     const key = query.get('key');
 
@@ -101,8 +103,6 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
     return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isIntegration]);
-
-  const feedTypeName = isIntegration ? 'Integration' : 'Connector';
 
   const handleTemplateChange = (template: Feed) => {
     setRawActiveTemplate(template);
