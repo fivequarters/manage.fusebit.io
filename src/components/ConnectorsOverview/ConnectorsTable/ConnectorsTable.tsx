@@ -11,7 +11,7 @@ import { useAccountConnectorsGetAll } from '../../../hooks/api/v2/account/connec
 import { Connector } from '../../../interfaces/connector';
 import DeleteConnectorModal from '../DeleteConnectorModal';
 import NewFeedModal from '../../common/NewFeedModal';
-import GetIdentities from '../../IntegrationsOverview/IntegrationsTable/GetIdentities';
+import GetIdentities from './GetIdentities';
 
 interface Props {
   headless: boolean;

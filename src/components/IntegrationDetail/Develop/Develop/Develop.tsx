@@ -396,6 +396,7 @@ const Develop: React.FC = () => {
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"
           open={editGuiOpen}
+          disableEscapeKeyDown
           onClose={() => {
             setEditGuiOpen(false);
             setEditGuiMounted(false);

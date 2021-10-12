@@ -24,8 +24,8 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, onMount, int
   const [unsavedWarning, setUnsavedWarning] = useState(false);
   const { createLoader, removeLoader } = useLoader();
   const [loginFlowModalOpen, setLoginFlowModalOpen] = useState(false);
-  const { handleRun, handleNoInstanceFound, isFindingInstance } = useEditor({
-    onNoInstanceFound: () => setLoginFlowModalOpen(true),
+  const { handleRun, handleNoInstallFound, isFindingInstall } = useEditor({
+    onNoInstallFound: () => setLoginFlowModalOpen(true),
   });
 
   useTrackPage('Web Editor', 'Web Editor');
@@ -107,7 +107,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, onMount, int
       <ConfirmationPrompt
         open={loginFlowModalOpen}
         setOpen={setLoginFlowModalOpen}
-        handleConfirmation={handleNoInstanceFound}
+        handleConfirmation={handleNoInstallFound}
         title="Start login flow?"
         description="The integration needs to know the Identity of the user on whose behalf to execute. For development purposes, please log in as your own user."
         confirmationButtonText="Start"
@@ -134,9 +134,9 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, onMount, int
                 variant="contained"
                 color="primary"
                 onClick={handleRun}
-                disabled={isFindingInstance}
+                disabled={isFindingInstall}
               >
-                {isFindingInstance ? <CircularProgress size={20} /> : 'Run'}
+                {isFindingInstall ? <CircularProgress size={20} /> : 'Run'}
               </Button>
               <Button onClick={() => setConfigureRunnerActive(true)} size="small" variant="contained" color="primary">
                 <img src={settings} alt="settings" height="16" width="16" />

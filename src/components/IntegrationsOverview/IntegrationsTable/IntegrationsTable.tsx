@@ -10,8 +10,8 @@ import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import { trackEvent } from '../../../utils/analytics';
 import { useContext } from '../../../hooks/useContext';
 import { useAccountIntegrationsGetAll } from '../../../hooks/api/v2/account/integration/useGetAll';
+import GetInstalls from './GetInstalls';
 import NewFeedModal from '../../common/NewFeedModal';
-import GetInstances from '../../ConnectorsOverview/ConnectorsTable/GetInstances';
 
 interface Props {
   headless: boolean;
@@ -44,7 +44,7 @@ const IntegrationsTable = ({ headless, setHeadless }: Props) => {
   const tableRows = (rows as Integration[]).map((row) => ({
     id: row.id,
     name: row.id,
-    installs: <GetInstances id={row.id} />,
+    installs: <GetInstalls id={row.id} />,
   }));
 
   const handleClickRow = (row: BaseTableRow) => history.push(getRedirectLink(`/integration/${row.id}/develop`));

@@ -4,10 +4,10 @@ import { Entity, Feed } from '../interfaces/feed';
 import { FinalConnector } from '../interfaces/integrationDetailDevelop';
 import { integrationsFeed, connectorsFeed } from '../static/feed';
 import { Decoded } from '../interfaces/decoded';
-import { InstallInstance } from '../interfaces/install';
+import { Install } from '../interfaces/install';
 
 const { REACT_APP_AUTH0_DOMAIN, REACT_APP_AUTH0_CLIENT_ID, REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
-export const LS_KEY = `T29M03eleloegehOxGtpEPel18JfM3djp5pUL4Jm`;
+export const LS_KEY = `T29M03eleloegehOxGtpEPel18JfM3djp5pUL4Jm`; // Shouldn't this be in an env variable?
 
 export const readLocalData = () => JSON.parse(localStorage.getItem(LS_KEY) || '{}');
 
@@ -57,6 +57,14 @@ export const isTokenExpired = () => {
   return expInMilliseconds - todayInMiliseconds <= TIME_T0_EXPIRE; // if true it expired
 };
 
+export function isSegmentTrackingEvents() {
+  const user = readLocalData();
+  return (
+    process.env.NODE_ENV !== 'production' ||
+    (!user?.primaryEmail?.endsWith('@fusebit.io') && !user?.primaryEmail?.endsWith('@litebox.ai'))
+  );
+}
+
 export const validateToken = ({ onValid }: { onValid?: () => void } = {}) => {
   const expired = isTokenExpired();
   if (expired) {
@@ -64,7 +72,9 @@ export const validateToken = ({ onValid }: { onValid?: () => void } = {}) => {
   } else {
     analytics.ready(() => {
       const user = readLocalData();
-      if (!user || user === {}) return;
+      const segmentUserId = analytics.user().id();
+      if (!user || user === {} || user.id === segmentUserId) return;
+      if (!isSegmentTrackingEvents()) return;
       analytics.identify(user.id, {
         ...user,
       } as Object);
@@ -77,7 +87,7 @@ export const startCase = (str: string) => {
   return _startCase(str.toLowerCase());
 };
 
-export const getConnectorsFromInstall = (install: InstallInstance) =>
+export const getConnectorsFromInstall = (install: Install) =>
   Object.keys(install.data).map((key) => install?.data[key]?.parentEntityId);
 
 export const getPluralText = <T = unknown>(list: T[], noun?: string) => {
