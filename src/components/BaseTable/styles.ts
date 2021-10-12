@@ -41,12 +41,6 @@ export const Flex = styled.div`
   align-items: center;
 `;
 
-export const HeadName = styled.p`
-  color: var(--black);
-  width: max-content;
-  font-weight: 500;
-`;
-
 export const CellName = styled.p<{ regularColor?: boolean }>`
   color: var(--primary-color);
   font-weight: 500;

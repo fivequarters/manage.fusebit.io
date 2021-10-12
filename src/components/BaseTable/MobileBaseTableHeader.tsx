@@ -29,7 +29,7 @@ const MobileBaseTableHeader = ({
             onChange={onSelectAll}
           />
         </TableCell>
-        <TableCell>{headers[0].value}</TableCell>
+        <TableCell style={{ whiteSpace: 'nowrap' }}>{headers[0].value}</TableCell>
         <TableCell align="left">
           <SC.TableCellMobile>
             <p>{mobileArrowColumns[mobileColumnIndex].value}</p>
