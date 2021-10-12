@@ -1,6 +1,7 @@
 import React from 'react';
 import { TableCell, TableHead, TableRow, Checkbox } from '@material-ui/core';
 import { BaseTableProps } from './types';
+import * as SC from './styles';
 
 const BaseTableHead = ({
   rows,
@@ -20,7 +21,7 @@ const BaseTableHead = ({
         </TableCell>
         {headers.map((header, index) => (
           <TableCell key={index} align="left">
-            {header.value}
+            <SC.HeadName style={{ width: 'max-content' }}>{header.value}</SC.HeadName>
           </TableCell>
         ))}
       </TableRow>
