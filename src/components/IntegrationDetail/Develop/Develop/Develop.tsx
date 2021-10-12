@@ -378,7 +378,7 @@ const Develop: React.FC = () => {
                   return (
                     <ListComponent
                       onLinkConnectorClick={(_connector: any) => linkConnector(_connector)}
-                      linkConnector={true}
+                      linkConnector
                       key={connector.id}
                       connector={connector}
                       onConnectorDelete={(_connector: Entity) => handleListComponentDelete(_connector)}

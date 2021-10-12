@@ -7,16 +7,20 @@ const BaseTableHead = ({
   selected,
   onSelectAll,
   headers,
-}: Pick<BaseTableProps, 'rows' | 'selected' | 'onSelectAll' | 'headers'>) => {
+  isAllChecked,
+  hideCheckAll,
+}: Pick<BaseTableProps, 'rows' | 'selected' | 'onSelectAll' | 'headers' | 'isAllChecked' | 'hideCheckAll'>) => {
   return (
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            checked={rows.length > 0 && selected.length === rows.length}
-            onChange={onSelectAll}
-          />
+          {!hideCheckAll && (
+            <Checkbox
+              color="primary"
+              checked={isAllChecked || (rows.length > 0 && selected.length === rows.length)}
+              onChange={onSelectAll}
+            />
+          )}
         </TableCell>
         {headers.map((header) => (
           <TableCell key={header.id} align="left">

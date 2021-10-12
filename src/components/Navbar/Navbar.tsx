@@ -374,7 +374,7 @@ const Navbar: React.FC<Props> = ({
                     <SC.UserDropdownLink>Billing</SC.UserDropdownLink>
                   </Link>
                   <Link to="/settings">
-                    <SC.UserDropdownLink noMargin={true}>Settings</SC.UserDropdownLink>
+                    <SC.UserDropdownLink noMargin>Settings</SC.UserDropdownLink>
                   </Link>
                 </SC.UserDropdownLinksWrapper>
                 <SC.UserButtonWrapper>
@@ -426,7 +426,7 @@ const Navbar: React.FC<Props> = ({
                   <SC.UserDropdownLink>Billing</SC.UserDropdownLink>
                 </Link>
                 <Link to="/settings">
-                  <SC.UserDropdownLink noMargin={true}>Settings</SC.UserDropdownLink>
+                  <SC.UserDropdownLink noMargin>Settings</SC.UserDropdownLink>
                 </Link>
               </SC.UserDropdownLinksWrapper>
 
