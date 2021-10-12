@@ -16,7 +16,7 @@ const {
   REACT_APP_FUSEBIT_SUBSCRIPTION_ID,
 } = process.env;
 
-const IntegrationsPage: FC<{}> = (): ReactElement => {
+const AuthCallbackPage: FC<{}> = (): ReactElement => {
   const location = useLocation();
   const history = useHistory();
   const { auth, userData } = useContext();
@@ -92,4 +92,4 @@ const IntegrationsPage: FC<{}> = (): ReactElement => {
   return <></>;
 };
 
-export default IntegrationsPage;
+export default AuthCallbackPage;
