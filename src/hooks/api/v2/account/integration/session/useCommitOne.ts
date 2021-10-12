@@ -4,7 +4,7 @@ import { useAxios } from '../../../../../useAxios';
 import { useContext } from '../../../../../useContext';
 
 export const useAccountIntegrationCommitSession = () => {
-  const { axios } = useAxios();
+  const { axios } = useAxios({ ignoreInterceptors: true });
   const { userData } = useContext();
 
   return useMutation((params: Params) => {

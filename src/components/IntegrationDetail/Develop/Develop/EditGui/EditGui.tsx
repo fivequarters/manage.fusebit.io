@@ -24,8 +24,8 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, onMount, int
   const [unsavedWarning, setUnsavedWarning] = useState(false);
   const { createLoader, removeLoader } = useLoader();
   const [loginFlowModalOpen, setLoginFlowModalOpen] = useState(false);
-  const { handleRun, handleNoInstanceFound, isFindingInstance } = useEditor({
-    onNoInstanceFound: () => setLoginFlowModalOpen(true),
+  const { handleRun, handleNoInstallFound, isFindingInstall } = useEditor({
+    onNoInstallFound: () => setLoginFlowModalOpen(true),
   });
 
   useTrackPage('Web Editor', 'Web Editor');
@@ -83,11 +83,11 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, onMount, int
   const handleSave = () => {
     const context = window.editor;
     trackEvent('Save Button Clicked', 'Web Editor');
-    context._server.saveFunction(context);
+    context?._server.saveFunction(context);
   };
 
   const handleClose = () => {
-    if (window.editor.dirtyState) {
+    if (window.editor?.dirtyState) {
       setUnsavedWarning(true);
     } else {
       onClose();
@@ -107,7 +107,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, onMount, int
       <ConfirmationPrompt
         open={loginFlowModalOpen}
         setOpen={setLoginFlowModalOpen}
-        handleConfirmation={handleNoInstanceFound}
+        handleConfirmation={handleNoInstallFound}
         title="Start login flow?"
         description="The integration needs to know the Identity of the user on whose behalf to execute. For development purposes, please log in as your own user."
         confirmationButtonText="Start"
@@ -134,9 +134,9 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, onMount, int
                 variant="contained"
                 color="primary"
                 onClick={handleRun}
-                disabled={isFindingInstance}
+                disabled={isFindingInstall}
               >
-                {isFindingInstance ? <CircularProgress size={20} /> : 'Run'}
+                {isFindingInstall ? <CircularProgress size={20} /> : 'Run'}
               </Button>
               <Button onClick={() => setConfigureRunnerActive(true)} size="small" variant="contained" color="primary">
                 <img src={settings} alt="settings" height="16" width="16" />
@@ -144,7 +144,9 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, onMount, int
             </ButtonGroup>
             <h3>{integrationId}</h3>
             <SC.ActionsHelpWrapper>
-              <SC.ActionsHelpLink href="/">Edit Locally</SC.ActionsHelpLink>
+              <SC.ActionsHelpLink target="_blank" href="https://developer.fusebit.io/docs/developing-locally">
+                Edit locally
+              </SC.ActionsHelpLink>
               <SC.ActionsHelpImage src={question} alt="question" height="16" width="16" />
             </SC.ActionsHelpWrapper>
             <SC.Close onClick={handleClose} />
@@ -160,7 +162,12 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, onMount, int
               baseUrl: process.env.REACT_APP_FUSEBIT_DEPLOYMENT,
               accessToken: userData.token,
             }}
-            options={{ entityType: 'integration' }}
+            options={{
+              entityType: 'integration',
+              editor: {
+                navigationPanel: { hideRunnerTool: true, hideScheduleSettings: true },
+              },
+            }}
             onLoaded={() => {
               setIsMounted(true);
             }}

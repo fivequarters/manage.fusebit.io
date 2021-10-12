@@ -8,10 +8,10 @@ import { useError } from './useError';
 import { Connector } from '../interfaces/connector';
 import { ApiResponse } from './useAxios';
 import { useAccountConnectorUpdateConnector } from './api/v2/account/connector/useUpdateOne';
-import { Identity } from '../interfaces/identities';
+import { IdentityList } from '../interfaces/identities';
 import { useAccountConnectorIdentityDeleteOne } from './api/v2/account/connector/identity/useDeleteOne';
-import { useAccountIntegrationInstanceDeleteOne } from './api/v2/account/integration/instance/useDeleteOne';
-import { Install } from '../interfaces/install';
+import { useAccountIntegrationInstallDeleteOne } from './api/v2/account/integration/install/useDeleteOne';
+import { InstallList } from '../interfaces/install';
 import { InnerConnector, Integration } from '../interfaces/integration';
 import { useAccountIntegrationUpdateIntegration } from './api/v2/account/integration/useUpdateOne';
 import { useAccountIntegrationDeleteIntegration } from './api/v2/account/integration/useDeleteOne';
@@ -40,7 +40,7 @@ export const useEntityApi = (preventLoader?: boolean) => {
 
   // deletes
   const deleteIndentity = useAccountConnectorIdentityDeleteOne<Operation>();
-  const deleteInstall = useAccountIntegrationInstanceDeleteOne<Operation>();
+  const deleteInstall = useAccountIntegrationInstallDeleteOne<Operation>();
   const deleteIntegration = useAccountIntegrationDeleteIntegration<Operation>();
   const deleteConnector = useAccountConnectorDeleteConnector<Operation>();
   const deleteAccount = useAccountUserDeleteOne<Operation>();
@@ -157,13 +157,13 @@ export const useEntityApi = (preventLoader?: boolean) => {
 
   const deleteEntity = async (
     id: string,
-    identitiesData: ApiResponse<Identity | Install> | undefined,
+    identitiesData: ApiResponse<IdentityList | InstallList> | undefined,
     isIdentity: boolean,
     callback?: Function
   ) => {
     try {
       if (!preventLoader) createLoader();
-      const data = JSON.parse(JSON.stringify(identitiesData?.data)) as Identity;
+      const data = JSON.parse(JSON.stringify(identitiesData?.data)) as IdentityList;
       await Promise.all(
         (data.items || []).map(async (item) => {
           const params = {
@@ -174,9 +174,6 @@ export const useEntityApi = (preventLoader?: boolean) => {
           } else {
             await deleteInstall.mutateAsync(params);
           }
-          // return waitForEntityStateChange(isIdentity ? `integration/${id}/instance` : `connector/${id}/identity`, [
-          //   item.id,
-          // ]);
         })
       );
       if (callback) callback();
@@ -215,9 +212,6 @@ export const useEntityApi = (preventLoader?: boolean) => {
           });
         }
       }
-      // if (type !== 'A') {
-      //   await waitForEntityStateChange(type === 'I' ? 'integration' : 'connector', ids);
-      // }
       if (callback) callback();
     } catch (e) {
       createError(e, errorContainer);

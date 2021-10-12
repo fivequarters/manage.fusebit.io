@@ -12,7 +12,7 @@ interface Props {
 }
 
 const MobileDrawer = ({ open, onClose }: Props) => {
-  const { handleRun, isRunning } = useEditor();
+  const { handleRun, isRunning } = useEditor({ enableListener: open });
 
   return (
     <Drawer anchor="bottom" open={open} onClose={onClose}>

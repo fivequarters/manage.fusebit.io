@@ -1,35 +1,40 @@
-import { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { getAllInstances } from '../../../../../hooks/api/v2/account/integration/instance/useGetAll';
+import { getAllInstalls } from '../../../../../hooks/api/v2/account/integration/install/useGetAll';
 import { useAccountIntegrationCreateSession } from '../../../../../hooks/api/v2/account/integration/session/useCreateOne';
 import { useAccountIntegrationCommitSession } from '../../../../../hooks/api/v2/account/integration/session/useCommitOne';
 import { useAccountIntegrationTestIntegration } from '../../../../../hooks/api/v2/account/integration/useTestOne';
 import { useAxios } from '../../../../../hooks/useAxios';
 import { useContext } from '../../../../../hooks/useContext';
-import { Install } from '../../../../../interfaces/install';
+import { InstallList } from '../../../../../interfaces/install';
 import { trackEvent } from '../../../../../utils/analytics';
 import { STATIC_TENANT_ID } from '../../../../../utils/constants';
 
 interface Props {
-  onNoInstanceFound?: () => void;
+  onNoInstallFound?: () => void;
+  enableListener?: boolean;
 }
 
-const useEditor = ({ onNoInstanceFound } = {} as Props) => {
+const LOCALSTORAGE_SESSION_KEY = 'session';
+
+const useEditor = ({ onNoInstallFound, enableListener = true } = {} as Props) => {
   const { id } = useParams<{ id: string }>();
   const { userData } = useContext();
-  const { axios } = useAxios();
+  const { axios } = useAxios({ ignoreInterceptors: true });
   const { mutateAsync: createSesssion, isLoading: isCreatingSession } = useAccountIntegrationCreateSession();
   const { mutateAsync: testIntegration, isLoading: isTesting } = useAccountIntegrationTestIntegration();
   const { mutateAsync: commitSession, isLoading: isCommiting } = useAccountIntegrationCommitSession();
-  const [isFindingInstance, setIsFindingInstance] = useState(false);
+  const [isFindingInstall, setIsFindingInstall] = useState(false);
+  // Prevent beign called multiple times if user has multiple tabs open
+  const hasSessionChanged = useRef(false);
 
-  const findInstance = useCallback(async () => {
+  const findInstall = useCallback(async () => {
     try {
-      setIsFindingInstance(true);
+      setIsFindingInstall(true);
 
       const {
         data: { items },
-      } = await getAllInstances<Install>(
+      } = await getAllInstalls<InstallList>(
         axios,
         {
           subscriptionId: userData.subscriptionId,
@@ -43,57 +48,61 @@ const useEditor = ({ onNoInstanceFound } = {} as Props) => {
 
       return (items || [])[0];
     } finally {
-      setIsFindingInstance(false);
+      setIsFindingInstall(false);
     }
   }, [axios, id, userData]);
 
   useEffect(() => {
-    const prevSessionId = localStorage.getItem('session');
-
-    const handleChangeStorage = () => {
-      const sessionId = localStorage.getItem('session');
-
+    const handleChangeStorage = (e: any) => {
       const runFirstTest = async () => {
-        try {
-          await commitSession({ id, sessionId });
+        hasSessionChanged.current = true;
 
+        try {
+          await commitSession({ id, sessionId: e.newValue });
           await testIntegration({ id, tenantId: STATIC_TENANT_ID });
+
+          trackEvent('Run Button Execution', 'Web Editor', { runStatus: 'success' });
         } catch (error) {
+          trackEvent('Run Button Execution', 'Web Editor', { runStatus: 'failure' });
           // eslint-disable-next-line no-console
           console.log(error);
         }
       };
 
-      if (prevSessionId !== sessionId) {
+      if (e.key === LOCALSTORAGE_SESSION_KEY && !hasSessionChanged.current) {
         runFirstTest();
       }
     };
 
-    window.addEventListener('storage', handleChangeStorage);
+    if (enableListener) {
+      window.addEventListener('storage', handleChangeStorage);
+    }
 
     return () => {
-      window.removeEventListener('storage', handleChangeStorage);
+      if (enableListener) {
+        window.removeEventListener('storage', handleChangeStorage);
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [enableListener]);
 
-  const handleNoInstanceFound = () => createSesssion({ id, tenantId: STATIC_TENANT_ID });
+  const handleNoInstallFound = () => createSesssion({ id, tenantId: STATIC_TENANT_ID });
 
   const handleRun = async () => {
     trackEvent('Run Button Clicked', 'Web Editor');
     try {
-      if (window.editor.dirtyState) {
+      if (window.editor?.dirtyState) {
         await window.editor._server.saveFunction(window.editor);
       }
 
-      const hasInstance = await findInstance();
+      const hasInstall = await findInstall();
 
-      if (hasInstance) {
+      if (hasInstall) {
         await testIntegration({ id, tenantId: STATIC_TENANT_ID });
-      } else if (onNoInstanceFound) {
-        onNoInstanceFound();
+      } else if (onNoInstallFound) {
+        onNoInstallFound();
       } else {
-        await handleNoInstanceFound();
+        await handleNoInstallFound();
       }
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -103,12 +112,12 @@ const useEditor = ({ onNoInstanceFound } = {} as Props) => {
 
   return {
     handleRun,
-    handleNoInstanceFound,
-    isFindingInstance,
+    handleNoInstallFound,
+    isFindingInstall,
     isCreatingSession,
     isTesting,
     isCommiting,
-    isRunning: isFindingInstance || isCreatingSession || isTesting || isCommiting,
+    isRunning: isFindingInstall || isCreatingSession || isTesting || isCommiting,
   };
 };
 

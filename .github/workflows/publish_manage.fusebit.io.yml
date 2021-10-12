@@ -63,7 +63,8 @@ jobs:
           REACT_APP_SEGMENT_ANALYTICS_TAG: CaC5PUXF3swrCxkM5rGOA7oUUGVZv9zH
           REACT_APP_GOOGLE_ANALYTICS: UA-136792777-1
           REACT_APP_HOTJAR_ID: 2534393
-          REACT_APP_ENABLE_ONLINE_EDITOR: false
+          REACT_APP_ENABLE_ONLINE_EDITOR: true
+          REACT_APP_INTERCOM_APP_ID: v9ncq3ml
         run: ./scripts/build_tree.sh
       - name: Publish - website
         env:

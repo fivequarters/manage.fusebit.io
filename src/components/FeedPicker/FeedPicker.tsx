@@ -64,12 +64,14 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
 
   const handleFilterChange = (filter: Filters) => {
     if (isIntegration) {
-      trackEvent(`New Integration Catalog ${filter} Clicked`, 'Integrations');
+      trackEvent('New Integration Catalog Clicked', 'Integrations', { tag: filter });
     } else {
-      trackEvent(`New Connector Catalog ${filter} Clicked`, 'Connectors');
+      trackEvent('New Connector Catalog Clicked', 'Connectors', { tag: filter });
     }
     setActiveFilter(filter);
   };
+
+  const feedTypeName = isIntegration ? 'Integration' : 'Connector';
 
   useEffect(() => {
     const key = query.get('key');
@@ -86,15 +88,23 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
       setRawActiveTemplate(_feed[0]);
       replaceMustache(data, _feed[0]).then((template) => {
         setActiveTemplate(template);
+        setImmediate(() => {
+          trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
+            [feedTypeName.toLowerCase()]: template.name,
+            [`${feedTypeName.toLowerCase()}Default`]: true,
+          });
+        });
       });
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isIntegration]);
 
-  const feedTypeName = isIntegration ? 'Integration' : 'Connector';
-
   const handleTemplateChange = (template: Feed) => {
     setRawActiveTemplate(template);
+    trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
+      [feedTypeName.toLowerCase()]: template.name,
+      [`${feedTypeName.toLowerCase()}Default`]: false,
+    });
     replaceMustache(data, template).then((_template) => {
       setActiveTemplate(_template);
     });
@@ -188,7 +198,9 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
                 cells={materialCells}
                 onChange={({ errors: _errors, data: _data }) => {
                   if (_data?.ui?.toggle && activeTemplate) {
-                    trackEvent(`New Integration Customize ${activeTemplate.name} Clicked`, 'Integrations');
+                    trackEvent('New Integration Customize Clicked', 'Integrations', {
+                      integration: activeTemplate.name,
+                    });
                   }
                   if (_errors) {
                     setErrors(_errors);

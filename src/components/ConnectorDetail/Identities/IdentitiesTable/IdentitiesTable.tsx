@@ -5,7 +5,7 @@ import BaseTable from '../../../BaseTable';
 import { useEntityTable } from '../../../../hooks/useEntityTable';
 import { usePagination } from '../../../../hooks/usePagination';
 import { useAccountConnectorIdentityGetAll } from '../../../../hooks/api/v2/account/connector/identity/useGetAll';
-import { Identity } from '../../../../interfaces/identities';
+import { IdentityList } from '../../../../interfaces/identities';
 import CodeBlock from '../../../CodeBlock';
 import ConfirmationPrompt from '../../../ConfirmationPrompt';
 import InformationalBanner from '../../../InformationalBanner';
@@ -24,7 +24,7 @@ const IntegrationsTable = () => {
     rowsPerPage,
   });
 
-  const { data, isLoading } = useAccountConnectorIdentityGetAll<Identity>(
+  const { data, isLoading } = useAccountConnectorIdentityGetAll<IdentityList>(
     {
       id,
     },
