@@ -4,7 +4,7 @@ import { Props } from '../../../../../interfaces/edit';
 import { useContext } from '../../../../../hooks/useContext';
 import FusebitEditor from './FusebitEditor';
 import { useLoader } from '../../../../../hooks/useLoader';
-import { Button, ButtonGroup } from '@material-ui/core';
+import { Box, Button, ButtonGroup } from '@material-ui/core';
 import play from '../../../../../assets/play.svg';
 import settings from '../../../../../assets/settings.svg';
 import save from '../../../../../assets/save.svg';
@@ -17,7 +17,7 @@ import { useTrackPage } from '../../../../../hooks/useTrackPage';
 import { trackEvent } from '../../../../../utils/analytics';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, ref) => {
+const EditGui = React.forwardRef(({ onClose, integrationId }: Props, ref) => {
   const { userData } = useContext();
   const [isMounted, setIsMounted] = useState(false);
   const [configureRunnerActive, setConfigureRunnerActive] = useState(false);
@@ -68,14 +68,7 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
     } else {
       createLoader();
     }
-  }, [isMounted, onMount, createLoader, removeLoader]);
-
-  useEffect(() => {
-    if (isMounted) {
-      onMount?.();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMounted]);
+  }, [isMounted, createLoader, removeLoader]);
 
   const handleSave = () => {
     const context = window.editor;
@@ -92,7 +85,7 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
   };
 
   return (
-    <>
+    <Box>
       <ConfirmationPrompt
         open={unsavedWarning}
         setOpen={setUnsavedWarning}
@@ -172,7 +165,7 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
           {isMounted && <SC.FusebitEditorLogo src={logo} alt="fusebit logo" height="20" width="80" />}
         </SC.FusebitEditorContainer>
       </SC.EditorContainer>
-    </>
+    </Box>
   );
 });
 

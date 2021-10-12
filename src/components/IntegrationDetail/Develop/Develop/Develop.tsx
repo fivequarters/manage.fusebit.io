@@ -41,7 +41,6 @@ import { useEntityApi } from '../../../../hooks/useEntityApi';
 import { useBackendClient } from '../../../../hooks/useBackendClient';
 import { BackendClient } from '../../../../interfaces/backendClient';
 import EditCli from './EditCli';
-import SlideUpSpring from '../../../Animations/SlideUpSpring';
 import { trackEvent } from '../../../../utils/analytics';
 import LineConnector from '../../../LineConnector';
 import MobileDrawer from './MobileDrawer';
@@ -82,7 +81,6 @@ const Develop: React.FC = () => {
   const [backendClients, setBackendClients] = useState<BackendClient[]>([]);
   const [backendClient, setBackendClient] = useState<BackendClient>();
   const [connectHover, setConnectHover] = useState(false);
-  const [editGuiMounted, setEditGuiMounted] = useState(false);
   const [editCliOpen, setEditCliOpen] = React.useState(false);
   const isMobile = useMediaQuery('(max-width: 850px)');
   const areCardsCollapsing = useMediaQuery('(max-width: 1200px)');
@@ -394,21 +392,16 @@ const Develop: React.FC = () => {
           open={editGuiOpen}
           onClose={() => {
             setEditGuiOpen(false);
-            setEditGuiMounted(false);
           }}
           closeAfterTransition
           BackdropComponent={Backdrop}
         >
-          <SlideUpSpring in={editGuiOpen} mounted={editGuiMounted}>
-            <EditGui
-              onMount={() => setEditGuiMounted(true)}
-              onClose={() => {
-                setEditGuiOpen(false);
-                setEditGuiMounted(false);
-              }}
-              integrationId={integrationData?.data.id || ''}
-            />
-          </SlideUpSpring>
+          <EditGui
+            onClose={() => {
+              setEditGuiOpen(false);
+            }}
+            integrationId={integrationData?.data.id || ''}
+          />
         </Modal>
       )}
       <SC.Flex>
