@@ -154,6 +154,7 @@ export const TableCell = styled(MUICellRow)<{ $isMain?: boolean; $isClickable?: 
     css`
       & > div {
         color: var(--primary-color);
+        font-weight: 500;
       }
     `}
 

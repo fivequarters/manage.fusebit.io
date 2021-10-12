@@ -148,7 +148,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
           </SC.ColumnItem>
         </SC.Column>
         <SC.ColumnBr />
-        <SC.Column border={true}>
+        <SC.Column border>
           <SC.ColumnSearchWrapper>
             <TextField
               style={{ width: '100%' }}

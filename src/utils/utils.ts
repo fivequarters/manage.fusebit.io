@@ -1,6 +1,5 @@
 import jwt_decode from 'jwt-decode';
 import _startCase from 'lodash.startcase';
-
 import { Entity, Feed } from '../interfaces/feed';
 import { FinalConnector } from '../interfaces/integrationDetailDevelop';
 import { integrationsFeed, connectorsFeed } from '../static/feed';

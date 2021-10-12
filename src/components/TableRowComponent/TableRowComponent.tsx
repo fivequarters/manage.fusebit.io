@@ -69,7 +69,9 @@ const TableRowComponent: React.FC<Props> = ({
           </TableCell>
         )}
         {connectorsTable && (
-          <TableCell align="left">{row.tags ? row.tags['fusebit.provider'] : <CSC.Spinner />}</TableCell>
+          <TableCell align="left" id="asdsadas">
+            {row.tags ? row.tags['fusebit.provider'] : <CSC.Spinner />}
+          </TableCell>
         )}
         {integrationsTable || connectorsTable ? (
           <TableCell align="left">

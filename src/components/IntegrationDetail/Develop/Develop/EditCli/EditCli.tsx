@@ -22,7 +22,7 @@ const Edit = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, integrati
       <CopyLine
         text={`fuse integration get ${integrationId} --dir ${integrationId}`}
         highlightedText="get --dir"
-        horizontalScrollbar={true}
+        horizontalScrollbar
       />
 
       <CSC.Flex>
@@ -37,7 +37,7 @@ const Edit = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, integrati
       <CopyLine
         text={`fuse integration deploy ${integrationId} -d ${integrationId}`}
         highlightedText="deploy -d"
-        horizontalScrollbar={true}
+        horizontalScrollbar
       />
 
       <SC.ButtonsWrapper>

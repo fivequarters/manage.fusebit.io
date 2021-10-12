@@ -9,7 +9,7 @@ const IntegrationsOverviewPage: FC<{}> = (): ReactElement => {
 
   return (
     <Layout>
-      <Navbar dropdown={true} sectionName="Integrations" integration={true} />
+      <Navbar dropdown sectionName="Integrations" integration />
       <IntegrationsOverview />
     </Layout>
   );

@@ -109,7 +109,7 @@ const TableComponent: React.FC<Props> = ({
           BackdropComponent={Backdrop}
         >
           <FeedPicker
-            isIntegration={true}
+            isIntegration
             onSubmit={(activeIntegration: Feed, data: Data) => handleIntegrationCreation(activeIntegration, data)}
             open={addIntegrationOpen}
             onClose={() => setAddIntegrationOpen(false)}
@@ -303,7 +303,7 @@ const TableComponent: React.FC<Props> = ({
                     handleCheck={handleCheck}
                     handleRowClick={handleRowClick}
                     isSelected={isSelected}
-                    mobile={true}
+                    mobile
                     selectedCell={selectedCell}
                   />
                 ))}

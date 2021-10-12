@@ -105,7 +105,7 @@ const Navbar: React.FC<Props> = ({
                 <SC.Flex>
                   {sectionName !== 'Integrations' && sectionName !== 'Connectors' && (
                     <Link to={to}>
-                      <SC.Flex mobileHidden={true}>
+                      <SC.Flex mobileHidden>
                         <SC.SectionLink>
                           {integrationsLink ? 'Integrations' : authenticationLink ? 'Authentication' : 'Connectors'}
                         </SC.SectionLink>
@@ -273,7 +273,7 @@ const Navbar: React.FC<Props> = ({
                         <Link
                           to={`/account/${userData.accountId}/subscription/${userData.subscriptionId}/authentication/detail`}
                         >
-                          <SC.SectionDropdownIntegration active={true}>
+                          <SC.SectionDropdownIntegration active>
                             {userData.primaryEmail}
                             <img src={check} alt="check" height="16" width="16" />
                           </SC.SectionDropdownIntegration>
@@ -296,7 +296,7 @@ const Navbar: React.FC<Props> = ({
                         <Link
                           to={`/account/${userData.accountId}/subscription/${userData.subscriptionId}/authentication/detail`}
                         >
-                          <SC.SectionDropdownIntegration active={true}>
+                          <SC.SectionDropdownIntegration active>
                             {userData.primaryEmail}
                             <img src={check} alt="check" height="16" width="16" />
                           </SC.SectionDropdownIntegration>
