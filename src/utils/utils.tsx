@@ -64,7 +64,8 @@ export const validateToken = ({ onValid }: { onValid?: () => void } = {}) => {
   } else {
     analytics.ready(() => {
       const user = readLocalData();
-      if (!user || user === {}) return;
+      const segmentUserId = analytics.user().id();
+      if (!user || user === {} || user.id === segmentUserId) return;
       analytics.identify(user.id, {
         ...user,
       } as Object);
