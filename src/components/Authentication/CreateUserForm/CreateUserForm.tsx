@@ -59,7 +59,7 @@ const uischema = {
   ],
 };
 
-const NewUserForm = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, createUser }, ref) => {
+const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, createUser }, ref) => {
   const [data, setData] = React.useState<NewUserData>({
     firstName: undefined,
     lastName: undefined,
@@ -155,4 +155,4 @@ const NewUserForm = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, cr
   );
 });
 
-export default NewUserForm;
+export default CreateUserForm;

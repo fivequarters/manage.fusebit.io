@@ -11,7 +11,7 @@ import { Account } from '../../../interfaces/account';
 import { useAccountUserGetAll } from '../../../hooks/api/v1/account/user/useGetAll';
 import DeleteUserModal from '../DeleteUserModal';
 import NameColumn from './NameColumn';
-import NewUserModal from '../NewUserModal';
+import CreateUserModal from '../CreateUserModal';
 
 const UsersTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -51,7 +51,7 @@ const UsersTable = () => {
 
   return (
     <>
-      <NewUserModal onClose={toggleNewModal} open={newModalOpen} />
+      <CreateUserModal onClose={toggleNewModal} open={newModalOpen} />
       <DeleteUserModal
         onConfirm={() => handleRowDelete('A')}
         setOpen={setDeleteModal}
