@@ -1,4 +1,5 @@
 import isEqual from 'lodash.isequal';
+import { isSegmentTrackingEvents } from './utils';
 
 type TrackEventHandler = (eventName: string, objectLocation: string, extraProperties?: { [key: string]: any }) => void;
 
@@ -17,6 +18,7 @@ const memoize = (originalFunction: TrackEventHandler) => {
 
 // original trackEvent function that gets called to offload events to Segment
 const trackEventHandler: TrackEventHandler = (eventName, objectLocation, extraProperties = {}) => {
+  if (!isSegmentTrackingEvents()) return;
   analytics.track(eventName, {
     objectLocation,
     domain: 'manage.fusebit.io',

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { Button, ButtonGroup } from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import * as SC from './styles';
 import { Props } from '../../../../../interfaces/edit';
 import { useContext } from '../../../../../hooks/useContext';
 import FusebitEditor from './FusebitEditor';
 import { useLoader } from '../../../../../hooks/useLoader';
-import { Button, ButtonGroup } from '@material-ui/core';
 import play from '../../../../../assets/play.svg';
 import settings from '../../../../../assets/settings.svg';
 import save from '../../../../../assets/save.svg';
@@ -15,17 +16,16 @@ import ConfigureRunnerModal from './ConfigureRunnerModal';
 import ConfirmationPrompt from '../../../../ConfirmationPrompt';
 import { useTrackPage } from '../../../../../hooks/useTrackPage';
 import { trackEvent } from '../../../../../utils/analytics';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
-const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, ref) => {
+const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, onMount, integrationId }, ref) => {
   const { userData } = useContext();
   const [isMounted, setIsMounted] = useState(false);
   const [configureRunnerActive, setConfigureRunnerActive] = useState(false);
   const [unsavedWarning, setUnsavedWarning] = useState(false);
   const { createLoader, removeLoader } = useLoader();
   const [loginFlowModalOpen, setLoginFlowModalOpen] = useState(false);
-  const { handleRun, handleNoInstanceFound, isFindingInstance, isSaving } = useEditor({
-    onNoInstanceFound: () => setLoginFlowModalOpen(true),
+  const { handleRun, handleNoInstallFound, isFindingInstall, isSaving } = useEditor({
+    onNoInstallFound: () => setLoginFlowModalOpen(true),
     isMounted,
   });
 
@@ -43,7 +43,10 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
           el?.click();
           document.getElementById('addNewItem')?.remove();
           const input = document.querySelector('.fusebit-nav-new-file');
-          input && createAddNewItemElement(input);
+
+          if (input) {
+            createAddNewItemElement(input);
+          }
         }
       };
 
@@ -100,21 +103,21 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
         open={unsavedWarning}
         setOpen={setUnsavedWarning}
         handleConfirmation={onClose}
-        title={`​Are you sure you want to discard unsaved changes?`}
-        description={`You have made some unsaved changes to your Integration. Closing this window will discard those changes.`}
-        confirmationButtonText={`Discard`}
+        title="​Are you sure you want to discard unsaved changes?"
+        description="You have made some unsaved changes to your Integration. Closing this window will discard those changes."
+        confirmationButtonText="Discard"
       />
       <ConfirmationPrompt
         open={loginFlowModalOpen}
         setOpen={setLoginFlowModalOpen}
-        handleConfirmation={handleNoInstanceFound}
+        handleConfirmation={handleNoInstallFound}
         title="Start login flow?"
         description="The integration needs to know the Identity of the user on whose behalf to execute. For development purposes, please log in as your own user."
         confirmationButtonText="Start"
         hideCancelButton
       />
       <ConfigureRunnerModal open={configureRunnerActive} setOpen={setConfigureRunnerActive} />
-      <SC.EditorContainer>
+      <SC.EditorContainer ref={ref}>
         {isMounted && (
           <SC.CloseHeader>
             <Button
@@ -145,9 +148,9 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
                 variant="contained"
                 color="primary"
                 onClick={handleRun}
-                disabled={isFindingInstance || isSaving}
+                disabled={isFindingInstall || isSaving}
               >
-                {isFindingInstance ? <CircularProgress size={20} /> : 'Run'}
+                {isFindingInstall ? <CircularProgress size={20} /> : 'Run'}
               </Button>
               <Button onClick={() => setConfigureRunnerActive(true)} size="small" variant="contained" color="primary">
                 <img src={settings} alt="settings" height="16" width="16" />
@@ -165,7 +168,7 @@ const EditGui = React.forwardRef(({ onClose, onMount, integrationId }: Props, re
         )}
         <SC.FusebitEditorContainer>
           <FusebitEditor
-            boundaryId={'integration'}
+            boundaryId="integration"
             functionId={integrationId}
             account={{
               accountId: userData.accountId,
