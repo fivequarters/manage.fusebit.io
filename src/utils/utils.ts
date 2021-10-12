@@ -4,7 +4,7 @@ import { Entity, Feed, EntityComponent } from '../interfaces/feed';
 import { FinalConnector } from '../interfaces/integrationDetailDevelop';
 import { integrationsFeed, connectorsFeed } from '../static/feed';
 import { Decoded } from '../interfaces/decoded';
-import { InstallInstance } from '../interfaces/install';
+import { Install } from '../interfaces/install';
 
 const { REACT_APP_AUTH0_DOMAIN, REACT_APP_AUTH0_CLIENT_ID, REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 export const LS_KEY = `T29M03eleloegehOxGtpEPel18JfM3djp5pUL4Jm`;
@@ -77,17 +77,7 @@ export const startCase = (str: string) => {
   return _startCase(str.toLowerCase());
 };
 
-export const initIntercom = () => {
-  window.Intercom('boot', {
-    app_id: 'v9ncq3ml',
-  });
-};
-
-export const updateIntercom = () => {
-  window.Intercom('update');
-};
-
-export const getConnectorsFromInstall = (install: InstallInstance) =>
+export const getConnectorsFromInstall = (install: Install) =>
   Object.keys(install.data).map((key) => install?.data[key]?.parentEntityId);
 
 export const getPluralText = <T = unknown>(list: T[], noun?: string) => {
