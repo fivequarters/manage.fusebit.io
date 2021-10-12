@@ -1,7 +1,12 @@
 import isEqual from 'lodash.isequal';
 import { isSegmentTrackingEvents } from './utils';
 
-type TrackEventHandler = (eventName: string, objectLocation: string, extraProperties?: { [key: string]: any }) => void;
+type TrackEventHandler = (
+  eventName: string,
+  objectLocation: string,
+  extraProperties?: { [key: string]: any },
+  cb?: () => void
+) => void;
 
 // utility to memoize the original trackEvent function to avoid noise
 const memoize = (originalFunction: TrackEventHandler) => {
@@ -17,13 +22,17 @@ const memoize = (originalFunction: TrackEventHandler) => {
 };
 
 // original trackEvent function that gets called to offload events to Segment
-const trackEventHandler: TrackEventHandler = (eventName, objectLocation, extraProperties = {}) => {
+const trackEventHandler: TrackEventHandler = (eventName, objectLocation, extraProperties = {}, cb = () => {}) => {
   if (!isSegmentTrackingEvents()) return;
-  analytics.track(eventName, {
-    objectLocation,
-    domain: 'manage.fusebit.io',
-    ...extraProperties,
-  });
+  analytics.track(
+    eventName,
+    {
+      objectLocation,
+      domain: 'manage.fusebit.io',
+      ...extraProperties,
+    },
+    cb
+  );
 };
 
 // trackEvent is memoized because React re-rendering process makes it get called multiple times for the same event

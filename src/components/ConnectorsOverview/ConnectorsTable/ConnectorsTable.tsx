@@ -51,8 +51,7 @@ const ConnectorsTable = ({ headless, setHeadless }: Props) => {
   const handleClickRow = (row: BaseTableRow) => history.push(getRedirectLink(`/connector/${row.id}/configure`));
 
   const handleNewIntegration = () => {
-    trackEvent('New Connector Button Clicked', 'Connectors');
-    toggleNewModal();
+    trackEvent('New Connector Button Clicked', 'Connectors', {}, toggleNewModal);
   };
 
   return (
