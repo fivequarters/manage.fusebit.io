@@ -91,13 +91,12 @@ export async function createSampleAppClientUrl(user: User, integrations: Record<
     FUSEBIT_JWT: token,
   };
 
-  // Create a simple HMAC signing key
   const hmacKey = await crypto.subtle.importKey(
     'raw',
-    Buffer.from(REACT_APP_SAMPLE_APP_KEY as string),
+    new TextEncoder().encode(REACT_APP_SAMPLE_APP_KEY),
     { name: 'HMAC', hash: 'SHA-256' },
-    true,
-    ['sign']
+    false,
+    ['sign'],
   );
 
   // Create a JWT that'll act as an envelope for the sample app
@@ -105,7 +104,7 @@ export async function createSampleAppClientUrl(user: User, integrations: Record<
     { sub: `${user.id}`, aud: `${REACT_APP_SAMPLE_APP_URL}`, ...configuration },
     { displayName: 'Sample App Key', id: `${user.id}-issuer`, publicKeys: [{ keyId: 'sample', publicKey: 'sample' }] },
     hmacKey,
-    { name: 'HMAC' }
+    { name: 'HMAC', hash: 'SHA-256', algorithm: 'HS256' },
   );
 
   // Add it to the URL, and return
