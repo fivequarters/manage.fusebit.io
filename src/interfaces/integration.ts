@@ -2,10 +2,13 @@ import { Tags } from './tags';
 
 export interface IntegrationData {
   components: InnerConnector[];
+  files: {
+    'package.json': string;
+    [x: string]: string;
+  };
   componentTags: {
     [key: string]: any;
   };
-  files: object;
 }
 
 export interface InnerConnector {
