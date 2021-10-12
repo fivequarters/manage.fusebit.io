@@ -20,7 +20,7 @@ export async function signJwt(
   algorithmOptions: Record<string, string> = {}
 ): Promise<string> {
   const header = {
-    alg: 'RS256',
+    alg: algorithmOptions.algorithm || 'RS256',
     typ: 'JWT',
     kid: issuer.publicKeys[0].keyId,
   };
@@ -46,9 +46,8 @@ export async function signJwt(
 
   const signature = await crypto.subtle.sign(
     {
-      name: 'RSASSA-PKCS1-v1_5',
-      hash: 'SHA-256',
-      ...algorithmOptions,
+      name: algorithmOptions.name || 'RSASSA-PKCS1-v1_5',
+      hash: algorithmOptions.hash || 'SHA-256',
     },
     privateKey,
     messageAsUint8Array
