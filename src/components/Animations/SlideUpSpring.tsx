@@ -12,7 +12,7 @@ interface SlideUpProps {
 const SlideUpSpring = React.forwardRef<HTMLDivElement, SlideUpProps>((props, ref) => {
   const { in: open, mounted, children, onEnter, onExited, ...other } = props;
   const style = useSpring({
-    transform: mounted ? 'translateY(0vh)' : 'translateY(100vh)',
+    display: mounted ? 'block' : 'hidden',
     config: { mass: 3, tension: 500, friction: 70 },
 
     onStart: () => {
@@ -31,7 +31,7 @@ const SlideUpSpring = React.forwardRef<HTMLDivElement, SlideUpProps>((props, ref
     <animated.div
       ref={ref}
       style={{
-        transform: style.transform.to((transform) => transform),
+        ...style,
       }}
       {...other}
     >
