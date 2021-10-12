@@ -89,6 +89,12 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
       setRawActiveTemplate(_feed[0]);
       replaceMustache(data, _feed[0]).then((template) => {
         setActiveTemplate(template);
+        setImmediate(() => {
+          trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
+            [feedTypeName.toLowerCase()]: template.name,
+            [`${feedTypeName.toLowerCase()}Default`]: true,
+          });
+        });
       });
     });
 
@@ -100,6 +106,10 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
 
   const handleTemplateChange = (template: Feed) => {
     setRawActiveTemplate(template);
+    trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
+      [feedTypeName.toLowerCase()]: template.name,
+      [`${feedTypeName.toLowerCase()}Default`]: false,
+    });
     replaceMustache(data, template).then((_template) => {
       setActiveTemplate(_template);
     });
