@@ -1,6 +1,7 @@
 import jwt_decode from 'jwt-decode';
 import _startCase from 'lodash.startcase';
 
+import { isSegmentTrackingEvents } from './analytics';
 import { Entity, Feed } from '../interfaces/feed';
 import { FinalConnector } from '../interfaces/integrationDetailDevelop';
 import { integrationsFeed, connectorsFeed } from '../static/feed';
@@ -67,6 +68,7 @@ export const validateToken = ({ onValid }: { onValid?: () => void } = {}) => {
       const user = readLocalData();
       const segmentUserId = analytics.user().id();
       if (!user || user === {} || user.id === segmentUserId) return;
+      if (!isSegmentTrackingEvents()) return;
       analytics.identify(user.id, {
         ...user,
       } as Object);
