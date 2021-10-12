@@ -1,5 +1,5 @@
 import isEqual from 'lodash.isequal';
-import { readLocalData } from './utils';
+import { isSegmentTrackingEvents } from './utils';
 
 type TrackEventHandler = (eventName: string, objectLocation: string, extraProperties?: { [key: string]: any }) => void;
 
@@ -28,11 +28,3 @@ const trackEventHandler: TrackEventHandler = (eventName, objectLocation, extraPr
 
 // trackEvent is memoized because React re-rendering process makes it get called multiple times for the same event
 export const trackEvent = memoize(trackEventHandler);
-
-export function isSegmentTrackingEvents() {
-  const user = readLocalData();
-  return (
-    process.env.NODE_ENV !== 'production' ||
-    (!user?.primaryEmail?.endsWith('@fusebit.io') && !user?.primaryEmail?.endsWith('@litebox.ai'))
-  );
-}

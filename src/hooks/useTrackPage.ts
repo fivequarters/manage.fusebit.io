@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { isSegmentTrackingEvents } from '../utils/analytics';
+import { isSegmentTrackingEvents } from '../utils/utils';
 
 export function useTrackPage(pageName: string, objectLocation: String) {
   useEffect(() => {

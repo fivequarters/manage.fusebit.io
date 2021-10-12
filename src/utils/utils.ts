@@ -1,7 +1,6 @@
 import jwt_decode from 'jwt-decode';
 import _startCase from 'lodash.startcase';
 
-import { isSegmentTrackingEvents } from './analytics';
 import { Entity, Feed } from '../interfaces/feed';
 import { FinalConnector } from '../interfaces/integrationDetailDevelop';
 import { integrationsFeed, connectorsFeed } from '../static/feed';
@@ -58,6 +57,14 @@ export const isTokenExpired = () => {
   const todayInMiliseconds = new Date().getTime();
   return expInMilliseconds - todayInMiliseconds <= TIME_T0_EXPIRE; // if true it expired
 };
+
+export function isSegmentTrackingEvents() {
+  const user = readLocalData();
+  return (
+    process.env.NODE_ENV !== 'production' ||
+    (!user?.primaryEmail?.endsWith('@fusebit.io') && !user?.primaryEmail?.endsWith('@litebox.ai'))
+  );
+}
 
 export const validateToken = ({ onValid }: { onValid?: () => void } = {}) => {
   const expired = isTokenExpired();
