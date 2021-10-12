@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Input } from '@material-ui/core';
+import { useParams } from 'react-router-dom';
 import * as SC from './styles';
 import * as CSC from '../../../../globalStyle';
 import { Props } from '../../../../../interfaces/connect';
@@ -9,7 +10,6 @@ import ConfirmationPrompt from '../../../../ConfirmationPrompt';
 import { useContext } from '../../../../../hooks/useContext';
 import { patchBackendClients } from '../../../../../utils/backendClients';
 import { useGetRedirectLink } from '../../../../../hooks/useGetRedirectLink';
-import { useParams } from 'react-router-dom';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
