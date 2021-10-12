@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import * as SC from './styles';
 import { Checkbox, TableCell, Collapse, useMediaQuery } from '@material-ui/core';
 import { BaseTableProps, BaseTableRow } from './types';
+import * as SC from './styles';
 import { useQuery } from '../../hooks/useQuery';
 
 interface Props {
@@ -41,12 +41,12 @@ const Row = ({
     onClick?.(row, columnId);
   };
 
-  const renderCollapsable = (row: BaseTableRow) => {
+  const renderCollapsable = (_row: BaseTableRow) => {
     return (
-      <SC.ExpandableRow noBorder={isExpanded}>
+      <SC.ExpandableRow $noBorder={isExpanded}>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={headers.length + 1}>
           <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-            {row.collapsableContent}
+            {_row.collapsableContent}
           </Collapse>
         </TableCell>
       </SC.ExpandableRow>
@@ -72,23 +72,23 @@ const Row = ({
 
     return (
       <>
-        <SC.TableRow noBorder={isCollapsible}>
+        <SC.TableRow $noBorder={isCollapsible}>
           {renderCheckbox(row.id)}
           <SC.TableCell
-            isMain
+            $isMain
             scope="row"
-            isClickable
+            $isClickable
             onClick={() => handleClickCell(isCollapseTrigger, headers[0].id)}
           >
-            <SC.CellContent isClickable={isCollapseTrigger || !!onClick}>
+            <SC.CellContent $isClickable={isCollapseTrigger}>
               {row[headers[0].id]}
-              {isCollapseTrigger && <SC.TriggerArrow active={isExpanded} isMain />}
+              {isCollapseTrigger && <SC.TriggerArrow $active={isExpanded} $isMain />}
             </SC.CellContent>
           </SC.TableCell>
           <SC.TableCell
             scope="row"
             onClick={() => handleClickCell(isCollapseTrigger, currentMobileRow)}
-            isClickable={isCollapseTrigger || !!onClick}
+            $isClickable={isCollapseTrigger || !!onClick}
           >
             {row[currentMobileRow]}
           </SC.TableCell>
@@ -101,21 +101,22 @@ const Row = ({
   const renderDesktop = () => {
     return (
       <>
-        <SC.TableRow noBorder={isCollapsible}>
+        <SC.TableRow $noBorder={isCollapsible}>
           {renderCheckbox(row.id)}
           {headers.map((header, i: number) => {
             const isCollapseTrigger = collapseTrigger === header.id;
 
             return (
               <SC.TableCell
-                isMain={i === 0}
-                isClickable={isCollapseTrigger || !!onClick}
+                key={header.id}
+                $isMain={i === 0}
+                $isClickable={isCollapseTrigger || !!onClick}
                 scope="row"
                 onClick={() => handleClickCell(isCollapseTrigger, header.id)}
               >
-                <SC.CellContent isClickable={isCollapseTrigger}>
+                <SC.CellContent $isClickable={isCollapseTrigger}>
                   {row[header.id]}
-                  {isCollapseTrigger && <SC.TriggerArrow active={isExpanded} isMain />}
+                  {isCollapseTrigger && <SC.TriggerArrow $active={isExpanded} $isMain />}
                 </SC.CellContent>
               </SC.TableCell>
             );

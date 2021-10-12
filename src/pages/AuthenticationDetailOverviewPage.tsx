@@ -9,7 +9,7 @@ const AuthenticationDetailPage: FC<{}> = (): ReactElement => {
 
   return (
     <Layout>
-      <Navbar sectionName={'Authentication'} authentication={true} authenticationLink={true} />
+      <Navbar sectionName="Authentication" authentication={true} authenticationLink={true} />
       <AuthenticationDetail />
     </Layout>
   );

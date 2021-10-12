@@ -13,7 +13,7 @@ export const useAccountIntegrationCreateIntegration = <T>() => {
       return axios<T>(`/v2/account/${accountId}/subscription/${subscriptionId}/integration/${data.id}`, 'post', data);
     },
     {
-      onMutate: (_: Params) => () => {},
+      onMutate: () => () => {},
       onError: (_, __, rollback) => rollback?.(),
       onSuccess: (_, { id }) => {
         localStorage.setItem(id, JSON.stringify(DEFAULT_INTEGRATION_CONFIG));

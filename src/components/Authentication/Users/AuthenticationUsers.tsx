@@ -5,7 +5,7 @@ import Users from './Users';
 const AuthenticationUsers: React.FC = () => {
   return (
     <>
-      <TabComponent tabNames={['Users']} tabObjects={[<Users />]} />
+      <TabComponent tabNames={['Users']} tabObjects={[<Users key="users" />]} />
     </>
   );
 };

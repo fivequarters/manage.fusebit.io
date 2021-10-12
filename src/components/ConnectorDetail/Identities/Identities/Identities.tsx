@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import * as SC from './styles';
-import * as CSC from '../../../globalStyle';
 import { Button } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
+import * as SC from './styles';
+import * as CSC from '../../../globalStyle';
 import { useAccountConnectorIdentityGetAll } from '../../../../hooks/api/v2/account/connector/identity/useGetAll';
-import { Identity } from '../../../../interfaces/identities';
+import { IdentityList } from '../../../../interfaces/identities';
 import { useEntityApi } from '../../../../hooks/useEntityApi';
 import ConfirmationPrompt from '../../../ConfirmationPrompt/ConfirmationPrompt';
 
 const Identities: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { data: identitiesData, refetch: reloadInstalls } = useAccountConnectorIdentityGetAll<Identity>({
+  const { data: identitiesData, refetch: reloadInstalls } = useAccountConnectorIdentityGetAll<IdentityList>({
     id,
   });
   const { deleteEntity } = useEntityApi();
@@ -33,9 +33,10 @@ const Identities: React.FC = () => {
         setOpen={setDeleteOpen}
         handleConfirmation={handleDelete}
         title={`Are you sure you want to delete ${
+          // eslint-disable-next-line no-nested-ternary
           identitiesData ? (identitiesData?.data.total > 1 ? 'these Identities?' : 'this Identity?') : ''
         }`}
-        description={`Your tenants will have to re-authenticate themselves in their account.`}
+        description="Your tenants will have to re-authenticate themselves in their account."
       />
       <SC.Header>
         Total Identities: {identitiesData ? identitiesData?.data.total : <CSC.Spinner margin="0 0 0 5px" />}

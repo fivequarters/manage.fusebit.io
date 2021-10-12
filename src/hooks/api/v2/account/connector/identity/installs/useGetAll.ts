@@ -3,10 +3,10 @@ import { Params } from '../../../../../../../interfaces/api';
 import { useAxios } from '../../../../../../useAxios';
 import { useContext } from '../../../../../../useContext';
 import { getAllIntegrations } from '../../../integration/useGetAll';
-import { getAllInstances } from '../../../integration/instance/useGetAll';
+import { getAllInstalls } from '../../../integration/install/useGetAll';
 
 import { Integration } from '../../../../../../../interfaces/integration';
-import { Install, InstallInstance } from '../../../../../../../interfaces/install';
+import { Install, InstallList } from '../../../../../../../interfaces/install';
 import { useError } from '../../../../../../useError';
 import { entityLoopThrough } from '../../../../utils';
 import { getConnectorsFromInstall } from '../../../../../../../utils/utils';
@@ -15,7 +15,7 @@ export const ACCOUNT_CONNECTOR_IDENTITY_INSTALLS_GET_ALL = 'accountConnectorIden
 
 export const useAccountConnectorIdentityInstallsGetAll = (
   { tenantId, connectorId }: Params,
-  options?: UseQueryOptions<unknown, unknown, InstallInstance[]>
+  options?: UseQueryOptions<unknown, unknown, Install[]>
 ) => {
   const { axios } = useAxios();
   const { userData } = useContext();
@@ -34,22 +34,22 @@ export const useAccountConnectorIdentityInstallsGetAll = (
         })
       );
 
-      const instances = await Promise.all(
+      const installs = await Promise.all(
         (integrations || []).map((integration) => {
-          return getAllInstances<Install>(axios, {
+          return getAllInstalls<InstallList>(axios, {
             ...userParams,
             id: integration.id,
           });
         })
       );
 
-      return instances
+      return installs
         .map((res) => {
           const {
             data: { items },
           } = res;
 
-          const isRelated = (i: InstallInstance) => {
+          const isRelated = (i: Install) => {
             const connectorIds = getConnectorsFromInstall(i);
 
             return i.tags['fusebit.tenantId'] === tenantId && connectorIds.includes(connectorId);

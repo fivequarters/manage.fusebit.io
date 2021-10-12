@@ -18,8 +18,8 @@ const BaseTableHead = ({
             onChange={onSelectAll}
           />
         </TableCell>
-        {headers.map((header, index) => (
-          <TableCell key={index} align="left">
+        {headers.map((header) => (
+          <TableCell key={header.id} align="left">
             {header.value}
           </TableCell>
         ))}

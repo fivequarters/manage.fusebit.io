@@ -3,7 +3,7 @@ import TabComponent from '../TabComponent';
 import IntegrationsTable from './IntegrationsTable/IntegrationsTable';
 
 const IntegrationsOverview: React.FC = () => {
-  let headless = useRef(true); // the parent has to have this otherwise the mounting of the overview will open the feed picker if there is a query param.
+  const headless = useRef(true); // the parent has to have this otherwise the mounting of the overview will open the feed picker if there is a query param.
 
   return (
     <TabComponent
@@ -12,7 +12,9 @@ const IntegrationsOverview: React.FC = () => {
         <IntegrationsTable
           key="integrationsTable"
           headless={!!headless}
-          setHeadless={(value: boolean) => (headless.current = value)}
+          setHeadless={(value: boolean) => {
+            headless.current = value;
+          }}
         />,
       ]}
     />

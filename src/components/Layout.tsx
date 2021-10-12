@@ -1,11 +1,11 @@
-import React, { FC, ReactNode } from 'react';
+import React, { FC, ReactNode, useEffect } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { CssBaseline } from '@material-ui/core';
 import GlobalStyle from './globalStyle';
-import { useEffect } from 'react';
+
 import { useContext } from '../hooks/useContext';
 
-const useStyles = makeStyles((_) =>
+const useStyles = makeStyles(() =>
   createStyles({
     root: {
       flex: 1,
@@ -25,7 +25,7 @@ const Layout: FC<Props> = ({ children }) => {
   const { userData } = useContext();
 
   useEffect(() => {
-    //@ts-ignore
+    // @ts-ignore
     if (userData.id && userData.accountId) {
       pendo.initialize({
         visitor: {

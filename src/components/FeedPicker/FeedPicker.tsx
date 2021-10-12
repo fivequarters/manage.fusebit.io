@@ -1,20 +1,19 @@
-import React from 'react';
-import * as SC from './styles';
-import { Props } from '../../interfaces/feedPicker';
+import React, { useState, useEffect } from 'react';
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
 import { JsonForms } from '@jsonforms/react';
 import { ValidationMode } from '@jsonforms/core';
 import { Button, TextField } from '@material-ui/core';
+import debounce from 'lodash.debounce';
+import * as SC from './styles';
+import { Props } from '../../interfaces/feedPicker';
 import { integrationsFeed, connectorsFeed } from '../../static/feed';
 import search from '../../assets/search.svg';
 import cross from '../../assets/cross.svg';
 import { Feed } from '../../interfaces/feed';
-import { useState } from 'react';
-import { useEffect } from 'react';
+
 import { useQuery } from '../../hooks/useQuery';
 import { useReplaceMustache } from '../../hooks/useReplaceMustache';
 import { trackEvent } from '../../utils/analytics';
-import debounce from 'lodash.debounce';
 
 enum Filters {
   ALL = 'All',
@@ -24,7 +23,7 @@ enum Filters {
   CALENDAR = 'Calendar',
 }
 
-const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }: Props, ref) => {
+const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onSubmit, isIntegration }, ref) => {
   const [data, setData] = React.useState<any>({});
   const [errors, setErrors] = React.useState<object[]>([]);
   const [validationMode, setValidationMode] = React.useState<ValidationMode>('ValidateAndHide');
@@ -49,16 +48,16 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
     if (errors.length > 0) {
       setValidationMode('ValidateAndShow');
     } else {
-      //normalize data
+      // normalize data
       const keys = Object.keys(data);
       for (let i = 0; keys.length > i; i++) {
-        const id: any = data[keys[i]].id;
+        const { id } = data[keys[i]];
         if (typeof id === 'string') {
           data[keys[i]].id = id.replace(/\s/g, '');
         }
       }
 
-      //send data with customized form
+      // send data with customized form
       onSubmit(rawActiveTemplate, { ...data });
     }
   };
@@ -72,32 +71,42 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
     setActiveFilter(filter);
   };
 
+  const feedTypeName = isIntegration ? 'Integration' : 'Connector';
+
   useEffect(() => {
     const key = query.get('key');
 
-    (isIntegration ? integrationsFeed() : connectorsFeed()).then((feed) => {
-      setFeed(feed);
-      for (let i = 0; i < feed.length; i++) {
-        if (feed[i].id === key) {
-          replaceMustache(data, feed[i]).then((template) => setActiveTemplate(template));
+    (isIntegration ? integrationsFeed() : connectorsFeed()).then((_feed) => {
+      setFeed(_feed);
+      for (let i = 0; i < _feed.length; i++) {
+        if (_feed[i].id === key) {
+          replaceMustache(data, _feed[i]).then((template) => setActiveTemplate(template));
           return;
         }
       }
 
-      setRawActiveTemplate(feed[0]);
-      replaceMustache(data, feed[0]).then((template) => {
+      setRawActiveTemplate(_feed[0]);
+      replaceMustache(data, _feed[0]).then((template) => {
         setActiveTemplate(template);
+        setImmediate(() => {
+          trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
+            [feedTypeName.toLowerCase()]: template.name,
+            [`${feedTypeName.toLowerCase()}Default`]: true,
+          });
+        });
       });
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isIntegration]);
 
-  const feedTypeName = isIntegration ? 'Integration' : 'Connector';
-
   const handleTemplateChange = (template: Feed) => {
     setRawActiveTemplate(template);
-    replaceMustache(data, template).then((template) => {
-      setActiveTemplate(template);
+    trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
+      [feedTypeName.toLowerCase()]: template.name,
+      [`${feedTypeName.toLowerCase()}Default`]: false,
+    });
+    replaceMustache(data, template).then((_template) => {
+      setActiveTemplate(_template);
     });
   };
 
@@ -108,7 +117,7 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
   };
 
   return (
-    <SC.Card onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)} open={open}>
+    <SC.Card onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)} open={open} ref={ref} tabIndex={-1}>
       <SC.Close onClick={() => onClose()} src={cross} alt="close" height="12" width="12" />
       <SC.Title>{`New ${feedTypeName}`}</SC.Title>
       <SC.Flex>
@@ -167,9 +176,8 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
                   {feedEntry.name}
                 </SC.ColumnItem>
               );
-            } else {
-              return null;
             }
+            return null;
           })}
         </SC.Column>
         <SC.ColumnBr />
@@ -180,7 +188,7 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
             <SC.ConnectorVersion>{activeTemplate?.version}</SC.ConnectorVersion>
           </SC.ConnectorTitleWrapper>
           <SC.GeneralInfoWrapper>
-            <SC.ConnectorDescription children={activeTemplate?.description || ''} />
+            <SC.ConnectorDescription>{activeTemplate?.description || ''}</SC.ConnectorDescription>
             <SC.FormWrapper>
               <JsonForms
                 schema={activeTemplate?.configuration.schema}
@@ -188,14 +196,16 @@ const FeedPicker = React.forwardRef(({ open, onClose, onSubmit, isIntegration }:
                 data={data}
                 renderers={materialRenderers}
                 cells={materialCells}
-                onChange={({ errors, data }) => {
-                  if (data?.ui?.toggle && activeTemplate) {
+                onChange={({ errors: _errors, data: _data }) => {
+                  if (_data?.ui?.toggle && activeTemplate) {
                     trackEvent('New Integration Customize Clicked', 'Integrations', {
                       integration: activeTemplate.name,
                     });
                   }
-                  errors && setErrors(errors);
-                  setData(data);
+                  if (_errors) {
+                    setErrors(_errors);
+                  }
+                  setData(_data);
                 }}
                 validationMode={validationMode}
               />

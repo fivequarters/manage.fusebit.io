@@ -11,7 +11,7 @@ export const entityLoopThrough = async <T = any>(
 
     next = data.next;
     pages.push(data.items);
-  } while (!!next);
+  } while (next);
 
   return pages.flat();
 };
