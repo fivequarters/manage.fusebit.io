@@ -1,7 +1,7 @@
 import React from 'react';
-import * as SC from './styles';
 import { Box, Button, Dialog, DialogActions, DialogProps } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
+import * as SC from './styles';
 
 interface Props extends DialogProps {
   onClose: () => void;
