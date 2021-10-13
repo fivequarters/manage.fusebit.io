@@ -11,7 +11,9 @@ export default createGlobalStyle`
         --black: #333333;
         --grey: #959595;
         --yellow: #FFC940;
+        --navbar-height: 185px;
     }
+    
     a {
         text-decoration: none;
         span {
@@ -32,6 +34,12 @@ export default createGlobalStyle`
     button {
       &:hover {
         cursor: pointer;
+      }
+    }
+
+    @media only screen and (max-width: 880px) {
+      :root {
+        --navbar-height: 164px;
       }
     }
 `;

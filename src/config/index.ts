@@ -10,6 +10,7 @@ import AuthenticationDetailOverviewPage from '../pages/AuthenticationDetailOverv
 import FatalErrorPage from '../pages/FatalErrorPage';
 import AuthCallback from '../pages/AuthCallback';
 import NotFoundPage from '../pages/NotFoundPage';
+import AccountSettingsPage from '../pages/AccountSettingsPage';
 import { RouteItem } from '../interfaces/router';
 
 // define app routes
@@ -53,6 +54,11 @@ export const routes: Array<RouteItem> = [
     key: 'router-logged-out',
     path: '/logged-out',
     component: LoggedOutErrorPage,
+  },
+  {
+    key: 'router-account',
+    path: '/account/:accountId/subscription/:subscriptionId/account/settings',
+    component: AccountSettingsPage,
   },
   {
     key: 'router-authentication-users',
