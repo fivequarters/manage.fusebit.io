@@ -12,6 +12,8 @@ import { Connector } from '../../../interfaces/connector';
 import DeleteConnectorModal from '../DeleteConnectorModal';
 import NewFeedModal from '../../common/NewFeedModal';
 import GetIdentities from './GetIdentities';
+import useKey from '../../../hooks/useKey';
+import useFirstTimeVisitor from '../../../hooks/useFirstTimeVisitor';
 
 interface Props {
   headless: boolean;
@@ -20,16 +22,28 @@ interface Props {
 
 const ConnectorsTable = ({ headless, setHeadless }: Props) => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
-  const [newModalOpen, , toggleNewModal] = useModal();
+  const [newModalOpen, setNewModal, toggleNewModal] = useModal();
   const [deleteModalOpen, setDeleteModal, toggleDeleteModal] = useModal();
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
   const { userData } = useContext();
-
   const { data: connectors } = useAccountConnectorsGetAll<{ items: Connector[] }>({
     enabled: userData.token,
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
+  });
+
+  // TODO: Verify if opening connector modal at first time is still needed
+  const { setFirstTimeVisitor } = useFirstTimeVisitor({
+    entities: connectors?.data.items,
+    onFirstTimeVisitor: () => setNewModal(true),
+  });
+
+  useKey({
+    onHasKey: () => {
+      setNewModal(true);
+      setFirstTimeVisitor(false);
+    },
   });
 
   const { loading, rows, selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({

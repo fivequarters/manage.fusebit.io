@@ -52,66 +52,12 @@ export const useEntityTable = ({
   const { massiveDelete } = useEntityApi();
   const { userData } = useContext();
 
-  const setItems = () => {
-    const items = isIntegration.current ? integrations?.data.items : connectors?.data.items;
-    if (items) {
-      setRows(items);
-    }
-    localStorage.removeItem('firstTimeVisitor'); // we delete this key, to, in case the user logs in to an account that has items and creates a new one, we now that we dont have to show them the modal
-  };
-
-  const checkQuery = () => {
-    if (setHeadless) {
-      setHeadless(false);
-    }
-    const key = query.get('key');
-    if (key !== null && key !== undefined) {
-      if (isIntegration.current) {
-        setAddIntegrationOpen(true);
-      } else {
-        setAddConnectorOpen(true);
-      }
-    }
-  };
-
   useEffect(() => {
     isIntegration.current = window.location.href.indexOf('integration') >= 0;
     if (integrations && integrations.data.items) {
       setLoading(false);
-
-      // If there are no Integrations when we first visit the integrations tab we open the integrations modal
-      if (integrations.data.items.length === 0 && localStorage.getItem('firstTimeVisitor')) {
-        setAddIntegrationOpen(true);
-        localStorage.removeItem('firstTimeVisitor');
-      }
-
-      // If there are integrations to show or if all of the integrations where deleted we call the setItems function
-      if (integrations.data.items.length > 0 || !headless.current) {
-        setItems();
-      }
-
-      // If we have just navigated to the integrations list we check if there is a query param
-      if (headless.current) {
-        checkQuery();
-      }
     } else if (connectors && connectors.data.items) {
       setLoading(false);
-
-      // If there are no connectors when we first visit the connectors tab we open the connectors modal
-      if (connectors.data.items.length === 0 && localStorage.getItem('firstTimeVisitor')) {
-        setAddConnectorOpen(true);
-        localStorage.removeItem('firstTimeVisitor');
-      }
-
-      // If there are connectors to show or if all of the connectors where deleted we call the setItems function
-      if (connectors.data.items.length > 0 || !headless.current) {
-        setItems();
-      }
-
-      // If we have just navigated to the connectors list we check if there is a query param
-      if (headless.current) {
-        checkQuery();
-      }
     } else if (users && users.data.items) {
       setLoading(false);
 
@@ -183,7 +129,6 @@ export const useEntityTable = ({
       },
       errorContainer
     );
-    localStorage.removeItem('firstTimeVisitor'); // so we dont show the user the modal when he had some integrations or connector already
   };
 
   return {
