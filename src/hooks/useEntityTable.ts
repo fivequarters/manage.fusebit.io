@@ -31,9 +31,6 @@ interface Props {
 export const useEntityTable = ({ integrations, connectors, users, page, setPage, rowsPerPage }: Props) => {
   const [selected, setSelected] = useState<string[]>([]);
   const [rows, setRows] = useState<Integration[] | Connector[] | Account[]>([]);
-  const [addIntegrationOpen, setAddIntegrationOpen] = useState(false);
-  const [addConnectorOpen, setAddConnectorOpen] = useState(false);
-  const [newUserOpen, setNewUserOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const query = useQuery();
@@ -126,12 +123,6 @@ export const useEntityTable = ({ integrations, connectors, users, page, setPage,
     handleCheck,
     isSelected,
     handleRowDelete,
-    setAddIntegrationOpen,
-    setAddConnectorOpen,
-    setNewUserOpen,
-    addIntegrationOpen,
-    addConnectorOpen,
-    newUserOpen,
     loading,
     selected,
     deleteModalOpen,
