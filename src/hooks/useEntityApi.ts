@@ -204,13 +204,13 @@ export const useEntityApi = (preventLoader?: boolean) => {
             accountId: userData.accountId,
             subscriptionId: userData.subscriptionId,
           });
-        } else if (type === 'C') {
+        } else if (type === 'Connector') {
           await deleteConnector.mutateAsync({
             id: ids[i],
             accountId: userData.accountId,
             subscriptionId: userData.subscriptionId,
           });
-        } else if (type === 'A') {
+        } else if (type === 'Account') {
           await deleteAccount.mutateAsync({ userId: ids[i], accountId: userData.accountId });
         } else if (type === 'Identity') {
           await deleteIndentity.mutateAsync({

@@ -53,7 +53,7 @@ const UsersTable = () => {
     <>
       <NewUserModal onClose={toggleNewModal} open={newModalOpen} />
       <DeleteUserModal
-        onConfirm={() => handleRowDelete('A')}
+        onConfirm={() => handleRowDelete('Account')}
         setOpen={setDeleteModal}
         open={deleteModalOpen}
         selected={selected}

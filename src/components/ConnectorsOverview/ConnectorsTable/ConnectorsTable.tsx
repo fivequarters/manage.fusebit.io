@@ -58,7 +58,7 @@ const ConnectorsTable = ({ headless, setHeadless }: Props) => {
     <>
       <NewFeedModal onClose={toggleNewModal} open={newModalOpen} isIntegration={false} />
       <DeleteConnectorModal
-        onConfirm={() => handleRowDelete('C')}
+        onConfirm={() => handleRowDelete('Connector')}
         setOpen={setDeleteModal}
         open={deleteModalOpen}
         selected={selected}

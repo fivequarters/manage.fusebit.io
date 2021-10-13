@@ -1,10 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { Integration } from '../interfaces/integration';
 import { Connector } from '../interfaces/connector';
-import { Feed } from '../interfaces/feed';
-import { Data } from '../interfaces/feedPicker';
-import { useCreateDataFromFeed } from './useCreateDataFromFeed';
 import { useQuery } from './useQuery';
 import { useEntityApi } from './useEntityApi';
 import { Account } from '../interfaces/account';
@@ -44,10 +40,8 @@ export const useEntityTable = ({
   setPage,
   rowsPerPage,
 }: Props) => {
-  const history = useHistory();
   const [selected, setSelected] = useState<string[]>([]);
   const [rows, setRows] = useState<Integration[] | Connector[] | Account[]>([]);
-  const { createDataFromFeed } = useCreateDataFromFeed();
   const [addIntegrationOpen, setAddIntegrationOpen] = useState(false);
   const [addConnectorOpen, setAddConnectorOpen] = useState(false);
   const [newUserOpen, setNewUserOpen] = useState(false);
@@ -171,8 +165,13 @@ export const useEntityTable = ({
     massiveDelete(
       selected,
       // TODO: Remove the location validation when the tables migration is done
-      // eslint-disable-next-line no-nested-ternary
-      type || (isIntegration.current ? 'Integration' : window.location.href.indexOf('connector') >= 0 ? 'C' : 'A'),
+      type ||
+        // eslint-disable-next-line no-nested-ternary
+        (isIntegration.current
+          ? 'Integration'
+          : window.location.href.indexOf('connector') >= 0
+          ? 'Connector'
+          : 'Account'),
       () => {
         const computedPages = Math.ceil((rows.length - selected.length) / rowsPerPage) - 1;
 
@@ -187,35 +186,12 @@ export const useEntityTable = ({
     localStorage.removeItem('firstTimeVisitor'); // so we dont show the user the modal when he had some integrations or connector already
   };
 
-  const handleRowClick = (event: any, href: string) => {
-    if (!event.target.id) {
-      history.push(href);
-    }
-  };
-
-  const handleIntegrationCreation = async (activeIntegration: Feed, data: Data) => {
-    const res = await createDataFromFeed(activeIntegration, data);
-    if (!res) {
-      setAddIntegrationOpen(false);
-    }
-  };
-
-  const handleConnectorCreation = async (activeIntegration: Feed, data: Data) => {
-    const res = await createDataFromFeed(activeIntegration, data, true);
-    if (!res) {
-      setAddConnectorOpen(false);
-    }
-  };
-
   return {
     rows,
     handleSelectAllCheck,
     handleCheck,
     isSelected,
     handleRowDelete,
-    handleRowClick,
-    handleIntegrationCreation,
-    handleConnectorCreation,
     setAddIntegrationOpen,
     setAddConnectorOpen,
     setNewUserOpen,
