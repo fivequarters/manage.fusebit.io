@@ -1,7 +1,7 @@
 import React from 'react';
+import { Button, Modal, Backdrop } from '@material-ui/core';
 import * as SC from './styles';
 import * as CSC from '../globalStyle';
-import { Button, Modal, Backdrop } from '@material-ui/core';
 
 interface Props {
   open: boolean;
@@ -36,7 +36,7 @@ const ConfirmationPrompt: React.FC<Props> = ({
       closeAfterTransition
       BackdropComponent={Backdrop}
     >
-      <SC.Card open={open}>
+      <SC.Card open={open} tabIndex={-1}>
         <CSC.Close onClick={() => setOpen(false)} />
         <CSC.ModalTitle margin="0 0 16px 0">{title}</CSC.ModalTitle>
         <CSC.ModalDescription textAlign="center">{description}</CSC.ModalDescription>
@@ -53,7 +53,7 @@ const ConfirmationPrompt: React.FC<Props> = ({
             </Button>
           )}
           <Button onClick={onConfirm} style={{ width: '77px' }} size="medium" variant="contained" color="primary">
-            {confirmationButtonText ? confirmationButtonText : 'Delete'}
+            {confirmationButtonText || 'Delete'}
           </Button>
         </SC.ButtonsWrapper>
       </SC.Card>

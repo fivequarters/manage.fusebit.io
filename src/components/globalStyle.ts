@@ -1,5 +1,5 @@
-import { createGlobalStyle, css, keyframes } from 'styled-components';
-import styled from 'styled-components';
+import styled, { createGlobalStyle, css, keyframes } from 'styled-components';
+
 import spinner from '../assets/spinner.svg';
 import cross from '../assets/cross.svg';
 import copy from '../assets/copy.svg';
