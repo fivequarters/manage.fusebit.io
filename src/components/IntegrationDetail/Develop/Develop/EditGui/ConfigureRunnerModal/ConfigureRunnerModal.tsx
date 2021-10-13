@@ -24,7 +24,6 @@ const Verbs = ['get', 'post', 'put', 'patch', 'delete'];
 
 const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
   const { id } = useParams<{ id: string }>();
-  const [verbSelectorActive, setVerbSelectorActive] = useState(false);
   const [formValues, setFormValues] = useState(getIntegrationConfig(id).runner);
   const [formErrors, setFormErrors] = useState<Partial<Errors>>({});
 
@@ -88,29 +87,23 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
         <Box display="flex" mt="30px">
           <CSC.Flex width="max-content" margin="0 48px 0 0" flexDown>
             <Label>Verb</Label>
-            <SC.VerbSelector
-              onBlur={() => validateForm()}
-              onClick={() => setVerbSelectorActive(!verbSelectorActive)}
-              hasError={!!formErrors.method}
+            <SC.VerbSelect
+              value={formValues?.method}
+              onChange={(e) => {
+                const newValues = {
+                  ...formValues,
+                  method: e.target.value as 'post' | 'delete' | 'put' | 'get' | 'patch',
+                };
+                validateForm(newValues);
+                setFormValues(newValues);
+              }}
             >
-              {formValues?.method} <SC.VerbArrow active={verbSelectorActive} />
-              <SC.VerbOptionsWrapper active={verbSelectorActive}>
-                {Verbs.map((verb) => (
-                  <SC.VerbOption
-                    onClick={() => {
-                      const newValues = { ...formValues, method: verb as 'post' | 'delete' | 'put' | 'get' | 'patch' };
-                      validateForm(newValues);
-                      setFormValues(newValues);
-                    }}
-                    key={verb}
-                    selected={verb === formValues?.method}
-                  >
-                    {verb}
-                  </SC.VerbOption>
-                ))}
-              </SC.VerbOptionsWrapper>
-            </SC.VerbSelector>
-            {formErrors.method && <SC.ErrorMessage>{formErrors.method}</SC.ErrorMessage>}
+              {Verbs.map((verb) => (
+                <SC.VerbItem key={verb} value={verb}>
+                  {verb.toLocaleUpperCase()}
+                </SC.VerbItem>
+              ))}
+            </SC.VerbSelect>
           </CSC.Flex>
           <CSC.Flex flexDown>
             <Label>URL</Label>
