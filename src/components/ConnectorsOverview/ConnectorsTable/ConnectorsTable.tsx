@@ -13,7 +13,6 @@ import DeleteConnectorModal from '../DeleteConnectorModal';
 import NewFeedModal from '../../common/NewFeedModal';
 import GetIdentities from './GetIdentities';
 import useQueryParam from '../../../hooks/useQueryParam';
-import useFirstTimeVisitor from '../../../hooks/useFirstTimeVisitor';
 
 const ConnectorsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -28,16 +27,9 @@ const ConnectorsTable = () => {
     subscriptionId: userData.subscriptionId,
   });
 
-  // TODO: Verify if opening connector modal at first time is still needed
-  const { setFirstTimeVisitor } = useFirstTimeVisitor({
-    entities: connectors?.data.items,
-    onFirstTimeVisitor: () => setNewModal(true),
-  });
-
   useQueryParam({
     onSet: () => {
       setNewModal(true);
-      setFirstTimeVisitor(false);
     },
     param: 'key',
   });
