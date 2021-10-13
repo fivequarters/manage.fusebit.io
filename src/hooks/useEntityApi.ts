@@ -17,7 +17,7 @@ import { useAccountIntegrationUpdateIntegration } from './api/v2/account/integra
 import { useAccountIntegrationDeleteIntegration } from './api/v2/account/integration/useDeleteOne';
 import { useAccountConnectorDeleteConnector } from './api/v2/account/connector/useDeleteOne';
 import { useAccountUserDeleteOne } from './api/v1/account/user/useDeleteOne';
-import { findMatchingConnectorFeed } from '../utils/utils';
+import { findMatchingConnectorFeed, getAllDependenciesFromFeed, linkPackageJson } from '../utils/utils';
 import { useAccountUserCreateUser } from './api/v1/account/user/useCreateUser';
 import { Account } from '../interfaces/account';
 import { useCreateToken } from './useCreateToken';
@@ -53,9 +53,13 @@ export const useEntityApi = (preventLoader?: boolean) => {
       accountId: userData.accountId,
       subscriptionId: userData.subscriptionId,
     };
-    entity.entityType === 'connector'
-      ? await createConnector.mutateAsync(obj)
-      : await createIntegration.mutateAsync(obj);
+
+    if (entity.entityType === 'connector') {
+      await createConnector.mutateAsync(obj);
+    } else {
+      await createIntegration.mutateAsync(obj);
+    }
+
     await waitForEntityStateChange(entity.entityType, [entity.id]);
   };
 
@@ -105,15 +109,25 @@ export const useEntityApi = (preventLoader?: boolean) => {
     try {
       if (!preventLoader) createLoader();
       const data = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
-      let newData = data;
+      const newData = data;
       if (isAdding) {
         const feedtype = connector.tags['fusebit.feedType'];
         const item: Feed = await findMatchingConnectorFeed(connector);
+        const dependencies = getAllDependenciesFromFeed(item);
+
         if (feedtype === 'connector') {
           item.configuration.components?.forEach((component) => {
             component.name = connector.id;
             component.entityId = connector.id;
             newData.data.components.push(component);
+
+            const newPackageJson = linkPackageJson(
+              JSON.parse(newData.data.files['package.json']),
+              dependencies,
+              component
+            );
+
+            newData.data.files['package.json'] = JSON.stringify(newPackageJson);
           });
         } else {
           Object.entries(item.configuration.entities).forEach((entity) => {
@@ -165,7 +179,11 @@ export const useEntityApi = (preventLoader?: boolean) => {
           const params = {
             id: item.id,
           };
-          isIdentity ? await deleteIndentity.mutateAsync(params) : await deleteInstall.mutateAsync(params);
+          if (isIdentity) {
+            await deleteIndentity.mutateAsync(params);
+          } else {
+            await deleteInstall.mutateAsync(params);
+          }
         })
       );
       if (callback) callback();
@@ -180,7 +198,7 @@ export const useEntityApi = (preventLoader?: boolean) => {
     try {
       createLoader();
       for (let i = 0; i < ids.length; i++) {
-        if (type === 'I') {
+        if (type === 'Integration') {
           await deleteIntegration.mutateAsync({
             id: ids[i],
             accountId: userData.accountId,

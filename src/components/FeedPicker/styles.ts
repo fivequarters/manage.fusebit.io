@@ -121,7 +121,7 @@ export const ColumnSearch = styled.input`
   width: 254px;
   transition: all 0.2s linear;
 
-  &::placeholder  {
+  &::placeholder {
     font-size: 14px;
     line-height: 20px;
     color: #959595;

@@ -13,7 +13,7 @@ export const useAccountUserCreateUser = <T>() => {
       return axios<T>(`/v1/account/${accountId}/user`, 'post', data);
     },
     {
-      onMutate: (_: Params) => () => {},
+      onMutate: () => () => {},
       onError: (_, __, rollback) => rollback?.(),
       onSettled: () => {},
       onSuccess: () => {

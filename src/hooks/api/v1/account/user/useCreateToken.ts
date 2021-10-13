@@ -11,7 +11,7 @@ export const useAccountUserCreateToken = <T>() => {
       return axios<T>(`/v1/account/${accountId}/user/${userId}/init`, 'post', data);
     },
     {
-      onMutate: (_: Params) => () => {},
+      onMutate: () => () => {},
       onError: (_, __, rollback) => rollback?.(),
       onSettled: () => {},
     }

@@ -1,13 +1,13 @@
-import React, { FC, ReactElement } from 'react';
-import { useEffect } from 'react';
+import React, { FC, ReactElement, useEffect } from 'react';
+
 import { useHistory, useLocation } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
+import axios from 'axios';
 import { useContext } from '../hooks/useContext';
 import { useAccountUserGetOne } from '../hooks/api/v1/account/user/useGetOne';
 import { useAccountGetOne } from '../hooks/api/v1/account/useGetOne';
 import { User } from '../interfaces/user';
 import { Account } from '../interfaces/account';
-import axios from 'axios';
 
 const {
   REACT_APP_AUTH0_DOMAIN,
@@ -28,7 +28,7 @@ const IntegrationsPage: FC<{}> = (): ReactElement => {
   const { data: account } = useAccountGetOne<Account>({ enabled: userData.token, accountId: userData.accountId });
 
   const getPicture = async () => {
-    let picture = '';
+    const picture = '';
     try {
       const response = await axios.get(`${REACT_APP_AUTH0_DOMAIN}/userinfo`, {
         headers: {
@@ -36,7 +36,10 @@ const IntegrationsPage: FC<{}> = (): ReactElement => {
         },
       });
       return response.data.picture;
-    } catch (e) {}
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.log(e);
+    }
     return picture;
   };
 
