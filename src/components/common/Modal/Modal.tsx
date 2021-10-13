@@ -25,14 +25,6 @@ const Modal: React.FC<Props> = ({
   content,
   ...props
 }) => {
-  const handleAccept = () => {
-    if (onAccept) {
-      onAccept();
-    } else {
-      onClose();
-    }
-  };
-
   return (
     <Dialog onClose={onClose} open={open} {...props}>
       <SC.Title>{title}</SC.Title>
@@ -49,7 +41,7 @@ const Modal: React.FC<Props> = ({
               {cancelButtonText || 'Cancel'}
             </Button>
           )}
-          <Button style={{ width: '200px' }} variant="contained" onClick={handleAccept} color="primary">
+          <Button style={{ width: 200 }} variant="contained" onClick={onAccept} color="primary">
             {acceptButtonText || 'Accept'}
           </Button>
         </Box>
