@@ -46,15 +46,17 @@ const rotate = keyframes`
   }
 `;
 
-const withError = css<{ hasError?: boolean }>`
+export const withError = css<{ $hasError?: boolean }>`
+  margin-bottom: 25px;
+
   ${(props) =>
-    props.hasError &&
+    props.$hasError &&
     `
   margin-bottom: 0px;
 `}
 `;
 
-export const InputMixin = css`
+export const inputBlueMixin = css<{ hasError: boolean }>`
   padding: 8px 16px;
   background-color: var(--secondary-color);
   width: 100%;
@@ -63,6 +65,7 @@ export const InputMixin = css`
   border-radius: 4px;
   outline: rgba(255, 255, 255, 0);
   margin: 0;
+  min-height: 50px !important;
 
   & > div > input {
     font-family: courier;
@@ -77,8 +80,6 @@ export const InputMixin = css`
   & > ::before {
     display: none;
   }
-
-  ${withError}
 `;
 
 export const Spinner = styled.div<{ margin?: string }>`

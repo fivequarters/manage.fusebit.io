@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom';
 import * as SC from './styles';
 import * as CSC from '../../../../../globalStyle';
 import { getIntegrationConfig } from '../../../../../../utils/localStorage';
+import Label from '../../../../../FormFields/Label';
+import TextField from '../../../../../FormFields/TextField';
 
 interface Props {
   open: boolean;
@@ -85,7 +87,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
         <CSC.ModalTitle margin="0 0 16px 0">Configure runner</CSC.ModalTitle>
         <Box display="flex" mt="30px">
           <CSC.Flex width="max-content" margin="0 48px 0 0" flexDown>
-            <SC.Subtitle>Verb</SC.Subtitle>
+            <Label>Verb</Label>
             <SC.VerbSelector
               onBlur={() => validateForm()}
               onClick={() => setVerbSelectorActive(!verbSelectorActive)}
@@ -111,9 +113,10 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
             {formErrors.method && <SC.ErrorMessage>{formErrors.method}</SC.ErrorMessage>}
           </CSC.Flex>
           <CSC.Flex flexDown>
-            <SC.Subtitle>URL</SC.Subtitle>
+            <Label>URL</Label>
             <div>
-              <SC.TextField
+              <TextField
+                fieldVariant="customBlue"
                 hasError={!!formErrors.url}
                 onChange={(e) => {
                   const newValues = { ...formValues, url: e.target.value };
@@ -129,9 +132,10 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
         </Box>
         {formValues?.method !== 'get' && (
           <Box display="flex" mt="15px" flexDirection="column">
-            <SC.Subtitle>Payload</SC.Subtitle>
+            <Label>Payload</Label>
             <div>
-              <SC.Textarea
+              <SC.PayloadTextarea
+                fieldVariant="customBlue"
                 hasError={!!formErrors.payload}
                 onChange={(e) => {
                   const newValues = { ...formValues, payload: e.target.value };
@@ -140,7 +144,6 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
                 }}
                 value={formValues?.payload}
                 onBlur={() => validateForm()}
-                height="250px"
               />
               {formErrors.payload && <SC.ErrorMessage>{formErrors.payload}</SC.ErrorMessage>}
             </div>

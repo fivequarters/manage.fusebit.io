@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import arrow from '../../../../../../assets/arrow-down-thin.svg';
+import Textarea from '../../../../../FormFields/Textarea';
 
 const withError = css<{ hasError?: boolean }>`
   margin-bottom: 25px;
@@ -108,31 +109,6 @@ export const VerbOption = styled.div<{ selected: boolean }>`
   }
 `;
 
-export const Input = css<{ height?: string }>`
-  font-family: courier;
-  font-size: 16px;
-  line-height: 18.5px;
-  color: var(--black);
-  padding: 16px;
-  background-color: var(--secondary-color);
-  width: 100%;
-  border: none;
-  resize: none;
-  border-radius: 4px;
-  height: ${(props) => (props.height ? props.height : '50px')};
-  outline: rgba(255, 255, 255, 0);
-
-  ${withError}
-`;
-
-export const TextField = styled.input<{ height?: string; hasError?: boolean }>`
-  ${Input}
-`;
-
-export const Textarea = styled.textarea<{ height?: string; hasError?: boolean }>`
-  ${Input}
-`;
-
 export const ButtonsWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -144,4 +120,8 @@ export const ErrorMessage = styled.p`
   line-height: 20px;
   margin: 5px 0 0 0;
   color: var(--primary-color);
+`;
+
+export const PayloadTextarea = styled(Textarea)`
+  height: 250px !important;
 `;
