@@ -2,20 +2,21 @@ import { useEffect } from 'react';
 import { useQuery } from './useQuery';
 
 interface Props {
-  onHasKey: (key: string) => void;
+  onSet: (key: string) => void;
+  param: string;
 }
 
-const useKey = ({ onHasKey }: Props) => {
+const useQueryParam = ({ onSet, param }: Props) => {
   const query = useQuery();
 
-  const key = query.get('key');
+  const _param = query.get(param);
 
   useEffect(() => {
-    if (key) {
-      onHasKey(key);
+    if (_param) {
+      onSet(_param);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };
 
-export default useKey;
+export default useQueryParam;

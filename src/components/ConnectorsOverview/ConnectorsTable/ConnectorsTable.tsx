@@ -12,7 +12,7 @@ import { Connector } from '../../../interfaces/connector';
 import DeleteConnectorModal from '../DeleteConnectorModal';
 import NewFeedModal from '../../common/NewFeedModal';
 import GetIdentities from './GetIdentities';
-import useKey from '../../../hooks/useKey';
+import useQueryParam from '../../../hooks/useQueryParam';
 import useFirstTimeVisitor from '../../../hooks/useFirstTimeVisitor';
 
 const ConnectorsTable = () => {
@@ -34,11 +34,12 @@ const ConnectorsTable = () => {
     onFirstTimeVisitor: () => setNewModal(true),
   });
 
-  useKey({
-    onHasKey: () => {
+  useQueryParam({
+    onSet: () => {
       setNewModal(true);
       setFirstTimeVisitor(false);
     },
+    param: 'key',
   });
 
   const rows = (connectors?.data?.items || []).map((row) => ({

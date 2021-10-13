@@ -12,7 +12,7 @@ import { useContext } from '../../../hooks/useContext';
 import { useAccountIntegrationsGetAll } from '../../../hooks/api/v2/account/integration/useGetAll';
 import GetInstalls from './GetInstalls';
 import NewFeedModal from '../../common/NewFeedModal';
-import useKey from '../../../hooks/useKey';
+import useQueryParam from '../../../hooks/useQueryParam';
 import useFirstTimeVisitor from '../../../hooks/useFirstTimeVisitor';
 
 const IntegrationsTable = () => {
@@ -32,11 +32,12 @@ const IntegrationsTable = () => {
     entities: integrations?.data.items,
   });
 
-  useKey({
-    onHasKey: () => {
+  useQueryParam({
+    onSet: () => {
       setNewModal(true);
       setFirstTimeVisitor(false);
     },
+    param: 'key',
   });
 
   const rows = (integrations?.data?.items || []).map((row) => ({
