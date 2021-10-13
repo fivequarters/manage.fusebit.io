@@ -74,7 +74,18 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
       setEditMode(false);
     };
 
-    const isSlackIntegration = integration?.tags && integration.tags['fusebit.service'] === 'slack';
+    const supportedTypeMap: Record<string, string> = {
+      slackConnector: 'slack'
+    };
+    const componentMap = integration?.data?.components
+      ?.map(component => supportedTypeMap[component.name])
+      .filter(type => !!type)
+      .reduce<Record<string, string>>((acc, cur) => {
+        acc[cur] = integration?.id
+        return acc;
+      }, {}) || {};
+    const isSampleAppEnabled = !!Object.keys(componentMap).length;
+
 
     return deleteModalOpen ? (
       <ConfirmationPrompt
@@ -187,12 +198,11 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
               >
                 Follow guide
               </Button>
-              {isSlackIntegration && (
+              {isSampleAppEnabled && (
                 <React.Fragment>
                   or
                   <LinkSampleApp
-                    integrationId={integration?.id}
-                    integrationType={integration!.tags!['fusebit.service']}
+                    componentMap={componentMap}
                   />
                 </React.Fragment>
               )}
@@ -202,7 +212,7 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
                 <SC.TimeIcon />
                 <SC.TimeDescription>10 minutes</SC.TimeDescription>
               </div>
-              {isSlackIntegration && (
+              {isSampleAppEnabled && (
                 <div style={{ display: 'flex', alignItems: 'center', margin: '0 auto' }}>
                   <SC.TimeIcon />
                   <SC.TimeDescription>2 minutes.</SC.TimeDescription>
