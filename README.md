@@ -27,7 +27,7 @@ REACT_APP_INTEGRATIONS_FEED_URL=http://localhost:3000/feed/integrationsFeed.json
 REACT_APP_CONNECTORS_FEED_URL=http://localhost:3000/feed/connectorsFeed.json
 REACT_APP_ENABLE_ONLINE_EDITOR=false
 REACT_APP_INTERCOM_APP_ID=v9ncq3ml
-REACT_APP_SAMPLE_APP_URL=https://sample-app.on.fusebit.io
+REACT_APP_SAMPLE_APP_URL=https://task-sample-app.on.fusebit.io
 REACT_APP_SAMPLE_APP_KEY=TheCommonTokenWithTheSampleApp
 ```
 
@@ -45,7 +45,7 @@ REACT_APP_INTEGRATIONS_FEED_URL=http://localhost:3000/feed/integrationsFeed.json
 REACT_APP_CONNECTORS_FEED_URL=http://localhost:3000/feed/connectorsFeed.json
 REACT_APP_ENABLE_ONLINE_EDITOR=false
 REACT_APP_INTERCOM_APP_ID=v9ncq3ml
-REACT_APP_SAMPLE_APP_URL=https://sample-app.on.fusebit.io
+REACT_APP_SAMPLE_APP_URL=https://task-sample-app.on.fusebit.io
 REACT_APP_SAMPLE_APP_KEY=TheCommonTokenWithTheSampleApp
 ```
 
@@ -60,7 +60,7 @@ REACT_APP_INTEGRATIONS_FEED_URL=https://portal-fusebit-io.vercel.app/feed/connec
 REACT_APP_CONNECTORS_FEED_URL=https://portal-fusebit-io.vercel.app/feed/connectorsFeed.json
 REACT_APP_ENABLE_ONLINE_EDITOR=false
 REACT_APP_INTERCOM_APP_ID=v9ncq3ml
-REACT_APP_SAMPLE_APP_URL=https://sample-app.on.fusebit.io
+REACT_APP_SAMPLE_APP_URL=https://task-sample-app.on.fusebit.io
 REACT_APP_SAMPLE_APP_KEY=TheCommonTokenWithTheSampleApp
 ```
 
