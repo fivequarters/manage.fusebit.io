@@ -1,9 +1,9 @@
 import React, { FC, ReactElement } from 'react';
-import Layout from '../components/Layout';
+import { Container } from '@material-ui/core';
 import Navbar from '../components/Navbar';
 import { useTrackPage } from '../hooks/useTrackPage';
 import Settings from '../components/AccountPage/Settings';
-import { Container } from '@material-ui/core';
+import Layout from '../components/Layout';
 
 const AccountSettingsPage: FC<{}> = (): ReactElement => {
   useTrackPage('Settings Overview', 'Settings');

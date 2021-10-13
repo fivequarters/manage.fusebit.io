@@ -1,9 +1,9 @@
 import React from 'react';
-import { Box } from '@material-ui/core';
-import * as SC from './styles';
-import { Props } from '../../../interfaces/Drawer';
 import { Link, useLocation } from 'react-router-dom';
+import { Box } from '@material-ui/core';
+import { Props } from '../../../interfaces/Drawer';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
+import * as SC from './styles';
 
 const Drawer: React.FC<Props> = ({ links, children }) => {
   const { getRedirectLink } = useGetRedirectLink();
@@ -13,7 +13,7 @@ const Drawer: React.FC<Props> = ({ links, children }) => {
     <Box display="flex">
       <SC.DrawerComponent variant="permanent" anchor="left">
         {links?.map((link) => (
-          <Box mb="8px">
+          <Box key={link.text} mb="8px">
             <Link to={getRedirectLink(link.href)}>
               <SC.Link color="default" active={location.pathname.indexOf(link.text.toLowerCase()) > 0}>
                 {link.text}

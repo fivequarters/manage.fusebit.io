@@ -54,6 +54,31 @@ const rotate = keyframes`
   }
 `;
 
+export const InfoField = styled.h4`
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 400;
+  margin: 0;
+  color: black;
+`;
+
+export const InfoFieldPlaceholder = styled.div`
+  font-size: 12px;
+  line-height: 14px;
+  font-weight: 300;
+  color: var(--grey);
+  margin-bottom: 4px;
+`;
+
+export const InfoFieldWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  &:not(:last-child) {
+    margin-bottom: 24px;
+  }
+`;
+
 export const Spinner = styled.div<{ margin?: string }>`
   height: 20px;
   width: 20px;
