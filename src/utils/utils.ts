@@ -60,7 +60,7 @@ export const isTokenExpired = () => {
 export function isSegmentTrackingEvents() {
   const user = readLocalData();
   return (
-    process.env.NODE_ENV !== 'production' ||
+    document.location.host !== 'manage.fusebit.io' ||
     (!user?.primaryEmail?.endsWith('@fusebit.io') && !user?.primaryEmail?.endsWith('@litebox.ai'))
   );
 }
