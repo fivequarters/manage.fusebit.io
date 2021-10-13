@@ -15,12 +15,7 @@ import NewFeedModal from '../../common/NewFeedModal';
 import useKey from '../../../hooks/useKey';
 import useFirstTimeVisitor from '../../../hooks/useFirstTimeVisitor';
 
-interface Props {
-  headless: boolean;
-  setHeadless: (value: boolean) => void;
-}
-
-const IntegrationsTable = ({ headless, setHeadless }: Props) => {
+const IntegrationsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
   const [newModalOpen, setNewModal, toggleNewModal] = useModal();
   const [deleteModalOpen, setDeleteModal, toggleDeleteModal] = useModal();
@@ -45,8 +40,6 @@ const IntegrationsTable = ({ headless, setHeadless }: Props) => {
   });
 
   const { loading, rows, selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
-    headless,
-    setHeadless,
     integrations,
     page,
     setPage,

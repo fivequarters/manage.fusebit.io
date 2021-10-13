@@ -15,12 +15,7 @@ import GetIdentities from './GetIdentities';
 import useKey from '../../../hooks/useKey';
 import useFirstTimeVisitor from '../../../hooks/useFirstTimeVisitor';
 
-interface Props {
-  headless: boolean;
-  setHeadless: (value: boolean) => void;
-}
-
-const ConnectorsTable = ({ headless, setHeadless }: Props) => {
+const ConnectorsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
   const [newModalOpen, setNewModal, toggleNewModal] = useModal();
   const [deleteModalOpen, setDeleteModal, toggleDeleteModal] = useModal();
@@ -47,8 +42,6 @@ const ConnectorsTable = ({ headless, setHeadless }: Props) => {
   });
 
   const { loading, rows, selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
-    headless,
-    setHeadless,
     connectors,
     page,
     setPage,

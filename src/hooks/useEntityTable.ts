@@ -8,8 +8,6 @@ import { EntitiesType } from '../interfaces/entities';
 import { useContext } from './useContext';
 
 interface Props {
-  headless?: any;
-  setHeadless?: Function;
   integrations?: {
     data: {
       items: Integration[];
@@ -30,16 +28,7 @@ interface Props {
   rowsPerPage: number;
 }
 
-export const useEntityTable = ({
-  headless,
-  setHeadless,
-  integrations,
-  connectors,
-  users,
-  page,
-  setPage,
-  rowsPerPage,
-}: Props) => {
+export const useEntityTable = ({ integrations, connectors, users, page, setPage, rowsPerPage }: Props) => {
   const [selected, setSelected] = useState<string[]>([]);
   const [rows, setRows] = useState<Integration[] | Connector[] | Account[]>([]);
   const [addIntegrationOpen, setAddIntegrationOpen] = useState(false);
