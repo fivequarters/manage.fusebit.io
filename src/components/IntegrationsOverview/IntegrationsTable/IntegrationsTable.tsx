@@ -22,7 +22,7 @@ const IntegrationsTable = () => {
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
   const { userData } = useContext();
-  const { data: integrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({
+  const { data: integrations, isLoading } = useAccountIntegrationsGetAll<{ items: Integration[] }>({
     enabled: userData.token,
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
@@ -39,18 +39,18 @@ const IntegrationsTable = () => {
     },
   });
 
-  const { loading, rows, selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
-    integrations,
-    page,
-    setPage,
-    rowsPerPage,
-  });
-
-  const tableRows = (rows as Integration[]).map((row) => ({
+  const rows = (integrations?.data?.items || []).map((row) => ({
     id: row.id,
     name: row.id,
     installs: <GetInstalls id={row.id} />,
   }));
+
+  const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
+    page,
+    setPage,
+    rowsPerPage,
+    rows,
+  });
 
   const handleClickRow = (row: BaseTableRow) => history.push(getRedirectLink(`/integration/${row.id}/develop`));
 
@@ -78,11 +78,11 @@ const IntegrationsTable = () => {
           { id: 'name', value: 'Name' },
           { id: 'installs', value: 'Installs' },
         ]}
-        loading={loading}
+        loading={isLoading}
         onClickNew={handleNewIntegration}
         onDeleteAll={toggleDeleteModal}
         onSelectAll={handleSelectAllCheck}
-        rows={tableRows}
+        rows={rows}
         onSelectRow={handleCheck}
         isSelected={isSelected}
         selected={selected}

@@ -22,7 +22,7 @@ const ConnectorsTable = () => {
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
   const { userData } = useContext();
-  const { data: connectors } = useAccountConnectorsGetAll<{ items: Connector[] }>({
+  const { data: connectors, isLoading } = useAccountConnectorsGetAll<{ items: Connector[] }>({
     enabled: userData.token,
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
@@ -41,19 +41,19 @@ const ConnectorsTable = () => {
     },
   });
 
-  const { loading, rows, selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
-    connectors,
-    page,
-    setPage,
-    rowsPerPage,
-  });
-
-  const tableRows = (rows as Connector[]).map((row) => ({
+  const rows = (connectors?.data?.items || []).map((row) => ({
     id: row.id,
     name: row.id,
     type: row.tags['fusebit.provider'],
     identities: <GetIdentities id={row.id} />,
   }));
+
+  const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
+    page,
+    setPage,
+    rowsPerPage,
+    rows,
+  });
 
   const handleClickRow = (row: BaseTableRow) => history.push(getRedirectLink(`/connector/${row.id}/configure`));
 
@@ -82,11 +82,11 @@ const ConnectorsTable = () => {
           { id: 'type', value: 'Type' },
           { id: 'identities', value: 'Identities' },
         ]}
-        loading={loading}
+        loading={isLoading}
         onClickNew={handleNewIntegration}
         onDeleteAll={toggleDeleteModal}
         onSelectAll={handleSelectAllCheck}
-        rows={tableRows}
+        rows={rows}
         onSelectRow={handleCheck}
         isSelected={isSelected}
         selected={selected}
