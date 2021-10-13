@@ -63,17 +63,17 @@ const Connect = React.forwardRef(
     };
 
     const supportedTypeMap: Record<string, string> = {
-      slackConnector: 'slack'
+      slackConnector: 'slack',
     };
-    const componentMap = integration?.data?.components
-      ?.map(component => supportedTypeMap[component.name])
-      .filter(type => !!type)
-      .reduce<Record<string, string>>((acc, cur) => {
-        acc[cur] = integration?.id
-        return acc;
-      }, {}) || {};
+    const componentMap =
+      integration?.data?.components
+        ?.map((component) => supportedTypeMap[component.name])
+        .filter((type) => !!type)
+        .reduce<Record<string, string>>((acc, cur) => {
+          acc[cur] = integration?.id;
+          return acc;
+        }, {}) || {};
     const isSampleAppEnabled = !!Object.keys(componentMap).length;
-
 
     return deleteModalOpen ? (
       <ConfirmationPrompt
@@ -191,9 +191,7 @@ const Connect = React.forwardRef(
               {isSampleAppEnabled && (
                 <React.Fragment>
                   or
-                  <LinkSampleApp
-                    componentMap={componentMap}
-                  />
+                  <LinkSampleApp componentMap={componentMap} />
                 </React.Fragment>
               )}
             </CSC.Flex>

@@ -63,7 +63,7 @@ export async function createSampleAppClientUrl(user: User, integrations: Record<
     new TextEncoder().encode(REACT_APP_SAMPLE_APP_KEY),
     { name: 'HMAC', hash: 'SHA-256' },
     false,
-    ['sign'],
+    ['sign']
   );
 
   // Create a JWT that'll act as an envelope for the sample app
@@ -71,7 +71,7 @@ export async function createSampleAppClientUrl(user: User, integrations: Record<
     { sub: `${user.id}`, aud: `${REACT_APP_SAMPLE_APP_URL}`, ...configuration },
     { displayName: 'Sample App Key', id: `${user.id}-issuer`, publicKeys: [{ keyId: 'sample', publicKey: 'sample' }] },
     hmacKey,
-    { name: 'HMAC', hash: 'SHA-256', algorithm: 'HS256' },
+    { name: 'HMAC', hash: 'SHA-256', algorithm: 'HS256' }
   );
 
   // Add it to the URL, and return
