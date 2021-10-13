@@ -22,7 +22,7 @@ const ConnectorDetailIdentitiesPage: FC<{}> = (): ReactElement => {
 
   return (
     <Layout>
-      <Navbar sectionName={connectorData?.data.id || id} dropdown={true} />
+      <Navbar sectionName={connectorData?.data.id || id} dropdown />
       <Identities id={id} />
     </Layout>
   );

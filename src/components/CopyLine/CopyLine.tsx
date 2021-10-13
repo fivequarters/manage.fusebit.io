@@ -11,7 +11,9 @@ const CopyLine: React.FC<Props> = ({ text, highlightedText, horizontalScrollbar,
   const handleClick = () => {
     if (!disableCopy) {
       handleCopy(text);
-      onCopy && onCopy();
+      if (onCopy) {
+        onCopy();
+      }
     }
   };
 
@@ -38,9 +40,8 @@ const CopyLine: React.FC<Props> = ({ text, highlightedText, horizontalScrollbar,
               });
               if (foundWord) {
                 return <strong key={word}>{word}</strong>;
-              } else {
-                return word + ' ';
               }
+              return `${word} `;
             })
           : text}
       </SC.LineInstruction>

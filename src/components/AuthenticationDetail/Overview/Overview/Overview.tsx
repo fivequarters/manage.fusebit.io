@@ -1,15 +1,15 @@
-import React from 'react';
-import * as SC from './styles';
-import * as CSC from '../../../globalStyle';
-import { useContext } from '../../../../hooks/useContext';
-import dots from '../../../../assets/dots.svg';
+import React, { useEffect } from 'react';
 import { Button, Modal, Backdrop } from '@material-ui/core';
 import { JsonForms } from '@jsonforms/react';
 import { ValidationMode } from '@jsonforms/core';
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
-import { useEffect } from 'react';
-import CliAccess from './CliAccess';
+
 import { useHistory, useParams } from 'react-router-dom';
+import dots from '../../../../assets/dots.svg';
+import { useContext } from '../../../../hooks/useContext';
+import * as CSC from '../../../globalStyle';
+import * as SC from './styles';
+import CliAccess from './CliAccess';
 import { useAccountUserGetOne } from '../../../../hooks/api/v1/account/user/useGetOne';
 import { useAccountUserUpdateOne } from '../../../../hooks/api/v1/account/user/useUpdateOne';
 import client from '../../../../assets/client.jpg';
@@ -102,9 +102,9 @@ const Overview: React.FC = () => {
     }
   }, [accountData]);
 
-  const _updateUser = async (data: Account) => {
+  const _updateUser = async (_data: Account) => {
     try {
-      await updateUser.mutateAsync({ data, accountId: userData.accountId, userId: data.id });
+      await updateUser.mutateAsync({ _data, accountId: userData.accountId, userId: _data.id });
       reloadAccount();
     } catch (e) {
       createError(e);
@@ -115,7 +115,7 @@ const Overview: React.FC = () => {
     if (errors.length > 0) {
       setValidationMode('ValidateAndShow');
     } else {
-      //update the user info
+      // update the user info
       setIsSubmitting(true);
       const dataToSubmit: Account = {
         id: accountData?.data.id || '',
@@ -163,8 +163,8 @@ const Overview: React.FC = () => {
         open={deleteOpen}
         setOpen={setDeleteOpen}
         handleConfirmation={handleDelete}
-        title={`Are you sure you want to delete this user?`}
-        description={`Deleting this user will remove all of their access to Fusebit. You will have to re-add them again`}
+        title="Are you sure you want to delete this user?"
+        description="Deleting this user will remove all of their access to Fusebit. You will have to re-add them again"
       />
       <Modal
         aria-labelledby="transition-modal-title"
@@ -243,9 +243,11 @@ const Overview: React.FC = () => {
                 data={data}
                 renderers={materialRenderers}
                 cells={materialCells}
-                onChange={({ errors, data }) => {
-                  errors && setErrors(errors);
-                  setData(data);
+                onChange={({ errors: _errors, data: _data }) => {
+                  if (_errors) {
+                    setErrors(_errors);
+                  }
+                  setData(_data);
                 }}
                 validationMode={validationMode}
               />

@@ -1,5 +1,5 @@
 import { useMutation } from 'react-query';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { Params } from '../../../../../../interfaces/api';
 import { useAxios } from '../../../../../useAxios';
 import { useContext } from '../../../../../useContext';

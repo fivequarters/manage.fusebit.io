@@ -1,11 +1,11 @@
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { format } from 'date-fns';
 import BaseTable from '../../../BaseTable';
 import { useEntityTable } from '../../../../hooks/useEntityTable';
 import { usePagination } from '../../../../hooks/usePagination';
-import { useParams } from 'react-router-dom';
 import { useAccountConnectorIdentityGetAll } from '../../../../hooks/api/v2/account/connector/identity/useGetAll';
-import { Identity } from '../../../../interfaces/identities';
-import { format } from 'date-fns';
+import { IdentityList } from '../../../../interfaces/identities';
 import CodeBlock from '../../../CodeBlock';
 import ConfirmationPrompt from '../../../ConfirmationPrompt';
 import InformationalBanner from '../../../InformationalBanner';
@@ -24,7 +24,7 @@ const IntegrationsTable = () => {
     rowsPerPage,
   });
 
-  const { data, isLoading } = useAccountConnectorIdentityGetAll<Identity>(
+  const { data, isLoading } = useAccountConnectorIdentityGetAll<IdentityList>(
     {
       id,
     },
@@ -65,19 +65,22 @@ const IntegrationsTable = () => {
       <InformationalBanner>
         An identity is a unique relationship your tenant has with a connector. It is used to authenticate on behalf of
         them when running an integration.{' '}
-        <a href="https://developer.fusebit.io/docs">Learn more about Identities here</a>.
+        <a href="https://developer.fusebit.io/docs/fusebit-system-architecture#installation-lifecycle">
+          Learn more about Identities here
+        </a>
+        .
       </InformationalBanner>
       <ConfirmationPrompt
         open={deleteOpen}
         setOpen={setDeleteOpen}
         handleConfirmation={handleDelete}
-        title={`​Are you sure you want to delete ${selected.length > 1 ? 'these Identities?' : 'this Identity?'}`}
+        title={`Are you sure you want to delete ${selected.length > 1 ? 'these Identities?' : 'this Identity?'}`}
         description="Your tenants will have to re-authenticate themselves in their account"
       />
       <BaseTable
         emptyTableText="Your identities list is empty"
-        handleChangePage={handleChangePage}
-        handleChangeRowsPerPage={handleChangeRowsPerPage}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
         page={page}
         rowsPerPage={rowsPerPage}
         headers={[

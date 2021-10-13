@@ -125,6 +125,14 @@ export const Input = css<{ height?: string }>`
   ${withError}
 `;
 
+export const TextField = styled.input<{ height?: string; hasError?: boolean }>`
+  ${Input}
+`;
+
+export const Textarea = styled.textarea<{ height?: string; hasError?: boolean }>`
+  ${Input}
+`;
+
 export const ButtonsWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -133,9 +141,7 @@ export const ButtonsWrapper = styled.div`
 `;
 
 export const ErrorMessage = styled.p`
-  position: absolute;
-  left: 0;
-  bottom: -45px;
   line-height: 20px;
+  margin: 5px 0 0 0;
   color: var(--primary-color);
 `;

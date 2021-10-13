@@ -3,12 +3,8 @@ import { Params } from '../../../../../../interfaces/api';
 import { useAxios } from '../../../../../useAxios';
 import { useContext } from '../../../../../useContext';
 
-interface Props {
-  skipRun: boolean;
-}
-
-export const useAccountIntegrationCommitSession = ({ skipRun } = {} as Props) => {
-  const { axios } = useAxios();
+export const useAccountIntegrationCommitSession = () => {
+  const { axios } = useAxios({ ignoreInterceptors: true });
   const { userData } = useContext();
 
   return useMutation((params: Params) => {

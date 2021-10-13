@@ -1,12 +1,12 @@
-import { useContext } from './useContext';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { useContext } from './useContext';
 import { useReplaceMustache } from './useReplaceMustache';
 import { useGetRedirectLink } from './useGetRedirectLink';
 import { Entity, Feed } from '../interfaces/feed';
 import { Data } from '../interfaces/feedPicker';
 import { useLoader } from './useLoader';
 import { useError } from './useError';
-import { useHistory } from 'react-router-dom';
 import { useEntityApi } from './useEntityApi';
 import { trackEvent } from '../utils/analytics';
 
@@ -23,14 +23,14 @@ export const useCreateDataFromFeed = () => {
     async (activeFeed: Feed, data: Data, isConnector?: boolean) => {
       try {
         createLoader();
-        let firstIntegration: Entity | undefined;
-        let firstConnector: Entity | undefined;
 
         const parsedFeed = await replaceMustache(data, activeFeed);
-        firstIntegration = parsedFeed.configuration.entities.find(
+        const firstIntegration = parsedFeed.configuration.entities.find(
           (entity: Entity) => entity.entityType === 'integration'
         );
-        firstConnector = parsedFeed.configuration.entities.find((entity: Entity) => entity.entityType === 'connector');
+        const firstConnector = parsedFeed.configuration.entities.find(
+          (entity: Entity) => entity.entityType === 'connector'
+        );
 
         const commonTags = {
           'fusebit.feedType': isConnector ? 'connector' : 'integration',
@@ -38,9 +38,11 @@ export const useCreateDataFromFeed = () => {
         };
 
         if (isConnector) {
-          trackEvent(`New Connector Create Button ${commonTags['fusebit.feedId']} Clicked`, 'Connectors');
+          trackEvent('New Connector Create Button Clicked', 'Connectors', { connector: commonTags['fusebit.feedId'] });
         } else {
-          trackEvent(`New Integration Create Button ${commonTags['fusebit.feedId']} Clicked`, 'Integrations');
+          trackEvent('New Integration Create Button Clicked', 'Integrations', {
+            integration: commonTags['fusebit.feedId'],
+          });
         }
 
         await Promise.all([
@@ -51,8 +53,8 @@ export const useCreateDataFromFeed = () => {
         removeLoader();
         history.push(
           isConnector
-            ? getRedirectLink('/connector/' + firstConnector?.id + '/configure')
-            : getRedirectLink('/integration/' + firstIntegration?.id + '/develop')
+            ? getRedirectLink(`/connector/${firstConnector?.id}/configure`)
+            : getRedirectLink(`/integration/${firstIntegration?.id}/develop`)
         );
       } catch (e) {
         createError(e);

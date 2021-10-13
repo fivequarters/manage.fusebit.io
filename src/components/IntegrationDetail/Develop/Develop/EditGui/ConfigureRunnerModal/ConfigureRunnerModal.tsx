@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, Backdrop, Box, Select, MenuItem } from '@material-ui/core';
+import { Button, Modal, Backdrop, Box } from '@material-ui/core';
+import { useParams } from 'react-router-dom';
 import * as SC from './styles';
 import * as CSC from '../../../../../globalStyle';
 import { getIntegrationConfig } from '../../../../../../utils/localStorage';
-import { useParams } from 'react-router-dom';
-import TextField from '../../../../../FormFields/TextField';
-import Label from '../../../../../FormFields/Label';
-import Textarea from '../../../../../FormFields/Textarea';
 
 interface Props {
   open: boolean;
@@ -25,6 +22,7 @@ const Verbs = ['get', 'post', 'put', 'patch', 'delete'];
 
 const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
   const { id } = useParams<{ id: string }>();
+  const [verbSelectorActive, setVerbSelectorActive] = useState(false);
   const [formValues, setFormValues] = useState(getIntegrationConfig(id).runner);
   const [formErrors, setFormErrors] = useState<Partial<Errors>>({});
 
@@ -37,7 +35,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
 
   const validateForm = (newValues?: any) => {
     const { method, url, payload } = newValues || formValues || {};
-    let errors = {} as Errors;
+    const errors = {} as Errors;
     let valid = true;
 
     if (!method) {
@@ -73,12 +71,6 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
     }
   };
 
-  const handleVerbChange = (event: any) => {
-    const newValues = { ...formValues, method: event.target.value as 'post' | 'delete' | 'put' | 'get' | 'patch' };
-    validateForm(newValues);
-    setFormValues(newValues);
-  };
-
   return (
     <Modal
       aria-labelledby="transition-modal-title"
@@ -88,30 +80,40 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
       closeAfterTransition
       BackdropComponent={Backdrop}
     >
-      <SC.Card open={open}>
+      <SC.Card open={open} tabIndex={-1}>
         <CSC.Close onClick={() => setOpen(false)} />
         <CSC.ModalTitle margin="0 0 16px 0">Configure runner</CSC.ModalTitle>
         <Box display="flex" mt="30px">
           <CSC.Flex width="max-content" margin="0 48px 0 0" flexDown>
-            <Label>Verb</Label>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={formValues?.method}
-              onChange={handleVerbChange}
-              style={{ width: '110px', marginTop: '16px' }}
+            <SC.Subtitle>Verb</SC.Subtitle>
+            <SC.VerbSelector
+              onBlur={() => validateForm()}
+              onClick={() => setVerbSelectorActive(!verbSelectorActive)}
+              hasError={!!formErrors.method}
             >
-              {Verbs.map((verb) => (
-                <MenuItem value={verb}>{verb.toLocaleUpperCase()}</MenuItem>
-              ))}
-            </Select>
+              {formValues?.method} <SC.VerbArrow active={verbSelectorActive} />
+              <SC.VerbOptionsWrapper active={verbSelectorActive}>
+                { Verbs.map((verb) => (
+                  <SC.VerbOption
+                    onClick={() => {
+                      const newValues = { ...formValues, method: verb as 'post' | 'delete' | 'put' | 'get' | 'patch' };
+                      validateForm(newValues);
+                      setFormValues(newValues);
+                    }}
+                    key={verb}
+                    selected={verb === formValues?.method}
+                  >
+                    {verb}
+                  </SC.VerbOption>
+                ))}
+              </SC.VerbOptionsWrapper>
+            </SC.VerbSelector>
             {formErrors.method && <SC.ErrorMessage>{formErrors.method}</SC.ErrorMessage>}
           </CSC.Flex>
           <CSC.Flex flexDown>
-            <Label>URL</Label>
-            <Box mb="40px" position="relative">
-              <TextField
-                fieldVariant="customBlue"
+            <SC.Subtitle>URL</SC.Subtitle>
+            <div>
+              <SC.TextField
                 hasError={!!formErrors.url}
                 onChange={(e) => {
                   const newValues = { ...formValues, url: e.target.value };
@@ -122,15 +124,14 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
                 value={formValues?.url}
               />
               {formErrors.url && <SC.ErrorMessage>{formErrors.url}</SC.ErrorMessage>}
-            </Box>
+            </div>
           </CSC.Flex>
         </Box>
         {formValues?.method !== 'get' && (
           <Box display="flex" mt="15px" flexDirection="column">
-            <Label>Payload</Label>
-            <Box mb="40px" position="relative">
-              <Textarea
-                fieldVariant="customBlue"
+            <SC.Subtitle>Payload</SC.Subtitle>
+            <div>
+              <SC.Textarea
                 hasError={!!formErrors.payload}
                 onChange={(e) => {
                   const newValues = { ...formValues, payload: e.target.value };
@@ -139,9 +140,10 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
                 }}
                 value={formValues?.payload}
                 onBlur={() => validateForm()}
+                height="250px"
               />
               {formErrors.payload && <SC.ErrorMessage>{formErrors.payload}</SC.ErrorMessage>}
-            </Box>
+            </div>
           </Box>
         )}
         <SC.ButtonsWrapper>
