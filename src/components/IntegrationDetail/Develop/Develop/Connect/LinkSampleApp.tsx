@@ -43,6 +43,6 @@ export const LinkSampleApp: React.FC<IProps> = ({ componentMap }: IProps) => {
       Try the sample app for {typesString}!
     </Button>
   ) : (
-    <React.Fragment />
+    <></>
   );
 };

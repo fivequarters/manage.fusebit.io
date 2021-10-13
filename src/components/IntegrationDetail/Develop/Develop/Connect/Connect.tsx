@@ -199,10 +199,10 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
                 Follow guide
               </Button>
               {isSampleAppEnabled && (
-                <React.Fragment>
+                <>
                   or
                   <LinkSampleApp componentMap={componentMap} />
-                </React.Fragment>
+                </>
               )}
             </CSC.Flex>
             <CSC.Flex>
