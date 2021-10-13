@@ -87,7 +87,7 @@ export const useLoader = () => {
     });
     return new Promise((globalAccept: Function, globalReject: Function) => {
       Promise.all(promises)
-        .then((_) => {
+        .then(() => {
           Object.keys(intervalIds).forEach((entityId: string) => clearInterval(intervalIds[entityId]));
           globalAccept({});
         })

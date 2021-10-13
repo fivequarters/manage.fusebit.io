@@ -1,7 +1,6 @@
-import React from 'react';
+/* eslint-disable no-nested-ternary */
+import React, { useState, useEffect } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
-import * as SC from './styles';
-import * as CSC from '../../../globalStyle';
 import {
   Button,
   Modal,
@@ -18,6 +17,8 @@ import {
   Box,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import * as SC from './styles';
+import * as CSC from '../../../globalStyle';
 import arrow from '../../../../assets/arrow-right-black.svg';
 import Connect from './Connect';
 import { useLoader } from '../../../../hooks/useLoader';
@@ -35,8 +36,7 @@ import { Entity, Feed } from '../../../../interfaces/feed';
 import { Data } from '../../../../interfaces/feedPicker';
 import { useReplaceMustache } from '../../../../hooks/useReplaceMustache';
 import { FinalConnector } from '../../../../interfaces/integrationDetailDevelop';
-import { useState } from 'react';
-import { useEffect } from 'react';
+
 import { useEntityApi } from '../../../../hooks/useEntityApi';
 import { useBackendClient } from '../../../../hooks/useBackendClient';
 import { BackendClient } from '../../../../interfaces/backendClient';
@@ -47,6 +47,8 @@ import MobileDrawer from './MobileDrawer';
 
 const { REACT_APP_ENABLE_ONLINE_EDITOR } = process.env;
 const isOnlineEditorEnabled = REACT_APP_ENABLE_ONLINE_EDITOR === 'true';
+
+// TODO: Split this component and refactor ternary logic
 
 const Develop: React.FC = () => {
   const history = useHistory();
@@ -86,8 +88,10 @@ const Develop: React.FC = () => {
   const areCardsCollapsing = useMediaQuery('(max-width: 1200px)');
 
   const getBackendClients = async () => {
-    const backendClients = await getBackendClientListener();
-    backendClients && setBackendClients(backendClients);
+    const _backendClients = await getBackendClientListener();
+    if (_backendClients) {
+      setBackendClients(_backendClients);
+    }
     setBackendClientsLoading(false);
   };
 
@@ -224,7 +228,7 @@ const Develop: React.FC = () => {
       return returnItem;
     });
 
-    let finalConnectorsList: FinalConnector[] | undefined = filteredConnectors;
+    const finalConnectorsList: FinalConnector[] | undefined = filteredConnectors;
 
     if (
       integrationData &&
@@ -283,8 +287,8 @@ const Develop: React.FC = () => {
 
   const handleConnectOpen = async () => {
     trackEvent('Develop Connect Button Clicked', 'Integration');
-    const backendClient = await registerBackend();
-    setBackendClient(backendClient);
+    const _backendClient = await registerBackend();
+    setBackendClient(_backendClient);
     setConnectOpen(true);
   };
 
@@ -368,14 +372,14 @@ const Develop: React.FC = () => {
                   });
                   return returnItem;
                 })
-                .map((connector: Connector, index: number) => {
+                .map((connector: Connector) => {
                   return (
                     <ListComponent
-                      onLinkConnectorClick={(connector: any) => linkConnector(connector)}
-                      linkConnector={true}
+                      onLinkConnectorClick={(_connector: any) => linkConnector(_connector)}
+                      linkConnector
                       key={connector.id}
                       connector={connector}
-                      onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
+                      onConnectorDelete={(_connector: Entity) => handleListComponentDelete(_connector)}
                     />
                   );
                 })}
@@ -390,6 +394,7 @@ const Develop: React.FC = () => {
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"
           open={editGuiOpen}
+          disableEscapeKeyDown
           onClose={() => {
             setEditGuiOpen(false);
           }}
@@ -410,7 +415,7 @@ const Develop: React.FC = () => {
             <SC.CardTitle>Your Application</SC.CardTitle>
             {backendClients.length > 0 ? (
               backendClients.map((client: BackendClient) => (
-                <>
+                <React.Fragment key={client.id}>
                   <ListComponent
                     id={client.id}
                     onChange={getBackendClients}
@@ -420,7 +425,7 @@ const Develop: React.FC = () => {
                   {!areCardsCollapsing && (
                     <LineConnector start={client.id} startAnchor="right" end="fusebit" endAnchor="left" />
                   )}
-                </>
+                </React.Fragment>
               ))
             ) : !backendClientsLoading ? (
               <SC.NoApplicationsConfiguredWrapper>
@@ -546,7 +551,7 @@ const Develop: React.FC = () => {
                                 index: number
                               ) => (
                                 <MenuItem
-                                  key={option.buttonLabel}
+                                  key={option.optionLabel}
                                   disabled={index === 2}
                                   selected={index === editOption}
                                   onClick={(event) => handleEditOptionClick(event, index)}
@@ -567,9 +572,13 @@ const Develop: React.FC = () => {
               filterConnectors().map((connector: FinalConnector, index: number) => {
                 if (index < 5) {
                   return (
-                    <>
-                      <LineConnector start="fusebit" startAnchor="right" end={connector.id} endAnchor="left" />
-                    </>
+                    <LineConnector
+                      key={connector.id}
+                      start="fusebit"
+                      startAnchor="right"
+                      end={connector.id}
+                      endAnchor="left"
+                    />
                   );
                 }
                 return null;
@@ -613,30 +622,26 @@ const Develop: React.FC = () => {
                 filterConnectors().map((connector: FinalConnector, index: number) => {
                   if (index < 5) {
                     return (
-                      <>
-                        <ListComponent
-                          id={connector.id}
-                          key={index}
-                          connector={connector}
-                          onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
-                        />
-                      </>
+                      <ListComponent
+                        id={connector.id}
+                        key={connector.id}
+                        connector={connector}
+                        onConnectorDelete={(_connector: Entity) => handleListComponentDelete(_connector)}
+                      />
                     );
                   }
                   return null;
                 })
               )}
             </SC.CardConnectorWrapper>
-            {integrationData?.data.data.components.length
-              ? integrationData?.data.data.components.length >= 5 && (
-                  <Link to={getRedirectLink('/connectors')}>
-                    <SC.CardConnectorSeeMore href={getRedirectLink('/connectors')}>
-                      See all
-                      <img src={arrow} alt="see more" height="10" width="10" />
-                    </SC.CardConnectorSeeMore>
-                  </Link>
-                )
-              : null}
+            {(integrationData?.data?.data?.components || []).length >= 5 && (
+              <Link to={getRedirectLink('/connectors')}>
+                <SC.CardConnectorSeeMore href={getRedirectLink('/connectors')}>
+                  See all
+                  <img src={arrow} alt="see more" height="10" width="10" />
+                </SC.CardConnectorSeeMore>
+              </Link>
+            )}
 
             <SC.CardConnectorButtonsWrapper>
               <Button

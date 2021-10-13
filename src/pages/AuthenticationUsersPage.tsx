@@ -1,7 +1,8 @@
-import React, { FC, ReactElement } from 'react';
-import AuthenticationUsers from '../components/Authentication/Users/AuthenticationUsers';
+import { FC, ReactElement } from 'react';
+import UsersTable from '../components/Authentication/UsersTable';
 import Layout from '../components/Layout';
 import Navbar from '../components/Navbar';
+import TabComponent from '../components/TabComponent';
 import { useTrackPage } from '../hooks/useTrackPage';
 
 const AuthenticationUsersPage: FC<{}> = (): ReactElement => {
@@ -9,8 +10,8 @@ const AuthenticationUsersPage: FC<{}> = (): ReactElement => {
 
   return (
     <Layout>
-      <Navbar sectionName="Authentication" authenticationLink={true} authentication={true} />
-      <AuthenticationUsers />
+      <Navbar sectionName="Authentication" authenticationLink authentication />
+      <TabComponent tabNames={['Users']} tabObjects={[<UsersTable key="usersTable" />]} />
     </Layout>
   );
 };
