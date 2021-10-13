@@ -1,6 +1,6 @@
-import { useQuery } from 'react-query';
+import { useQuery, UseQueryOptions } from 'react-query';
 import { Params } from '../../../../../interfaces/api';
-import { FusebitAxios, useAxios } from '../../../../useAxios';
+import { ApiResponse, FusebitAxios, useAxios } from '../../../../useAxios';
 
 export const ACCOUNT_CONNECTORS_GET_ALL = 'accountConnectorsGetAll';
 
@@ -14,7 +14,10 @@ export const getAllConnectors = <T>(axiosInstance: FusebitAxios, params: Params,
   );
 };
 
-export const useAccountConnectorsGetAll = <T>(params: Params) => {
+export const useAccountConnectorsGetAll = <T>(
+  params: Params,
+  options?: UseQueryOptions<unknown, unknown, ApiResponse<T>>
+) => {
   const { axios } = useAxios();
 
   const { enabled, ...queryParams } = params;
@@ -27,6 +30,9 @@ export const useAccountConnectorsGetAll = <T>(params: Params) => {
         'get',
         params
       ),
-    { enabled: !!enabled }
+    {
+      enabled: !!enabled,
+      ...options,
+    }
   );
 };
