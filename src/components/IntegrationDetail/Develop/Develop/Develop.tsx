@@ -523,13 +523,13 @@ const Develop: React.FC = () => {
             )}
             <SC.CardButtonWrapper>
               <Button
-                onClick={() => editOptions.handle(true)}
+                onClick={() => editOptions[editOption].handle(true)}
                 style={{ width: '200px' }}
                 size="large"
                 variant="contained"
                 color="primary"
               >
-                {editOptions.buttonLabel}
+                {editOptions[editOption].buttonLabel}
               </Button>
 
               {isOnlineEditorEnabled && (
