@@ -93,7 +93,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
             >
               {formValues?.method} <SC.VerbArrow active={verbSelectorActive} />
               <SC.VerbOptionsWrapper active={verbSelectorActive}>
-                { Verbs.map((verb) => (
+                {Verbs.map((verb) => (
                   <SC.VerbOption
                     onClick={() => {
                       const newValues = { ...formValues, method: verb as 'post' | 'delete' | 'put' | 'get' | 'patch' };

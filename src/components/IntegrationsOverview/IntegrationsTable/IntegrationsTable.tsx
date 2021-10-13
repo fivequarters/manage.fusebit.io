@@ -50,7 +50,8 @@ const IntegrationsTable = ({ headless, setHeadless }: Props) => {
   const handleClickRow = (row: BaseTableRow) => history.push(getRedirectLink(`/integration/${row.id}/develop`));
 
   const handleNewIntegration = () => {
-    trackEvent('New Integration Button Clicked', 'Integrations', {}, toggleNewModal);
+    trackEvent('New Integration Button Clicked', 'Integrations', {});
+    toggleNewModal();
   };
 
   return (
