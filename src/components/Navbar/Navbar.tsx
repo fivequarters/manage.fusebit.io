@@ -29,6 +29,7 @@ const Navbar: React.FC<Props> = ({
   integration,
   connector,
   authentication,
+  team,
   authenticationLink,
   integrationsLink,
 }) => {
@@ -84,7 +85,7 @@ const Navbar: React.FC<Props> = ({
   const to = integrationsLink
     ? getRedirectLink('/integrations/overview')
     : authenticationLink
-    ? getRedirectLink('/authentication/users')
+    ? getRedirectLink('/account/settings')
     : getRedirectLink('/connectors/overview');
 
   return (
@@ -263,7 +264,7 @@ const Navbar: React.FC<Props> = ({
                           <Link style={{ marginRight: 'auto' }} to={getRedirectLink('/connectors/overview')}>
                             <SC.SectionDropdownTitle>Accounts</SC.SectionDropdownTitle>
                           </Link>
-                          <Link to={getRedirectLink('/authentication/users')}>
+                          <Link to={getRedirectLink('/account/settings')}>
                             <SC.SectionDropdownSeeMore>
                               See all
                               <img src={rightArrow} alt="See all" height="8" width="8" />
@@ -283,10 +284,10 @@ const Navbar: React.FC<Props> = ({
                     <Drawer anchor="bottom" open={drawerBottomOpen} onClose={() => setDrawerBottomOpen(false)}>
                       <SC.SectionDropdownMenu>
                         <SC.Flex>
-                          <Link style={{ marginRight: 'auto' }} to={getRedirectLink('/authentication/users')}>
+                          <Link style={{ marginRight: 'auto' }} to={getRedirectLink('/account/settings')}>
                             <SC.SectionDropdownTitle>Accounts</SC.SectionDropdownTitle>
                           </Link>
-                          <Link to={getRedirectLink('/authentication/users')}>
+                          <Link to={getRedirectLink('/account/settings')}>
                             <SC.SectionDropdownSeeMore>
                               See all
                               <img src={rightArrow} alt="See all" height="8" width="8" />
@@ -312,7 +313,9 @@ const Navbar: React.FC<Props> = ({
                   integration
                     ? getRedirectLink('/integrations/overview')
                     : authentication
-                    ? getRedirectLink('/authentication/users')
+                    ? getRedirectLink('/account/settings')
+                    : team
+                    ? getRedirectLink('/account/team')
                     : getRedirectLink('/connectors/overview')
                 }
               >
@@ -367,14 +370,11 @@ const Navbar: React.FC<Props> = ({
                   </SC.UserDropdownStatus>
                 </Link>
                 <SC.UserDropdownLinksWrapper>
-                  <Link to={getRedirectLink('/authentication/users')}>
-                    <SC.UserDropdownLink>Authentication</SC.UserDropdownLink>
+                  <Link to={getRedirectLink('/account/settings')}>
+                    <SC.UserDropdownLink>Settings</SC.UserDropdownLink>
                   </Link>
-                  <Link to="/billing">
-                    <SC.UserDropdownLink>Billing</SC.UserDropdownLink>
-                  </Link>
-                  <Link to="/settings">
-                    <SC.UserDropdownLink noMargin>Settings</SC.UserDropdownLink>
+                  <Link to={getRedirectLink('/account/team')}>
+                    <SC.UserDropdownLink noMargin>Team</SC.UserDropdownLink>
                   </Link>
                 </SC.UserDropdownLinksWrapper>
                 <SC.UserButtonWrapper>
@@ -419,14 +419,11 @@ const Navbar: React.FC<Props> = ({
                 </SC.UserDropdownStatus>
               </Link>
               <SC.UserDropdownLinksWrapper>
-                <Link to={getRedirectLink('/authentication/users')}>
-                  <SC.UserDropdownLink>Authentication</SC.UserDropdownLink>
+                <Link to={getRedirectLink('/account/settings')}>
+                  <SC.UserDropdownLink>Settings</SC.UserDropdownLink>
                 </Link>
-                <Link to="/billing">
-                  <SC.UserDropdownLink>Billing</SC.UserDropdownLink>
-                </Link>
-                <Link to="/settings">
-                  <SC.UserDropdownLink noMargin>Settings</SC.UserDropdownLink>
+                <Link to={getRedirectLink('/account/team')}>
+                  <SC.UserDropdownLink noMargin>Team</SC.UserDropdownLink>
                 </Link>
               </SC.UserDropdownLinksWrapper>
 
