@@ -46,6 +46,7 @@ const _useContext = () => {
     userData,
     auth,
     logout,
+    setUserData,
   };
 };
 

@@ -57,7 +57,7 @@ export const routes: Array<RouteItem> = [
   },
   {
     key: 'router-account',
-    path: '/account/:accountId/subscription/:subscriptionId/account/settings',
+    path: '/account/:accountId/settings',
     component: AccountSettingsPage,
   },
   {
