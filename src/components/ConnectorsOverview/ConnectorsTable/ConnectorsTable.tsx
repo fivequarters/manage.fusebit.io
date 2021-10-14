@@ -44,7 +44,7 @@ const ConnectorsTable = ({ headless, setHeadless }: Props) => {
   const tableRows = (rows as Connector[]).map((row) => ({
     id: row.id,
     name: row.id,
-    type: row.tags['fusebit.provider'],
+    type: row.tags['fusebit.service'],
     identities: <GetIdentities id={row.id} />,
   }));
 
