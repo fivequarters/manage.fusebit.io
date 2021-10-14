@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { format } from 'date-fns';
-import BaseTable from '../../../common/BaseTable';
-import { useEntityTable } from '../../../../hooks/useEntityTable';
-import { usePagination } from '../../../../hooks/usePagination';
-import { useAccountConnectorIdentityGetAll } from '../../../../hooks/api/v2/account/connector/identity/useGetAll';
-import { IdentityList } from '../../../../interfaces/identities';
-import CodeBlock from '../../../common/CodeBlock';
-import ConfirmationPrompt from '../../../common/ConfirmationPrompt';
-import InformationalBanner from '../../../common/InformationalBanner';
+import BaseTable from '../../common/BaseTable';
+import { useEntityTable } from '../../../hooks/useEntityTable';
+import { usePagination } from '../../../hooks/usePagination';
+import { useAccountConnectorIdentityGetAll } from '../../../hooks/api/v2/account/connector/identity/useGetAll';
+import { IdentityList } from '../../../interfaces/identities';
+import CodeBlock from '../../common/CodeBlock';
+import ConfirmationPrompt from '../../common/ConfirmationPrompt';
+import InformationalBanner from '../../common/InformationalBanner';
 import AssociatedInstalls from './AssociatedInstalls';
 import AssociatedIntegrations from './AssociatedIntegrations';
-import Tag from '../../../common/Tag';
-import { trackEvent } from '../../../../utils/analytics';
+import Tag from '../../common/Tag';
+import { trackEvent } from '../../../utils/analytics';
 
 const IdentitiesTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();

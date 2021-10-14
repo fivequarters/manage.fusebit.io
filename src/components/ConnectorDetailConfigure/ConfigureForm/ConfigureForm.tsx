@@ -5,17 +5,17 @@ import { materialRenderers, materialCells } from '@jsonforms/material-renderers'
 import { JsonForms } from '@jsonforms/react';
 import { ValidationMode } from '@jsonforms/core';
 import * as SC from './styles';
-import * as CSC from '../../../globalStyle';
-import { useAccountConnectorsGetOne } from '../../../../hooks/api/v2/account/connector/useGetOne';
-import { useAccountConnectorsGetOneConfig } from '../../../../hooks/api/v2/account/connector/useGetOneConfig';
-import { useContext } from '../../../../hooks/useContext';
-import { Connector, ConnectorConfig } from '../../../../interfaces/connector';
-import { useEntityApi } from '../../../../hooks/useEntityApi';
-import { useGetFeedById } from '../../../../hooks/useGetFeedById';
-import { trackEvent } from '../../../../utils/analytics';
-import InformationalBanner from '../../../common/InformationalBanner';
+import * as CSC from '../../globalStyle';
+import { useAccountConnectorsGetOne } from '../../../hooks/api/v2/account/connector/useGetOne';
+import { useAccountConnectorsGetOneConfig } from '../../../hooks/api/v2/account/connector/useGetOneConfig';
+import { useContext } from '../../../hooks/useContext';
+import { Connector, ConnectorConfig } from '../../../interfaces/connector';
+import { useEntityApi } from '../../../hooks/useEntityApi';
+import { useGetFeedById } from '../../../hooks/useGetFeedById';
+import { trackEvent } from '../../../utils/analytics';
+import InformationalBanner from '../../common/InformationalBanner';
 
-const Configure: React.FC = () => {
+const ConfigureForm: React.FC = () => {
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
   const [connectorId, setConnectorId] = useState(id);
@@ -161,4 +161,4 @@ const Configure: React.FC = () => {
   );
 };
 
-export default Configure;
+export default ConfigureForm;
