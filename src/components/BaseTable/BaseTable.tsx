@@ -33,6 +33,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
   isAllChecked,
   headerButtons,
   hideCheckAll,
+  buttonsMarginTop,
 }) => {
   const computedRowsPerPage = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   const isMobile = useMediaQuery('(max-width: 880px)');
@@ -109,7 +110,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
   return (
     <SC.Wrapper>
       {onClickNew && (
-        <SC.ButtonsContainer display="flex" mt="56px" mb="36px" justifyContent="flex-end">
+        <SC.ButtonsContainer display="flex" mt={buttonsMarginTop || '56px'} mb="36px" justifyContent="flex-end">
           {(headerButtons || [])?.map((button) => (
             <Button
               key={button.text}

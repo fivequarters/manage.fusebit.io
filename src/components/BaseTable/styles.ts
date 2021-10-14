@@ -195,6 +195,7 @@ export const TriggerArrow = styled.div<{ $active: boolean; $isMain?: boolean }>`
 
 export const TableContainer = styled.div`
   overflow: auto;
+  width: 100%;
 `;
 
 export const ButtonsContainer = styled(Box)`

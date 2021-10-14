@@ -22,7 +22,9 @@ const Drawer: React.FC<Props> = ({ links, children }) => {
           </Box>
         ))}
       </SC.DrawerComponent>
-      <Box mt="104px">{children}</Box>
+      <Box mt="104px" width="100%">
+        {children}
+      </Box>
     </Box>
   );
 };
