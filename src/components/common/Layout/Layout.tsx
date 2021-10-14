@@ -1,9 +1,9 @@
 import React, { FC, ReactNode, useEffect } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { CssBaseline } from '@material-ui/core';
-import GlobalStyle from './globalStyle';
+import GlobalStyle from '../../globalStyle';
 
-import { useContext } from '../hooks/useContext';
+import { useContext } from '../../../hooks/useContext';
 
 const useStyles = makeStyles(() =>
   createStyles({

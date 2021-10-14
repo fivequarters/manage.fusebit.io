@@ -1,8 +1,8 @@
 import { FC, ReactElement } from 'react';
-import Layout from '../components/Layout';
+import Layout from '../components/common/Layout';
 import Navbar from '../components/common/Navbar';
 import { useTrackPage } from '../hooks/useTrackPage';
-import IntegrationsTable from '../components/IntegrationsOverview/IntegrationsTable/IntegrationsTable';
+import IntegrationsTable from '../components/IntegrationsOverview/IntegrationsTable';
 import TabComponent from '../components/common/TabComponent';
 
 const IntegrationsOverviewPage: FC<{}> = (): ReactElement => {

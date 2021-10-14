@@ -1,6 +1,6 @@
 import { FC, ReactElement } from 'react';
-import UsersTable from '../components/Authentication/UsersTable';
-import Layout from '../components/Layout';
+import UsersTable from '../components/AuthenticationUsers/UsersTable';
+import Layout from '../components/common/Layout';
 import Navbar from '../components/common/Navbar';
 import TabComponent from '../components/common/TabComponent';
 import { useTrackPage } from '../hooks/useTrackPage';

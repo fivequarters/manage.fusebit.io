@@ -1,6 +1,6 @@
 import React, { FC, ReactElement } from 'react';
 import { useParams } from 'react-router-dom';
-import Layout from '../components/Layout';
+import Layout from '../components/common/Layout';
 import { useAccountIntegrationsGetOne } from '../hooks/api/v2/account/integration/useGetOne';
 import { useContext } from '../hooks/useContext';
 import { useTrackPage } from '../hooks/useTrackPage';
