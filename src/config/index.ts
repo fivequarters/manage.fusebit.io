@@ -11,6 +11,7 @@ import FatalErrorPage from '../pages/FatalErrorPage';
 import AuthCallback from '../pages/AuthCallback';
 import NotFoundPage from '../pages/NotFoundPage';
 import AccountSettingsPage from '../pages/AccountSettingsPage';
+import AccountTeamPage from '../pages/AccountTeamPage';
 import { RouteItem } from '../interfaces/router';
 
 // define app routes
@@ -59,6 +60,11 @@ export const routes: Array<RouteItem> = [
     key: 'router-account',
     path: '/account/:accountId/settings',
     component: AccountSettingsPage,
+  },
+  {
+    key: 'router-account',
+    path: '/account/:accountId/subscription/:subscriptionId/account/team',
+    component: AccountTeamPage,
   },
   {
     key: 'router-authentication-users',

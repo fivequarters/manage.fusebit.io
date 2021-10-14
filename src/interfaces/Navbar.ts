@@ -4,6 +4,7 @@ export interface Props {
   integration?: boolean;
   connector?: boolean;
   authentication?: boolean;
+  team?: boolean;
   authenticationLink?: boolean;
   integrationsLink?: boolean;
 }

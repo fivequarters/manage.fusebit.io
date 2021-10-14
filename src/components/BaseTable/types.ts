@@ -38,4 +38,5 @@ export interface BaseTableProps {
     props?: ButtonProps;
   }[];
   hideCheckAll?: boolean;
+  buttonsMarginTop?: string;
 }
