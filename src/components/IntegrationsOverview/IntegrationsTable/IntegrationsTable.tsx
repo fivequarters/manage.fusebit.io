@@ -12,45 +12,51 @@ import { useContext } from '../../../hooks/useContext';
 import { useAccountIntegrationsGetAll } from '../../../hooks/api/v2/account/integration/useGetAll';
 import GetInstalls from './GetInstalls';
 import NewFeedModal from '../../common/NewFeedModal';
+import useQueryParam from '../../../hooks/useQueryParam';
+import useFirstTimeVisitor from '../../../hooks/useFirstTimeVisitor';
 
-interface Props {
-  headless: boolean;
-  setHeadless: (value: boolean) => void;
-}
-
-const IntegrationsTable = ({ headless, setHeadless }: Props) => {
+const IntegrationsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
-  const [newModalOpen, , toggleNewModal] = useModal();
+  const [newModalOpen, setNewModal, toggleNewModal] = useModal();
   const [deleteModalOpen, setDeleteModal, toggleDeleteModal] = useModal();
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
   const { userData } = useContext();
-
-  const { data: integrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({
+  const { data: integrations, isLoading } = useAccountIntegrationsGetAll<{ items: Integration[] }>({
     enabled: userData.token,
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
   });
-
-  const { loading, rows, selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
-    headless,
-    setHeadless,
-    integrations,
-    page,
-    setPage,
-    rowsPerPage,
+  const { setFirstTimeVisitor } = useFirstTimeVisitor({
+    onFirstTimeVisitor: () => setNewModal(true),
+    entities: integrations?.data.items,
   });
 
-  const tableRows = (rows as Integration[]).map((row) => ({
+  useQueryParam({
+    onSet: () => {
+      setNewModal(true);
+      setFirstTimeVisitor(false);
+    },
+    param: 'key',
+  });
+
+  const rows = (integrations?.data?.items || []).map((row) => ({
     id: row.id,
     name: row.id,
     installs: <GetInstalls id={row.id} />,
   }));
 
+  const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
+    page,
+    setPage,
+    rowsPerPage,
+    rows,
+  });
+
   const handleClickRow = (row: BaseTableRow) => history.push(getRedirectLink(`/integration/${row.id}/develop`));
 
   const handleNewIntegration = () => {
-    trackEvent('New Integration Button Clicked', 'Integrations');
+    trackEvent('New Integration Button Clicked', 'Integrations', {});
     toggleNewModal();
   };
 
@@ -74,11 +80,11 @@ const IntegrationsTable = ({ headless, setHeadless }: Props) => {
           { id: 'name', value: 'Name' },
           { id: 'installs', value: 'Installs' },
         ]}
-        loading={loading}
+        loading={isLoading}
         onClickNew={handleNewIntegration}
         onDeleteAll={toggleDeleteModal}
         onSelectAll={handleSelectAllCheck}
-        rows={tableRows}
+        rows={rows}
         onSelectRow={handleCheck}
         isSelected={isSelected}
         selected={selected}

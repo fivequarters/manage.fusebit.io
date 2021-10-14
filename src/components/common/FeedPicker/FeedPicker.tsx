@@ -15,6 +15,7 @@ import { useQuery } from '../../../hooks/useQuery';
 import { useReplaceMustache } from '../../../hooks/useReplaceMustache';
 import { trackEvent } from '../../../utils/analytics';
 import Loader from '../Loader';
+import { useTrackPage } from '../../../hooks/useTrackPage';
 
 enum Filters {
   ALL = 'All',
@@ -74,6 +75,8 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
   };
 
   const feedTypeName = isIntegration ? 'Integration' : 'Connector';
+
+  useTrackPage(`${feedTypeName} New Modal`, `${feedTypeName}s`);
 
   useEffect(() => {
     const key = query.get('key');

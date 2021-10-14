@@ -14,28 +14,16 @@ import AssociatedIntegrations from './AssociatedIntegrations';
 import Tag from '../../../common/Tag';
 import { trackEvent } from '../../../../utils/analytics';
 
-const IntegrationsTable = () => {
+const IdentitiesTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
   const { id } = useParams<{ id: string }>();
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete, setRows } = useEntityTable({
-    page,
-    setPage,
-    rowsPerPage,
+
+  const { data: identities, isLoading } = useAccountConnectorIdentityGetAll<IdentityList>({
+    id,
   });
 
-  const { data, isLoading } = useAccountConnectorIdentityGetAll<IdentityList>(
-    {
-      id,
-    },
-    {
-      onSuccess: (res) => setRows(res?.data?.items || []),
-    }
-  );
-
-  const { items = [] } = data?.data || {};
-
-  const rows = items.map((identity) => {
+  const rows = (identities?.data?.items || []).map((identity) => {
     const connectorId = identity.tags['fusebit.parentEntityId'];
 
     return {
@@ -52,6 +40,13 @@ const IntegrationsTable = () => {
         trackEvent('Identities Expand Identity Clicked', 'Connector');
       },
     };
+  });
+
+  const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
+    page,
+    setPage,
+    rowsPerPage,
+    rows,
   });
 
   const handleDelete = () => {
@@ -104,4 +99,4 @@ const IntegrationsTable = () => {
   );
 };
 
-export default IntegrationsTable;
+export default IdentitiesTable;

@@ -3,12 +3,12 @@ import { User } from '../interfaces/user';
 import { addClientIdentity, createClient, patchClient, removeClient } from './clients';
 import { BACKEND_LIST_STORAGE_ID, X_USER_AGENT } from './constants';
 import { generateKeyPair } from './crypto';
-import { generateNonExpiringToken } from './jwt';
+import { generateNonExpiringToken, signJwt } from './jwt';
 import { createIssuer, removeIssuer } from './issuer';
 import { BackendClient } from '../interfaces/backendClient';
 import { Storage } from '../interfaces/storage';
 
-const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
+const { REACT_APP_FUSEBIT_DEPLOYMENT, REACT_APP_SAMPLE_APP_URL, REACT_APP_SAMPLE_APP_KEY } = process.env;
 
 const axiosNo404MiddlewareInstance = axios.create({
   headers: {
@@ -78,6 +78,38 @@ export async function createBackendClient(user: User): Promise<BackendClient> {
     ...backendClient,
     token: nonExpiringToken,
   };
+}
+
+export async function createSampleAppClientUrl(user: User, integrations: Record<string, string>): Promise<string> {
+  const { accountId, subscriptionId, token } = user;
+  const url = new URL(`${REACT_APP_SAMPLE_APP_URL}`);
+
+  const configuration = {
+    SLACK_INTEGRATION_ID: integrations.slack,
+    HUBSPOT_INTEGRATION_ID: undefined,
+    FUSEBIT_INTEGRATION_URL: `${REACT_APP_FUSEBIT_DEPLOYMENT}/v2/account/${accountId}/subscription/${subscriptionId}/integration`,
+    FUSEBIT_JWT: token,
+  };
+
+  const hmacKey = await crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(REACT_APP_SAMPLE_APP_KEY),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+
+  // Create a JWT that'll act as an envelope for the sample app
+  const sampleAppJwt = await signJwt(
+    { sub: `${user.id}`, aud: `${REACT_APP_SAMPLE_APP_URL}`, ...configuration },
+    { displayName: 'Sample App Key', id: `${user.id}-issuer`, publicKeys: [{ keyId: 'sample', publicKey: 'sample' }] },
+    hmacKey,
+    { name: 'HMAC', hash: 'SHA-256', algorithm: 'HS256' }
+  );
+
+  // Add it to the URL, and return
+  url.hash = `configuration=${sampleAppJwt}`;
+  return url.toString();
 }
 
 export async function removedBackendClient(user: User, clientId: string): Promise<void> {

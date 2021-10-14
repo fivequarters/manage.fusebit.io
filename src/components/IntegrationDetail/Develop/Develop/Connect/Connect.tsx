@@ -11,6 +11,8 @@ import { useContext } from '../../../../../hooks/useContext';
 import { patchBackendClients } from '../../../../../utils/backendClients';
 import { useGetRedirectLink } from '../../../../../hooks/useGetRedirectLink';
 
+import { LinkSampleApp } from './LinkSampleApp';
+
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
 const Connect = React.forwardRef<HTMLDivElement, Props>(
@@ -28,6 +30,7 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
       setShowWarning,
       showWarning,
       disableCopy,
+      integration,
     },
     ref
   ) => {
@@ -70,6 +73,19 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
       setEditedBackendClientId(backendClientId);
       setEditMode(false);
     };
+
+    const supportedTypeMap: Record<string, string> = {
+      slackConnector: 'slack',
+    };
+    const componentMap =
+      integration?.data?.components
+        ?.map((component) => supportedTypeMap[component.name])
+        .filter((type) => !!type)
+        .reduce<Record<string, string>>((acc, cur) => {
+          acc[cur] = integration?.id;
+          return acc;
+        }, {}) || {};
+    const isSampleAppEnabled = !!Object.keys(componentMap).length;
 
     return deleteModalOpen ? (
       <ConfirmationPrompt
@@ -170,22 +186,36 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
 
           <SC.Subtitle style={{ margin: '32px auto 16px' }}>Connect your Backend</SC.Subtitle>
           <CSC.Flex flexDown>
-            <Button
-              style={{ margin: '0 auto', width: '293px' }}
-              target="_blank"
-              rel="noopener"
-              href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
-              variant="outlined"
-              color="primary"
-              size="large"
-            >
-              Follow guide
-            </Button>
+            <CSC.Flex>
+              <Button
+                style={{ margin: '0 auto', width: '293px' }}
+                target="_blank"
+                rel="noopener"
+                href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
+                variant="outlined"
+                color="primary"
+                size="large"
+              >
+                Follow guide
+              </Button>
+              {isSampleAppEnabled && (
+                <>
+                  or
+                  <LinkSampleApp componentMap={componentMap} />
+                </>
+              )}
+            </CSC.Flex>
             <CSC.Flex>
               <div style={{ display: 'flex', alignItems: 'center', margin: '0 auto' }}>
                 <SC.TimeIcon />
                 <SC.TimeDescription>10 minutes</SC.TimeDescription>
               </div>
+              {isSampleAppEnabled && (
+                <div style={{ display: 'flex', alignItems: 'center', margin: '0 auto' }}>
+                  <SC.TimeIcon />
+                  <SC.TimeDescription>2 minutes.</SC.TimeDescription>
+                </div>
+              )}
             </CSC.Flex>
           </CSC.Flex>
           {/* <CSC.Flex margin="32px 0 0 0">
