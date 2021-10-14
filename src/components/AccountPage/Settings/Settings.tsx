@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { Box, Button, CircularProgress } from '@material-ui/core';
+import { Box, Button, CircularProgress, Grid } from '@material-ui/core';
 import { JsonForms } from '@jsonforms/react';
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
 import { ValidationMode } from '@jsonforms/core';
 import { useParams } from 'react-router-dom';
-import { ACCOUNT_SECTION_LINKS } from '../../../utils/constants';
-import Drawer from '../../common/Drawer';
 import * as CSC from '../../globalStyle';
 import { useContext } from '../../../hooks/useContext';
 import { useAccountUpdateOne } from '../../../hooks/api/v1/account/account/useUpdateOne';
@@ -71,54 +69,56 @@ const Settings: React.FC = () => {
   };
 
   return (
-    <Drawer links={ACCOUNT_SECTION_LINKS}>
-      {editMode ? (
-        <>
-          <JsonForms
-            schema={schema}
-            uischema={uischema}
-            data={formValues}
-            renderers={materialRenderers}
-            cells={materialCells}
-            onChange={({ errors: _errors, data: _data }) => {
-              if (_errors) {
-                setErrors(_errors);
-              }
-              setFormValues(_data);
-            }}
-            validationMode={validationMode}
-          />
-          <Box mt="10px">
-            <Button
-              disabled={isLoading}
-              onClick={handleSubmit}
-              style={{ marginRight: '16px' }}
-              fullWidth={false}
-              size="small"
-              color="primary"
-              variant="contained"
-            >
-              {isLoading ? <CircularProgress size={20} /> : 'Save'}
-            </Button>
-            <Button onClick={handleCancel} fullWidth={false} size="small" color="primary" variant="outlined">
-              Cancel
-            </Button>
+    <Grid container>
+      <Grid item xs={3}>
+        {editMode ? (
+          <>
+            <JsonForms
+              schema={schema}
+              uischema={uischema}
+              data={formValues}
+              renderers={materialRenderers}
+              cells={materialCells}
+              onChange={({ errors: _errors, data: _data }) => {
+                if (_errors) {
+                  setErrors(_errors);
+                }
+                setFormValues(_data);
+              }}
+              validationMode={validationMode}
+            />
+            <Box mt="10px">
+              <Button
+                disabled={isLoading}
+                onClick={handleSubmit}
+                style={{ marginRight: '16px' }}
+                fullWidth={false}
+                size="small"
+                color="primary"
+                variant="contained"
+              >
+                {isLoading ? <CircularProgress size={20} /> : 'Save'}
+              </Button>
+              <Button onClick={handleCancel} fullWidth={false} size="small" color="primary" variant="outlined">
+                Cancel
+              </Button>
+            </Box>
+          </>
+        ) : (
+          <Box display="flex" flexDirection="column">
+            <CSC.InfoFieldWrapper>
+              <CSC.InfoFieldPlaceholder>Account Name</CSC.InfoFieldPlaceholder>
+              <CSC.InfoField>{userData.company}</CSC.InfoField>
+            </CSC.InfoFieldWrapper>
+            <Box>
+              <Button onClick={handleEdit} fullWidth={false} size="medium" color="primary" variant="outlined">
+                Edit information
+              </Button>
+            </Box>
           </Box>
-        </>
-      ) : (
-        <Box display="flex" flexDirection="column">
-          <CSC.InfoFieldWrapper>
-            <CSC.InfoFieldPlaceholder>Account Name</CSC.InfoFieldPlaceholder>
-            <CSC.InfoField>{userData.company}</CSC.InfoField>
-          </CSC.InfoFieldWrapper>
-          <Box mt="40px">
-            <Button onClick={handleEdit} fullWidth={false} size="medium" color="primary" variant="outlined">
-              Edit information
-            </Button>
-          </Box>
-        </Box>
-      )}
-    </Drawer>
+        )}
+      </Grid>
+    </Grid>
   );
 };
 

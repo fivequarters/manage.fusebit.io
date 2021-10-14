@@ -1,31 +1,48 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Box } from '@material-ui/core';
-import { Props } from '../../../interfaces/Drawer';
-import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
+import { Link, useParams } from 'react-router-dom';
+import { Box, Container } from '@material-ui/core';
 import * as SC from './styles';
 
-const Drawer: React.FC<Props> = ({ links, children }) => {
-  const { getRedirectLink } = useGetRedirectLink();
-  const location = useLocation();
+interface Props {
+  children: React.ReactNode;
+  active?: 'settings' | 'team';
+}
+
+const Drawer: React.FC<Props> = ({ children, active }) => {
+  const { accountId } = useParams<{ accountId: string }>();
+
+  const links = [
+    {
+      name: 'Settings',
+      href: `/account/${accountId}/settings`,
+      id: 'settings',
+    },
+    {
+      name: `Team`,
+      href: `/account/${accountId}/team`,
+      id: 'team',
+    },
+  ];
 
   return (
-    <Box display="flex">
-      <SC.DrawerComponent variant="permanent" anchor="left">
-        {links?.map((link) => (
-          <Box key={link.text} mb="8px">
-            <Link to={getRedirectLink(link.href)}>
-              <SC.Link color="default" active={location.pathname.indexOf(link.text.toLowerCase()) > 0}>
-                {link.text}
-              </SC.Link>
-            </Link>
-          </Box>
-        ))}
-      </SC.DrawerComponent>
-      <Box mt="104px" width="100%">
-        {children}
+    <Container maxWidth="lg">
+      <Box display="flex">
+        <SC.DrawerComponent variant="permanent" anchor="left">
+          {links.map((link) => (
+            <Box key={link.href} mb="8px">
+              <Link to={link.href}>
+                <SC.Link color="default" active={active === link.id}>
+                  {link.name}
+                </SC.Link>
+              </Link>
+            </Box>
+          ))}
+        </SC.DrawerComponent>
+        <Box pt="104px" width="100%">
+          {children}
+        </Box>
       </Box>
-    </Box>
+    </Container>
   );
 };
 
