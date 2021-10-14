@@ -8,7 +8,7 @@ import { Integration } from '../interfaces/integration';
 import Navbar from '../components/common/Navbar';
 import TabComponent from '../components/common/TabComponent';
 import { useGetRedirectLink } from '../hooks/useGetRedirectLink';
-import InstallsTable from '../components/IntegrationDetail/Installs/InstallsTable/InstallsTable';
+import InstallsTable from '../components/IntegrationDetailInstalls/InstallsTable';
 
 const IntegrationDetailInstallsPage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
