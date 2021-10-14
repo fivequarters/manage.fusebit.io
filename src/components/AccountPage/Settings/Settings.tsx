@@ -70,7 +70,7 @@ const Settings: React.FC = () => {
 
   return (
     <Grid container>
-      <Grid item xs={3}>
+      <Grid item xs={6}>
         {editMode ? (
           <>
             <JsonForms
