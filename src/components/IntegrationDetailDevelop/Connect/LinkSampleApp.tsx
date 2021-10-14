@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@material-ui/core';
 
-import { useContext } from '../../../../../hooks/useContext';
-import { createSampleAppClientUrl } from '../../../../../utils/backendClients';
+import { useContext } from '../../../hooks/useContext';
+import { createSampleAppClientUrl } from '../../../utils/backendClients';
 
 interface IProps {
   componentMap: Record<string, string>;

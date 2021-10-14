@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { EditorEvents } from '../../../../../enums/editor';
+import { EditorEvents } from '../../../enums/editor';
 
 interface Props {
   isMounted: boolean;

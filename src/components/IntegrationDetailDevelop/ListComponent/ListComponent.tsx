@@ -2,14 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Backdrop, Fade, Modal } from '@material-ui/core';
 import * as SC from './styles';
-import * as CSC from '../../../../globalStyle';
-import { ListComponentProps } from '../../../../../interfaces/integrationDetailDevelop';
-import cross from '../../../../../assets/cross.svg';
-import server from '../../../../../assets/server.svg';
-import { useGetRedirectLink } from '../../../../../hooks/useGetRedirectLink';
-import { findMatchingConnectorFeed } from '../../../../../utils/utils';
-import ConfirmationPrompt from '../../../../common/ConfirmationPrompt/ConfirmationPrompt';
+import * as CSC from '../../globalStyle';
+import cross from '../../../assets/cross.svg';
+import server from '../../../assets/server.svg';
 import Connect from '../Connect';
+import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
+import { ListComponentProps } from '../../../interfaces/integrationDetailDevelop';
+import ConfirmationPrompt from '../../common/ConfirmationPrompt';
+import { findMatchingConnectorFeed } from '../../../utils/utils';
 
 const NOT_FOUND_ICON = '/images/warning-red.svg';
 

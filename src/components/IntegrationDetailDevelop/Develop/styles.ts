@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Box } from '@material-ui/core';
-import dottedBox from '../../../../assets/dotted-box.svg';
-import fusebitLogo from '../../../../assets/fusebit-logo.svg';
+import dottedBox from '../../../assets/dotted-box.svg';
+import fusebitLogo from '../../../assets/fusebit-logo.svg';
 
 export const Background = styled.div`
   padding-bottom: 76px;

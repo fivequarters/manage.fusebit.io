@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { Button, Input } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import * as SC from './styles';
-import * as CSC from '../../../../globalStyle';
-import { Props } from '../../../../../interfaces/connect';
-import CopyLine from '../../../../common/CopyLine';
-import { useCopy } from '../../../../../hooks/useCopy';
-import ConfirmationPrompt from '../../../../common/ConfirmationPrompt';
-import { useContext } from '../../../../../hooks/useContext';
-import { patchBackendClients } from '../../../../../utils/backendClients';
-import { useGetRedirectLink } from '../../../../../hooks/useGetRedirectLink';
+import * as CSC from '../../globalStyle';
+import { Props } from '../../../interfaces/connect';
+import CopyLine from '../../common/CopyLine';
+import { useCopy } from '../../../hooks/useCopy';
+import ConfirmationPrompt from '../../common/ConfirmationPrompt';
+import { useContext } from '../../../hooks/useContext';
+import { patchBackendClients } from '../../../utils/backendClients';
+import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 
 import { LinkSampleApp } from './LinkSampleApp';
 

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Button, Modal, Backdrop, Box } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import * as SC from './styles';
-import * as CSC from '../../../../../globalStyle';
-import { getIntegrationConfig } from '../../../../../../utils/localStorage';
+import * as CSC from '../../globalStyle';
+import { getIntegrationConfig } from '../../../utils/localStorage';
 
 interface Props {
   open: boolean;
