@@ -5,7 +5,7 @@ import { Data } from '../interfaces/feedPicker';
 import { Feed, Entity } from '../interfaces/feed';
 
 const walkObjectStrings = (obj: any, func: (value: string) => string): any => {
-  Object.entries(obj).forEach(([key, value]: [string, any]) => {
+  Object.entries(obj).forEach(([key, value]) => {
     if (typeof value === 'string') {
       obj[key] = func(value);
     } else if (typeof value === 'object') {
@@ -50,7 +50,7 @@ export const useReplaceMustache = () => {
             endpoint: process.env.REACT_APP_FUSEBIT_DEPLOYMENT,
             integrationId: () => {
               const integration: any = Object.entries(feed.configuration.entities as Record<string, Entity>).find(
-                ([, entity]: [string, Entity]) => entity.entityType === 'integration'
+                ([, entity]) => entity.entityType === 'integration'
               );
               return integration ? global.entities[integration[0]]?.id() || integration[1].id : '';
             },
@@ -69,40 +69,36 @@ export const useReplaceMustache = () => {
 
         if (feed.configuration?.entities) {
           // Populate the global entities first, so that the id is always available and always consistent
-          Object.entries(feed.configuration.entities as Record<string, Entity>).forEach(
-            ([name, entity]: [string, Entity]) => {
-              if (!data[name]) {
-                data[name] = {};
-              }
-              global.entities[name] = {
-                ...data[name],
-                id: () => {
-                  if (!data[name].id) {
-                    data[name].id = `${
-                      entity.entityType === 'integration' ? 'my-integration' : 'my-connector'
-                    }-${Math.floor(Math.random() * 1000)}`;
-                  }
-                  return data[name].id;
-                },
-              };
+          Object.entries(feed.configuration.entities as Record<string, Entity>).forEach(([name, entity]) => {
+            if (!data[name]) {
+              data[name] = {};
             }
-          );
+            global.entities[name] = {
+              ...data[name],
+              id: () => {
+                if (!data[name].id) {
+                  data[name].id = `${
+                    entity.entityType === 'integration' ? 'my-integration' : 'my-connector'
+                  }-${Math.floor(Math.random() * 1000)}`;
+                }
+                return data[name].id;
+              },
+            };
+          });
 
           // Now parse each entity, replacing it's strings as appropriate
-          Object.entries(feed.configuration.entities as Record<string, Entity>).forEach(
-            ([name, entity]: [string, Entity]) => {
-              const view = {
-                this: {
-                  id: () => global.entities[name].id(),
-                  name,
-                },
-                global,
-              };
-              newEntities.push(
-                walkObjectStrings(entity, (value: string) => Mustache.render(value, view, {}, customTags))
-              );
-            }
-          );
+          Object.entries(feed.configuration.entities as Record<string, Entity>).forEach(([name, entity]) => {
+            const view = {
+              this: {
+                id: () => global.entities[name].id(),
+                name,
+              },
+              global,
+            };
+            newEntities.push(
+              walkObjectStrings(entity, (value: string) => Mustache.render(value, view, {}, customTags))
+            );
+          });
 
           feed.configuration.entities = newEntities;
         }

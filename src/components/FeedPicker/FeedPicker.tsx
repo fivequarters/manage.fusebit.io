@@ -38,8 +38,8 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
   const query = useQuery();
   const { replaceMustache } = useReplaceMustache();
 
-  const urlOrSvgToImage = (img?: string) =>
-    img && (img.match('^<svg') ? `data:image/svg+xml;utf8,${encodeURIComponent(img)}` : img);
+  const urlOrSvgToImage = (img: string) =>
+    img.match('^<svg') ? `data:image/svg+xml;utf8,${encodeURIComponent(img)}` : img;
 
   const debouncedSetSearchFilter = debounce((keyword: string) => {
     if (isIntegration) {
@@ -87,6 +87,18 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
       trackEvent('New Connector Catalog Clicked', 'Connectors', { tag: filter });
     }
     setActiveFilter(filter);
+  };
+
+  const handleJsonFormsChange = ({ errors: _errors, data: _data }: { errors: any; data: any }) => {
+    if (data?.ui?.toggle && activeTemplate) {
+      trackEvent('New Integration Customize Clicked', 'Integrations', {
+        integration: activeTemplate.name,
+      });
+    }
+    if (_errors) {
+      setErrors(_errors);
+    }
+    setData(_data);
   };
 
   const feedTypeName = isIntegration ? 'Integration' : 'Connector';
@@ -214,13 +226,13 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
         </SC.Column>
         <SC.ColumnBr />
         <SC.ConnectorInfo>
-          {loading ? (
+          {loading || !activeTemplate ? (
             <Loader />
           ) : (
             <>
               <SC.ConnectorTitleWrapper>
                 <SC.ConnectorImage
-                  src={urlOrSvgToImage(activeTemplate?.smallIcon)}
+                  src={urlOrSvgToImage(activeTemplate.smallIcon)}
                   alt={activeTemplate?.name || 'slack'}
                   height="28"
                   width="28"
@@ -238,17 +250,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
                       data={data}
                       renderers={materialRenderers}
                       cells={materialCells}
-                      onChange={({ errors: _errors, data: _data }) => {
-                        if (data?.ui?.toggle && activeTemplate) {
-                          trackEvent('New Integration Customize Clicked', 'Integrations', {
-                            integration: activeTemplate.name,
-                          });
-                        }
-                        if (_errors) {
-                          setErrors(_errors);
-                        }
-                        setData(_data);
-                      }}
+                      onChange={handleJsonFormsChange}
                       validationMode={validationMode}
                     />
                   </SC.FormWrapper>
