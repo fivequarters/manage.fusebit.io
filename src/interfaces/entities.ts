@@ -1,1 +1,1 @@
-export type EntitiesType = 'Integration' | 'C' | 'A' | 'Install' | 'Identity';
+export type EntitiesType = 'Integration' | 'Connector' | 'Account' | 'Install' | 'Identity';

@@ -17,23 +17,10 @@ import { trackEvent } from '../../../../utils/analytics';
 const InstallsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
   const { id } = useParams<{ id: string }>();
-  const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete, setRows } = useEntityTable({
-    page,
-    setPage,
-    rowsPerPage,
-  });
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const { data: installs, isLoading } = useAccountIntegrationInstallGetAll<InstallList>({ id });
 
-  const { data, isLoading } = useAccountIntegrationInstallGetAll<InstallList>(
-    { id },
-    {
-      onSuccess: (res) => setRows(res?.data?.items || []),
-    }
-  );
-
-  const { items = [] } = data?.data || {};
-
-  const rows = items.map((install) => {
+  const rows = (installs?.data?.items || []).map((install) => {
     const connectorIds = getConnectorsFromInstall(install);
 
     return {
@@ -49,6 +36,13 @@ const InstallsTable = () => {
         trackEvent('Installs Expand Tenant Clicked', 'Integration');
       },
     };
+  });
+
+  const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
+    page,
+    setPage,
+    rowsPerPage,
+    rows,
   });
 
   const headers = [

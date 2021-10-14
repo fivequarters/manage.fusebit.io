@@ -2,11 +2,13 @@ import constate from 'constate';
 import { useEffect, useState } from 'react';
 import { User } from '../interfaces/user';
 import { getAuthLink, LS_KEY, readLocalData } from '../utils/utils';
+import useFirstTimeVisitor from './useFirstTimeVisitor';
 
 const { REACT_APP_AUTH0_DOMAIN, REACT_APP_LOGOUT_REDIRECT_URL } = process.env;
 
 const _useContext = () => {
   const [userData, setUserData] = useState<User>({});
+  const { setFirstTimeVisitor } = useFirstTimeVisitor();
 
   useEffect(() => {
     const __userData = readLocalData();
@@ -31,13 +33,13 @@ const _useContext = () => {
   const auth = (__userData: User) => {
     setUserData(__userData);
     localStorage.setItem(LS_KEY, JSON.stringify(__userData));
-    localStorage.setItem('firstTimeVisitor', 'true');
+    setFirstTimeVisitor(true);
   };
 
   const logout = () => {
     analytics.reset();
     localStorage.setItem(LS_KEY, JSON.stringify({}));
-    localStorage.removeItem('firstTimeVisitor');
+    setFirstTimeVisitor(false);
     setUserData({ picture: userData.picture });
     window.location.href = `${REACT_APP_AUTH0_DOMAIN}/v2/logout?returnTo=${REACT_APP_LOGOUT_REDIRECT_URL}`;
   };

@@ -12,53 +12,54 @@ import { Connector } from '../../../interfaces/connector';
 import DeleteConnectorModal from '../DeleteConnectorModal';
 import NewFeedModal from '../../common/NewFeedModal';
 import GetIdentities from './GetIdentities';
+import useQueryParam from '../../../hooks/useQueryParam';
 
-interface Props {
-  headless: boolean;
-  setHeadless: (value: boolean) => void;
-}
-
-const ConnectorsTable = ({ headless, setHeadless }: Props) => {
+const ConnectorsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
-  const [newModalOpen, , toggleNewModal] = useModal();
+  const [newModalOpen, setNewModal, toggleNewModal] = useModal();
   const [deleteModalOpen, setDeleteModal, toggleDeleteModal] = useModal();
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
   const { userData } = useContext();
-
-  const { data: connectors } = useAccountConnectorsGetAll<{ items: Connector[] }>({
+  const { data: connectors, isLoading } = useAccountConnectorsGetAll<{ items: Connector[] }>({
     enabled: userData.token,
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
   });
 
-  const { loading, rows, selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
-    headless,
-    setHeadless,
-    connectors,
-    page,
-    setPage,
-    rowsPerPage,
+  useQueryParam({
+    onSet: () => {
+      setNewModal(true);
+    },
+    param: 'key',
   });
 
-  const tableRows = (rows as Connector[]).map((row) => ({
+  const rows = (connectors?.data?.items || []).map((row) => ({
     id: row.id,
     name: row.id,
     type: row.tags['fusebit.service'],
     identities: <GetIdentities id={row.id} />,
   }));
 
+  const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
+    page,
+    setPage,
+    rowsPerPage,
+    rows,
+  });
+
   const handleClickRow = (row: BaseTableRow) => history.push(getRedirectLink(`/connector/${row.id}/configure`));
 
   const handleNewIntegration = () => {
-    trackEvent('New Connector Button Clicked', 'Connectors', {}, toggleNewModal);
+    trackEvent('New Connector Button Clicked', 'Connectors', {});
+    toggleNewModal();
   };
 
   return (
     <>
       <NewFeedModal onClose={toggleNewModal} open={newModalOpen} isIntegration={false} />
       <DeleteConnectorModal
-        onConfirm={() => handleRowDelete('C')}
+        onConfirm={() => handleRowDelete('Connector')}
         setOpen={setDeleteModal}
         open={deleteModalOpen}
         selected={selected}
@@ -75,11 +76,11 @@ const ConnectorsTable = ({ headless, setHeadless }: Props) => {
           { id: 'type', value: 'Type' },
           { id: 'identities', value: 'Identities' },
         ]}
-        loading={loading}
+        loading={isLoading}
         onClickNew={handleNewIntegration}
         onDeleteAll={toggleDeleteModal}
         onSelectAll={handleSelectAllCheck}
-        rows={tableRows}
+        rows={rows}
         onSelectRow={handleCheck}
         isSelected={isSelected}
         selected={selected}
