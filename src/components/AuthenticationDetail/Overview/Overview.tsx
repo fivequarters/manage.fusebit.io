@@ -5,23 +5,23 @@ import { ValidationMode } from '@jsonforms/core';
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
 
 import { useHistory, useParams } from 'react-router-dom';
-import dots from '../../../../assets/dots.svg';
-import { useContext } from '../../../../hooks/useContext';
-import * as CSC from '../../../globalStyle';
+import dots from '../../../assets/dots.svg';
+import { useContext } from '../../../hooks/useContext';
+import * as CSC from '../../globalStyle';
 import * as SC from './styles';
-import CliAccess from './CliAccess';
-import { useAccountUserGetOne } from '../../../../hooks/api/v1/account/user/useGetOne';
-import { useAccountUserUpdateOne } from '../../../../hooks/api/v1/account/user/useUpdateOne';
-import client from '../../../../assets/client.jpg';
-import { Operation } from '../../../../interfaces/operation';
-import { Account } from '../../../../interfaces/account';
-import { useLoader } from '../../../../hooks/useLoader';
-import { useError } from '../../../../hooks/useError';
-import { useAccountUserDeleteOne } from '../../../../hooks/api/v1/account/user/useDeleteOne';
-import { useGetRedirectLink } from '../../../../hooks/useGetRedirectLink';
-import { useCopy } from '../../../../hooks/useCopy';
-import ConfirmationPrompt from '../../../common/ConfirmationPrompt/ConfirmationPrompt';
-import { startCase } from '../../../../utils/utils';
+import CliAccess from '../CliAccess';
+import { useAccountUserGetOne } from '../../../hooks/api/v1/account/user/useGetOne';
+import { useAccountUserUpdateOne } from '../../../hooks/api/v1/account/user/useUpdateOne';
+import client from '../../../assets/client.jpg';
+import { Operation } from '../../../interfaces/operation';
+import { Account } from '../../../interfaces/account';
+import { useLoader } from '../../../hooks/useLoader';
+import { useError } from '../../../hooks/useError';
+import { useAccountUserDeleteOne } from '../../../hooks/api/v1/account/user/useDeleteOne';
+import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
+import { useCopy } from '../../../hooks/useCopy';
+import { startCase } from '../../../utils/utils';
+import ConfirmationPrompt from '../../common/ConfirmationPrompt';
 
 const schema = {
   type: 'object',
