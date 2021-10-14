@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
+import { Button, Input } from '@material-ui/core';
+import { useParams } from 'react-router-dom';
 import * as SC from './styles';
 import * as CSC from '../../../../globalStyle';
-import { Button, Input } from '@material-ui/core';
 import { Props } from '../../../../../interfaces/connect';
 import CopyLine from '../../../../CopyLine';
 import { useCopy } from '../../../../../hooks/useCopy';
 import ConfirmationPrompt from '../../../../ConfirmationPrompt';
 import { useContext } from '../../../../../hooks/useContext';
 import { patchBackendClients } from '../../../../../utils/backendClients';
+import { useGetRedirectLink } from '../../../../../hooks/useGetRedirectLink';
+
+import { LinkSampleApp } from './LinkSampleApp';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
-const Connect = React.forwardRef(
+const Connect = React.forwardRef<HTMLDivElement, Props>(
   (
     {
       id,
@@ -26,9 +30,12 @@ const Connect = React.forwardRef(
       setShowWarning,
       showWarning,
       disableCopy,
-    }: Props,
+      integration,
+    },
     ref
   ) => {
+    const { id: integrationId } = useParams<{ id: string }>();
+    const { getRedirectLink } = useGetRedirectLink();
     const { userData } = useContext();
     const [editMode, setEditMode] = useState(false);
     const [editedBackendClientId, setEditedBackendClientId] = useState(name);
@@ -37,18 +44,26 @@ const Connect = React.forwardRef(
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [saving, setSaving] = useState(false);
 
+    const integrationBaseUrl = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v2${getRedirectLink(`/integration/${integrationId}`)}`;
+
     const handleClose = () => {
       if (disableCopy) {
         onClose();
       } else if (setShowWarning) {
-        keyIsCopied || showWarning ? onClose() : setShowWarning(true);
+        if (keyIsCopied || showWarning) {
+          onClose();
+        } else {
+          setShowWarning(true);
+        }
       }
     };
 
     const handleSave = async () => {
       setSaving(true);
       await patchBackendClients(id, userData, { name: editedBackendClientId });
-      disableCopy && onChange?.(); //if its the first time its created, we dont call onChange
+      if (disableCopy) {
+        onChange?.(); // if its the first time its created, we dont call onChange
+      }
       setBackendClientId(editedBackendClientId);
       setEditMode(false);
       setSaving(false);
@@ -59,19 +74,30 @@ const Connect = React.forwardRef(
       setEditMode(false);
     };
 
+    const supportedTypeMap: Record<string, string> = {
+      slackConnector: 'slack',
+    };
+    const componentMap =
+      integration?.data?.components
+        ?.map((component) => supportedTypeMap[component.name])
+        .filter((type) => !!type)
+        .reduce<Record<string, string>>((acc, cur) => {
+          acc[cur] = integration?.id;
+          return acc;
+        }, {}) || {};
+    const isSampleAppEnabled = !!Object.keys(componentMap).length;
+
     return deleteModalOpen ? (
       <ConfirmationPrompt
         open={deleteModalOpen}
         setOpen={setDeleteModalOpen}
-        handleConfirmation={() => onDelete({ isApplication: true, id: id })}
-        title={'Are you sure you want to delete this application?'}
-        description={
-          'All calls from your application to Fusebit that use this key will fail. Before deleting this key, make sure your application is no longer using this key.'
-        }
-        confirmationButtonText={'Delete'}
+        handleConfirmation={() => onDelete({ isApplication: true, id })}
+        title="Are you sure you want to delete this application?"
+        description="All calls from your application to Fusebit that use this key will fail. Before deleting this key, make sure your application is no longer using this key."
+        confirmationButtonText="Delete"
       />
     ) : (
-      <SC.Card open={open}>
+      <SC.Card open={open} ref={ref} tabIndex={-1}>
         <SC.Wrapper>
           <CSC.Close onClick={handleClose} />
 
@@ -129,9 +155,9 @@ const Connect = React.forwardRef(
           </SC.SmallTitleWrapper>
           <SC.SmallTitleWrapper>
             <SC.SmallTitle>
-              <strong>Integration Base URL:</strong> {REACT_APP_FUSEBIT_DEPLOYMENT}
+              <strong>Integration Base URL:</strong> {integrationBaseUrl}
             </SC.SmallTitle>
-            <CSC.Copy onClick={() => handleCopy(REACT_APP_FUSEBIT_DEPLOYMENT as string)} margin="0 0 0 20px" />
+            <CSC.Copy onClick={() => handleCopy(integrationBaseUrl as string)} margin="0 0 0 20px" />
             <SC.CopySuccess copy={copiedLine}>Copied to clipboard!</SC.CopySuccess>
           </SC.SmallTitleWrapper>
 
@@ -160,22 +186,36 @@ const Connect = React.forwardRef(
 
           <SC.Subtitle style={{ margin: '32px auto 16px' }}>Connect your Backend</SC.Subtitle>
           <CSC.Flex flexDown>
-            <Button
-              style={{ margin: '0 auto', width: '293px' }}
-              target="_blank"
-              rel="noopener"
-              href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
-              variant="outlined"
-              color="primary"
-              size="large"
-            >
-              Follow guide
-            </Button>
+            <CSC.Flex>
+              <Button
+                style={{ margin: '0 auto', width: '293px' }}
+                target="_blank"
+                rel="noopener"
+                href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
+                variant="outlined"
+                color="primary"
+                size="large"
+              >
+                Follow guide
+              </Button>
+              {isSampleAppEnabled && (
+                <>
+                  or
+                  <LinkSampleApp componentMap={componentMap} />
+                </>
+              )}
+            </CSC.Flex>
             <CSC.Flex>
               <div style={{ display: 'flex', alignItems: 'center', margin: '0 auto' }}>
                 <SC.TimeIcon />
                 <SC.TimeDescription>10 minutes</SC.TimeDescription>
               </div>
+              {isSampleAppEnabled && (
+                <div style={{ display: 'flex', alignItems: 'center', margin: '0 auto' }}>
+                  <SC.TimeIcon />
+                  <SC.TimeDescription>2 minutes.</SC.TimeDescription>
+                </div>
+              )}
             </CSC.Flex>
           </CSC.Flex>
           {/* <CSC.Flex margin="32px 0 0 0">

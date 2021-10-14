@@ -12,7 +12,7 @@ interface schemaElement {
   minLength?: number;
 }
 
-interface EntityComponent {
+export interface EntityComponent {
   name: string;
   entityType: string;
   entityId: string;
@@ -27,7 +27,10 @@ export interface Entity {
   isApplication?: boolean;
   data: {
     id?: string;
-    files?: { [key: string]: any };
+    files: {
+      'package.json': string;
+      [x: string]: string;
+    };
     handler?: string;
     configuration?: {
       [key: string]: any;

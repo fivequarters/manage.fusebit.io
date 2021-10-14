@@ -1,7 +1,8 @@
-import React, { FC, ReactElement } from 'react';
+import { FC, ReactElement } from 'react';
+import ConnectorsTable from '../components/ConnectorsOverview/ConnectorsTable';
 import Layout from '../components/Layout';
-import ConnectorsOverview from '../components/Connectors/Overview/ConnectorsOverview';
 import Navbar from '../components/Navbar';
+import TabComponent from '../components/TabComponent';
 import { useTrackPage } from '../hooks/useTrackPage';
 
 const ConnectorsOverviewPage: FC<{}> = (): ReactElement => {
@@ -9,8 +10,8 @@ const ConnectorsOverviewPage: FC<{}> = (): ReactElement => {
 
   return (
     <Layout>
-      <Navbar dropdown={true} sectionName="Connectors" connector={true} />
-      <ConnectorsOverview />
+      <Navbar dropdown sectionName="Connectors" connector />
+      <TabComponent tabNames={['Overview']} tabObjects={[<ConnectorsTable key="connectorsTable" />]} />
     </Layout>
   );
 };
