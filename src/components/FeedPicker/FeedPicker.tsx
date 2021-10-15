@@ -9,7 +9,7 @@ import { Props } from '../../interfaces/feedPicker';
 import { integrationsFeed, connectorsFeed } from '../../static/feed';
 import search from '../../assets/search.svg';
 import cross from '../../assets/cross.svg';
-import { Feed } from '../../interfaces/feed';
+import { Feed, ParsedFeed } from '../../interfaces/feed';
 
 import { useQuery } from '../../hooks/useQuery';
 import { useReplaceMustache } from '../../hooks/useReplaceMustache';
@@ -31,12 +31,15 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
   const [validationMode, setValidationMode] = React.useState<ValidationMode>('ValidateAndHide');
   const [activeFilter, setActiveFilter] = React.useState<Filters>(Filters.ALL);
   const [feed, setFeed] = useState<Feed[]>([]);
-  const [activeTemplate, setActiveTemplate] = React.useState<Feed>();
+  const [activeTemplate, setActiveTemplate] = React.useState<ParsedFeed>();
   const [rawActiveTemplate, setRawActiveTemplate] = React.useState<Feed>();
   const [searchFilter, setSearchFilter] = React.useState('');
   const [loading, setLoading] = React.useState(true);
   const query = useQuery();
   const { replaceMustache } = useReplaceMustache();
+
+  const urlOrSvgToImage = (img: string) =>
+    img.match('^<svg') ? `data:image/svg+xml;utf8,${encodeURIComponent(img)}` : img;
 
   const debouncedSetSearchFilter = debounce((keyword: string) => {
     if (isIntegration) {
@@ -65,6 +68,18 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
     }
   };
 
+  const handlePlanUpsell = () => {
+    if (rawActiveTemplate) {
+      if (isIntegration) {
+        trackEvent('Interest in Integration', 'Integrations', { tag: rawActiveTemplate.id });
+      } else {
+        trackEvent('Interest in Connector', 'Connectors', { tag: rawActiveTemplate.id });
+      }
+      window.Intercom('showNewMessage', `I'm interested in enabling ${rawActiveTemplate.name}`);
+    }
+    onClose();
+  };
+
   const handleFilterChange = (filter: Filters) => {
     if (isIntegration) {
       trackEvent('New Integration Catalog Clicked', 'Integrations', { tag: filter });
@@ -72,6 +87,18 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
       trackEvent('New Connector Catalog Clicked', 'Connectors', { tag: filter });
     }
     setActiveFilter(filter);
+  };
+
+  const handleJsonFormsChange = ({ errors: _errors, data: _data }: { errors: any; data: any }) => {
+    if (data?.ui?.toggle && activeTemplate) {
+      trackEvent('New Integration Customize Clicked', 'Integrations', {
+        integration: activeTemplate.name,
+      });
+    }
+    if (_errors) {
+      setErrors(_errors);
+    }
+    setData(_data);
   };
 
   const feedTypeName = isIntegration ? 'Integration' : 'Connector';
@@ -165,7 +192,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
             />
             <SC.ColumnSearchIcon src={search} alt={`Search ${feedTypeName}`} height="24" width="24" />
           </SC.ColumnSearchWrapper>
-          {loading ? (
+          {loading || !activeTemplate ? (
             <Loader />
           ) : (
             feed.map((feedEntry: Feed) => {
@@ -181,9 +208,14 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
                   <SC.ColumnItem
                     key={feedEntry.id}
                     onClick={() => handleTemplateChange(feedEntry)}
-                    active={feedEntry.id === activeTemplate?.id}
+                    active={feedEntry.id === activeTemplate.id}
                   >
-                    <SC.ColumnItemImage src={feedEntry.smallIcon} alt="slack" height="18" width="18" />
+                    <SC.ColumnItemImage
+                      src={urlOrSvgToImage(feedEntry.smallIcon)}
+                      alt={feedEntry.name}
+                      height="18"
+                      width="18"
+                    />
                     {feedEntry.name}
                   </SC.ColumnItem>
                 );
@@ -194,61 +226,58 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
         </SC.Column>
         <SC.ColumnBr />
         <SC.ConnectorInfo>
-          {loading ? (
+          {loading || !activeTemplate ? (
             <Loader />
           ) : (
             <>
               <SC.ConnectorTitleWrapper>
-                <SC.ConnectorImage src={activeTemplate?.smallIcon} alt="slack" height="28" width="28" />
-                <SC.ConnectorTitle>{activeTemplate?.name}</SC.ConnectorTitle>
-                <SC.ConnectorVersion>{activeTemplate?.version}</SC.ConnectorVersion>
+                <SC.ConnectorImage
+                  src={urlOrSvgToImage(activeTemplate.smallIcon)}
+                  alt={activeTemplate.name || 'slack'}
+                  height="28"
+                  width="28"
+                />
+                <SC.ConnectorTitle>{activeTemplate.name}</SC.ConnectorTitle>
+                <SC.ConnectorVersion>{activeTemplate.version}</SC.ConnectorVersion>
               </SC.ConnectorTitleWrapper>
               <SC.GeneralInfoWrapper>
-                <SC.ConnectorDescription>{activeTemplate?.description || ''}</SC.ConnectorDescription>
-                <SC.FormWrapper>
-                  <JsonForms
-                    schema={activeTemplate?.configuration.schema}
-                    uischema={activeTemplate?.configuration.uischema}
-                    data={data}
-                    renderers={materialRenderers}
-                    cells={materialCells}
-                    onChange={({ errors: _errors, data: _data }) => {
-                      if (_data?.ui?.toggle && activeTemplate) {
-                        trackEvent('New Integration Customize Clicked', 'Integrations', {
-                          integration: activeTemplate.name,
-                        });
-                      }
-                      if (_errors) {
-                        setErrors(_errors);
-                      }
-                      setData(_data);
-                    }}
-                    validationMode={validationMode}
-                  />
-                </SC.FormWrapper>
+                <SC.ConnectorDescription>{activeTemplate.description || ''}</SC.ConnectorDescription>
+                {activeTemplate.outOfPlan || (
+                  <SC.FormWrapper>
+                    <JsonForms
+                      schema={activeTemplate.configuration.schema}
+                      uischema={activeTemplate.configuration.uischema}
+                      data={data}
+                      renderers={materialRenderers}
+                      cells={materialCells}
+                      onChange={handleJsonFormsChange}
+                      validationMode={validationMode}
+                    />
+                  </SC.FormWrapper>
+                )}
               </SC.GeneralInfoWrapper>
               <SC.MobileHidden>
                 <Button
-                  onClick={handleSubmit}
+                  onClick={activeTemplate.outOfPlan ? handlePlanUpsell : handleSubmit}
                   style={{ width: '200px', marginTop: 'auto', marginLeft: 'auto' }}
                   fullWidth={false}
                   size="large"
                   color="primary"
                   variant="contained"
                 >
-                  Create
+                  {activeTemplate.outOfPlan ? 'Enable' : 'Create'}
                 </Button>
               </SC.MobileHidden>
               <SC.MobileVisible>
                 <Button
-                  onClick={handleSubmit}
+                  onClick={activeTemplate.outOfPlan ? handlePlanUpsell : handleSubmit}
                   style={{ width: '200px', margin: 'auto' }}
                   fullWidth={false}
                   size="large"
                   color="primary"
                   variant="contained"
                 >
-                  Create
+                  {activeTemplate.outOfPlan ? 'Enable' : 'Create'}
                 </Button>
               </SC.MobileVisible>
             </>
