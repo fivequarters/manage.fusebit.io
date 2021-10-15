@@ -65,7 +65,7 @@ jobs:
           REACT_APP_HOTJAR_ID: 2534393
           REACT_APP_ENABLE_ONLINE_EDITOR: true
           REACT_APP_INTERCOM_APP_ID: v9ncq3ml
-          REACT_APP_SAMPLE_APP_URL: https://task-sample-app.fusebit.io
+          REACT_APP_SAMPLE_APP_URL: https://task-sample-app.on.fusebit.io
           REACT_APP_SAMPLE_APP_KEY: ${{secrets.SAMPLE_APP_TASK_JWT_SECRET}}
         run: ./scripts/build_tree.sh
       - name: Publish - website
