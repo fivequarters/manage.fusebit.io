@@ -86,3 +86,7 @@ export interface Feed {
     components?: EntityComponent[];
   };
 }
+
+export type ParsedFeed = Omit<Feed, 'configuration'> & {
+  configuration: Omit<Feed['configuration'], 'entities'> & { entities: Entity[] };
+};

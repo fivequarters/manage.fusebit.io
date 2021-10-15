@@ -2,7 +2,7 @@ import React from 'react';
 import Mustache from 'mustache';
 import { useContext } from './useContext';
 import { Data } from '../interfaces/feedPicker';
-import { Feed, Entity } from '../interfaces/feed';
+import { Feed, ParsedFeed } from '../interfaces/feed';
 
 const walkObjectStrings = (obj: any, func: (value: string) => string): any => {
   Object.entries(obj).forEach(([key, value]) => {
@@ -30,12 +30,13 @@ export const useReplaceMustache = () => {
   const { userData } = useContext();
 
   const replaceMustache = React.useCallback(
-    async (data: Data, feedMaster: Feed) => {
+    async (data: Data, feedMaster: Feed): Promise<ParsedFeed> => {
       // This hurts but it's easy.
       const oldMustacheEscape = Mustache.escape;
       try {
         checkIfEntitiesAreValid(feedMaster);
-        const feed = JSON.parse(JSON.stringify(feedMaster));
+        const feed = JSON.parse(JSON.stringify(feedMaster)) as Feed;
+        const parsedFeed = (feed as unknown) as ParsedFeed; // Feed, but with a different configuration.entities
         const customTags: any = ['<%', '%>'];
 
         // Disable html escaping because these values are all trusted
@@ -49,7 +50,7 @@ export const useReplaceMustache = () => {
             subscriptionId: userData.subscriptionId,
             endpoint: process.env.REACT_APP_FUSEBIT_DEPLOYMENT,
             integrationId: () => {
-              const integration: any = Object.entries(feed.configuration.entities as Record<string, Entity>).find(
+              const integration: any = Object.entries(feed.configuration.entities).find(
                 ([, entity]) => entity.entityType === 'integration'
               );
               return integration ? global.entities[integration[0]]?.id() || integration[1].id : '';
@@ -65,11 +66,9 @@ export const useReplaceMustache = () => {
         // No really good reason to delete this besides it making it difficult to console.log the globals.
         delete global.consts.feed.configuration;
 
-        const newEntities: Entity[] = [];
-
         if (feed.configuration?.entities) {
           // Populate the global entities first, so that the id is always available and always consistent
-          Object.entries(feed.configuration.entities as Record<string, Entity>).forEach(([name, entity]) => {
+          Object.entries(feed.configuration.entities).forEach(([name, entity]) => {
             if (!data[name]) {
               data[name] = {};
             }
@@ -87,7 +86,7 @@ export const useReplaceMustache = () => {
           });
 
           // Now parse each entity, replacing it's strings as appropriate
-          Object.entries(feed.configuration.entities as Record<string, Entity>).forEach(([name, entity]) => {
+          parsedFeed.configuration.entities = Object.entries(feed.configuration.entities).map(([name, entity]) => {
             const view = {
               this: {
                 id: () => global.entities[name].id(),
@@ -95,16 +94,12 @@ export const useReplaceMustache = () => {
               },
               global,
             };
-            newEntities.push(
-              walkObjectStrings(entity, (value: string) => Mustache.render(value, view, {}, customTags))
-            );
+            return walkObjectStrings(entity, (value: string) => Mustache.render(value, view, {}, customTags));
           });
-
-          feed.configuration.entities = newEntities;
         }
         feed.description = Mustache.render(feed.description, { global }, {}, customTags);
 
-        return feed;
+        return parsedFeed;
       } finally {
         Mustache.escape = oldMustacheEscape;
       }

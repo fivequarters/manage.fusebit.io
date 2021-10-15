@@ -9,7 +9,7 @@ import { Props } from '../../interfaces/feedPicker';
 import { integrationsFeed, connectorsFeed } from '../../static/feed';
 import search from '../../assets/search.svg';
 import cross from '../../assets/cross.svg';
-import { Feed } from '../../interfaces/feed';
+import { Feed, ParsedFeed } from '../../interfaces/feed';
 
 import { useQuery } from '../../hooks/useQuery';
 import { useReplaceMustache } from '../../hooks/useReplaceMustache';
@@ -31,7 +31,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
   const [validationMode, setValidationMode] = React.useState<ValidationMode>('ValidateAndHide');
   const [activeFilter, setActiveFilter] = React.useState<Filters>(Filters.ALL);
   const [feed, setFeed] = useState<Feed[]>([]);
-  const [activeTemplate, setActiveTemplate] = React.useState<Feed>();
+  const [activeTemplate, setActiveTemplate] = React.useState<ParsedFeed>();
   const [rawActiveTemplate, setRawActiveTemplate] = React.useState<Feed>();
   const [searchFilter, setSearchFilter] = React.useState('');
   const [loading, setLoading] = React.useState(true);
@@ -192,7 +192,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
             />
             <SC.ColumnSearchIcon src={search} alt={`Search ${feedTypeName}`} height="24" width="24" />
           </SC.ColumnSearchWrapper>
-          {loading ? (
+          {loading || !activeTemplate ? (
             <Loader />
           ) : (
             feed.map((feedEntry: Feed) => {
@@ -208,7 +208,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
                   <SC.ColumnItem
                     key={feedEntry.id}
                     onClick={() => handleTemplateChange(feedEntry)}
-                    active={feedEntry.id === activeTemplate?.id}
+                    active={feedEntry.id === activeTemplate.id}
                   >
                     <SC.ColumnItemImage
                       src={urlOrSvgToImage(feedEntry.smallIcon)}
@@ -233,20 +233,20 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
               <SC.ConnectorTitleWrapper>
                 <SC.ConnectorImage
                   src={urlOrSvgToImage(activeTemplate.smallIcon)}
-                  alt={activeTemplate?.name || 'slack'}
+                  alt={activeTemplate.name || 'slack'}
                   height="28"
                   width="28"
                 />
-                <SC.ConnectorTitle>{activeTemplate?.name}</SC.ConnectorTitle>
-                <SC.ConnectorVersion>{activeTemplate?.version}</SC.ConnectorVersion>
+                <SC.ConnectorTitle>{activeTemplate.name}</SC.ConnectorTitle>
+                <SC.ConnectorVersion>{activeTemplate.version}</SC.ConnectorVersion>
               </SC.ConnectorTitleWrapper>
               <SC.GeneralInfoWrapper>
-                <SC.ConnectorDescription>{activeTemplate?.description || ''}</SC.ConnectorDescription>
-                {activeTemplate?.outOfPlan || (
+                <SC.ConnectorDescription>{activeTemplate.description || ''}</SC.ConnectorDescription>
+                {activeTemplate.outOfPlan || (
                   <SC.FormWrapper>
                     <JsonForms
-                      schema={activeTemplate?.configuration.schema}
-                      uischema={activeTemplate?.configuration.uischema}
+                      schema={activeTemplate.configuration.schema}
+                      uischema={activeTemplate.configuration.uischema}
                       data={data}
                       renderers={materialRenderers}
                       cells={materialCells}
@@ -258,26 +258,26 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
               </SC.GeneralInfoWrapper>
               <SC.MobileHidden>
                 <Button
-                  onClick={activeTemplate?.outOfPlan ? handlePlanUpsell : handleSubmit}
+                  onClick={activeTemplate.outOfPlan ? handlePlanUpsell : handleSubmit}
                   style={{ width: '200px', marginTop: 'auto', marginLeft: 'auto' }}
                   fullWidth={false}
                   size="large"
                   color="primary"
                   variant="contained"
                 >
-                  {activeTemplate?.outOfPlan ? 'Enable' : 'Create'}
+                  {activeTemplate.outOfPlan ? 'Enable' : 'Create'}
                 </Button>
               </SC.MobileHidden>
               <SC.MobileVisible>
                 <Button
-                  onClick={activeTemplate?.outOfPlan ? handlePlanUpsell : handleSubmit}
+                  onClick={activeTemplate.outOfPlan ? handlePlanUpsell : handleSubmit}
                   style={{ width: '200px', margin: 'auto' }}
                   fullWidth={false}
                   size="large"
                   color="primary"
                   variant="contained"
                 >
-                  {activeTemplate?.outOfPlan ? 'Enable' : 'Create'}
+                  {activeTemplate.outOfPlan ? 'Enable' : 'Create'}
                 </Button>
               </SC.MobileVisible>
             </>
