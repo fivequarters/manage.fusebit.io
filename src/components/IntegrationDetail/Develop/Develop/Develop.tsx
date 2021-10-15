@@ -36,7 +36,6 @@ import { Entity, Feed } from '../../../../interfaces/feed';
 import { Data } from '../../../../interfaces/feedPicker';
 import { useReplaceMustache } from '../../../../hooks/useReplaceMustache';
 import { FinalConnector } from '../../../../interfaces/integrationDetailDevelop';
-
 import { useEntityApi } from '../../../../hooks/useEntityApi';
 import { useBackendClient } from '../../../../hooks/useBackendClient';
 import { BackendClient } from '../../../../interfaces/backendClient';

@@ -6,12 +6,7 @@ export const useCopy = () => {
 
   const handleCopy = (text: string) => {
     clearTimeout(timeout);
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
+    navigator.clipboard.writeText(text);
     setCopiedLine(true);
     timeout = setTimeout(() => {
       setCopiedLine(false);
