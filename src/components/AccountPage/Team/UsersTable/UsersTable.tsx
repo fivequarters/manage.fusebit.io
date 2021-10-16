@@ -82,7 +82,9 @@ const UsersTable = () => {
         onClickRow={handleClickRow}
         isAllChecked={rows.length > 1 ? selected.length === rows.length - 1 : false}
         hideCheckAll={rows.length === 1}
-        buttonsMarginTop="0"
+        actionsContainerProps={{
+          mt: 0,
+        }}
       />
     </>
   );

@@ -1,4 +1,4 @@
-import { ButtonProps } from '@material-ui/core';
+import { BoxProps, ButtonProps } from '@material-ui/core';
 
 export interface BaseTableRow {
   id: string;
@@ -38,5 +38,5 @@ export interface BaseTableProps {
     props?: ButtonProps;
   }[];
   hideCheckAll?: boolean;
-  buttonsMarginTop?: string;
+  actionsContainerProps?: BoxProps;
 }
