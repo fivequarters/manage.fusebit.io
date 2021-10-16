@@ -2,8 +2,8 @@ import { FC, ReactElement } from 'react';
 import Navbar from '../components/Navbar';
 import { useTrackPage } from '../hooks/useTrackPage';
 import Layout from '../components/Layout';
-import Drawer from '../components/common/Drawer';
 import UsersTable from '../components/AccountPage/Team/UsersTable';
+import AccountLayout from '../components/common/AccountLayout';
 
 const AccountSettingsPage: FC<{}> = (): ReactElement => {
   useTrackPage('Team Overview', 'Team');
@@ -11,9 +11,9 @@ const AccountSettingsPage: FC<{}> = (): ReactElement => {
   return (
     <Layout>
       <Navbar sectionName="Account" authenticationLink={true} authentication={true} />
-      <Drawer active="team">
+      <AccountLayout active="team">
         <UsersTable />
-      </Drawer>
+      </AccountLayout>
     </Layout>
   );
 };
