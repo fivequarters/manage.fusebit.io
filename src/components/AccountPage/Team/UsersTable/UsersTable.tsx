@@ -21,26 +21,26 @@ const UsersTable = () => {
   const history = useHistory();
   const { userData } = useContext();
 
-  const { data: users } = useAccountUserGetAll<{ items: Account[] }>({
+  const { data: users, isLoading } = useAccountUserGetAll<{ items: Account[] }>({
     enabled: userData.token,
     accountId: userData.accountId,
     params: 'include=all',
   });
 
-  const { loading, rows, selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
-    users,
-    page,
-    setPage,
-    rowsPerPage,
-  });
-
-  const tableRows = (rows as Account[]).map((row) => ({
+  const rows = (users?.data?.items || []).map((row) => ({
     id: row.id,
     name: <NameColumn account={row} />,
     email: row.primaryEmail,
     userId: row.id,
     hideCheckbox: row.id === userData.id,
   }));
+
+  const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
+    page,
+    setPage,
+    rowsPerPage,
+    rows,
+  });
 
   const handleClickRow = (row: BaseTableRow) => history.push(getRedirectLink(`/authentication/${row.id}/overview`));
 
@@ -53,7 +53,7 @@ const UsersTable = () => {
     <>
       <NewUserModal onClose={toggleNewModal} open={newModalOpen} />
       <DeleteUserModal
-        onConfirm={() => handleRowDelete('A')}
+        onConfirm={() => handleRowDelete('Account')}
         setOpen={setDeleteModal}
         open={deleteModalOpen}
         selected={selected}
@@ -71,17 +71,17 @@ const UsersTable = () => {
           { id: 'email', value: 'Email' },
           { id: 'userId', value: 'User-ID' },
         ]}
-        loading={loading}
+        loading={isLoading}
         onClickNew={handleNewIntegration}
         onDeleteAll={toggleDeleteModal}
         onSelectAll={handleSelectAllCheck}
-        rows={tableRows}
+        rows={rows}
         onSelectRow={handleCheck}
         isSelected={isSelected}
         selected={selected}
         onClickRow={handleClickRow}
-        isAllChecked={tableRows.length > 1 ? selected.length === tableRows.length - 1 : false}
-        hideCheckAll={tableRows.length === 1}
+        isAllChecked={rows.length > 1 ? selected.length === rows.length - 1 : false}
+        hideCheckAll={rows.length === 1}
         buttonsMarginTop="0"
       />
     </>

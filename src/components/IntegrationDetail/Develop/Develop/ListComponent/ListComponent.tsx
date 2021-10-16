@@ -20,6 +20,7 @@ const ListComponent: React.FC<ListComponentProps> = ({
   onLinkConnectorClick,
   linkConnector,
   id,
+  integration,
 }) => {
   const history = useHistory();
   const { getRedirectLink } = useGetRedirectLink();
@@ -108,6 +109,7 @@ const ListComponent: React.FC<ListComponentProps> = ({
             disableCopy
             open={connectOpen}
             onClose={() => setConnectOpen(false)}
+            integration={integration}
           />
         </Fade>
       </Modal>
