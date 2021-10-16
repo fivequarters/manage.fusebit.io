@@ -1,6 +1,6 @@
 import { Backdrop } from '@material-ui/core';
 import Modal from '@material-ui/core/Modal';
-import { useEntityApi } from '../../../../hooks/useEntityApi';
+import { useEntityApi } from '../../../hooks/useEntityApi';
 import NewUserForm from '../NewUserForm';
 
 interface Props {

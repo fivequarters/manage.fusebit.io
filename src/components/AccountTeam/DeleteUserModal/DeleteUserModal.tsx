@@ -1,5 +1,5 @@
-import ConfirmationPrompt from '../../../ConfirmationPrompt';
-import { getPluralText } from '../../../../utils/utils';
+import ConfirmationPrompt from '../../ConfirmationPrompt';
+import { getPluralText } from '../../../utils/utils';
 
 interface Props {
   open: boolean;

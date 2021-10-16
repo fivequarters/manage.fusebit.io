@@ -4,11 +4,11 @@ import { JsonForms } from '@jsonforms/react';
 import { ValidationMode } from '@jsonforms/core';
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
 import * as SC from './styles';
-import { Props } from '../../../../interfaces/newUser';
-import { NewUserData } from '../../../../interfaces/newUserData';
-import CopyLine from '../../../CopyLine';
-import * as CSC from '../../../globalStyle';
-import { startCase } from '../../../../utils/utils';
+import { Props } from '../../../interfaces/newUser';
+import { NewUserData } from '../../../interfaces/newUserData';
+import * as CSC from '../../globalStyle';
+import { startCase } from '../../../utils/utils';
+import CopyLine from '../../CopyLine';
 
 const schema = {
   type: 'object',

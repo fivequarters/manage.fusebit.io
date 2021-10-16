@@ -1,7 +1,7 @@
 import { FC, ReactElement } from 'react';
 import Navbar from '../components/Navbar';
 import { useTrackPage } from '../hooks/useTrackPage';
-import Settings from '../components/AccountPage/Settings/SettingsForm';
+import Settings from '../components/AccountSettings/SettingsForm';
 import Layout from '../components/Layout';
 import AccountLayout from '../components/common/AccountLayout';
 

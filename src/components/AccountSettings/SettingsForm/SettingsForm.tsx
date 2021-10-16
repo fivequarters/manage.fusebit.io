@@ -4,9 +4,9 @@ import { JsonForms } from '@jsonforms/react';
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
 import { ValidationMode } from '@jsonforms/core';
 import { useParams } from 'react-router-dom';
-import * as CSC from '../../../globalStyle';
-import { useContext } from '../../../../hooks/useContext';
-import { useAccountUpdateOne } from '../../../../hooks/api/v1/account/account/useUpdateOne';
+import * as CSC from '../../globalStyle';
+import { useContext } from '../../../hooks/useContext';
+import { useAccountUpdateOne } from '../../../hooks/api/v1/account/account/useUpdateOne';
 
 const schema = {
   type: 'object',

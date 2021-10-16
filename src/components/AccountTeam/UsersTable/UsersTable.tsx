@@ -1,17 +1,17 @@
 import { useHistory } from 'react-router-dom';
-import BaseTable from '../../../BaseTable/BaseTable';
-import { useEntityTable } from '../../../../hooks/useEntityTable';
-import { usePagination } from '../../../../hooks/usePagination';
-import { useModal } from '../../../../hooks/useModal';
-import { BaseTableRow } from '../../../BaseTable/types';
-import { useGetRedirectLink } from '../../../../hooks/useGetRedirectLink';
-import { trackEvent } from '../../../../utils/analytics';
-import { useContext } from '../../../../hooks/useContext';
-import { Account } from '../../../../interfaces/account';
-import { useAccountUserGetAll } from '../../../../hooks/api/v1/account/user/useGetAll';
 import DeleteUserModal from '../DeleteUserModal';
 import NameColumn from './NameColumn';
 import NewUserModal from '../NewUserModal';
+import BaseTable from '../../BaseTable';
+import { usePagination } from '../../../hooks/usePagination';
+import { useModal } from '../../../hooks/useModal';
+import { useContext } from '../../../hooks/useContext';
+import { useAccountUserGetAll } from '../../../hooks/api/v1/account/user/useGetAll';
+import { useEntityTable } from '../../../hooks/useEntityTable';
+import { Account } from '../../../interfaces/account';
+import { BaseTableRow } from '../../BaseTable/types';
+import { trackEvent } from '../../../utils/analytics';
+import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 
 const UsersTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
