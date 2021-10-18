@@ -8,7 +8,7 @@ import LoggedOutErrorPage from '../pages/LoggedOutErrorPage';
 import AuthenticationUsersPage from '../pages/AuthenticationUsersPage';
 import AuthenticationDetailOverviewPage from '../pages/AuthenticationDetailOverviewPage';
 import FatalErrorPage from '../pages/FatalErrorPage';
-import AuthCallback from '../pages/AuthCallback';
+import AuthCallbackPage from '../pages/AuthCallbackPage';
 import NotFoundPage from '../pages/NotFoundPage';
 import { RouteItem } from '../interfaces/router';
 
@@ -47,7 +47,7 @@ export const routes: Array<RouteItem> = [
   {
     key: 'router-auth-callback',
     path: '/callback',
-    component: AuthCallback,
+    component: AuthCallbackPage,
   },
   {
     key: 'router-logged-out',

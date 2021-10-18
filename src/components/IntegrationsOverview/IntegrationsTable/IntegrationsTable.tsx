@@ -1,11 +1,11 @@
 import { useHistory } from 'react-router-dom';
-import BaseTable from '../../BaseTable/BaseTable';
+import BaseTable from '../../common/BaseTable/BaseTable';
 import { useEntityTable } from '../../../hooks/useEntityTable';
 import { usePagination } from '../../../hooks/usePagination';
 import { Integration } from '../../../interfaces/integration';
 import DeleteIntegrationModal from '../DeleteIntegrationModal';
 import { useModal } from '../../../hooks/useModal';
-import { BaseTableRow } from '../../BaseTable/types';
+import { BaseTableRow } from '../../common/BaseTable/types';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import { trackEvent } from '../../../utils/analytics';
 import { useContext } from '../../../hooks/useContext';
