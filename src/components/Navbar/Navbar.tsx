@@ -5,7 +5,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { Link, useHistory } from 'react-router-dom';
 import * as SC from './styles';
-import client from '../../assets/client.jpg';
+import accountImg from '../../assets/account.svg';
 import { Props } from '../../interfaces/Navbar';
 import arrow from '../../assets/down-arrow-white.svg';
 import rightArrow from '../../assets/arrow-right-black.svg';
@@ -86,6 +86,10 @@ const Navbar: React.FC<Props> = ({
     : authenticationLink
     ? getRedirectLink('/authentication/users')
     : getRedirectLink('/connectors/overview');
+
+  const handleOnClickEmail = () => {
+    history.push(getRedirectLink(`/authentication/${userData.userId}/overview`));
+  };
 
   return (
     <SC.Background>
@@ -331,7 +335,7 @@ const Navbar: React.FC<Props> = ({
               aria-haspopup="true"
               onClick={(event: any) => setAnchorUserDropdown(event.currentTarget)}
               size="large"
-              startIcon={<SC.User src={userData.picture || client} />}
+              startIcon={<SC.User src={userData.picture || accountImg} />}
               endIcon={Boolean(anchorUserDropdown) && !loggingOut ? <ExpandLessIcon /> : <ExpandMoreIcon />}
               variant="text"
               color="inherit"
@@ -348,8 +352,8 @@ const Navbar: React.FC<Props> = ({
             >
               <SC.UserDropdown>
                 <SC.UserDropdownCompany>{userData.company}</SC.UserDropdownCompany>
-                <SC.UserDropdownInfo>
-                  <SC.UserDropdownInfoImage src={userData.picture || client} alt="user" height="38" width="38" />
+                <SC.UserDropdownInfo onClick={handleOnClickEmail}>
+                  <SC.UserDropdownInfoImage src={userData.picture || accountImg} alt="user" height="38" width="38" />
                   <SC.UserDropdownPersonalInfo>
                     <SC.UserDropdownInfoName>
                       {userData.firstName} {userData.lastName}
@@ -400,7 +404,7 @@ const Navbar: React.FC<Props> = ({
               </SC.Flex>
 
               <SC.UserDropdownInfo>
-                <SC.UserDropdownInfoImage src={userData.picture || client} alt="user" height="38" width="38" />
+                <SC.UserDropdownInfoImage src={userData.picture || accountImg} alt="user" height="38" width="38" />
                 <SC.UserDropdownPersonalInfo>
                   <SC.UserDropdownInfoName>
                     {userData.firstName} {userData.lastName}

@@ -188,6 +188,7 @@ export const UserDropdownInfo = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 24px;
+  cursor: pointer;
 
   @media only screen and (max-width: 880px) {
     margin-top: 48px;
