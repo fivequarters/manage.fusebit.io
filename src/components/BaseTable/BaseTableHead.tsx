@@ -23,7 +23,7 @@ const BaseTableHead = ({
           )}
         </TableCell>
         {headers.map((header) => (
-          <TableCell key={header.id} align="left">
+          <TableCell style={{ whiteSpace: 'nowrap' }} key={header.id} align="left">
             {header.value}
           </TableCell>
         ))}

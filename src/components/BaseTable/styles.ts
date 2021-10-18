@@ -41,7 +41,7 @@ export const Flex = styled.div`
   align-items: center;
 `;
 
-export const CellName = styled.p`
+export const CellName = styled.p<{ regularColor?: boolean }>`
   color: var(--primary-color);
   font-weight: 500;
 `;
@@ -82,12 +82,8 @@ export const TableCellMobile = styled.div`
   width: 100%;
 
   p {
-    width: 90px;
+    width: max-content;
     margin: 0;
-
-    @media only screen and (max-width: 345px) {
-      width: 70px;
-    }
   }
 `;
 
