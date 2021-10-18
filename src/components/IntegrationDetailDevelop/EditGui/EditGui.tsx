@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, ButtonGroup } from '@material-ui/core';
+import { Box, Button, ButtonGroup } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import * as SC from './styles';
 import { Props } from '../../../interfaces/edit';
@@ -17,15 +17,15 @@ import { trackEvent } from '../../../utils/analytics';
 import ConfirmationPrompt from '../../common/ConfirmationPrompt';
 import { useTrackPage } from '../../../hooks/useTrackPage';
 
-const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, onMount, integrationId }, ref) => {
+const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationId }, ref) => {
   const { userData } = useContext();
   const [isMounted, setIsMounted] = useState(false);
   const [configureRunnerActive, setConfigureRunnerActive] = useState(false);
   const [unsavedWarning, setUnsavedWarning] = useState(false);
   const { createLoader, removeLoader } = useLoader();
   const [loginFlowModalOpen, setLoginFlowModalOpen] = useState(false);
-  const { handleRun, handleNoInstallFound, isFindingInstall, isSaving } = useEditor({
-    onNoInstallFound: () => setLoginFlowModalOpen(true),
+  const { handleRun, handleLogin, isFindingInstall, isSaving } = useEditor({
+    onReadyToLogin: () => setLoginFlowModalOpen(true),
     isMounted,
   });
 
@@ -72,14 +72,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, onMount, int
     } else {
       createLoader();
     }
-  }, [isMounted, onMount, createLoader, removeLoader]);
-
-  useEffect(() => {
-    if (isMounted) {
-      onMount?.();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMounted]);
+  }, [isMounted, createLoader, removeLoader]);
 
   useEffect(() => {}, []);
 
@@ -98,7 +91,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, onMount, int
   };
 
   return (
-    <>
+    <Box>
       <ConfirmationPrompt
         open={unsavedWarning}
         setOpen={setUnsavedWarning}
@@ -110,7 +103,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, onMount, int
       <ConfirmationPrompt
         open={loginFlowModalOpen}
         setOpen={setLoginFlowModalOpen}
-        handleConfirmation={handleNoInstallFound}
+        handleConfirmation={handleLogin}
         title="Start login flow?"
         description="The integration needs to know the Identity of the user on whose behalf to execute. For development purposes, please log in as your own user."
         confirmationButtonText="Start"
@@ -189,7 +182,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, onMount, int
           {isMounted && <SC.FusebitEditorLogo src={logo} alt="fusebit logo" height="20" width="80" />}
         </SC.FusebitEditorContainer>
       </SC.EditorContainer>
-    </>
+    </Box>
   );
 });
 

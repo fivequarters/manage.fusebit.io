@@ -15,6 +15,7 @@ import {
   Tooltip,
   useMediaQuery,
   Box,
+  CircularProgress,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import * as SC from './styles';
@@ -41,10 +42,10 @@ import { useEntityApi } from '../../../hooks/useEntityApi';
 import { useBackendClient } from '../../../hooks/useBackendClient';
 import { BackendClient } from '../../../interfaces/backendClient';
 import EditCli from '../EditCli';
-import SlideUpSpring from '../../common/Animations/SlideUpSpring';
 import { trackEvent } from '../../../utils/analytics';
 import LineConnector from '../../common/LineConnector';
 import MobileDrawer from '../MobileDrawer';
+import useEditor from '../EditGui/useEditor';
 
 const { REACT_APP_ENABLE_ONLINE_EDITOR } = process.env;
 const isOnlineEditorEnabled = REACT_APP_ENABLE_ONLINE_EDITOR === 'true';
@@ -84,10 +85,10 @@ const Develop: React.FC = () => {
   const [backendClients, setBackendClients] = useState<BackendClient[]>([]);
   const [backendClient, setBackendClient] = useState<BackendClient>();
   const [connectHover, setConnectHover] = useState(false);
-  const [editGuiMounted, setEditGuiMounted] = useState(false);
   const [editCliOpen, setEditCliOpen] = React.useState(false);
   const isMobile = useMediaQuery('(max-width: 850px)');
   const areCardsCollapsing = useMediaQuery('(max-width: 1200px)');
+  const { handleEdit, isEditing } = useEditor({ enableListener: false, onReadyToRun: () => setEditGuiOpen(true) });
 
   const getBackendClients = async () => {
     const _backendClients = await getBackendClientListener();
@@ -106,12 +107,13 @@ const Develop: React.FC = () => {
 
   const editOptions = [
     {
-      buttonLabel: 'Edit',
+      buttonLabel: isEditing ? <CircularProgress size={20} /> : 'Edit',
       optionLabel: 'Edit in the in-browser editor',
-      handle: (isOpen: boolean) => {
+      handle: () => {
         trackEvent('Develop Edit Web Button Clicked', 'Integration');
-        setEditGuiOpen(isOpen);
+        handleEdit();
       },
+      disabled: isEditing,
     },
     {
       buttonLabel: isOnlineEditorEnabled ? 'CLI' : 'Edit',
@@ -400,21 +402,16 @@ const Develop: React.FC = () => {
           disableEscapeKeyDown
           onClose={() => {
             setEditGuiOpen(false);
-            setEditGuiMounted(false);
           }}
           closeAfterTransition
           BackdropComponent={Backdrop}
         >
-          <SlideUpSpring in={editGuiOpen} mounted={editGuiMounted}>
-            <EditGui
-              onMount={() => setEditGuiMounted(true)}
-              onClose={() => {
-                setEditGuiOpen(false);
-                setEditGuiMounted(false);
-              }}
-              integrationId={integrationData?.data.id || ''}
-            />
-          </SlideUpSpring>
+          <EditGui
+            onClose={() => {
+              setEditGuiOpen(false);
+            }}
+            integrationId={integrationData?.data.id || ''}
+          />
         </Modal>
       )}
       <SC.Flex>
@@ -528,6 +525,7 @@ const Develop: React.FC = () => {
                 size="large"
                 variant="contained"
                 color="primary"
+                disabled={!!editOptions[editOption]?.disabled}
               >
                 {editOptions[editOption].buttonLabel}
               </Button>
@@ -553,14 +551,14 @@ const Develop: React.FC = () => {
                             {editOptions.map(
                               (
                                 option: {
-                                  buttonLabel: string;
-                                  optionLabel: string;
+                                  buttonLabel: any;
+                                  optionLabel: any;
                                   handle: (isOpen: boolean) => void;
                                 },
                                 index: number
                               ) => (
                                 <MenuItem
-                                  key={option.optionLabel}
+                                  key={option.buttonLabel}
                                   disabled={index === 2}
                                   selected={index === editOption}
                                   onClick={(event) => handleEditOptionClick(event, index)}

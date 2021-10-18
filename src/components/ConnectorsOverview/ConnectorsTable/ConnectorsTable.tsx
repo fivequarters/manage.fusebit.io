@@ -37,7 +37,7 @@ const ConnectorsTable = () => {
   const rows = (connectors?.data?.items || []).map((row) => ({
     id: row.id,
     name: row.id,
-    type: row.tags['fusebit.provider'],
+    type: row.tags['fusebit.service'],
     identities: <GetIdentities id={row.id} />,
   }));
 
