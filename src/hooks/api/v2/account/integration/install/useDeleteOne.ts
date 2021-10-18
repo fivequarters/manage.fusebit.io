@@ -2,13 +2,13 @@ import { useMutation } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { Params } from '../../../../../../interfaces/api';
 import { useAxios } from '../../../../../useAxios';
-import { useContext } from '../../../../../useContext';
+import { useAuthContext } from '../../../../../useAuthContext';
 import useOptimisticDelete from '../../../../../useOptimisticDelete';
 import { ACCOUNT_INTEGRATION_INSTALL_GET_ALL } from './useGetAll';
 
 export const useAccountIntegrationInstallDeleteOne = <T>() => {
   const { axios } = useAxios();
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
   const { id: integrationId } = useParams<{ id: string }>();
   const optimisticDelete = useOptimisticDelete({
     queryKey: [

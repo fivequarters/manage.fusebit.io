@@ -7,7 +7,7 @@ import { Props } from '../../../interfaces/connect';
 import CopyLine from '../../common/CopyLine';
 import { useCopy } from '../../../hooks/useCopy';
 import ConfirmationPrompt from '../../common/ConfirmationPrompt';
-import { useContext } from '../../../hooks/useContext';
+import { useAuthContext } from '../../../hooks/useAuthContext';
 import { patchBackendClients } from '../../../utils/backendClients';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 
@@ -36,7 +36,7 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
   ) => {
     const { id: integrationId } = useParams<{ id: string }>();
     const { getRedirectLink } = useGetRedirectLink();
-    const { userData } = useContext();
+    const { userData } = useAuthContext();
     const [editMode, setEditMode] = useState(false);
     const [editedBackendClientId, setEditedBackendClientId] = useState(name);
     const [backendClientId, setBackendClientId] = useState(name);

@@ -1,14 +1,14 @@
 import { useMutation, useQueryClient } from 'react-query';
 import { Params } from '../../../../../interfaces/api';
 import { useAxios } from '../../../../useAxios';
-import { useContext } from '../../../../useContext';
+import { useAuthContext } from '../../../../useAuthContext';
 import useOptimisticDelete from '../../../../useOptimisticDelete';
 import { ACCOUNT_CONNECTORS_GET_ALL } from './useGetAll';
 import { ACCOUNT_CONNECTORS_GET_ONE_CONFIG } from './useGetOneConfig';
 
 export const useAccountConnectorDeleteConnector = <T>() => {
   const { axios } = useAxios();
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
   const optimisticDelete = useOptimisticDelete({
     queryKey: [ACCOUNT_CONNECTORS_GET_ALL, { accountId: userData.accountId, subscriptionId: userData.subscriptionId }],
   });

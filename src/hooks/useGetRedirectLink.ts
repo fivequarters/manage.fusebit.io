@@ -1,7 +1,7 @@
-import { useContext } from './useContext';
+import { useAuthContext } from './useAuthContext';
 
 export const useGetRedirectLink = () => {
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
 
   const getRedirectLink = (url: string) => {
     const redirectLink = `/account/${userData.accountId}/subscription/${userData.subscriptionId}${url}`;

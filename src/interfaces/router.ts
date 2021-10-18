@@ -4,4 +4,5 @@ export interface RouteItem {
   key: string;
   path: string;
   component: FC;
+  public?: boolean;
 }

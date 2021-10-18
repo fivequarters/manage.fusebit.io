@@ -1,14 +1,14 @@
 import { useMutation } from 'react-query';
 import { Params } from '../../../../../interfaces/api';
 import { useAxios } from '../../../../useAxios';
-import { useContext } from '../../../../useContext';
+import { useAuthContext } from '../../../../useAuthContext';
 import { getIntegrationConfig } from '../../../../../utils/localStorage';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
 export const useAccountIntegrationTestIntegration = () => {
   const { axios } = useAxios({ ignoreInterceptors: true });
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
 
   const integrationUrl = `/v2/account/${userData.accountId}/subscription/${userData.subscriptionId}/integration`;
 

@@ -2,7 +2,7 @@ import React, { FC, ReactElement } from 'react';
 import { useParams } from 'react-router-dom';
 import Layout from '../components/common/Layout';
 import { useAccountIntegrationsGetOne } from '../hooks/api/v2/account/integration/useGetOne';
-import { useContext } from '../hooks/useContext';
+import { useAuthContext } from '../hooks/useAuthContext';
 import { useTrackPage } from '../hooks/useTrackPage';
 import { Integration } from '../interfaces/integration';
 import Navbar from '../components/common/Navbar';
@@ -12,7 +12,7 @@ import InstallsTable from '../components/IntegrationDetailInstalls/InstallsTable
 
 const IntegrationDetailInstallsPage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
   const { data: integrationData } = useAccountIntegrationsGetOne<Integration>({
     enabled: userData.token,
     id,

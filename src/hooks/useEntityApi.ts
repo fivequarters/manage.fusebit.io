@@ -3,7 +3,7 @@ import { useLoader } from './useLoader';
 import { Operation } from '../interfaces/operation';
 import { useAccountConnectorCreateConnector } from './api/v2/account/connector/useCreateOne';
 import { useAccountIntegrationCreateIntegration } from './api/v2/account/integration/useCreateOne';
-import { useContext } from './useContext';
+import { useAuthContext } from './useAuthContext';
 import { useError } from './useError';
 import { Connector } from '../interfaces/connector';
 import { ApiResponse } from './useAxios';
@@ -24,7 +24,7 @@ import { useCreateToken } from './useCreateToken';
 import { EntitiesType } from '../interfaces/entities';
 
 export const useEntityApi = (preventLoader?: boolean) => {
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
   const { waitForEntityStateChange, createLoader, removeLoader } = useLoader();
   const { createError } = useError();
   const { _createToken } = useCreateToken();

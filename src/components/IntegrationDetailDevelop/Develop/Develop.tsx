@@ -24,7 +24,7 @@ import arrow from '../../../assets/arrow-right-black.svg';
 import Connect from '../Connect';
 import { useLoader } from '../../../hooks/useLoader';
 import { useError } from '../../../hooks/useError';
-import { useContext } from '../../../hooks/useContext';
+import { useAuthContext } from '../../../hooks/useAuthContext';
 import { useAccountIntegrationsGetOne } from '../../../hooks/api/v2/account/integration/useGetOne';
 import { useAccountConnectorsGetAll } from '../../../hooks/api/v2/account/connector/useGetAll';
 import { Connector } from '../../../interfaces/connector';
@@ -37,7 +37,6 @@ import { Entity, Feed } from '../../../interfaces/feed';
 import { Data } from '../../../interfaces/feedPicker';
 import { useReplaceMustache } from '../../../hooks/useReplaceMustache';
 import { FinalConnector } from '../../../interfaces/integrationDetailDevelop';
-
 import { useEntityApi } from '../../../hooks/useEntityApi';
 import { useBackendClient } from '../../../hooks/useBackendClient';
 import { BackendClient } from '../../../interfaces/backendClient';
@@ -56,7 +55,7 @@ const Develop: React.FC = () => {
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
   const [integrationId, setIntegrationId] = useState(id);
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
   const { data: connectors, refetch: reloadConnectors } = useAccountConnectorsGetAll<{ items: Connector[] }>({
     enabled: userData.token,
     accountId: userData.accountId,
@@ -142,12 +141,6 @@ const Develop: React.FC = () => {
   };
 
   React.useEffect(() => {
-    const res = localStorage.getItem('refreshToken');
-    if (res === 'true') {
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('refreshTokenUrl');
-      setConnectOpen(true);
-    }
     const unlisten = history.listen((location) => {
       setIntegrationId(location.pathname.split('/')[6]);
       setLoading(true);
