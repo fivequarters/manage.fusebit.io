@@ -1,7 +1,6 @@
 import { useReplaceMustache } from './useReplaceMustache';
 import { Entity, Feed, ParsedFeed } from '../interfaces/feed';
 import { Data } from '../interfaces/feedPicker';
-import { useLoader } from './useLoader';
 import { useError } from './useError';
 import { useEntityApi } from './useEntityApi';
 import { trackEvent } from '../utils/analytics';
@@ -17,26 +16,15 @@ const getCommonTags = (feed: Feed, entityType: 'integration' | 'connector') => {
 
 export const useCreateDataFromFeed = () => {
   const { replaceMustache } = useReplaceMustache();
-  const { createLoader, removeLoader } = useLoader();
   const { createEntity, addConnectorToIntegration } = useEntityApi();
   const { createError } = useError();
-
-  const parseEntity = async (activeFeed: Feed, data: Data) => {
-    const parsedFeed = await replaceMustache(data, activeFeed);
-
-    return {
-      parsedFeed,
-    };
-  };
 
   const createFromFeed = async (parsedFeed: ParsedFeed, commonTags: Record<string, string>) =>
     Promise.all(parsedFeed.configuration.entities.map((e) => createEntity(e, commonTags)));
 
-  const createIntegrationFromFeed = async (activeFeed: Feed, data: Data) => {
+  const createIntegrationAndConnector = async (activeFeed: Feed, data: Data) => {
     try {
-      createLoader();
-
-      const { parsedFeed } = await parseEntity(activeFeed, data);
+      const parsedFeed = await replaceMustache(data, activeFeed);
 
       const commonTags = getCommonTags(activeFeed, 'integration');
 
@@ -46,23 +34,18 @@ export const useCreateDataFromFeed = () => {
 
       const res = await createFromFeed(parsedFeed, commonTags);
 
-      removeLoader();
-
-      return res[0].data;
-
-      // history.push(getRedirectLink(`/integration/${firstEntity?.id}/develop`));
+      return {
+        connector: res[0].data,
+        integration: res[1].data,
+      };
     } catch (e) {
       createError(e);
-      removeLoader();
-      return false;
     }
   };
 
-  const createConnectorFromFeed = async (activeFeed: Feed, data: Data) => {
+  const createConnector = async (activeFeed: Feed, data: Data) => {
     try {
-      createLoader();
-
-      const { parsedFeed } = await parseEntity(activeFeed, data);
+      const parsedFeed = await replaceMustache(data, activeFeed);
 
       const commonTags = getCommonTags(activeFeed, 'connector');
 
@@ -70,28 +53,31 @@ export const useCreateDataFromFeed = () => {
 
       const res = await createFromFeed(parsedFeed, commonTags);
 
-      removeLoader();
-
       return res[0].data;
     } catch (e) {
       createError(e);
-      removeLoader();
     }
   };
 
   const createAndAddConnectorToIntegration = async (
     activeFeed: Feed,
     data: Data,
-    integrationData: ApiResponse<Integration>
+    integrationData?: ApiResponse<Integration>
   ) => {
-    const connector = await createConnectorFromFeed(activeFeed, data);
+    try {
+      const connector = await createConnector(activeFeed, data);
 
-    return addConnectorToIntegration(connector as Entity, integrationData);
+      const res = await addConnectorToIntegration(connector as Entity, integrationData);
+
+      return res;
+    } catch (e) {
+      createError(e);
+    }
   };
 
   return {
-    createIntegrationFromFeed,
-    createConnectorFromFeed,
+    createIntegrationAndConnector,
+    createConnector,
     createAndAddConnectorToIntegration,
   };
 };

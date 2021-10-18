@@ -30,7 +30,6 @@ import { Connector } from '../../../interfaces/connector';
 import { Integration, InnerConnector } from '../../../interfaces/integration';
 import EditGui from '../EditGui';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
-import FeedPicker from '../../common/FeedPicker';
 import ListComponent from '../ListComponent';
 import { Entity, Feed } from '../../../interfaces/feed';
 import { Data } from '../../../interfaces/feedPicker';
@@ -45,7 +44,7 @@ import SlideUpSpring from '../../common/Animations/SlideUpSpring';
 import { trackEvent } from '../../../utils/analytics';
 import LineConnector from '../../common/LineConnector';
 import MobileDrawer from '../MobileDrawer';
-import NewFeedModal from '../../common/NewFeedModal';
+import AddConnectorToIntegrationModal from '../../common/AddConnectorToIntegrationModal';
 
 const { REACT_APP_ENABLE_ONLINE_EDITOR } = process.env;
 const isOnlineEditorEnabled = REACT_APP_ENABLE_ONLINE_EDITOR === 'true';
@@ -297,11 +296,9 @@ const Develop: React.FC = () => {
 
   return (
     <SC.Background>
-      <NewFeedModal
+      <AddConnectorToIntegrationModal
         open={connectorPickerOpen}
         onClose={() => setConnectorPickerOpen(false)}
-        entityType="connector"
-        action="add"
         integrationData={integrationData}
       />
       <Modal

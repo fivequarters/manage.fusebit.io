@@ -64,7 +64,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
       }
 
       // send data with customized form
-      onSubmit(rawActiveTemplate, { ...data });
+      onSubmit(rawActiveTemplate as Feed, { ...data });
     }
   };
 

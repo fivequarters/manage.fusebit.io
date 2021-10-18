@@ -11,9 +11,9 @@ import { trackEvent } from '../../../utils/analytics';
 import { useContext } from '../../../hooks/useContext';
 import { useAccountIntegrationsGetAll } from '../../../hooks/api/v2/account/integration/useGetAll';
 import GetInstalls from './GetInstalls';
-import NewFeedModal from '../../common/NewFeedModal';
 import useQueryParam from '../../../hooks/useQueryParam';
 import useFirstTimeVisitor from '../../../hooks/useFirstTimeVisitor';
+import CreateIntegrationModal from '../../common/CreateIntegrationModal';
 
 const IntegrationsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -62,7 +62,7 @@ const IntegrationsTable = () => {
 
   return (
     <>
-      <NewFeedModal onClose={toggleNewModal} open={newModalOpen} entityType="integration" />
+      <CreateIntegrationModal onClose={toggleNewModal} open={newModalOpen} />
       <DeleteIntegrationModal
         onConfirm={() => handleRowDelete('Integration')}
         setOpen={setDeleteModal}
