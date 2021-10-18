@@ -21,7 +21,7 @@ const Modal = styled(MUIModal)`
 `;
 
 const NewFeedModal = ({ open, onClose, entityType }: Props) => {
-  const { createIntegrationFromFeed } = useCreateDataFromFeed();
+  const { createIntegrationFromFeed, createConnectorFromFeed } = useCreateDataFromFeed();
 
   const handleCreate = async (feed: Feed, data: Data) => {
     let res;
@@ -31,7 +31,7 @@ const NewFeedModal = ({ open, onClose, entityType }: Props) => {
     }
 
     if (entityType === 'connector') {
-      res = await createIntegrationFromFeed(feed, data);
+      res = await createConnectorFromFeed(feed, data);
     }
 
     if (!res) {
