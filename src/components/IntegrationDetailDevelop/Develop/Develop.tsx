@@ -45,6 +45,7 @@ import SlideUpSpring from '../../common/Animations/SlideUpSpring';
 import { trackEvent } from '../../../utils/analytics';
 import LineConnector from '../../common/LineConnector';
 import MobileDrawer from '../MobileDrawer';
+import NewFeedModal from '../../common/NewFeedModal';
 
 const { REACT_APP_ENABLE_ONLINE_EDITOR } = process.env;
 const isOnlineEditorEnabled = REACT_APP_ENABLE_ONLINE_EDITOR === 'true';
@@ -296,22 +297,13 @@ const Develop: React.FC = () => {
 
   return (
     <SC.Background>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
+      <NewFeedModal
         open={connectorPickerOpen}
         onClose={() => setConnectorPickerOpen(false)}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-      >
-        <Fade in={connectorPickerOpen}>
-          <FeedPicker
-            onSubmit={(activeIntegration: Feed, data: Data) => addNewConnector(activeIntegration, data)}
-            open={connectorPickerOpen}
-            onClose={() => setConnectorPickerOpen(false)}
-          />
-        </Fade>
-      </Modal>
+        entityType="connector"
+        action="add"
+        integrationData={integrationData}
+      />
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"

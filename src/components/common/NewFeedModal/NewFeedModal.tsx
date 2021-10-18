@@ -1,15 +1,19 @@
 import MUIModal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import styled from 'styled-components';
+import { useHistory } from 'react-router-dom';
 import FeedPicker from '../FeedPicker';
-import { Feed } from '../../../interfaces/feed';
+import { Entity, Feed } from '../../../interfaces/feed';
 import { Data } from '../../../interfaces/feedPicker';
 import { useCreateDataFromFeed } from '../../../hooks/useCreateDataFromFeed';
+import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 
 interface Props {
   open: boolean;
   onClose: () => void;
   entityType: 'integration' | 'connector';
+  action?: 'add' | 'create';
+  integrationData?: any;
 }
 
 const Modal = styled(MUIModal)`
@@ -20,8 +24,14 @@ const Modal = styled(MUIModal)`
   }
 `;
 
-const NewFeedModal = ({ open, onClose, entityType }: Props) => {
-  const { createIntegrationFromFeed, createConnectorFromFeed } = useCreateDataFromFeed();
+const NewFeedModal = ({ open, onClose, entityType, action = 'create', integrationData }: Props) => {
+  const {
+    createIntegrationFromFeed,
+    createConnectorFromFeed,
+    createAndAddConnectorToIntegration,
+  } = useCreateDataFromFeed();
+  const history = useHistory();
+  const { getRedirectLink } = useGetRedirectLink();
 
   const handleCreate = async (feed: Feed, data: Data) => {
     let res;
@@ -31,7 +41,17 @@ const NewFeedModal = ({ open, onClose, entityType }: Props) => {
     }
 
     if (entityType === 'connector') {
-      res = await createConnectorFromFeed(feed, data);
+      if (action === 'create') {
+        const connector = (await createConnectorFromFeed(feed, data)) as Entity;
+
+        history.push(getRedirectLink(`/connector/${connector.id}/configure`));
+
+        return;
+      }
+
+      if (action === 'add') {
+        res = await createAndAddConnectorToIntegration(feed, data, integrationData);
+      }
     }
 
     if (!res) {

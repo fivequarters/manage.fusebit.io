@@ -22,6 +22,7 @@ import { useAccountUserCreateUser } from './api/v1/account/user/useCreateUser';
 import { Account } from '../interfaces/account';
 import { useCreateToken } from './useCreateToken';
 import { EntitiesType } from '../interfaces/entities';
+import useConnector from './useConnector';
 
 export const useEntityApi = (preventLoader?: boolean) => {
   const { userData } = useContext();
@@ -30,8 +31,8 @@ export const useEntityApi = (preventLoader?: boolean) => {
   const { _createToken } = useCreateToken();
 
   // creates
-  const createConnector = useAccountConnectorCreateConnector<Operation>();
-  const createIntegration = useAccountIntegrationCreateIntegration<Operation>();
+  const createConnector = useAccountConnectorCreateConnector<Entity>();
+  const createIntegration = useAccountIntegrationCreateIntegration<Entity>();
   const createUser = useAccountUserCreateUser<Operation>();
 
   // updates
@@ -54,13 +55,17 @@ export const useEntityApi = (preventLoader?: boolean) => {
       subscriptionId: userData.subscriptionId,
     };
 
+    let newEntity;
+
     if (entity.entityType === 'connector') {
-      await createConnector.mutateAsync(obj);
+      newEntity = await createConnector.mutateAsync(obj);
     } else {
-      await createIntegration.mutateAsync(obj);
+      newEntity = await createIntegration.mutateAsync(obj);
     }
 
     await waitForEntityStateChange(entity.entityType, [entity.id]);
+
+    return newEntity;
   };
 
   const _createUser = async (data: Account) => {
@@ -237,5 +242,6 @@ export const useEntityApi = (preventLoader?: boolean) => {
     deleteEntity,
     toggleConnector,
     massiveDelete,
+    ...useConnector(),
   };
 };
