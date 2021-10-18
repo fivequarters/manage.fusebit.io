@@ -24,8 +24,8 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const [unsavedWarning, setUnsavedWarning] = useState(false);
   const { createLoader, removeLoader } = useLoader();
   const [loginFlowModalOpen, setLoginFlowModalOpen] = useState(false);
-  const { handleRun, handleNoInstallFound, isFindingInstall, isSaving } = useEditor({
-    onNoInstallFound: () => setLoginFlowModalOpen(true),
+  const { handleRun, handleLogin, isFindingInstall, isSaving } = useEditor({
+    onReadyToLogin: () => setLoginFlowModalOpen(true),
     isMounted,
   });
 
@@ -103,7 +103,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       <ConfirmationPrompt
         open={loginFlowModalOpen}
         setOpen={setLoginFlowModalOpen}
-        handleConfirmation={handleNoInstallFound}
+        handleConfirmation={handleLogin}
         title="Start login flow?"
         description="The integration needs to know the Identity of the user on whose behalf to execute. For development purposes, please log in as your own user."
         confirmationButtonText="Start"
