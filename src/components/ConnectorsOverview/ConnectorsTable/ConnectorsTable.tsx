@@ -12,7 +12,7 @@ import { Connector } from '../../../interfaces/connector';
 import DeleteConnectorModal from '../DeleteConnectorModal';
 import GetIdentities from './GetIdentities';
 import useQueryParam from '../../../hooks/useQueryParam';
-import CreateConnectorModal from '../../common/CreateConnectorModal';
+import CreateConnectorModal from '../CreateConnectorModal';
 
 const ConnectorsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();

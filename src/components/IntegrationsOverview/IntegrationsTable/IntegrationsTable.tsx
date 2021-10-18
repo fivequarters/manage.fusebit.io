@@ -13,7 +13,7 @@ import { useAccountIntegrationsGetAll } from '../../../hooks/api/v2/account/inte
 import GetInstalls from './GetInstalls';
 import useQueryParam from '../../../hooks/useQueryParam';
 import useFirstTimeVisitor from '../../../hooks/useFirstTimeVisitor';
-import CreateIntegrationModal from '../../common/CreateIntegrationModal';
+import CreateIntegrationModal from '../CreateIntegrationModal';
 
 const IntegrationsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();

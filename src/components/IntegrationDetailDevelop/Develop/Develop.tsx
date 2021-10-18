@@ -44,7 +44,7 @@ import SlideUpSpring from '../../common/Animations/SlideUpSpring';
 import { trackEvent } from '../../../utils/analytics';
 import LineConnector from '../../common/LineConnector';
 import MobileDrawer from '../MobileDrawer';
-import AddConnectorToIntegrationModal from '../../common/AddConnectorToIntegrationModal';
+import AddConnectorToIntegrationModal from '../AddConnectorToIntegrationModal';
 
 const { REACT_APP_ENABLE_ONLINE_EDITOR } = process.env;
 const isOnlineEditorEnabled = REACT_APP_ENABLE_ONLINE_EDITOR === 'true';

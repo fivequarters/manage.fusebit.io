@@ -1,7 +1,7 @@
 import { Feed } from '../../../interfaces/feed';
 import { Data } from '../../../interfaces/feedPicker';
 import { useCreateDataFromFeed } from '../../../hooks/useCreateDataFromFeed';
-import FeedPickerModal from '../FeedPickerModal';
+import FeedPickerModal from '../../common/FeedPickerModal';
 import { ApiResponse } from '../../../hooks/useAxios';
 import { Integration } from '../../../interfaces/integration';
 import { useLoader } from '../../../hooks/useLoader';
