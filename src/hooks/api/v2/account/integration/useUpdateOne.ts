@@ -15,7 +15,7 @@ export const useAccountIntegrationUpdateIntegration = <T>() => {
       );
     },
     {
-      onMutate: (_: Params) => () => {},
+      onMutate: () => () => {},
       onError: (_, __, rollback) => rollback?.(),
     }
   );

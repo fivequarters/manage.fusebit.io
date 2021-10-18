@@ -8,16 +8,16 @@ import { useError } from './useError';
 import { Connector } from '../interfaces/connector';
 import { ApiResponse } from './useAxios';
 import { useAccountConnectorUpdateConnector } from './api/v2/account/connector/useUpdateOne';
-import { Identity } from '../interfaces/identities';
+import { IdentityList } from '../interfaces/identities';
 import { useAccountConnectorIdentityDeleteOne } from './api/v2/account/connector/identity/useDeleteOne';
-import { useAccountIntegrationInstanceDeleteOne } from './api/v2/account/integration/instance/useDeleteOne';
-import { Install } from '../interfaces/install';
+import { useAccountIntegrationInstallDeleteOne } from './api/v2/account/integration/install/useDeleteOne';
+import { InstallList } from '../interfaces/install';
 import { InnerConnector, Integration } from '../interfaces/integration';
 import { useAccountIntegrationUpdateIntegration } from './api/v2/account/integration/useUpdateOne';
 import { useAccountIntegrationDeleteIntegration } from './api/v2/account/integration/useDeleteOne';
 import { useAccountConnectorDeleteConnector } from './api/v2/account/connector/useDeleteOne';
 import { useAccountUserDeleteOne } from './api/v1/account/user/useDeleteOne';
-import { findMatchingConnectorFeed } from '../utils/utils';
+import { findMatchingConnectorFeed, getAllDependenciesFromFeed, linkPackageJson } from '../utils/utils';
 import { useAccountUserCreateUser } from './api/v1/account/user/useCreateUser';
 import { Account } from '../interfaces/account';
 import { useCreateToken } from './useCreateToken';
@@ -40,7 +40,7 @@ export const useEntityApi = (preventLoader?: boolean) => {
 
   // deletes
   const deleteIndentity = useAccountConnectorIdentityDeleteOne<Operation>();
-  const deleteInstall = useAccountIntegrationInstanceDeleteOne<Operation>();
+  const deleteInstall = useAccountIntegrationInstallDeleteOne<Operation>();
   const deleteIntegration = useAccountIntegrationDeleteIntegration<Operation>();
   const deleteConnector = useAccountConnectorDeleteConnector<Operation>();
   const deleteAccount = useAccountUserDeleteOne<Operation>();
@@ -53,9 +53,13 @@ export const useEntityApi = (preventLoader?: boolean) => {
       accountId: userData.accountId,
       subscriptionId: userData.subscriptionId,
     };
-    entity.entityType === 'connector'
-      ? await createConnector.mutateAsync(obj)
-      : await createIntegration.mutateAsync(obj);
+
+    if (entity.entityType === 'connector') {
+      await createConnector.mutateAsync(obj);
+    } else {
+      await createIntegration.mutateAsync(obj);
+    }
+
     await waitForEntityStateChange(entity.entityType, [entity.id]);
   };
 
@@ -105,15 +109,25 @@ export const useEntityApi = (preventLoader?: boolean) => {
     try {
       if (!preventLoader) createLoader();
       const data = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
-      let newData = data;
+      const newData = data;
       if (isAdding) {
         const feedtype = connector.tags['fusebit.feedType'];
         const item: Feed = await findMatchingConnectorFeed(connector);
+        const dependencies = getAllDependenciesFromFeed(item);
+
         if (feedtype === 'connector') {
           item.configuration.components?.forEach((component) => {
             component.name = connector.id;
             component.entityId = connector.id;
             newData.data.components.push(component);
+
+            const newPackageJson = linkPackageJson(
+              JSON.parse(newData.data.files['package.json']),
+              dependencies,
+              component
+            );
+
+            newData.data.files['package.json'] = JSON.stringify(newPackageJson);
           });
         } else {
           Object.entries(item.configuration.entities).forEach((entity) => {
@@ -153,22 +167,23 @@ export const useEntityApi = (preventLoader?: boolean) => {
 
   const deleteEntity = async (
     id: string,
-    identitiesData: ApiResponse<Identity | Install> | undefined,
+    identitiesData: ApiResponse<IdentityList | InstallList> | undefined,
     isIdentity: boolean,
     callback?: Function
   ) => {
     try {
       if (!preventLoader) createLoader();
-      const data = JSON.parse(JSON.stringify(identitiesData?.data)) as Identity;
+      const data = JSON.parse(JSON.stringify(identitiesData?.data)) as IdentityList;
       await Promise.all(
         (data.items || []).map(async (item) => {
           const params = {
             id: item.id,
           };
-          isIdentity ? await deleteIndentity.mutateAsync(params) : await deleteInstall.mutateAsync(params);
-          // return waitForEntityStateChange(isIdentity ? `integration/${id}/instance` : `connector/${id}/identity`, [
-          //   item.id,
-          // ]);
+          if (isIdentity) {
+            await deleteIndentity.mutateAsync(params);
+          } else {
+            await deleteInstall.mutateAsync(params);
+          }
         })
       );
       if (callback) callback();
@@ -183,19 +198,19 @@ export const useEntityApi = (preventLoader?: boolean) => {
     try {
       createLoader();
       for (let i = 0; i < ids.length; i++) {
-        if (type === 'I') {
+        if (type === 'Integration') {
           await deleteIntegration.mutateAsync({
             id: ids[i],
             accountId: userData.accountId,
             subscriptionId: userData.subscriptionId,
           });
-        } else if (type === 'C') {
+        } else if (type === 'Connector') {
           await deleteConnector.mutateAsync({
             id: ids[i],
             accountId: userData.accountId,
             subscriptionId: userData.subscriptionId,
           });
-        } else if (type === 'A') {
+        } else if (type === 'Account') {
           await deleteAccount.mutateAsync({ userId: ids[i], accountId: userData.accountId });
         } else if (type === 'Identity') {
           await deleteIndentity.mutateAsync({
@@ -207,9 +222,6 @@ export const useEntityApi = (preventLoader?: boolean) => {
           });
         }
       }
-      // if (type !== 'A') {
-      //   await waitForEntityStateChange(type === 'I' ? 'integration' : 'connector', ids);
-      // }
       if (callback) callback();
     } catch (e) {
       createError(e, errorContainer);

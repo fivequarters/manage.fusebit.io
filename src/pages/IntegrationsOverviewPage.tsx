@@ -1,16 +1,17 @@
-import React, { FC, ReactElement } from 'react';
+import { FC, ReactElement } from 'react';
 import Layout from '../components/Layout';
-import IntegrationsOverview from '../components/Integrations/Overview/IntegrationsOverview';
 import Navbar from '../components/Navbar';
 import { useTrackPage } from '../hooks/useTrackPage';
+import IntegrationsTable from '../components/IntegrationsOverview/IntegrationsTable/IntegrationsTable';
+import TabComponent from '../components/TabComponent';
 
 const IntegrationsOverviewPage: FC<{}> = (): ReactElement => {
   useTrackPage('Integrations Overview', 'Integrations');
 
   return (
     <Layout>
-      <Navbar dropdown={true} sectionName="Integrations" integration={true} />
-      <IntegrationsOverview />
+      <Navbar dropdown sectionName="Integrations" integration />
+      <TabComponent tabNames={['Overview']} tabObjects={[<IntegrationsTable key="integrationsTable" />]} />
     </Layout>
   );
 };

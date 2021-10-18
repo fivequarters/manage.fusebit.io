@@ -1,7 +1,6 @@
-import React from 'react';
+/* eslint-disable no-nested-ternary */
+import React, { useState, useEffect } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
-import * as SC from './styles';
-import * as CSC from '../../../globalStyle';
 import {
   Button,
   Modal,
@@ -16,8 +15,11 @@ import {
   Tooltip,
   useMediaQuery,
   Box,
+  CircularProgress,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import * as SC from './styles';
+import * as CSC from '../../../globalStyle';
 import arrow from '../../../../assets/arrow-right-black.svg';
 import Connect from './Connect';
 import { useLoader } from '../../../../hooks/useLoader';
@@ -35,19 +37,19 @@ import { Entity, Feed } from '../../../../interfaces/feed';
 import { Data } from '../../../../interfaces/feedPicker';
 import { useReplaceMustache } from '../../../../hooks/useReplaceMustache';
 import { FinalConnector } from '../../../../interfaces/integrationDetailDevelop';
-import { useState } from 'react';
-import { useEffect } from 'react';
 import { useEntityApi } from '../../../../hooks/useEntityApi';
 import { useBackendClient } from '../../../../hooks/useBackendClient';
 import { BackendClient } from '../../../../interfaces/backendClient';
 import EditCli from './EditCli';
-import SlideUpSpring from '../../../Animations/SlideUpSpring';
 import { trackEvent } from '../../../../utils/analytics';
 import LineConnector from '../../../LineConnector';
 import MobileDrawer from './MobileDrawer';
+import useEditor from './EditGui/useEditor';
 
 const { REACT_APP_ENABLE_ONLINE_EDITOR } = process.env;
 const isOnlineEditorEnabled = REACT_APP_ENABLE_ONLINE_EDITOR === 'true';
+
+// TODO: Split this component and refactor ternary logic
 
 const Develop: React.FC = () => {
   const history = useHistory();
@@ -82,14 +84,16 @@ const Develop: React.FC = () => {
   const [backendClients, setBackendClients] = useState<BackendClient[]>([]);
   const [backendClient, setBackendClient] = useState<BackendClient>();
   const [connectHover, setConnectHover] = useState(false);
-  const [editGuiMounted, setEditGuiMounted] = useState(false);
   const [editCliOpen, setEditCliOpen] = React.useState(false);
   const isMobile = useMediaQuery('(max-width: 850px)');
   const areCardsCollapsing = useMediaQuery('(max-width: 1200px)');
+  const { handleEdit, isEditing } = useEditor({ enableListener: false, onReadyToRun: () => setEditGuiOpen(true) });
 
   const getBackendClients = async () => {
-    const backendClients = await getBackendClientListener();
-    backendClients && setBackendClients(backendClients);
+    const _backendClients = await getBackendClientListener();
+    if (_backendClients) {
+      setBackendClients(_backendClients);
+    }
     setBackendClientsLoading(false);
   };
 
@@ -102,12 +106,13 @@ const Develop: React.FC = () => {
 
   const editOptions = [
     {
-      buttonLabel: 'Edit',
+      buttonLabel: isEditing ? <CircularProgress size={20} /> : 'Edit',
       optionLabel: 'Edit in the in-browser editor',
-      handle: (isOpen: boolean) => {
+      handle: () => {
         trackEvent('Develop Edit Web Button Clicked', 'Integration');
-        setEditGuiOpen(isOpen);
+        handleEdit();
       },
+      disabled: isEditing,
     },
     {
       buttonLabel: isOnlineEditorEnabled ? 'CLI' : 'Edit',
@@ -226,7 +231,7 @@ const Develop: React.FC = () => {
       return returnItem;
     });
 
-    let finalConnectorsList: FinalConnector[] | undefined = filteredConnectors;
+    const finalConnectorsList: FinalConnector[] | undefined = filteredConnectors;
 
     if (
       integrationData &&
@@ -285,8 +290,8 @@ const Develop: React.FC = () => {
 
   const handleConnectOpen = async () => {
     trackEvent('Develop Connect Button Clicked', 'Integration');
-    const backendClient = await registerBackend();
-    setBackendClient(backendClient);
+    const _backendClient = await registerBackend();
+    setBackendClient(_backendClient);
     setConnectOpen(true);
   };
 
@@ -329,6 +334,7 @@ const Develop: React.FC = () => {
             setKeyIsCopied={setKeyIsCopied}
             open={connectOpen}
             onClose={onConnectClose}
+            integration={integrationData?.data}
           />
         </Fade>
       </Modal>
@@ -370,14 +376,14 @@ const Develop: React.FC = () => {
                   });
                   return returnItem;
                 })
-                .map((connector: Connector, index: number) => {
+                .map((connector: Connector) => {
                   return (
                     <ListComponent
-                      onLinkConnectorClick={(connector: any) => linkConnector(connector)}
-                      linkConnector={true}
+                      onLinkConnectorClick={(_connector: any) => linkConnector(_connector)}
+                      linkConnector
                       key={connector.id}
                       connector={connector}
-                      onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
+                      onConnectorDelete={(_connector: Entity) => handleListComponentDelete(_connector)}
                     />
                   );
                 })}
@@ -392,23 +398,19 @@ const Develop: React.FC = () => {
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"
           open={editGuiOpen}
+          disableEscapeKeyDown
           onClose={() => {
             setEditGuiOpen(false);
-            setEditGuiMounted(false);
           }}
           closeAfterTransition
           BackdropComponent={Backdrop}
         >
-          <SlideUpSpring in={editGuiOpen} mounted={editGuiMounted}>
-            <EditGui
-              onMount={() => setEditGuiMounted(true)}
-              onClose={() => {
-                setEditGuiOpen(false);
-                setEditGuiMounted(false);
-              }}
-              integrationId={integrationData?.data.id || ''}
-            />
-          </SlideUpSpring>
+          <EditGui
+            onClose={() => {
+              setEditGuiOpen(false);
+            }}
+            integrationId={integrationData?.data.id || ''}
+          />
         </Modal>
       )}
       <SC.Flex>
@@ -417,17 +419,18 @@ const Develop: React.FC = () => {
             <SC.CardTitle>Your Application</SC.CardTitle>
             {backendClients.length > 0 ? (
               backendClients.map((client: BackendClient) => (
-                <>
+                <React.Fragment key={client.id}>
                   <ListComponent
                     id={client.id}
                     onChange={getBackendClients}
                     connector={{ ...client, isApplication: true }}
                     onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
+                    integration={integrationData?.data}
                   />
                   {!areCardsCollapsing && (
                     <LineConnector start={client.id} startAnchor="right" end="fusebit" endAnchor="left" />
                   )}
-                </>
+                </React.Fragment>
               ))
             ) : !backendClientsLoading ? (
               <SC.NoApplicationsConfiguredWrapper>
@@ -521,6 +524,7 @@ const Develop: React.FC = () => {
                 size="large"
                 variant="contained"
                 color="primary"
+                disabled={!!editOptions[editOption]?.disabled}
               >
                 {editOptions[editOption].buttonLabel}
               </Button>
@@ -546,8 +550,8 @@ const Develop: React.FC = () => {
                             {editOptions.map(
                               (
                                 option: {
-                                  buttonLabel: string;
-                                  optionLabel: string;
+                                  buttonLabel: any;
+                                  optionLabel: any;
                                   handle: (isOpen: boolean) => void;
                                 },
                                 index: number
@@ -574,9 +578,13 @@ const Develop: React.FC = () => {
               filterConnectors().map((connector: FinalConnector, index: number) => {
                 if (index < 5) {
                   return (
-                    <>
-                      <LineConnector start="fusebit" startAnchor="right" end={connector.id} endAnchor="left" />
-                    </>
+                    <LineConnector
+                      key={connector.id}
+                      start="fusebit"
+                      startAnchor="right"
+                      end={connector.id}
+                      endAnchor="left"
+                    />
                   );
                 }
                 return null;
@@ -620,30 +628,26 @@ const Develop: React.FC = () => {
                 filterConnectors().map((connector: FinalConnector, index: number) => {
                   if (index < 5) {
                     return (
-                      <>
-                        <ListComponent
-                          id={connector.id}
-                          key={index}
-                          connector={connector}
-                          onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
-                        />
-                      </>
+                      <ListComponent
+                        id={connector.id}
+                        key={connector.id}
+                        connector={connector}
+                        onConnectorDelete={(_connector: Entity) => handleListComponentDelete(_connector)}
+                      />
                     );
                   }
                   return null;
                 })
               )}
             </SC.CardConnectorWrapper>
-            {integrationData?.data.data.components.length
-              ? integrationData?.data.data.components.length >= 5 && (
-                  <Link to={getRedirectLink('/connectors')}>
-                    <SC.CardConnectorSeeMore href={getRedirectLink('/connectors')}>
-                      See all
-                      <img src={arrow} alt="see more" height="10" width="10" />
-                    </SC.CardConnectorSeeMore>
-                  </Link>
-                )
-              : null}
+            {(integrationData?.data?.data?.components || []).length >= 5 && (
+              <Link to={getRedirectLink('/connectors')}>
+                <SC.CardConnectorSeeMore href={getRedirectLink('/connectors')}>
+                  See all
+                  <img src={arrow} alt="see more" height="10" width="10" />
+                </SC.CardConnectorSeeMore>
+              </Link>
+            )}
 
             <SC.CardConnectorButtonsWrapper>
               <Button

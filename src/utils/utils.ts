@@ -1,0 +1,141 @@
+import jwt_decode from 'jwt-decode';
+import _startCase from 'lodash.startcase';
+import { Entity, EntityComponent, Feed } from '../interfaces/feed';
+import { FinalConnector } from '../interfaces/integrationDetailDevelop';
+import { integrationsFeed, connectorsFeed } from '../static/feed';
+import { Decoded } from '../interfaces/decoded';
+import { Install } from '../interfaces/install';
+
+const { REACT_APP_AUTH0_DOMAIN, REACT_APP_AUTH0_CLIENT_ID, REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
+export const LS_KEY = `T29M03eleloegehOxGtpEPel18JfM3djp5pUL4Jm`; // Shouldn't this be in an env variable?
+
+export const readLocalData = () => JSON.parse(localStorage.getItem(LS_KEY) || '{}');
+
+export const findMatchingConnectorFeed = async (connector: Entity | FinalConnector) => {
+  return new Promise<Feed>((accept, reject) => {
+    if (connector.tags) {
+      const feedtype = connector.tags['fusebit.feedType'];
+      const feedId = connector.tags['fusebit.feedId'];
+      if (feedtype === 'integration') {
+        integrationsFeed().then((feed) => {
+          feed.forEach((item) => {
+            if (item.id === feedId) {
+              return accept(item);
+            }
+          });
+          return reject({});
+        });
+      } else {
+        connectorsFeed().then((feed) => {
+          feed.forEach((item) => {
+            if (item.id === feedId) {
+              return accept(item);
+            }
+          });
+          return reject({});
+        });
+      }
+    } else {
+      return reject({});
+    }
+  });
+};
+
+export const getAuthLink = () => {
+  const authLink = `${REACT_APP_AUTH0_DOMAIN}/authorize?response_type=token&client_id=${REACT_APP_AUTH0_CLIENT_ID}&audience=${REACT_APP_FUSEBIT_DEPLOYMENT}&redirect_uri=${window.location.origin}/callback&scope=openid profile email`;
+  return authLink;
+};
+
+export const isTokenExpired = () => {
+  const __userData = readLocalData();
+  const { token } = __userData;
+  const TIME_T0_EXPIRE = 300000; // in miliseconds (5 mins currently)
+  const decoded: Decoded = jwt_decode(token);
+  const { exp } = decoded;
+  const expInMilliseconds = exp * 1000;
+  const todayInMiliseconds = new Date().getTime();
+  return expInMilliseconds - todayInMiliseconds <= TIME_T0_EXPIRE; // if true it expired
+};
+
+export function isSegmentTrackingEvents() {
+  const user = readLocalData();
+  return (
+    document.location.host !== 'manage.fusebit.io' ||
+    (!user?.primaryEmail?.endsWith('@fusebit.io') && !user?.primaryEmail?.endsWith('@litebox.ai'))
+  );
+}
+
+export const validateToken = ({ onValid }: { onValid?: () => void } = {}) => {
+  const expired = isTokenExpired();
+  if (expired) {
+    window.location.href = getAuthLink(); // refreshing the token
+  } else {
+    analytics.ready(() => {
+      const user = readLocalData();
+      const segmentUserId = analytics.user().id();
+      if (!user || user === {} || user.id === segmentUserId) return;
+      if (!isSegmentTrackingEvents()) return;
+      analytics.identify(user.id, {
+        ...user,
+      } as Object);
+    });
+    onValid?.();
+  }
+};
+
+export const startCase = (str: string) => {
+  return _startCase(str.toLowerCase());
+};
+
+export const getConnectorsFromInstall = (install: Install) =>
+  Object.keys(install.data).map((key) => install?.data[key]?.parentEntityId);
+
+export const getAllDependenciesFromFeed = (feed: Feed) => {
+  const { entities } = feed?.configuration || {};
+
+  const dependencies = Object.keys(entities).reduce<Record<string, string>>((acc, curr) => {
+    const currDependencies = JSON.parse(entities[curr].data.files['package.json']).dependencies;
+
+    Object.keys(currDependencies).forEach((key) => {
+      acc[key] = currDependencies[key];
+    });
+
+    return acc;
+  }, {});
+
+  return dependencies;
+};
+
+const LINKED_DEPENDENCIES = {
+  provider: 'connector',
+};
+
+export const linkPackageJson = (
+  currPkgJson: Record<string, string>,
+  dependencies: Record<string, string>,
+  component: EntityComponent
+) => {
+  const newPackageJson = { ...currPkgJson };
+
+  const [prefix, suffix] = component.provider.split('/');
+
+  const [name, type] = suffix.split('-');
+
+  const dependencyBaseName = `${prefix}/${name}`;
+
+  const dependencyName = `${dependencyBaseName}-${
+    LINKED_DEPENDENCIES[type as keyof typeof LINKED_DEPENDENCIES] || LINKED_DEPENDENCIES.provider
+  }`;
+
+  // @ts-ignore
+  newPackageJson.dependencies[component.provider] = dependencies[dependencyName];
+
+  return newPackageJson;
+};
+
+export const getPluralText = <T = unknown>(list: T[], noun?: string) => {
+  const isPlural = list.length > 1;
+  const pronoun = isPlural ? 'these' : 'this';
+
+  return `${pronoun} ${noun}${isPlural ? 's' : ''}`;
+};

@@ -1,30 +1,54 @@
 import { useState } from 'react';
-import * as SC from './styles';
 import { Checkbox, TableCell, Collapse, useMediaQuery } from '@material-ui/core';
-import { BaseTableProps } from './types';
+import * as SC from './styles';
+import { BaseTableProps, BaseTableRow } from './types';
 import { useQuery } from '../../hooks/useQuery';
 
 interface Props {
-  row: any;
+  row: BaseTableRow;
   headers: BaseTableProps['headers'];
   onSelectRow: (e: any, id: string) => void;
   checked: boolean;
   currentMobileRow: string;
   collapseTrigger?: string;
   isCollapsible?: boolean;
+  onClick?: (row: BaseTableRow, columnId: string) => void;
+  noMainColumn?: BaseTableProps['noMainColumn'];
 }
 
-const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTrigger, isCollapsible }: Props) => {
+const Row = ({
+  row,
+  onSelectRow,
+  checked,
+  headers,
+  currentMobileRow,
+  collapseTrigger,
+  isCollapsible,
+  onClick,
+  noMainColumn,
+}: Props) => {
   const isMobile = useMediaQuery('(max-width: 880px)');
   const query = useQuery();
   const [isExpanded, setIsExpanded] = useState(query.get('expanded')?.split(',').includes(row.id) || false);
 
-  const renderCollapsable = (row: any) => {
+  const handleClickCell = (isCollapseTrigger: boolean, columnId: string) => {
+    if (!isExpanded) {
+      row.collapsableContentOpened?.();
+    }
+
+    if (isCollapseTrigger) {
+      setIsExpanded(!isExpanded);
+    }
+
+    onClick?.(row, columnId);
+  };
+
+  const renderCollapsable = (_row: BaseTableRow) => {
     return (
-      <SC.ExpandableRow noBorder={isExpanded}>
+      <SC.ExpandableRow $noBorder={isExpanded}>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={headers.length + 1}>
           <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-            {row.collapsableContent}
+            {_row.collapsableContent}
           </Collapse>
         </TableCell>
       </SC.ExpandableRow>
@@ -34,43 +58,44 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
   const renderCheckbox = (id: string) => {
     return (
       <TableCell style={{ cursor: 'default' }} padding="checkbox" id={`enhanced-table-cell-checkbox-${id}`}>
-        <Checkbox
-          color="primary"
-          onClick={(e) => onSelectRow(e, id)}
-          checked={checked}
-          inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${id}` }}
-          id={`enhanced-table-checkbox-${id}`}
-        />
+        {row.hideCheckbox ? null : (
+          <Checkbox
+            color="primary"
+            onClick={(e) => onSelectRow(e, id)}
+            checked={checked}
+            inputProps={{ 'aria-labelledby': `enhanced-table-checkbox-${id}` }}
+            id={`enhanced-table-checkbox-${id}`}
+          />
+        )}
       </TableCell>
     );
   };
 
   const renderMobile = () => {
-    const isClickable = collapseTrigger === headers[0].id;
+    const isCollapseTrigger = collapseTrigger === headers[0].id && !noMainColumn;
 
     return (
       <>
-        <SC.TableRow noBorder={isCollapsible}>
+        <SC.TableRow $noBorder={isCollapsible}>
           {renderCheckbox(row.id)}
           <SC.TableCell
-            isMain
+            $isMain={!noMainColumn}
             scope="row"
-            isClickable
-            onClick={
-              isClickable
-                ? () => {
-                    if (!isExpanded) row.collapsableContentOpened();
-                    setIsExpanded(!isExpanded);
-                  }
-                : undefined
-            }
+            $isClickable
+            onClick={() => handleClickCell(isCollapseTrigger, headers[0].id)}
           >
-            <SC.CellContent isClickable={isClickable}>
+            <SC.CellContent $isClickable>
               {row[headers[0].id]}
-              {isClickable && <SC.TriggerArrow active={isExpanded} isMain />}
+              {isCollapseTrigger && <SC.TriggerArrow $active={isExpanded} $isMain />}
             </SC.CellContent>
           </SC.TableCell>
-          <TableCell scope="row">{row[currentMobileRow]}</TableCell>
+          <SC.TableCell
+            scope="row"
+            onClick={() => handleClickCell(isCollapseTrigger, currentMobileRow)}
+            $isClickable={isCollapseTrigger || !!onClick}
+          >
+            {row[currentMobileRow]}
+          </SC.TableCell>
         </SC.TableRow>
         {isCollapsible && renderCollapsable(row)}
       </>
@@ -80,28 +105,22 @@ const Row = ({ row, onSelectRow, checked, headers, currentMobileRow, collapseTri
   const renderDesktop = () => {
     return (
       <>
-        <SC.TableRow noBorder={isCollapsible}>
+        <SC.TableRow $noBorder={isCollapsible}>
           {renderCheckbox(row.id)}
           {headers.map((header, i: number) => {
-            const isClickable = collapseTrigger === header.id;
+            const isCollapseTrigger = collapseTrigger === header.id && !noMainColumn;
 
             return (
               <SC.TableCell
-                isMain={i === 0}
-                isClickable={isClickable}
+                key={header.id}
+                $isMain={i === 0 && !noMainColumn}
+                $isClickable={isCollapseTrigger || !!onClick}
                 scope="row"
-                onClick={
-                  isClickable
-                    ? () => {
-                        if (!isExpanded) row.collapsableContentOpened();
-                        setIsExpanded(!isExpanded);
-                      }
-                    : undefined
-                }
+                onClick={() => handleClickCell(isCollapseTrigger, header.id)}
               >
-                <SC.CellContent isClickable={isClickable}>
+                <SC.CellContent $isClickable={isCollapseTrigger}>
                   {row[header.id]}
-                  {header.id === collapseTrigger && <SC.TriggerArrow active={isExpanded} isMain />}
+                  {isCollapseTrigger && <SC.TriggerArrow $active={isExpanded} $isMain />}
                 </SC.CellContent>
               </SC.TableCell>
             );

@@ -1,3 +1,5 @@
+import { Integration } from './integration';
+
 export interface Props {
   onClose: Function;
   onDelete: Function;
@@ -11,4 +13,5 @@ export interface Props {
   showWarning?: boolean;
   setShowWarning?: Function;
   disableCopy?: boolean;
+  integration?: Integration;
 }

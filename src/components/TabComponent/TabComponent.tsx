@@ -1,10 +1,9 @@
-import React from 'react';
-import * as SC from './styles';
+import React, { useEffect } from 'react';
 import { Container, Tabs, Tab } from '@material-ui/core';
-import PropTypes from 'prop-types';
-import { Props } from '../../interfaces/TabComponent';
-import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { Props } from '../../interfaces/TabComponent';
+
+import * as SC from './styles';
 
 const TabPanel = (props: any) => {
   const { children, value, index, ...other } = props;
@@ -20,12 +19,6 @@ const TabPanel = (props: any) => {
       {value === index && children}
     </div>
   );
-};
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
 };
 
 const a11yProps = (index: number) => {
@@ -67,7 +60,7 @@ const TabComponent: React.FC<Props> = ({ tabNames, tabObjects }) => {
         >
           {tabNames.map((name, index) => (
             <Tab
-              key={index}
+              key={name}
               label={<SC.TabLabel active={activeTab === index}>{name}</SC.TabLabel>}
               {...a11yProps(index)}
             />
@@ -85,7 +78,7 @@ const TabComponent: React.FC<Props> = ({ tabNames, tabObjects }) => {
           >
             {tabNames.map((name, index) => (
               <Tab
-                key={index}
+                key={name}
                 label={<SC.TabLabel active={activeTab === index}>{name}</SC.TabLabel>}
                 {...a11yProps(index)}
               />
@@ -93,7 +86,7 @@ const TabComponent: React.FC<Props> = ({ tabNames, tabObjects }) => {
           </Tabs>
         </SC.Content>
         {tabObjects.map((obj, index) => (
-          <TabPanel key={index} value={activeTab} index={index}>
+          <TabPanel key={obj} value={activeTab} index={index}>
             {obj}
           </TabPanel>
         ))}

@@ -12,7 +12,7 @@ interface schemaElement {
   minLength?: number;
 }
 
-interface EntityComponent {
+export interface EntityComponent {
   name: string;
   entityType: string;
   entityId: string;
@@ -27,7 +27,10 @@ export interface Entity {
   isApplication?: boolean;
   data: {
     id?: string;
-    files?: { [key: string]: any };
+    files: {
+      'package.json': string;
+      [x: string]: string;
+    };
     handler?: string;
     configuration?: {
       [key: string]: any;
@@ -49,6 +52,7 @@ export interface Feed {
   smallIcon: string;
   largeIcon: string;
   version: string;
+  outOfPlan: boolean;
   tags: {
     service: string;
     catalog: string;
@@ -82,3 +86,7 @@ export interface Feed {
     components?: EntityComponent[];
   };
 }
+
+export type ParsedFeed = Omit<Feed, 'configuration'> & {
+  configuration: Omit<Feed['configuration'], 'entities'> & { entities: Entity[] };
+};

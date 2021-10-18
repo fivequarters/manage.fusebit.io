@@ -19,7 +19,12 @@ const AsyncTags: React.FC<Props> = ({ isLoading, tags }) => {
       ) : (
         <List>
           {tags.map((tag) => {
-            return <Tag onClick={() => tag.onClick?.(tag.value)}> {tag.value} </Tag>;
+            return (
+              <Tag key={tag.value} onClick={() => tag.onClick?.(tag.value)}>
+                {' '}
+                {tag.value}{' '}
+              </Tag>
+            );
           })}
         </List>
       )}

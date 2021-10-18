@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { format } from 'date-fns';
 import BaseTable from '../../../BaseTable';
 import { useEntityTable } from '../../../../hooks/useEntityTable';
 import { usePagination } from '../../../../hooks/usePagination';
-import { useParams } from 'react-router-dom';
-import { useAccountIntegrationInstanceGetAll } from '../../../../hooks/api/v2/account/integration/instance/useGetAll';
-import { format } from 'date-fns';
+import { useAccountIntegrationInstallGetAll } from '../../../../hooks/api/v2/account/integration/install/useGetAll';
 import CodeBlock from '../../../CodeBlock';
-import { Install } from '../../../../interfaces/install';
+import { InstallList } from '../../../../interfaces/install';
 import Tag from '../../../Tag';
 import ConfirmationPrompt from '../../../ConfirmationPrompt';
 import InformationalBanner from '../../../InformationalBanner';
@@ -17,23 +17,10 @@ import { trackEvent } from '../../../../utils/analytics';
 const InstallsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
   const { id } = useParams<{ id: string }>();
-  const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete, setRows } = useEntityTable({
-    page,
-    setPage,
-    rowsPerPage,
-  });
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const { data: installs, isLoading } = useAccountIntegrationInstallGetAll<InstallList>({ id });
 
-  const { data, isLoading } = useAccountIntegrationInstanceGetAll<Install>(
-    { id },
-    {
-      onSuccess: (res) => setRows(res?.data?.items || []),
-    }
-  );
-
-  const { items = [] } = data?.data || {};
-
-  const rows = items.map((install) => {
+  const rows = (installs?.data?.items || []).map((install) => {
     const connectorIds = getConnectorsFromInstall(install);
 
     return {
@@ -49,6 +36,13 @@ const InstallsTable = () => {
         trackEvent('Installs Expand Tenant Clicked', 'Integration');
       },
     };
+  });
+
+  const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
+    page,
+    setPage,
+    rowsPerPage,
+    rows,
   });
 
   const headers = [
@@ -77,15 +71,15 @@ const InstallsTable = () => {
         open={deleteOpen}
         setOpen={setDeleteOpen}
         handleConfirmation={handleDelete}
-        title={`​Are you sure you want to delete ${selected.length > 1 ? 'these Installs?' : 'this Install?'}`}
+        title={`Are you sure you want to delete ${selected.length > 1 ? 'these Installs?' : 'this Install?'}`}
         description={`Your tenants will have to re-install ${
           selected.length > 1 ? 'these integrations' : ' this integration'
         } in their account.`}
       />
       <BaseTable
         emptyTableText="Your installs list is empty"
-        handleChangePage={handleChangePage}
-        handleChangeRowsPerPage={handleChangeRowsPerPage}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
         page={page}
         rowsPerPage={rowsPerPage}
         headers={headers}

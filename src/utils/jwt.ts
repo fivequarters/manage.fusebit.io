@@ -5,17 +5,30 @@ import { TokenPayload } from '../interfaces/tokenPayload';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
-export function generateNonExpiringToken(keyPair: KeyPair, client: Client, issuer: Issuer): Promise<string> {
-  const tokenPayload = {
-    sub: client.id,
-    aud: REACT_APP_FUSEBIT_DEPLOYMENT as string,
-  };
-  return signJwt(tokenPayload, issuer, keyPair.privateKey);
+function base64ToUint8Array(base64Contents: string): Uint8Array {
+  base64Contents = base64Contents.replace(/-/g, '+').replace(/_/g, '/').replace(/\s/g, '');
+  const content = atob(base64Contents);
+  return new Uint8Array(content.split('').map((c) => c.charCodeAt(0)));
 }
 
-export async function signJwt(tokenPayload: TokenPayload, issuer: Issuer, privateKey: CryptoKey): Promise<string> {
+function stringToUint8Array(contents: string): Uint8Array {
+  const encoded = btoa(unescape(encodeURIComponent(contents)));
+  return base64ToUint8Array(encoded);
+}
+
+function uint8ArrayToString(unsignedArray: Uint8Array): string {
+  const base64string = btoa(String.fromCharCode(...unsignedArray));
+  return base64string.replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+}
+
+export async function signJwt(
+  tokenPayload: TokenPayload,
+  issuer: Issuer,
+  privateKey: CryptoKey,
+  algorithmOptions: Record<string, string> = {}
+): Promise<string> {
   const header = {
-    alg: 'RS256',
+    alg: algorithmOptions.algorithm || 'RS256',
     typ: 'JWT',
     kid: issuer.publicKeys[0].keyId,
   };
@@ -41,8 +54,8 @@ export async function signJwt(tokenPayload: TokenPayload, issuer: Issuer, privat
 
   const signature = await crypto.subtle.sign(
     {
-      name: 'RSASSA-PKCS1-v1_5',
-      hash: 'SHA-256',
+      name: algorithmOptions.name || 'RSASSA-PKCS1-v1_5',
+      hash: algorithmOptions.hash || 'SHA-256',
     },
     privateKey,
     messageAsUint8Array
@@ -50,21 +63,13 @@ export async function signJwt(tokenPayload: TokenPayload, issuer: Issuer, privat
 
   const base64Signature = uint8ArrayToString(new Uint8Array(signature));
 
-  return headerAndPayload + '.' + base64Signature;
+  return `${headerAndPayload}.${base64Signature}`;
 }
 
-function uint8ArrayToString(unsignedArray: Uint8Array): string {
-  const base64string = btoa(String.fromCharCode(...unsignedArray));
-  return base64string.replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
-}
-
-function base64ToUint8Array(base64Contents: string): Uint8Array {
-  base64Contents = base64Contents.replace(/-/g, '+').replace(/_/g, '/').replace(/\s/g, '');
-  const content = atob(base64Contents);
-  return new Uint8Array(content.split('').map((c) => c.charCodeAt(0)));
-}
-
-function stringToUint8Array(contents: string): Uint8Array {
-  const encoded = btoa(unescape(encodeURIComponent(contents)));
-  return base64ToUint8Array(encoded);
+export function generateNonExpiringToken(keyPair: KeyPair, client: Client, issuer: Issuer): Promise<string> {
+  const tokenPayload = {
+    sub: client.id,
+    aud: REACT_APP_FUSEBIT_DEPLOYMENT as string,
+  };
+  return signJwt(tokenPayload, issuer, keyPair.privateKey);
 }

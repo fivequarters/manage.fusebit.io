@@ -1,5 +1,5 @@
-import { createGlobalStyle, css, keyframes } from 'styled-components';
-import styled from 'styled-components';
+import styled, { createGlobalStyle, css, keyframes } from 'styled-components';
+
 import spinner from '../assets/spinner.svg';
 import cross from '../assets/cross.svg';
 import copy from '../assets/copy.svg';
@@ -43,6 +43,42 @@ const rotate = keyframes`
 
   to {
     transform: rotate(360deg);
+  }
+`;
+
+export const withError = css<{ $hasError?: boolean }>`
+  margin-bottom: 25px;
+
+  ${(props) =>
+    props.$hasError &&
+    `
+  margin-bottom: 0px;
+`}
+`;
+
+export const inputBlueMixin = css<{ hasError: boolean }>`
+  padding: 8px 16px;
+  background-color: var(--secondary-color);
+  width: 100%;
+  border: none;
+  resize: none;
+  border-radius: 4px;
+  outline: rgba(255, 255, 255, 0);
+  margin: 0;
+  min-height: 50px !important;
+
+  & > div > input {
+    font-family: courier;
+    font-size: 16px;
+    line-height: 18.5px;
+    color: var(--black);
+  }
+  & > ::after {
+    display: none;
+  }
+
+  & > ::before {
+    display: none;
   }
 `;
 

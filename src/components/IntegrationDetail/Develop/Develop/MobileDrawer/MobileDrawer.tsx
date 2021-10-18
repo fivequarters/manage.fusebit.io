@@ -1,9 +1,9 @@
 import React from 'react';
+import { Drawer, Button } from '@material-ui/core';
 import * as SC from './styles';
 import * as CSC from '../../../../globalStyle';
 import play from '../../../../../assets/play.svg';
 import info from '../../../../../assets/info.svg';
-import { Drawer, Button } from '@material-ui/core';
 import useEditor from '../EditGui/useEditor';
 
 interface Props {
@@ -12,10 +12,10 @@ interface Props {
 }
 
 const MobileDrawer = ({ open, onClose }: Props) => {
-  const { handleRun, isRunning } = useEditor();
+  const { handleRun, isRunning } = useEditor({ enableListener: open });
 
   return (
-    <Drawer anchor={'bottom'} open={open} onClose={onClose}>
+    <Drawer anchor="bottom" open={open} onClose={onClose}>
       <SC.GuiMobileWrapper>
         <CSC.Close onClick={onClose} />
         <Button

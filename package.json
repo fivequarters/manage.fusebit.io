@@ -1,6 +1,6 @@
 {
   "name": "fusebit-portal",
-  "version": "1.0.1",
+  "version": "1.1.2",
   "description": "Fusebit portal",
   "scripts": {
     "start": "react-scripts start",
@@ -8,7 +8,10 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prettier": "git ls-tree -r `git branch --show-current` --name-only | grep -E \"\\.[tj]?sx?$\" | grep -v public | grep -v build | xargs -P 1 prettier --write",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint": "eslint --max-warnings=0 --ext ts,tsx src",
+    "lint:fix": "eslint --fix .",
+    "lint:clean": "rm .eslintcache"
   },
   "author": "Litebox",
   "license": "SEE LICENSE IN LICENSE",
@@ -19,12 +22,14 @@
     "@material-ui/core": "^4.11.2",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/pickers": "^3.3.10",
+    "@types/intercom-web": "^2.8.13",
     "axios": "^0.21.1",
     "constate": "^3.2.0",
     "date-fns": "^2.23.0",
     "dotenv": "^8.2.0",
     "jwt-decode": "^3.1.2",
     "lodash.debounce": "^4.0.8",
+    "lodash.isequal": "^4.5.0",
     "lodash.startcase": "^4.4.0",
     "mustache": "^4.2.0",
     "react": "^17.0.1",
@@ -67,6 +72,7 @@
     "@testing-library/user-event": "^12.1.10",
     "@types/jest": "^26.0.15",
     "@types/lodash.debounce": "^4.0.6",
+    "@types/lodash.isequal": "^4.5.5",
     "@types/lodash.startcase": "^4.4.6",
     "@types/material-ui": "^0.21.8",
     "@types/mustache": "^4.1.2",
@@ -78,7 +84,17 @@
     "@types/react-router-dom": "^5.1.6",
     "@types/segment-analytics": "0.0.34",
     "@types/styled-components": "^5.1.10",
+    "@typescript-eslint/eslint-plugin": "^4.11.1",
+    "eslint-config-airbnb-typescript": "^12.0.0",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-json": "^2.1.2",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^3.3.0",
+    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^7.0.1",
-    "prettier": "2.0.5"
+    "prettier": "2.0.5",
+    "prettier-eslint": "^12.0.0"
   }
 }

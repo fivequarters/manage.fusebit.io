@@ -1,11 +1,11 @@
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { format } from 'date-fns';
 import BaseTable from '../../../BaseTable';
 import { useEntityTable } from '../../../../hooks/useEntityTable';
 import { usePagination } from '../../../../hooks/usePagination';
-import { useParams } from 'react-router-dom';
 import { useAccountConnectorIdentityGetAll } from '../../../../hooks/api/v2/account/connector/identity/useGetAll';
-import { Identity } from '../../../../interfaces/identities';
-import { format } from 'date-fns';
+import { IdentityList } from '../../../../interfaces/identities';
 import CodeBlock from '../../../CodeBlock';
 import ConfirmationPrompt from '../../../ConfirmationPrompt';
 import InformationalBanner from '../../../InformationalBanner';
@@ -14,28 +14,16 @@ import AssociatedIntegrations from './AssociatedIntegrations';
 import Tag from '../../../Tag';
 import { trackEvent } from '../../../../utils/analytics';
 
-const IntegrationsTable = () => {
+const IdentitiesTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
   const { id } = useParams<{ id: string }>();
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete, setRows } = useEntityTable({
-    page,
-    setPage,
-    rowsPerPage,
+
+  const { data: identities, isLoading } = useAccountConnectorIdentityGetAll<IdentityList>({
+    id,
   });
 
-  const { data, isLoading } = useAccountConnectorIdentityGetAll<Identity>(
-    {
-      id,
-    },
-    {
-      onSuccess: (res) => setRows(res?.data?.items || []),
-    }
-  );
-
-  const { items = [] } = data?.data || {};
-
-  const rows = items.map((identity) => {
+  const rows = (identities?.data?.items || []).map((identity) => {
     const connectorId = identity.tags['fusebit.parentEntityId'];
 
     return {
@@ -52,6 +40,13 @@ const IntegrationsTable = () => {
         trackEvent('Identities Expand Identity Clicked', 'Connector');
       },
     };
+  });
+
+  const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
+    page,
+    setPage,
+    rowsPerPage,
+    rows,
   });
 
   const handleDelete = () => {
@@ -74,13 +69,13 @@ const IntegrationsTable = () => {
         open={deleteOpen}
         setOpen={setDeleteOpen}
         handleConfirmation={handleDelete}
-        title={`​Are you sure you want to delete ${selected.length > 1 ? 'these Identities?' : 'this Identity?'}`}
+        title={`Are you sure you want to delete ${selected.length > 1 ? 'these Identities?' : 'this Identity?'}`}
         description="Your tenants will have to re-authenticate themselves in their account"
       />
       <BaseTable
         emptyTableText="Your identities list is empty"
-        handleChangePage={handleChangePage}
-        handleChangeRowsPerPage={handleChangeRowsPerPage}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
         page={page}
         rowsPerPage={rowsPerPage}
         headers={[
@@ -104,4 +99,4 @@ const IntegrationsTable = () => {
   );
 };
 
-export default IntegrationsTable;
+export default IdentitiesTable;

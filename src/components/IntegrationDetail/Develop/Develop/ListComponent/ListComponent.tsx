@@ -1,17 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { Backdrop, Fade, Modal } from '@material-ui/core';
 import * as SC from './styles';
 import * as CSC from '../../../../globalStyle';
 import { ListComponentProps } from '../../../../../interfaces/integrationDetailDevelop';
 import cross from '../../../../../assets/cross.svg';
 import server from '../../../../../assets/server.svg';
-import { useHistory } from 'react-router-dom';
 import { useGetRedirectLink } from '../../../../../hooks/useGetRedirectLink';
 import { findMatchingConnectorFeed } from '../../../../../utils/utils';
 import ConfirmationPrompt from '../../../../ConfirmationPrompt/ConfirmationPrompt';
 import Connect from '../Connect';
-import { Backdrop, Fade, Modal } from '@material-ui/core';
 
 const NOT_FOUND_ICON = '/images/warning-red.svg';
+const CLOSE_ICON_CLASS = 'close';
 
 const ListComponent: React.FC<ListComponentProps> = ({
   connector,
@@ -20,6 +21,7 @@ const ListComponent: React.FC<ListComponentProps> = ({
   onLinkConnectorClick,
   linkConnector,
   id,
+  integration,
 }) => {
   const history = useHistory();
   const { getRedirectLink } = useGetRedirectLink();
@@ -62,12 +64,14 @@ const ListComponent: React.FC<ListComponentProps> = ({
       id={id}
       onClick={(e: any) => {
         if (connector.isApplication) {
-          if (!e.target.id && !connectOpen && !deleteModalOpen) {
+          if (!e.target.className.includes(CLOSE_ICON_CLASS) && !connectOpen && !deleteModalOpen) {
             setConnectOpen(true);
           }
         } else if (linkConnector) {
-          onLinkConnectorClick && onLinkConnectorClick(connector);
-        } else if (!e.target.id && !deleteModalOpen) {
+          if (onLinkConnectorClick) {
+            onLinkConnectorClick(connector);
+          }
+        } else if (!e.target.className.includes(CLOSE_ICON_CLASS) && !deleteModalOpen) {
           history.push(getRedirectLink(`/connector/${connector.id}/configure`));
         }
       }}
@@ -99,27 +103,32 @@ const ListComponent: React.FC<ListComponentProps> = ({
         <Fade in={connectOpen}>
           <Connect
             onDelete={handleConnectorDelete}
-            token={'*************' + connector.tokenSignature?.slice(-4)}
+            token={`*************${connector.tokenSignature?.slice(-4)}`}
             name={connector.name || ''}
             onChange={onChange}
             id={connector.id || ''}
             disableCopy
             open={connectOpen}
             onClose={() => setConnectOpen(false)}
+            integration={integration}
           />
         </Fade>
       </Modal>
       {icon === '' ? (
         <CSC.Spinner margin="0 16px 0 0" />
       ) : (
-        <SC.CardConnectorImage src={icon} alt={'connector image'} height="20" width="20" />
+        <SC.CardConnectorImage src={icon} alt="connector image" height="20" width="20" />
       )}
       <SC.CardConnectorText>
         {connector?.name ? connector?.name : connector.id} {icon === NOT_FOUND_ICON && 'is not found'}
       </SC.CardConnectorText>
       {!linkConnector && (
-        <SC.CardConnectorCrossContainer id="closeWrapper" onClick={() => setDeleteModalOpen(true)}>
-          <SC.CardConnectorCross id="close" src={cross} alt="close" height="8" width="8" />
+        <SC.CardConnectorCrossContainer
+          className={CLOSE_ICON_CLASS}
+          id="closeWrapper"
+          onClick={() => setDeleteModalOpen(true)}
+        >
+          <SC.CardConnectorCross className={CLOSE_ICON_CLASS} src={cross} alt="Close" height="8" width="8" />
         </SC.CardConnectorCrossContainer>
       )}
     </SC.CardConnector>
