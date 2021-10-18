@@ -62,7 +62,7 @@ const IntegrationsTable = () => {
 
   return (
     <>
-      <NewFeedModal onClose={toggleNewModal} open={newModalOpen} isIntegration />
+      <NewFeedModal onClose={toggleNewModal} open={newModalOpen} entityType="integration" />
       <DeleteIntegrationModal
         onConfirm={() => handleRowDelete('Integration')}
         setOpen={setDeleteModal}

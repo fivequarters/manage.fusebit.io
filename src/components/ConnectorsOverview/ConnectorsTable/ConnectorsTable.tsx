@@ -57,7 +57,7 @@ const ConnectorsTable = () => {
 
   return (
     <>
-      <NewFeedModal onClose={toggleNewModal} open={newModalOpen} isIntegration={false} />
+      <NewFeedModal onClose={toggleNewModal} open={newModalOpen} entityType="connector" />
       <DeleteConnectorModal
         onConfirm={() => handleRowDelete('Connector')}
         setOpen={setDeleteModal}

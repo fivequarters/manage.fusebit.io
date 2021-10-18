@@ -9,7 +9,7 @@ import { useCreateDataFromFeed } from '../../../hooks/useCreateDataFromFeed';
 interface Props {
   open: boolean;
   onClose: () => void;
-  isIntegration: boolean;
+  entityType: 'integration' | 'connector';
 }
 
 const Modal = styled(MUIModal)`
@@ -20,11 +20,19 @@ const Modal = styled(MUIModal)`
   }
 `;
 
-const NewFeedModal = ({ open, onClose, isIntegration }: Props) => {
-  const { createDataFromFeed } = useCreateDataFromFeed();
+const NewFeedModal = ({ open, onClose, entityType }: Props) => {
+  const { createIntegrationFromFeed } = useCreateDataFromFeed();
 
   const handleCreate = async (feed: Feed, data: Data) => {
-    const res = await createDataFromFeed(feed, data, !isIntegration);
+    let res;
+
+    if (entityType === 'integration') {
+      res = await createIntegrationFromFeed(feed, data);
+    }
+
+    if (entityType === 'connector') {
+      res = await createIntegrationFromFeed(feed, data);
+    }
 
     if (!res) {
       onClose();
@@ -43,7 +51,7 @@ const NewFeedModal = ({ open, onClose, isIntegration }: Props) => {
         outline: 'none',
       }}
     >
-      <FeedPicker isIntegration={isIntegration} onSubmit={handleCreate} open={open} onClose={onClose} />
+      <FeedPicker isIntegration={entityType === 'integration'} onSubmit={handleCreate} open={open} onClose={onClose} />
     </Modal>
   );
 };
