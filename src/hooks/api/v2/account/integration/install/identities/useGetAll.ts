@@ -1,7 +1,7 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import { Params } from '../../../../../../../interfaces/api';
 import { useAxios } from '../../../../../../useAxios';
-import { useContext } from '../../../../../../useContext';
+import { useAuthContext } from '../../../../../../useAuthContext';
 import { getAllConnectors } from '../../../connector/useGetAll';
 import { getAllIdentities } from '../../../connector/identity/useGetAll';
 
@@ -17,7 +17,7 @@ export const useAccountIntegrationInstallIdentitiesGetAll = (
   options?: UseQueryOptions<unknown, unknown, Identity[]>
 ) => {
   const { axios } = useAxios();
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
   const { createError } = useError();
 
   const getAllIdentitiesFromInstalls = async () => {

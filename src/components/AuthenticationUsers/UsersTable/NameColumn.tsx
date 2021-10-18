@@ -2,7 +2,7 @@ import { Avatar } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import { Account } from '../../../interfaces/account';
 import clientImg from '../../../assets/client.jpg';
-import { useContext } from '../../../hooks/useContext';
+import { useAuthContext } from '../../../hooks/useAuthContext';
 import * as SC from './styles';
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 }
 
 const NameColumn = ({ account }: Props) => {
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
   const isAdmin = userData.id === account.id;
 
   return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import * as CSC from '../../globalStyle';
 import { useAccountIntegrationInstallGetAll } from '../../../hooks/api/v2/account/integration/install/useGetAll';
-import { useContext } from '../../../hooks/useContext';
+import { useAuthContext } from '../../../hooks/useAuthContext';
 import { InstallList } from '../../../interfaces/install';
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 }
 
 const GetInstalls: React.FC<Props> = ({ id }) => {
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
   const { data: installsData } = useAccountIntegrationInstallGetAll<InstallList>({
     enabled: userData.token,
     id,

@@ -6,7 +6,7 @@ import { useModal } from '../../../hooks/useModal';
 import { BaseTableRow } from '../../common/BaseTable/types';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import { trackEvent } from '../../../utils/analytics';
-import { useContext } from '../../../hooks/useContext';
+import { useAuthContext } from '../../../hooks/useAuthContext';
 import { useAccountConnectorsGetAll } from '../../../hooks/api/v2/account/connector/useGetAll';
 import { Connector } from '../../../interfaces/connector';
 import DeleteConnectorModal from '../DeleteConnectorModal';
@@ -20,7 +20,7 @@ const ConnectorsTable = () => {
   const [deleteModalOpen, setDeleteModal, toggleDeleteModal] = useModal();
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
   const { data: connectors, isLoading } = useAccountConnectorsGetAll<{ items: Connector[] }>({
     enabled: userData.token,
     accountId: userData.accountId,

@@ -2,11 +2,11 @@ import { useMutation } from 'react-query';
 import { Params } from '../../../../../../interfaces/api';
 import { CreateSessionPayload } from '../../../../../../interfaces/createSessionPayload';
 import { useAxios } from '../../../../../useAxios';
-import { useContext } from '../../../../../useContext';
+import { useAuthContext } from '../../../../../useAuthContext';
 
 export const useAccountIntegrationCreateSession = () => {
   const { axios } = useAxios();
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
 
   return useMutation((params: Params) => {
     const { id, tenantId } = params;

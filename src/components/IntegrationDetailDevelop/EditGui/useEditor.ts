@@ -5,7 +5,7 @@ import { useAccountIntegrationCreateSession } from '../../../hooks/api/v2/accoun
 import { useAccountIntegrationCommitSession } from '../../../hooks/api/v2/account/integration/session/useCommitOne';
 import { useAccountIntegrationTestIntegration } from '../../../hooks/api/v2/account/integration/useTestOne';
 import { useAxios } from '../../../hooks/useAxios';
-import { useContext } from '../../../hooks/useContext';
+import { useAuthContext } from '../../../hooks/useAuthContext';
 import { InstallList } from '../../../interfaces/install';
 import { trackEvent } from '../../../utils/analytics';
 import { STATIC_TENANT_ID } from '../../../utils/constants';
@@ -23,7 +23,7 @@ const LOCALSTORAGE_SESSION_URL_KEY = 'sessionUrl';
 
 const useEditor = ({ enableListener = true, isMounted = false, onReadyToRun, onReadyToLogin } = {} as Props) => {
   const { id } = useParams<{ id: string }>();
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
   const { axios } = useAxios({ ignoreInterceptors: true });
   const { mutateAsync: createSesssion, isLoading: isCreatingSession } = useAccountIntegrationCreateSession();
   const { mutateAsync: testIntegration, isLoading: isTesting } = useAccountIntegrationTestIntegration();

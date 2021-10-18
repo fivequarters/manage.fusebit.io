@@ -3,7 +3,7 @@ import { Box, Button, ButtonGroup } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import * as SC from './styles';
 import { Props } from '../../../interfaces/edit';
-import { useContext } from '../../../hooks/useContext';
+import { useAuthContext } from '../../../hooks/useAuthContext';
 import FusebitEditor from './FusebitEditor';
 import { useLoader } from '../../../hooks/useLoader';
 import play from '../../../assets/play.svg';
@@ -18,7 +18,7 @@ import ConfirmationPrompt from '../../common/ConfirmationPrompt';
 import { useTrackPage } from '../../../hooks/useTrackPage';
 
 const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationId }, ref) => {
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
   const [isMounted, setIsMounted] = useState(false);
   const [configureRunnerActive, setConfigureRunnerActive] = useState(false);
   const [unsavedWarning, setUnsavedWarning] = useState(false);

@@ -3,7 +3,7 @@ import Layout from '../components/common/Layout';
 import FatalError from '../components/FatalError';
 import Navbar from '../components/common/Navbar';
 
-const LoggedOutErrorPage: FC<{}> = (): ReactElement => {
+const FataErrorPage: FC<{}> = (): ReactElement => {
   return (
     <Layout>
       <Navbar sectionName="Integrations" integration />
@@ -12,4 +12,4 @@ const LoggedOutErrorPage: FC<{}> = (): ReactElement => {
   );
 };
 
-export default LoggedOutErrorPage;
+export default FataErrorPage;

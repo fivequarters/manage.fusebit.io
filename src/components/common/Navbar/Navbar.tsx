@@ -10,7 +10,7 @@ import { Props } from '../../../interfaces/Navbar';
 import arrow from '../../../assets/down-arrow-white.svg';
 import rightArrow from '../../../assets/arrow-right-black.svg';
 import check from '../../../assets/check.svg';
-import { useContext } from '../../../hooks/useContext';
+import { signOut, useAuthContext } from '../../../hooks/useAuthContext';
 import { useAccountIntegrationsGetAll } from '../../../hooks/api/v2/account/integration/useGetAll';
 import { useAccountConnectorsGetAll } from '../../../hooks/api/v2/account/connector/useGetAll';
 import { Integration } from '../../../interfaces/integration';
@@ -35,7 +35,7 @@ const Navbar: React.FC<Props> = ({
   const history = useHistory();
   const [anchorSectionDropdown, setAnchorSectionDropdown] = React.useState(null);
   const [anchorUserDropdown, setAnchorUserDropdown] = React.useState(null);
-  const { userData, logout } = useContext();
+  const { userData } = useAuthContext();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerBottomOpen, setDrawerBottomOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
@@ -62,22 +62,12 @@ const Navbar: React.FC<Props> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (
-      (integrations?.error && integrations.error.indexOf('403') >= 0) ||
-      (connectors?.error && connectors.error.indexOf('403') >= 0)
-    ) {
-      history.push('/fatal-error');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [integrations, connectors, history]);
-
   const handleLogout = () => {
     setLoggingOut(true);
     setDrawerOpen(false);
     setAnchorUserDropdown(null);
     setTimeout(() => {
-      logout();
+      signOut();
     }, 250);
   };
 

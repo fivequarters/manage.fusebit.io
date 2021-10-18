@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@material-ui/core';
-
-import { useContext } from '../../../hooks/useContext';
+import { useAuthContext } from '../../../hooks/useAuthContext';
 import { createSampleAppClientUrl } from '../../../utils/backendClients';
 
 interface IProps {
@@ -9,7 +8,7 @@ interface IProps {
 }
 
 export const LinkSampleApp: React.FC<IProps> = ({ componentMap }: IProps) => {
-  const { userData: user } = useContext();
+  const { userData: user } = useAuthContext();
 
   const [url, setUrl] = useState<string>();
   useEffect(() => {

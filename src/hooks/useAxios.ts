@@ -1,7 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { X_USER_AGENT } from '../utils/constants';
-import { readLocalData, validateToken } from '../utils/utils';
-import { useContext } from './useContext';
+import { signIn, useAuthContext } from './useAuthContext';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
@@ -24,24 +23,19 @@ axios.interceptors.response.use(
   (response) => response,
   (error) => {
     const statusCode = Number(error?.response?.status);
-    const __userData = readLocalData();
     if (statusCode === 403) {
-      validateToken();
+      const silent = true;
+      signIn(silent);
     } else if (statusCode === 404) {
-      let toUrl = '/logged-out';
-      if (__userData.token) {
-        if (window.location.href.indexOf('connector') >= 0) toUrl = '/connectors';
-        else if (window.location.href.indexOf('integration') >= 0) toUrl = '/';
-        else toUrl = '/';
-      }
-      window.location.href = toUrl;
+      // TODO add "not found message/error"
+      window.location.href = '/';
     }
     return Promise.reject(error);
   }
 );
 
 export const useAxios = ({ ignoreInterceptors } = {} as { ignoreInterceptors?: boolean }) => {
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
 
   const _axios: FusebitAxios = async <T extends {}>(
     endpoint: string,
