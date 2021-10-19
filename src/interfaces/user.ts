@@ -1,12 +1,10 @@
-export interface User {
-  id?: string;
+import { Auth0Profile } from './auth0Profile';
+import { FusebitProfile } from './auth0Token';
+import { Company } from './company';
+
+export interface User extends Auth0Profile, Company, FusebitProfile {
   firstName?: string;
   lastName?: string;
-  primaryEmail?: string;
-  accountId?: string;
-  subscriptionId?: string;
-  userId?: string;
-  token?: string;
   company?: string;
-  picture?: string;
+  token?: string;
 }

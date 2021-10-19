@@ -12,7 +12,7 @@ import * as SC from './styles';
 import CliAccess from '../CliAccess';
 import { useAccountUserGetOne } from '../../../hooks/api/v1/account/user/useGetOne';
 import { useAccountUserUpdateOne } from '../../../hooks/api/v1/account/user/useUpdateOne';
-import client from '../../../assets/client.jpg';
+import accountImg from '../../../assets/account.svg';
 import { Operation } from '../../../interfaces/operation';
 import { Account } from '../../../interfaces/account';
 import { useLoader } from '../../../hooks/useLoader';
@@ -150,6 +150,8 @@ const Overview: React.FC = () => {
     }
   };
 
+  const isAdmin = userData.userId === accountData?.data.id;
+
   return (
     <SC.Overview
       onClick={(e: any) =>
@@ -196,7 +198,8 @@ const Overview: React.FC = () => {
                 )}
               </SC.PopperOpen>
             </div>
-            <SC.UserImage alt="user" src={client} height="88" width="88" />
+            <SC.UserImage alt="user" src={isAdmin ? userData.picture : accountImg} height="88" width="88" />
+
             <SC.FlexDown>
               <SC.UserName>
                 {accountData?.data.firstName} {accountData?.data.lastName}
