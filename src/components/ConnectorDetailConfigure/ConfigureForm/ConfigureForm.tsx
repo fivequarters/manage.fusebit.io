@@ -14,6 +14,7 @@ import { useEntityApi } from '../../../hooks/useEntityApi';
 import { useGetFeedById } from '../../../hooks/useGetFeedById';
 import { trackEvent } from '../../../utils/analytics';
 import InformationalBanner from '../../common/InformationalBanner';
+import InputWithCopy, { inputWithCopyTester } from '../../common/FormFields/InputWithCopy/InputWithCopy';
 
 const ConfigureForm: React.FC = () => {
   const history = useHistory();
@@ -103,7 +104,13 @@ const ConfigureForm: React.FC = () => {
               schema={config?.data.schema}
               uischema={config?.data.uischema}
               data={jsonFormsInputs || config?.data.data}
-              renderers={materialRenderers}
+              renderers={[
+                ...materialRenderers,
+                {
+                  tester: inputWithCopyTester,
+                  renderer: InputWithCopy,
+                },
+              ]}
               cells={materialCells}
               onChange={({ errors: _errors, data: newData }) => {
                 // Clear the clientId and clientSecret when going from non-prod to production.
