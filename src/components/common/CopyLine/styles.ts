@@ -76,7 +76,7 @@ export const LineInstructionFade = styled.div<{
   display: ${(props) => props.onlyMobileVisible && 'none'};
   position: absolute;
   right: 0;
-  top: 0px;
+  top: 0;
   height: 50px;
   width: ${(props) => (props.change && !props.disabled ? '300px' : '60px')};
   background-image: linear-gradient(to left, #eff5ff 10%, rgba(255, 255, 255, 0) 100%);
@@ -94,7 +94,7 @@ export const LineInstructionFade = styled.div<{
     `
       border-radius: 4px;
       border: 2px solid #F83420;
-      border-left: 0px;
+      border-left: 0;
   `}
 `;
 
