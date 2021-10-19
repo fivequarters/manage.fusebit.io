@@ -5,7 +5,6 @@ import {
   Button,
   Modal,
   Backdrop,
-  Fade,
   ClickAwayListener,
   Grow,
   Paper,
@@ -20,7 +19,6 @@ import AddIcon from '@material-ui/icons/Add';
 import * as SC from './styles';
 import * as CSC from '../../globalStyle';
 import arrow from '../../../assets/arrow-right-black.svg';
-import Connect from '../Connect';
 import { useLoader } from '../../../hooks/useLoader';
 import { useError } from '../../../hooks/useError';
 import { useContext } from '../../../hooks/useContext';
@@ -39,13 +37,14 @@ import { FinalConnector } from '../../../interfaces/integrationDetailDevelop';
 import { useEntityApi } from '../../../hooks/useEntityApi';
 import { useBackendClient } from '../../../hooks/useBackendClient';
 import { BackendClient } from '../../../interfaces/backendClient';
-import EditCli from '../EditCli';
 import SlideUpSpring from '../../common/Animations/SlideUpSpring';
 import { trackEvent } from '../../../utils/analytics';
 import LineConnector from '../../common/LineConnector';
 import MobileDrawer from '../MobileDrawer';
 import AddConnectorToIntegrationModal from '../AddConnectorToIntegrationModal';
 import AddBackendModal from '../AddBackendModal';
+import EditCliModal from '../EditCliModal';
+import ConnectorListModal from '../ConnectorListModal';
 
 const { REACT_APP_ENABLE_ONLINE_EDITOR } = process.env;
 const isOnlineEditorEnabled = REACT_APP_ENABLE_ONLINE_EDITOR === 'true';
@@ -79,8 +78,6 @@ const Develop: React.FC = () => {
   const [loading, setLoading] = React.useState(false);
   const [backendClientsLoading, setBackendClientsLoading] = React.useState(true);
   const { toggleConnector, createEntity } = useEntityApi(true);
-  const [keyIsCopied, setKeyIsCopied] = useState(false);
-  const [showWarning, setShowWarning] = useState(false);
   const { getBackendClientListener, registerBackend, removeBackendClientListener } = useBackendClient();
   const [backendClients, setBackendClients] = useState<BackendClient[]>([]);
   const [backendClient, setBackendClient] = useState<BackendClient>();
@@ -189,10 +186,6 @@ const Develop: React.FC = () => {
     }
   };
 
-  const linkConnector = async (connector: Entity) => {
-    _toggleConnector(connector, true);
-  };
-
   const addNewConnector = async (activeFeed: Feed, data: Data) => {
     try {
       createLoader();
@@ -295,59 +288,12 @@ const Develop: React.FC = () => {
         onClose={() => setConnectOpen(false)}
         integrationData={integrationData?.data}
       />
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
+      <EditCliModal
         open={editCliOpen}
         onClose={() => setEditCliOpen(false)}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-      >
-        <Fade in={editCliOpen}>
-          <EditCli
-            open={editCliOpen}
-            onClose={() => setEditCliOpen(false)}
-            integrationId={integrationData?.data.id || ''}
-          />
-        </Fade>
-      </Modal>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={connectorListOpen}
-        onClose={() => setConnectorListOpen(false)}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-      >
-        <Fade in={connectorListOpen}>
-          <SC.ConnectorList>
-            <SC.CardTitle>Connectors</SC.CardTitle>
-            <div>
-              {connectors?.data.items
-                .filter((item: Connector) => {
-                  let returnItem = true;
-                  integrationData?.data.data.components.forEach((connector: InnerConnector) => {
-                    if (connector.entityId === item.id) {
-                      returnItem = false;
-                    }
-                  });
-                  return returnItem;
-                })
-                .map((connector: Connector) => {
-                  return (
-                    <ListComponent
-                      onLinkConnectorClick={(_connector: any) => linkConnector(_connector)}
-                      linkConnector
-                      key={connector.id}
-                      connector={connector}
-                      onConnectorDelete={(_connector: Entity) => handleListComponentDelete(_connector)}
-                    />
-                  );
-                })}
-            </div>
-          </SC.ConnectorList>
-        </Fade>
-      </Modal>
+        integrationId={integrationData?.data.id || ''}
+      />
+      <ConnectorListModal open={connectorListOpen} onClose={() => setConnectorListOpen(false)} />
       {isMobile ? (
         <MobileDrawer open={editGuiOpen} onClose={() => setEditGuiOpen(false)} />
       ) : (
