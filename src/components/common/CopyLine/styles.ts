@@ -27,8 +27,6 @@ export const LineInstruction = styled.div<{ horizontalScrollbar?: boolean; warni
   border-radius: 4px;
   border: ${(props) => props.warning && '2px solid #F83420'};
   background-color: var(--secondary-color);
-  overflow-x: ${(props) => (props.horizontalScrollbar ? 'auto' : 'hidden')};
-  overflow-y: scroll;
   white-space: nowrap;
   font-family: 'Courier';
   font-size: 16px;
@@ -36,6 +34,12 @@ export const LineInstruction = styled.div<{ horizontalScrollbar?: boolean; warni
   width: 100%;
   color: var(--black);
   display: flex;
+
+  & > p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+  }
 
   & > span {
     color: var(--primary-color);
@@ -71,9 +75,9 @@ export const LineInstructionFade = styled.div<{
 }>`
   display: ${(props) => props.onlyMobileVisible && 'none'};
   position: absolute;
-  right: ${(props) => (props.warning ? '2px' : 0)};
-  top: 3px;
-  height: 45px;
+  right: 0;
+  top: 0px;
+  height: 50px;
   width: ${(props) => (props.change && !props.disabled ? '300px' : '60px')};
   background-image: linear-gradient(to left, #eff5ff 10%, rgba(255, 255, 255, 0) 100%);
   z-index: 1;
@@ -84,6 +88,14 @@ export const LineInstructionFade = styled.div<{
     display: ${(props) => props.onlyMobileVisible && 'block'};
     width: 300px !important;
   }
+
+  ${(props) =>
+    props.warning &&
+    `
+      border-radius: 4px;
+      border: 2px solid #F83420;
+      border-left: 0px;
+  `}
 `;
 
 export const LineInstructionCopy = styled.div<{ disabled?: boolean }>`
