@@ -45,6 +45,7 @@ import { trackEvent } from '../../../utils/analytics';
 import LineConnector from '../../common/LineConnector';
 import MobileDrawer from '../MobileDrawer';
 import AddConnectorToIntegrationModal from '../AddConnectorToIntegrationModal';
+import AddBackendModal from '../AddBackendModal';
 
 const { REACT_APP_ENABLE_ONLINE_EDITOR } = process.env;
 const isOnlineEditorEnabled = REACT_APP_ENABLE_ONLINE_EDITOR === 'true';
@@ -274,19 +275,6 @@ const Develop: React.FC = () => {
     return true;
   };
 
-  const onConnectClose = async () => {
-    if (keyIsCopied || showWarning) {
-      await getBackendClients();
-      setConnectOpen(false);
-      setTimeout(() => {
-        setShowWarning(false);
-        setKeyIsCopied(false);
-      }, 250);
-    } else {
-      setShowWarning(true);
-    }
-  };
-
   const handleConnectOpen = async () => {
     trackEvent('Develop Connect Button Clicked', 'Integration');
     const _backendClient = await registerBackend();
@@ -301,31 +289,12 @@ const Develop: React.FC = () => {
         onClose={() => setConnectorPickerOpen(false)}
         integrationData={integrationData}
       />
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
+      <AddBackendModal
+        backendClient={backendClient}
         open={connectOpen}
-        onClose={onConnectClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-      >
-        <Fade in={connectOpen}>
-          <Connect
-            onDelete={handleListComponentDelete}
-            name={backendClient?.name || ''}
-            id={backendClient?.id || ''}
-            onChange={getBackendClients}
-            token={backendClient?.token || ''}
-            showWarning={showWarning}
-            setShowWarning={setShowWarning}
-            keyIsCopied={keyIsCopied}
-            setKeyIsCopied={setKeyIsCopied}
-            open={connectOpen}
-            onClose={onConnectClose}
-            integration={integrationData?.data}
-          />
-        </Fade>
-      </Modal>
+        onClose={() => setConnectOpen(false)}
+        integrationData={integrationData?.data}
+      />
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
