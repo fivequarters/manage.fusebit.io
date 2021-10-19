@@ -71,7 +71,7 @@ const AuthCallbackPage: FC<{}> = (): ReactElement => {
         const decoded = jwt_decode<Auth0Token>(token);
         const fusebitProfile = decoded['https://fusebit.io/profile'];
 
-        getAuth0ProfileAndCompany(token, fusebitProfile.accountId).then(({ auth0Profile, company }) => {
+        getAuth0ProfileAndCompany(token, fusebitProfile?.accountId || '').then(({ auth0Profile, company }) => {
           const normalizedData = {
             firstName: auth0Profile?.given_name || '',
             lastName: auth0Profile?.family_name || '',
@@ -90,7 +90,7 @@ const AuthCallbackPage: FC<{}> = (): ReactElement => {
 
         analytics.ready(() => {
           if (isSegmentTrackingEvents()) {
-            trackAuthEvent(decoded, decoded);
+            trackAuthEvent(decoded as Auth0Token);
           }
         });
       }

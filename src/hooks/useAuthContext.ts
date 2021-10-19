@@ -43,7 +43,7 @@ const signIn = (silent?: boolean): void => {
 
 const _useAuthContext = () => {
   const [authStatus, setAuthStatus] = useState<AuthStatus>(AuthStatus.UNKNOWN);
-  const [userData, setUserData] = useState({} as User);
+  const [userData, setUserData] = useState<User>({});
 
   const checkAuthStatus = async () => {
     const isUserDataDefined = userData && Object.entries(userData).length > 0;
