@@ -1,1 +1,1 @@
-export { default } from './BaseJsonForms';
+export { default } from './BaseJsonForm';
