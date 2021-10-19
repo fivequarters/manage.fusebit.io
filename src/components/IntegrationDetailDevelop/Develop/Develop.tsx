@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import {
   Button,
   ClickAwayListener,
@@ -19,18 +19,14 @@ import * as SC from './styles';
 import * as CSC from '../../globalStyle';
 import arrow from '../../../assets/arrow-right-black.svg';
 import { useLoader } from '../../../hooks/useLoader';
-import { useError } from '../../../hooks/useError';
 import { useAccountIntegrationsGetOne } from '../../../hooks/api/v2/account/integration/useGetOne';
 import { useAccountConnectorsGetAll } from '../../../hooks/api/v2/account/connector/useGetAll';
 import { Connector } from '../../../interfaces/connector';
 import { Integration, InnerConnector } from '../../../interfaces/integration';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import ListComponent from '../ListComponent';
-import { Entity, Feed } from '../../../interfaces/feed';
-import { Data } from '../../../interfaces/feedPicker';
-import { useReplaceMustache } from '../../../hooks/useReplaceMustache';
+import { Entity } from '../../../interfaces/feed';
 import { FinalConnector } from '../../../interfaces/integrationDetailDevelop';
-
 import { useEntityApi } from '../../../hooks/useEntityApi';
 import { useBackendClient } from '../../../hooks/useBackendClient';
 import { BackendClient } from '../../../interfaces/backendClient';
@@ -51,9 +47,7 @@ const isOnlineEditorEnabled = REACT_APP_ENABLE_ONLINE_EDITOR === 'true';
 // TODO: Split this component and refactor ternary logic
 
 const Develop: React.FC = () => {
-  const history = useHistory();
-  const { id } = useParams<{ id: string }>();
-  const [integrationId, setIntegrationId] = useState(id);
+  const { id: integrationId } = useParams<{ id: string }>();
   const { userData } = useAuthContext();
   const { data: connectors, refetch: reloadConnectors } = useAccountConnectorsGetAll<{ items: Connector[] }>({
     enabled: userData.token,
@@ -67,16 +61,14 @@ const Develop: React.FC = () => {
     subscriptionId: userData.subscriptionId,
   });
   const { createLoader, removeLoader } = useLoader();
-  const { createError } = useError();
   const [editGuiOpen, setEditGuiOpen] = React.useState(false);
   const [connectOpen, setConnectOpen] = React.useState(false);
   const [connectorListOpen, setConnectorListOpen] = React.useState(false);
   const { getRedirectLink } = useGetRedirectLink();
   const [connectorPickerOpen, setConnectorPickerOpen] = React.useState(false);
-  const { replaceMustache } = useReplaceMustache();
   const [loading, setLoading] = React.useState(false);
   const [backendClientsLoading, setBackendClientsLoading] = React.useState(true);
-  const { toggleConnector, createEntity } = useEntityApi(true);
+  const { toggleConnector } = useEntityApi(true);
   const { getBackendClientListener, registerBackend, removeBackendClientListener } = useBackendClient();
   const [backendClients, setBackendClients] = useState<BackendClient[]>([]);
   const [backendClient, setBackendClient] = useState<BackendClient>();
@@ -137,16 +129,6 @@ const Develop: React.FC = () => {
     setEditOptionOpen(false);
   };
 
-  React.useEffect(() => {
-    const unlisten = history.listen((location) => {
-      setIntegrationId(location.pathname.split('/')[6]);
-      setLoading(true);
-    });
-
-    return () => unlisten();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   useEffect(() => {
     const checkAndReloadIntegration = async () => {
       if (userData.subscriptionId) {
@@ -177,34 +159,6 @@ const Develop: React.FC = () => {
       await getBackendClients();
     } else {
       _toggleConnector(connector, false);
-    }
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const addNewConnector = async (activeFeed: Feed, data: Data) => {
-    try {
-      createLoader();
-      const parsedFeed = await replaceMustache(data, activeFeed);
-      const commonTags = {
-        'fusebit.feedType': 'connector',
-        'fusebit.feedId': activeFeed.id,
-      };
-      await Promise.all([
-        ...parsedFeed.configuration.entities.map(async (entity: Entity) => {
-          entity.tags = { ...commonTags, ...entity.tags };
-          if (entity.entityType === 'connector') {
-            await createEntity(entity, commonTags);
-            await toggleConnector(true, entity, integrationData);
-          }
-        }),
-      ]);
-      reloadIntegration();
-      reloadConnectors();
-    } catch (e) {
-      createError(e);
-    } finally {
-      removeLoader();
-      setConnectorPickerOpen(false);
     }
   };
 
