@@ -2,8 +2,8 @@ import { MaterialInputControl, MaterialTextCell, MaterialIntegerCell } from '@js
 import { ControlProps, schemaMatches, rankWith, and, uiTypeIs, RankedTester } from '@jsonforms/core';
 import { withJsonFormsControlProps } from '@jsonforms/react';
 import { Box, IconButton } from '@material-ui/core';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { useCopy } from '../../../../hooks/useCopy';
+import copyIcon from '../../../../assets/copy.svg';
 
 const CustomInputCell = (props: ControlProps) => {
   const { handleCopy } = useCopy();
@@ -21,7 +21,7 @@ const CustomInputCell = (props: ControlProps) => {
       }
       <Box ml="5px">
         <IconButton onClick={() => handleCopy(props.data)} size="small">
-          <FileCopyIcon fontSize="small" />
+          <img src={copyIcon} alt="Copy Button" />
         </IconButton>
       </Box>
     </Box>
