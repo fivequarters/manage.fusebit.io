@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { Button } from '@material-ui/core';
-import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
-import { JsonForms } from '@jsonforms/react';
+import { materialCells } from '@jsonforms/material-renderers';
 import { ValidationMode } from '@jsonforms/core';
 import * as SC from './styles';
 import * as CSC from '../../globalStyle';
@@ -14,7 +13,7 @@ import { useEntityApi } from '../../../hooks/useEntityApi';
 import { useGetFeedById } from '../../../hooks/useGetFeedById';
 import { trackEvent } from '../../../utils/analytics';
 import InformationalBanner from '../../common/InformationalBanner';
-import InputWithCopy, { inputWithCopyTester } from '../../common/FormFields/InputWithCopy/InputWithCopy';
+import BaseJsonForm from '../../common/BaseJsonForm';
 
 const ConfigureForm: React.FC = () => {
   const history = useHistory();
@@ -100,17 +99,10 @@ const ConfigureForm: React.FC = () => {
                 By default, Connectors use Fusebit demonstration credentials, which are intended for testing only.
               </InformationalBanner>
             )}
-            <JsonForms
+            <BaseJsonForm
               schema={config?.data.schema}
               uischema={config?.data.uischema}
               data={jsonFormsInputs || config?.data.data}
-              renderers={[
-                ...materialRenderers,
-                {
-                  tester: inputWithCopyTester,
-                  renderer: InputWithCopy,
-                },
-              ]}
               cells={materialCells}
               onChange={({ errors: _errors, data: newData }) => {
                 // Clear the clientId and clientSecret when going from non-prod to production.
