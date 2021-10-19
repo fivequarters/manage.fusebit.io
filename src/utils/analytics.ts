@@ -52,7 +52,7 @@ const trackEventHandler: TrackEventHandler = (eventName, objectLocation, extraPr
 // trackEvent is memoized because React re-rendering process makes it get called multiple times for the same event
 export const trackEvent = memoize(trackEventHandler);
 
-export const trackAuthEvent = (auth0DecodedToken: Auth0Token, user: User) => {
+export const trackAuthEvent = (auth0DecodedToken: Auth0Token, user: Auth0Token) => {
   const isSilentAuthInProgress = silentAuthInProgress();
   const fusebitProfile = auth0DecodedToken['https://fusebit.io/profile'];
   const userSignUpEvent = auth0DecodedToken['https://fusebit.io/new-user'] === true;
