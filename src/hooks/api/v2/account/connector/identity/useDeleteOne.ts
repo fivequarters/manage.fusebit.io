@@ -2,13 +2,13 @@ import { useMutation } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { Params } from '../../../../../../interfaces/api';
 import { useAxios } from '../../../../../useAxios';
-import { useContext } from '../../../../../useContext';
+import { useAuthContext } from '../../../../../useAuthContext';
 import useOptimisticDelete from '../../../../../useOptimisticDelete';
 import { ACCOUNT_CONNECTOR_IDENTITY_GET_ALL } from './useGetAll';
 
 export const useAccountConnectorIdentityDeleteOne = <T>() => {
   const { axios } = useAxios();
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
   const { id: connectorId } = useParams<{ id: string }>();
 
   const optimisticDelete = useOptimisticDelete({

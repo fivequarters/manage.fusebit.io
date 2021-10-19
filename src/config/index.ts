@@ -48,11 +48,13 @@ export const routes: Array<RouteItem> = [
     key: 'router-auth-callback',
     path: '/callback',
     component: AuthCallbackPage,
+    public: true,
   },
   {
     key: 'router-logged-out',
     path: '/logged-out',
     component: LoggedOutErrorPage,
+    public: true,
   },
   {
     key: 'router-authentication-users',

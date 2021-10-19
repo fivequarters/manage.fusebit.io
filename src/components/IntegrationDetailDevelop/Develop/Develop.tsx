@@ -14,6 +14,7 @@ import {
   Tooltip,
   useMediaQuery,
   Box,
+  CircularProgress,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import * as SC from './styles';
@@ -21,7 +22,6 @@ import * as CSC from '../../globalStyle';
 import arrow from '../../../assets/arrow-right-black.svg';
 import { useLoader } from '../../../hooks/useLoader';
 import { useError } from '../../../hooks/useError';
-import { useContext } from '../../../hooks/useContext';
 import { useAccountIntegrationsGetOne } from '../../../hooks/api/v2/account/integration/useGetOne';
 import { useAccountConnectorsGetAll } from '../../../hooks/api/v2/account/connector/useGetAll';
 import { Connector } from '../../../interfaces/connector';
@@ -37,7 +37,6 @@ import { FinalConnector } from '../../../interfaces/integrationDetailDevelop';
 import { useEntityApi } from '../../../hooks/useEntityApi';
 import { useBackendClient } from '../../../hooks/useBackendClient';
 import { BackendClient } from '../../../interfaces/backendClient';
-import SlideUpSpring from '../../common/Animations/SlideUpSpring';
 import { trackEvent } from '../../../utils/analytics';
 import LineConnector from '../../common/LineConnector';
 import MobileDrawer from '../MobileDrawer';
@@ -45,6 +44,8 @@ import AddConnectorToIntegrationModal from '../AddConnectorToIntegrationModal';
 import AddBackendModal from '../AddBackendModal';
 import EditCliModal from '../EditCliModal';
 import ConnectorListModal from '../ConnectorListModal';
+import useEditor from '../EditGui/useEditor';
+import { useAuthContext } from '../../../hooks/useAuthContext';
 
 const { REACT_APP_ENABLE_ONLINE_EDITOR } = process.env;
 const isOnlineEditorEnabled = REACT_APP_ENABLE_ONLINE_EDITOR === 'true';
@@ -55,7 +56,7 @@ const Develop: React.FC = () => {
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
   const [integrationId, setIntegrationId] = useState(id);
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
   const { data: connectors, refetch: reloadConnectors } = useAccountConnectorsGetAll<{ items: Connector[] }>({
     enabled: userData.token,
     accountId: userData.accountId,
@@ -82,10 +83,10 @@ const Develop: React.FC = () => {
   const [backendClients, setBackendClients] = useState<BackendClient[]>([]);
   const [backendClient, setBackendClient] = useState<BackendClient>();
   const [connectHover, setConnectHover] = useState(false);
-  const [editGuiMounted, setEditGuiMounted] = useState(false);
   const [editCliOpen, setEditCliOpen] = React.useState(false);
   const isMobile = useMediaQuery('(max-width: 850px)');
   const areCardsCollapsing = useMediaQuery('(max-width: 1200px)');
+  const { handleEdit, isEditing } = useEditor({ enableListener: false, onReadyToRun: () => setEditGuiOpen(true) });
 
   const getBackendClients = async () => {
     const _backendClients = await getBackendClientListener();
@@ -104,12 +105,13 @@ const Develop: React.FC = () => {
 
   const editOptions = [
     {
-      buttonLabel: 'Edit',
+      buttonLabel: isEditing ? <CircularProgress size={20} /> : 'Edit',
       optionLabel: 'Edit in the in-browser editor',
-      handle: (isOpen: boolean) => {
+      handle: () => {
         trackEvent('Develop Edit Web Button Clicked', 'Integration');
-        setEditGuiOpen(isOpen);
+        handleEdit();
       },
+      disabled: isEditing,
     },
     {
       buttonLabel: isOnlineEditorEnabled ? 'CLI' : 'Edit',
@@ -138,12 +140,6 @@ const Develop: React.FC = () => {
   };
 
   React.useEffect(() => {
-    const res = localStorage.getItem('refreshToken');
-    if (res === 'true') {
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('refreshTokenUrl');
-      setConnectOpen(true);
-    }
     const unlisten = history.listen((location) => {
       setIntegrationId(location.pathname.split('/')[6]);
       setLoading(true);
@@ -304,21 +300,16 @@ const Develop: React.FC = () => {
           disableEscapeKeyDown
           onClose={() => {
             setEditGuiOpen(false);
-            setEditGuiMounted(false);
           }}
           closeAfterTransition
           BackdropComponent={Backdrop}
         >
-          <SlideUpSpring in={editGuiOpen} mounted={editGuiMounted}>
-            <EditGui
-              onMount={() => setEditGuiMounted(true)}
-              onClose={() => {
-                setEditGuiOpen(false);
-                setEditGuiMounted(false);
-              }}
-              integrationId={integrationData?.data.id || ''}
-            />
-          </SlideUpSpring>
+          <EditGui
+            onClose={() => {
+              setEditGuiOpen(false);
+            }}
+            integrationId={integrationData?.data.id || ''}
+          />
         </Modal>
       )}
       <SC.Flex>
@@ -432,6 +423,7 @@ const Develop: React.FC = () => {
                 size="large"
                 variant="contained"
                 color="primary"
+                disabled={!!editOptions[editOption]?.disabled}
               >
                 {editOptions[editOption].buttonLabel}
               </Button>
@@ -457,14 +449,14 @@ const Develop: React.FC = () => {
                             {editOptions.map(
                               (
                                 option: {
-                                  buttonLabel: string;
-                                  optionLabel: string;
+                                  buttonLabel: any;
+                                  optionLabel: any;
                                   handle: (isOpen: boolean) => void;
                                 },
                                 index: number
                               ) => (
                                 <MenuItem
-                                  key={option.optionLabel}
+                                  key={option.buttonLabel}
                                   disabled={index === 2}
                                   selected={index === editOption}
                                   onClick={(event) => handleEditOptionClick(event, index)}

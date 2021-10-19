@@ -2,8 +2,7 @@ import React, { FC, ReactNode, useEffect } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { CssBaseline } from '@material-ui/core';
 import GlobalStyle from '../../globalStyle';
-
-import { useContext } from '../../../hooks/useContext';
+import { useAuthContext } from '../../../hooks/useAuthContext';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -22,7 +21,7 @@ interface Props {
 // functional component
 const Layout: FC<Props> = ({ children }) => {
   const classes = useStyles();
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
 
   useEffect(() => {
     // @ts-ignore

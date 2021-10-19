@@ -5,23 +5,25 @@ import { useAccountIntegrationCreateSession } from '../../../hooks/api/v2/accoun
 import { useAccountIntegrationCommitSession } from '../../../hooks/api/v2/account/integration/session/useCommitOne';
 import { useAccountIntegrationTestIntegration } from '../../../hooks/api/v2/account/integration/useTestOne';
 import { useAxios } from '../../../hooks/useAxios';
-import { useContext } from '../../../hooks/useContext';
+import { useAuthContext } from '../../../hooks/useAuthContext';
 import { InstallList } from '../../../interfaces/install';
 import { trackEvent } from '../../../utils/analytics';
 import { STATIC_TENANT_ID } from '../../../utils/constants';
 import useIsSaving from './useIsSaving';
 
 interface Props {
-  onNoInstallFound?: () => void;
   enableListener?: boolean;
   isMounted?: boolean;
+  onReadyToRun?: () => void;
+  onReadyToLogin?: () => void;
 }
 
 const LOCALSTORAGE_SESSION_KEY = 'session';
+const LOCALSTORAGE_SESSION_URL_KEY = 'sessionUrl';
 
-const useEditor = ({ onNoInstallFound, enableListener = true, isMounted = false } = {} as Props) => {
+const useEditor = ({ enableListener = true, isMounted = false, onReadyToRun, onReadyToLogin } = {} as Props) => {
   const { id } = useParams<{ id: string }>();
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
   const { axios } = useAxios({ ignoreInterceptors: true });
   const { mutateAsync: createSesssion, isLoading: isCreatingSession } = useAccountIntegrationCreateSession();
   const { mutateAsync: testIntegration, isLoading: isTesting } = useAccountIntegrationTestIntegration();
@@ -62,6 +64,9 @@ const useEditor = ({ onNoInstallFound, enableListener = true, isMounted = false 
 
         try {
           await commitSession({ id, sessionId: e.newValue });
+
+          localStorage.removeItem(LOCALSTORAGE_SESSION_URL_KEY);
+
           await testIntegration({ id, tenantId: STATIC_TENANT_ID });
 
           trackEvent('Run Button Execution', 'Web Editor', { runStatus: 'success' });
@@ -89,23 +94,44 @@ const useEditor = ({ onNoInstallFound, enableListener = true, isMounted = false 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enableListener]);
 
-  const handleNoInstallFound = () => createSesssion({ id, tenantId: STATIC_TENANT_ID });
+  const handleNoInstallFound = async () => {
+    const res = await createSesssion({ id, tenantId: STATIC_TENANT_ID });
 
-  const handleRun = async () => {
-    trackEvent('Run Button Clicked', 'Web Editor');
+    localStorage.setItem(LOCALSTORAGE_SESSION_URL_KEY, res.data.targetUrl);
+  };
+
+  const handleLogin = () => window.open(localStorage.getItem(LOCALSTORAGE_SESSION_URL_KEY) || '')?.focus();
+
+  const handleEdit = async () => {
     try {
       const hasInstall = await findInstall();
 
-      if (window.editor?.dirtyState) {
-        await window.editor._server.saveFunction(window.editor);
-      }
-
       if (hasInstall) {
-        await testIntegration({ id, tenantId: STATIC_TENANT_ID });
-      } else if (onNoInstallFound) {
-        onNoInstallFound();
+        onReadyToRun?.();
       } else {
         await handleNoInstallFound();
+        onReadyToRun?.();
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+    }
+  };
+
+  const handleRun = async () => {
+    trackEvent('Run Button Clicked', 'Web Editor');
+
+    try {
+      const url = localStorage.getItem(LOCALSTORAGE_SESSION_URL_KEY) || '';
+
+      if (url) {
+        if (onReadyToLogin) {
+          onReadyToLogin();
+        } else {
+          handleLogin();
+        }
+      } else {
+        await testIntegration({ id, tenantId: STATIC_TENANT_ID });
       }
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -121,7 +147,10 @@ const useEditor = ({ onNoInstallFound, enableListener = true, isMounted = false 
     isTesting,
     isCommiting,
     isSaving,
-    isRunning: isFindingInstall || isCreatingSession || isTesting || isCommiting,
+    handleEdit,
+    handleLogin,
+    isRunning: isTesting || isCommiting,
+    isEditing: isFindingInstall || isCreatingSession,
   };
 };
 

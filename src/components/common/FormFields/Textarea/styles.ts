@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { TextareaAutosize } from '@material-ui/core';
-import { inputBlueMixin, withError } from '../../globalStyle';
+import { inputBlueMixin, withError } from '../../../globalStyle';
 
 export const MUITextarea = styled(TextareaAutosize)<{ $fieldVariant: 'default' | 'customBlue'; $hasError?: boolean }>`
   ${(props) =>

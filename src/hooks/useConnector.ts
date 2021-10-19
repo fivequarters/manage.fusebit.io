@@ -4,13 +4,13 @@ import { Operation } from '../interfaces/operation';
 import { findMatchingConnectorFeed, getAllDependenciesFromFeed, linkPackageJson } from '../utils/utils';
 import { useAccountIntegrationUpdateIntegration } from './api/v2/account/integration/useUpdateOne';
 import { ApiResponse } from './useAxios';
-import { useContext } from './useContext';
+import { useAuthContext } from './useAuthContext';
 import { useError } from './useError';
 import { useLoader } from './useLoader';
 
 const useConnector = () => {
   const updateIntegration = useAccountIntegrationUpdateIntegration<Operation>();
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
   const { waitForEntityStateChange } = useLoader();
   const { createError } = useError();
 

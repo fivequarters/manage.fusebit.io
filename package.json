@@ -10,7 +10,8 @@
     "prettier": "git ls-tree -r `git branch --show-current` --name-only | grep -E \"\\.[tj]?sx?$\" | grep -v public | grep -v build | xargs -P 1 prettier --write",
     "prepare": "husky install",
     "lint": "eslint --max-warnings=0 --ext ts,tsx src",
-    "lint:fix": "eslint --fix ."
+    "lint:fix": "eslint --fix .",
+    "lint:clean": "rm .eslintcache"
   },
   "author": "Litebox",
   "license": "SEE LICENSE IN LICENSE",

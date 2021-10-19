@@ -8,7 +8,7 @@ import * as SC from './styles';
 import * as CSC from '../../globalStyle';
 import { useAccountConnectorsGetOne } from '../../../hooks/api/v2/account/connector/useGetOne';
 import { useAccountConnectorsGetOneConfig } from '../../../hooks/api/v2/account/connector/useGetOneConfig';
-import { useContext } from '../../../hooks/useContext';
+import { useAuthContext } from '../../../hooks/useAuthContext';
 import { Connector, ConnectorConfig } from '../../../interfaces/connector';
 import { useEntityApi } from '../../../hooks/useEntityApi';
 import { useGetFeedById } from '../../../hooks/useGetFeedById';
@@ -19,7 +19,7 @@ const ConfigureForm: React.FC = () => {
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
   const [connectorId, setConnectorId] = useState(id);
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
   const { data: connectorData, refetch: reloadConnector } = useAccountConnectorsGetOne<Connector>({
     enabled: userData.token,
     id: connectorId,

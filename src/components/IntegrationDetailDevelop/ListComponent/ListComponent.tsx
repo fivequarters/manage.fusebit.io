@@ -12,6 +12,7 @@ import ConfirmationPrompt from '../../common/ConfirmationPrompt';
 import { findMatchingConnectorFeed } from '../../../utils/utils';
 
 const NOT_FOUND_ICON = '/images/warning-red.svg';
+const CLOSE_ICON_CLASS = 'close';
 
 const ListComponent: React.FC<ListComponentProps> = ({
   connector,
@@ -63,14 +64,14 @@ const ListComponent: React.FC<ListComponentProps> = ({
       id={id}
       onClick={(e: any) => {
         if (connector.isApplication) {
-          if (!e.target.id && !connectOpen && !deleteModalOpen) {
+          if (!e.target.className.includes(CLOSE_ICON_CLASS) && !connectOpen && !deleteModalOpen) {
             setConnectOpen(true);
           }
         } else if (linkConnector) {
           if (onLinkConnectorClick) {
             onLinkConnectorClick(connector);
           }
-        } else if (!e.target.id && !deleteModalOpen) {
+        } else if (!e.target.className.includes(CLOSE_ICON_CLASS) && !deleteModalOpen) {
           history.push(getRedirectLink(`/connector/${connector.id}/configure`));
         }
       }}
@@ -122,8 +123,12 @@ const ListComponent: React.FC<ListComponentProps> = ({
         {connector?.name ? connector?.name : connector.id} {icon === NOT_FOUND_ICON && 'is not found'}
       </SC.CardConnectorText>
       {!linkConnector && (
-        <SC.CardConnectorCrossContainer id="closeWrapper" onClick={() => setDeleteModalOpen(true)}>
-          <SC.CardConnectorCross id="close" src={cross} alt="close" height="8" width="8" />
+        <SC.CardConnectorCrossContainer
+          className={CLOSE_ICON_CLASS}
+          id="closeWrapper"
+          onClick={() => setDeleteModalOpen(true)}
+        >
+          <SC.CardConnectorCross className={CLOSE_ICON_CLASS} src={cross} alt="Close" height="8" width="8" />
         </SC.CardConnectorCrossContainer>
       )}
     </SC.CardConnector>

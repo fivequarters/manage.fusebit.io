@@ -6,7 +6,7 @@ import { materialRenderers, materialCells } from '@jsonforms/material-renderers'
 
 import { useHistory, useParams } from 'react-router-dom';
 import dots from '../../../assets/dots.svg';
-import { useContext } from '../../../hooks/useContext';
+import { useAuthContext } from '../../../hooks/useAuthContext';
 import * as CSC from '../../globalStyle';
 import * as SC from './styles';
 import CliAccess from '../CliAccess';
@@ -75,7 +75,7 @@ const uischema = {
 const Overview: React.FC = () => {
   const history = useHistory();
   const { userId } = useParams<{ userId: string }>();
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
   const [editInformation, setEditInformation] = React.useState(false);
   const [data, setData] = React.useState<Account>();
   const { data: accountData, refetch: reloadAccount } = useAccountUserGetOne<Account>({

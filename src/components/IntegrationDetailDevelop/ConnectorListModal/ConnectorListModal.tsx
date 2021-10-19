@@ -2,7 +2,7 @@ import { Backdrop, CircularProgress, Fade, Modal } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { useAccountConnectorsGetAll } from '../../../hooks/api/v2/account/connector/useGetAll';
 import { useAccountIntegrationsGetOne } from '../../../hooks/api/v2/account/integration/useGetOne';
-import { useContext } from '../../../hooks/useContext';
+import { useAuthContext } from '../../../hooks/useAuthContext';
 import { useEntityApi } from '../../../hooks/useEntityApi';
 import { useLoader } from '../../../hooks/useLoader';
 import { Connector } from '../../../interfaces/connector';
@@ -17,7 +17,7 @@ interface Props {
 }
 
 const ConnectorListModal = ({ onClose, open }: Props) => {
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
   const { id } = useParams<{ id: string }>();
   const { addConnectorToIntegration } = useEntityApi();
   const { createLoader, removeLoader } = useLoader();

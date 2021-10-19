@@ -1,5 +1,8 @@
 import isEqual from 'lodash.isequal';
-import { isSegmentTrackingEvents } from './utils';
+import { silentAuthInProgress } from '../hooks/useAuthContext';
+import { Auth0Token } from '../interfaces/auth0Token';
+import { User } from '../interfaces/user';
+import { PRODUCTION_HOST } from './constants';
 
 type TrackEventHandler = (
   eventName: string,
@@ -21,6 +24,17 @@ const memoize = (originalFunction: TrackEventHandler) => {
   return memoizedFunction;
 };
 
+export function isSegmentTrackingEvents() {
+  if (!analytics.user) {
+    return false;
+  }
+  const user = (analytics.user()?.traits() as unknown) as User;
+  return (
+    document.location.host !== PRODUCTION_HOST ||
+    (!user?.primaryEmail?.endsWith('@fusebit.io') && !user?.primaryEmail?.endsWith('@litebox.ai'))
+  );
+}
+
 // original trackEvent function that gets called to offload events to Segment
 const trackEventHandler: TrackEventHandler = (eventName, objectLocation, extraProperties = {}, cb = () => {}) => {
   if (!isSegmentTrackingEvents()) return;
@@ -28,7 +42,7 @@ const trackEventHandler: TrackEventHandler = (eventName, objectLocation, extraPr
     eventName,
     {
       objectLocation,
-      domain: 'manage.fusebit.io',
+      domain: PRODUCTION_HOST,
       ...extraProperties,
     },
     cb
@@ -37,3 +51,33 @@ const trackEventHandler: TrackEventHandler = (eventName, objectLocation, extraPr
 
 // trackEvent is memoized because React re-rendering process makes it get called multiple times for the same event
 export const trackEvent = memoize(trackEventHandler);
+
+export const trackAuthEvent = (auth0DecodedToken: Auth0Token, user: User) => {
+  const isSilentAuthInProgress = silentAuthInProgress();
+  const fusebitProfile = auth0DecodedToken['https://fusebit.io/profile'];
+  const userSignUpEvent = auth0DecodedToken['https://fusebit.io/new-user'] === true;
+  const currentSegmentUserId = analytics.user().id();
+  const sameUser = fusebitProfile.userId === currentSegmentUserId;
+
+  const extraSegmentEventProps: { userType: string; authType?: string } = userSignUpEvent
+    ? { userType: 'new user' }
+    : { userType: 'existing user' };
+
+  if (userSignUpEvent) {
+    extraSegmentEventProps.authType = 'sign up';
+  } else if (sameUser && isSilentAuthInProgress) {
+    extraSegmentEventProps.authType = 'silent';
+  } else if (sameUser && !isSilentAuthInProgress) {
+    extraSegmentEventProps.authType = 'dormant';
+  } else if (!sameUser && !isSilentAuthInProgress) {
+    extraSegmentEventProps.authType = 'new browser';
+  } else if (!sameUser && isSilentAuthInProgress) {
+    // eslint-disable-next-line no-console
+    console.error('Segment has another user identified but silentAuth worked? Something is off.');
+  }
+
+  analytics.identify(fusebitProfile.userId, {
+    ...user,
+  } as Object);
+  trackEvent('Log In Execution', 'Authentication', extraSegmentEventProps);
+};

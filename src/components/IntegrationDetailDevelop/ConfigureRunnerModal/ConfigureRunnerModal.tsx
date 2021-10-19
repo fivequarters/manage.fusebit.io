@@ -4,8 +4,8 @@ import { useParams } from 'react-router-dom';
 import * as SC from './styles';
 import * as CSC from '../../globalStyle';
 import { getIntegrationConfig } from '../../../utils/localStorage';
-import Label from '../../FormFields/Label';
-import TextField from '../../FormFields/TextField';
+import Label from '../../common/FormFields/Label';
+import TextField from '../../common/FormFields/TextField';
 
 interface Props {
   open: boolean;

@@ -1,12 +1,11 @@
 import { Button } from '@material-ui/core';
-
 import { useLoader } from '../../../hooks/useLoader';
 import { useError } from '../../../hooks/useError';
-import { useContext } from '../../../hooks/useContext';
+import { useAuthContext } from '../../../hooks/useAuthContext';
 import { getBackendClients } from '../../../utils/backendClients';
 
 export default function ListBackendClients() {
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
   const { createLoader, removeLoader } = useLoader();
   const { createError } = useError();
 

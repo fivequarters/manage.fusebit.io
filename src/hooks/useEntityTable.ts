@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useEntityApi } from './useEntityApi';
 import { EntitiesType } from '../interfaces/entities';
-import { useContext } from './useContext';
+import { useAuthContext } from './useAuthContext';
 
 interface Props {
   rows: any[];
@@ -13,7 +13,7 @@ interface Props {
 export const useEntityTable = ({ page, setPage, rowsPerPage, rows }: Props) => {
   const [selected, setSelected] = useState<string[]>([]);
   const { massiveDelete } = useEntityApi();
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
 
   const handleSelectAllCheck = (event: any) => {
     if (event.target.checked) {

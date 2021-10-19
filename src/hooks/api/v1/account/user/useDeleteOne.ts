@@ -3,11 +3,11 @@ import { Params } from '../../../../../interfaces/api';
 import { useAxios } from '../../../../useAxios';
 import { ACCOUNT_USER_GET_ALL } from './useGetAll';
 import useOptimisticDelete from '../../../../useOptimisticDelete';
-import { useContext } from '../../../../useContext';
+import { useAuthContext } from '../../../../useAuthContext';
 
 export const useAccountUserDeleteOne = <T>() => {
   const { axios } = useAxios();
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
   const optimisticDelete = useOptimisticDelete({ queryKey: [ACCOUNT_USER_GET_ALL, { accountId: userData.accountId }] });
 
   return useMutation((params: Params) => {
