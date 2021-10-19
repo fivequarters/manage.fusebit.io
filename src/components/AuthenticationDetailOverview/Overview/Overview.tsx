@@ -150,7 +150,7 @@ const Overview: React.FC = () => {
     }
   };
 
-  const isAdmin = userData.id === accountData?.data.id;
+  const isAdmin = userData.userId === accountData?.data.id;
 
   return (
     <SC.Overview

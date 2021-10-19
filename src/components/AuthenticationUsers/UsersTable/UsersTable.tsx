@@ -32,7 +32,7 @@ const UsersTable = () => {
     name: <NameColumn account={row} />,
     email: row.primaryEmail,
     userId: row.id,
-    hideCheckbox: row.id === userData.id,
+    hideCheckbox: row.id === userData.userId,
   }));
 
   const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({

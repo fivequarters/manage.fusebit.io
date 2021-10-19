@@ -11,7 +11,7 @@ interface Props {
 
 const NameColumn = ({ account }: Props) => {
   const { userData } = useAuthContext();
-  const isAdmin = userData.id === account.id;
+  const isAdmin = userData.userId === account.id;
 
   return (
     <Box display="flex" alignItems="center">

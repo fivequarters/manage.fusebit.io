@@ -25,10 +25,10 @@ const Layout: FC<Props> = ({ children }) => {
 
   useEffect(() => {
     // @ts-ignore
-    if (userData.id && userData.accountId) {
+    if (userData.userId && userData.accountId) {
       pendo.initialize({
         visitor: {
-          id: userData.id, // Required if user is logged in
+          id: userData.userId || '', // Required if user is logged in
         },
         account: {
           id: userData.accountId, // Required if using Pendo Feedback
