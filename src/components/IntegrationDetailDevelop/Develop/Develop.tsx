@@ -182,6 +182,7 @@ const Develop: React.FC = () => {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const addNewConnector = async (activeFeed: Feed, data: Data) => {
     try {
       createLoader();
