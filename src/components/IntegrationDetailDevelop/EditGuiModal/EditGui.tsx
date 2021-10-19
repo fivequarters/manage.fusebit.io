@@ -4,18 +4,18 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import * as SC from './styles';
 import { Props } from '../../../interfaces/edit';
 import { useAuthContext } from '../../../hooks/useAuthContext';
-import FusebitEditor from './FusebitEditor';
 import { useLoader } from '../../../hooks/useLoader';
 import play from '../../../assets/play.svg';
 import settings from '../../../assets/settings.svg';
 import save from '../../../assets/save.svg';
 import question from '../../../assets/question.svg';
 import logo from '../../../assets/logo.svg';
-import useEditor from './useEditor';
 import ConfigureRunnerModal from '../ConfigureRunnerModal';
 import { trackEvent } from '../../../utils/analytics';
 import ConfirmationPrompt from '../../common/ConfirmationPrompt';
 import { useTrackPage } from '../../../hooks/useTrackPage';
+import FusebitEditor from '../FusebitEditor';
+import useEditor from '../FusebitEditor/useEditor';
 
 const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationId }, ref) => {
   const { userData } = useAuthContext();

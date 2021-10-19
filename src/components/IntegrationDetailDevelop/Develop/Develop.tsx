@@ -3,8 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import {
   Button,
-  Modal,
-  Backdrop,
   ClickAwayListener,
   Grow,
   Paper,
@@ -26,7 +24,6 @@ import { useAccountIntegrationsGetOne } from '../../../hooks/api/v2/account/inte
 import { useAccountConnectorsGetAll } from '../../../hooks/api/v2/account/connector/useGetAll';
 import { Connector } from '../../../interfaces/connector';
 import { Integration, InnerConnector } from '../../../interfaces/integration';
-import EditGui from '../EditGui';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import ListComponent from '../ListComponent';
 import { Entity, Feed } from '../../../interfaces/feed';
@@ -44,8 +41,9 @@ import AddConnectorToIntegrationModal from '../AddConnectorToIntegrationModal';
 import AddBackendModal from '../AddBackendModal';
 import EditCliModal from '../EditCliModal';
 import ConnectorListModal from '../ConnectorListModal';
-import useEditor from '../EditGui/useEditor';
 import { useAuthContext } from '../../../hooks/useAuthContext';
+import EditGuiModal from '../EditGuiModal';
+import useEditor from '../FusebitEditor/useEditor';
 
 const { REACT_APP_ENABLE_ONLINE_EDITOR } = process.env;
 const isOnlineEditorEnabled = REACT_APP_ENABLE_ONLINE_EDITOR === 'true';
@@ -294,24 +292,13 @@ const Develop: React.FC = () => {
       {isMobile ? (
         <MobileDrawer open={editGuiOpen} onClose={() => setEditGuiOpen(false)} />
       ) : (
-        <Modal
-          aria-labelledby="transition-modal-title"
-          aria-describedby="transition-modal-description"
-          open={editGuiOpen}
-          disableEscapeKeyDown
+        <EditGuiModal
           onClose={() => {
             setEditGuiOpen(false);
           }}
-          closeAfterTransition
-          BackdropComponent={Backdrop}
-        >
-          <EditGui
-            onClose={() => {
-              setEditGuiOpen(false);
-            }}
-            integrationId={integrationData?.data.id || ''}
-          />
-        </Modal>
+          open={editGuiOpen}
+          integrationId={integrationData?.data.id || ''}
+        />
       )}
       <SC.Flex>
         <SC.FlexDown>
