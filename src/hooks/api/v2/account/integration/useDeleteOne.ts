@@ -3,11 +3,11 @@ import { Params } from '../../../../../interfaces/api';
 import { useAxios } from '../../../../useAxios';
 import { ACCOUNT_INTEGRATIONS_GET_ALL } from './useGetAll';
 import useOptimisticDelete from '../../../../useOptimisticDelete';
-import { useContext } from '../../../../useContext';
+import { useAuthContext } from '../../../../useAuthContext';
 
 export const useAccountIntegrationDeleteIntegration = <T>() => {
   const { axios } = useAxios();
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
   const optimisticDelete = useOptimisticDelete({
     queryKey: [
       ACCOUNT_INTEGRATIONS_GET_ALL,

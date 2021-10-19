@@ -1,8 +1,9 @@
 import React, { FC, ReactElement } from 'react';
-import AuthenticationDetail from '../components/AuthenticationDetail/Overview/AuthenticationDetail';
-import Layout from '../components/Layout';
-import Navbar from '../components/Navbar';
+import Layout from '../components/common/Layout';
+import Navbar from '../components/common/Navbar';
 import { useTrackPage } from '../hooks/useTrackPage';
+import Overview from '../components/AuthenticationDetailOverview/Overview';
+import TabComponent from '../components/common/TabComponent';
 
 const AuthenticationDetailPage: FC<{}> = (): ReactElement => {
   useTrackPage('Team User Details', 'Team');
@@ -10,7 +11,7 @@ const AuthenticationDetailPage: FC<{}> = (): ReactElement => {
   return (
     <Layout>
       <Navbar sectionName="Authentication" authentication authenticationLink />
-      <AuthenticationDetail />
+      <TabComponent tabNames={['Overview']} tabObjects={[<Overview key="overview" />]} />
     </Layout>
   );
 };

@@ -1,12 +1,12 @@
 import { useHistory } from 'react-router-dom';
-import BaseTable from '../../BaseTable/BaseTable';
+import BaseTable from '../../common/BaseTable/BaseTable';
 import { useEntityTable } from '../../../hooks/useEntityTable';
 import { usePagination } from '../../../hooks/usePagination';
 import { useModal } from '../../../hooks/useModal';
-import { BaseTableRow } from '../../BaseTable/types';
+import { BaseTableRow } from '../../common/BaseTable/types';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import { trackEvent } from '../../../utils/analytics';
-import { useContext } from '../../../hooks/useContext';
+import { useAuthContext } from '../../../hooks/useAuthContext';
 import { useAccountConnectorsGetAll } from '../../../hooks/api/v2/account/connector/useGetAll';
 import { Connector } from '../../../interfaces/connector';
 import DeleteConnectorModal from '../DeleteConnectorModal';
@@ -20,7 +20,7 @@ const ConnectorsTable = () => {
   const [deleteModalOpen, setDeleteModal, toggleDeleteModal] = useModal();
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
   const { data: connectors, isLoading } = useAccountConnectorsGetAll<{ items: Connector[] }>({
     enabled: userData.token,
     accountId: userData.accountId,
@@ -37,7 +37,7 @@ const ConnectorsTable = () => {
   const rows = (connectors?.data?.items || []).map((row) => ({
     id: row.id,
     name: row.id,
-    type: row.tags['fusebit.provider'],
+    type: row.tags['fusebit.service'],
     identities: <GetIdentities id={row.id} />,
   }));
 

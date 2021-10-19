@@ -1,7 +1,7 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import { Params } from '../../../../../../interfaces/api';
 import { ApiResponse, FusebitAxios, useAxios } from '../../../../../useAxios';
-import { useContext } from '../../../../../useContext';
+import { useAuthContext } from '../../../../../useAuthContext';
 
 export const getAllIdentities = <T>(axiosInstance: FusebitAxios, params: Params) => {
   return axiosInstance<T>(
@@ -18,7 +18,7 @@ export const useAccountConnectorIdentityGetAll = <T>(
   options?: UseQueryOptions<unknown, unknown, ApiResponse<T>>
 ) => {
   const { axios } = useAxios();
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
 
   const params = {
     id,

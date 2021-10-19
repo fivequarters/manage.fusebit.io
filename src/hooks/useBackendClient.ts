@@ -1,10 +1,10 @@
 import { useLoader } from './useLoader';
 import { useError } from './useError';
-import { useContext } from './useContext';
+import { useAuthContext } from './useAuthContext';
 import { getBackendClients, createBackendClient, removedBackendClient } from '../utils/backendClients';
 
 export const useBackendClient = () => {
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
   const { createLoader, removeLoader } = useLoader();
   const { createError } = useError();
 
