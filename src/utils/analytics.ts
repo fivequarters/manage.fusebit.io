@@ -52,7 +52,7 @@ const trackEventHandler: TrackEventHandler = (eventName, objectLocation, extraPr
 // trackEvent is memoized because React re-rendering process makes it get called multiple times for the same event
 export const trackEvent = memoize(trackEventHandler);
 
-export const trackAuthEvent = (user: User, fusebitProfile: FusebitProfile, isSignUpEvent: boolean) => {
+export const trackAuthEvent = (user: User, fusebitProfile: FusebitProfile, isSignUpEvent: boolean, cb = () => {}) => {
   const isSilentAuthInProgress = silentAuthInProgress();
   const currentSegmentUserId = analytics.user().id();
   const sameUser = fusebitProfile.userId === currentSegmentUserId;
@@ -77,5 +77,5 @@ export const trackAuthEvent = (user: User, fusebitProfile: FusebitProfile, isSig
   analytics.identify(fusebitProfile.userId, {
     ...user,
   } as Object);
-  trackEvent('Log In Execution', 'Authentication', extraSegmentEventProps);
+  trackEvent('Log In Execution', 'Authentication', extraSegmentEventProps, cb);
 };

@@ -81,21 +81,25 @@ const AuthCallbackPage: FC<{}> = (): ReactElement => {
         setUserData({ token, ...fusebitProfile, ...auth0Profile, ...company, ...normalizedData });
         setAuthStatus(AuthStatus.AUTHENTICATED);
 
-        const urlSearchParams = new URLSearchParams(window.location.search);
-        const requestedPath = urlSearchParams.get('requestedPath') || '/';
+        const navigatePostAuth = () => {
+          const urlSearchParams = new URLSearchParams(window.location.search);
+          const requestedPath = urlSearchParams.get('requestedPath') || '/';
+
+          setFirstTimeVisitor(true);
+          history.push(requestedPath);
+        };
 
         const isSegmentConfigured = process.env.REACT_APP_SEGMENT_ANALYTICS_TAG;
         if (isSegmentConfigured) {
           analytics.ready(() => {
             if (isSegmentTrackingEvents()) {
-              trackAuthEvent(auth0Profile, fusebitProfile, isSignUpEvent);
+              trackAuthEvent(auth0Profile, fusebitProfile, isSignUpEvent, navigatePostAuth);
+            } else {
+              navigatePostAuth();
             }
-            setFirstTimeVisitor(true);
-            history.push(requestedPath);
           });
         } else {
-          setFirstTimeVisitor(true);
-          history.push(requestedPath);
+          navigatePostAuth();
         }
       });
     } catch (err) {
