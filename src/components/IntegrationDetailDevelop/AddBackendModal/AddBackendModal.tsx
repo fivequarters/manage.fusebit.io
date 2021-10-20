@@ -8,10 +8,11 @@ interface Props {
   open: boolean;
   onClose: () => void;
   backendClient: any;
+  // eslint-disable-next-line react/no-unused-prop-types
   integrationData?: any;
 }
 
-const AddBackendModal = ({ open, onClose, backendClient, integrationData }: Props) => {
+const AddBackendModal = ({ open, onClose, backendClient }: Props) => {
   const [showWarning, setShowWarning] = useState(false);
   const [keyIsCopied, setKeyIsCopied] = useState(false);
   const { removeBackendClientListener } = useBackendClient();
@@ -61,7 +62,6 @@ const AddBackendModal = ({ open, onClose, backendClient, integrationData }: Prop
           setKeyIsCopied={setKeyIsCopied}
           open={open}
           onClose={handleCloseWithWarning}
-          integration={integrationData?.data}
         />
       </Fade>
     </Modal>

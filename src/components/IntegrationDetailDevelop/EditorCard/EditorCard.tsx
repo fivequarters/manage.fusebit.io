@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardActions, Box, Icon } from '@material-ui/core';
+import { Card, CardContent, CardActions, Box } from '@material-ui/core';
 import styled from 'styled-components';
 import fusebitLogo from '../../../assets/fusebit-logo.svg';
 import Button from '../../common/Button/Button';

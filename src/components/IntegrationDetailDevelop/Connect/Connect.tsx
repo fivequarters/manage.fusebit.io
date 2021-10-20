@@ -3,7 +3,6 @@ import { Button, Input } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import * as SC from './styles';
 import * as CSC from '../../globalStyle';
-import { Props } from '../../../interfaces/connect';
 import CopyLine from '../../common/CopyLine';
 import { useCopy } from '../../../hooks/useCopy';
 import ConfirmationPrompt from '../../common/ConfirmationPrompt';
@@ -12,8 +11,26 @@ import { patchBackendClients } from '../../../utils/backendClients';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 
 import { LinkSampleApp } from './LinkSampleApp';
+import { useAccountIntegrationsGetOne } from '../../../hooks/api/v2/account/integration/useGetOne';
+import { Integration } from '../../../interfaces/integration';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
+
+interface Props {
+  onClose: Function;
+  onDelete: Function;
+  onChange?: () => void;
+  open: boolean;
+  id: string;
+  name: string;
+  token: string;
+  keyIsCopied?: boolean;
+  setKeyIsCopied?: Function;
+  showWarning?: boolean;
+  setShowWarning?: Function;
+  disableCopy?: boolean;
+  integration?: Integration;
+}
 
 const Connect = React.forwardRef<HTMLDivElement, Props>(
   (
@@ -30,7 +47,6 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
       setShowWarning,
       showWarning,
       disableCopy,
-      integration,
     },
     ref
   ) => {
@@ -45,6 +61,13 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
     const [saving, setSaving] = useState(false);
 
     const integrationBaseUrl = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v2${getRedirectLink(`/integration/${integrationId}`)}`;
+
+    const { data: integrationData } = useAccountIntegrationsGetOne({
+      enabled: userData.token,
+      id: integrationId,
+      accountId: userData.accountId,
+      subscriptionId: userData.subscriptionId,
+    });
 
     const handleClose = () => {
       if (disableCopy) {
@@ -78,11 +101,11 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
       slackConnector: 'slack',
     };
     const componentMap =
-      integration?.data?.components
+      integrationData?.data.data?.components
         ?.map((component) => supportedTypeMap[component.name])
         .filter((type) => !!type)
         .reduce<Record<string, string>>((acc, cur) => {
-          acc[cur] = integration?.id;
+          acc[cur] = integrationData?.data.id;
           return acc;
         }, {}) || {};
     const isSampleAppEnabled = !!Object.keys(componentMap).length;

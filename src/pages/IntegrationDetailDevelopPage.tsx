@@ -1,6 +1,6 @@
 import { FC, ReactElement } from 'react';
 import { useParams } from 'react-router-dom';
-import { Grid, Box } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import styled from 'styled-components';
 import Layout from '../components/common/Layout';
 import { useAccountIntegrationsGetOne } from '../hooks/api/v2/account/integration/useGetOne';
