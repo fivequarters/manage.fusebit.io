@@ -59,7 +59,7 @@ const EditorCard: React.FC<Props> = ({ name, className }) => {
     <StyledCard className={className}>
       <StyledContent>
         <Box display="flex" mb="32px" justifyContent="center">
-          <img src={fusebitLogo} alt="fusebit" />
+          <img src={fusebitLogo} alt="fusebit" width={109} height={28} />
         </Box>
         {name}
       </StyledContent>

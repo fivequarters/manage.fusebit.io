@@ -3,7 +3,7 @@ import Button from '../../common/Button/Button';
 import BackendItem from '../BackendItem';
 import BaseCard from '../BaseCard';
 
-const backends = ['Stage', 'Stage 2'];
+const backends = ['Stage', 'Stage 2', 'Stage 2', 'Stage 2', 'Stage 2'];
 
 interface Props {
   className?: string;
