@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { materialCells } from '@jsonforms/material-renderers';
+
 import { ValidationMode } from '@jsonforms/core';
 import { Button, TextField } from '@material-ui/core';
 import debounce from 'lodash.debounce';
@@ -248,7 +248,6 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
                       schema={activeTemplate.configuration.schema}
                       uischema={activeTemplate.configuration.uischema}
                       data={data}
-                      cells={materialCells}
                       onChange={handleJsonFormsChange}
                       validationMode={validationMode}
                     />

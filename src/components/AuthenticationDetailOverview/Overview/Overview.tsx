@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Button, Modal, Backdrop } from '@material-ui/core';
 import { ValidationMode } from '@jsonforms/core';
-import { materialCells } from '@jsonforms/material-renderers';
 
 import { useHistory, useParams } from 'react-router-dom';
 import dots from '../../../assets/dots.svg';
@@ -241,7 +240,6 @@ const Overview: React.FC = () => {
                 schema={schema}
                 uischema={uischema}
                 data={data}
-                cells={materialCells}
                 onChange={({ errors: _errors, data: _data }) => {
                   if (_errors) {
                     setErrors(_errors);

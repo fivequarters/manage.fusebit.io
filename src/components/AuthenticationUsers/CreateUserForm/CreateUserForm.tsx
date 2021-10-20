@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
 import { ValidationMode } from '@jsonforms/core';
-import { materialCells } from '@jsonforms/material-renderers';
+
 import * as SC from './styles';
 import { Props } from '../../../interfaces/newUser';
 import { NewUserData } from '../../../interfaces/newUserData';
@@ -102,7 +102,6 @@ const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ open, onClose,
               schema={schema}
               uischema={uischema}
               data={data}
-              cells={materialCells}
               onChange={({ errors: _errors, data: _data }) => {
                 if (_errors) {
                   setErrors(_errors);

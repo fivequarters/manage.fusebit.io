@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { Button } from '@material-ui/core';
-import { materialCells } from '@jsonforms/material-renderers';
+
 import { ValidationMode } from '@jsonforms/core';
 import * as SC from './styles';
 import * as CSC from '../../globalStyle';
@@ -103,7 +103,6 @@ const ConfigureForm: React.FC = () => {
               schema={config?.data.schema}
               uischema={config?.data.uischema}
               data={jsonFormsInputs || config?.data.data}
-              cells={materialCells}
               onChange={({ errors: _errors, data: newData }) => {
                 // Clear the clientId and clientSecret when going from non-prod to production.
                 if (
