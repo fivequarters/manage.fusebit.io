@@ -1,4 +1,4 @@
-import { Box, BoxProps, IconButton } from '@material-ui/core';
+import { Box, Icon, IconButton, Typography } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
 import CloseIcon from '@material-ui/icons/Close';
@@ -9,11 +9,14 @@ const StyledContainer = styled(Box)`
   }
 `;
 
-interface Props extends BoxProps {
+interface Props {
   className?: string;
+  icon?: React.ReactElement;
+  onDelete?: () => void;
+  name?: string;
 }
 
-const ListItem: React.FC<Props> = ({ children, className, ...props }) => {
+const ListItem: React.FC<Props> = ({ name, icon, className, onDelete, ...props }) => {
   return (
     <StyledContainer
       display="flex"
@@ -29,12 +32,27 @@ const ListItem: React.FC<Props> = ({ children, className, ...props }) => {
       border="none"
       {...props}
     >
-      {children}
-      <Box ml="auto">
-        <IconButton size="small">
-          <CloseIcon fontSize="small" htmlColor="black" />
-        </IconButton>
-      </Box>
+      {icon && (
+        <Box mr="17px">
+          <Icon>{icon}</Icon>
+        </Box>
+      )}
+      <Typography
+        variant="body2"
+        component="p"
+        style={{
+          fontWeight: 500,
+        }}
+      >
+        {name}
+      </Typography>
+      {onDelete && (
+        <Box ml="auto">
+          <IconButton size="small" onClick={onDelete}>
+            <CloseIcon fontSize="small" htmlColor="black" />
+          </IconButton>
+        </Box>
+      )}
     </StyledContainer>
   );
 };

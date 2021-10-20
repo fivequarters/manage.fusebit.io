@@ -7,8 +7,8 @@ interface Props {
   name: string;
 }
 
-const BackendItem: React.FC<Props> = ({ className, name }) => {
+const ConnectorItem: React.FC<Props> = ({ className, name }) => {
   return <ListItem className={className} icon={<DnsOutlinedIcon />} name={name} onDelete={() => {}} />;
 };
 
-export default BackendItem;
+export default ConnectorItem;
