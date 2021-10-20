@@ -75,6 +75,7 @@ export const trackAuthEvent = (user: User, fusebitProfile: FusebitProfile, isSig
   }
 
   analytics.identify(fusebitProfile.userId, {
+    ...fusebitProfile,
     ...user,
   } as Object);
   trackEvent('Log In Execution', 'Authentication', extraSegmentEventProps, cb);
