@@ -5,9 +5,14 @@ import BaseCard from '../BaseCard';
 
 const connectors = ['Slack 1', 'Slack 2'];
 
-const ConnectorsCard = () => {
+interface Props {
+  className?: string;
+}
+
+const ConnectorsCard: React.FC<Props> = ({ className }) => {
   return (
     <BaseCard
+      className={className}
       title="Your Application"
       actions={
         <>

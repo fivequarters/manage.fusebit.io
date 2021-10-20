@@ -36,11 +36,12 @@ const StyledCardActions = styled(CardActions)`
 interface Props {
   title: string;
   actions: React.ReactNode;
+  className?: string;
 }
 
-const BaseCard: React.FC<Props> = ({ title, children, actions }) => {
+const BaseCard: React.FC<Props> = ({ title, children, className, actions }) => {
   return (
-    <StyledCard>
+    <StyledCard className={className}>
       <StyledCardHeader title={title} />
       <StyledContent>{children}</StyledContent>
       <StyledCardActions>{actions}</StyledCardActions>

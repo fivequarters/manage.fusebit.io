@@ -5,9 +5,14 @@ import BaseCard from '../BaseCard';
 
 const backends = ['Stage', 'Stage 2'];
 
-const YourAplication = () => {
+interface Props {
+  className?: string;
+}
+
+const YourAplication: React.FC<Props> = ({ className }) => {
   return (
     <BaseCard
+      className={className}
       title="Your Application"
       actions={
         <Button
