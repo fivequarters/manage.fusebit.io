@@ -1,6 +1,6 @@
 import isEqual from 'lodash.isequal';
 import { silentAuthInProgress } from '../hooks/useAuthContext';
-import { Auth0Token } from '../interfaces/auth0Token';
+import { FusebitProfile } from '../interfaces/auth0Token';
 import { User } from '../interfaces/user';
 import { PRODUCTION_HOST } from './constants';
 
@@ -52,18 +52,16 @@ const trackEventHandler: TrackEventHandler = (eventName, objectLocation, extraPr
 // trackEvent is memoized because React re-rendering process makes it get called multiple times for the same event
 export const trackEvent = memoize(trackEventHandler);
 
-export const trackAuthEvent = (auth0DecodedToken: Auth0Token) => {
+export const trackAuthEvent = (user: User, fusebitProfile: FusebitProfile, isSignUpEvent: boolean) => {
   const isSilentAuthInProgress = silentAuthInProgress();
-  const fusebitProfile = auth0DecodedToken['https://fusebit.io/profile'];
-  const userSignUpEvent = auth0DecodedToken['https://fusebit.io/new-user'] === true;
   const currentSegmentUserId = analytics.user().id();
   const sameUser = fusebitProfile.userId === currentSegmentUserId;
 
-  const extraSegmentEventProps: { userType: string; authType?: string } = userSignUpEvent
+  const extraSegmentEventProps: { userType: string; authType?: string } = isSignUpEvent
     ? { userType: 'new user' }
     : { userType: 'existing user' };
 
-  if (userSignUpEvent) {
+  if (isSignUpEvent) {
     extraSegmentEventProps.authType = 'sign up';
   } else if (sameUser && isSilentAuthInProgress) {
     extraSegmentEventProps.authType = 'silent';
@@ -77,7 +75,7 @@ export const trackAuthEvent = (auth0DecodedToken: Auth0Token) => {
   }
 
   analytics.identify(fusebitProfile.userId, {
-    ...auth0DecodedToken,
+    ...user,
   } as Object);
   trackEvent('Log In Execution', 'Authentication', extraSegmentEventProps);
 };
