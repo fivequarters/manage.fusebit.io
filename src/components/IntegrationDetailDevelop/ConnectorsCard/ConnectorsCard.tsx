@@ -51,7 +51,7 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
       />
       <BaseCard
         className={className}
-        title="Your Application"
+        title="Connectors"
         isLoading={isLoading}
         actions={
           <>
@@ -80,7 +80,7 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
       >
         <Box>
           {(usedConnectors || []).map((connector) => (
-            <ConnectorItem key={connector.id} connector={connector} />
+            <ConnectorItem key={connector.id} connector={connector} integrationData={integrationData} />
           ))}
         </Box>
       </BaseCard>

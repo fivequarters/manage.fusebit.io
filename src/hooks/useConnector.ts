@@ -1,3 +1,4 @@
+import { useQueryClient } from 'react-query';
 import { Entity, Feed } from '../interfaces/feed';
 import { InnerConnector, Integration } from '../interfaces/integration';
 import { Operation } from '../interfaces/operation';
@@ -7,12 +8,15 @@ import { ApiResponse } from './useAxios';
 import { useAuthContext } from './useAuthContext';
 import { useError } from './useError';
 import { useLoader } from './useLoader';
+import { Connector } from '../interfaces/connector';
+import { ACCOUNT_INTEGRATIONS_GET_ONE } from './api/v2/account/integration/useGetOne';
 
 const useConnector = () => {
   const updateIntegration = useAccountIntegrationUpdateIntegration<Operation>();
   const { userData } = useAuthContext();
   const { waitForEntityStateChange } = useLoader();
   const { createError } = useError();
+  const queryClient = useQueryClient();
 
   const runAndWait = async (data: Integration, integrationId = '') => {
     await updateIntegration.mutateAsync({
@@ -69,7 +73,7 @@ const useConnector = () => {
   };
 
   const removeConnectorFromIntegration = async (
-    connector: Entity,
+    connector: Connector | Entity,
     integrationData: ApiResponse<Integration> | undefined
   ) => {
     try {
@@ -86,6 +90,7 @@ const useConnector = () => {
       newData.data.components = filteredComponents;
 
       await runAndWait(newData, integrationData?.data.id);
+      queryClient.invalidateQueries(ACCOUNT_INTEGRATIONS_GET_ONE, { active: true });
     } catch (e) {
       createError(e);
     }
