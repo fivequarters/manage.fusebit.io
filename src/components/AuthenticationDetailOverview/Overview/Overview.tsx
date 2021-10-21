@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import { Button, Modal, Backdrop } from '@material-ui/core';
-import { JsonForms } from '@jsonforms/react';
 import { ValidationMode } from '@jsonforms/core';
-import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
 
 import { useHistory, useParams } from 'react-router-dom';
 import dots from '../../../assets/dots.svg';
@@ -22,6 +20,7 @@ import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import { useCopy } from '../../../hooks/useCopy';
 import { startCase } from '../../../utils/utils';
 import ConfirmationPrompt from '../../common/ConfirmationPrompt';
+import BaseJsonForm from '../../common/BaseJsonForm';
 
 const schema = {
   type: 'object',
@@ -240,12 +239,10 @@ const Overview: React.FC = () => {
             </>
           ) : (
             <SC.FormWrapper>
-              <JsonForms
+              <BaseJsonForm
                 schema={schema}
                 uischema={uischema}
                 data={data}
-                renderers={materialRenderers}
-                cells={materialCells}
                 onChange={({ errors: _errors, data: _data }) => {
                   if (_errors) {
                     setErrors(_errors);
