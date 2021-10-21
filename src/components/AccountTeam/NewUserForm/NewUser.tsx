@@ -1,14 +1,14 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
-import { JsonForms } from '@jsonforms/react';
 import { ValidationMode } from '@jsonforms/core';
-import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
+
 import * as SC from './styles';
 import { Props } from '../../../interfaces/newUser';
 import { NewUserData } from '../../../interfaces/newUserData';
 import CopyLine from '../../common/CopyLine';
 import * as CSC from '../../globalStyle';
 import { startCase } from '../../../utils/utils';
+import BaseJsonForm from '../../common/BaseJsonForm';
 
 const schema = {
   type: 'object',
@@ -98,12 +98,10 @@ const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ open, onClose,
         <>
           <CSC.ModalTitle>New User</CSC.ModalTitle>
           <SC.FormWrapper>
-            <JsonForms
+            <BaseJsonForm
               schema={schema}
               uischema={uischema}
               data={data}
-              renderers={materialRenderers}
-              cells={materialCells}
               onChange={({ errors: _errors, data: _data }) => {
                 if (_errors) {
                   setErrors(_errors);
