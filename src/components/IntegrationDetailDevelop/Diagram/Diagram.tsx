@@ -4,41 +4,41 @@ import ConnectorsCard from '../ConnectorsCard';
 import EditorCard from '../EditorCard';
 import YourAplication from '../YourAplicationCard';
 
-const centerMixin = css<{ $isMobile: boolean }>`
+const centerMixin = css<{ $matchesCardCollapsing: boolean }>`
   margin: 0 auto;
 `;
 
-const StyledYourApplicationCard = styled(YourAplication)<{ $isMobile: boolean }>`
-  ${(props) => props.$isMobile && centerMixin};
+const StyledYourApplicationCard = styled(YourAplication)<{ $matchesCardCollapsing: boolean }>`
+  ${(props) => props.$matchesCardCollapsing && centerMixin};
 `;
 
-const StyledEditorCard = styled(EditorCard)<{ $isMobile: boolean }>`
+const StyledEditorCard = styled(EditorCard)<{ $matchesCardCollapsing: boolean }>`
   margin-top: 49px;
   ${(props) =>
-    props.$isMobile &&
+    props.$matchesCardCollapsing &&
     css`
       margin: 68px auto 68px;
     `};
 `;
 
-const StyledConnectorsCard = styled(ConnectorsCard)<{ $isMobile: boolean }>`
+const StyledConnectorsCard = styled(ConnectorsCard)<{ $matchesCardCollapsing: boolean }>`
   margin-left: auto;
-  ${(props) => props.$isMobile && centerMixin};
+  ${(props) => props.$matchesCardCollapsing && centerMixin};
 `;
 
 const Diagram = () => {
-  const isMobile = useMediaQuery('(max-width:1199px)');
+  const matchesCardCollapsing = useMediaQuery('(max-width:1199px)');
 
   return (
     <Grid key="asd" container>
-      <Grid item xs={isMobile ? 12 : 4}>
-        <StyledYourApplicationCard $isMobile={isMobile} />
+      <Grid item xs={matchesCardCollapsing ? 12 : 4}>
+        <StyledYourApplicationCard $matchesCardCollapsing={matchesCardCollapsing} />
       </Grid>
-      <Grid item xs={isMobile ? 12 : 4}>
-        <StyledEditorCard name="integration" $isMobile={isMobile} />
+      <Grid item xs={matchesCardCollapsing ? 12 : 4}>
+        <StyledEditorCard name="integration" $matchesCardCollapsing={matchesCardCollapsing} />
       </Grid>
-      <Grid item xs={isMobile ? 12 : 4}>
-        <StyledConnectorsCard $isMobile={isMobile} />
+      <Grid item xs={matchesCardCollapsing ? 12 : 4}>
+        <StyledConnectorsCard $matchesCardCollapsing={matchesCardCollapsing} />
       </Grid>
     </Grid>
   );

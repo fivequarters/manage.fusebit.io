@@ -24,7 +24,7 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
   const queryClient = useQueryClient();
   const [connectorModalOpen, , toggleConnectorModalOpen] = useModal();
   const [linkExistingModalOpen, , toggleLinkExistingModalOpen] = useModal();
-  const isMobile = useMediaQuery('(max-width:1199px)');
+  const matchesCardsOverlapping = useMediaQuery('(max-width:1199px)');
 
   const { data: connectors, isLoading } = useAccountConnectorsGetAll({
     enabled: userData.token,
@@ -61,7 +61,7 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
           <>
             <Button
               mode="add"
-              size={isMobile ? 'small' : 'large'}
+              size={matchesCardsOverlapping ? 'small' : 'large'}
               style={
                 {
                   // width: 160,
@@ -73,7 +73,7 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
               Add new
             </Button>
             <Button
-              size={isMobile ? 'small' : 'large'}
+              size={matchesCardsOverlapping ? 'small' : 'large'}
               mode="add"
               style={
                 {

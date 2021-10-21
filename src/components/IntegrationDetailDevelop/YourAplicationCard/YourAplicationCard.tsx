@@ -21,7 +21,7 @@ const YourAplication: React.FC<Props> = ({ className }) => {
   const { data: backends = [], isLoading } = useBackendGetAll();
   const { mutateAsync } = useBackendCreateOne();
   const { createLoader, removeLoader } = useLoader();
-  const isMobile = useMediaQuery('(max-width:1199px)');
+  const matchesCardsOverlapping = useMediaQuery('(max-width:1199px)');
 
   const handleConnect = async () => {
     trackEvent('Develop Connect Button Clicked', 'Integration');
@@ -42,7 +42,7 @@ const YourAplication: React.FC<Props> = ({ className }) => {
         actions={
           <Button
             mode="add"
-            size={isMobile ? 'small' : 'large'}
+            size={matchesCardsOverlapping ? 'small' : 'large'}
             style={{
               width: 200,
             }}
