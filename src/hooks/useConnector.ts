@@ -1,4 +1,5 @@
 import { useQueryClient } from 'react-query';
+import { LiveTvSharp } from '@material-ui/icons';
 import { Entity, Feed } from '../interfaces/feed';
 import { InnerConnector, Integration } from '../interfaces/integration';
 import { Operation } from '../interfaces/operation';
@@ -10,6 +11,7 @@ import { useError } from './useError';
 import { useLoader } from './useLoader';
 import { Connector } from '../interfaces/connector';
 import { ACCOUNT_INTEGRATIONS_GET_ONE } from './api/v2/account/integration/useGetOne';
+import { FinalConnector } from '../interfaces/integrationDetailDevelop';
 
 const useConnector = () => {
   const updateIntegration = useAccountIntegrationUpdateIntegration<Operation>();
@@ -34,8 +36,7 @@ const useConnector = () => {
     integrationData: ApiResponse<Integration> | undefined
   ) => {
     try {
-      const data = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
-      const newData = data;
+      const newData = JSON.parse(JSON.stringify(integrationData?.data)) as Integration;
 
       const feedtype = connector.tags['fusebit.feedType'];
       const item: Feed = await findMatchingConnectorFeed(connector);
@@ -45,6 +46,13 @@ const useConnector = () => {
         item.configuration.components?.forEach((component) => {
           component.name = connector.id;
           component.entityId = connector.id;
+
+          const existingComponent = newData.data.components?.findIndex((c) => c.entityId === component.entityId);
+
+          if (existingComponent !== -1) {
+            newData.data.components?.splice(existingComponent, 1);
+          }
+
           newData.data.components.push(component);
 
           const newPackageJson = linkPackageJson(
@@ -74,7 +82,7 @@ const useConnector = () => {
   };
 
   const removeConnectorFromIntegration = async (
-    connector: Connector | Entity,
+    connector: Connector | Entity | FinalConnector,
     integrationData: ApiResponse<Integration> | undefined
   ) => {
     try {

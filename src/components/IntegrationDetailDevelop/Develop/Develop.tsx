@@ -173,6 +173,7 @@ const Develop: React.FC = () => {
       return returnItem;
     });
 
+    // @ts-ignore
     const finalConnectorsList: FinalConnector[] | undefined = filteredConnectors;
 
     if (
@@ -259,6 +260,7 @@ const Develop: React.FC = () => {
                   <ListComponent
                     id={client.id}
                     onChange={getBackendClients}
+                    // @ts-ignore
                     connector={{ ...client, isApplication: true }}
                     onConnectorDelete={(connector: Entity) => handleListComponentDelete(connector)}
                     integration={integrationData?.data}
@@ -411,6 +413,7 @@ const Develop: React.FC = () => {
               )}
             </SC.CardButtonWrapper>
             {!areCardsCollapsing &&
+              // @ts-ignore
               filterConnectors().map((connector: FinalConnector, index: number) => {
                 if (index < 5) {
                   return (
@@ -461,6 +464,7 @@ const Develop: React.FC = () => {
                   <CSC.Spinner />
                 </CSC.LoaderContainer>
               ) : (
+                // @ts-ignore
                 filterConnectors().map((connector: FinalConnector, index: number) => {
                   if (index < 5) {
                     return (

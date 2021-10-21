@@ -4,6 +4,7 @@ import { useAccountConnectorsGetAll } from '../../../hooks/api/v2/account/connec
 import { useAuthContext } from '../../../hooks/useAuthContext';
 import { useGetIntegrationFromCache } from '../../../hooks/useGetIntegrationFromCache';
 import { useModal } from '../../../hooks/useModal';
+import { FinalConnector } from '../../../interfaces/integrationDetailDevelop';
 import Button from '../../common/Button/Button';
 import LineConnector from '../../common/LineConnector';
 import AddConnectorToIntegrationModal from '../AddConnectorToIntegrationModal';
@@ -33,11 +34,19 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
 
   const integrationData = useGetIntegrationFromCache();
 
-  const usedConnectors = useMemo(
+  const installedConnectors = useMemo(
     () =>
-      (connectors?.data.items || []).filter((item) =>
-        integrationData?.data.data.components.some((connector) => connector.entityId === item.id)
-      ),
+      ((integrationData?.data.data.components || []) as FinalConnector[]).map((integrationConnector) => {
+        const existingConnector = connectors?.data.items.find((c) => c.id === integrationConnector.entityId);
+
+        return (
+          existingConnector || {
+            ...integrationConnector,
+            missing: true,
+            id: integrationConnector.entityId,
+          }
+        );
+      }),
     [connectors, integrationData]
   );
 
@@ -65,7 +74,6 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
                 }
               }
               onClick={toggleConnectorModalOpen}
-              // disabled={usedConnectors.length >= 5}
             >
               Add new
             </Button>
@@ -78,7 +86,7 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
                 }
               }
               onClick={toggleLinkExistingModalOpen}
-              disabled={usedConnectors.length >= 5}
+              disabled={installedConnectors.length >= 5}
             >
               Link existing
             </Button>
@@ -86,8 +94,12 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
         }
       >
         <Box>
-          {(usedConnectors || []).map((connector) => (
-            <ConnectorItem key={connector.id} connector={connector} integrationData={integrationData} />
+          {(installedConnectors || []).map((connector) => (
+            <ConnectorItem
+              key={connector.id}
+              connector={connector as FinalConnector}
+              integrationData={integrationData}
+            />
           ))}
         </Box>
       </BaseCard>

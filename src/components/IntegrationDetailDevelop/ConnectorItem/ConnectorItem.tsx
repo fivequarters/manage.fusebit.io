@@ -4,7 +4,6 @@ import { CircularProgress, useMediaQuery } from '@material-ui/core';
 import ListItem from '../ListItem';
 import { useModal } from '../../../hooks/useModal';
 import ConfirmationPrompt from '../../common/ConfirmationPrompt';
-import { Connector } from '../../../interfaces/connector';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import { useGetMatchingConnectorFeed } from '../../../hooks/api/useGetMatchingConnectorFeed';
 import { useEntityApi } from '../../../hooks/useEntityApi';
@@ -14,10 +13,12 @@ import { useLoader } from '../../../hooks/useLoader';
 import LineConnector from '../../common/LineConnector';
 import { INTEGRATION_CARD_ID } from '../IntegrationCard/IntegrationCard';
 import { CARD_OVERLAPPING_MEDIA_QUERY } from '../constants';
+import { FinalConnector } from '../../../interfaces/integrationDetailDevelop';
+import notFoundIcon from '../../../assets/warning-red.svg';
 
 interface Props {
   className?: string;
-  connector: Connector;
+  connector: FinalConnector;
   integrationData?: ApiResponse<Integration>;
 }
 
@@ -59,10 +60,15 @@ const ConnectorItem: React.FC<Props> = ({ className, connector, integrationData 
           isLoading ? (
             <CircularProgress size={20} />
           ) : (
-            <img src={connectorFeed?.smallIcon} alt="connector" height={20} width={20} />
+            <img
+              src={connector.missing ? notFoundIcon : connectorFeed?.smallIcon}
+              alt="connector"
+              height={20}
+              width={20}
+            />
           )
         }
-        name={connector.id}
+        name={connector.missing ? `${connector.id} is not found` : connector.id}
         onDelete={toggleDeleteConnectorModal}
       />
       {!matchesCardOverlapping && (
