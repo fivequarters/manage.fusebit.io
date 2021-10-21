@@ -1,23 +1,15 @@
-import { useEffect } from 'react';
 import { createMuiTheme, responsiveFontSizes, ThemeProvider } from '@material-ui/core/styles';
-import { Switch, Route } from 'react-router-dom';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import CookieConsent from 'react-cookie-consent';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { lightTheme } from './theme/appTheme';
-import { routes } from './config';
 import { APP_TITLE } from './utils/constants';
-import { RouteItem } from './interfaces/router';
-import { ContextProvider } from './hooks/useContext';
-import { validateToken } from './utils/utils';
+import { ContextProvider } from './hooks/useAuthContext';
 import { useIntercom } from './hooks/useIntercom';
+import DashboardRoutes from './components/DashboardRoutes';
 
 function App() {
   useIntercom();
-
-  useEffect(() => {
-    validateToken();
-  }, []);
 
   return (
     <>
@@ -46,11 +38,7 @@ function App() {
                 This website uses cookies to enhance the user experience.
               </p>
             </CookieConsent>
-            <Switch>
-              {routes.map((route: RouteItem) => (
-                <Route key={`${route.key}`} path={`${route.path}`} component={route.component} exact />
-              ))}
-            </Switch>
+            <DashboardRoutes />
           </ThemeProvider>
         </ContextProvider>
       </HelmetProvider>

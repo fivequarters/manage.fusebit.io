@@ -1,7 +1,7 @@
 import { FC, ReactElement } from 'react';
-import Navbar from '../components/Navbar';
+import Navbar from '../components/common/Navbar';
 import { useTrackPage } from '../hooks/useTrackPage';
-import Layout from '../components/Layout';
+import Layout from '../components/common/Layout';
 import AccountLayout from '../components/common/AccountLayout';
 import UsersTable from '../components/AccountTeam/UsersTable';
 

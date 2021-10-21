@@ -1,6 +1,6 @@
 import React from 'react';
 import Mustache from 'mustache';
-import { useContext } from './useContext';
+import { useAuthContext } from './useAuthContext';
 import { Data } from '../interfaces/feedPicker';
 import { Feed, ParsedFeed } from '../interfaces/feed';
 
@@ -27,7 +27,7 @@ const checkIfEntitiesAreValid = (parsedFeed: Feed) => {
 };
 
 export const useReplaceMustache = () => {
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
 
   const replaceMustache = React.useCallback(
     async (data: Data, feedMaster: Feed): Promise<ParsedFeed> => {

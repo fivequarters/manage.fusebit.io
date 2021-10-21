@@ -1,17 +1,17 @@
 import { useHistory } from 'react-router-dom';
-import DeleteUserModal from '../DeleteUserModal';
-import NameColumn from './NameColumn';
-import NewUserModal from '../NewUserModal';
-import BaseTable from '../../BaseTable';
+import BaseTable from '../../common/BaseTable/BaseTable';
+import { useEntityTable } from '../../../hooks/useEntityTable';
 import { usePagination } from '../../../hooks/usePagination';
 import { useModal } from '../../../hooks/useModal';
-import { useContext } from '../../../hooks/useContext';
-import { useAccountUserGetAll } from '../../../hooks/api/v1/account/user/useGetAll';
-import { useEntityTable } from '../../../hooks/useEntityTable';
-import { Account } from '../../../interfaces/account';
-import { BaseTableRow } from '../../BaseTable/types';
-import { trackEvent } from '../../../utils/analytics';
+import { BaseTableRow } from '../../common/BaseTable/types';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
+import { trackEvent } from '../../../utils/analytics';
+import { useAuthContext } from '../../../hooks/useAuthContext';
+import { Account } from '../../../interfaces/account';
+import { useAccountUserGetAll } from '../../../hooks/api/v1/account/user/useGetAll';
+import DeleteUserModal from '../DeleteUserModal';
+import NameColumn from './NameColumn';
+import CreateUserModal from '../NewUserModal';
 
 const UsersTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -19,7 +19,7 @@ const UsersTable = () => {
   const [deleteModalOpen, setDeleteModal, toggleDeleteModal] = useModal();
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
 
   const { data: users, isLoading } = useAccountUserGetAll<{ items: Account[] }>({
     enabled: userData.token,
@@ -32,7 +32,7 @@ const UsersTable = () => {
     name: <NameColumn account={row} />,
     email: row.primaryEmail,
     userId: row.id,
-    hideCheckbox: row.id === userData.id,
+    hideCheckbox: row.id === userData.userId,
   }));
 
   const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
@@ -51,7 +51,7 @@ const UsersTable = () => {
 
   return (
     <>
-      <NewUserModal onClose={toggleNewModal} open={newModalOpen} />
+      <CreateUserModal onClose={toggleNewModal} open={newModalOpen} />
       <DeleteUserModal
         onConfirm={() => handleRowDelete('Account')}
         setOpen={setDeleteModal}

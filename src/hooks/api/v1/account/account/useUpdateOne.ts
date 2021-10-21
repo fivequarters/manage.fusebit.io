@@ -1,12 +1,11 @@
 import { useMutation } from 'react-query';
 import { Params } from '../../../../../interfaces/api';
-import { LS_KEY } from '../../../../../utils/utils';
+import { useAuthContext } from '../../../../useAuthContext';
 import { useAxios } from '../../../../useAxios';
-import { useContext } from '../../../../useContext';
 
 export const useAccountUpdateOne = <T>() => {
   const { axios } = useAxios();
-  const { userData, setUserData } = useContext();
+  const { userData, setUserData } = useAuthContext();
 
   return useMutation(
     (params: Params) => {
@@ -20,11 +19,9 @@ export const useAccountUpdateOne = <T>() => {
           company: displayName,
         };
 
-        localStorage.setItem(LS_KEY, JSON.stringify(newUserData));
         setUserData(newUserData);
 
         return () => {
-          localStorage.setItem(LS_KEY, JSON.stringify(userData));
           setUserData(userData);
         };
       },

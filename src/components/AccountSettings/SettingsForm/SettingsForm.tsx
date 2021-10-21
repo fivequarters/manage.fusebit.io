@@ -5,8 +5,8 @@ import { materialRenderers, materialCells } from '@jsonforms/material-renderers'
 import { ValidationMode } from '@jsonforms/core';
 import { useParams } from 'react-router-dom';
 import * as CSC from '../../globalStyle';
-import { useContext } from '../../../hooks/useContext';
 import { useAccountUpdateOne } from '../../../hooks/api/v1/account/account/useUpdateOne';
+import { useAuthContext } from '../../../hooks/useAuthContext';
 
 const schema = {
   type: 'object',
@@ -35,7 +35,7 @@ const uischema = {
 
 const SettingsForm: React.FC = () => {
   const [validationMode, setValidationMode] = useState<ValidationMode>('ValidateAndHide');
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
   const [editMode, setEditMode] = useState(false);
   const [errors, setErrors] = useState<object[]>([]);
   const [formValues, setFormValues] = useState({ displayName: userData.company });

@@ -79,6 +79,42 @@ export const InfoFieldWrapper = styled.div`
   }
 `;
 
+export const withError = css<{ $hasError?: boolean }>`
+  margin-bottom: 25px;
+
+  ${(props) =>
+    props.$hasError &&
+    `
+    margin-bottom: 0px;
+  `}
+`;
+
+export const inputBlueMixin = css<{ hasError: boolean }>`
+  padding: 8px 16px;
+  background-color: var(--secondary-color);
+  width: 100%;
+  border: none;
+  resize: none;
+  border-radius: 4px;
+  outline: rgba(255, 255, 255, 0);
+  margin: 0;
+  min-height: 50px !important;
+
+  & > div > input {
+    font-family: courier;
+    font-size: 16px;
+    line-height: 18.5px;
+    color: var(--black);
+  }
+  & > ::after {
+    display: none;
+  }
+
+  & > ::before {
+    display: none;
+  }
+`;
+
 export const Spinner = styled.div<{ margin?: string }>`
   height: 20px;
   width: 20px;

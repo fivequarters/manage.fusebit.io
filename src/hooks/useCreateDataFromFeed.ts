@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { useContext } from './useContext';
+import { useAuthContext } from './useAuthContext';
 import { useReplaceMustache } from './useReplaceMustache';
 import { useGetRedirectLink } from './useGetRedirectLink';
 import { Entity, Feed } from '../interfaces/feed';
@@ -12,7 +12,7 @@ import { trackEvent } from '../utils/analytics';
 
 export const useCreateDataFromFeed = () => {
   const history = useHistory();
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
   const { getRedirectLink } = useGetRedirectLink();
   const { replaceMustache } = useReplaceMustache();
   const { createLoader, removeLoader } = useLoader();

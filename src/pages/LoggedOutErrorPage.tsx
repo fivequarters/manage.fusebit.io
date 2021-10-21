@@ -1,5 +1,5 @@
 import React, { FC, ReactElement } from 'react';
-import Layout from '../components/Layout';
+import Layout from '../components/common/Layout';
 import LoggedOutError from '../components/LoggedOutError/LoggedOutError';
 
 const LoggedOutErrorPage: FC<{}> = (): ReactElement => {

@@ -2,7 +2,7 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import { Params } from '../../../../../../interfaces/api';
 import { Install } from '../../../../../../interfaces/install';
 import { ApiResponse, FusebitAxios, useAxios } from '../../../../../useAxios';
-import { useContext } from '../../../../../useContext';
+import { useAuthContext } from '../../../../../useAuthContext';
 
 export const getAllInstalls = <T>(axiosInstall: FusebitAxios, params: Params, queryParams?: Params) => {
   return axiosInstall<T>(
@@ -21,7 +21,7 @@ export const useAccountIntegrationInstallGetAll = <T = Install>(
   options?: UseQueryOptions<unknown, unknown, ApiResponse<T>>
 ) => {
   const { axios } = useAxios();
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
 
   const params = {
     subscriptionId: userData.subscriptionId,

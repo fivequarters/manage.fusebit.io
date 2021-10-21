@@ -1,11 +1,11 @@
 import { useMutation } from 'react-query';
 import { Params } from '../../../../../../interfaces/api';
 import { useAxios } from '../../../../../useAxios';
-import { useContext } from '../../../../../useContext';
+import { useAuthContext } from '../../../../../useAuthContext';
 
 export const useAccountIntegrationCommitSession = () => {
   const { axios } = useAxios({ ignoreInterceptors: true });
-  const { userData } = useContext();
+  const { userData } = useAuthContext();
 
   return useMutation((params: Params) => {
     const { id, sessionId } = params;
