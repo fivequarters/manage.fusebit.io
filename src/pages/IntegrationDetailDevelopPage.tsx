@@ -13,7 +13,7 @@ import Diagram from '../components/IntegrationDetailDevelop/Diagram';
 const IntegrationDetailDevelopPage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
   const { userData } = useAuthContext();
-  const { data: integrationData } = useAccountIntegrationsGetOne<Integration>({
+  const { data: integrationData, isLoading } = useAccountIntegrationsGetOne<Integration>({
     enabled: userData.token,
     id,
     accountId: userData.accountId,
@@ -28,7 +28,7 @@ const IntegrationDetailDevelopPage: FC<{}> = (): ReactElement => {
       <Navbar sectionName={integrationData?.data.id || id} dropdown integrationsLink />
       <TabComponent
         tabNames={['Develop', 'Installs']}
-        tabObjects={[<Diagram key="diagram" />, getRedirectLink(`/integration/${id}/installs`)]}
+        tabObjects={[<Diagram key="diagram" isLoading={isLoading} />, getRedirectLink(`/integration/${id}/installs`)]}
       />
     </Layout>
   );

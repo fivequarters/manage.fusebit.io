@@ -33,7 +33,7 @@ interface Props {
   className?: string;
 }
 
-const EditorCard: React.FC<Props> = ({ name, className }) => {
+const IntegrationCard: React.FC<Props> = ({ name, className }) => {
   const [editGuiModalOpen, setEditGuiModalOpen] = useModal();
   const { handleEdit, isEditing } = useEditor({ enableListener: false, onReadyToRun: () => setEditGuiModalOpen(true) });
   const theme = useTheme();
@@ -77,4 +77,4 @@ const EditorCard: React.FC<Props> = ({ name, className }) => {
   );
 };
 
-export default EditorCard;
+export default IntegrationCard;

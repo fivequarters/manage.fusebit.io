@@ -1,7 +1,8 @@
 import { Grid, useMediaQuery } from '@material-ui/core';
 import styled, { css } from 'styled-components';
+import Loader from '../../common/Loader';
 import ConnectorsCard from '../ConnectorsCard';
-import EditorCard from '../EditorCard';
+import IntegrationCard from '../IntegrationCard';
 import YourAplication from '../YourAplicationCard';
 
 const centerMixin = css<{ $matchesCardCollapsing: boolean }>`
@@ -12,7 +13,7 @@ const StyledYourApplicationCard = styled(YourAplication)<{ $matchesCardCollapsin
   ${(props) => props.$matchesCardCollapsing && centerMixin};
 `;
 
-const StyledEditorCard = styled(EditorCard)<{ $matchesCardCollapsing: boolean }>`
+const StyledIntegrationCard = styled(IntegrationCard)<{ $matchesCardCollapsing: boolean }>`
   margin-top: 49px;
   ${(props) =>
     props.$matchesCardCollapsing &&
@@ -26,21 +27,31 @@ const StyledConnectorsCard = styled(ConnectorsCard)<{ $matchesCardCollapsing: bo
   ${(props) => props.$matchesCardCollapsing && centerMixin};
 `;
 
-const Diagram = () => {
+interface Props {
+  isLoading: boolean;
+}
+
+const Diagram: React.FC<Props> = ({ isLoading }) => {
   const matchesCardCollapsing = useMediaQuery('(max-width:1199px)');
 
   return (
-    <Grid key="asd" container>
-      <Grid item xs={matchesCardCollapsing ? 12 : 4}>
-        <StyledYourApplicationCard $matchesCardCollapsing={matchesCardCollapsing} />
-      </Grid>
-      <Grid item xs={matchesCardCollapsing ? 12 : 4}>
-        <StyledEditorCard name="integration" $matchesCardCollapsing={matchesCardCollapsing} />
-      </Grid>
-      <Grid item xs={matchesCardCollapsing ? 12 : 4}>
-        <StyledConnectorsCard $matchesCardCollapsing={matchesCardCollapsing} />
-      </Grid>
-    </Grid>
+    <>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <Grid key="asd" container>
+          <Grid item xs={matchesCardCollapsing ? 12 : 4}>
+            <StyledYourApplicationCard $matchesCardCollapsing={matchesCardCollapsing} />
+          </Grid>
+          <Grid item xs={matchesCardCollapsing ? 12 : 4}>
+            <StyledIntegrationCard name="integration" $matchesCardCollapsing={matchesCardCollapsing} />
+          </Grid>
+          <Grid item xs={matchesCardCollapsing ? 12 : 4}>
+            <StyledConnectorsCard $matchesCardCollapsing={matchesCardCollapsing} />
+          </Grid>
+        </Grid>
+      )}
+    </>
   );
 };
 
