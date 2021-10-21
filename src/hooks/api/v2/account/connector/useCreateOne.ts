@@ -14,7 +14,7 @@ export const useAccountConnectorCreateConnector = <T>() => {
     {
       onMutate: () => () => {},
       onError: (_, __, rollback) => rollback?.(),
-      onSuccess: () => queryClient.removeQueries('accountConnectorsGetAll'),
+      onSuccess: () => queryClient.invalidateQueries('accountConnectorsGetAll'),
     }
   );
 };

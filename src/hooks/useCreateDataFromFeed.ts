@@ -1,3 +1,4 @@
+import { useQueryClient } from 'react-query';
 import { useReplaceMustache } from './useReplaceMustache';
 import { Entity, Feed, ParsedFeed } from '../interfaces/feed';
 import { Data } from '../interfaces/feedPicker';
@@ -6,6 +7,7 @@ import { useEntityApi } from './useEntityApi';
 import { trackEvent } from '../utils/analytics';
 import { Integration } from '../interfaces/integration';
 import { ApiResponse } from './useAxios';
+import { ACCOUNT_INTEGRATIONS_GET_ONE } from './api/v2/account/integration/useGetOne';
 
 const getCommonTags = (feed: Feed, entityType: 'integration' | 'connector') => {
   return {
@@ -18,6 +20,7 @@ export const useCreateDataFromFeed = () => {
   const { replaceMustache } = useReplaceMustache();
   const { createEntity, addConnectorToIntegration } = useEntityApi();
   const { createError } = useError();
+  const queryClient = useQueryClient();
 
   const createFromFeed = async (parsedFeed: ParsedFeed, commonTags: Record<string, string>) =>
     Promise.all(parsedFeed.configuration.entities.map((e) => createEntity(e, commonTags)));
@@ -68,6 +71,7 @@ export const useCreateDataFromFeed = () => {
       const connector = await createConnector(activeFeed, data);
 
       const res = await addConnectorToIntegration(connector as Entity, integrationData);
+      queryClient.invalidateQueries(ACCOUNT_INTEGRATIONS_GET_ONE, { active: true });
 
       return res;
     } catch (e) {

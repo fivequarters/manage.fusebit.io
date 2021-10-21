@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardActions } from '@material-ui/core';
 import styled from 'styled-components';
+import Loader from '../../common/Loader';
 
 const StyledCardHeader = styled(CardHeader)`
   padding: 32px 32px 0;
@@ -38,13 +39,14 @@ interface Props {
   actions: React.ReactNode;
   className?: string;
   onClickCard?: () => void;
+  isLoading?: boolean;
 }
 
-const BaseCard: React.FC<Props> = ({ title, children, className, actions, onClickCard }) => {
+const BaseCard: React.FC<Props> = ({ title, children, className, actions, onClickCard, isLoading }) => {
   return (
     <StyledCard className={className} onClick={onClickCard}>
       <StyledCardHeader title={title} />
-      <StyledContent>{children}</StyledContent>
+      <StyledContent>{isLoading ? <Loader /> : children}</StyledContent>
       <StyledCardActions>{actions}</StyledCardActions>
     </StyledCard>
   );

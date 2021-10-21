@@ -7,7 +7,6 @@ import { useModal } from '../../../hooks/useModal';
 import { BackendClient } from '../../../interfaces/backendClient';
 import { trackEvent } from '../../../utils/analytics';
 import Button from '../../common/Button/Button';
-import Loader from '../../common/Loader';
 import BackendItem from '../BackendItem';
 import BaseCard from '../BaseCard';
 import NewBackendModal from '../NewBackendModal';
@@ -38,6 +37,7 @@ const YourAplication: React.FC<Props> = ({ className }) => {
       <BaseCard
         className={className}
         title="Your Application"
+        isLoading={isLoading}
         actions={
           <Button
             mode="add"
@@ -51,15 +51,11 @@ const YourAplication: React.FC<Props> = ({ className }) => {
           </Button>
         }
       >
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <Box>
-            {backends.map((backend) => (
-              <BackendItem key={backend.id} backend={backend} />
-            ))}
-          </Box>
-        )}
+        <Box>
+          {backends.map((backend) => (
+            <BackendItem key={backend.id} backend={backend} />
+          ))}
+        </Box>
       </BaseCard>
     </>
   );
