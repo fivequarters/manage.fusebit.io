@@ -60,40 +60,48 @@ const AuthCallbackPage: FC<{}> = (): ReactElement => {
         return;
       }
 
-      if (REACT_APP_FUSEBIT_ACCOUNT_ID && REACT_APP_FUSEBIT_SUBSCRIPTION_ID && REACT_APP_FUSEBIT_USER_ID) {
-        setUserData({
-          token,
-          accountId: REACT_APP_FUSEBIT_ACCOUNT_ID,
-          subscriptionId: REACT_APP_FUSEBIT_SUBSCRIPTION_ID,
-          userId: REACT_APP_FUSEBIT_USER_ID,
-        });
-      } else {
-        const decoded = jwt_decode<Auth0Token>(token);
-        const fusebitProfile = decoded['https://fusebit.io/profile'];
+      const decoded = jwt_decode<Auth0Token>(token);
+      const fusebitProfile = decoded['https://fusebit.io/profile'];
+      const isSignUpEvent = decoded['https://fusebit.io/new-user'] === true;
 
-        getAuth0ProfileAndCompany(token, fusebitProfile?.accountId || '').then(({ auth0Profile, company }) => {
-          const normalizedData = {
-            firstName: auth0Profile?.given_name || '',
-            lastName: auth0Profile?.family_name || '',
-            company: company?.displayName || '',
-          };
+      getAuth0ProfileAndCompany(token, fusebitProfile?.accountId || '').then(({ auth0Profile, company }) => {
+        const normalizedData = {
+          firstName: auth0Profile?.given_name || '',
+          lastName: auth0Profile?.family_name || '',
+          company: company?.displayName || '',
+        };
 
-          setUserData({ token, ...fusebitProfile, ...auth0Profile, ...company, ...normalizedData });
-          setAuthStatus(AuthStatus.AUTHENTICATED);
+        // for local testing: https://docs.google.com/document/d/1dkI4UdRgaD840HWc-sGi6_qz4JY8AHts97MD-1O4SpY/edit#heading=h.gtoda0wgke4n
+        if (REACT_APP_FUSEBIT_ACCOUNT_ID && REACT_APP_FUSEBIT_SUBSCRIPTION_ID && REACT_APP_FUSEBIT_USER_ID) {
+          fusebitProfile.accountId = REACT_APP_FUSEBIT_ACCOUNT_ID;
+          fusebitProfile.subscriptionId = REACT_APP_FUSEBIT_SUBSCRIPTION_ID;
+          fusebitProfile.userId = REACT_APP_FUSEBIT_USER_ID;
+        }
 
+        setUserData({ token, ...fusebitProfile, ...auth0Profile, ...company, ...normalizedData });
+        setAuthStatus(AuthStatus.AUTHENTICATED);
+
+        const navigatePostAuth = () => {
           const urlSearchParams = new URLSearchParams(window.location.search);
           const requestedPath = urlSearchParams.get('requestedPath') || '/';
+
+          setFirstTimeVisitor(true);
           history.push(requestedPath);
-        });
+        };
 
-        setFirstTimeVisitor(true);
-
-        analytics.ready(() => {
-          if (isSegmentTrackingEvents()) {
-            trackAuthEvent(decoded as Auth0Token);
-          }
-        });
-      }
+        const isSegmentConfigured = process.env.REACT_APP_SEGMENT_ANALYTICS_TAG;
+        if (isSegmentConfigured) {
+          analytics.ready(() => {
+            if (isSegmentTrackingEvents()) {
+              trackAuthEvent(auth0Profile, fusebitProfile, isSignUpEvent, navigatePostAuth);
+            } else {
+              navigatePostAuth();
+            }
+          });
+        } else {
+          navigatePostAuth();
+        }
+      });
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);
