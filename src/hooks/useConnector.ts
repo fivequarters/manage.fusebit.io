@@ -28,6 +28,7 @@ const useConnector = () => {
     });
     await waitForEntityStateChange('integration', [integrationId]);
     queryClient.invalidateQueries(ACCOUNT_INTEGRATIONS_GET_ONE, { active: true });
+    queryClient.invalidateQueries('accountConnectorsGetAll', { active: true });
   };
 
   const addConnectorToIntegration = async (
