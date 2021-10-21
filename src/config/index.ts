@@ -5,11 +5,12 @@ import IntegrationDetailInstallsPage from '../pages/IntegrationDetailInstallsPag
 import ConnectorDetailConfigurePage from '../pages/ConnectorDetailConfigurePage';
 import ConnectorDetailIdentitiesPage from '../pages/ConnectorDetailIdentitiesPage';
 import LoggedOutErrorPage from '../pages/LoggedOutErrorPage';
-import AuthenticationUsersPage from '../pages/AuthenticationUsersPage';
 import AuthenticationDetailOverviewPage from '../pages/AuthenticationDetailOverviewPage';
 import FatalErrorPage from '../pages/FatalErrorPage';
 import AuthCallbackPage from '../pages/AuthCallbackPage';
 import NotFoundPage from '../pages/NotFoundPage';
+import AccountSettingsPage from '../pages/AccountSettingsPage';
+import AccountTeamPage from '../pages/AccountTeamPage';
 import { RouteItem } from '../interfaces/router';
 
 // define app routes
@@ -57,9 +58,14 @@ export const routes: Array<RouteItem> = [
     public: true,
   },
   {
-    key: 'router-authentication-users',
-    path: '/account/:accountId/subscription/:subscriptionId/authentication/users',
-    component: AuthenticationUsersPage,
+    key: 'router-account',
+    path: '/account/:accountId/settings',
+    component: AccountSettingsPage,
+  },
+  {
+    key: 'router-account',
+    path: '/account/:accountId/team',
+    component: AccountTeamPage,
   },
   {
     key: 'router-authentication-detail-overview',

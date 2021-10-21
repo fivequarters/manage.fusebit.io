@@ -11,7 +11,9 @@ export default createGlobalStyle`
         --black: #333333;
         --grey: #959595;
         --yellow: #FFC940;
+        --navbar-height: 185px;
     }
+    
     a {
         text-decoration: none;
         span {
@@ -34,6 +36,12 @@ export default createGlobalStyle`
         cursor: pointer;
       }
     }
+
+    @media only screen and (max-width: 880px) {
+      :root {
+        --navbar-height: 164px;
+      }
+    }
 `;
 
 const rotate = keyframes`
@@ -46,14 +54,39 @@ const rotate = keyframes`
   }
 `;
 
+export const InfoField = styled.h4`
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 400;
+  margin: 0;
+  color: black;
+`;
+
+export const InfoFieldPlaceholder = styled.div`
+  font-size: 12px;
+  line-height: 14px;
+  font-weight: 300;
+  color: var(--grey);
+  margin-bottom: 4px;
+`;
+
+export const InfoFieldWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  &:not(:last-child) {
+    margin-bottom: 24px;
+  }
+`;
+
 export const withError = css<{ $hasError?: boolean }>`
   margin-bottom: 25px;
 
   ${(props) =>
     props.$hasError &&
     `
-  margin-bottom: 0px;
-`}
+    margin-bottom: 0px;
+  `}
 `;
 
 export const inputBlueMixin = css<{ hasError: boolean }>`

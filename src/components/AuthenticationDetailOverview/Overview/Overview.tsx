@@ -64,6 +64,7 @@ const uischema = {
     {
       type: 'Control',
       scope: '#/properties/primaryEmail',
+      label: 'E-mail',
       options: {
         hideRequiredAsterisk: true,
       },
@@ -213,18 +214,18 @@ const Overview: React.FC = () => {
           </SC.UserInfoContainer>
           {!editInformation ? (
             <>
-              <SC.InfoFieldWrapper>
-                <SC.InfoFieldPlaceholder>First Name</SC.InfoFieldPlaceholder>
-                <SC.InfoField>{data?.firstName}</SC.InfoField>
-              </SC.InfoFieldWrapper>
-              <SC.InfoFieldWrapper>
-                <SC.InfoFieldPlaceholder>Last Name</SC.InfoFieldPlaceholder>
-                <SC.InfoField>{data?.lastName}</SC.InfoField>
-              </SC.InfoFieldWrapper>
-              <SC.InfoFieldWrapper>
-                <SC.InfoFieldPlaceholder>E-mail</SC.InfoFieldPlaceholder>
-                <SC.InfoField>{data?.primaryEmail}</SC.InfoField>
-              </SC.InfoFieldWrapper>
+              <CSC.InfoFieldWrapper>
+                <CSC.InfoFieldPlaceholder>First Name</CSC.InfoFieldPlaceholder>
+                <CSC.InfoField>{data?.firstName}</CSC.InfoField>
+              </CSC.InfoFieldWrapper>
+              <CSC.InfoFieldWrapper>
+                <CSC.InfoFieldPlaceholder>Last Name</CSC.InfoFieldPlaceholder>
+                <CSC.InfoField>{data?.lastName}</CSC.InfoField>
+              </CSC.InfoFieldWrapper>
+              <CSC.InfoFieldWrapper>
+                <CSC.InfoFieldPlaceholder>E-mail</CSC.InfoFieldPlaceholder>
+                <CSC.InfoField>{data?.primaryEmail}</CSC.InfoField>
+              </CSC.InfoFieldWrapper>
               <SC.EditButtonWrapper>
                 <Button
                   onClick={() => setEditInformation(true)}

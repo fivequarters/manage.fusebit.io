@@ -5,7 +5,7 @@ import arrow from '../../../assets/right-arrow-white.svg';
 
 export const Background = styled.div`
   width: 100vw;
-  height: 185px;
+  height: var(--navbar-height);
   display: flex;
   background-image: url(${navbarBg});
   background-repeat: no-repeat;
@@ -13,7 +13,6 @@ export const Background = styled.div`
   padding-top: 50px;
 
   @media only screen and (max-width: 880px) {
-    height: 164px;
     padding-top: 41px;
   }
 `;

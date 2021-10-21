@@ -11,7 +11,7 @@ import { Account } from '../../../interfaces/account';
 import { useAccountUserGetAll } from '../../../hooks/api/v1/account/user/useGetAll';
 import DeleteUserModal from '../DeleteUserModal';
 import NameColumn from './NameColumn';
-import CreateUserModal from '../CreateUserModal';
+import CreateUserModal from '../NewUserModal';
 
 const UsersTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -82,6 +82,9 @@ const UsersTable = () => {
         onClickRow={handleClickRow}
         isAllChecked={rows.length > 1 ? selected.length === rows.length - 1 : false}
         hideCheckAll={rows.length === 1}
+        actionsContainerProps={{
+          mt: 0,
+        }}
       />
     </>
   );
