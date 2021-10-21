@@ -13,32 +13,6 @@ import EditGuiModal from '../EditGuiModal';
 import useEditor from '../FusebitEditor/useEditor';
 import MobileDrawer from '../MobileDrawer';
 
-export const FusebitCard = styled(Box)`
-  position: relative;
-  height: 260px;
-  width: 285px;
-  border-radius: 8px;
-  background-color: white;
-  box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
-  border: 2px solid #f83420;
-`;
-
-export const FusebitLogo = styled(Box)`
-  width: 109px;
-  height: 28px;
-  background-image: url(${fusebitLogo});
-  background-size: contain;
-  background-repeat: no-repeat;
-`;
-
-export const FusebitIntegration = styled.h3`
-  font-size: 20px;
-  line-height: 26px;
-  font-weight: 600;
-  text-align: center;
-  color: var(--black);
-`;
-
 const StyledCard = styled(Card)`
   height: 260px;
   width: 285px;
