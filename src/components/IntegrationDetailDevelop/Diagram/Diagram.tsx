@@ -1,9 +1,11 @@
-import { Grid, useMediaQuery } from '@material-ui/core';
+import { Box, Grid, useMediaQuery } from '@material-ui/core';
 import styled, { css } from 'styled-components';
 import Loader from '../../common/Loader';
 import ConnectorsCard from '../ConnectorsCard';
 import { CARD_OVERLAPPING_MEDIA_QUERY } from '../constants';
+import FooterLinks from '../FooterLinks';
 import IntegrationCard from '../IntegrationCard';
+import LinksTitle from '../LinksTitle';
 import YourAplication from '../YourAplicationCard';
 
 const centerMixin = css<{ $matchesCardOverlapping: boolean }>`
@@ -40,17 +42,41 @@ const Diagram: React.FC<Props> = ({ isLoading }) => {
       {isLoading ? (
         <Loader />
       ) : (
-        <Grid container>
-          <Grid item xs={matchesCardOverlapping ? 12 : 4}>
-            <StyledYourApplicationCard $matchesCardOverlapping={matchesCardOverlapping} />
+        <Box>
+          <Grid container>
+            <Grid item xs={matchesCardOverlapping ? 12 : 4}>
+              <StyledYourApplicationCard $matchesCardOverlapping={matchesCardOverlapping} />
+            </Grid>
+            <Grid item xs={matchesCardOverlapping ? 12 : 4}>
+              <StyledIntegrationCard $matchesCardOverlapping={matchesCardOverlapping} />
+            </Grid>
+            <Grid item xs={matchesCardOverlapping ? 12 : 4}>
+              <StyledConnectorsCard $matchesCardOverlapping={matchesCardOverlapping} />
+            </Grid>
           </Grid>
-          <Grid item xs={matchesCardOverlapping ? 12 : 4}>
-            <StyledIntegrationCard $matchesCardOverlapping={matchesCardOverlapping} />
-          </Grid>
-          <Grid item xs={matchesCardOverlapping ? 12 : 4}>
-            <StyledConnectorsCard $matchesCardOverlapping={matchesCardOverlapping} />
-          </Grid>
-        </Grid>
+          {!matchesCardOverlapping && (
+            <Grid container>
+              <Grid item xs={4}>
+                <Box display="flex" flexDirection="column">
+                  <LinksTitle />
+                  <FooterLinks links={['connectingFusebit']} />
+                </Box>
+              </Grid>
+              <Grid item xs={4}>
+                <Box display="flex" flexDirection="column" width="285px" m="0 auto">
+                  <LinksTitle />
+                  <FooterLinks links={['gettingStarted', 'programmingModel']} />
+                </Box>
+              </Grid>
+            </Grid>
+          )}
+          {matchesCardOverlapping && (
+            <Box display="flex" flexDirection="column" maxWidth="389px" m="0 auto">
+              <LinksTitle />
+              <FooterLinks links={['connectingFusebit', 'gettingStarted', 'programmingModel']} />
+            </Box>
+          )}
+        </Box>
       )}
     </>
   );
