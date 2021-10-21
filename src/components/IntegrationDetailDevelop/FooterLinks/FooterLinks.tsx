@@ -7,7 +7,6 @@ export const StyledLink = styled.a`
   line-height: 16px;
   color: var(--black);
   text-decoration: underline;
-  width: max-content;
   margin-bottom: 16px;
   margin-left: 5px;
   transition: all 0.25s linear;
