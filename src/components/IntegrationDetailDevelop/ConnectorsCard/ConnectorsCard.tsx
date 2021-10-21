@@ -12,6 +12,7 @@ import Button from '../../common/Button/Button';
 import AddConnectorToIntegrationModal from '../AddConnectorToIntegrationModal';
 import BaseCard from '../BaseCard';
 import ConnectorItem from '../ConnectorItem';
+import ConnectorListModal from '../ConnectorListModal';
 
 interface Props {
   className?: string;
@@ -22,6 +23,7 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
   const { id } = useParams<{ id: string }>();
   const queryClient = useQueryClient();
   const [connectorModalOpen, , toggleConnectorModalOpen] = useModal();
+  const [linkExistingModalOpen, , toggleLinkExistingModalOpen] = useModal();
 
   const { data: connectors, isLoading } = useAccountConnectorsGetAll({
     enabled: userData.token,
@@ -49,6 +51,7 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
         onClose={toggleConnectorModalOpen}
         integrationData={integrationData}
       />
+      <ConnectorListModal open={linkExistingModalOpen} onClose={toggleLinkExistingModalOpen} />
       <BaseCard
         className={className}
         title="Connectors"
@@ -70,8 +73,8 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
               style={{
                 width: 160,
               }}
-              // onClick={handleConnectOpen}
-              // disabled={backendClients.length >= 5}
+              onClick={toggleLinkExistingModalOpen}
+              disabled={usedConnectors.length >= 5}
             >
               Link existing
             </Button>

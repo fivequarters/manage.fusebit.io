@@ -26,6 +26,7 @@ const useConnector = () => {
       data,
     });
     await waitForEntityStateChange('integration', [integrationId]);
+    queryClient.invalidateQueries(ACCOUNT_INTEGRATIONS_GET_ONE, { active: true });
   };
 
   const addConnectorToIntegration = async (
@@ -90,7 +91,6 @@ const useConnector = () => {
       newData.data.components = filteredComponents;
 
       await runAndWait(newData, integrationData?.data.id);
-      queryClient.invalidateQueries(ACCOUNT_INTEGRATIONS_GET_ONE, { active: true });
     } catch (e) {
       createError(e);
     }

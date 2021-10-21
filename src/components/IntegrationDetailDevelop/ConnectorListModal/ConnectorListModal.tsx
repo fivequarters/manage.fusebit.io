@@ -37,12 +37,12 @@ const ConnectorListModal = ({ onClose, open }: Props) => {
 
   const handleLinkConnector = async (connector: Entity) => {
     try {
+      onClose();
       createLoader();
 
       await addConnectorToIntegration(connector, integrationData);
     } finally {
       removeLoader();
-      onClose();
     }
   };
 
