@@ -1,5 +1,4 @@
 import { useQueryClient } from 'react-query';
-import { LiveTvSharp } from '@material-ui/icons';
 import { Entity, Feed } from '../interfaces/feed';
 import { InnerConnector, Integration } from '../interfaces/integration';
 import { Operation } from '../interfaces/operation';
