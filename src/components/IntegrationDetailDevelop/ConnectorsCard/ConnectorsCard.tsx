@@ -1,4 +1,4 @@
-import { Box, useMediaQuery } from '@material-ui/core';
+import { Box, useMediaQuery, useTheme } from '@material-ui/core';
 import { useMemo } from 'react';
 import { useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
@@ -24,7 +24,8 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
   const queryClient = useQueryClient();
   const [connectorModalOpen, , toggleConnectorModalOpen] = useModal();
   const [linkExistingModalOpen, , toggleLinkExistingModalOpen] = useModal();
-  const matchesCardsOverlapping = useMediaQuery('(max-width:1199px)');
+  const theme = useTheme();
+  const matchesMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const { data: connectors, isLoading } = useAccountConnectorsGetAll({
     enabled: userData.token,
@@ -61,7 +62,7 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
           <>
             <Button
               mode="add"
-              size={matchesCardsOverlapping ? 'small' : 'large'}
+              size={matchesMobile ? 'small' : 'large'}
               style={
                 {
                   // width: 160,
@@ -73,7 +74,7 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
               Add new
             </Button>
             <Button
-              size={matchesCardsOverlapping ? 'small' : 'large'}
+              size={matchesMobile ? 'small' : 'large'}
               mode="add"
               style={
                 {
