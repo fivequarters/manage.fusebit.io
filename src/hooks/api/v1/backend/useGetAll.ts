@@ -8,10 +8,12 @@ import { BACKEND_LIST_STORAGE_ID } from '../../../../utils/constants';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
+export const BACKEND_GET_ALL = 'backendGetAll';
+
 export async function getBackendClients(
   axiosClient: AxiosInstance,
-  accountId?: string,
-  subscriptionId?: string
+  accountId: string,
+  subscriptionId: string
 ): Promise<BackendClient[]> {
   try {
     const clientsPaths = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/subscription/${subscriptionId}/storage/${BACKEND_LIST_STORAGE_ID}`;
@@ -31,7 +33,7 @@ export const useBackendGetAll = () => {
   const axiosClient = createAxiosClient(userData.token);
 
   return useQuery(
-    ['backendGetAll', { accountId: userData.accountId }, { subscriptionId: userData.subscriptionId }],
-    () => getBackendClients(axiosClient, userData.accountId, userData.subscriptionId)
+    [BACKEND_GET_ALL, { accountId: userData.accountId }, { subscriptionId: userData.subscriptionId }],
+    () => getBackendClients(axiosClient, userData.accountId || '', userData.subscriptionId || '')
   );
 };

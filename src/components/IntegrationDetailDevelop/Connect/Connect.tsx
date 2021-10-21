@@ -5,14 +5,14 @@ import * as SC from './styles';
 import * as CSC from '../../globalStyle';
 import CopyLine from '../../common/CopyLine';
 import { useCopy } from '../../../hooks/useCopy';
-import ConfirmationPrompt from '../../common/ConfirmationPrompt';
 import { useAuthContext } from '../../../hooks/useAuthContext';
-import { patchBackendClients } from '../../../utils/backendClients';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 
 import { LinkSampleApp } from './LinkSampleApp';
 import { useAccountIntegrationsGetOne } from '../../../hooks/api/v2/account/integration/useGetOne';
 import { Integration } from '../../../interfaces/integration';
+import { useBackendUpdateOne } from '../../../hooks/api/v1/backend/useUpdateOne';
+import DeleteBackendModal from '../DeleteBackendModal';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
@@ -61,6 +61,7 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
     const [saving, setSaving] = useState(false);
 
     const integrationBaseUrl = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v2${getRedirectLink(`/integration/${integrationId}`)}`;
+    const { mutateAsync: updateBackend } = useBackendUpdateOne();
 
     const { data: integrationData } = useAccountIntegrationsGetOne({
       enabled: userData.token,
@@ -83,7 +84,7 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
 
     const handleSave = async () => {
       setSaving(true);
-      await patchBackendClients(id, userData, { name: editedBackendClientId });
+      await updateBackend({ id, updatedBackend: { name: editedBackendClientId } });
       if (disableCopy) {
         onChange?.(); // if its the first time its created, we dont call onChange
       }
@@ -111,13 +112,10 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
     const isSampleAppEnabled = !!Object.keys(componentMap).length;
 
     return deleteModalOpen ? (
-      <ConfirmationPrompt
+      <DeleteBackendModal
         open={deleteModalOpen}
         setOpen={setDeleteModalOpen}
-        handleConfirmation={() => onDelete({ isApplication: true, id })}
-        title="Are you sure you want to delete this application?"
-        description="All calls from your application to Fusebit that use this key will fail. Before deleting this key, make sure your application is no longer using this key."
-        confirmationButtonText="Delete"
+        onConfirm={() => onDelete({ isApplication: true, id })}
       />
     ) : (
       <SC.Card open={open} ref={ref} tabIndex={-1}>

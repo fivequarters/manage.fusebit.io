@@ -34,7 +34,7 @@ import { trackEvent } from '../../../utils/analytics';
 import LineConnector from '../../common/LineConnector';
 import MobileDrawer from '../MobileDrawer';
 import AddConnectorToIntegrationModal from '../AddConnectorToIntegrationModal';
-import AddBackendModal from '../AddBackendModal';
+import NewBackendModal from '../NewBackendModal';
 import EditCliModal from '../EditCliModal';
 import ConnectorListModal from '../ConnectorListModal';
 import { useAuthContext } from '../../../hooks/useAuthContext';
@@ -231,12 +231,7 @@ const Develop: React.FC = () => {
         onClose={() => setConnectorPickerOpen(false)}
         integrationData={integrationData}
       />
-      <AddBackendModal
-        backendClient={backendClient}
-        open={connectOpen}
-        onClose={() => setConnectOpen(false)}
-        integrationData={integrationData?.data}
-      />
+      <NewBackendModal backendClient={backendClient} open={connectOpen} onClose={() => setConnectOpen(false)} />
       <EditCliModal
         open={editCliOpen}
         onClose={() => setEditCliOpen(false)}

@@ -25,7 +25,7 @@ export async function getBackendClients(user: User): Promise<BackendClient[]> {
   }
 }
 
-async function putBackendClients(user: User, backendClients: BackendClient[]): Promise<Storage<BackendClient>> {
+export async function putBackendClients(user: User, backendClients: BackendClient[]): Promise<Storage<BackendClient>> {
   const { accountId, subscriptionId, token } = user;
   const axiosClient = createAxiosClient(token);
   const clientsPaths = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/subscription/${subscriptionId}/storage/${BACKEND_LIST_STORAGE_ID}`;

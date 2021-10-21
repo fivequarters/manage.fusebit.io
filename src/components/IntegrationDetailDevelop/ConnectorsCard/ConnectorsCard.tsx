@@ -1,9 +1,5 @@
-import { Box } from '@material-ui/core';
 import Button from '../../common/Button/Button';
-import BackendItem from '../BackendItem';
 import BaseCard from '../BaseCard';
-
-const connectors = ['Slack 1', 'Slack 2'];
 
 interface Props {
   className?: string;
@@ -39,11 +35,11 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
         </>
       }
     >
-      <Box>
+      {/* <Box>
         {connectors.map((b) => (
-          <BackendItem key={b} name={b} />
+          <BackendItem key={b} backend={b} />
         ))}
-      </Box>
+      </Box> */}
     </BaseCard>
   );
 };

@@ -14,9 +14,10 @@ interface Props {
   icon?: React.ReactElement;
   onDelete?: () => void;
   name?: string;
+  onClick?: () => void;
 }
 
-const ListItem: React.FC<Props> = ({ name, icon, className, onDelete, ...props }) => {
+const ListItem: React.FC<Props> = ({ name, icon, className, onDelete, onClick, ...props }) => {
   return (
     <StyledContainer
       display="flex"
@@ -30,6 +31,7 @@ const ListItem: React.FC<Props> = ({ name, icon, className, onDelete, ...props }
       component="button"
       width="100%"
       border="none"
+      onClick={onClick}
       {...props}
     >
       {icon && (
@@ -48,7 +50,13 @@ const ListItem: React.FC<Props> = ({ name, icon, className, onDelete, ...props }
       </Typography>
       {onDelete && (
         <Box ml="auto">
-          <IconButton size="small" onClick={onDelete}>
+          <IconButton
+            size="small"
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete();
+            }}
+          >
             <CloseIcon fontSize="small" htmlColor="black" />
           </IconButton>
         </Box>

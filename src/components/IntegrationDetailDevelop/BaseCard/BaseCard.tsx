@@ -37,11 +37,12 @@ interface Props {
   title: string;
   actions: React.ReactNode;
   className?: string;
+  onClickCard?: () => void;
 }
 
-const BaseCard: React.FC<Props> = ({ title, children, className, actions }) => {
+const BaseCard: React.FC<Props> = ({ title, children, className, actions, onClickCard }) => {
   return (
-    <StyledCard className={className}>
+    <StyledCard className={className} onClick={onClickCard}>
       <StyledCardHeader title={title} />
       <StyledContent>{children}</StyledContent>
       <StyledCardActions>{actions}</StyledCardActions>
