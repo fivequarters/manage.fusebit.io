@@ -35,7 +35,7 @@ const StyledContent = styled(CardContent)`
 
 const StyledActions = styled(CardActions)`
   padding: 32px;
-  margin-top: 0;
+  margin: 0 auto;
 `;
 
 interface Props {
