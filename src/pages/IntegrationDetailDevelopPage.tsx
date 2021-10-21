@@ -1,7 +1,5 @@
 import { FC, ReactElement } from 'react';
 import { useParams } from 'react-router-dom';
-import { Grid } from '@material-ui/core';
-import styled from 'styled-components';
 import Layout from '../components/common/Layout';
 import { useAccountIntegrationsGetOne } from '../hooks/api/v2/account/integration/useGetOne';
 import { useAuthContext } from '../hooks/useAuthContext';
@@ -10,17 +8,7 @@ import Navbar from '../components/common/Navbar';
 import { useTrackPage } from '../hooks/useTrackPage';
 import TabComponent from '../components/common/TabComponent';
 import { useGetRedirectLink } from '../hooks/useGetRedirectLink';
-import YourAplication from '../components/IntegrationDetailDevelop/YourAplicationCard';
-import ConnectorsCard from '../components/IntegrationDetailDevelop/ConnectorsCard';
-import EditorCard from '../components/IntegrationDetailDevelop/EditorCard';
-
-const StyledEditorCard = styled(EditorCard)`
-  margin-top: 49px;
-`;
-
-const StyledConnectorsCard = styled(ConnectorsCard)`
-  margin-left: auto;
-`;
+import Diagram from '../components/IntegrationDetailDevelop/Diagram';
 
 const IntegrationDetailDevelopPage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
@@ -40,21 +28,7 @@ const IntegrationDetailDevelopPage: FC<{}> = (): ReactElement => {
       <Navbar sectionName={integrationData?.data.id || id} dropdown integrationsLink />
       <TabComponent
         tabNames={['Develop', 'Installs']}
-        tabObjects={[
-          // WIP :(
-          <Grid key="asd" container spacing={2}>
-            <Grid item sm={12} md={4}>
-              <YourAplication />
-            </Grid>
-            <Grid item sm={12} md={4}>
-              <StyledEditorCard name="integration" />
-            </Grid>
-            <Grid item sm={12} md={4}>
-              <StyledConnectorsCard />
-            </Grid>
-          </Grid>,
-          getRedirectLink(`/integration/${id}/installs`),
-        ]}
+        tabObjects={[<Diagram key="diagram" />, getRedirectLink(`/integration/${id}/installs`)]}
       />
     </Layout>
   );

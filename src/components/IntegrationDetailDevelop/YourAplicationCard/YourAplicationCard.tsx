@@ -1,4 +1,4 @@
-import { Box } from '@material-ui/core';
+import { Box, useMediaQuery } from '@material-ui/core';
 import { useState } from 'react';
 import { useBackendCreateOne } from '../../../hooks/api/v1/backend/useCreateOne';
 import { useBackendGetAll } from '../../../hooks/api/v1/backend/useGetAll';
@@ -21,6 +21,7 @@ const YourAplication: React.FC<Props> = ({ className }) => {
   const { data: backends = [], isLoading } = useBackendGetAll();
   const { mutateAsync } = useBackendCreateOne();
   const { createLoader, removeLoader } = useLoader();
+  const isMobile = useMediaQuery('(max-width:1199px)');
 
   const handleConnect = async () => {
     trackEvent('Develop Connect Button Clicked', 'Integration');
@@ -41,6 +42,7 @@ const YourAplication: React.FC<Props> = ({ className }) => {
         actions={
           <Button
             mode="add"
+            size={isMobile ? 'small' : 'large'}
             style={{
               width: 200,
             }}

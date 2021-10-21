@@ -1,4 +1,4 @@
-import { Box } from '@material-ui/core';
+import { Box, useMediaQuery } from '@material-ui/core';
 import { useMemo } from 'react';
 import { useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
@@ -24,6 +24,7 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
   const queryClient = useQueryClient();
   const [connectorModalOpen, , toggleConnectorModalOpen] = useModal();
   const [linkExistingModalOpen, , toggleLinkExistingModalOpen] = useModal();
+  const isMobile = useMediaQuery('(max-width:1199px)');
 
   const { data: connectors, isLoading } = useAccountConnectorsGetAll({
     enabled: userData.token,
@@ -60,19 +61,25 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
           <>
             <Button
               mode="add"
-              style={{
-                width: 160,
-              }}
+              size={isMobile ? 'small' : 'large'}
+              style={
+                {
+                  // width: 160,
+                }
+              }
               onClick={toggleConnectorModalOpen}
               // disabled={usedConnectors.length >= 5}
             >
               Add new
             </Button>
             <Button
+              size={isMobile ? 'small' : 'large'}
               mode="add"
-              style={{
-                width: 160,
-              }}
+              style={
+                {
+                  // width: 160,
+                }
+              }
               onClick={toggleLinkExistingModalOpen}
               disabled={usedConnectors.length >= 5}
             >
