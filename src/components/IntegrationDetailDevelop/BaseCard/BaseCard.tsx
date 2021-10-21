@@ -27,7 +27,7 @@ const StyledContent = styled(CardContent)`
 
 const StyledCardActions = styled(CardActions)`
   margin: auto auto 0;
-  padding: 32px;
+  padding: 0 32px 32px;
 
   & button {
     white-space: nowrap;
