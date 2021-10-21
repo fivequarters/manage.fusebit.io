@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, useMediaQuery } from '@material-ui/core';
 import ListItem from '../ListItem';
 import { useModal } from '../../../hooks/useModal';
 import ConfirmationPrompt from '../../common/ConfirmationPrompt';
@@ -11,6 +11,9 @@ import { useEntityApi } from '../../../hooks/useEntityApi';
 import { Integration } from '../../../interfaces/integration';
 import { ApiResponse } from '../../../hooks/useAxios';
 import { useLoader } from '../../../hooks/useLoader';
+import LineConnector from '../../common/LineConnector';
+import { INTEGRATION_CARD_ID } from '../IntegrationCard/IntegrationCard';
+import { CARD_OVERLAPPING_MEDIA_QUERY } from '../constants';
 
 interface Props {
   className?: string;
@@ -26,6 +29,7 @@ const ConnectorItem: React.FC<Props> = ({ className, connector, integrationData 
   const handleClick = () => history.push(getRedirectLink(`/connector/${connector.id}/configure`));
   const { removeConnectorFromIntegration } = useEntityApi();
   const { createLoader, removeLoader } = useLoader();
+  const matchesCardOverlapping = useMediaQuery(CARD_OVERLAPPING_MEDIA_QUERY);
 
   const handleDelete = async () => {
     try {
@@ -48,6 +52,7 @@ const ConnectorItem: React.FC<Props> = ({ className, connector, integrationData 
         confirmationButtonText="Remove"
       />
       <ListItem
+        id={connector.id}
         onClick={handleClick}
         className={className}
         icon={
@@ -60,6 +65,9 @@ const ConnectorItem: React.FC<Props> = ({ className, connector, integrationData 
         name={connector.id}
         onDelete={toggleDeleteConnectorModal}
       />
+      {!matchesCardOverlapping && (
+        <LineConnector start={INTEGRATION_CARD_ID} startAnchor="right" end={connector.id} endAnchor="left" />
+      )}
     </>
   );
 };

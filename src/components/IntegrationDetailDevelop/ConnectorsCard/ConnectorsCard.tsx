@@ -5,10 +5,13 @@ import { useAuthContext } from '../../../hooks/useAuthContext';
 import { useGetIntegrationFromCache } from '../../../hooks/useGetIntegrationFromCache';
 import { useModal } from '../../../hooks/useModal';
 import Button from '../../common/Button/Button';
+import LineConnector from '../../common/LineConnector';
 import AddConnectorToIntegrationModal from '../AddConnectorToIntegrationModal';
 import BaseCard from '../BaseCard';
 import ConnectorItem from '../ConnectorItem';
 import ConnectorListModal from '../ConnectorListModal';
+import { CARD_OVERLAPPING_MEDIA_QUERY } from '../constants';
+import { INTEGRATION_CARD_ID } from '../IntegrationCard/IntegrationCard';
 
 interface Props {
   className?: string;
@@ -20,6 +23,7 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
   const [linkExistingModalOpen, , toggleLinkExistingModalOpen] = useModal();
   const theme = useTheme();
   const matchesMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const matchesCardOverlapping = useMediaQuery(CARD_OVERLAPPING_MEDIA_QUERY);
 
   const { data: connectors, isLoading } = useAccountConnectorsGetAll({
     enabled: userData.token,
@@ -46,6 +50,7 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
       />
       <ConnectorListModal open={linkExistingModalOpen} onClose={toggleLinkExistingModalOpen} />
       <BaseCard
+        id="connectors"
         className={className}
         title="Connectors"
         isLoading={isLoading}
@@ -86,6 +91,9 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
           ))}
         </Box>
       </BaseCard>
+      {matchesCardOverlapping && (
+        <LineConnector start={INTEGRATION_CARD_ID} startAnchor="bottom" end="connectors" endAnchor="top" />
+      )}
     </>
   );
 };

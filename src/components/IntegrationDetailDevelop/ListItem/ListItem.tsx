@@ -14,12 +14,14 @@ interface Props {
   icon?: React.ReactElement;
   onDelete?: () => void;
   name?: string;
+  id?: string;
   onClick?: () => void;
 }
 
-const ListItem: React.FC<Props> = ({ name, icon, className, onDelete, onClick, ...props }) => {
+const ListItem: React.FC<Props> = ({ name, icon, className, onDelete, onClick, id, ...props }) => {
   return (
     <StyledContainer
+      id={id}
       display="flex"
       p="17px"
       borderRadius="4px"

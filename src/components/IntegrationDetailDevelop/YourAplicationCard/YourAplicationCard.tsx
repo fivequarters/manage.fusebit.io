@@ -7,8 +7,11 @@ import { useModal } from '../../../hooks/useModal';
 import { BackendClient } from '../../../interfaces/backendClient';
 import { trackEvent } from '../../../utils/analytics';
 import Button from '../../common/Button/Button';
+import LineConnector from '../../common/LineConnector';
 import BackendItem from '../BackendItem';
 import BaseCard from '../BaseCard';
+import { CARD_OVERLAPPING_MEDIA_QUERY } from '../constants';
+import { INTEGRATION_CARD_ID } from '../IntegrationCard/IntegrationCard';
 import NewBackendModal from '../NewBackendModal';
 
 interface Props {
@@ -23,6 +26,7 @@ const YourAplication: React.FC<Props> = ({ className }) => {
   const { createLoader, removeLoader } = useLoader();
   const theme = useTheme();
   const matchesMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const matchesCardOverlapping = useMediaQuery(CARD_OVERLAPPING_MEDIA_QUERY);
 
   const handleConnect = async () => {
     trackEvent('Develop Connect Button Clicked', 'Integration');
@@ -37,6 +41,7 @@ const YourAplication: React.FC<Props> = ({ className }) => {
     <>
       <NewBackendModal backendClient={createdBackend} open={newBackendOpen} onClose={() => setBackendOpen(false)} />
       <BaseCard
+        id="your-application"
         className={className}
         title="Your Application"
         isLoading={isLoading}
@@ -60,6 +65,9 @@ const YourAplication: React.FC<Props> = ({ className }) => {
           ))}
         </Box>
       </BaseCard>
+      {matchesCardOverlapping && (
+        <LineConnector start="your-application" startAnchor="bottom" end={INTEGRATION_CARD_ID} endAnchor="top" />
+      )}
     </>
   );
 };

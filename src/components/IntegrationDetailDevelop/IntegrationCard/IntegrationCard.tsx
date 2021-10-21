@@ -1,4 +1,14 @@
-import { Card, CardContent, CardActions, Box, CircularProgress, useMediaQuery, useTheme } from '@material-ui/core';
+import {
+  Card,
+  CardContent,
+  CardActions,
+  Box,
+  CircularProgress,
+  useMediaQuery,
+  useTheme,
+  Typography,
+} from '@material-ui/core';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import fusebitLogo from '../../../assets/fusebit-logo.svg';
 import { useGetIntegrationFromCache } from '../../../hooks/useGetIntegrationFromCache';
@@ -29,14 +39,16 @@ const StyledActions = styled(CardActions)`
 `;
 
 interface Props {
-  name: string;
   className?: string;
 }
 
-const IntegrationCard: React.FC<Props> = ({ name, className }) => {
+export const INTEGRATION_CARD_ID = 'integration-card';
+
+const IntegrationCard: React.FC<Props> = ({ className }) => {
   const [editGuiModalOpen, setEditGuiModalOpen] = useModal();
   const { handleEdit, isEditing } = useEditor({ enableListener: false, onReadyToRun: () => setEditGuiModalOpen(true) });
   const theme = useTheme();
+  const { id } = useParams<{ id: string }>();
   const matchesMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const integrationData = useGetIntegrationFromCache();
@@ -54,12 +66,21 @@ const IntegrationCard: React.FC<Props> = ({ name, className }) => {
           integrationId={integrationData?.data.id || ''}
         />
       )}
-      <StyledCard className={className}>
+      <StyledCard id={INTEGRATION_CARD_ID} className={className}>
         <StyledContent>
           <Box display="flex" mb="32px" justifyContent="center">
             <img src={fusebitLogo} alt="fusebit" width={109} height={28} />
           </Box>
-          <h3>{name}</h3>
+          <Typography
+            variant="h3"
+            style={{
+              textAlign: 'center',
+              fontWeight: 600,
+              fontSize: 20,
+            }}
+          >
+            {integrationData?.data.id || id}
+          </Typography>
         </StyledContent>
         <StyledActions>
           <Button

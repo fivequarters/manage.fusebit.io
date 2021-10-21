@@ -40,11 +40,12 @@ interface Props {
   className?: string;
   onClickCard?: () => void;
   isLoading?: boolean;
+  id?: string;
 }
 
-const BaseCard: React.FC<Props> = ({ title, children, className, actions, onClickCard, isLoading }) => {
+const BaseCard: React.FC<Props> = ({ title, id, children, className, actions, onClickCard, isLoading }) => {
   return (
-    <StyledCard className={className} onClick={onClickCard}>
+    <StyledCard className={className} onClick={onClickCard} id={id}>
       <StyledCardHeader title={title} />
       <StyledContent>{isLoading ? <Loader /> : children}</StyledContent>
       <StyledCardActions>{actions}</StyledCardActions>
