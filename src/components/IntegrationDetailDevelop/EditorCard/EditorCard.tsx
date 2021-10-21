@@ -1,13 +1,8 @@
 import { Card, CardContent, CardActions, Box, CircularProgress, useMediaQuery, useTheme } from '@material-ui/core';
-import { useQueryClient } from 'react-query';
-import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import fusebitLogo from '../../../assets/fusebit-logo.svg';
-import { ACCOUNT_INTEGRATIONS_GET_ONE } from '../../../hooks/api/v2/account/integration/useGetOne';
-import { useAuthContext } from '../../../hooks/useAuthContext';
-import { ApiResponse } from '../../../hooks/useAxios';
+import { useGetIntegrationFromCache } from '../../../hooks/useGetIntegrationFromCache';
 import { useModal } from '../../../hooks/useModal';
-import { Integration } from '../../../interfaces/integration';
 import Button from '../../common/Button/Button';
 import EditGuiModal from '../EditGuiModal';
 import useEditor from '../FusebitEditor/useEditor';
@@ -41,17 +36,10 @@ interface Props {
 const EditorCard: React.FC<Props> = ({ name, className }) => {
   const [editGuiModalOpen, setEditGuiModalOpen] = useModal();
   const { handleEdit, isEditing } = useEditor({ enableListener: false, onReadyToRun: () => setEditGuiModalOpen(true) });
-  const queryClient = useQueryClient();
-  const { userData } = useAuthContext();
-  const { id } = useParams<{ id: string }>();
   const theme = useTheme();
   const matchesMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  // TODO: Move to a custom hook
-  const integrationData = queryClient.getQueryData<ApiResponse<Integration>>([
-    ACCOUNT_INTEGRATIONS_GET_ONE,
-    { id, accountId: userData.accountId, subscriptionId: userData.subscriptionId },
-  ]);
+  const integrationData = useGetIntegrationFromCache();
 
   return (
     <>
@@ -71,7 +59,7 @@ const EditorCard: React.FC<Props> = ({ name, className }) => {
           <Box display="flex" mb="32px" justifyContent="center">
             <img src={fusebitLogo} alt="fusebit" width={109} height={28} />
           </Box>
-          {name}
+          <h3>{name}</h3>
         </StyledContent>
         <StyledActions>
           <Button

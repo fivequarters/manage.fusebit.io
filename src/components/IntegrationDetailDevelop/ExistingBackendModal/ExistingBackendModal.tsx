@@ -1,10 +1,5 @@
-import { useQueryClient } from 'react-query';
-import { useParams } from 'react-router-dom';
-import { ACCOUNT_INTEGRATIONS_GET_ONE } from '../../../hooks/api/v2/account/integration/useGetOne';
-import { useAuthContext } from '../../../hooks/useAuthContext';
-import { ApiResponse } from '../../../hooks/useAxios';
+import { useGetIntegrationFromCache } from '../../../hooks/useGetIntegrationFromCache';
 import { BackendClient } from '../../../interfaces/backendClient';
-import { Integration } from '../../../interfaces/integration';
 import BaseBackendModal from '../BaseBackendModal';
 
 interface Props {
@@ -14,14 +9,7 @@ interface Props {
 }
 
 const ExistingBackendModal = ({ open, onClose, backendClient }: Props) => {
-  const queryClient = useQueryClient();
-  const { id } = useParams<{ id: string }>();
-  const { userData } = useAuthContext();
-
-  const integrationData = queryClient.getQueryData<ApiResponse<Integration>>([
-    ACCOUNT_INTEGRATIONS_GET_ONE,
-    { id, accountId: userData.accountId, subscriptionId: userData.subscriptionId },
-  ]);
+  const integrationData = useGetIntegrationFromCache();
 
   return (
     <BaseBackendModal
