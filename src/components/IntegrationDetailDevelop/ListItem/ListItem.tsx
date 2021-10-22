@@ -1,7 +1,7 @@
-import { Box, Icon, IconButton, Typography } from '@material-ui/core';
+import { Box, Icon, Typography } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
-import CloseIcon from '@material-ui/icons/Close';
+import { Close } from '../../globalStyle';
 
 const StyledContainer = styled(Box)`
   &:not(:last-child) {
@@ -17,6 +17,10 @@ interface Props {
   id?: string;
   onClick?: () => void;
 }
+
+const StyledCloseButton = styled(Close)`
+  position: static;
+`;
 
 const ListItem: React.FC<Props> = ({ name, icon, className, onDelete, onClick, id, ...props }) => {
   return (
@@ -52,15 +56,12 @@ const ListItem: React.FC<Props> = ({ name, icon, className, onDelete, onClick, i
       </Typography>
       {onDelete && (
         <Box ml="auto">
-          <IconButton
-            size="small"
+          <StyledCloseButton
             onClick={(e) => {
               e.stopPropagation();
               onDelete();
             }}
-          >
-            <CloseIcon fontSize="small" htmlColor="black" />
-          </IconButton>
+          />
         </Box>
       )}
     </StyledContainer>
