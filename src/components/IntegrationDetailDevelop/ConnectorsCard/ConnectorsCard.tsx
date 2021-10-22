@@ -2,6 +2,7 @@ import { Box, useMediaQuery, useTheme } from '@material-ui/core';
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import differenceWith from 'lodash.differencewith';
 import { useAccountConnectorsGetAll } from '../../../hooks/api/v2/account/connector/useGetAll';
 import { useAuthContext } from '../../../hooks/useAuthContext';
 import { useGetIntegrationFromCache } from '../../../hooks/useGetIntegrationFromCache';
@@ -61,7 +62,7 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
   const integrationData = useGetIntegrationFromCache();
 
   const installedConnectors = useMemo(() => {
-    const allConnectors = (integrationData?.data.data.components || []).map((integrationConnector) => {
+    return (integrationData?.data.data.components || []).map((integrationConnector) => {
       const existingConnector = connectors?.data.items.find((c) => c.id === integrationConnector.entityId);
 
       return (
@@ -72,9 +73,17 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
         }
       );
     });
-
-    return (allConnectors as FinalConnector[]).sort((a) => (a.missing ? 1 : -1));
   }, [connectors, integrationData]);
+
+  const isLinkExistingDisabled = useMemo(
+    () =>
+      differenceWith(
+        connectors?.data.items || [],
+        integrationData?.data.data.components || [],
+        (a, b) => a.id === b.entityId
+      ).length === 0,
+    [connectors, integrationData]
+  );
 
   return (
     <>
@@ -112,7 +121,7 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
                 }
               }
               onClick={toggleLinkExistingModalOpen}
-              disabled={installedConnectors.length >= 5}
+              disabled={isLinkExistingDisabled}
             >
               Link existing
             </Button>
