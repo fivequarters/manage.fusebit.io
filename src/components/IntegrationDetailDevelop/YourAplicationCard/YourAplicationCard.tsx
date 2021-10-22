@@ -11,6 +11,7 @@ import LineConnector from '../../common/LineConnector';
 import BackendItem from '../BackendItem';
 import BaseCard from '../BaseCard';
 import { CARD_OVERLAPPING_MEDIA_QUERY } from '../constants';
+import EmptyBackendList from '../EmptyBackendList';
 import { INTEGRATION_CARD_ID } from '../IntegrationCard/IntegrationCard';
 import NewBackendModal from '../NewBackendModal';
 
@@ -60,9 +61,11 @@ const YourAplication: React.FC<Props> = ({ className }) => {
         }
       >
         <Box>
-          {backends.map((backend) => (
-            <BackendItem key={backend.id} backend={backend} />
-          ))}
+          {backends.length > 0 ? (
+            backends.map((backend) => <BackendItem key={backend.id} backend={backend} />)
+          ) : (
+            <EmptyBackendList />
+          )}
         </Box>
       </BaseCard>
       {matchesCardOverlapping && (

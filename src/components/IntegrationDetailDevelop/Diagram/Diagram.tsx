@@ -8,12 +8,14 @@ import IntegrationCard from '../IntegrationCard';
 import LinksTitle from '../LinksTitle';
 import YourAplication from '../YourAplicationCard';
 
-const centerMixin = css<{ $matchesCardOverlapping: boolean }>`
-  margin: 0 auto;
-`;
+const centerMixin = (props: { $matchesCardOverlapping: boolean }) =>
+  props.$matchesCardOverlapping &&
+  css<{ $matchesCardOverlapping: boolean }>`
+    margin: 0 auto;
+  `;
 
 const StyledYourApplicationCard = styled(YourAplication)<{ $matchesCardOverlapping: boolean }>`
-  ${(props) => props.$matchesCardOverlapping && centerMixin};
+  ${centerMixin};
 `;
 
 const StyledIntegrationCard = styled(IntegrationCard)<{ $matchesCardOverlapping: boolean }>`
@@ -27,7 +29,7 @@ const StyledIntegrationCard = styled(IntegrationCard)<{ $matchesCardOverlapping:
 
 const StyledConnectorsCard = styled(ConnectorsCard)<{ $matchesCardOverlapping: boolean }>`
   margin-left: auto;
-  ${(props) => props.$matchesCardOverlapping && centerMixin};
+  ${centerMixin};
 `;
 
 interface Props {
@@ -54,7 +56,12 @@ const Diagram: React.FC<Props> = ({ isLoading }) => {
               <StyledConnectorsCard $matchesCardOverlapping={matchesCardOverlapping} />
             </Grid>
           </Grid>
-          {!matchesCardOverlapping && (
+          {matchesCardOverlapping ? (
+            <Box display="flex" flexDirection="column" maxWidth="389px" m="0 auto">
+              <LinksTitle />
+              <FooterLinks links={['connectingFusebit', 'gettingStarted', 'programmingModel']} />
+            </Box>
+          ) : (
             <Grid container>
               <Grid item xs={4}>
                 <Box display="flex" flexDirection="column">
@@ -69,12 +76,6 @@ const Diagram: React.FC<Props> = ({ isLoading }) => {
                 </Box>
               </Grid>
             </Grid>
-          )}
-          {matchesCardOverlapping && (
-            <Box display="flex" flexDirection="column" maxWidth="389px" m="0 auto">
-              <LinksTitle />
-              <FooterLinks links={['connectingFusebit', 'gettingStarted', 'programmingModel']} />
-            </Box>
           )}
         </Box>
       )}
