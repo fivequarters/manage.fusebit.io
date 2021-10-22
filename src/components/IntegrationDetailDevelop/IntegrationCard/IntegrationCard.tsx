@@ -19,23 +19,26 @@ import useEditor from '../FusebitEditor/useEditor';
 import MobileDrawer from '../MobileDrawer';
 
 const StyledCard = styled(Card)`
+  display: flex;
+  flex-direction: column;
   height: 260px;
   width: 285px;
   margin: 0 auto;
   border: 2px solid #f83420;
   box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
   border-radius: 8px;
+`;
+
+const StyledContent = styled(CardContent)`
+  padding: 32px 32px 0;
+  flex: 1;
   display: flex;
   flex-direction: column;
 `;
 
-const StyledContent = styled(CardContent)`
-  padding: 32px;
-`;
-
 const StyledActions = styled(CardActions)`
-  padding: 32px;
-  margin: 0 auto;
+  padding: 0 32px 32px;
+  margin: auto;
 `;
 
 interface Props {
@@ -68,19 +71,20 @@ const IntegrationCard: React.FC<Props> = ({ className }) => {
       )}
       <StyledCard id={INTEGRATION_CARD_ID} className={className}>
         <StyledContent>
-          <Box display="flex" mb="32px" justifyContent="center">
+          <Box display="flex" mb="14px" justifyContent="center">
             <img src={fusebitLogo} alt="fusebit" width={109} height={28} />
           </Box>
-          <Typography
-            variant="h3"
-            style={{
-              textAlign: 'center',
-              fontWeight: 600,
-              fontSize: 20,
-            }}
-          >
-            {integrationData?.data.id || id}
-          </Typography>
+          <Box display="flex" alignItems="center" justifyContent="center" flex={1}>
+            <Typography
+              variant="h3"
+              style={{
+                fontWeight: 600,
+                fontSize: 20,
+              }}
+            >
+              {integrationData?.data.id || id}
+            </Typography>
+          </Box>
         </StyledContent>
         <StyledActions>
           <Button
