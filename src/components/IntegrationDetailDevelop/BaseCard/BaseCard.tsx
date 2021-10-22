@@ -10,6 +10,10 @@ const StyledCardHeader = styled(CardHeader)`
     line-height: 18px;
     font-weight: 600;
   }
+
+  @media only screen and (max-width: 1200px) {
+    padding: 24px 24px 0;
+  }
 `;
 
 const StyledCard = styled(Card)`
@@ -23,14 +27,24 @@ const StyledCard = styled(Card)`
 
 const StyledContent = styled(CardContent)`
   padding: 32px;
+
+  @media only screen and (max-width: 1200px) {
+    padding: 24px;
+  }
 `;
 
 const StyledCardActions = styled(CardActions)`
-  margin: auto auto 0;
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
   padding: 0 32px 32px;
 
   & button {
     white-space: nowrap;
+  }
+
+  @media only screen and (max-width: 1200px) {
+    padding: 0 24px 24px;
   }
 `;
 

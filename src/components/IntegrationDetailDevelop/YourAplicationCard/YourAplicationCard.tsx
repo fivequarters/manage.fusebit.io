@@ -27,7 +27,7 @@ const YourAplication: React.FC<Props> = ({ className }) => {
   const { mutateAsync } = useBackendCreateOne();
   const { createLoader, removeLoader } = useLoader();
   const theme = useTheme();
-  const matchesMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const matchesMobile = useMediaQuery(theme.breakpoints.down('xs'));
   const matchesCardOverlapping = useMediaQuery(CARD_OVERLAPPING_MEDIA_QUERY);
   const updateLines = useUpdateLineConnectors();
 

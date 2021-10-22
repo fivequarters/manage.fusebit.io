@@ -50,7 +50,7 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
   const [connectorModalOpen, , toggleConnectorModalOpen] = useModal();
   const [linkExistingModalOpen, , toggleLinkExistingModalOpen] = useModal();
   const theme = useTheme();
-  const matchesMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const matchesMobile = useMediaQuery(theme.breakpoints.down('xs'));
   const matchesCardOverlapping = useMediaQuery(CARD_OVERLAPPING_MEDIA_QUERY);
   const { getRedirectLink } = useGetRedirectLink();
   const updateLines = useUpdateLineConnectors();
@@ -106,26 +106,13 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
         isLoading={isLoading}
         actions={
           <>
-            <Button
-              mode="add"
-              size={matchesMobile ? 'small' : 'large'}
-              style={
-                {
-                  // width: 160,
-                }
-              }
-              onClick={toggleConnectorModalOpen}
-            >
+            <Button mode="add" size={matchesMobile ? 'small' : 'large'} fullWidth onClick={toggleConnectorModalOpen}>
               Add new
             </Button>
             <Button
               size={matchesMobile ? 'small' : 'large'}
               mode="add"
-              style={
-                {
-                  // width: 160,
-                }
-              }
+              fullWidth
               onClick={toggleLinkExistingModalOpen}
               disabled={isLinkExistingDisabled}
             >
