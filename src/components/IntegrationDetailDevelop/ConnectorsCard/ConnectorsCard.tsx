@@ -19,6 +19,7 @@ import { CARD_OVERLAPPING_MEDIA_QUERY } from '../constants';
 import { INTEGRATION_CARD_ID } from '../IntegrationCard/IntegrationCard';
 import arrowIcon from '../../../assets/arrow-right-black.svg';
 import useUpdateLineConnectors from '../../../hooks/useUpdateLineConnectors';
+import { trackEvent } from '../../../utils/analytics';
 
 interface Props {
   className?: string;
@@ -91,6 +92,16 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
     updateLines();
   }, [connectors, updateLines]);
 
+  const handleAddNewConnector = () => {
+    trackEvent('Develop Add New Button Clicked', 'Integration');
+    toggleConnectorModalOpen();
+  };
+
+  const handleLinkExistingConnector = () => {
+    trackEvent('Develop Link Existing Clicked', 'Integration');
+    toggleConnectorModalOpen();
+  };
+
   return (
     <>
       <AddConnectorToIntegrationModal
@@ -98,7 +109,7 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
         onClose={toggleConnectorModalOpen}
         integrationData={integrationData}
       />
-      <ConnectorListModal open={linkExistingModalOpen} onClose={toggleLinkExistingModalOpen} />
+      <ConnectorListModal open={linkExistingModalOpen} onClose={handleLinkExistingConnector} />
       <BaseCard
         id="connectors"
         className={className}
@@ -106,7 +117,7 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
         isLoading={isLoading}
         actions={
           <>
-            <Button mode="add" size={matchesMobile ? 'small' : 'large'} fullWidth onClick={toggleConnectorModalOpen}>
+            <Button mode="add" size={matchesMobile ? 'small' : 'large'} fullWidth onClick={handleAddNewConnector}>
               Add new
             </Button>
             <Button

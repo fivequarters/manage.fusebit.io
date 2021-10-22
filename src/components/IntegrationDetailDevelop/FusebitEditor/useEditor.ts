@@ -103,6 +103,7 @@ const useEditor = ({ enableListener = true, isMounted = false, onReadyToRun, onR
   const handleLogin = () => window.open(localStorage.getItem(LOCALSTORAGE_SESSION_URL_KEY) || '')?.focus();
 
   const handleEdit = async () => {
+    trackEvent('Develop Edit Web Button Clicked', 'Integration');
     try {
       const hasInstall = await findInstall();
 
