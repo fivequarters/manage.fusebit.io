@@ -15,6 +15,83 @@ import { trackEvent } from '../../../utils/analytics';
 import InformationalBanner from '../../common/InformationalBanner';
 import BaseJsonForm from '../../common/BaseJsonForm';
 
+const test = {
+  type: 'object',
+  properties: {
+    mode: {
+      type: 'object',
+      properties: {
+        useProduction: {
+          title: 'Production Credentials',
+          type: 'boolean',
+        },
+      },
+    },
+    constants: {
+      type: 'object',
+      properties: {
+        urls: {
+          type: 'object',
+          properties: {
+            callbackUrl: {
+              title: 'OAuth2 Redirect URL',
+              type: 'string',
+              readOnly: true,
+              copy: true,
+            },
+            webhookUrl: {
+              title: 'Events API Request URL',
+              type: 'string',
+              readOnly: true,
+              copy: true,
+            },
+          },
+        },
+      },
+    },
+    authorizationUrl: {
+      title: 'Override the OAuth2 Authorization URL',
+      type: 'string',
+    },
+    tokenUrl: {
+      title: 'Override the OAuth2 Token Request URL',
+      type: 'string',
+    },
+    scope: {
+      title: 'Bot Token Scopes (space separated)',
+      type: 'string',
+    },
+    clientId: {
+      title: 'The Client ID from your Slack App',
+      type: 'string',
+    },
+    clientSecret: {
+      title: 'The Client Secret from your Slack App',
+      type: 'string',
+    },
+    refreshErrorLimit: {
+      type: 'integer',
+    },
+    refreshInitialBackoff: {
+      type: 'integer',
+    },
+    refreshWaitCountLimit: {
+      type: 'integer',
+    },
+    refreshBackoffIncrement: {
+      type: 'integer',
+    },
+    accessTokenExpirationBuffer: {
+      type: 'integer',
+    },
+    signingSecret: {
+      title: 'Signing Secret from your Slack App',
+      type: 'string',
+    },
+  },
+  required: ['scope', 'clientId', 'clientSecret'],
+};
+
 const ConfigureForm: React.FC = () => {
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
@@ -100,7 +177,7 @@ const ConfigureForm: React.FC = () => {
               </InformationalBanner>
             )}
             <BaseJsonForm
-              schema={config?.data.schema}
+              schema={test}
               uischema={config?.data.uischema}
               data={jsonFormsInputs || config?.data.data}
               onChange={({ errors: _errors, data: newData }) => {
