@@ -2,7 +2,7 @@ import { AxiosInstance } from 'axios';
 import { useMutation, useQueryClient } from 'react-query';
 import { BackendClient } from '../../../../interfaces/backendClient';
 import { User } from '../../../../interfaces/user';
-import { putBackendClients } from '../../../../utils/backendClients';
+import { putBackendClients } from './utils/putBackendClients';
 import { addClientIdentity, createClient } from '../../../../utils/clients';
 import { generateKeyPair } from '../../../../utils/crypto';
 import { createIssuer } from '../../../../utils/issuer';

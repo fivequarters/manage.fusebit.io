@@ -1,7 +1,7 @@
 import { AxiosInstance } from 'axios';
 import { useMutation, useQueryClient } from 'react-query';
 import { User } from '../../../../interfaces/user';
-import { putBackendClients } from '../../../../utils/backendClients';
+import { putBackendClients } from './utils/putBackendClients';
 import { removeClient } from '../../../../utils/clients';
 import { removeIssuer } from '../../../../utils/issuer';
 import { createAxiosClient } from '../../../../utils/utils';
