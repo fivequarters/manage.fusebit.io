@@ -1,5 +1,6 @@
 import { Box, Grid, useMediaQuery } from '@material-ui/core';
 import styled, { css } from 'styled-components';
+import { Xwrapper } from 'react-xarrows';
 import Loader from '../../common/Loader';
 import ConnectorsCard from '../ConnectorsCard';
 import { CARD_OVERLAPPING_MEDIA_QUERY } from '../constants';
@@ -40,7 +41,7 @@ const Diagram: React.FC<Props> = ({ isLoading }) => {
   const matchesCardOverlapping = useMediaQuery(CARD_OVERLAPPING_MEDIA_QUERY);
 
   return (
-    <>
+    <Xwrapper>
       {isLoading ? (
         <Loader />
       ) : (
@@ -79,7 +80,7 @@ const Diagram: React.FC<Props> = ({ isLoading }) => {
           )}
         </Box>
       )}
-    </>
+    </Xwrapper>
   );
 };
 

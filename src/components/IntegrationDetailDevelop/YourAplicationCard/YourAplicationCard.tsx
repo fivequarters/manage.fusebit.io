@@ -1,9 +1,10 @@
 import { Box, useMediaQuery, useTheme } from '@material-ui/core';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useBackendCreateOne } from '../../../hooks/api/v1/backend/useCreateOne';
 import { useBackendGetAll } from '../../../hooks/api/v1/backend/useGetAll';
 import { useLoader } from '../../../hooks/useLoader';
 import { useModal } from '../../../hooks/useModal';
+import useUpdateLineConnectors from '../../../hooks/useUpdateLineConnectors';
 import { BackendClient } from '../../../interfaces/backendClient';
 import { trackEvent } from '../../../utils/analytics';
 import Button from '../../common/Button/Button';
@@ -28,6 +29,7 @@ const YourAplication: React.FC<Props> = ({ className }) => {
   const theme = useTheme();
   const matchesMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const matchesCardOverlapping = useMediaQuery(CARD_OVERLAPPING_MEDIA_QUERY);
+  const updateLines = useUpdateLineConnectors();
 
   const handleConnect = async () => {
     trackEvent('Develop Connect Button Clicked', 'Integration');
@@ -37,6 +39,10 @@ const YourAplication: React.FC<Props> = ({ className }) => {
     setCreatedBackend(newBackend);
     toggleNewBackend();
   };
+
+  useEffect(() => {
+    updateLines();
+  }, [backends, updateLines]);
 
   return (
     <>

@@ -1,5 +1,5 @@
 import { Box, useMediaQuery, useTheme } from '@material-ui/core';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import differenceWith from 'lodash.differencewith';
@@ -18,6 +18,7 @@ import ConnectorListModal from '../ConnectorListModal';
 import { CARD_OVERLAPPING_MEDIA_QUERY } from '../constants';
 import { INTEGRATION_CARD_ID } from '../IntegrationCard/IntegrationCard';
 import arrowIcon from '../../../assets/arrow-right-black.svg';
+import useUpdateLineConnectors from '../../../hooks/useUpdateLineConnectors';
 
 interface Props {
   className?: string;
@@ -52,6 +53,7 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
   const matchesMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const matchesCardOverlapping = useMediaQuery(CARD_OVERLAPPING_MEDIA_QUERY);
   const { getRedirectLink } = useGetRedirectLink();
+  const updateLines = useUpdateLineConnectors();
 
   const { data: connectors, isLoading } = useAccountConnectorsGetAll({
     enabled: userData.token,
@@ -84,6 +86,10 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
       ).length === 0,
     [connectors, integrationData]
   );
+
+  useEffect(() => {
+    updateLines();
+  }, [connectors, updateLines]);
 
   return (
     <>
