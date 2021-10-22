@@ -15,8 +15,6 @@ const ExistingBackendModal = ({ open, onClose, backendClient }: Props) => {
     <BaseBackendModal
       token={`*************${backendClient.tokenSignature?.slice(-4)}`}
       name={backendClient.name || ''}
-      // onChange={onChange}
-      onChange={() => {}}
       id={backendClient.id || ''}
       disableCopy
       open={open}

@@ -11,6 +11,7 @@ import { useLoader } from './useLoader';
 import { Connector } from '../interfaces/connector';
 import { ACCOUNT_INTEGRATIONS_GET_ONE } from './api/v2/account/integration/useGetOne';
 import { FinalConnector } from '../interfaces/integrationDetailDevelop';
+import { ACCOUNT_CONNECTORS_GET_ALL } from './api/v2/account/connector/useGetAll';
 
 const useConnector = () => {
   const updateIntegration = useAccountIntegrationUpdateIntegration<Operation>();
@@ -28,7 +29,7 @@ const useConnector = () => {
     });
     await waitForEntityStateChange('integration', [integrationId]);
     queryClient.invalidateQueries(ACCOUNT_INTEGRATIONS_GET_ONE, { active: true });
-    queryClient.invalidateQueries('accountConnectorsGetAll', { active: true });
+    queryClient.invalidateQueries(ACCOUNT_CONNECTORS_GET_ALL, { active: true });
   };
 
   const addConnectorToIntegration = async (

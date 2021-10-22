@@ -31,8 +31,6 @@ const NewBackendModal = ({ open, onClose, backendClient }: Props) => {
     <BaseBackendModal
       name={backendClient?.name || ''}
       id={backendClient?.id || ''}
-      //   onChange={getBackendClients}
-      onChange={() => {}}
       token={backendClient?.token || ''}
       showWarning={showWarning}
       setShowWarning={setShowWarning}
