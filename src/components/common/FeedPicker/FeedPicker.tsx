@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
-import { JsonForms } from '@jsonforms/react';
+
 import { ValidationMode } from '@jsonforms/core';
 import { Button, TextField } from '@material-ui/core';
 import debounce from 'lodash.debounce';
@@ -17,6 +16,7 @@ import { trackEvent } from '../../../utils/analytics';
 import Loader from '../Loader';
 import { useTrackPage } from '../../../hooks/useTrackPage';
 import { urlOrSvgToImage } from '../../../utils/utils';
+import BaseJsonForm from '../BaseJsonForm';
 
 enum Filters {
   ALL = 'All',
@@ -242,12 +242,10 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
                 <SC.ConnectorDescription>{activeTemplate.description || ''}</SC.ConnectorDescription>
                 {activeTemplate.outOfPlan || (
                   <SC.FormWrapper>
-                    <JsonForms
+                    <BaseJsonForm
                       schema={activeTemplate.configuration.schema}
                       uischema={activeTemplate.configuration.uischema}
                       data={data}
-                      renderers={materialRenderers}
-                      cells={materialCells}
                       onChange={handleJsonFormsChange}
                       validationMode={validationMode}
                     />

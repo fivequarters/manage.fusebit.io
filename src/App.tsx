@@ -5,45 +5,36 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import { lightTheme } from './theme/appTheme';
 import { APP_TITLE } from './utils/constants';
 import { ContextProvider } from './hooks/useAuthContext';
-import { useIntercom } from './hooks/useIntercom';
 import DashboardRoutes from './components/DashboardRoutes';
 
-function App() {
-  useIntercom();
-
-  return (
-    <>
-      <HelmetProvider>
-        <Helmet>
-          <title>{APP_TITLE}</title>
-        </Helmet>
-        <ContextProvider>
-          {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />}
-          <ThemeProvider theme={responsiveFontSizes(createMuiTheme(lightTheme))}>
-            <CookieConsent
-              location="bottom"
-              buttonText="Accept"
-              cookieName="CookieConsent"
-              style={{ background: 'rgba(215, 229, 255, 0.4)' }}
-              buttonStyle={{
-                borderRadius: '4px',
-                border: '1px solid #F83420',
-                backgroundColor: 'white',
-                color: '#F83420',
-                fontSize: '13px',
-              }}
-              expires={150}
-            >
-              <p style={{ color: '#333333', fontWeight: 500 }}>
-                This website uses cookies to enhance the user experience.
-              </p>
-            </CookieConsent>
-            <DashboardRoutes />
-          </ThemeProvider>
-        </ContextProvider>
-      </HelmetProvider>
-    </>
-  );
-}
+const App = () => (
+  <HelmetProvider>
+    <Helmet>
+      <title>{APP_TITLE}</title>
+    </Helmet>
+    <ContextProvider>
+      {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />}
+      <ThemeProvider theme={responsiveFontSizes(createMuiTheme(lightTheme))}>
+        <CookieConsent
+          location="bottom"
+          buttonText="Accept"
+          cookieName="CookieConsent"
+          style={{ background: 'rgba(215, 229, 255, 0.4)' }}
+          buttonStyle={{
+            borderRadius: '4px',
+            border: '1px solid #F83420',
+            backgroundColor: 'white',
+            color: '#F83420',
+            fontSize: '13px',
+          }}
+          expires={150}
+        >
+          <p style={{ color: '#333333', fontWeight: 500 }}>This website uses cookies to enhance the user experience.</p>
+        </CookieConsent>
+        <DashboardRoutes />
+      </ThemeProvider>
+    </ContextProvider>
+  </HelmetProvider>
+);
 
 export default App;

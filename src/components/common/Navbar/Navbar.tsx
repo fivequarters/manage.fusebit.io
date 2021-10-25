@@ -3,9 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { Container, Button, Menu, Drawer } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import * as SC from './styles';
-import client from '../../../assets/client.jpg';
+import accountImg from '../../../assets/account.svg';
 import { Props } from '../../../interfaces/Navbar';
 import arrow from '../../../assets/down-arrow-white.svg';
 import rightArrow from '../../../assets/arrow-right-black.svg';
@@ -21,7 +21,7 @@ import cross from '../../../assets/cross.svg';
 
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 
-// TOOD: Refactor nested ternary expressions
+// TODO: Refactor, split and remove nested ternary expressions
 
 const Navbar: React.FC<Props> = ({
   sectionName,
@@ -29,6 +29,7 @@ const Navbar: React.FC<Props> = ({
   integration,
   connector,
   authentication,
+  team,
   authenticationLink,
   integrationsLink,
 }) => {
@@ -40,6 +41,7 @@ const Navbar: React.FC<Props> = ({
   const [drawerBottomOpen, setDrawerBottomOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
   const { getRedirectLink } = useGetRedirectLink();
+  const { accountId } = useParams<{ accountId: string }>();
 
   const { data: integrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({
     enabled: userData.token,
@@ -74,8 +76,12 @@ const Navbar: React.FC<Props> = ({
   const to = integrationsLink
     ? getRedirectLink('/integrations/overview')
     : authenticationLink
-    ? getRedirectLink('/authentication/users')
+    ? `/account/${accountId}/settings`
     : getRedirectLink('/connectors/overview');
+
+  const handleOnClickEmail = () => {
+    history.push(getRedirectLink(`/authentication/${userData.userId}/overview`));
+  };
 
   return (
     <SC.Background>
@@ -253,7 +259,7 @@ const Navbar: React.FC<Props> = ({
                           <Link style={{ marginRight: 'auto' }} to={getRedirectLink('/connectors/overview')}>
                             <SC.SectionDropdownTitle>Accounts</SC.SectionDropdownTitle>
                           </Link>
-                          <Link to={getRedirectLink('/authentication/users')}>
+                          <Link to={`/account/${accountId}/settings`}>
                             <SC.SectionDropdownSeeMore>
                               See all
                               <img src={rightArrow} alt="See all" height="8" width="8" />
@@ -273,10 +279,10 @@ const Navbar: React.FC<Props> = ({
                     <Drawer anchor="bottom" open={drawerBottomOpen} onClose={() => setDrawerBottomOpen(false)}>
                       <SC.SectionDropdownMenu>
                         <SC.Flex>
-                          <Link style={{ marginRight: 'auto' }} to={getRedirectLink('/authentication/users')}>
+                          <Link style={{ marginRight: 'auto' }} to={`/account/${accountId}/settings`}>
                             <SC.SectionDropdownTitle>Accounts</SC.SectionDropdownTitle>
                           </Link>
-                          <Link to={getRedirectLink('/authentication/users')}>
+                          <Link to={`/account/${accountId}/settings`}>
                             <SC.SectionDropdownSeeMore>
                               See all
                               <img src={rightArrow} alt="See all" height="8" width="8" />
@@ -302,7 +308,9 @@ const Navbar: React.FC<Props> = ({
                   integration
                     ? getRedirectLink('/integrations/overview')
                     : authentication
-                    ? getRedirectLink('/authentication/users')
+                    ? `/account/${accountId}/settings`
+                    : team
+                    ? `/account/${accountId}/team`
                     : getRedirectLink('/connectors/overview')
                 }
               >
@@ -321,7 +329,7 @@ const Navbar: React.FC<Props> = ({
               aria-haspopup="true"
               onClick={(event: any) => setAnchorUserDropdown(event.currentTarget)}
               size="large"
-              startIcon={<SC.User src={userData.picture || client} />}
+              startIcon={<SC.User src={userData.picture || accountImg} />}
               endIcon={Boolean(anchorUserDropdown) && !loggingOut ? <ExpandLessIcon /> : <ExpandMoreIcon />}
               variant="text"
               color="inherit"
@@ -338,8 +346,8 @@ const Navbar: React.FC<Props> = ({
             >
               <SC.UserDropdown>
                 <SC.UserDropdownCompany>{userData.company}</SC.UserDropdownCompany>
-                <SC.UserDropdownInfo>
-                  <SC.UserDropdownInfoImage src={userData.picture || client} alt="user" height="38" width="38" />
+                <SC.UserDropdownInfo onClick={handleOnClickEmail}>
+                  <SC.UserDropdownInfoImage src={userData.picture || accountImg} alt="user" height="38" width="38" />
                   <SC.UserDropdownPersonalInfo>
                     <SC.UserDropdownInfoName>
                       {userData.firstName} {userData.lastName}
@@ -357,14 +365,11 @@ const Navbar: React.FC<Props> = ({
                   </SC.UserDropdownStatus>
                 </Link>
                 <SC.UserDropdownLinksWrapper>
-                  <Link to={getRedirectLink('/authentication/users')}>
-                    <SC.UserDropdownLink>Authentication</SC.UserDropdownLink>
+                  <Link to={`/account/${accountId}/settings`}>
+                    <SC.UserDropdownLink>Settings</SC.UserDropdownLink>
                   </Link>
-                  <Link to="/billing">
-                    <SC.UserDropdownLink>Billing</SC.UserDropdownLink>
-                  </Link>
-                  <Link to="/settings">
-                    <SC.UserDropdownLink noMargin>Settings</SC.UserDropdownLink>
+                  <Link to={`/account/${accountId}/team`}>
+                    <SC.UserDropdownLink noMargin>Team</SC.UserDropdownLink>
                   </Link>
                 </SC.UserDropdownLinksWrapper>
                 <SC.UserButtonWrapper>
@@ -390,7 +395,7 @@ const Navbar: React.FC<Props> = ({
               </SC.Flex>
 
               <SC.UserDropdownInfo>
-                <SC.UserDropdownInfoImage src={userData.picture || client} alt="user" height="38" width="38" />
+                <SC.UserDropdownInfoImage src={userData.picture || accountImg} alt="user" height="38" width="38" />
                 <SC.UserDropdownPersonalInfo>
                   <SC.UserDropdownInfoName>
                     {userData.firstName} {userData.lastName}
@@ -409,14 +414,11 @@ const Navbar: React.FC<Props> = ({
                 </SC.UserDropdownStatus>
               </Link>
               <SC.UserDropdownLinksWrapper>
-                <Link to={getRedirectLink('/authentication/users')}>
-                  <SC.UserDropdownLink>Authentication</SC.UserDropdownLink>
+                <Link to={`/account/${accountId}/settings`}>
+                  <SC.UserDropdownLink>Settings</SC.UserDropdownLink>
                 </Link>
-                <Link to="/billing">
-                  <SC.UserDropdownLink>Billing</SC.UserDropdownLink>
-                </Link>
-                <Link to="/settings">
-                  <SC.UserDropdownLink noMargin>Settings</SC.UserDropdownLink>
+                <Link to={`/account/${accountId}/team`}>
+                  <SC.UserDropdownLink noMargin>Team</SC.UserDropdownLink>
                 </Link>
               </SC.UserDropdownLinksWrapper>
 
