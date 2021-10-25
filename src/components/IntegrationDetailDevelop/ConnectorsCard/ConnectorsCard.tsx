@@ -48,8 +48,8 @@ const StyledSeeMoreLink = styled.a`
 
 const ConnectorsCard: React.FC<Props> = ({ className }) => {
   const { userData } = useAuthContext();
-  const [connectorModalOpen, , toggleConnectorModalOpen] = useModal();
-  const [linkExistingModalOpen, , toggleLinkExistingModalOpen] = useModal();
+  const [connectorModalOpen, setConnectorModalOpen] = useModal();
+  const [linkExistingModalOpen, setLinkExistingModalOpen] = useModal();
   const theme = useTheme();
   const matchesMobile = useMediaQuery(theme.breakpoints.down('xs'));
   const matchesCardOverlapping = useMediaQuery(CARD_OVERLAPPING_MEDIA_QUERY);
@@ -94,22 +94,22 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
 
   const handleAddNewConnector = () => {
     trackEvent('Develop Add New Button Clicked', 'Integration');
-    toggleConnectorModalOpen();
+    setConnectorModalOpen(true);
   };
 
   const handleLinkExistingConnector = () => {
     trackEvent('Develop Link Existing Clicked', 'Integration');
-    toggleConnectorModalOpen();
+    setLinkExistingModalOpen(true);
   };
 
   return (
     <>
       <AddConnectorToIntegrationModal
         open={connectorModalOpen}
-        onClose={toggleConnectorModalOpen}
+        onClose={() => setConnectorModalOpen(false)}
         integrationData={integrationData}
       />
-      <ConnectorListModal open={linkExistingModalOpen} onClose={handleLinkExistingConnector} />
+      <ConnectorListModal open={linkExistingModalOpen} onClose={() => setConnectorModalOpen(false)} />
       <BaseCard
         id="connectors"
         className={className}
@@ -124,7 +124,7 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
               size={matchesMobile ? 'small' : 'large'}
               mode="add"
               fullWidth
-              onClick={toggleLinkExistingModalOpen}
+              onClick={handleLinkExistingConnector}
               disabled={isLinkExistingDisabled}
             >
               Link existing
