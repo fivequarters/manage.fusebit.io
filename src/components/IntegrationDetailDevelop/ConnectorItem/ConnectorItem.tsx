@@ -15,6 +15,7 @@ import { INTEGRATION_CARD_ID } from '../IntegrationCard/IntegrationCard';
 import { CARD_OVERLAPPING_MEDIA_QUERY } from '../constants';
 import { FinalConnector } from '../../../interfaces/integrationDetailDevelop';
 import notFoundIcon from '../../../assets/warning-red.svg';
+import { urlOrSvgToImage } from '../../../utils/utils';
 
 interface Props {
   className?: string;
@@ -61,7 +62,7 @@ const ConnectorItem: React.FC<Props> = ({ className, connector, integrationData 
             <CircularProgress size={20} />
           ) : (
             <img
-              src={connector.missing ? notFoundIcon : connectorFeed?.smallIcon}
+              src={connector.missing ? notFoundIcon : urlOrSvgToImage(connectorFeed?.smallIcon)}
               alt="connector"
               height={20}
               width={20}

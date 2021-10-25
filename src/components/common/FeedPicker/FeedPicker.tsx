@@ -16,6 +16,7 @@ import { useReplaceMustache } from '../../../hooks/useReplaceMustache';
 import { trackEvent } from '../../../utils/analytics';
 import Loader from '../Loader';
 import { useTrackPage } from '../../../hooks/useTrackPage';
+import { urlOrSvgToImage } from '../../../utils/utils';
 
 enum Filters {
   ALL = 'All',
@@ -37,9 +38,6 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
   const [loading, setLoading] = React.useState(true);
   const query = useQuery();
   const { replaceMustache } = useReplaceMustache();
-
-  const urlOrSvgToImage = (img: string) =>
-    img.match('^<svg') ? `data:image/svg+xml;utf8,${encodeURIComponent(img)}` : img;
 
   const debouncedSetSearchFilter = debounce((keyword: string) => {
     if (isIntegration) {
