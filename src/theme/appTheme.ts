@@ -10,13 +10,25 @@ export const lightTheme: Theme = createMuiTheme({
       main: 'rgba(215, 229, 255, 0.4)',
     },
     background: {
-      default: 'white',
+      default: '#fff',
     },
   },
   overrides: {
     MuiFormControl: {
       root: {
         marginBottom: '20px',
+      },
+    },
+    MuiSnackbarContent: {
+      root: {
+        backgroundColor: '#F83420',
+        borderRadius: '8px',
+        padding: '10px 20px',
+      },
+      message: {
+        fontFamily: 'Poppins',
+        fontWeight: 300,
+        fontSize: '14px',
       },
     },
     MuiDrawer: {

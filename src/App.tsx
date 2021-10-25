@@ -6,6 +6,7 @@ import { lightTheme } from './theme/appTheme';
 import { APP_TITLE } from './utils/constants';
 import { ContextProvider } from './hooks/useAuthContext';
 import DashboardRoutes from './components/DashboardRoutes';
+import RootSnackbar from './components/common/RootSnackbar/RootSnackbar';
 
 const App = () => (
   <HelmetProvider>
@@ -31,6 +32,7 @@ const App = () => (
         >
           <p style={{ color: '#333333', fontWeight: 500 }}>This website uses cookies to enhance the user experience.</p>
         </CookieConsent>
+        <RootSnackbar />
         <DashboardRoutes />
       </ThemeProvider>
     </ContextProvider>
