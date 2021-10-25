@@ -14,6 +14,7 @@ const useFilterFeed = ({ feed }: Props) => {
   const [activeFilter, setActiveFilter] = React.useState<string>(DefaultFilters.ALL);
 
   const allTags = useMemo(
+    // First item from catalog is always the same as the connector name
     () => [...new Set(feed.map((feedEntry) => feedEntry.tags.catalog.split(',').slice(1)).flat())],
     [feed]
   );
