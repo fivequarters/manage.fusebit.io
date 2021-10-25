@@ -11,7 +11,9 @@ type TrackEventHandler = (
 ) => void;
 
 // ad blocker workaround for Segment (if it is array, means ad blocker got in our way)
-export const analyticsClient = !Array.isArray(analytics)
+const isAdBlockerEnabled = Array.isArray(analytics);
+
+export const analyticsClient = !isAdBlockerEnabled
   ? analytics
   : {
       identify: () => {},
