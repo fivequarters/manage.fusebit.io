@@ -109,3 +109,7 @@ export const createAxiosClient: (token?: string, skipXUserAgent?: boolean) => Ax
 
   return instance;
 };
+
+export const getAllTagsFromFeed = (feeds: Feed[]) => [
+  ...new Set(feeds.map((feed) => feed.tags.catalog.split(',').slice(1)).flat()),
+];
