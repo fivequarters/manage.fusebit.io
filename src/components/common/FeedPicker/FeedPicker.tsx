@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { ValidationMode } from '@jsonforms/core';
-import { Button, TextField } from '@material-ui/core';
+import { Box, Button, TextField } from '@material-ui/core';
 import debounce from 'lodash.debounce';
 import * as SC from './styles';
 import { Props } from '../../../interfaces/feedPicker';
@@ -152,7 +152,9 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
       <SC.Flex>
         <SC.Column>
           {loading ? (
-            <Loader />
+            <Box minWidth="254px">
+              <Loader />
+            </Box>
           ) : (
             <>
               <SC.ColumnItem
