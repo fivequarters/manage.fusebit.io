@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { Feed } from '../interfaces/feed';
-import { getAllTagsFromFeed } from '../utils/utils';
 
 interface Props {
   feed: Feed[];
@@ -14,16 +13,17 @@ const useFilterFeed = ({ feed }: Props) => {
   const [searchFilter, setSearchFilter] = React.useState('');
   const [activeFilter, setActiveFilter] = React.useState<string>(DefaultFilters.ALL);
 
-  const allTags = useMemo(() => getAllTagsFromFeed(feed), [feed]);
+  const allTags = useMemo(
+    () => [...new Set(feed.map((feedEntry) => feedEntry.tags.catalog.split(',').slice(1)).flat())],
+    [feed]
+  );
 
   const filteredFeed = useMemo(() => {
     const applySearchFilter = (feedEntry: Feed) => feedEntry.name.toLowerCase().includes(searchFilter.toLowerCase());
 
     return activeFilter === DefaultFilters.ALL
       ? feed.filter(applySearchFilter)
-      : feed.filter((feedEntry) => {
-          return feedEntry.tags.catalog.includes(activeFilter) && applySearchFilter(feedEntry);
-        });
+      : feed.filter((feedEntry) => feedEntry.tags.catalog.includes(activeFilter) && applySearchFilter(feedEntry));
   }, [activeFilter, feed, searchFilter]);
 
   return {
