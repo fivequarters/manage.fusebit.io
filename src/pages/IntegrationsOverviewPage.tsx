@@ -1,6 +1,6 @@
 import { FC, ReactElement } from 'react';
 import Layout from '../components/common/Layout';
-import Navbar from '../components/common/Navbar';
+import Navbar from '../components/common/Navbar/NewNavbar';
 import { useTrackPage } from '../hooks/useTrackPage';
 import IntegrationsTable from '../components/IntegrationsOverview/IntegrationsTable';
 import TabComponent from '../components/common/TabComponent';
