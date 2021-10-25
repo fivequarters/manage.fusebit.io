@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import ReactMarkdown from 'react-markdown';
+import { Box } from '@material-ui/core';
 
 export const Card = styled.div<{ open: boolean }>`
   position: absolute;

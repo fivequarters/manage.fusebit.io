@@ -186,23 +186,25 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
           {loading || !activeTemplate ? (
             <Loader />
           ) : (
-            filteredFeed.map((feedEntry) => {
-              return (
-                <SC.ColumnItem
-                  key={feedEntry.id}
-                  onClick={() => handleTemplateChange(feedEntry)}
-                  active={feedEntry.id === activeTemplate.id}
-                >
-                  <SC.ColumnItemImage
-                    src={urlOrSvgToImage(feedEntry.smallIcon)}
-                    alt={feedEntry.name}
-                    height="18"
-                    width="18"
-                  />
-                  {feedEntry.name}
-                </SC.ColumnItem>
-              );
-            })
+            <Box overflow="auto">
+              {filteredFeed.map((feedEntry) => {
+                return (
+                  <SC.ColumnItem
+                    key={feedEntry.id}
+                    onClick={() => handleTemplateChange(feedEntry)}
+                    active={feedEntry.id === activeTemplate.id}
+                  >
+                    <SC.ColumnItemImage
+                      src={urlOrSvgToImage(feedEntry.smallIcon)}
+                      alt={feedEntry.name}
+                      height="18"
+                      width="18"
+                    />
+                    {feedEntry.name}
+                  </SC.ColumnItem>
+                );
+              })}
+            </Box>
           )}
         </SC.Column>
         <SC.ColumnBr />
