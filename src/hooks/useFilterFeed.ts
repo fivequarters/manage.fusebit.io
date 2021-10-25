@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
 import { Feed } from '../interfaces/feed';
 
-interface Props {
-  feed: Feed[];
-}
-
 export enum DefaultFilters {
   ALL = 'all',
+}
+
+interface Props {
+  feed: Feed[];
 }
 
 const useFilterFeed = ({ feed }: Props) => {
