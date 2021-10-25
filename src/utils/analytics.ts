@@ -18,9 +18,13 @@ export const analyticsClient = !isAdBlockerEnabled
   : {
       identify: () => {},
       page: () => {},
-      ready: (cb: () => void) => cb,
+      ready: (cb: () => void) => {
+        cb();
+      },
       reset: () => {},
-      track: (event: any, opt: any, cb: () => void) => cb,
+      track: (event: any, opt: any, cb: () => void) => {
+        cb();
+      },
       user: null,
     };
 
