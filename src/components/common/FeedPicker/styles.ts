@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import ReactMarkdown from 'react-markdown';
+import { Box } from '@material-ui/core';
 
 export const Card = styled.div<{ open: boolean }>`
   position: absolute;
@@ -58,6 +59,11 @@ export const Column = styled.div<{ border?: boolean }>`
   @media only screen and (max-width: 1100px) {
     height: 100%;
   }
+`;
+
+export const ScrollableColumn = styled(Box)`
+  height: 100%;
+  overflow-y: scroll;
 `;
 
 export const ColumnItem = styled.div<{ active: boolean }>`

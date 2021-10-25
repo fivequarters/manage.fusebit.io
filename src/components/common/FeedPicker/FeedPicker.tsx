@@ -157,30 +157,32 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
       <SC.Title>{`New ${feedTypeName}`}</SC.Title>
       <SC.Flex>
         <SC.Column>
-          <SC.ColumnItem onClick={() => handleFilterChange(Filters.ALL)} active={activeFilter === Filters.ALL}>
-            {Filters.ALL}
-          </SC.ColumnItem>
-          <SC.ColumnItem
-            onClick={() => handleFilterChange(Filters.MESSAGGING)}
-            active={activeFilter === Filters.MESSAGGING}
-          >
-            {Filters.MESSAGGING}
-          </SC.ColumnItem>
-          <SC.ColumnItem
-            onClick={() => handleFilterChange(Filters.PRODUCTIVITY)}
-            active={activeFilter === Filters.PRODUCTIVITY}
-          >
-            {Filters.PRODUCTIVITY}
-          </SC.ColumnItem>
-          <SC.ColumnItem onClick={() => handleFilterChange(Filters.CRM)} active={activeFilter === Filters.CRM}>
-            {Filters.CRM}
-          </SC.ColumnItem>
-          <SC.ColumnItem
-            onClick={() => handleFilterChange(Filters.CALENDAR)}
-            active={activeFilter === Filters.CALENDAR}
-          >
-            {Filters.CALENDAR}
-          </SC.ColumnItem>
+          <SC.ScrollableColumn>
+            <SC.ColumnItem onClick={() => handleFilterChange(Filters.ALL)} active={activeFilter === Filters.ALL}>
+              {Filters.ALL}
+            </SC.ColumnItem>
+            <SC.ColumnItem
+              onClick={() => handleFilterChange(Filters.MESSAGGING)}
+              active={activeFilter === Filters.MESSAGGING}
+            >
+              {Filters.MESSAGGING}
+            </SC.ColumnItem>
+            <SC.ColumnItem
+              onClick={() => handleFilterChange(Filters.PRODUCTIVITY)}
+              active={activeFilter === Filters.PRODUCTIVITY}
+            >
+              {Filters.PRODUCTIVITY}
+            </SC.ColumnItem>
+            <SC.ColumnItem onClick={() => handleFilterChange(Filters.CRM)} active={activeFilter === Filters.CRM}>
+              {Filters.CRM}
+            </SC.ColumnItem>
+            <SC.ColumnItem
+              onClick={() => handleFilterChange(Filters.CALENDAR)}
+              active={activeFilter === Filters.CALENDAR}
+            >
+              {Filters.CALENDAR}
+            </SC.ColumnItem>
+          </SC.ScrollableColumn>
         </SC.Column>
         <SC.ColumnBr />
         <SC.Column border>
@@ -195,33 +197,35 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
           {loading || !activeTemplate ? (
             <Loader />
           ) : (
-            feed.map((feedEntry: Feed) => {
-              const tags = feedEntry.tags.catalog.split(',');
-              let tagIsActive = false;
-              tags.forEach((tag: string) => {
-                if (activeFilter.toUpperCase().match(tag.toUpperCase()) || activeFilter === Filters.ALL) {
-                  tagIsActive = true;
+            <SC.ScrollableColumn>
+              {feed.map((feedEntry: Feed) => {
+                const tags = feedEntry.tags.catalog.split(',');
+                let tagIsActive = false;
+                tags.forEach((tag: string) => {
+                  if (activeFilter.toUpperCase().match(tag.toUpperCase()) || activeFilter === Filters.ALL) {
+                    tagIsActive = true;
+                  }
+                });
+                if (tagIsActive && feedEntry.name.toUpperCase().includes(searchFilter.toUpperCase())) {
+                  return (
+                    <SC.ColumnItem
+                      key={feedEntry.id}
+                      onClick={() => handleTemplateChange(feedEntry)}
+                      active={feedEntry.id === activeTemplate.id}
+                    >
+                      <SC.ColumnItemImage
+                        src={urlOrSvgToImage(feedEntry.smallIcon)}
+                        alt={feedEntry.name}
+                        height="18"
+                        width="18"
+                      />
+                      {feedEntry.name}
+                    </SC.ColumnItem>
+                  );
                 }
-              });
-              if (tagIsActive && feedEntry.name.toUpperCase().includes(searchFilter.toUpperCase())) {
-                return (
-                  <SC.ColumnItem
-                    key={feedEntry.id}
-                    onClick={() => handleTemplateChange(feedEntry)}
-                    active={feedEntry.id === activeTemplate.id}
-                  >
-                    <SC.ColumnItemImage
-                      src={urlOrSvgToImage(feedEntry.smallIcon)}
-                      alt={feedEntry.name}
-                      height="18"
-                      width="18"
-                    />
-                    {feedEntry.name}
-                  </SC.ColumnItem>
-                );
-              }
-              return null;
-            })
+                return null;
+              })}
+            </SC.ScrollableColumn>
           )}
         </SC.Column>
         <SC.ColumnBr />
