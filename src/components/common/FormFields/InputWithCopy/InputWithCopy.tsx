@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { useCopy } from '../../../../hooks/useCopy';
 import copyIcon from '../../../../assets/copy.svg';
 
-const CopySuccess = styled.p<{ copy: boolean }>`
+const StyledCopySuccess = styled.p<{ copy: boolean }>`
   position: absolute;
   right: 0;
   bottom: -35px;
@@ -38,7 +38,7 @@ const CustomInputCell = (props: ControlProps) => {
           <img src={copyIcon} alt="Copy Button" />
         </IconButton>
       </Box>
-      <CopySuccess copy={copiedLine}>Copied to clipboard!</CopySuccess>
+      <StyledCopySuccess copy={copiedLine}>Copied to clipboard!</StyledCopySuccess>
     </Box>
   );
 };
