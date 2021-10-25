@@ -19,18 +19,6 @@ export const lightTheme: Theme = createMuiTheme({
         marginBottom: '20px',
       },
     },
-    MuiSnackbarContent: {
-      root: {
-        backgroundColor: '#F83420',
-        borderRadius: '8px',
-        padding: '10px 20px',
-      },
-      message: {
-        fontFamily: 'Poppins',
-        fontWeight: 300,
-        fontSize: '14px',
-      },
-    },
     MuiDrawer: {
       paperAnchorBottom: {
         borderRadius: '8px 8px 0 0',

@@ -1,14 +1,38 @@
 import constate from 'constate';
 import { useState } from 'react';
+import { Snackbar, SnackbarHorizontal, SnackbarType, SnackbarVertical } from '../interfaces/snackbar';
+
+const defaultSnack: Snackbar = {
+  open: false,
+  message: '',
+  type: 'error',
+  vertical: 'bottom',
+  horizontal: 'center',
+};
 
 const _useSnackbarContext = () => {
-  const [snack, setSnack] = useState<string | null>('There has been an error.');
+  const [snack, setSnack] = useState<Snackbar>(defaultSnack);
 
   const hideSnack = () => {
-    setSnack(null);
+    setSnack(defaultSnack);
   };
 
-  return { snack, setSnack, hideSnack };
+  const changeSnack = (
+    message: string,
+    type?: SnackbarType,
+    vertical?: SnackbarVertical,
+    horizontal?: SnackbarHorizontal
+  ) => {
+    setSnack({
+      open: true,
+      message,
+      type: type || defaultSnack.type,
+      vertical: vertical || defaultSnack.vertical,
+      horizontal: horizontal || defaultSnack.horizontal,
+    });
+  };
+
+  return { snack, hideSnack, changeSnack };
 };
 
 const [SnackbarProvider, useSnackbar] = constate(_useSnackbarContext);

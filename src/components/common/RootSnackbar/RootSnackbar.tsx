@@ -1,12 +1,20 @@
-import { IconButton, Snackbar } from '@material-ui/core';
-import { Close } from '@material-ui/icons';
+import { Snackbar } from '@material-ui/core';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import React from 'react';
 import styled from 'styled-components';
 import { useSnackbar } from '../../../hooks/useSnackbarContext';
 
 const StyledSnackbar = styled(Snackbar)`
-  border-radius: 8px;
+  .MuiAlert-message {
+    border-radius: 8px;
+    font-family: 'Poppins';
+    font-weight: 300;
+  }
 `;
+
+const Alert = (props: AlertProps) => {
+  return <MuiAlert variant="filled" {...props} />;
+};
 
 const RootSnackbar: React.FC = () => {
   const { snack, hideSnack } = useSnackbar();
@@ -14,21 +22,17 @@ const RootSnackbar: React.FC = () => {
   return (
     <StyledSnackbar
       anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'center',
+        vertical: snack.vertical,
+        horizontal: snack.horizontal,
       }}
-      open={!!snack}
+      open={snack.open}
       autoHideDuration={10000}
       onClose={hideSnack}
-      message={snack}
-      action={
-        <>
-          <IconButton size="small" aria-label="close" color="inherit" onClick={hideSnack}>
-            <Close fontSize="small" />
-          </IconButton>
-        </>
-      }
-    />
+    >
+      <Alert onClose={hideSnack} severity={snack.type}>
+        {snack.message}
+      </Alert>
+    </StyledSnackbar>
   );
 };
 
