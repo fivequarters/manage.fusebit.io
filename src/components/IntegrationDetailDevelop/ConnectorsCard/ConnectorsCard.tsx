@@ -1,4 +1,4 @@
-import { Box, useMediaQuery, useTheme } from '@material-ui/core';
+import { Box, useMediaQuery } from '@material-ui/core';
 import { useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -50,8 +50,7 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
   const { userData } = useAuthContext();
   const [connectorModalOpen, setConnectorModalOpen] = useModal();
   const [linkExistingModalOpen, setLinkExistingModalOpen] = useModal();
-  const theme = useTheme();
-  const matchesMobile = useMediaQuery(theme.breakpoints.down('xs'));
+  const matchesMobile = useMediaQuery('(max-width: 450px)');
   const matchesCardOverlapping = useMediaQuery(CARD_OVERLAPPING_MEDIA_QUERY);
   const { getRedirectLink } = useGetRedirectLink();
   const updateLines = useUpdateLineConnectors();
@@ -117,11 +116,11 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
         isLoading={isLoading}
         actions={
           <>
-            <Button mode="add" size={matchesMobile ? 'small' : 'large'} fullWidth onClick={handleAddNewConnector}>
+            <Button mode="add" size={matchesMobile ? 'medium' : 'large'} fullWidth onClick={handleAddNewConnector}>
               Add new
             </Button>
             <Button
-              size={matchesMobile ? 'small' : 'large'}
+              size={matchesMobile ? 'medium' : 'large'}
               mode="add"
               fullWidth
               onClick={handleLinkExistingConnector}

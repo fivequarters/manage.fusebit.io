@@ -56,7 +56,7 @@ const ListItem: React.FC<Props> = ({ name, icon, className, onDelete, onClick, i
         {name}
       </Typography>
       {onDelete && (
-        <Box ml="auto">
+        <Box ml="auto" height="12px">
           <StyledCloseButton
             onClick={(e) => {
               e.stopPropagation();

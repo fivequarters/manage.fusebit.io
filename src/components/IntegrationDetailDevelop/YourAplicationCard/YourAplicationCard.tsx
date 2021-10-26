@@ -1,4 +1,4 @@
-import { Box, useMediaQuery, useTheme } from '@material-ui/core';
+import { Box, useMediaQuery } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useBackendCreateOne } from '../../../hooks/api/v1/backend/useCreateOne';
 import { useBackendGetAll } from '../../../hooks/api/v1/backend/useGetAll';
@@ -26,8 +26,6 @@ const YourAplication: React.FC<Props> = ({ className }) => {
   const { data: backends = [], isLoading } = useBackendGetAll();
   const { mutateAsync } = useBackendCreateOne();
   const { createLoader, removeLoader } = useLoader();
-  const theme = useTheme();
-  const matchesMobile = useMediaQuery(theme.breakpoints.down('xs'));
   const matchesCardOverlapping = useMediaQuery(CARD_OVERLAPPING_MEDIA_QUERY);
   const updateLines = useUpdateLineConnectors();
 
@@ -55,7 +53,7 @@ const YourAplication: React.FC<Props> = ({ className }) => {
         actions={
           <Button
             mode="add"
-            size={matchesMobile ? 'small' : 'large'}
+            size="large"
             style={{
               width: 200,
             }}

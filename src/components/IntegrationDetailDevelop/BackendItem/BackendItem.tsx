@@ -34,7 +34,7 @@ const BackendItem: React.FC<Props> = ({ className, backend }) => {
         id={backend.id}
         onClick={toggleExistingBackend}
         className={className}
-        icon={<DnsOutlinedIcon />}
+        icon={<DnsOutlinedIcon style={{ color: 'var(--black)' }} />}
         name={backend.name}
         onDelete={toggleDeleteBackendModal}
       />
