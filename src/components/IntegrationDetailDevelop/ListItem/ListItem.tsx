@@ -50,6 +50,7 @@ const ListItem: React.FC<Props> = ({ name, icon, className, onDelete, onClick, i
         component="p"
         style={{
           fontWeight: 500,
+          color: 'var(--black)',
         }}
       >
         {name}
