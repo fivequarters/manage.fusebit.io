@@ -3,7 +3,7 @@ import { Params } from '../../../../../interfaces/api';
 import { Integration } from '../../../../../interfaces/integration';
 import { useAxios } from '../../../../useAxios';
 
-export const ACCOUNT_INTEGRATIONS_GET_ONE = 'ACCOUNT_INTEGRATIONS_GET_ONE';
+export const ACCOUNT_INTEGRATIONS_GET_ONE = 'accountIntegrationsGetOne';
 
 export const useAccountIntegrationsGetOne = <T = Integration>(params: Params) => {
   const { axios } = useAxios();

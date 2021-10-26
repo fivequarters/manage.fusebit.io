@@ -15,6 +15,7 @@ import { useReplaceMustache } from '../../../hooks/useReplaceMustache';
 import { trackEvent } from '../../../utils/analytics';
 import Loader from '../Loader';
 import { useTrackPage } from '../../../hooks/useTrackPage';
+import { urlOrSvgToImage } from '../../../utils/utils';
 import BaseJsonForm from '../BaseJsonForm';
 import useFilterFeed, { DefaultFilters } from '../../../hooks/useFilterFeed';
 
@@ -31,9 +32,6 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
   const { activeFilter, allTags, filteredFeed, setActiveFilter, setSearchFilter } = useFilterFeed({
     feed,
   });
-
-  const urlOrSvgToImage = (img: string) =>
-    img.match('^<svg') ? `data:image/svg+xml;utf8,${encodeURIComponent(img)}` : img;
 
   const debouncedSetSearchFilter = debounce((keyword: string) => {
     if (isIntegration) {
@@ -58,7 +56,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
       }
 
       // send data with customized form
-      onSubmit(rawActiveTemplate, { ...data });
+      onSubmit(rawActiveTemplate as Feed, { ...data });
     }
   };
 

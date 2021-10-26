@@ -9,7 +9,7 @@ import Connect from '../Connect';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import { ListComponentProps } from '../../../interfaces/integrationDetailDevelop';
 import ConfirmationPrompt from '../../common/ConfirmationPrompt';
-import { findMatchingConnectorFeed } from '../../../utils/utils';
+import { findMatchingConnectorFeed, urlOrSvgToImage } from '../../../utils/utils';
 
 const NOT_FOUND_ICON = '/images/warning-red.svg';
 const CLOSE_ICON_CLASS = 'close';

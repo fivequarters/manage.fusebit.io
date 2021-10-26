@@ -10,9 +10,9 @@ import { useAuthContext } from '../../../hooks/useAuthContext';
 import { useAccountConnectorsGetAll } from '../../../hooks/api/v2/account/connector/useGetAll';
 import { Connector } from '../../../interfaces/connector';
 import DeleteConnectorModal from '../DeleteConnectorModal';
-import NewFeedModal from '../../common/NewFeedModal';
 import GetIdentities from './GetIdentities';
 import useQueryParam from '../../../hooks/useQueryParam';
+import CreateConnectorModal from '../CreateConnectorModal';
 
 const ConnectorsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -57,7 +57,7 @@ const ConnectorsTable = () => {
 
   return (
     <>
-      <NewFeedModal onClose={toggleNewModal} open={newModalOpen} isIntegration={false} />
+      <CreateConnectorModal onClose={toggleNewModal} open={newModalOpen} />
       <DeleteConnectorModal
         onConfirm={() => handleRowDelete('Connector')}
         setOpen={setDeleteModal}
