@@ -1,4 +1,4 @@
-import { Integration } from './integration';
+import { InnerConnector, Integration } from './integration';
 
 export interface ListComponentProps {
   connector: FinalConnector;
@@ -10,10 +10,9 @@ export interface ListComponentProps {
   integration?: Integration;
 }
 
-export interface FinalConnector {
+export interface FinalConnector extends InnerConnector {
   missing?: boolean;
   id: string;
-  name?: string;
   tokenSignature?: string;
   isApplication?: boolean;
   data?: object;

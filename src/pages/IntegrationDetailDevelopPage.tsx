@@ -7,15 +7,14 @@ import { Integration } from '../interfaces/integration';
 import Navbar from '../components/common/Navbar/NewNavbar';
 import { useTrackPage } from '../hooks/useTrackPage';
 import TabComponent from '../components/common/TabComponent';
-import Develop from '../components/IntegrationDetailDevelop/Develop';
 import { useGetRedirectLink } from '../hooks/useGetRedirectLink';
+import Diagram from '../components/IntegrationDetailDevelop/Diagram';
 import Integrations from '../components/common/Navbar/Integrations';
 
 const IntegrationDetailDevelopPage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
   const { userData } = useAuthContext();
-
-  const { data: integrationData } = useAccountIntegrationsGetOne<Integration>({
+  const { isLoading } = useAccountIntegrationsGetOne<Integration>({
     enabled: userData.token,
     id,
     accountId: userData.accountId,
@@ -32,7 +31,7 @@ const IntegrationDetailDevelopPage: FC<{}> = (): ReactElement => {
       </Navbar>
       <TabComponent
         tabNames={['Develop', 'Installs']}
-        tabObjects={[<Develop key="develop" />, getRedirectLink(`/integration/${id}/installs`)]}
+        tabObjects={[<Diagram key="diagram" isLoading={isLoading} />, getRedirectLink(`/integration/${id}/installs`)]}
       />
     </Layout>
   );
