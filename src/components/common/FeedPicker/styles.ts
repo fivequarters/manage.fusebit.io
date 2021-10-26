@@ -53,14 +53,16 @@ export const Flex = styled.div<{ alignItems?: boolean }>`
 export const Column = styled.div<{ border?: boolean }>`
   display: flex;
   flex-direction: column;
-  height: 490px;
+  max-height: 490px;
+  overflow-y: auto;
+  flex-shrink: 0;
 
   @media only screen and (max-width: 1100px) {
     height: 100%;
   }
 `;
 
-export const ColumnItem = styled.div<{ active: boolean }>`
+export const ColumnItem = styled.div<{ active: boolean; capitalize?: boolean }>`
   display: flex;
   align-items: center;
   padding: 11px 16px;
@@ -72,6 +74,7 @@ export const ColumnItem = styled.div<{ active: boolean }>`
   transition: background-color 0.2s linear;
   margin-bottom: 8px;
   border-radius: 4px;
+  ${(props) => props.capitalize && 'text-transform: capitalize;'}
 
   &:hover {
     cursor: pointer;

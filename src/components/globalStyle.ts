@@ -202,6 +202,9 @@ export const CloseIconMixin = css`
   top: 32px;
   right: 32px;
   transition: all 0.25s linear;
+  border: none;
+  background-color: transparent;
+  background-size: contain;
 
   &:hover {
     cursor: pointer;
@@ -222,6 +225,6 @@ export const Copy = styled.div<{ margin?: string }>`
   }
 `;
 
-export const Close = styled.div`
+export const Close = styled.button`
   ${CloseIconMixin}
 `;

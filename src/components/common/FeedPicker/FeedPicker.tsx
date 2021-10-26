@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { ValidationMode } from '@jsonforms/core';
-import { Button, TextField } from '@material-ui/core';
+import { Box, Button, TextField } from '@material-ui/core';
 import debounce from 'lodash.debounce';
 import * as SC from './styles';
 import { Props } from '../../../interfaces/feedPicker';
@@ -15,31 +15,23 @@ import { useReplaceMustache } from '../../../hooks/useReplaceMustache';
 import { trackEvent } from '../../../utils/analytics';
 import Loader from '../Loader';
 import { useTrackPage } from '../../../hooks/useTrackPage';
+import { urlOrSvgToImage } from '../../../utils/utils';
 import BaseJsonForm from '../BaseJsonForm';
-
-enum Filters {
-  ALL = 'All',
-  MESSAGGING = 'Messaging',
-  PRODUCTIVITY = 'Productivity',
-  CRM = 'CRM',
-  CALENDAR = 'Calendar',
-}
+import useFilterFeed, { DefaultFilters } from '../../../hooks/useFilterFeed';
 
 const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onSubmit, isIntegration }, ref) => {
   const [data, setData] = React.useState<any>({});
   const [errors, setErrors] = React.useState<object[]>([]);
   const [validationMode, setValidationMode] = React.useState<ValidationMode>('ValidateAndHide');
-  const [activeFilter, setActiveFilter] = React.useState<Filters>(Filters.ALL);
   const [feed, setFeed] = useState<Feed[]>([]);
   const [activeTemplate, setActiveTemplate] = React.useState<ParsedFeed>();
   const [rawActiveTemplate, setRawActiveTemplate] = React.useState<Feed>();
-  const [searchFilter, setSearchFilter] = React.useState('');
   const [loading, setLoading] = React.useState(true);
   const query = useQuery();
   const { replaceMustache } = useReplaceMustache();
-
-  const urlOrSvgToImage = (img: string) =>
-    img.match('^<svg') ? `data:image/svg+xml;utf8,${encodeURIComponent(img)}` : img;
+  const { activeFilter, allTags, filteredFeed, setActiveFilter, setSearchFilter } = useFilterFeed({
+    feed,
+  });
 
   const debouncedSetSearchFilter = debounce((keyword: string) => {
     if (isIntegration) {
@@ -47,7 +39,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
     } else {
       trackEvent('New Connector Search Submitted', 'Connectors');
     }
-    setSearchFilter(keyword);
+    setSearchFilter(keyword.trim());
   }, 500);
 
   const handleSubmit = () => {
@@ -64,7 +56,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
       }
 
       // send data with customized form
-      onSubmit(rawActiveTemplate, { ...data });
+      onSubmit(rawActiveTemplate as Feed, { ...data });
     }
   };
 
@@ -80,7 +72,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
     onClose();
   };
 
-  const handleFilterChange = (filter: Filters) => {
+  const handleFilterChange = (filter: string) => {
     if (isIntegration) {
       trackEvent('New Integration Catalog Clicked', 'Integrations', { tag: filter });
     } else {
@@ -157,53 +149,43 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
       <SC.Title>{`New ${feedTypeName}`}</SC.Title>
       <SC.Flex>
         <SC.Column>
-          <SC.ColumnItem onClick={() => handleFilterChange(Filters.ALL)} active={activeFilter === Filters.ALL}>
-            {Filters.ALL}
-          </SC.ColumnItem>
-          <SC.ColumnItem
-            onClick={() => handleFilterChange(Filters.MESSAGGING)}
-            active={activeFilter === Filters.MESSAGGING}
-          >
-            {Filters.MESSAGGING}
-          </SC.ColumnItem>
-          <SC.ColumnItem
-            onClick={() => handleFilterChange(Filters.PRODUCTIVITY)}
-            active={activeFilter === Filters.PRODUCTIVITY}
-          >
-            {Filters.PRODUCTIVITY}
-          </SC.ColumnItem>
-          <SC.ColumnItem onClick={() => handleFilterChange(Filters.CRM)} active={activeFilter === Filters.CRM}>
-            {Filters.CRM}
-          </SC.ColumnItem>
-          <SC.ColumnItem
-            onClick={() => handleFilterChange(Filters.CALENDAR)}
-            active={activeFilter === Filters.CALENDAR}
-          >
-            {Filters.CALENDAR}
-          </SC.ColumnItem>
+          {loading ? (
+            <Box minWidth="254px">
+              <Loader />
+            </Box>
+          ) : (
+            <>
+              <SC.ColumnItem
+                onClick={() => handleFilterChange(DefaultFilters.ALL)}
+                active={activeFilter === DefaultFilters.ALL}
+                capitalize
+              >
+                {DefaultFilters.ALL}
+              </SC.ColumnItem>
+              {allTags.map((tag) => (
+                <SC.ColumnItem
+                  active={tag === activeFilter}
+                  key={tag}
+                  onClick={() => handleFilterChange(tag)}
+                  capitalize
+                >
+                  {tag}
+                </SC.ColumnItem>
+              ))}
+            </>
+          )}
         </SC.Column>
         <SC.ColumnBr />
         <SC.Column border>
           <SC.ColumnSearchWrapper>
-            <TextField
-              style={{ width: '100%' }}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => debouncedSetSearchFilter(e.target.value)}
-              label="Search"
-            />
+            <TextField fullWidth onChange={(e) => debouncedSetSearchFilter(e.target.value)} label="Search" />
             <SC.ColumnSearchIcon src={search} alt={`Search ${feedTypeName}`} height="24" width="24" />
           </SC.ColumnSearchWrapper>
           {loading || !activeTemplate ? (
             <Loader />
           ) : (
-            feed.map((feedEntry: Feed) => {
-              const tags = feedEntry.tags.catalog.split(',');
-              let tagIsActive = false;
-              tags.forEach((tag: string) => {
-                if (activeFilter.toUpperCase().match(tag.toUpperCase()) || activeFilter === Filters.ALL) {
-                  tagIsActive = true;
-                }
-              });
-              if (tagIsActive && feedEntry.name.toUpperCase().includes(searchFilter.toUpperCase())) {
+            <Box overflow="auto">
+              {filteredFeed.map((feedEntry) => {
                 return (
                   <SC.ColumnItem
                     key={feedEntry.id}
@@ -219,9 +201,8 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
                     {feedEntry.name}
                   </SC.ColumnItem>
                 );
-              }
-              return null;
-            })
+              })}
+            </Box>
           )}
         </SC.Column>
         <SC.ColumnBr />

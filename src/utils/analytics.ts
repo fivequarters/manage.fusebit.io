@@ -1,5 +1,4 @@
 import isEqual from 'lodash.isequal';
-import { silentAuthInProgress } from '../hooks/useAuthContext';
 import { FusebitProfile } from '../interfaces/auth0Token';
 import { User } from '../interfaces/user';
 import { PRODUCTION_HOST } from './constants';
@@ -10,6 +9,31 @@ type TrackEventHandler = (
   extraProperties?: { [key: string]: any },
   cb?: () => void
 ) => void;
+
+export const getAnalyticsClient = () => {
+  // ad blocker workaround for Segment (if it is array, means ad blocker got in our way)
+  const isAdBlockerEnabled = Array.isArray(analytics);
+
+  return !isAdBlockerEnabled
+    ? analytics
+    : {
+        identify: () => {},
+        page: () => {},
+        ready: (cb: () => void) => {
+          cb();
+        },
+        reset: () => {},
+        track: (event: any, opt: any, cb: () => void) => {
+          cb();
+        },
+        user: null,
+      };
+};
+
+export const silentAuthInProgress = (): boolean => {
+  const urlSearchParams = new URLSearchParams(window.location.search);
+  return urlSearchParams.get('silentAuth') === 'true';
+};
 
 // utility to memoize the original trackEvent function to avoid noise
 const memoize = (originalFunction: TrackEventHandler) => {
@@ -25,10 +49,11 @@ const memoize = (originalFunction: TrackEventHandler) => {
 };
 
 export function isSegmentTrackingEvents() {
-  if (!analytics.user) {
+  const segmentUser = getAnalyticsClient().user;
+  if (!segmentUser) {
     return false;
   }
-  const user = (analytics.user()?.traits() as unknown) as User;
+  const user = (segmentUser().traits() as unknown) as User;
   return (
     document.location.host !== PRODUCTION_HOST ||
     (!user?.primaryEmail?.endsWith('@fusebit.io') && !user?.primaryEmail?.endsWith('@litebox.ai'))
@@ -38,7 +63,7 @@ export function isSegmentTrackingEvents() {
 // original trackEvent function that gets called to offload events to Segment
 const trackEventHandler: TrackEventHandler = (eventName, objectLocation, extraProperties = {}, cb = () => {}) => {
   if (!isSegmentTrackingEvents()) return;
-  analytics.track(
+  getAnalyticsClient().track(
     eventName,
     {
       objectLocation,
@@ -53,8 +78,12 @@ const trackEventHandler: TrackEventHandler = (eventName, objectLocation, extraPr
 export const trackEvent = memoize(trackEventHandler);
 
 export const trackAuthEvent = (user: User, fusebitProfile: FusebitProfile, isSignUpEvent: boolean, cb = () => {}) => {
+  const segmentUser = getAnalyticsClient().user;
+  if (!segmentUser) {
+    return;
+  }
   const isSilentAuthInProgress = silentAuthInProgress();
-  const currentSegmentUserId = analytics.user().id();
+  const currentSegmentUserId = segmentUser().id();
   const sameUser = fusebitProfile.userId === currentSegmentUserId;
 
   const extraSegmentEventProps: { userType: string; authType?: string } = isSignUpEvent
@@ -74,7 +103,7 @@ export const trackAuthEvent = (user: User, fusebitProfile: FusebitProfile, isSig
     console.error('Segment has another user identified but silentAuth worked? Something is off.');
   }
 
-  analytics.identify(fusebitProfile.userId, {
+  getAnalyticsClient().identify(fusebitProfile.userId, {
     ...fusebitProfile,
     ...user,
   } as Object);

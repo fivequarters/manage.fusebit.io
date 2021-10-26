@@ -1,6 +1,7 @@
 import constate from 'constate';
 import { useState } from 'react';
 import { User } from '../interfaces/user';
+import { getAnalyticsClient } from '../utils/analytics';
 
 const {
   REACT_APP_AUTH0_DOMAIN,
@@ -16,13 +17,8 @@ enum AuthStatus {
   UNAUTHENTICATED,
 }
 
-const silentAuthInProgress = (): boolean => {
-  const urlSearchParams = new URLSearchParams(window.location.search);
-  return urlSearchParams.get('silentAuth') === 'true';
-};
-
 const signOut = () => {
-  analytics.reset();
+  getAnalyticsClient().reset();
   window.location.href = `${REACT_APP_AUTH0_DOMAIN}/v2/logout?returnTo=${REACT_APP_LOGOUT_REDIRECT_URL}`;
 };
 
@@ -65,4 +61,4 @@ const _useAuthContext = () => {
 
 const [ContextProvider, useAuthContext] = constate(_useAuthContext);
 
-export { AuthStatus, ContextProvider, signOut, signIn, silentAuthInProgress, useAuthContext };
+export { AuthStatus, ContextProvider, signOut, signIn, useAuthContext };

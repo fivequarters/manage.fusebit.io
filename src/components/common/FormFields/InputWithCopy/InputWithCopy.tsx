@@ -2,17 +2,31 @@ import { MaterialInputControl, MaterialTextCell, MaterialIntegerCell } from '@js
 import { ControlProps, schemaMatches, rankWith, and, uiTypeIs, RankedTester } from '@jsonforms/core';
 import { withJsonFormsControlProps } from '@jsonforms/react';
 import { Box, IconButton } from '@material-ui/core';
+import styled from 'styled-components';
 import { useCopy } from '../../../../hooks/useCopy';
 import copyIcon from '../../../../assets/copy.svg';
 
+const StyledCopySuccess = styled.p<{ copy: boolean }>`
+  position: absolute;
+  right: 0;
+  bottom: -35px;
+  font-size: 14px;
+  line-height: 16px;
+  color: var(--grey);
+  opacity: ${(props) => (props.copy ? 1 : 0)};
+  visibility: ${(props) => (props.copy ? 'visible' : 'hidden')};
+  margin-left: auto;
+  transition: all 0.5s linear;
+`;
+
 const CustomInputCell = (props: ControlProps) => {
-  const { handleCopy } = useCopy();
+  const { handleCopy, copiedLine } = useCopy();
   const {
     schema: { type },
   } = props;
 
   return (
-    <Box display="flex" alignItems="center" mt="16px">
+    <Box position="relative" display="flex" alignItems="center" mt="16px">
       {
         {
           string: <MaterialTextCell {...props} />,
@@ -24,6 +38,7 @@ const CustomInputCell = (props: ControlProps) => {
           <img src={copyIcon} alt="Copy Button" />
         </IconButton>
       </Box>
+      <StyledCopySuccess copy={copiedLine}>Copied to clipboard!</StyledCopySuccess>
     </Box>
   );
 };

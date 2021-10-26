@@ -1,72 +1,87 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
-import { useAuthContext } from './useAuthContext';
+import { useQueryClient } from 'react-query';
 import { useReplaceMustache } from './useReplaceMustache';
-import { useGetRedirectLink } from './useGetRedirectLink';
-import { Entity, Feed } from '../interfaces/feed';
+import { Entity, Feed, ParsedFeed } from '../interfaces/feed';
 import { Data } from '../interfaces/feedPicker';
-import { useLoader } from './useLoader';
 import { useError } from './useError';
 import { useEntityApi } from './useEntityApi';
 import { trackEvent } from '../utils/analytics';
+import { Integration } from '../interfaces/integration';
+import { ApiResponse } from './useAxios';
+import { ACCOUNT_INTEGRATIONS_GET_ONE } from './api/v2/account/integration/useGetOne';
+
+const getCommonTags = (feed: Feed, entityType: 'integration' | 'connector') => {
+  return {
+    'fusebit.feedType': entityType,
+    'fusebit.feedId': feed.id,
+  };
+};
 
 export const useCreateDataFromFeed = () => {
-  const history = useHistory();
-  const { userData } = useAuthContext();
-  const { getRedirectLink } = useGetRedirectLink();
   const { replaceMustache } = useReplaceMustache();
-  const { createLoader, removeLoader } = useLoader();
-  const { createEntity } = useEntityApi();
+  const { createEntity, addConnectorToIntegration } = useEntityApi();
   const { createError } = useError();
+  const queryClient = useQueryClient();
 
-  const createDataFromFeed = React.useCallback(
-    async (activeFeed: Feed, data: Data, isConnector?: boolean) => {
-      try {
-        createLoader();
+  const createFromFeed = async (parsedFeed: ParsedFeed, commonTags: Record<string, string>) =>
+    Promise.all(parsedFeed.configuration.entities.map((e) => createEntity(e, commonTags)));
 
-        const parsedFeed = await replaceMustache(data, activeFeed);
-        const firstIntegration = parsedFeed.configuration.entities.find(
-          (entity: Entity) => entity.entityType === 'integration'
-        );
-        const firstConnector = parsedFeed.configuration.entities.find(
-          (entity: Entity) => entity.entityType === 'connector'
-        );
+  const createIntegrationAndConnector = async (activeFeed: Feed, data: Data) => {
+    try {
+      const parsedFeed = await replaceMustache(data, activeFeed);
 
-        const commonTags = {
-          'fusebit.feedType': isConnector ? 'connector' : 'integration',
-          'fusebit.feedId': activeFeed.id,
-        };
+      const commonTags = getCommonTags(activeFeed, 'integration');
 
-        if (isConnector) {
-          trackEvent('New Connector Create Button Clicked', 'Connectors', { connector: commonTags['fusebit.feedId'] });
-        } else {
-          trackEvent('New Integration Create Button Clicked', 'Integrations', {
-            integration: commonTags['fusebit.feedId'],
-          });
-        }
+      trackEvent('New Integration Create Button Clicked', 'Integrations', {
+        integration: commonTags['fusebit.feedId'],
+      });
 
-        await Promise.all([
-          ...parsedFeed.configuration.entities.map(async (entity: Entity) => {
-            await createEntity(entity, commonTags);
-          }),
-        ]);
-        removeLoader();
-        history.push(
-          isConnector
-            ? getRedirectLink(`/connector/${firstConnector?.id}/configure`)
-            : getRedirectLink(`/integration/${firstIntegration?.id}/develop`)
-        );
-      } catch (e) {
-        createError(e);
-        removeLoader();
-        return false;
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [createError, createLoader, userData, replaceMustache, getRedirectLink, removeLoader]
-  );
+      const res = await createFromFeed(parsedFeed, commonTags);
+
+      return {
+        connector: res[0].data,
+        integration: res[1].data,
+      };
+    } catch (e) {
+      createError(e);
+    }
+  };
+
+  const createConnector = async (activeFeed: Feed, data: Data) => {
+    try {
+      const parsedFeed = await replaceMustache(data, activeFeed);
+
+      const commonTags = getCommonTags(activeFeed, 'connector');
+
+      trackEvent('New Connector Create Button Clicked', 'Connectors', { connector: commonTags['fusebit.feedId'] });
+
+      const res = await createFromFeed(parsedFeed, commonTags);
+
+      return res[0].data;
+    } catch (e) {
+      createError(e);
+    }
+  };
+
+  const createAndAddConnectorToIntegration = async (
+    activeFeed: Feed,
+    data: Data,
+    integrationData?: ApiResponse<Integration>
+  ) => {
+    try {
+      const connector = await createConnector(activeFeed, data);
+
+      const res = await addConnectorToIntegration(connector as Entity, integrationData);
+      queryClient.invalidateQueries(ACCOUNT_INTEGRATIONS_GET_ONE, { active: true });
+
+      return res;
+    } catch (e) {
+      createError(e);
+    }
+  };
 
   return {
-    createDataFromFeed,
+    createIntegrationAndConnector,
+    createConnector,
+    createAndAddConnectorToIntegration,
   };
 };

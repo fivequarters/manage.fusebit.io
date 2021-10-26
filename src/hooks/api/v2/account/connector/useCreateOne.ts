@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from 'react-query';
 import { Params } from '../../../../../interfaces/api';
 import { useAxios } from '../../../../useAxios';
+import { ACCOUNT_CONNECTORS_GET_ALL } from './useGetAll';
 
 export const useAccountConnectorCreateConnector = <T>() => {
   const { axios } = useAxios();
@@ -14,7 +15,7 @@ export const useAccountConnectorCreateConnector = <T>() => {
     {
       onMutate: () => () => {},
       onError: (_, __, rollback) => rollback?.(),
-      onSuccess: () => queryClient.removeQueries('accountConnectorsGetAll'),
+      onSuccess: () => queryClient.invalidateQueries(ACCOUNT_CONNECTORS_GET_ALL),
     }
   );
 };
