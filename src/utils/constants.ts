@@ -8,4 +8,4 @@ export const X_USER_AGENT = `fusebit-portal/${require('../../package.json').vers
 
 export const STATIC_TENANT_ID = 'user-1';
 
-export const PRODUCTION_HOST = 'manage.fusebit.io';
+export const PRODUCTION_HOST = 'manage.fusebruno.com';
