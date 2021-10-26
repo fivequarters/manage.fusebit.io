@@ -109,7 +109,7 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
         onClose={() => setConnectorModalOpen(false)}
         integrationData={integrationData}
       />
-      <ConnectorListModal open={linkExistingModalOpen} onClose={() => setConnectorModalOpen(false)} />
+      <ConnectorListModal open={linkExistingModalOpen} onClose={() => setLinkExistingModalOpen(false)} />
       <BaseCard
         id="connectors"
         className={className}
