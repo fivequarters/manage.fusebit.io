@@ -9,15 +9,15 @@ import accountImg from '../../../assets/account.svg';
 import rightArrow from '../../../assets/arrow-right-black.svg';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 
-const StyledContainer = styled.div<{ active: boolean }>`
+const StyledButton = styled(Button)<{ active: boolean }>`
   color: white;
-  border: 1px solid ${(props) => (props.active ? 'rgba(215, 229, 255, 0)' : '#D7E5FF66')};
   border-radius: 4px;
-  transition: all 0.25s linear;
-
-  @media only screen and (max-width: 880px) {
-    display: none;
-  }
+  border: 1px solid ${(props) => (props.active ? 'rgba(215, 229, 255, 0)' : '#D7E5FF66')};
+  ${(props) =>
+    props.active &&
+    `
+    background-color: #D7E5FF66
+  `}
 `;
 
 const StyledUserDropdown = styled.div`
@@ -167,9 +167,9 @@ const UserMenu = () => {
   };
 
   return (
-    <StyledContainer active={!!anchorEl}>
-      <Button
-        style={{ backgroundColor: anchorEl ? '#D7E5FF66' : '' }}
+    <>
+      <StyledButton
+        active={!!anchorEl}
         aria-controls="simple-menu"
         aria-haspopup="true"
         onClick={handleClick}
@@ -180,7 +180,7 @@ const UserMenu = () => {
         color="inherit"
       >
         {process.env.REACT_APP_DEPLOYMENT_KEY}
-      </Button>
+      </StyledButton>
       <Menu
         style={{ top: '100px', margin: '0 0 0 -88px' }}
         id="simple-menu"
@@ -230,7 +230,7 @@ const UserMenu = () => {
           </Box>
         </StyledUserDropdown>
       </Menu>
-    </StyledContainer>
+    </>
   );
 };
 
