@@ -32,6 +32,7 @@ const SnackProvider: React.FC<Props> = ({ children }) => {
         vertical: 'bottom',
         horizontal: 'center',
       }}
+      autoHideDuration={5000}
       action={(key) => (
         <IconButton size="small" aria-label="close" color="inherit" onClick={handleClickDismiss(key)}>
           <Close fontSize="small" />
