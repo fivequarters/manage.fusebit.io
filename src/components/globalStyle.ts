@@ -31,6 +31,10 @@ export default createGlobalStyle`
       z-index: 0 !important;
     }
 
+    .SnackbarItem-variantError {
+      background-color: var(--primary-color) !important;
+    }
+
     button {
       &:hover {
         cursor: pointer;
