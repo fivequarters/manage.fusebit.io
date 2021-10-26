@@ -5,7 +5,7 @@ import { Snackbar, SnackbarHorizontal, SnackbarType, SnackbarVertical } from '..
 const defaultSnack: Snackbar = {
   open: false,
   message: '',
-  type: 'error',
+  type: 'success',
   vertical: 'bottom',
   horizontal: 'center',
 };
@@ -19,14 +19,14 @@ const _useSnackbarContext = () => {
 
   const changeSnack = (
     message: string,
-    type?: SnackbarType,
+    type: SnackbarType,
     vertical?: SnackbarVertical,
     horizontal?: SnackbarHorizontal
   ) => {
     setSnack({
       open: true,
       message,
-      type: type || defaultSnack.type,
+      type,
       vertical: vertical || defaultSnack.vertical,
       horizontal: horizontal || defaultSnack.horizontal,
     });
