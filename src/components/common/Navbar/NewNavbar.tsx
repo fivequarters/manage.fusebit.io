@@ -1,5 +1,5 @@
-import React from 'react';
 import { Container, IconButton, Box, useMediaQuery } from '@material-ui/core';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Props } from '../../../interfaces/Navbar';
@@ -23,7 +23,7 @@ const StyledContainerRoot = styled(Box)`
   }
 `;
 
-const StyledCompany = styled.span`
+const StyledCompany = styled(Box)`
   font-size: 16px;
   line-height: 18px;
   font-weight: 600;
@@ -82,7 +82,7 @@ const Navbar: React.FC<Props> = ({ children }) => {
                 </IconButton>
               </Link>
             </Box>
-            <Box display="flex" flexDirection="column" mb="8px">
+            <Box display="flex" flexDirection="column">
               <Link to={getRedirectLink('/integrations/overview')}>
                 <StyledCompany>{userData.company}</StyledCompany>
               </Link>

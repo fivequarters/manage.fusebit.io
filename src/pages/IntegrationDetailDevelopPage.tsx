@@ -4,15 +4,17 @@ import Layout from '../components/common/Layout';
 import { useAccountIntegrationsGetOne } from '../hooks/api/v2/account/integration/useGetOne';
 import { useAuthContext } from '../hooks/useAuthContext';
 import { Integration } from '../interfaces/integration';
-import Navbar from '../components/common/Navbar';
+import Navbar from '../components/common/Navbar/NewNavbar';
 import { useTrackPage } from '../hooks/useTrackPage';
 import TabComponent from '../components/common/TabComponent';
 import Develop from '../components/IntegrationDetailDevelop/Develop';
 import { useGetRedirectLink } from '../hooks/useGetRedirectLink';
+import Integrations from '../components/common/Navbar/Integrations';
 
 const IntegrationDetailDevelopPage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
   const { userData } = useAuthContext();
+
   const { data: integrationData } = useAccountIntegrationsGetOne<Integration>({
     enabled: userData.token,
     id,
@@ -25,7 +27,9 @@ const IntegrationDetailDevelopPage: FC<{}> = (): ReactElement => {
 
   return (
     <Layout>
-      <Navbar sectionName={integrationData?.data.id || id} dropdown integrationsLink />
+      <Navbar dropdown sectionName="Integrations" integration>
+        <Integrations title="integrations" titleLinkTo={getRedirectLink('/integrations/overview')} />
+      </Navbar>
       <TabComponent
         tabNames={['Develop', 'Installs']}
         tabObjects={[<Develop key="develop" />, getRedirectLink(`/integration/${id}/installs`)]}
