@@ -52,21 +52,16 @@ export const useEntityTable = ({ page, setPage, rowsPerPage, rows }: Props) => {
 
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
-  const handleRowDelete = async (type: EntitiesType, errorContainer?: string) => {
-    massiveDelete(
-      selected,
-      type,
-      () => {
-        const computedPages = Math.ceil((rows.length - selected.length) / rowsPerPage) - 1;
+  const handleRowDelete = async (type: EntitiesType) => {
+    massiveDelete(selected, type, () => {
+      const computedPages = Math.ceil((rows.length - selected.length) / rowsPerPage) - 1;
 
-        if (page > 0 && page > computedPages) {
-          setPage(0);
-        }
+      if (page > 0 && page > computedPages) {
+        setPage(0);
+      }
 
-        setSelected([]);
-      },
-      errorContainer
-    );
+      setSelected([]);
+    });
   };
 
   return {

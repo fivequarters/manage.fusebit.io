@@ -52,7 +52,7 @@ const IdentitiesTable = () => {
   const handleDelete = () => {
     trackEvent('Identities Delete Identity Clicked', 'Connector');
     setDeleteOpen(false);
-    handleRowDelete('Identity', 'identities-table');
+    handleRowDelete('Identity');
   };
 
   return (
