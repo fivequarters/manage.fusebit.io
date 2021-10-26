@@ -14,6 +14,9 @@ import { findMatchingConnectorFeed } from '../../../utils/utils';
 const NOT_FOUND_ICON = '/images/warning-red.svg';
 const CLOSE_ICON_CLASS = 'close';
 
+const urlOrSvgToImage = (img: string) =>
+  img.match('^<svg') ? `data:image/svg+xml;utf8,${encodeURIComponent(img)}` : img;
+
 const ListComponent: React.FC<ListComponentProps> = ({
   connector,
   onChange,
@@ -117,7 +120,7 @@ const ListComponent: React.FC<ListComponentProps> = ({
       {icon === '' ? (
         <CSC.Spinner margin="0 16px 0 0" />
       ) : (
-        <SC.CardConnectorImage src={icon} alt="connector image" height="20" width="20" />
+        <SC.CardConnectorImage src={urlOrSvgToImage(icon)} alt="connector image" height="20" width="20" />
       )}
       <SC.CardConnectorText>
         {connector?.name ? connector?.name : connector.id} {icon === NOT_FOUND_ICON && 'is not found'}
