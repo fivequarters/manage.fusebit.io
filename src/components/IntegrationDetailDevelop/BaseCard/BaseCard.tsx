@@ -46,6 +46,10 @@ const StyledCardActions = styled(CardActions)`
   @media only screen and (max-width: 1200px) {
     padding: 0 24px 24px;
   }
+
+  @media only screen and (max-width: 450px) {
+    padding: 0 10px 24px;
+  }
 `;
 
 interface Props {

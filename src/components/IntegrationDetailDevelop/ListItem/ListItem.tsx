@@ -22,16 +22,30 @@ const StyledCloseButton = styled(Close)`
   position: static;
 `;
 
+const StyledCloseContainer = styled(Box)`
+  height: 30px;
+  width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media only screen and (max-width: 450px) {
+    & > button {
+      height: 8px;
+      width: 8px;
+    }
+  }
+`;
+
 const ListItem: React.FC<Props> = ({ name, icon, className, onDelete, onClick, id, ...props }) => {
   return (
     <StyledContainer
       id={id}
       display="flex"
-      p="17px"
+      p="11px"
       borderRadius="4px"
       bgcolor="rgba(215, 229, 255, 0.4)"
       alignItems="center"
-      maxHeight="52px"
       boxSizing="border-box"
       className={className}
       component="button"
@@ -51,19 +65,20 @@ const ListItem: React.FC<Props> = ({ name, icon, className, onDelete, onClick, i
         style={{
           fontWeight: 500,
           color: 'var(--black)',
+          textAlign: 'left',
         }}
       >
         {name}
       </Typography>
       {onDelete && (
-        <Box ml="auto" height="12px">
+        <StyledCloseContainer ml="auto">
           <StyledCloseButton
             onClick={(e) => {
               e.stopPropagation();
               onDelete();
             }}
           />
-        </Box>
+        </StyledCloseContainer>
       )}
     </StyledContainer>
   );

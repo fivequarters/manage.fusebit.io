@@ -200,6 +200,7 @@ export const CloseIconMixin = css`
   transition: all 0.25s linear;
   border: none;
   background-color: transparent;
+  background-size: contain;
 
   &:hover {
     cursor: pointer;
