@@ -14,9 +14,6 @@ import { findMatchingConnectorFeed, urlOrSvgToImage } from '../../../utils/utils
 const NOT_FOUND_ICON = '/images/warning-red.svg';
 const CLOSE_ICON_CLASS = 'close';
 
-const urlOrSvgToImage = (img: string) =>
-  img.match('^<svg') ? `data:image/svg+xml;utf8,${encodeURIComponent(img)}` : img;
-
 const ListComponent: React.FC<ListComponentProps> = ({
   connector,
   onChange,
