@@ -8,6 +8,7 @@ import companyLogo from '../../../assets/company-logo.svg';
 
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import UserMenu from '../UserMenu/UserMenu';
+import UserDrawerMobile from '../UserDrawerMobile';
 
 const StyledContainerRoot = styled(Box)`
   height: var(--navbar-height);
@@ -72,32 +73,35 @@ const Navbar: React.FC = ({ children }) => {
   const rootUrl = getRedirectLink('/integrations/overview');
 
   return (
-    <StyledContainerRoot>
-      <Container maxWidth="lg">
-        <Box display="flex" justifyContent="space-between">
-          <Box display="flex" alignItems="center">
-            <Box mr="24px">
-              <Link to={rootUrl}>
-                <IconButton disableRipple style={logoProps}>
-                  <img src={companyLogo} alt="company logo" {...logoProps} />
-                </IconButton>
-              </Link>
+    <>
+      <UserDrawerMobile open={false} onClose={() => {}} />
+      <StyledContainerRoot>
+        <Container maxWidth="lg">
+          <Box display="flex" justifyContent="space-between">
+            <Box display="flex" alignItems="center">
+              <Box mr="24px">
+                <Link to={rootUrl}>
+                  <IconButton disableRipple style={logoProps}>
+                    <img src={companyLogo} alt="company logo" {...logoProps} />
+                  </IconButton>
+                </Link>
+              </Box>
+              <Box display="flex" flexDirection="column">
+                <Link to={rootUrl}>
+                  <StyledCompany>{userData.company}</StyledCompany>
+                </Link>
+                {children}
+              </Box>
             </Box>
-            <Box display="flex" flexDirection="column">
-              <Link to={rootUrl}>
-                <StyledCompany>{userData.company}</StyledCompany>
-              </Link>
-              {children}
-            </Box>
+            <StyledLinkContainer display="flex" alignItems="center">
+              <StyledLink href="https://fusebit.io/contact">Support</StyledLink>
+              <StyledLink href="https://developer.fusebit.io">Docs</StyledLink>
+              <UserMenu />
+            </StyledLinkContainer>
           </Box>
-          <StyledLinkContainer display="flex" alignItems="center">
-            <StyledLink href="https://fusebit.io/contact">Support</StyledLink>
-            <StyledLink href="https://developer.fusebit.io">Docs</StyledLink>
-            <UserMenu />
-          </StyledLinkContainer>
-        </Box>
-      </Container>
-    </StyledContainerRoot>
+        </Container>
+      </StyledContainerRoot>
+    </>
   );
 };
 
