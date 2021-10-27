@@ -18,7 +18,7 @@ const walkObjectStrings = (obj: any, func: (value: string) => string): any => {
 const checkIfEntitiesAreValid = (parsedFeed: Feed) => {
   if (Array.isArray(parsedFeed.configuration.entities)) {
     const err = {
-      statusCode: 400,
+      statusCode: 403,
       message: 'Entities cant be an array',
     };
     // eslint-disable-next-line @typescript-eslint/no-throw-literal
