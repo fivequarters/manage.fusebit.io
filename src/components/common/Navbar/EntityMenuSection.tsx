@@ -68,13 +68,14 @@ const StyledSectionDropdownSeeMore = styled.span`
 interface Props {
   title: string;
   linkTitleTo: string;
+  onClose: () => void;
   items?: {
     id: string;
     to: string;
   }[];
 }
 
-const EntityMenuSection = ({ title, items = [], linkTitleTo }: Props) => {
+const EntityMenuSection = ({ title, items = [], linkTitleTo, onClose }: Props) => {
   const { id } = useParams<{ id: string }>();
 
   return (
@@ -91,7 +92,7 @@ const EntityMenuSection = ({ title, items = [], linkTitleTo }: Props) => {
         </Link>
       </StyledContainer>
       {items.map((item) => (
-        <Link key={item.id} to={item.to}>
+        <Link key={item.id} to={item.to} onClick={onClose}>
           <StyledSectionDropdownIntegration active={id === item.id}>
             {item.id}
             <img src={check} alt="check" height="16" width="16" />

@@ -1,31 +1,21 @@
-import React, { FC, ReactElement } from 'react';
+import { FC, ReactElement } from 'react';
 import { useParams } from 'react-router-dom';
 import Layout from '../components/common/Layout';
-import { useAccountConnectorsGetOne } from '../hooks/api/v2/account/connector/useGetOne';
-import { useAuthContext } from '../hooks/useAuthContext';
-import { Connector } from '../interfaces/connector';
-import Navbar from '../components/common/Navbar';
 import { useTrackPage } from '../hooks/useTrackPage';
 import TabComponent from '../components/common/TabComponent';
 import { useGetRedirectLink } from '../hooks/useGetRedirectLink';
 import IdentitiesTable from '../components/ConnectorDetailIdentities/IdentitiesTable';
+import ConnectorsNavbar from '../components/common/Navbar/ConnectorsNavbar';
 
 const ConnectorDetailIdentitiesPage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
-  const { userData } = useAuthContext();
-  const { data: connectorData } = useAccountConnectorsGetOne<Connector>({
-    enabled: userData.token,
-    id,
-    accountId: userData.accountId,
-    subscriptionId: userData.subscriptionId,
-  });
   const { getRedirectLink } = useGetRedirectLink();
 
   useTrackPage('Connector Identities', 'Connector');
 
   return (
     <Layout>
-      <Navbar sectionName={connectorData?.data.id || id} dropdown />
+      <ConnectorsNavbar />
       <TabComponent
         tabNames={['Configure', 'Identities']}
         tabObjects={[getRedirectLink(`/connector/${id}/configure`), <IdentitiesTable key="identities" />]}

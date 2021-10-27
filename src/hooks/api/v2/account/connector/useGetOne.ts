@@ -1,8 +1,9 @@
 import { useQuery } from 'react-query';
 import { Params } from '../../../../../interfaces/api';
+import { Connector } from '../../../../../interfaces/connector';
 import { useAxios } from '../../../../useAxios';
 
-export const useAccountConnectorsGetOne = <T>(params: Params) => {
+export const useAccountConnectorsGetOne = <T = Connector>(params: Params) => {
   const { axios } = useAxios();
 
   const { enabled, ...queryParams } = params;

@@ -2,7 +2,6 @@ import { Container, IconButton, Box, useMediaQuery } from '@material-ui/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { Props } from '../../../interfaces/Navbar';
 import { useAuthContext } from '../../../hooks/useAuthContext';
 import navbarBg from '../../../assets/navbar.svg';
 import companyLogo from '../../../assets/company-logo.svg';
@@ -55,7 +54,7 @@ const StyledLinkContainer = styled(Box)`
   }
 `;
 
-const Navbar: React.FC<Props> = ({ children }) => {
+const Navbar: React.FC = ({ children }) => {
   const { userData } = useAuthContext();
   const { getRedirectLink } = useGetRedirectLink();
   const matchesMobile = useMediaQuery('(max-width: 880px)');
@@ -70,20 +69,22 @@ const Navbar: React.FC<Props> = ({ children }) => {
         width: 56,
       };
 
+  const rootUrl = getRedirectLink('/integrations/overview');
+
   return (
     <StyledContainerRoot>
       <Container maxWidth="lg">
         <Box display="flex" justifyContent="space-between">
           <Box display="flex" alignItems="center">
             <Box mr="24px">
-              <Link to={getRedirectLink('/integrations/overview')}>
+              <Link to={rootUrl}>
                 <IconButton disableRipple style={logoProps}>
                   <img src={companyLogo} alt="company logo" {...logoProps} />
                 </IconButton>
               </Link>
             </Box>
             <Box display="flex" flexDirection="column">
-              <Link to={getRedirectLink('/integrations/overview')}>
+              <Link to={rootUrl}>
                 <StyledCompany>{userData.company}</StyledCompany>
               </Link>
               {children}

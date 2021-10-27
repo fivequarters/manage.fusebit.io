@@ -48,6 +48,7 @@ const EntitiesMenu = ({ anchorEl, onClose }: Props) => {
       >
         <StyledSectionDropdownMenu>
           <EntityMenuSection
+            onClose={onClose}
             items={integrations?.data?.items?.map((i) => ({
               id: i.id,
               to: getRedirectLink(`/integration/${i.id}/develop`),
@@ -56,6 +57,7 @@ const EntitiesMenu = ({ anchorEl, onClose }: Props) => {
             title="Integrations"
           />
           <EntityMenuSection
+            onClose={onClose}
             items={connectors?.data?.items?.map((c) => ({
               id: c.id,
               to: getRedirectLink(`/connector/${c.id}/configure`),

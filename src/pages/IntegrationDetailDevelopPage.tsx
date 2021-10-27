@@ -4,12 +4,11 @@ import Layout from '../components/common/Layout';
 import { useAccountIntegrationsGetOne } from '../hooks/api/v2/account/integration/useGetOne';
 import { useAuthContext } from '../hooks/useAuthContext';
 import { Integration } from '../interfaces/integration';
-import Navbar from '../components/common/Navbar/NewNavbar';
 import { useTrackPage } from '../hooks/useTrackPage';
 import TabComponent from '../components/common/TabComponent';
 import { useGetRedirectLink } from '../hooks/useGetRedirectLink';
 import Diagram from '../components/IntegrationDetailDevelop/Diagram';
-import Integrations from '../components/common/Navbar/Integrations';
+import IntegrationsNavbar from '../components/common/Navbar/IntegrationsNavbar';
 
 const IntegrationDetailDevelopPage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
@@ -26,9 +25,7 @@ const IntegrationDetailDevelopPage: FC<{}> = (): ReactElement => {
 
   return (
     <Layout>
-      <Navbar dropdown sectionName="Integrations" integration>
-        <Integrations title="integrations" titleLinkTo={getRedirectLink('/integrations/overview')} />
-      </Navbar>
+      <IntegrationsNavbar />
       <TabComponent
         tabNames={['Develop', 'Installs']}
         tabObjects={[<Diagram key="diagram" isLoading={isLoading} />, getRedirectLink(`/integration/${id}/installs`)]}
