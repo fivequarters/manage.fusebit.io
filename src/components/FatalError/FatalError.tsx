@@ -1,6 +1,6 @@
 import React from 'react';
+import warning from '@assets/warning-red.svg';
 import * as SC from './styles';
-import warning from '../../assets/warning-red.svg';
 
 const FatalError: React.FC<{}> = () => {
   return (
