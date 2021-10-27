@@ -92,7 +92,10 @@ const ConfigureForm: React.FC = () => {
               <InformationalBanner>
                 By default, Connectors use Fusebit demonstration credentials, which are intended for testing only. When
                 you are ready for production use, supply your own credentials below, as described in{' '}
-                <a href={configureAppDocUrl}>this guide</a>.
+                <a target="_blank" rel="noreferrer" href={configureAppDocUrl}>
+                  this guide
+                </a>
+                .
               </InformationalBanner>
             ) : (
               <InformationalBanner>

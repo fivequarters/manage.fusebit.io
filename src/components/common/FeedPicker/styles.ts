@@ -196,6 +196,15 @@ export const ConnectorDescription = styled(ReactMarkdown)`
     margin-top: 16px;
   }
 
+  a {
+    color: var(--black);
+    text-decoration: underline;
+    transition: all 0.25s linear;
+
+    &:hover {
+      color: var(--primary-color);
+    }
+  }
   @media only screen and (max-width: 1100px) {
     max-width: none;
   }
