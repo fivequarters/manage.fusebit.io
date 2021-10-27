@@ -19,7 +19,7 @@ const useEntityBreadcrumb = ({ initialText, onClickInitialText }: Props) => {
     const items = [
       {
         text: isMobile && id ? id : initialText,
-        onClick: (event: any, isLastItem: boolean) => {
+        onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, isLastItem: boolean) => {
           if (isLastItem) {
             if (isMobile) {
               setOpenDrawer(true);
@@ -36,7 +36,7 @@ const useEntityBreadcrumb = ({ initialText, onClickInitialText }: Props) => {
     if (id && !isMobile) {
       items.push({
         text: id,
-        onClick: (event: any) => {
+        onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
           handleClickAnchor(event);
         },
       });

@@ -1,6 +1,6 @@
 import { useHistory, useParams } from 'react-router-dom';
 import NavbarBreadcrumb from '../NavbarBreadcrumb/NavbarBreadcrumb';
-import Navbar from '../Navbar/Navbar';
+import Navbar from '../Navbar';
 
 const AccountNavbar: React.FC = () => {
   const history = useHistory();

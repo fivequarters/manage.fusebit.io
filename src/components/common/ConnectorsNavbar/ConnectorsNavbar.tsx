@@ -3,7 +3,7 @@ import EntitiesMenu from '../EntitiesMenu/EntitiesMenu';
 import NavbarBreadcrumb from '../NavbarBreadcrumb/NavbarBreadcrumb';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import useEntityBreadcrumb from '../../../hooks/useEntityBreadcrumb';
-import Navbar from '../Navbar/Navbar';
+import Navbar from '../Navbar';
 
 const ConnectorsNavbar: React.FC = () => {
   const history = useHistory();

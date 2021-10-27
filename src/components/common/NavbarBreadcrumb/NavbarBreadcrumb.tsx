@@ -29,7 +29,7 @@ const StyledArrowContainer = styled(Box)<{ $active?: boolean }>`
 interface Props {
   items: {
     text: string;
-    onClick: (event: any, isLastItem: boolean) => void;
+    onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, isLastItem: boolean) => void;
     active?: boolean;
   }[];
   lastItemAction?: boolean;

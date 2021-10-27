@@ -18,7 +18,7 @@ const StyledSectionDropdownMenu = styled.div`
 
 interface Props {
   desktop: {
-    anchorEl?: any;
+    anchorEl: null | HTMLElement;
     onClose: () => void;
   };
   mobile: {

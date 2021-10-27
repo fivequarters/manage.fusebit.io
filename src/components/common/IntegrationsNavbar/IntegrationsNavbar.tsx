@@ -1,7 +1,7 @@
 import { useHistory } from 'react-router-dom';
 import EntitiesMenu from '../EntitiesMenu/EntitiesMenu';
-import Navbar from '../Navbar/Navbar';
-import NavbarBreadcrumb from '../NavbarBreadcrumb/NavbarBreadcrumb';
+import Navbar from '../Navbar';
+import NavbarBreadcrumb from '../NavbarBreadcrumb';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import useEntityBreadcrumb from '../../../hooks/useEntityBreadcrumb';
 
