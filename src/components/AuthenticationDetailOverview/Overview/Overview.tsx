@@ -3,12 +3,12 @@ import { Button, Modal, Backdrop } from '@material-ui/core';
 import { ValidationMode } from '@jsonforms/core';
 
 import { useHistory, useParams } from 'react-router-dom';
-import dots from '@components/assets/dots.svg';
+import dots from '@assets/dots.svg';
 import { useAuthContext } from '@hooks/useAuthContext';
 import CliAccess from '@components/AuthenticationDetailOverview/CliAccess';
 import { useAccountUserGetOne } from '@hooks/api/v1/account/user/useGetOne';
 import { useAccountUserUpdateOne } from '@hooks/api/v1/account/user/useUpdateOne';
-import accountImg from '@components/assets/account.svg';
+import accountImg from '@assets/account.svg';
 import { Operation } from '@interfaces/operation';
 import { Account } from '@interfaces/account';
 import { useLoader } from '@hooks/useLoader';
