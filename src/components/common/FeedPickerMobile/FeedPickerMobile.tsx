@@ -5,19 +5,31 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import FeedPickerMobileChoose from './FeedPickerMobileChoose';
 import FeedPickerMobileCreate from './FeedPickerMobileCreate';
 import FeedPickerMobileFilter from './FeedPickerMobileFilter';
-
-const steps = [
-  <FeedPickerMobileFilter key="1" />,
-  <FeedPickerMobileChoose key="2" />,
-  <FeedPickerMobileCreate key="3" />,
-];
+import useFilterFeed from '../../../hooks/useFilterFeed';
+import { Feed } from '../../../interfaces/feed';
 
 interface Props {
   title?: string;
+  feed?: Feed[];
 }
 
-const FeedPickerMobile: React.FC<Props> = ({ title = 'Integration' }) => {
+const FeedPickerMobile: React.FC<Props> = ({ title = 'Integration', feed }) => {
   const [step, setStep] = useState(0);
+  const { activeFilter, allTags, filteredFeed, setActiveFilter, setSearchFilter } = useFilterFeed({
+    feed,
+  });
+
+  console.log('feed', feed);
+
+  const filters = allTags.map((tag) => ({
+    text: tag,
+  }));
+
+  const steps = [
+    <FeedPickerMobileFilter key="1" items={filters} />,
+    <FeedPickerMobileChoose key="2" />,
+    <FeedPickerMobileCreate key="3" />,
+  ];
 
   const handleNext = () => {
     setStep(step + 1);

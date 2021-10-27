@@ -1,18 +1,10 @@
 import ItemList from '../ItemList/ItemList';
 
 interface Props {
-  items?: string[];
+  items?: React.ComponentProps<typeof ItemList>['items'];
 }
 
-const items = [
-  { text: 'Inbox', showArrow: true },
-  { text: 'Starred', showArrow: true },
-  { text: 'Send email', showArrow: true },
-  { text: 'Drafts', showArrow: true },
-  { text: 'Calendar', showArrow: true },
-];
-
-const FeedPickerMobileFilter: React.FC<Props> = () => {
+const FeedPickerMobileFilter: React.FC<Props> = ({ items }) => {
   return <ItemList items={items} />;
 };
 

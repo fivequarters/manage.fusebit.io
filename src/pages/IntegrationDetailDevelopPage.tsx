@@ -10,6 +10,7 @@ import TabComponent from '../components/common/TabComponent';
 import { useGetRedirectLink } from '../hooks/useGetRedirectLink';
 import Diagram from '../components/IntegrationDetailDevelop/Diagram';
 import FeedPickerMobile from '../components/common/FeedPickerMobile/FeedPickerMobile';
+import ConnectorsPickerMobile from '../components/common/ConnectorsPickerMobile';
 
 const IntegrationDetailDevelopPage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
@@ -26,7 +27,7 @@ const IntegrationDetailDevelopPage: FC<{}> = (): ReactElement => {
 
   return (
     <Layout>
-      <FeedPickerMobile />
+      <ConnectorsPickerMobile />
       <Navbar sectionName={integrationData?.data.id || id} dropdown integrationsLink />
       <TabComponent
         tabNames={['Develop', 'Installs']}

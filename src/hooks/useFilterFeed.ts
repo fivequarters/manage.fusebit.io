@@ -6,10 +6,10 @@ export enum DefaultFilters {
 }
 
 interface Props {
-  feed: Feed[];
+  feed?: Feed[];
 }
 
-const useFilterFeed = ({ feed }: Props) => {
+const useFilterFeed = ({ feed = [] }: Props) => {
   const [searchFilter, setSearchFilter] = React.useState('');
   const [activeFilter, setActiveFilter] = React.useState<string>(DefaultFilters.ALL);
 

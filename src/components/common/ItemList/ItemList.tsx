@@ -12,12 +12,13 @@ const StyledIconContainer = styled(Box)`
 interface Props {
   items?: {
     text: string;
-    showArrow?: boolean;
+    hideArrow?: boolean;
     icon?: any;
   }[];
 }
 
 const ItemList: React.FC<Props> = ({ items = [] }) => {
+  console.log('items', items);
   return (
     <List component="nav" aria-label="main mailbox folders">
       {items.map((item) => (
@@ -28,7 +29,7 @@ const ItemList: React.FC<Props> = ({ items = [] }) => {
             </StyledIconContainer>
           )}
           <ListItemText primary={item.text} />
-          {item.showArrow && <ArrowForwardIosIcon style={{ width: 14 }} />}
+          {!item.hideArrow && <ArrowForwardIosIcon style={{ width: 14 }} />}
         </ListItem>
       ))}
     </List>
