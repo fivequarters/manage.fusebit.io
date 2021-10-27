@@ -13,11 +13,9 @@ const useFilterFeed = ({ feed = [] }: Props) => {
   const [searchFilter, setSearchFilter] = React.useState('');
   const [activeFilter, setActiveFilter] = React.useState<string>(DefaultFilters.ALL);
 
-  const allTags = useMemo(
-    // First item from catalog is always the same as the connector name
-    () => [...new Set(feed.map((feedEntry) => feedEntry.tags.catalog.split(',').slice(1)).flat())],
-    [feed]
-  );
+  const allTags = useMemo(() => [...new Set(feed.map((feedEntry) => feedEntry.tags.catalog.split(',')).flat())], [
+    feed,
+  ]);
 
   const filteredFeed = useMemo(() => {
     const applySearchFilter = (feedEntry: Feed) => feedEntry.name.toLowerCase().includes(searchFilter.toLowerCase());
