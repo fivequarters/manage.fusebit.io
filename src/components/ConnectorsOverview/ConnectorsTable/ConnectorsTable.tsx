@@ -1,17 +1,17 @@
 import { useHistory } from 'react-router-dom';
-import BaseTable from '../../common/BaseTable/BaseTable';
-import { useEntityTable } from '../../../hooks/useEntityTable';
-import { usePagination } from '../../../hooks/usePagination';
-import { useModal } from '../../../hooks/useModal';
-import { BaseTableRow } from '../../common/BaseTable/types';
-import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
-import { trackEvent } from '../../../utils/analytics';
-import { useAuthContext } from '../../../hooks/useAuthContext';
-import { useAccountConnectorsGetAll } from '../../../hooks/api/v2/account/connector/useGetAll';
-import { Connector } from '../../../interfaces/connector';
+import BaseTable from '@components/common/BaseTable/BaseTable';
+import { useEntityTable } from '@hooks/useEntityTable';
+import { usePagination } from '@hooks/usePagination';
+import { useModal } from '@hooks/useModal';
+import { BaseTableRow } from '@components/common/BaseTable/types';
+import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
+import { trackEvent } from '@utils/analytics';
+import { useAuthContext } from '@hooks/useAuthContext';
+import { useAccountConnectorsGetAll } from '@hooks/api/v2/account/connector/useGetAll';
+import { Connector } from '@interfaces/connector';
+import useQueryParam from '@hooks/useQueryParam';
 import DeleteConnectorModal from '../DeleteConnectorModal';
 import GetIdentities from './GetIdentities';
-import useQueryParam from '../../../hooks/useQueryParam';
 import CreateConnectorModal from '../CreateConnectorModal';
 
 const ConnectorsTable = () => {
