@@ -12,6 +12,8 @@ const StyledText = styled.span<{ active?: boolean }>`
   font-weight: 300;
   margin: 0;
   color: white;
+  text-align: left;
+  width: max-content;
 
   ${(props) => props.active && `font-weight: 600;`}
 `;
