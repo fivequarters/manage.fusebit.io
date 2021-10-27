@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Menu } from '@material-ui/core';
+import { Menu, Drawer, useMediaQuery } from '@material-ui/core';
 import { useAccountConnectorsGetAll } from '../../../hooks/api/v2/account/connector/useGetAll';
 import { useAccountIntegrationsGetAll } from '../../../hooks/api/v2/account/integration/useGetAll';
 import { useAuthContext } from '../../../hooks/useAuthContext';
@@ -17,13 +17,20 @@ const StyledSectionDropdownMenu = styled.div`
 `;
 
 interface Props {
-  anchorEl?: any;
-  onClose: () => void;
+  desktop: {
+    anchorEl?: any;
+    onClose: () => void;
+  };
+  mobile: {
+    open: boolean;
+    onClose: () => void;
+  };
 }
 
-const EntitiesMenu = ({ anchorEl, onClose }: Props) => {
+const EntitiesMenu = ({ desktop, mobile }: Props) => {
   const { getRedirectLink } = useGetRedirectLink();
   const { userData } = useAuthContext();
+  const isMobile = useMediaQuery('(max-width: 880px)');
 
   const { data: integrations } = useAccountIntegrationsGetAll({
     enabled: userData.token,
@@ -36,37 +43,51 @@ const EntitiesMenu = ({ anchorEl, onClose }: Props) => {
     subscriptionId: userData.subscriptionId,
   });
 
+  const renderContent = () => {
+    const onClose = isMobile ? mobile.onClose : desktop.onClose;
+
+    return (
+      <StyledSectionDropdownMenu>
+        <EntityMenuSection
+          onClose={onClose}
+          items={integrations?.data?.items?.map((i) => ({
+            id: i.id,
+            to: getRedirectLink(`/integration/${i.id}/develop`),
+          }))}
+          linkTitleTo={getRedirectLink('/integrations/overview')}
+          title="Integrations"
+        />
+        <EntityMenuSection
+          onClose={onClose}
+          items={connectors?.data?.items?.map((c) => ({
+            id: c.id,
+            to: getRedirectLink(`/connector/${c.id}/configure`),
+          }))}
+          linkTitleTo={getRedirectLink('/connectors/overview')}
+          title="Connectors"
+        />
+      </StyledSectionDropdownMenu>
+    );
+  };
+
   return (
     <>
-      <Menu
-        style={{ top: '100px' }}
-        id="simple-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={!!anchorEl}
-        onClose={onClose}
-      >
-        <StyledSectionDropdownMenu>
-          <EntityMenuSection
-            onClose={onClose}
-            items={integrations?.data?.items?.map((i) => ({
-              id: i.id,
-              to: getRedirectLink(`/integration/${i.id}/develop`),
-            }))}
-            linkTitleTo={getRedirectLink('/integrations/overview')}
-            title="Integrations"
-          />
-          <EntityMenuSection
-            onClose={onClose}
-            items={connectors?.data?.items?.map((c) => ({
-              id: c.id,
-              to: getRedirectLink(`/connector/${c.id}/configure`),
-            }))}
-            linkTitleTo={getRedirectLink('/connectors/overview')}
-            title="Connectors"
-          />
-        </StyledSectionDropdownMenu>
-      </Menu>
+      {isMobile ? (
+        <Drawer anchor="bottom" open={mobile.open} onClose={mobile.onClose}>
+          {renderContent()}
+        </Drawer>
+      ) : (
+        <Menu
+          style={{ top: '100px' }}
+          id="simple-menu"
+          anchorEl={desktop.anchorEl}
+          keepMounted
+          open={!!desktop.anchorEl}
+          onClose={desktop.onClose}
+        >
+          {renderContent()}
+        </Menu>
+      )}
     </>
   );
 };

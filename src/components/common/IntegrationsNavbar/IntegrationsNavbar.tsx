@@ -9,14 +9,23 @@ const IntegrationsNavbar: React.FC = () => {
   const history = useHistory();
   const { getRedirectLink } = useGetRedirectLink();
 
-  const { anchorEl, breadcrumbItems, handleClose } = useEntityBreadcrumb({
+  const { anchorEl, breadcrumbItems, handleCloseDrawer, handleCloseMenu, openDrawer } = useEntityBreadcrumb({
     initialText: 'Integrations',
     onClickInitialText: () => history.push(getRedirectLink('/integrations/overview')),
   });
 
   return (
     <Navbar>
-      <EntitiesMenu anchorEl={anchorEl} onClose={handleClose} />
+      <EntitiesMenu
+        desktop={{
+          onClose: handleCloseMenu,
+          anchorEl,
+        }}
+        mobile={{
+          onClose: handleCloseDrawer,
+          open: openDrawer,
+        }}
+      />
       <NavbarBreadcrumb items={breadcrumbItems} />
     </Navbar>
   );

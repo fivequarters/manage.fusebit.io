@@ -152,7 +152,7 @@ const UserMenu = () => {
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
   const { accountId } = useParams<{ accountId: string }>();
-  const { anchorEl, handleClick, handleClose } = useAnchor();
+  const { anchorEl, handleClickAnchor, handleCloseMenu } = useAnchor();
 
   const handleOnClickEmail = () => {
     history.push(getRedirectLink(`/authentication/${userData.userId}/overview`));
@@ -164,7 +164,7 @@ const UserMenu = () => {
         active={!!anchorEl}
         aria-controls="simple-menu"
         aria-haspopup="true"
-        onClick={handleClick}
+        onClick={handleClickAnchor}
         size="large"
         startIcon={<StyledUserImg src={userData.picture || accountImg} />}
         endIcon={anchorEl ? <ExpandLessIcon /> : <ExpandMoreIcon />}
@@ -179,7 +179,7 @@ const UserMenu = () => {
         anchorEl={anchorEl}
         keepMounted
         open={!!anchorEl}
-        onClose={handleClose}
+        onClose={handleCloseMenu}
       >
         <StyledUserDropdown>
           <StyledUserDropdownCompany>{userData.company}</StyledUserDropdownCompany>

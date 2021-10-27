@@ -3,19 +3,19 @@ import React, { useState } from 'react';
 const useAnchor = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClickAnchor = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleCloseMenu = () => {
     setAnchorEl(null);
   };
 
   return {
     anchorEl,
     setAnchorEl,
-    handleClick,
-    handleClose,
+    handleClickAnchor,
+    handleCloseMenu,
   };
 };
 

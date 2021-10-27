@@ -1,4 +1,5 @@
-import { useMemo } from 'react';
+import { useMediaQuery } from '@material-ui/core';
+import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useAnchor from './useAnchor';
 
@@ -8,7 +9,9 @@ interface Props {
 }
 
 const useEntityBreadcrumb = ({ initialText, onClickInitialText }: Props) => {
-  const { handleClick, anchorEl, handleClose } = useAnchor();
+  const { handleClickAnchor, anchorEl, handleCloseMenu } = useAnchor();
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const isMobile = useMediaQuery('(max-width: 880px)');
 
   const { id } = useParams<{ id: string }>();
 
@@ -18,7 +21,11 @@ const useEntityBreadcrumb = ({ initialText, onClickInitialText }: Props) => {
         text: initialText,
         onClick: (event: any, isLastItem: boolean) => {
           if (isLastItem) {
-            handleClick(event);
+            if (isMobile) {
+              setOpenDrawer(true);
+            } else {
+              handleClickAnchor(event);
+            }
           } else {
             onClickInitialText();
           }
@@ -26,22 +33,28 @@ const useEntityBreadcrumb = ({ initialText, onClickInitialText }: Props) => {
       },
     ];
 
-    if (id) {
+    if (id && !isMobile) {
       items.push({
         text: id,
         onClick: (event: any) => {
-          handleClick(event);
+          handleClickAnchor(event);
         },
       });
     }
 
     return items;
-  }, [id, handleClick, initialText, onClickInitialText]);
+  }, [id, handleClickAnchor, initialText, onClickInitialText, isMobile]);
+
+  const handleCloseDrawer = () => {
+    setOpenDrawer(false);
+  };
 
   return {
     breadcrumbItems,
     anchorEl,
-    handleClose,
+    handleCloseMenu,
+    openDrawer,
+    handleCloseDrawer,
   };
 };
 
