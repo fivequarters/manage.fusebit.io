@@ -4,7 +4,7 @@ import { useAccountConnectorsGetAll } from '../../../hooks/api/v2/account/connec
 import { useAccountIntegrationsGetAll } from '../../../hooks/api/v2/account/integration/useGetAll';
 import { useAuthContext } from '../../../hooks/useAuthContext';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
-import EntityMenuSection from './EntityMenuSection';
+import EntityMenuSection from '../EntityMenuSection/EntityMenuSection';
 
 const StyledSectionDropdownMenu = styled.div`
   padding: 0px 32px 12px;

@@ -5,7 +5,7 @@ import { useTrackPage } from '../hooks/useTrackPage';
 import TabComponent from '../components/common/TabComponent';
 import { useGetRedirectLink } from '../hooks/useGetRedirectLink';
 import IdentitiesTable from '../components/ConnectorDetailIdentities/IdentitiesTable';
-import ConnectorsNavbar from '../components/common/Navbar/ConnectorsNavbar';
+import ConnectorsNavbar from '../components/common/ConnectorsNavbar/ConnectorsNavbar';
 
 const ConnectorDetailIdentitiesPage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();

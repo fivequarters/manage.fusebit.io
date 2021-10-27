@@ -1,11 +1,11 @@
 import { FC, ReactElement } from 'react';
 import { useHistory } from 'react-router-dom';
 import Layout from '../components/common/Layout';
-import NavBar from '../components/common/Navbar/NewNavbar';
+import Navbar from '../components/common/Navbar/Navbar';
 import { useTrackPage } from '../hooks/useTrackPage';
 import AuthenticationDetail from '../components/AuthenticationDetailOverview/Overview';
 import TabComponent from '../components/common/TabComponent';
-import NavbarBreadcrumb from '../components/common/Navbar/NavbarBreadcrumb';
+import NavbarBreadcrumb from '../components/common/NavbarBreadcrumb/NavbarBreadcrumb';
 import { useGetRedirectLink } from '../hooks/useGetRedirectLink';
 import { useAuthContext } from '../hooks/useAuthContext';
 
@@ -17,7 +17,7 @@ const AuthenticationDetailPage: FC<{}> = (): ReactElement => {
 
   return (
     <Layout>
-      <NavBar>
+      <Navbar>
         <NavbarBreadcrumb
           lastItemAction={false}
           items={[
@@ -27,7 +27,7 @@ const AuthenticationDetailPage: FC<{}> = (): ReactElement => {
             },
           ]}
         />
-      </NavBar>
+      </Navbar>
       <TabComponent tabNames={['Overview']} tabObjects={[<AuthenticationDetail key="overview" />]} />
     </Layout>
   );

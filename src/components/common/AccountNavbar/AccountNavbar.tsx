@@ -1,13 +1,13 @@
 import { useHistory, useParams } from 'react-router-dom';
-import NavbarBreadcrumb from './NavbarBreadcrumb';
-import NavBar from './NewNavbar';
+import NavbarBreadcrumb from '../NavbarBreadcrumb/NavbarBreadcrumb';
+import Navbar from '../Navbar/Navbar';
 
 const AccountNavbar: React.FC = () => {
   const history = useHistory();
   const { accountId } = useParams<{ accountId: string }>();
 
   return (
-    <NavBar>
+    <Navbar>
       <NavbarBreadcrumb
         lastItemAction={false}
         items={[
@@ -17,7 +17,7 @@ const AccountNavbar: React.FC = () => {
           },
         ]}
       />
-    </NavBar>
+    </Navbar>
   );
 };
 

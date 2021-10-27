@@ -1,25 +1,25 @@
 import { useHistory } from 'react-router-dom';
-import EntitiesMenu from './EntitiesMenu';
-import NavbarBreadcrumb from './NavbarBreadcrumb';
+import EntitiesMenu from '../EntitiesMenu/EntitiesMenu';
+import Navbar from '../Navbar/Navbar';
+import NavbarBreadcrumb from '../NavbarBreadcrumb/NavbarBreadcrumb';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import useEntityBreadcrumb from '../../../hooks/useEntityBreadcrumb';
-import NavBar from './NewNavbar';
 
-const ConnectorsNavbar: React.FC = () => {
+const IntegrationsNavbar: React.FC = () => {
   const history = useHistory();
   const { getRedirectLink } = useGetRedirectLink();
 
   const { anchorEl, breadcrumbItems, handleClose } = useEntityBreadcrumb({
-    initialText: 'Connectors',
-    onClickInitialText: () => history.push(getRedirectLink('/connectors/overview')),
+    initialText: 'Integrations',
+    onClickInitialText: () => history.push(getRedirectLink('/integrations/overview')),
   });
 
   return (
-    <NavBar>
+    <Navbar>
       <EntitiesMenu anchorEl={anchorEl} onClose={handleClose} />
       <NavbarBreadcrumb items={breadcrumbItems} />
-    </NavBar>
+    </Navbar>
   );
 };
 
-export default ConnectorsNavbar;
+export default IntegrationsNavbar;

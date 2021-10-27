@@ -8,7 +8,7 @@ import { useTrackPage } from '../hooks/useTrackPage';
 import TabComponent from '../components/common/TabComponent';
 import { useGetRedirectLink } from '../hooks/useGetRedirectLink';
 import Diagram from '../components/IntegrationDetailDevelop/Diagram';
-import IntegrationsNavbar from '../components/common/Navbar/IntegrationsNavbar';
+import IntegrationsNavbar from '../components/common/IntegrationsNavbar/IntegrationsNavbar';
 
 const IntegrationDetailDevelopPage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();

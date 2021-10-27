@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import useAnchor from '../components/common/Navbar/useAnchor';
+import useAnchor from './useAnchor';
 
 interface Props {
   initialText: string;
