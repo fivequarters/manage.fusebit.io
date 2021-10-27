@@ -1,14 +1,13 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
 import { ValidationMode } from '@jsonforms/core';
-
+import { Props } from '@interfaces/newUser';
+import { NewUserData } from '@interfaces/newUserData';
+import { startCase } from '@utils/utils';
+import CopyLine from '@components/common/CopyLine';
+import BaseJsonForm from '@components/common/BaseJsonForm';
 import * as SC from './styles';
-import { Props } from '../../../interfaces/newUser';
-import { NewUserData } from '../../../interfaces/newUserData';
-import CopyLine from '../../common/CopyLine';
 import * as CSC from '../../globalStyle';
-import { startCase } from '../../../utils/utils';
-import BaseJsonForm from '../../common/BaseJsonForm';
 
 const schema = {
   type: 'object',

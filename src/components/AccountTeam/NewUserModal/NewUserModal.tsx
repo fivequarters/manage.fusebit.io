@@ -1,7 +1,7 @@
 import { Backdrop } from '@material-ui/core';
 import Modal from '@material-ui/core/Modal';
-import { useEntityApi } from '../../../hooks/useEntityApi';
-import CreateUserForm from '../NewUserForm';
+import { useEntityApi } from '@hooks/useEntityApi';
+import CreateUserForm from '@components/AccountTeam/NewUserForm';
 
 interface Props {
   open: boolean;

@@ -2,13 +2,11 @@
   "compilerOptions": {
     "target": "es2015",
     "baseUrl": "./src",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "paths": {
-      "@components/*": ["./components/*"],
-      "@hooks/*": ["./hooks/*"],
-      "@utils/*": ["./utils/*"],
-      "@assets/*": ["./assets/*"], 
-    },
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -23,6 +21,13 @@
     "jsx": "react-jsx",
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/node_modules/*", "build"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/node_modules/*",
+    "build"
+  ],
+  "extends": "./base-tsconfig.json",
 }
