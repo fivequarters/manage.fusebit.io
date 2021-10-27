@@ -12,10 +12,12 @@ interface Props {
   items: {
     text: string;
     onClick: (event: any, isLastItem: boolean) => void;
+    active?: boolean;
   }[];
+  lastItemAction?: boolean;
 }
 
-const NavbarBreadcrumb: React.FC<Props> = ({ items }) => {
+const NavbarBreadcrumb: React.FC<Props> = ({ items, lastItemAction = true }) => {
   return (
     <>
       <Breadcrumbs separator={<img src={arrow} alt="arrow" />} aria-label="breadcrumb">
@@ -23,8 +25,8 @@ const NavbarBreadcrumb: React.FC<Props> = ({ items }) => {
           const isLastItem = index === items.length - 1;
           return (
             <StyledButton key={i.text} onClick={(e) => i.onClick(e, isLastItem)}>
-              <BreadCrumText active={isLastItem}>{i.text}</BreadCrumText>
-              {isLastItem && (
+              <BreadCrumText active={lastItemAction ? isLastItem : i.active}>{i.text}</BreadCrumText>
+              {isLastItem && lastItemAction && (
                 <Box ml="8px">
                   <img src={arrowDown} alt="arrow" />
                 </Box>
