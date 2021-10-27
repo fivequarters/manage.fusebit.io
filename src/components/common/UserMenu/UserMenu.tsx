@@ -3,11 +3,11 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import styled from 'styled-components';
 import { Link, useHistory, useParams } from 'react-router-dom';
-import { useState } from 'react';
 import { useAuthContext, signOut } from '../../../hooks/useAuthContext';
 import accountImg from '../../../assets/account.svg';
 import rightArrow from '../../../assets/arrow-right-black.svg';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
+import useAnchor from '../../../hooks/useAnchor';
 
 const StyledButton = styled(Button)<{ active: boolean }>`
   color: white;
@@ -152,18 +152,10 @@ const UserMenu = () => {
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
   const { accountId } = useParams<{ accountId: string }>();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { anchorEl, handleClick, handleClose } = useAnchor();
 
   const handleOnClickEmail = () => {
     history.push(getRedirectLink(`/authentication/${userData.userId}/overview`));
-  };
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
   };
 
   return (
