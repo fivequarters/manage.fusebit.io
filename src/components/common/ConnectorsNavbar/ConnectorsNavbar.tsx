@@ -9,7 +9,7 @@ const ConnectorsNavbar: React.FC = () => {
   const history = useHistory();
   const { getRedirectLink } = useGetRedirectLink();
 
-  const { anchorEl, breadcrumbItems, handleCloseDrawer, handleCloseMenu, openDrawer } = useEntityBreadcrumb({
+  const { anchorEl, breadcrumbItems, handleCloseDrawer, handleCloseMenu, openDrawer, isActive } = useEntityBreadcrumb({
     initialText: 'Connectors',
     onClickInitialText: () => history.push(getRedirectLink('/connectors/overview')),
   });
@@ -26,7 +26,7 @@ const ConnectorsNavbar: React.FC = () => {
           open: openDrawer,
         }}
       />
-      <NavbarBreadcrumb items={breadcrumbItems} />
+      <NavbarBreadcrumb items={breadcrumbItems} isArrowActive={isActive} />
     </Navbar>
   );
 };

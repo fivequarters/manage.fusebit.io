@@ -16,6 +16,16 @@ const StyledText = styled.span<{ active?: boolean }>`
   ${(props) => props.active && `font-weight: 600;`}
 `;
 
+const StyledArrowContainer = styled(Box)<{ $active?: boolean }>`
+  transition: transform 0.25s linear;
+
+  ${(props) =>
+    props.$active &&
+    `
+  transform: rotate(180deg);
+`}
+`;
+
 interface Props {
   items: {
     text: string;
@@ -23,9 +33,10 @@ interface Props {
     active?: boolean;
   }[];
   lastItemAction?: boolean;
+  isArrowActive?: boolean;
 }
 
-const NavbarBreadcrumb: React.FC<Props> = ({ items, lastItemAction = true }) => {
+const NavbarBreadcrumb: React.FC<Props> = ({ items, lastItemAction = true, isArrowActive }) => {
   return (
     <>
       <Breadcrumbs separator={<img src={arrow} alt="arrow" />} aria-label="breadcrumb">
@@ -35,9 +46,9 @@ const NavbarBreadcrumb: React.FC<Props> = ({ items, lastItemAction = true }) => 
             <StyledButton key={i.text} onClick={(e) => i.onClick(e, isLastItem)}>
               <StyledText active={lastItemAction ? isLastItem : i.active}>{i.text}</StyledText>
               {isLastItem && lastItemAction && (
-                <Box ml="8px">
+                <StyledArrowContainer ml="8px" $active={isArrowActive}>
                   <img src={arrowDown} alt="arrow" />
-                </Box>
+                </StyledArrowContainer>
               )}
             </StyledButton>
           );

@@ -78,8 +78,14 @@ const EntitiesMenu = ({ desktop, mobile }: Props) => {
         </Drawer>
       ) : (
         <Menu
-          style={{ top: '100px' }}
-          id="simple-menu"
+          PaperProps={{
+            style: {
+              marginTop: '8px',
+            },
+          }}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+          transformOrigin={{ horizontal: 'left', vertical: 'top' }}
+          getContentAnchorEl={null}
           anchorEl={desktop.anchorEl}
           keepMounted
           open={!!desktop.anchorEl}

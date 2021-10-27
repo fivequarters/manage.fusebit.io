@@ -18,7 +18,7 @@ const useEntityBreadcrumb = ({ initialText, onClickInitialText }: Props) => {
   const breadcrumbItems = useMemo(() => {
     const items = [
       {
-        text: initialText,
+        text: isMobile && id ? id : initialText,
         onClick: (event: any, isLastItem: boolean) => {
           if (isLastItem) {
             if (isMobile) {
@@ -55,6 +55,7 @@ const useEntityBreadcrumb = ({ initialText, onClickInitialText }: Props) => {
     handleCloseMenu,
     openDrawer,
     handleCloseDrawer,
+    isActive: openDrawer || !!anchorEl,
   };
 };
 

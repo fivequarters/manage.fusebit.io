@@ -9,7 +9,7 @@ const IntegrationsNavbar: React.FC = () => {
   const history = useHistory();
   const { getRedirectLink } = useGetRedirectLink();
 
-  const { anchorEl, breadcrumbItems, handleCloseDrawer, handleCloseMenu, openDrawer } = useEntityBreadcrumb({
+  const { anchorEl, breadcrumbItems, handleCloseDrawer, handleCloseMenu, openDrawer, isActive } = useEntityBreadcrumb({
     initialText: 'Integrations',
     onClickInitialText: () => history.push(getRedirectLink('/integrations/overview')),
   });
@@ -26,7 +26,7 @@ const IntegrationsNavbar: React.FC = () => {
           open: openDrawer,
         }}
       />
-      <NavbarBreadcrumb items={breadcrumbItems} />
+      <NavbarBreadcrumb items={breadcrumbItems} isArrowActive={isActive} />
     </Navbar>
   );
 };

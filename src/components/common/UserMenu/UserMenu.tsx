@@ -16,7 +16,7 @@ const StyledButton = styled(Button)<{ active: boolean }>`
   ${(props) =>
     props.active &&
     `
-    background-color: #D7E5FF66
+    background-color: #D7E5FF66 !important;
   `}
 `;
 
@@ -51,8 +51,14 @@ const UserMenu = () => {
         {process.env.REACT_APP_DEPLOYMENT_KEY}
       </StyledButton>
       <Menu
-        style={{ top: '100px', margin: '0 0 0 -88px' }}
-        id="simple-menu"
+        PaperProps={{
+          style: {
+            marginTop: '17px',
+          },
+        }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        getContentAnchorEl={null}
         anchorEl={anchorEl}
         keepMounted
         open={!!anchorEl}
