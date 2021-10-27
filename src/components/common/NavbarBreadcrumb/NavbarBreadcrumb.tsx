@@ -42,11 +42,11 @@ const NavbarBreadcrumb: React.FC<Props> = ({ items, lastItemAction = true, isArr
   return (
     <>
       <Breadcrumbs separator={<img src={arrow} alt="arrow" />} aria-label="breadcrumb">
-        {items.map((i, index) => {
+        {items.map((item, index) => {
           const isLastItem = index === items.length - 1;
           return (
-            <StyledButton key={i.text} onClick={(e) => i.onClick(e, isLastItem)}>
-              <StyledText active={lastItemAction ? isLastItem : i.active}>{i.text}</StyledText>
+            <StyledButton key={item.text} onClick={(e) => item.onClick(e, isLastItem)}>
+              <StyledText active={lastItemAction ? isLastItem : item.active}>{item.text}</StyledText>
               {isLastItem && lastItemAction && (
                 <StyledArrowContainer ml="8px" $active={isArrowActive}>
                   <img src={arrowDown} alt="arrow" />
