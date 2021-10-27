@@ -1,11 +1,11 @@
 import { Container, IconButton, Box, useMediaQuery } from '@material-ui/core';
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAuthContext } from '../../../hooks/useAuthContext';
 import navbarBg from '../../../assets/navbar.svg';
 import companyLogo from '../../../assets/company-logo.svg';
-
+import burguer from '../../../assets/burguer.svg';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import UserMenu from '../UserMenu/UserMenu';
 import UserDrawerMobile from '../UserDrawerMobile';
@@ -58,9 +58,10 @@ const StyledLinkContainer = styled(Box)`
 const Navbar: React.FC = ({ children }) => {
   const { userData } = useAuthContext();
   const { getRedirectLink } = useGetRedirectLink();
-  const matchesMobile = useMediaQuery('(max-width: 880px)');
+  const isMobile = useMediaQuery('(max-width: 880px)');
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
 
-  const logoProps = matchesMobile
+  const logoProps = isMobile
     ? {
         height: 40,
         width: 40,
@@ -74,12 +75,12 @@ const Navbar: React.FC = ({ children }) => {
 
   return (
     <>
-      <UserDrawerMobile open={false} onClose={() => {}} />
+      <UserDrawerMobile open={mobileDrawerOpen} onClose={() => setMobileDrawerOpen(false)} />
       <StyledContainerRoot>
         <Container maxWidth="lg">
           <Box display="flex" justifyContent="space-between">
             <Box display="flex" alignItems="center">
-              <Box mr="24px">
+              <Box mr={isMobile ? '16px' : '24px'}>
                 <Link to={rootUrl}>
                   <IconButton disableRipple style={logoProps}>
                     <img src={companyLogo} alt="company logo" {...logoProps} />
@@ -93,11 +94,17 @@ const Navbar: React.FC = ({ children }) => {
                 {children}
               </Box>
             </Box>
-            <StyledLinkContainer display="flex" alignItems="center">
-              <StyledLink href="https://fusebit.io/contact">Support</StyledLink>
-              <StyledLink href="https://developer.fusebit.io">Docs</StyledLink>
-              <UserMenu />
-            </StyledLinkContainer>
+            {isMobile ? (
+              <IconButton size="small" onClick={() => setMobileDrawerOpen(true)}>
+                <img src={burguer} alt="burguer" height="10" width="20" />
+              </IconButton>
+            ) : (
+              <StyledLinkContainer display="flex" alignItems="center">
+                <StyledLink href="https://fusebit.io/contact">Support</StyledLink>
+                <StyledLink href="https://developer.fusebit.io">Docs</StyledLink>
+                <UserMenu />
+              </StyledLinkContainer>
+            )}
           </Box>
         </Container>
       </StyledContainerRoot>

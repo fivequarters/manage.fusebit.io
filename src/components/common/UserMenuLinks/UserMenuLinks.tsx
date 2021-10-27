@@ -55,10 +55,10 @@ const UserMenuLinks: React.FC<Props> = ({ showAll }) => {
         <>
           <StyledDivider />
           <StyledUserDropdownLinksWrapper>
-            <MUILink href="https://fusebit.io/contact">
+            <MUILink underline="none" href="https://fusebit.io/contact">
               <StyledUserDropdownLink>Support</StyledUserDropdownLink>
             </MUILink>
-            <MUILink href="https://developer.fusebit.io">
+            <MUILink underline="none" href="https://developer.fusebit.io">
               <StyledUserDropdownLink>Docs</StyledUserDropdownLink>
             </MUILink>
           </StyledUserDropdownLinksWrapper>
