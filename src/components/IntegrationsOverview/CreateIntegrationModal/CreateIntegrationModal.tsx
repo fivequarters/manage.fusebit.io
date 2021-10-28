@@ -1,10 +1,10 @@
 import { useHistory } from 'react-router-dom';
-import { Feed } from '../../../interfaces/feed';
-import { Data } from '../../../interfaces/feedPicker';
-import { useCreateDataFromFeed } from '../../../hooks/useCreateDataFromFeed';
-import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
-import FeedPickerModal from '../../common/FeedPickerModal';
-import { useLoader } from '../../../hooks/useLoader';
+import { Feed } from '@interfaces/feed';
+import { Data } from '@interfaces/feedPicker';
+import { useCreateDataFromFeed } from '@hooks/useCreateDataFromFeed';
+import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
+import FeedPickerModal from '@components/common/FeedPickerModal';
+import { useLoader } from '@hooks/useLoader';
 
 interface Props {
   open: boolean;

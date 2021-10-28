@@ -1,19 +1,19 @@
 import { useHistory } from 'react-router-dom';
-import BaseTable from '../../common/BaseTable/BaseTable';
-import { useEntityTable } from '../../../hooks/useEntityTable';
-import { usePagination } from '../../../hooks/usePagination';
-import { Integration } from '../../../interfaces/integration';
-import DeleteIntegrationModal from '../DeleteIntegrationModal';
-import { useModal } from '../../../hooks/useModal';
-import { BaseTableRow } from '../../common/BaseTable/types';
-import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
-import { trackEvent } from '../../../utils/analytics';
-import { useAuthContext } from '../../../hooks/useAuthContext';
-import { useAccountIntegrationsGetAll } from '../../../hooks/api/v2/account/integration/useGetAll';
+import BaseTable from '@components/common/BaseTable/BaseTable';
+import { useEntityTable } from '@hooks/useEntityTable';
+import { usePagination } from '@hooks/usePagination';
+import { Integration } from '@interfaces/integration';
+import DeleteIntegrationModal from '@components/IntegrationsOverview/DeleteIntegrationModal';
+import { useModal } from '@hooks/useModal';
+import { BaseTableRow } from '@components/common/BaseTable/types';
+import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
+import { trackEvent } from '@utils/analytics';
+import { useAuthContext } from '@hooks/useAuthContext';
+import { useAccountIntegrationsGetAll } from '@hooks/api/v2/account/integration/useGetAll';
+import useQueryParam from '@hooks/useQueryParam';
+import useFirstTimeVisitor from '@hooks/useFirstTimeVisitor';
+import CreateIntegrationModal from '@components/IntegrationsOverview/CreateIntegrationModal';
 import GetInstalls from './GetInstalls';
-import useQueryParam from '../../../hooks/useQueryParam';
-import useFirstTimeVisitor from '../../../hooks/useFirstTimeVisitor';
-import CreateIntegrationModal from '../CreateIntegrationModal';
 
 const IntegrationsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
