@@ -2,13 +2,13 @@ import { FC, ReactElement, useEffect } from 'react';
 
 import { useHistory, useLocation } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
-import { getAnalyticsClient, isSegmentTrackingEvents, trackAuthEvent } from '../utils/analytics';
-import { createAxiosClient } from '../utils/utils';
-import { Auth0Token } from '../interfaces/auth0Token';
-import { AuthStatus, signIn, useAuthContext } from '../hooks/useAuthContext';
-import useFirstTimeVisitor from '../hooks/useFirstTimeVisitor';
-import { Auth0Profile } from '../interfaces/auth0Profile';
-import { Company } from '../interfaces/company';
+import { getAnalyticsClient, isSegmentTrackingEvents, trackAuthEvent } from '@utils/analytics';
+import { createAxiosClient } from '@utils/utils';
+import { Auth0Token } from '@interfaces/auth0Token';
+import { AuthStatus, signIn, useAuthContext } from '@hooks/useAuthContext';
+import useFirstTimeVisitor from '@hooks/useFirstTimeVisitor';
+import { Auth0Profile } from '@interfaces/auth0Profile';
+import { Company } from '@interfaces/company';
 
 const {
   REACT_APP_AUTH0_DOMAIN,

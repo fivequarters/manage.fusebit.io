@@ -1,8 +1,8 @@
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import * as CSC from '../components/globalStyle';
-import { useAuthContext } from '../hooks/useAuthContext';
-import { useGetRedirectLink } from '../hooks/useGetRedirectLink';
+import * as CSC from '@components/globalStyle';
+import { useAuthContext } from '@hooks/useAuthContext';
+import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 
 const NotFoundPage: FC<{}> = (): ReactElement => {
   const history = useHistory();
