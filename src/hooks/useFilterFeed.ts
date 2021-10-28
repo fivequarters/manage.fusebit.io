@@ -17,13 +17,12 @@ const useFilterFeed = ({ feed = [] }: Props) => {
     feed,
   ]);
 
-  const filteredFeed = useMemo(() => {
-    const applySearchFilter = (feedEntry: Feed) => feedEntry.name.toLowerCase().includes(searchFilter.toLowerCase());
+  const applySearchFilter = (feedEntry: Feed) => feedEntry.name.toLowerCase().includes(searchFilter.toLowerCase());
 
-    return activeFilter === DefaultFilters.ALL
+  const filteredFeed =
+    activeFilter === DefaultFilters.ALL
       ? feed.filter(applySearchFilter)
       : feed.filter((feedEntry) => feedEntry.tags.catalog.includes(activeFilter) && applySearchFilter(feedEntry));
-  }, [activeFilter, feed, searchFilter]);
 
   return {
     filteredFeed,
