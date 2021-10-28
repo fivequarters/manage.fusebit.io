@@ -41,7 +41,7 @@ export const startCase = (str: string) => {
 };
 
 export const getConnectorsFromInstall = (install: Install) =>
-  Object.keys(install.data).map((key) => install?.data[key]?.parentEntityId);
+  Object.keys(install.data || {}).map((key) => install?.data[key]?.parentEntityId);
 
 export const getAllDependenciesFromFeed = (feed: Feed) => {
   const { entities } = feed?.configuration || {};
