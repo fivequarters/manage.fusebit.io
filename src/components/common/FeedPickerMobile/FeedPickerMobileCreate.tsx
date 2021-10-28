@@ -1,3 +1,4 @@
+import { ValidationMode } from '@jsonforms/core';
 import { Box } from '@material-ui/core';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
@@ -7,9 +8,9 @@ import BaseJsonForm from '../BaseJsonForm';
 
 interface Props {
   entity?: ParsedFeed;
-  data?: any;
-  onChange?: any;
-  validationMode?: any;
+  data: any;
+  onChange: (payload: { errors: any; data: any }) => void;
+  validationMode: ValidationMode;
 }
 
 const FeedPickerMobileCreate: React.FC<Props> = ({ entity, data, onChange, validationMode }) => {
@@ -29,15 +30,17 @@ const FeedPickerMobileCreate: React.FC<Props> = ({ entity, data, onChange, valid
       <Box>
         <ReactMarkdown>{entity?.description || ''}</ReactMarkdown>
       </Box>
-      <Box pt="14px">
-        <BaseJsonForm
-          schema={entity?.configuration.schema}
-          uischema={entity?.configuration.uischema}
-          data={data}
-          onChange={onChange}
-          validationMode={validationMode}
-        />
-      </Box>
+      {!entity?.outOfPlan && (
+        <Box pt="14px">
+          <BaseJsonForm
+            schema={entity?.configuration.schema}
+            uischema={entity?.configuration.uischema}
+            data={data}
+            onChange={onChange}
+            validationMode={validationMode}
+          />
+        </Box>
+      )}
     </Box>
   );
 };

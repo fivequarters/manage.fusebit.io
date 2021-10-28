@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ValidationMode } from '@jsonforms/core';
 import debounce from 'lodash.debounce';
 import { Feed, ParsedFeed } from '../interfaces/feed';
 import { trackEvent } from '../utils/analytics';
-import useFilterFeed from './useFilterFeed';
+import useFilterFeed, { DefaultFilters } from './useFilterFeed';
 import { useQuery } from './useQuery';
 import { useReplaceMustache } from './useReplaceMustache';
 import { integrationsFeed, connectorsFeed } from '../static/feed';
@@ -27,6 +27,44 @@ const useFeed = ({ isIntegration, feedTypeName, onSubmit, onClose, open }: Props
   const { replaceMustache } = useReplaceMustache();
   const [activeTemplate, setActiveTemplate] = React.useState<ParsedFeed>();
   const filtedFeed = useFilterFeed({ feed });
+
+  useEffect(() => {
+    const key = query.get('key');
+
+    setLoading(true);
+
+    (isIntegration ? integrationsFeed() : connectorsFeed())
+      .then((_feed) => {
+        setFeed(_feed);
+        for (let i = 0; i < _feed.length; i++) {
+          if (_feed[i].id === key) {
+            replaceMustache(data, _feed[i]).then((template) => setActiveTemplate(template));
+            return;
+          }
+        }
+
+        setRawActiveTemplate(_feed[0]);
+        replaceMustache(data, _feed[0]).then((template) => {
+          setActiveTemplate(template);
+          setImmediate(() => {
+            trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
+              [feedTypeName.toLowerCase()]: template.name,
+              [`${feedTypeName.toLowerCase()}Default`]: true,
+            });
+          });
+        });
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+
+    return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isIntegration, open]);
 
   const debouncedSetSearchFilter = debounce((keyword: string) => {
     if (isIntegration) {
@@ -103,43 +141,13 @@ const useFeed = ({ isIntegration, feedTypeName, onSubmit, onClose, open }: Props
     return activeTemplate?.outOfPlan ? handlePlanUpsell() : handleAdd();
   };
 
-  useEffect(() => {
-    const key = query.get('key');
-
-    setLoading(true);
-
-    (isIntegration ? integrationsFeed() : connectorsFeed())
-      .then((_feed) => {
-        setFeed(_feed);
-        for (let i = 0; i < _feed.length; i++) {
-          if (_feed[i].id === key) {
-            replaceMustache(data, _feed[i]).then((template) => setActiveTemplate(template));
-            return;
-          }
-        }
-
-        setRawActiveTemplate(_feed[0]);
-        replaceMustache(data, _feed[0]).then((template) => {
-          setActiveTemplate(template);
-          setImmediate(() => {
-            trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
-              [feedTypeName.toLowerCase()]: template.name,
-              [`${feedTypeName.toLowerCase()}Default`]: true,
-            });
-          });
-        });
-      })
-      .catch((error) => {
-        // eslint-disable-next-line no-console
-        console.log(error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-
-    return () => {};
+  const reset = useCallback(() => {
+    setData({});
+    setRawActiveTemplate(undefined);
+    setActiveTemplate(undefined);
+    filtedFeed.setActiveFilter(DefaultFilters.ALL);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isIntegration, open]);
+  }, []);
 
   return {
     rawActiveTemplate,
@@ -162,6 +170,7 @@ const useFeed = ({ isIntegration, feedTypeName, onSubmit, onClose, open }: Props
     setFeed,
     loading,
     handleSubmit,
+    reset,
     ...filtedFeed,
   };
 };

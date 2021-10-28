@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Drawer, MobileStepper, Button } from '@material-ui/core';
+import { Box, Drawer, MobileStepper, Button, IconButton } from '@material-ui/core';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import _startCase from 'lodash.startcase';
 import FeedPickerMobileChoose from './FeedPickerMobileChoose';
 import FeedPickerMobileCreate from './FeedPickerMobileCreate';
@@ -12,6 +11,7 @@ import { urlOrSvgToImage } from '../../../utils/utils';
 import { Data } from '../../../interfaces/feedPicker';
 import { DefaultFilters } from '../../../hooks/useFilterFeed';
 import Loader from '../Loader';
+import cross from '../../../assets/cross.svg';
 
 interface Props {
   title?: string;
@@ -39,6 +39,7 @@ const FeedPickerMobile: React.FC<Props> = ({ title = 'Integration', type, onSubm
     setActiveTemplate,
     setActiveFilter,
     loading,
+    setData,
   } = useFeed({
     open,
     feedTypeName: title,
@@ -51,34 +52,20 @@ const FeedPickerMobile: React.FC<Props> = ({ title = 'Integration', type, onSubm
     return () => {
       if (open) {
         setStep(0);
+        setData({});
         setRawActiveTemplate(undefined);
         setActiveTemplate(undefined);
         setActiveFilter(DefaultFilters.ALL);
       }
     };
-  }, [open, setActiveFilter, setActiveTemplate, setRawActiveTemplate, setStep]);
-
-  const validateNext = () => {
-    if (loading) {
-      return false;
-    }
-    if (step === 0) {
-      return !!activeFilter;
-    }
-
-    if (step === 1) {
-      return !!activeTemplate;
-    }
-
-    return true;
-  };
+  }, [open, setActiveFilter, setActiveTemplate, setRawActiveTemplate, setStep, setData]);
 
   const handleNext = () => {
     setStep(step + 1);
   };
 
   const handleBack = () => {
-    if (step === 1) {
+    if (step === 1 || step === 2) {
       setRawActiveTemplate(undefined);
       setActiveTemplate(undefined);
     }
@@ -90,6 +77,7 @@ const FeedPickerMobile: React.FC<Props> = ({ title = 'Integration', type, onSubm
     id: tag,
     onClick: () => {
       handleFilterChange(tag);
+      handleNext();
     },
   }));
 
@@ -99,6 +87,7 @@ const FeedPickerMobile: React.FC<Props> = ({ title = 'Integration', type, onSubm
     id: entity.id,
     onClick: () => {
       handleTemplateChange(entity);
+      handleNext();
     },
   }));
 
@@ -106,12 +95,12 @@ const FeedPickerMobile: React.FC<Props> = ({ title = 'Integration', type, onSubm
     <ItemList key="1" items={filters} activeItem={activeFilter} />,
     <FeedPickerMobileChoose
       onChange={(e) => debouncedSetSearchFilter(e.target.value)}
-      key="2"
+      key={activeTemplate?.id}
       items={entities}
       activeItem={activeTemplate?.id}
     />,
     <FeedPickerMobileCreate
-      key="3"
+      key={activeTemplate?.id}
       data={data}
       onChange={handleJsonFormsChange}
       validationMode={validationMode}
@@ -135,15 +124,14 @@ const FeedPickerMobile: React.FC<Props> = ({ title = 'Integration', type, onSubm
             nextButton={null}
             backButton={null}
           />
-          <Button size="small" onClick={handleNext} disabled={!validateNext()}>
-            Next
-            <KeyboardArrowRight />
-          </Button>
+          <IconButton size="small" onClick={onClose}>
+            <img src={cross} alt="close" height={10} width={10} />
+          </IconButton>
         </Box>
         <Box component="h4" fontWeight={600} fontSize={20} color="#333333" mt="16px" mb="48px" textAlign="center">
           New {title}
         </Box>
-        <Box height="440px" overflow="auto">
+        <Box height="440px" mb="15px" overflow="auto">
           {loading ? <Loader /> : steps[step]}
         </Box>
         <Box m="0 auto" maxWidth="200px">
@@ -155,7 +143,7 @@ const FeedPickerMobile: React.FC<Props> = ({ title = 'Integration', type, onSubm
             disabled={step !== steps.length - 1}
             onClick={handleSubmit}
           >
-            Create
+            {activeTemplate?.outOfPlan ? 'Enable' : 'Create'}
           </Button>
         </Box>
       </Box>
