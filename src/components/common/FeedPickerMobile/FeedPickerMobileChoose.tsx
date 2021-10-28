@@ -3,22 +3,16 @@ import TextField from '../FormFields/TextField';
 import ItemList from '../ItemList/ItemList';
 
 interface Props {
-  items?: string[];
+  items: React.ComponentProps<typeof ItemList>['items'];
+  activeItem: React.ComponentProps<typeof ItemList>['activeItem'];
+  onChange: (e: any) => void;
 }
 
-const items = [
-  { text: 'Inbox', showArrow: true },
-  { text: 'Starred', showArrow: true },
-  { text: 'Send email', showArrow: true },
-  { text: 'Drafts', showArrow: true },
-  { text: 'Calendar', showArrow: true },
-];
-
-const FeedPickerMobileChoose: React.FC<Props> = () => {
+const FeedPickerMobileChoose: React.FC<Props> = ({ onChange, items, activeItem }) => {
   return (
     <Box>
-      <TextField fieldVariant="default" label="Search" variant="standard" fullWidth />
-      <ItemList items={items} />
+      <TextField fieldVariant="default" label="Search" variant="standard" fullWidth onChange={onChange} />
+      <ItemList items={items} activeItem={activeItem} />
     </Box>
   );
 };

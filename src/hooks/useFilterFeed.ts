@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Feed } from '../interfaces/feed';
 
 export enum DefaultFilters {
@@ -10,8 +10,8 @@ interface Props {
 }
 
 const useFilterFeed = ({ feed = [] }: Props) => {
-  const [searchFilter, setSearchFilter] = React.useState('');
-  const [activeFilter, setActiveFilter] = React.useState<string>(DefaultFilters.ALL);
+  const [searchFilter, setSearchFilter] = useState('');
+  const [activeFilter, setActiveFilter] = useState<string>(DefaultFilters.ALL);
 
   const allTags = useMemo(() => [...new Set(feed.map((feedEntry) => feedEntry.tags.catalog.split(',')).flat())], [
     feed,

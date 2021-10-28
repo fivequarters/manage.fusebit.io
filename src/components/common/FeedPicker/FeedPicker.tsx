@@ -1,141 +1,41 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-import { ValidationMode } from '@jsonforms/core';
 import { Box, Button, TextField } from '@material-ui/core';
-import debounce from 'lodash.debounce';
 import * as SC from './styles';
 import { Props } from '../../../interfaces/feedPicker';
-import { integrationsFeed, connectorsFeed } from '../../../static/feed';
 import search from '../../../assets/search.svg';
 import cross from '../../../assets/cross.svg';
-import { Feed, ParsedFeed } from '../../../interfaces/feed';
-
-import { useQuery } from '../../../hooks/useQuery';
-import { useReplaceMustache } from '../../../hooks/useReplaceMustache';
-import { trackEvent } from '../../../utils/analytics';
 import Loader from '../Loader';
 import { useTrackPage } from '../../../hooks/useTrackPage';
 import { urlOrSvgToImage } from '../../../utils/utils';
 import BaseJsonForm from '../BaseJsonForm';
-import useFilterFeed, { DefaultFilters } from '../../../hooks/useFilterFeed';
+import { DefaultFilters } from '../../../hooks/useFilterFeed';
+import useFeed from '../../../hooks/useFeed';
 
 const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onSubmit, isIntegration }, ref) => {
-  const [data, setData] = React.useState<any>({});
-  const [errors, setErrors] = React.useState<object[]>([]);
-  const [validationMode, setValidationMode] = React.useState<ValidationMode>('ValidateAndHide');
-  const [feed, setFeed] = useState<Feed[]>([]);
-  const [activeTemplate, setActiveTemplate] = React.useState<ParsedFeed>();
-  const [rawActiveTemplate, setRawActiveTemplate] = React.useState<Feed>();
-  const [loading, setLoading] = React.useState(true);
-  const query = useQuery();
-  const { replaceMustache } = useReplaceMustache();
-  const { activeFilter, allTags, filteredFeed, setActiveFilter, setSearchFilter } = useFilterFeed({
-    feed,
-  });
-
-  const debouncedSetSearchFilter = debounce((keyword: string) => {
-    if (isIntegration) {
-      trackEvent('New Integration Search Submitted', 'Integrations');
-    } else {
-      trackEvent('New Connector Search Submitted', 'Connectors');
-    }
-    setSearchFilter(keyword.trim());
-  }, 500);
-
-  const handleSubmit = () => {
-    if (errors.length > 0) {
-      setValidationMode('ValidateAndShow');
-    } else {
-      // normalize data
-      const keys = Object.keys(data);
-      for (let i = 0; keys.length > i; i++) {
-        const { id } = data[keys[i]];
-        if (typeof id === 'string') {
-          data[keys[i]].id = id.replace(/\s/g, '');
-        }
-      }
-
-      // send data with customized form
-      onSubmit(rawActiveTemplate as Feed, { ...data });
-    }
-  };
-
-  const handlePlanUpsell = () => {
-    if (rawActiveTemplate) {
-      if (isIntegration) {
-        trackEvent('Interest in Integration', 'Integrations', { tag: rawActiveTemplate.id });
-      } else {
-        trackEvent('Interest in Connector', 'Connectors', { tag: rawActiveTemplate.id });
-      }
-      window.Intercom('showNewMessage', `I'm interested in enabling ${rawActiveTemplate.name}`);
-    }
-    onClose();
-  };
-
-  const handleFilterChange = (filter: string) => {
-    if (isIntegration) {
-      trackEvent('New Integration Catalog Clicked', 'Integrations', { tag: filter });
-    } else {
-      trackEvent('New Connector Catalog Clicked', 'Connectors', { tag: filter });
-    }
-    setActiveFilter(filter);
-  };
-
-  const handleJsonFormsChange = ({ errors: _errors, data: _data }: { errors: any; data: any }) => {
-    if (data?.ui?.toggle && activeTemplate) {
-      trackEvent('New Integration Customize Clicked', 'Integrations', {
-        integration: activeTemplate.name,
-      });
-    }
-    if (_errors) {
-      setErrors(_errors);
-    }
-    setData(_data);
-  };
-
   const feedTypeName = isIntegration ? 'Integration' : 'Connector';
 
+  const {
+    activeFilter,
+    allTags,
+    filteredFeed,
+    data,
+    handleSubmit,
+    handleFilterChange,
+    debouncedSetSearchFilter,
+    activeTemplate,
+    handleTemplateChange,
+    handleJsonFormsChange,
+    validationMode,
+    loading,
+  } = useFeed({
+    feedTypeName,
+    isIntegration,
+    onSubmit,
+    onClose,
+  });
+
   useTrackPage(`${feedTypeName} New Modal`, `${feedTypeName}s`);
-
-  useEffect(() => {
-    const key = query.get('key');
-
-    (isIntegration ? integrationsFeed() : connectorsFeed()).then((_feed) => {
-      setFeed(_feed);
-      setLoading(false);
-      for (let i = 0; i < _feed.length; i++) {
-        if (_feed[i].id === key) {
-          replaceMustache(data, _feed[i]).then((template) => setActiveTemplate(template));
-          return;
-        }
-      }
-
-      setRawActiveTemplate(_feed[0]);
-      replaceMustache(data, _feed[0]).then((template) => {
-        setActiveTemplate(template);
-        setImmediate(() => {
-          trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
-            [feedTypeName.toLowerCase()]: template.name,
-            [`${feedTypeName.toLowerCase()}Default`]: true,
-          });
-        });
-      });
-    });
-
-    return () => {};
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isIntegration]);
-
-  const handleTemplateChange = (template: Feed) => {
-    setRawActiveTemplate(template);
-    trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
-      [feedTypeName.toLowerCase()]: template.name,
-      [`${feedTypeName.toLowerCase()}Default`]: false,
-    });
-    replaceMustache(data, template).then((_template) => {
-      setActiveTemplate(_template);
-    });
-  };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
@@ -237,7 +137,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
               </SC.GeneralInfoWrapper>
               <SC.MobileHidden>
                 <Button
-                  onClick={activeTemplate.outOfPlan ? handlePlanUpsell : handleSubmit}
+                  onClick={handleSubmit}
                   style={{ width: '200px', marginTop: 'auto', marginLeft: 'auto' }}
                   fullWidth={false}
                   size="large"
@@ -249,7 +149,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
               </SC.MobileHidden>
               <SC.MobileVisible>
                 <Button
-                  onClick={activeTemplate.outOfPlan ? handlePlanUpsell : handleSubmit}
+                  onClick={handleSubmit}
                   style={{ width: '200px', margin: 'auto' }}
                   fullWidth={false}
                   size="large"

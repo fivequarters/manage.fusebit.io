@@ -9,20 +9,24 @@ const StyledIconContainer = styled(Box)`
   }
 `;
 
-interface Props {
-  items?: {
-    text: string;
-    hideArrow?: boolean;
-    icon?: any;
-  }[];
+interface Item {
+  text?: string;
+  id: string;
+  hideArrow?: boolean;
+  icon?: any;
+  onClick?: () => void;
 }
 
-const ItemList: React.FC<Props> = ({ items = [] }) => {
-  console.log('items', items);
+interface Props {
+  items?: Item[];
+  activeItem?: string;
+}
+
+const ItemList: React.FC<Props> = ({ items = [], activeItem }) => {
   return (
     <List component="nav" aria-label="main mailbox folders">
       {items.map((item) => (
-        <ListItem button key={item.text}>
+        <ListItem button key={item.id} onClick={() => item.onClick?.()} selected={item?.id === activeItem}>
           {item.icon && (
             <StyledIconContainer mr="16px" width="18px" height="18px">
               {item.icon}
