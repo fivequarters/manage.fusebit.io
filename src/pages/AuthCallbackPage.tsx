@@ -9,6 +9,7 @@ import { AuthStatus, signIn, useAuthContext } from '../hooks/useAuthContext';
 import useFirstTimeVisitor from '../hooks/useFirstTimeVisitor';
 import { Auth0Profile } from '../interfaces/auth0Profile';
 import { Company } from '../interfaces/company';
+import { User } from '../interfaces/user';
 
 const {
   REACT_APP_AUTH0_DOMAIN,
@@ -93,7 +94,8 @@ const AuthCallbackPage: FC<{}> = (): ReactElement => {
         if (isSegmentConfigured) {
           getAnalyticsClient().ready(() => {
             if (isSegmentTrackingEvents()) {
-              trackAuthEvent(auth0Profile, fusebitProfile, isSignUpEvent, navigatePostAuth);
+              const user: User = { ...auth0Profile, ...company };
+              trackAuthEvent(user, fusebitProfile, isSignUpEvent, navigatePostAuth);
             } else {
               navigatePostAuth();
             }
