@@ -2,7 +2,7 @@ import { FC, ReactElement, useEffect } from 'react';
 
 import { useHistory, useLocation } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
-import { getAnalyticsClient, isSegmentTrackingEvents, trackAuthEvent } from '../utils/analytics';
+import { getAnalyticsClient, trackAuthEvent } from '../utils/analytics';
 import { createAxiosClient } from '../utils/utils';
 import { Auth0Token } from '../interfaces/auth0Token';
 import { AuthStatus, signIn, useAuthContext } from '../hooks/useAuthContext';
@@ -90,19 +90,10 @@ const AuthCallbackPage: FC<{}> = (): ReactElement => {
           history.push(requestedPath);
         };
 
-        const isSegmentConfigured = process.env.REACT_APP_SEGMENT_ANALYTICS_TAG;
-        if (isSegmentConfigured) {
-          getAnalyticsClient().ready(() => {
-            if (isSegmentTrackingEvents()) {
-              const user: User = { ...auth0Profile, ...company };
-              trackAuthEvent(user, fusebitProfile, isSignUpEvent, navigatePostAuth);
-            } else {
-              navigatePostAuth();
-            }
-          });
-        } else {
-          navigatePostAuth();
-        }
+        const user: User = { ...auth0Profile, ...company };
+        getAnalyticsClient(user).ready(() => {
+          trackAuthEvent(user, fusebitProfile, isSignUpEvent, navigatePostAuth);
+        });
       });
     } catch (err) {
       // eslint-disable-next-line no-console
