@@ -37,9 +37,9 @@ const FeedPickerMobile: React.FC<Props> = ({ title = 'Integration', type, onSubm
     validationMode,
     setRawActiveTemplate,
     setActiveTemplate,
-    setActiveFilter,
     loading,
     setData,
+    setActiveFilter,
   } = useFeed({
     open,
     feedTypeName: title,
@@ -58,7 +58,7 @@ const FeedPickerMobile: React.FC<Props> = ({ title = 'Integration', type, onSubm
         setActiveFilter(DefaultFilters.ALL);
       }
     };
-  }, [open, setActiveFilter, setActiveTemplate, setRawActiveTemplate, setStep, setData]);
+  }, [open, setActiveFilter, setActiveTemplate, setData, setRawActiveTemplate]);
 
   const handleNext = () => {
     setStep(step + 1);
@@ -124,9 +124,11 @@ const FeedPickerMobile: React.FC<Props> = ({ title = 'Integration', type, onSubm
             nextButton={null}
             backButton={null}
           />
-          <IconButton size="small" onClick={onClose}>
-            <img src={cross} alt="close" height={10} width={10} />
-          </IconButton>
+          <Box width="66px" display="flex" justifyContent="flex-end">
+            <IconButton size="small" onClick={onClose}>
+              <img src={cross} alt="close" height={10} width={10} />
+            </IconButton>
+          </Box>
         </Box>
         <Box component="h4" fontWeight={600} fontSize={20} color="#333333" mt="16px" mb="48px" textAlign="center">
           New {title}

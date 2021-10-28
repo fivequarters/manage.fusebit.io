@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ValidationMode } from '@jsonforms/core';
 import debounce from 'lodash.debounce';
 import { Feed, ParsedFeed } from '../interfaces/feed';
 import { trackEvent } from '../utils/analytics';
-import useFilterFeed, { DefaultFilters } from './useFilterFeed';
+import useFilterFeed from './useFilterFeed';
 import { useQuery } from './useQuery';
 import { useReplaceMustache } from './useReplaceMustache';
 import { integrationsFeed, connectorsFeed } from '../static/feed';
@@ -141,14 +141,6 @@ const useFeed = ({ isIntegration, feedTypeName, onSubmit, onClose, open }: Props
     return activeTemplate?.outOfPlan ? handlePlanUpsell() : handleAdd();
   };
 
-  const reset = useCallback(() => {
-    setData({});
-    setRawActiveTemplate(undefined);
-    setActiveTemplate(undefined);
-    filtedFeed.setActiveFilter(DefaultFilters.ALL);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return {
     rawActiveTemplate,
     setRawActiveTemplate,
@@ -170,7 +162,6 @@ const useFeed = ({ isIntegration, feedTypeName, onSubmit, onClose, open }: Props
     setFeed,
     loading,
     handleSubmit,
-    reset,
     ...filtedFeed,
   };
 };
