@@ -1,6 +1,6 @@
 import isEqual from 'lodash.isequal';
-import { FusebitProfile } from '../interfaces/auth0Token';
-import { User } from '../interfaces/user';
+import { FusebitProfile } from '@interfaces/auth0Token';
+import { User } from '@interfaces/user';
 import { PRODUCTION_HOST } from './constants';
 
 type TrackEventHandler = (
