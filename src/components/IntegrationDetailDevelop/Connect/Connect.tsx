@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { Button, Input } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import * as SC from './styles';
-import * as CSC from '../../globalStyle';
-import CopyLine from '../../common/CopyLine';
-import { useCopy } from '../../../hooks/useCopy';
-import { useAuthContext } from '../../../hooks/useAuthContext';
-import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
+import * as CSC from '@components/globalStyle';
+import CopyLine from '@components/common/CopyLine';
+import { useCopy } from '@hooks/useCopy';
+import { useAuthContext } from '@hooks/useAuthContext';
+import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 
-import { LinkSampleApp } from './LinkSampleApp';
-import { useAccountIntegrationsGetOne } from '../../../hooks/api/v2/account/integration/useGetOne';
-import { Integration } from '../../../interfaces/integration';
-import { useBackendUpdateOne } from '../../../hooks/api/v1/backend/useUpdateOne';
+import { useAccountIntegrationsGetOne } from '@hooks/api/v2/account/integration/useGetOne';
+import { Integration } from '@interfaces/integration';
+import { useBackendUpdateOne } from '@hooks/api/v1/backend/useUpdateOne';
 import DeleteBackendModal from '../DeleteBackendModal';
+import { LinkSampleApp } from './LinkSampleApp';
+import * as SC from './styles';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 

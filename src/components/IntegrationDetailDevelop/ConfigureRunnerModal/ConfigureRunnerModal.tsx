@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Modal, Backdrop, Box } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
+import { getIntegrationConfig } from '@utils/localStorage';
+import Label from '@components/common/FormFields/Label';
+import TextField from '@components/common/FormFields/TextField';
+import * as CSC from '@components/globalStyle';
 import * as SC from './styles';
-import * as CSC from '../../globalStyle';
-import { getIntegrationConfig } from '../../../utils/localStorage';
-import Label from '../../common/FormFields/Label';
-import TextField from '../../common/FormFields/TextField';
 
 interface Props {
   open: boolean;

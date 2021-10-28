@@ -1,10 +1,10 @@
-import { Feed } from '../../../interfaces/feed';
-import { Data } from '../../../interfaces/feedPicker';
-import { useCreateDataFromFeed } from '../../../hooks/useCreateDataFromFeed';
-import FeedPickerModal from '../../common/FeedPickerModal';
-import { ApiResponse } from '../../../hooks/useAxios';
-import { Integration } from '../../../interfaces/integration';
-import { useLoader } from '../../../hooks/useLoader';
+import { Feed } from '@interfaces/feed';
+import { Data } from '@interfaces/feedPicker';
+import { useCreateDataFromFeed } from '@hooks/useCreateDataFromFeed';
+import FeedPickerModal from '@components/common/FeedPickerModal';
+import { ApiResponse } from '@hooks/useAxios';
+import { Integration } from '@interfaces/integration';
+import { useLoader } from '@hooks/useLoader';
 
 interface Props {
   open: boolean;

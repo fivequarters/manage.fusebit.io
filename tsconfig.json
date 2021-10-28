@@ -29,5 +29,5 @@
     "**/node_modules/*",
     "build"
   ],
-  "extends": "./base-tsconfig.json",
+  "extends": "./base-tsconfig.json"
 }

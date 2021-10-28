@@ -10,13 +10,13 @@ import {
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import fusebitLogo from '../../../assets/fusebit-logo.svg';
-import { useGetIntegrationFromCache } from '../../../hooks/useGetIntegrationFromCache';
-import { useModal } from '../../../hooks/useModal';
-import Button from '../../common/Button/Button';
-import EditGuiModal from '../EditGuiModal';
-import useEditor from '../FusebitEditor/useEditor';
-import MobileDrawer from '../MobileDrawer';
+import fusebitLogo from '@assets/fusebit-logo.svg';
+import { useGetIntegrationFromCache } from '@hooks/useGetIntegrationFromCache';
+import { useModal } from '@hooks/useModal';
+import Button from '@components/common/Button/Button';
+import EditGuiModal from '@components/IntegrationDetailDevelop/EditGuiModal';
+import useEditor from '@components/IntegrationDetailDevelop/FusebitEditor/useEditor';
+import MobileDrawer from '@components/IntegrationDetailDevelop/MobileDrawer';
 
 const StyledCard = styled(Card)`
   display: flex;
