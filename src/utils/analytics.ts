@@ -10,24 +10,48 @@ type TrackEventHandler = (
   cb?: () => void
 ) => void;
 
-export const getAnalyticsClient = () => {
-  // ad blocker workaround for Segment (if it is array, means ad blocker got in our way)
-  const isAdBlockerEnabled = Array.isArray(analytics);
+let analyticsClient: SegmentAnalytics.AnalyticsJS;
 
-  return !isAdBlockerEnabled
-    ? analytics
-    : {
-        identify: () => {},
-        page: () => {},
-        ready: (cb: () => void) => {
-          cb();
-        },
-        reset: () => {},
-        track: (event: any, opt: any, cb: () => void) => {
-          cb();
-        },
-        user: null,
-      };
+const mockedAnalyticsClient = {
+  identify: () => {},
+  page: () => {},
+  ready: (cb: () => void) => {
+    cb();
+  },
+  reset: () => {},
+  track: (event: any, opt: any, cb: () => void) => {
+    cb();
+  },
+  user: null,
+} as any;
+
+export const getAnalyticsClient: (brandNewUser?: User) => SegmentAnalytics.AnalyticsJS = (brandNewUser) => {
+  // if already defined, returns it
+  if (analyticsClient) {
+    return analyticsClient;
+  }
+
+  // ad blocker workaround for Segment (if it is an array, it means ad blocker got in our way)
+  const isAdBlockerEnabled = Array.isArray(analytics);
+  if (isAdBlockerEnabled) {
+    analyticsClient = mockedAnalyticsClient;
+    return analyticsClient;
+  }
+
+  // if it is not prod, we can track everything
+  const isProd = document.location.host === PRODUCTION_HOST;
+  if (!isProd) {
+    analyticsClient = analytics;
+    return analyticsClient;
+  }
+
+  // if it is prod, we track only non-fusebit and non-litebox users
+  if (!brandNewUser || !brandNewUser.email) {
+    throw new Error('Analytics not defined yet and got no new user.');
+  }
+  const isExternalUser = !brandNewUser.email.endsWith('@fusebit.io') && !brandNewUser.email.endsWith('@litebox.ai');
+  analyticsClient = isExternalUser ? analytics : mockedAnalyticsClient;
+  return analyticsClient;
 };
 
 export const silentAuthInProgress = (): boolean => {
@@ -48,21 +72,8 @@ const memoize = (originalFunction: TrackEventHandler) => {
   return memoizedFunction;
 };
 
-export function isSegmentTrackingEvents() {
-  const segmentUser = getAnalyticsClient().user;
-  if (!segmentUser) {
-    return false;
-  }
-  const user = (segmentUser().traits() as unknown) as User;
-  return (
-    document.location.host !== PRODUCTION_HOST ||
-    (!user?.primaryEmail?.endsWith('@fusebit.io') && !user?.primaryEmail?.endsWith('@litebox.ai'))
-  );
-}
-
 // original trackEvent function that gets called to offload events to Segment
 const trackEventHandler: TrackEventHandler = (eventName, objectLocation, extraProperties = {}, cb = () => {}) => {
-  if (!isSegmentTrackingEvents()) return;
   getAnalyticsClient().track(
     eventName,
     {
@@ -80,7 +91,7 @@ export const trackEvent = memoize(trackEventHandler);
 export const trackAuthEvent = (user: User, fusebitProfile: FusebitProfile, isSignUpEvent: boolean, cb = () => {}) => {
   const segmentUser = getAnalyticsClient().user;
   if (!segmentUser) {
-    return;
+    return cb();
   }
   const isSilentAuthInProgress = silentAuthInProgress();
   const currentSegmentUserId = segmentUser().id();

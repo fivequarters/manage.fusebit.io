@@ -184,7 +184,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
           {loading || !activeTemplate ? (
             <Loader />
           ) : (
-            <Box overflow="auto">
+            <Box overflow="hidden auto">
               {filteredFeed.map((feedEntry) => {
                 return (
                   <SC.ColumnItem
