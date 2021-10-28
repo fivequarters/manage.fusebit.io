@@ -32,7 +32,7 @@ export default createGlobalStyle`
     }
 
     .SnackbarItem-variantError {
-      background-color: var(--primary-color) !important;
+      background-color: #D32F2F !important;
     }
 
     button {
