@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import info from '../../../assets/info.svg';
+import info from '@assets/info.svg';
 
 export const Banner = styled.div`
   display: flex;

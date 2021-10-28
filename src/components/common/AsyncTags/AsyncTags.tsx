@@ -1,7 +1,7 @@
 import React from 'react';
-import List from '../List';
-import Tag from '../Tag';
-import * as CSC from '../../globalStyle';
+import List from '@components/common/List';
+import Tag from '@components/common/Tag';
+import * as CSC from '@components/globalStyle';
 
 interface Props {
   isLoading: boolean;

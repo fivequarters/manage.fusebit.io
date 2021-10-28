@@ -1,8 +1,8 @@
 import React, { FC, ReactNode, useEffect } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { CssBaseline } from '@material-ui/core';
-import GlobalStyle from '../../globalStyle';
-import { useAuthContext } from '../../../hooks/useAuthContext';
+import GlobalStyle from '@components/globalStyle';
+import { useAuthContext } from '@hooks/useAuthContext';
 
 const useStyles = makeStyles(() =>
   createStyles({

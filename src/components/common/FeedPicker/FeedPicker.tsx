@@ -3,21 +3,20 @@ import React, { useState, useEffect } from 'react';
 import { ValidationMode } from '@jsonforms/core';
 import { Box, Button, TextField } from '@material-ui/core';
 import debounce from 'lodash.debounce';
+import { Props } from '@interfaces/feedPicker';
+import { integrationsFeed, connectorsFeed } from '@static/feed';
+import search from '@assets/search.svg';
+import cross from '@assets/cross.svg';
+import { Feed, ParsedFeed } from '@interfaces/feed';
+import { useQuery } from '@hooks/useQuery';
+import { useReplaceMustache } from '@hooks/useReplaceMustache';
+import { trackEvent } from '@utils/analytics';
+import Loader from '@components/common/Loader';
+import { useTrackPage } from '@hooks/useTrackPage';
+import { urlOrSvgToImage } from '@utils/utils';
+import BaseJsonForm from '@components/common/BaseJsonForm';
+import useFilterFeed, { DefaultFilters } from '@hooks/useFilterFeed';
 import * as SC from './styles';
-import { Props } from '../../../interfaces/feedPicker';
-import { integrationsFeed, connectorsFeed } from '../../../static/feed';
-import search from '../../../assets/search.svg';
-import cross from '../../../assets/cross.svg';
-import { Feed, ParsedFeed } from '../../../interfaces/feed';
-
-import { useQuery } from '../../../hooks/useQuery';
-import { useReplaceMustache } from '../../../hooks/useReplaceMustache';
-import { trackEvent } from '../../../utils/analytics';
-import Loader from '../Loader';
-import { useTrackPage } from '../../../hooks/useTrackPage';
-import { urlOrSvgToImage } from '../../../utils/utils';
-import BaseJsonForm from '../BaseJsonForm';
-import useFilterFeed, { DefaultFilters } from '../../../hooks/useFilterFeed';
 
 const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onSubmit, isIntegration }, ref) => {
   const [data, setData] = React.useState<any>({});
