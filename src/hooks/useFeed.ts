@@ -7,16 +7,16 @@ import useFilterFeed from './useFilterFeed';
 import { useQuery } from './useQuery';
 import { useReplaceMustache } from './useReplaceMustache';
 import { integrationsFeed, connectorsFeed } from '../static/feed';
+import { Data } from '../interfaces/feedPicker';
 
 interface Props {
   isIntegration?: boolean;
-  feedTypeName: string;
-  onSubmit: (a: any, b: any) => void;
+  onSubmit: (feed: Feed, data: Data) => void;
   onClose?: () => void;
   open: boolean;
 }
 
-const useFeed = ({ isIntegration, feedTypeName, onSubmit, onClose, open }: Props) => {
+const useFeed = ({ isIntegration, onSubmit, onClose, open }: Props) => {
   const [feed, setFeed] = useState<Feed[]>([]);
   const [loading, setLoading] = useState(false);
   const query = useQuery();
@@ -27,6 +27,8 @@ const useFeed = ({ isIntegration, feedTypeName, onSubmit, onClose, open }: Props
   const { replaceMustache } = useReplaceMustache();
   const [activeTemplate, setActiveTemplate] = React.useState<ParsedFeed>();
   const filtedFeed = useFilterFeed({ feed });
+
+  const feedTypeName = isIntegration ? 'Integration' : 'Connector';
 
   useEffect(() => {
     const key = query.get('key');
@@ -162,6 +164,7 @@ const useFeed = ({ isIntegration, feedTypeName, onSubmit, onClose, open }: Props
     setFeed,
     loading,
     handleSubmit,
+    feedTypeName,
     ...filtedFeed,
   };
 };

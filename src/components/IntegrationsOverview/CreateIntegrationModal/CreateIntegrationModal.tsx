@@ -34,13 +34,7 @@ const CreateIntegrationModal = ({ open, onClose }: Props) => {
   return (
     <>
       {isMobile ? (
-        <FeedPickerMobile
-          onClose={onClose}
-          type="integration"
-          title="Integration"
-          onSubmit={handleCreate}
-          open={open}
-        />
+        <FeedPickerMobile onClose={onClose} isIntegration onSubmit={handleCreate} open={open} />
       ) : (
         <FeedPickerModal onClose={onClose} onSubmit={handleCreate} open={open} isIntegration />
       )}

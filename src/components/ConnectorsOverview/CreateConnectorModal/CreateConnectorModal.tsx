@@ -34,7 +34,7 @@ const CreateConnectorModal = ({ open, onClose }: Props) => {
   return (
     <>
       {isMobile ? (
-        <FeedPickerMobile onClose={onClose} type="connector" title="Connector" onSubmit={handleCreate} open={open} />
+        <FeedPickerMobile onClose={onClose} isIntegration={false} onSubmit={handleCreate} open={open} />
       ) : (
         <FeedPickerModal onClose={onClose} onSubmit={handleCreate} open={open} isIntegration={false} />
       )}

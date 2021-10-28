@@ -13,8 +13,6 @@ import { DefaultFilters } from '../../../hooks/useFilterFeed';
 import useFeed from '../../../hooks/useFeed';
 
 const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onSubmit, isIntegration }, ref) => {
-  const feedTypeName = isIntegration ? 'Integration' : 'Connector';
-
   const {
     activeFilter,
     allTags,
@@ -28,9 +26,9 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
     handleJsonFormsChange,
     validationMode,
     loading,
+    feedTypeName,
   } = useFeed({
     open,
-    feedTypeName,
     isIntegration,
     onSubmit,
     onClose,

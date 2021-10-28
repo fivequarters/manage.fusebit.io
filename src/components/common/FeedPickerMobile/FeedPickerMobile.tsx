@@ -14,14 +14,13 @@ import Loader from '../Loader';
 import cross from '../../../assets/cross.svg';
 
 interface Props {
-  title?: string;
-  type: 'integration' | 'connector';
   onSubmit: (feed: Feed, data: Data) => void;
   onClose: () => void;
   open: boolean;
+  isIntegration: boolean;
 }
 
-const FeedPickerMobile: React.FC<Props> = ({ title = 'Integration', type, onSubmit, open, onClose }) => {
+const FeedPickerMobile: React.FC<Props> = ({ isIntegration, onSubmit, open, onClose }) => {
   const [step, setStep] = useState(0);
   const {
     activeFilter,
@@ -40,10 +39,10 @@ const FeedPickerMobile: React.FC<Props> = ({ title = 'Integration', type, onSubm
     loading,
     setData,
     setActiveFilter,
+    feedTypeName,
   } = useFeed({
     open,
-    feedTypeName: title,
-    isIntegration: type === 'integration',
+    isIntegration,
     onSubmit,
     onClose,
   });
@@ -131,7 +130,7 @@ const FeedPickerMobile: React.FC<Props> = ({ title = 'Integration', type, onSubm
           </Box>
         </Box>
         <Box component="h4" fontWeight={600} fontSize={20} color="#333333" mt="16px" mb="48px" textAlign="center">
-          New {title}
+          New {feedTypeName}
         </Box>
         <Box height="440px" mb="15px" overflow="auto">
           {loading ? <Loader /> : steps[step]}
