@@ -29,6 +29,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
     validationMode,
     loading,
   } = useFeed({
+    open,
     feedTypeName,
     isIntegration,
     onSubmit,

@@ -13,11 +13,12 @@ interface Props {
   feedTypeName: string;
   onSubmit: (a: any, b: any) => void;
   onClose?: () => void;
+  open: boolean;
 }
 
-const useFeed = ({ isIntegration, feedTypeName, onSubmit, onClose }: Props) => {
+const useFeed = ({ isIntegration, feedTypeName, onSubmit, onClose, open }: Props) => {
   const [feed, setFeed] = useState<Feed[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const query = useQuery();
   const [rawActiveTemplate, setRawActiveTemplate] = React.useState<Feed>();
   const [errors, setErrors] = React.useState<object[]>([]);
@@ -105,31 +106,40 @@ const useFeed = ({ isIntegration, feedTypeName, onSubmit, onClose }: Props) => {
   useEffect(() => {
     const key = query.get('key');
 
-    (isIntegration ? integrationsFeed() : connectorsFeed()).then((_feed) => {
-      setFeed(_feed);
-      setLoading(false);
-      for (let i = 0; i < _feed.length; i++) {
-        if (_feed[i].id === key) {
-          replaceMustache(data, _feed[i]).then((template) => setActiveTemplate(template));
-          return;
-        }
-      }
+    setLoading(true);
 
-      setRawActiveTemplate(_feed[0]);
-      replaceMustache(data, _feed[0]).then((template) => {
-        setActiveTemplate(template);
-        setImmediate(() => {
-          trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
-            [feedTypeName.toLowerCase()]: template.name,
-            [`${feedTypeName.toLowerCase()}Default`]: true,
+    (isIntegration ? integrationsFeed() : connectorsFeed())
+      .then((_feed) => {
+        setFeed(_feed);
+        for (let i = 0; i < _feed.length; i++) {
+          if (_feed[i].id === key) {
+            replaceMustache(data, _feed[i]).then((template) => setActiveTemplate(template));
+            return;
+          }
+        }
+
+        setRawActiveTemplate(_feed[0]);
+        replaceMustache(data, _feed[0]).then((template) => {
+          setActiveTemplate(template);
+          setImmediate(() => {
+            trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
+              [feedTypeName.toLowerCase()]: template.name,
+              [`${feedTypeName.toLowerCase()}Default`]: true,
+            });
           });
         });
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
-    });
 
     return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isIntegration]);
+  }, [isIntegration, open]);
 
   return {
     rawActiveTemplate,

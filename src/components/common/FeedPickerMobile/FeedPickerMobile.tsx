@@ -40,6 +40,7 @@ const FeedPickerMobile: React.FC<Props> = ({ title = 'Integration', type, onSubm
     setActiveFilter,
     loading,
   } = useFeed({
+    open,
     feedTypeName: title,
     isIntegration: type === 'integration',
     onSubmit,
