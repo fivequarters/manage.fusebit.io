@@ -10,6 +10,7 @@ module.exports = {
       '@assets': path.resolve(__dirname, 'src/assets/'),
       '@enums': path.resolve(__dirname, 'src/enums/'),
       '@config': path.resolve(__dirname, 'src/config/'),
+      '@pages': path.resolve(__dirname, 'src/pages/'),
     },
   },
 };

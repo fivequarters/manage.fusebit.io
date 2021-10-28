@@ -1,17 +1,17 @@
-import ConnectorsOverviewPage from '../pages/ConnectorsOverviewPage';
-import IntegrationsOverviewPage from '../pages/IntegrationsOverviewPage';
-import IntegrationDetailDevelopPage from '../pages/IntegrationDetailDevelopPage';
-import IntegrationDetailInstallsPage from '../pages/IntegrationDetailInstallsPage';
-import ConnectorDetailConfigurePage from '../pages/ConnectorDetailConfigurePage';
-import ConnectorDetailIdentitiesPage from '../pages/ConnectorDetailIdentitiesPage';
-import LoggedOutErrorPage from '../pages/LoggedOutErrorPage';
-import AuthenticationDetailOverviewPage from '../pages/AuthenticationDetailOverviewPage';
-import FatalErrorPage from '../pages/FatalErrorPage';
-import AuthCallbackPage from '../pages/AuthCallbackPage';
-import NotFoundPage from '../pages/NotFoundPage';
-import AccountSettingsPage from '../pages/AccountSettingsPage';
-import AccountTeamPage from '../pages/AccountTeamPage';
-import { RouteItem } from '../interfaces/router';
+import ConnectorsOverviewPage from '@pages/ConnectorsOverviewPage';
+import IntegrationsOverviewPage from '@pages/IntegrationsOverviewPage';
+import IntegrationDetailDevelopPage from '@pages/IntegrationDetailDevelopPage';
+import IntegrationDetailInstallsPage from '@pages/IntegrationDetailInstallsPage';
+import ConnectorDetailConfigurePage from '@pages/ConnectorDetailConfigurePage';
+import ConnectorDetailIdentitiesPage from '@pages/ConnectorDetailIdentitiesPage';
+import LoggedOutErrorPage from '@pages/LoggedOutErrorPage';
+import AuthenticationDetailOverviewPage from '@pages/AuthenticationDetailOverviewPage';
+import FatalErrorPage from '@pages/FatalErrorPage';
+import AuthCallbackPage from '@pages/AuthCallbackPage';
+import NotFoundPage from '@pages/NotFoundPage';
+import AccountSettingsPage from '@pages/AccountSettingsPage';
+import AccountTeamPage from '@pages/AccountTeamPage';
+import { RouteItem } from '@interfaces/router';
 
 // define app routes
 export const routes: Array<RouteItem> = [

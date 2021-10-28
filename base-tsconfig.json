@@ -8,7 +8,8 @@
       "@interfaces/*": ["./interfaces/*"],
       "@assets/*": ["./assets/*"],
       "@enums/*": ["./enums/*"],
-      "@config/*": ["./config/*"]
+      "@config/*": ["./config/*"],
+      "@pages/*": ["./pages/*"]
     }
   }
 }
