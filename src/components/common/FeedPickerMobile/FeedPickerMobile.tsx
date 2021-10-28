@@ -11,6 +11,7 @@ import ItemList from '../ItemList/ItemList';
 import { urlOrSvgToImage } from '../../../utils/utils';
 import { Data } from '../../../interfaces/feedPicker';
 import { DefaultFilters } from '../../../hooks/useFilterFeed';
+import Loader from '../Loader';
 
 interface Props {
   title?: string;
@@ -37,6 +38,7 @@ const FeedPickerMobile: React.FC<Props> = ({ title = 'Integration', type, onSubm
     setRawActiveTemplate,
     setActiveTemplate,
     setActiveFilter,
+    loading,
   } = useFeed({
     feedTypeName: title,
     isIntegration: type === 'integration',
@@ -56,6 +58,9 @@ const FeedPickerMobile: React.FC<Props> = ({ title = 'Integration', type, onSubm
   }, [open, setActiveFilter, setActiveTemplate, setRawActiveTemplate, setStep]);
 
   const validateNext = () => {
+    if (loading) {
+      return false;
+    }
     if (step === 0) {
       return !!activeFilter;
     }
@@ -138,7 +143,7 @@ const FeedPickerMobile: React.FC<Props> = ({ title = 'Integration', type, onSubm
           New {title}
         </Box>
         <Box height="440px" overflow="auto">
-          {steps[step]}
+          {loading ? <Loader /> : steps[step]}
         </Box>
         <Box m="0 auto" maxWidth="200px">
           <Button
