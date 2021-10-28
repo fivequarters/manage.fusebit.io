@@ -2,7 +2,7 @@ import { Feed } from './feed';
 
 export interface Props {
   open: boolean;
-  onClose: any;
+  onClose: () => void;
   onSubmit: (feed: Feed, data: Data) => void;
   isIntegration?: boolean;
 }

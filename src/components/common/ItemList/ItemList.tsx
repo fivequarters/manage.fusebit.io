@@ -13,7 +13,7 @@ interface Item {
   text?: string;
   id: string;
   hideArrow?: boolean;
-  icon?: any;
+  icon?: React.ReactNode;
   onClick?: () => void;
 }
 
