@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { routes } from '@config/index';
 import { RouteItem } from '@interfaces/router';
+import { routes } from '../config';
 import ProtectedRoute from './ProtectedRoute';
 
 const DashboardRoutes: FC<{}> = () => {

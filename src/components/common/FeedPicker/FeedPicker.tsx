@@ -4,7 +4,6 @@ import { ValidationMode } from '@jsonforms/core';
 import { Box, Button, TextField } from '@material-ui/core';
 import debounce from 'lodash.debounce';
 import { Props } from '@interfaces/feedPicker';
-import { integrationsFeed, connectorsFeed } from '@static/feed';
 import search from '@assets/search.svg';
 import cross from '@assets/cross.svg';
 import { Feed, ParsedFeed } from '@interfaces/feed';
@@ -16,6 +15,7 @@ import { useTrackPage } from '@hooks/useTrackPage';
 import { urlOrSvgToImage } from '@utils/utils';
 import BaseJsonForm from '@components/common/BaseJsonForm';
 import useFilterFeed, { DefaultFilters } from '@hooks/useFilterFeed';
+import { integrationsFeed, connectorsFeed } from '../../../static/feed';
 import * as SC from './styles';
 
 const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onSubmit, isIntegration }, ref) => {

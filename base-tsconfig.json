@@ -6,11 +6,7 @@
       "@hooks/*": ["./hooks/*"],
       "@utils/*": ["./utils/*"],
       "@interfaces/*": ["./interfaces/*"],
-      "@assets/*": ["./assets/*"],
-      "@enums/*": ["./enums/*"],
-      "@config/*": ["./config/*"],
-      "@pages/*": ["./pages/*"],
-      "@static/*": ["./static/*"]
+      "@assets/*": ["./assets/*"]
     }
   }
 }

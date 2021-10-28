@@ -2,7 +2,7 @@ import { useQuery } from 'react-query';
 import { Connector } from '@interfaces/connector';
 import { Feed } from '@interfaces/feed';
 import { FinalConnector } from '@interfaces/integrationDetailDevelop';
-import { connectorsFeed, integrationsFeed } from '@static/feed';
+import { connectorsFeed, integrationsFeed } from '../../static/feed';
 
 export const findMatchingConnectorFeed = async (connector: Connector | FinalConnector) => {
   return new Promise<Feed>((accept, reject) => {
