@@ -11,6 +11,7 @@ module.exports = {
       '@enums': path.resolve(__dirname, 'src/enums/'),
       '@config': path.resolve(__dirname, 'src/config/'),
       '@pages': path.resolve(__dirname, 'src/pages/'),
+      '@static': path.resolve(__dirname, 'src/static/'),
     },
   },
 };

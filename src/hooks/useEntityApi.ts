@@ -1,27 +1,27 @@
-import { Entity, Feed } from '../interfaces/feed';
+import { Entity, Feed } from '@interfaces/feed';
+import { Operation } from '@interfaces/operation';
+import { Connector } from '@interfaces/connector';
+import { IdentityList } from '@interfaces/identities';
+import { InstallList } from '@interfaces/install';
+import { InnerConnector, Integration } from '@interfaces/integration';
+import { findMatchingConnectorFeed, getAllDependenciesFromFeed, linkPackageJson } from '@utils/utils';
+import { EntitiesType } from '@interfaces/entities';
+import { Account } from '@interfaces/account';
 import { useLoader } from './useLoader';
-import { Operation } from '../interfaces/operation';
 import { useAccountConnectorCreateConnector } from './api/v2/account/connector/useCreateOne';
 import { useAccountIntegrationCreateIntegration } from './api/v2/account/integration/useCreateOne';
 import { useAuthContext } from './useAuthContext';
 import { useError } from './useError';
-import { Connector } from '../interfaces/connector';
 import { ApiResponse } from './useAxios';
 import { useAccountConnectorUpdateConnector } from './api/v2/account/connector/useUpdateOne';
-import { IdentityList } from '../interfaces/identities';
 import { useAccountConnectorIdentityDeleteOne } from './api/v2/account/connector/identity/useDeleteOne';
 import { useAccountIntegrationInstallDeleteOne } from './api/v2/account/integration/install/useDeleteOne';
-import { InstallList } from '../interfaces/install';
-import { InnerConnector, Integration } from '../interfaces/integration';
 import { useAccountIntegrationUpdateIntegration } from './api/v2/account/integration/useUpdateOne';
 import { useAccountIntegrationDeleteIntegration } from './api/v2/account/integration/useDeleteOne';
 import { useAccountConnectorDeleteConnector } from './api/v2/account/connector/useDeleteOne';
 import { useAccountUserDeleteOne } from './api/v1/account/user/useDeleteOne';
-import { findMatchingConnectorFeed, getAllDependenciesFromFeed, linkPackageJson } from '../utils/utils';
 import { useAccountUserCreateUser } from './api/v1/account/user/useCreateUser';
-import { Account } from '../interfaces/account';
 import { useCreateToken } from './useCreateToken';
-import { EntitiesType } from '../interfaces/entities';
 import useConnector from './useConnector';
 
 export const useEntityApi = (preventLoader?: boolean) => {

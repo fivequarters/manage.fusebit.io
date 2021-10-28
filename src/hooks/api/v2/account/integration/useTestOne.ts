@@ -1,8 +1,8 @@
 import { useMutation } from 'react-query';
-import { Params } from '../../../../../interfaces/api';
-import { useAxios } from '../../../../useAxios';
-import { useAuthContext } from '../../../../useAuthContext';
-import { getIntegrationConfig } from '../../../../../utils/localStorage';
+import { Params } from '@interfaces/api';
+import { useAxios } from '@hooks/useAxios';
+import { useAuthContext } from '@hooks/useAuthContext';
+import { getIntegrationConfig } from '@utils/localStorage';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 

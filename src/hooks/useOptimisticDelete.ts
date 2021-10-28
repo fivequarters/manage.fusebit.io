@@ -1,5 +1,5 @@
 import { useQueryClient, QueryKey, UseMutationOptions } from 'react-query';
-import { Params } from '../interfaces/api';
+import { Params } from '@interfaces/api';
 
 type Props = {
   queryKey: QueryKey;

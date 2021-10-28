@@ -1,11 +1,11 @@
 import { AxiosInstance } from 'axios';
 import { useMutation, useQueryClient } from 'react-query';
-import { User } from '../../../../interfaces/user';
+import { User } from '@interfaces/user';
+import { removeClient } from '@utils/clients';
+import { removeIssuer } from '@utils/issuer';
+import { createAxiosClient } from '@utils/utils';
+import { useAuthContext } from '@hooks/useAuthContext';
 import { putBackendClients } from './utils/putBackendClients';
-import { removeClient } from '../../../../utils/clients';
-import { removeIssuer } from '../../../../utils/issuer';
-import { createAxiosClient } from '../../../../utils/utils';
-import { useAuthContext } from '../../../useAuthContext';
 import { BACKEND_GET_ALL, getBackendClients } from './useGetAll';
 
 export async function removeBackendClient(axiosClient: AxiosInstance, user: User, clientId: string): Promise<void> {

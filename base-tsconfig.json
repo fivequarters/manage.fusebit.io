@@ -9,7 +9,8 @@
       "@assets/*": ["./assets/*"],
       "@enums/*": ["./enums/*"],
       "@config/*": ["./config/*"],
-      "@pages/*": ["./pages/*"]
+      "@pages/*": ["./pages/*"],
+      "@static/*": ["./static/*"]
     }
   }
 }
