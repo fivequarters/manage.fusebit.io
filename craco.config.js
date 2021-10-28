@@ -9,6 +9,7 @@ module.exports = {
       '@interfaces': path.resolve(__dirname, 'src/interfaces/'),
       '@assets': path.resolve(__dirname, 'src/assets/'),
       '@enums': path.resolve(__dirname, 'src/enums/'),
+      '@config': path.resolve(__dirname, 'src/config/'),
     },
   },
 };
