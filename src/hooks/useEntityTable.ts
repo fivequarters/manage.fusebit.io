@@ -1,6 +1,6 @@
 import { useState } from 'react';
+import { EntitiesType } from '@interfaces/entities';
 import { useEntityApi } from './useEntityApi';
-import { EntitiesType } from '../interfaces/entities';
 import { useAuthContext } from './useAuthContext';
 
 interface Props {

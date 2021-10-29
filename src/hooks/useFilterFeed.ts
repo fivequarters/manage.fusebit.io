@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Feed } from '../interfaces/feed';
+import { Feed } from '@interfaces/feed';
 
 export enum DefaultFilters {
   ALL = 'all',

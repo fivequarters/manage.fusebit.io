@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Feed } from '../interfaces/feed';
+import { Feed } from '@interfaces/feed';
 import { integrationsFeed, connectorsFeed } from '../static/feed';
 
 export const useGetFeedById = ({ id, type }: { id: string; type: 'integration' | 'connector' }) => {

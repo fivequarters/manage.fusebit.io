@@ -1,6 +1,6 @@
-import { Client } from '../interfaces/client';
-import { Issuer } from '../interfaces/issuer';
-import { User } from '../interfaces/user';
+import { Client } from '@interfaces/client';
+import { Issuer } from '@interfaces/issuer';
+import { User } from '@interfaces/user';
 import { createAxiosClient } from './utils';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;

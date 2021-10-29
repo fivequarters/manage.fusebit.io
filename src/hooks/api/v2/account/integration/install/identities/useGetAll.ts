@@ -1,14 +1,13 @@
 import { useQuery, UseQueryOptions } from 'react-query';
-import { Params } from '../../../../../../../interfaces/api';
-import { useAxios } from '../../../../../../useAxios';
-import { useAuthContext } from '../../../../../../useAuthContext';
-import { getAllConnectors } from '../../../connector/useGetAll';
-import { getAllIdentities } from '../../../connector/identity/useGetAll';
-
-import { Connector } from '../../../../../../../interfaces/connector';
-import { Identity, IdentityList } from '../../../../../../../interfaces/identities';
-import { useError } from '../../../../../../useError';
-import { entityLoopThrough } from '../../../../utils';
+import { Params } from '@interfaces/api';
+import { useAxios } from '@hooks/useAxios';
+import { useAuthContext } from '@hooks/useAuthContext';
+import { getAllConnectors } from '@hooks/api/v2/account/connector/useGetAll';
+import { getAllIdentities } from '@hooks/api/v2/account/connector/identity/useGetAll';
+import { Connector } from '@interfaces/connector';
+import { Identity, IdentityList } from '@interfaces/identities';
+import { useError } from '@hooks/useError';
+import { entityLoopThrough } from '@hooks/api/v2/utils';
 
 export const ACCOUNT_INTEGRATION_INSTALL_IDENTITIES_GET_ALL = 'accountIntegrationInstallIdentitiesGetAll';
 

@@ -1,14 +1,14 @@
 import React, { FC, ReactElement } from 'react';
 import { useParams } from 'react-router-dom';
-import Layout from '../components/common/Layout';
-import { useAccountConnectorsGetOne } from '../hooks/api/v2/account/connector/useGetOne';
-import { useAuthContext } from '../hooks/useAuthContext';
-import { Connector } from '../interfaces/connector';
-import Navbar from '../components/common/Navbar';
-import { useTrackPage } from '../hooks/useTrackPage';
-import TabComponent from '../components/common/TabComponent';
-import { useGetRedirectLink } from '../hooks/useGetRedirectLink';
-import IdentitiesTable from '../components/ConnectorDetailIdentities/IdentitiesTable';
+import Layout from '@components/common/Layout';
+import { useAccountConnectorsGetOne } from '@hooks/api/v2/account/connector/useGetOne';
+import { useAuthContext } from '@hooks/useAuthContext';
+import { Connector } from '@interfaces/connector';
+import Navbar from '@components/common/Navbar';
+import { useTrackPage } from '@hooks/useTrackPage';
+import TabComponent from '@components/common/TabComponent';
+import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
+import IdentitiesTable from '@components/ConnectorDetailIdentities/IdentitiesTable';
 
 const ConnectorDetailIdentitiesPage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();

@@ -1,13 +1,13 @@
 import { Box, Grid, useMediaQuery } from '@material-ui/core';
 import styled, { css } from 'styled-components';
 import { Xwrapper } from 'react-xarrows';
-import Loader from '../../common/Loader';
-import ConnectorsCard from '../ConnectorsCard';
-import { CARD_OVERLAPPING_MEDIA_QUERY } from '../constants';
-import FooterLinks from '../FooterLinks';
-import IntegrationCard from '../IntegrationCard';
-import LinksTitle from '../LinksTitle';
-import YourAplication from '../YourAplicationCard';
+import Loader from '@components/common/Loader';
+import ConnectorsCard from '@components/IntegrationDetailDevelop/ConnectorsCard';
+import { CARD_OVERLAPPING_MEDIA_QUERY } from '@components/IntegrationDetailDevelop/constants';
+import FooterLinks from '@components/IntegrationDetailDevelop/FooterLinks';
+import IntegrationCard from '@components/IntegrationDetailDevelop/IntegrationCard';
+import LinksTitle from '@components/IntegrationDetailDevelop/LinksTitle';
+import YourAplication from '@components/IntegrationDetailDevelop/YourAplicationCard';
 
 const centerMixin = (props: { $matchesCardOverlapping: boolean }) =>
   props.$matchesCardOverlapping &&

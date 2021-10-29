@@ -1,5 +1,5 @@
-import { useBackendDeleteOne } from '../../../hooks/api/v1/backend/useDeleteOne';
-import { useLoader } from '../../../hooks/useLoader';
+import { useBackendDeleteOne } from '@hooks/api/v1/backend/useDeleteOne';
+import { useLoader } from '@hooks/useLoader';
 
 interface Props {
   onClose: () => void;

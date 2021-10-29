@@ -1,9 +1,9 @@
 import { useMutation } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { Params } from '../../../../../../interfaces/api';
-import { useAxios } from '../../../../../useAxios';
-import { useAuthContext } from '../../../../../useAuthContext';
-import useOptimisticDelete from '../../../../../useOptimisticDelete';
+import { Params } from '@interfaces/api';
+import { useAxios } from '@hooks/useAxios';
+import { useAuthContext } from '@hooks/useAuthContext';
+import useOptimisticDelete from '@hooks/useOptimisticDelete';
 import { ACCOUNT_CONNECTOR_IDENTITY_GET_ALL } from './useGetAll';
 
 export const useAccountConnectorIdentityDeleteOne = <T>() => {

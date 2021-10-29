@@ -3,17 +3,17 @@ import { useHistory, useParams } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 
 import { ValidationMode } from '@jsonforms/core';
+import { useAccountConnectorsGetOne } from '@hooks/api/v2/account/connector/useGetOne';
+import { useAccountConnectorsGetOneConfig } from '@hooks/api/v2/account/connector/useGetOneConfig';
+import { useAuthContext } from '@hooks/useAuthContext';
+import { Connector, ConnectorConfig } from '@interfaces/connector';
+import { useEntityApi } from '@hooks/useEntityApi';
+import { useGetFeedById } from '@hooks/useGetFeedById';
+import { trackEvent } from '@utils/analytics';
+import InformationalBanner from '@components/common/InformationalBanner';
+import BaseJsonForm from '@components/common/BaseJsonForm';
+import * as CSC from '@components/globalStyle';
 import * as SC from './styles';
-import * as CSC from '../../globalStyle';
-import { useAccountConnectorsGetOne } from '../../../hooks/api/v2/account/connector/useGetOne';
-import { useAccountConnectorsGetOneConfig } from '../../../hooks/api/v2/account/connector/useGetOneConfig';
-import { useAuthContext } from '../../../hooks/useAuthContext';
-import { Connector, ConnectorConfig } from '../../../interfaces/connector';
-import { useEntityApi } from '../../../hooks/useEntityApi';
-import { useGetFeedById } from '../../../hooks/useGetFeedById';
-import { trackEvent } from '../../../utils/analytics';
-import InformationalBanner from '../../common/InformationalBanner';
-import BaseJsonForm from '../../common/BaseJsonForm';
 
 const ConfigureForm: React.FC = () => {
   const history = useHistory();

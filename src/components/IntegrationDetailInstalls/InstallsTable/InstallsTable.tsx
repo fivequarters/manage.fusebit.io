@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { format } from 'date-fns';
-import BaseTable from '../../common/BaseTable';
-import { useEntityTable } from '../../../hooks/useEntityTable';
-import { usePagination } from '../../../hooks/usePagination';
-import { useAccountIntegrationInstallGetAll } from '../../../hooks/api/v2/account/integration/install/useGetAll';
-import CodeBlock from '../../common/CodeBlock';
-import { InstallList } from '../../../interfaces/install';
-import Tag from '../../common/Tag';
-import ConfirmationPrompt from '../../common/ConfirmationPrompt';
-import InformationalBanner from '../../common/InformationalBanner';
+import BaseTable from '@components/common/BaseTable';
+import { useEntityTable } from '@hooks/useEntityTable';
+import { usePagination } from '@hooks/usePagination';
+import { useAccountIntegrationInstallGetAll } from '@hooks/api/v2/account/integration/install/useGetAll';
+import CodeBlock from '@components/common/CodeBlock';
+import { InstallList } from '@interfaces/install';
+import Tag from '@components/common/Tag';
+import ConfirmationPrompt from '@components/common/ConfirmationPrompt';
+import InformationalBanner from '@components/common/InformationalBanner';
+import { getConnectorsFromInstall } from '@utils/utils';
+import { trackEvent } from '@utils/analytics';
 import AssociatedIdentities from './AssociatedIdentities';
-import { getConnectorsFromInstall } from '../../../utils/utils';
-import { trackEvent } from '../../../utils/analytics';
 
 const InstallsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();

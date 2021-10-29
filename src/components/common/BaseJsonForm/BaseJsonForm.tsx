@@ -1,6 +1,6 @@
 import { JsonForms, JsonFormsInitStateProps, JsonFormsReactProps } from '@jsonforms/react';
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
-import InputWithCopy, { inputWithCopyTester } from '../FormFields/InputWithCopy/InputWithCopy';
+import InputWithCopy, { inputWithCopyTester } from '@components/common/FormFields/InputWithCopy/InputWithCopy';
 
 type Props = JsonFormsInitStateProps & JsonFormsReactProps;
 

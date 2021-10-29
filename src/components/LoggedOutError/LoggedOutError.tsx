@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
+import fusebit from '@assets/fusebit-logo.svg';
+import warning from '@assets/warning-red.svg';
+import { signIn } from '@hooks/useAuthContext';
 import * as SC from './styles';
-import fusebit from '../../assets/fusebit-logo.svg';
-import warning from '../../assets/warning-red.svg';
-import { signIn } from '../../hooks/useAuthContext';
 
 const LoggedOutError: React.FC = () => (
   <SC.Wrapper>

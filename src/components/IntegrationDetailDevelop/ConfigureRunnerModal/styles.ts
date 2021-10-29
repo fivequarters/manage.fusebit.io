@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { MenuItem, Select } from '@material-ui/core';
-import Textarea from '../../common/FormFields/Textarea';
+import Textarea from '@components/common/FormFields/Textarea';
 
 export const Card = styled.div<{ open: boolean }>`
   position: absolute;

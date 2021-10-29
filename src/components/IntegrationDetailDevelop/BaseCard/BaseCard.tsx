@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardActions } from '@material-ui/core';
 import styled from 'styled-components';
-import Loader from '../../common/Loader';
+import Loader from '@components/common/Loader';
 
 const StyledCardHeader = styled(CardHeader)`
   padding: 32px 32px 0;

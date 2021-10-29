@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
-import { Params } from '../../../../../interfaces/api';
-import { useAxios, FusebitAxios } from '../../../../useAxios';
+import { Params } from '@interfaces/api';
+import { useAxios, FusebitAxios } from '@hooks/useAxios';
 
 export const ACCOUNT_INTEGRATIONS_GET_ALL = 'accountIntegrationsGetAll';
 

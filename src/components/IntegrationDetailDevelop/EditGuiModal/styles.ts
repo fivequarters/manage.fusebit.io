@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import { CloseIconMixin } from '../../globalStyle';
-import file from '../../../assets/file.svg';
-import cogs from '../../../assets/cogs.svg';
-import clock from '../../../assets/clock.svg';
-import playEditor from '../../../assets/play-editor.svg';
-import add from '../../../assets/add.svg';
+import { CloseIconMixin } from '@components/globalStyle';
+import file from '@assets/file.svg';
+import cogs from '@assets/cogs.svg';
+import clock from '@assets/clock.svg';
+import playEditor from '@assets/play-editor.svg';
+import add from '@assets/add.svg';
 
 export const Card = styled.div<{ open: boolean }>`
   position: absolute;
