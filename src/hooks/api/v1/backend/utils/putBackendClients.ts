@@ -1,8 +1,8 @@
-import { BackendClient } from '../../../../../interfaces/backendClient';
-import { User } from '../../../../../interfaces/user';
-import { Storage } from '../../../../../interfaces/storage';
-import { createAxiosClient } from '../../../../../utils/utils';
-import { BACKEND_LIST_STORAGE_ID } from '../../../../../utils/constants';
+import { BackendClient } from '@interfaces/backendClient';
+import { User } from '@interfaces/user';
+import { Storage } from '@interfaces/storage';
+import { createAxiosClient } from '@utils/utils';
+import { BACKEND_LIST_STORAGE_ID } from '@utils/constants';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 

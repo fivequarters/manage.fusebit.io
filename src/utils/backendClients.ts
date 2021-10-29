@@ -1,4 +1,4 @@
-import { User } from '../interfaces/user';
+import { User } from '@interfaces/user';
 import { signJwt } from './jwt';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT, REACT_APP_SAMPLE_APP_URL, REACT_APP_SAMPLE_APP_KEY } = process.env;

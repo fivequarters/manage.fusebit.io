@@ -1,16 +1,15 @@
 import React from 'react';
-
 import { Box, Button, TextField } from '@material-ui/core';
+import { Props } from '@interfaces/feedPicker';
+import search from '@assets/search.svg';
+import cross from '@assets/cross.svg';
+import Loader from '@components/common/Loader';
+import { useTrackPage } from '@hooks/useTrackPage';
+import { urlOrSvgToImage } from '@utils/utils';
+import BaseJsonForm from '@components/common/BaseJsonForm';
+import { DefaultFilters } from '@hooks/useFilterFeed';
+import useFeed from '@hooks/useFeed';
 import * as SC from './styles';
-import { Props } from '../../../interfaces/feedPicker';
-import search from '../../../assets/search.svg';
-import cross from '../../../assets/cross.svg';
-import Loader from '../Loader';
-import { useTrackPage } from '../../../hooks/useTrackPage';
-import { urlOrSvgToImage } from '../../../utils/utils';
-import BaseJsonForm from '../BaseJsonForm';
-import { DefaultFilters } from '../../../hooks/useFilterFeed';
-import useFeed from '../../../hooks/useFeed';
 
 const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onSubmit, isIntegration }, ref) => {
   const {
@@ -83,7 +82,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
           {loading || !activeTemplate ? (
             <Loader />
           ) : (
-            <Box overflow="hidden auto">
+            <Box overflow="hidden auto" maxHeight="340px">
               {filteredFeed.map((feedEntry) => {
                 return (
                   <SC.ColumnItem
@@ -121,7 +120,9 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
                 <SC.ConnectorVersion>{activeTemplate.version}</SC.ConnectorVersion>
               </SC.ConnectorTitleWrapper>
               <SC.GeneralInfoWrapper>
-                <SC.ConnectorDescription>{activeTemplate.description || ''}</SC.ConnectorDescription>
+                <SC.ConnectorDescription linkTarget="_blank">
+                  {activeTemplate.description || ''}
+                </SC.ConnectorDescription>
                 {activeTemplate.outOfPlan || (
                   <SC.FormWrapper>
                     <BaseJsonForm

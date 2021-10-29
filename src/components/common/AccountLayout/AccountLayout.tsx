@@ -1,6 +1,6 @@
 import { Box, Container } from '@material-ui/core';
 import React from 'react';
-import AccountDrawer from '../AccountDrawer';
+import AccountDrawer from '@components/common/AccountDrawer';
 
 interface Props {
   active: React.ComponentProps<typeof AccountDrawer>['active'];

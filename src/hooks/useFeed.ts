@@ -3,11 +3,11 @@ import { ValidationMode } from '@jsonforms/core';
 import debounce from 'lodash.debounce';
 import { Feed, ParsedFeed } from '../interfaces/feed';
 import { trackEvent } from '../utils/analytics';
+import { integrationsFeed, connectorsFeed } from '../static/feed';
+import { Data } from '../interfaces/feedPicker';
 import useFilterFeed from './useFilterFeed';
 import { useQuery } from './useQuery';
 import { useReplaceMustache } from './useReplaceMustache';
-import { integrationsFeed, connectorsFeed } from '../static/feed';
-import { Data } from '../interfaces/feedPicker';
 
 interface Props {
   isIntegration?: boolean;

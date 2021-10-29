@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { format } from 'date-fns';
-import BaseTable from '../../common/BaseTable';
-import { useEntityTable } from '../../../hooks/useEntityTable';
-import { usePagination } from '../../../hooks/usePagination';
-import { useAccountConnectorIdentityGetAll } from '../../../hooks/api/v2/account/connector/identity/useGetAll';
-import { IdentityList } from '../../../interfaces/identities';
-import CodeBlock from '../../common/CodeBlock';
-import ConfirmationPrompt from '../../common/ConfirmationPrompt';
-import InformationalBanner from '../../common/InformationalBanner';
+import BaseTable from '@components/common/BaseTable';
+import { useEntityTable } from '@hooks/useEntityTable';
+import { usePagination } from '@hooks/usePagination';
+import { useAccountConnectorIdentityGetAll } from '@hooks/api/v2/account/connector/identity/useGetAll';
+import { IdentityList } from '@interfaces/identities';
+import CodeBlock from '@components/common/CodeBlock';
+import ConfirmationPrompt from '@components/common/ConfirmationPrompt';
+import InformationalBanner from '@components/common/InformationalBanner';
+import Tag from '@components/common/Tag';
+import { trackEvent } from '@utils/analytics';
 import AssociatedInstalls from './AssociatedInstalls';
 import AssociatedIntegrations from './AssociatedIntegrations';
-import Tag from '../../common/Tag';
-import { trackEvent } from '../../../utils/analytics';
 
 const IdentitiesTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -60,7 +60,11 @@ const IdentitiesTable = () => {
       <InformationalBanner>
         An identity is a unique relationship your tenant has with a connector. It is used to authenticate on behalf of
         them when running an integration.{' '}
-        <a href="https://developer.fusebit.io/docs/fusebit-system-architecture#installation-lifecycle">
+        <a
+          target="_blank"
+          rel="noreferrer"
+          href="https://developer.fusebit.io/docs/fusebit-system-architecture#installation-lifecycle"
+        >
           Learn more about Identities here
         </a>
         .

@@ -1,15 +1,15 @@
 import React from 'react';
 import DnsOutlinedIcon from '@material-ui/icons/DnsOutlined';
 import { useMediaQuery } from '@material-ui/core';
-import ListItem from '../ListItem';
-import { useModal } from '../../../hooks/useModal';
-import ExistingBackendModal from '../ExistingBackendModal';
-import { BackendClient } from '../../../interfaces/backendClient';
-import useDeleteBackend from '../hooks/useDeleteBackend';
-import DeleteBackendModal from '../DeleteBackendModal';
-import LineConnector from '../../common/LineConnector';
-import { INTEGRATION_CARD_ID } from '../IntegrationCard/IntegrationCard';
-import { CARD_OVERLAPPING_MEDIA_QUERY } from '../constants';
+import ListItem from '@components/IntegrationDetailDevelop/ListItem';
+import { useModal } from '@hooks/useModal';
+import ExistingBackendModal from '@components/IntegrationDetailDevelop/ExistingBackendModal';
+import { BackendClient } from '@interfaces/backendClient';
+import useDeleteBackend from '@components/IntegrationDetailDevelop/hooks/useDeleteBackend';
+import DeleteBackendModal from '@components/IntegrationDetailDevelop/DeleteBackendModal';
+import LineConnector from '@components/common/LineConnector';
+import { INTEGRATION_CARD_ID } from '@components/IntegrationDetailDevelop/IntegrationCard/IntegrationCard';
+import { CARD_OVERLAPPING_MEDIA_QUERY } from '@components/IntegrationDetailDevelop/constants';
 
 interface Props {
   className?: string;

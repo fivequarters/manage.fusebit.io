@@ -1,12 +1,12 @@
 import { useHistory } from 'react-router-dom';
+import { Feed } from '@interfaces/feed';
+import { Data } from '@interfaces/feedPicker';
+import { useCreateDataFromFeed } from '@hooks/useCreateDataFromFeed';
+import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
+import FeedPickerModal from '@components/common/FeedPickerModal';
+import { useLoader } from '@hooks/useLoader';
 import { useMediaQuery } from '@material-ui/core';
-import { Feed } from '../../../interfaces/feed';
-import { Data } from '../../../interfaces/feedPicker';
-import { useCreateDataFromFeed } from '../../../hooks/useCreateDataFromFeed';
-import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
-import FeedPickerModal from '../../common/FeedPickerModal';
-import { useLoader } from '../../../hooks/useLoader';
-import FeedPickerMobile from '../../common/FeedPickerMobile/FeedPickerMobile';
+import FeedPickerMobile from '@components/common/FeedPickerMobile/FeedPickerMobile';
 
 interface Props {
   open: boolean;

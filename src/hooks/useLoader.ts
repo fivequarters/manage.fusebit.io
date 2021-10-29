@@ -1,4 +1,4 @@
-import { EntityState, OperationState, OperationStatus } from '../interfaces/operation';
+import { EntityState, OperationState, OperationStatus } from '@interfaces/operation';
 import { useAxios } from './useAxios';
 import { useAuthContext } from './useAuthContext';
 

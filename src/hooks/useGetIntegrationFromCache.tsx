@@ -1,6 +1,6 @@
 import { useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { Integration } from '../interfaces/integration';
+import { Integration } from '@interfaces/integration';
 import { ACCOUNT_INTEGRATIONS_GET_ONE } from './api/v2/account/integration/useGetOne';
 import { useAuthContext } from './useAuthContext';
 import { ApiResponse } from './useAxios';

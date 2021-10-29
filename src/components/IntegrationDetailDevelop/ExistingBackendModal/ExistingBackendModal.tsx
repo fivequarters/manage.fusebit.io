@@ -1,6 +1,6 @@
-import { useGetIntegrationFromCache } from '../../../hooks/useGetIntegrationFromCache';
-import { BackendClient } from '../../../interfaces/backendClient';
-import BaseBackendModal from '../BaseBackendModal';
+import { useGetIntegrationFromCache } from '@hooks/useGetIntegrationFromCache';
+import { BackendClient } from '@interfaces/backendClient';
+import BaseBackendModal from '@components/IntegrationDetailDevelop/BaseBackendModal';
 
 interface Props {
   open: boolean;

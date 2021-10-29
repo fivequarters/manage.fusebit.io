@@ -1,8 +1,8 @@
+import { User } from '@interfaces/user';
+import { Client } from '@interfaces/client';
+import { Issuer } from '@interfaces/issuer';
+import { KeyPair } from '@interfaces/keyPair';
 import { createAxiosClient } from './utils';
-import { User } from '../interfaces/user';
-import { Client } from '../interfaces/client';
-import { Issuer } from '../interfaces/issuer';
-import { KeyPair } from '../interfaces/keyPair';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 

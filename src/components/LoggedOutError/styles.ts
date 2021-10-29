@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import background from '../../assets/background-small.jpg';
+import background from '@assets/background-small.jpg';
 
 export const Wrapper = styled.div`
   display: flex;

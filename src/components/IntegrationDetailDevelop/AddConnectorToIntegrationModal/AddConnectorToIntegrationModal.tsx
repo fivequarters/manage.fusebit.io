@@ -1,12 +1,12 @@
+import { Feed } from '@interfaces/feed';
+import { Data } from '@interfaces/feedPicker';
+import { useCreateDataFromFeed } from '@hooks/useCreateDataFromFeed';
+import FeedPickerModal from '@components/common/FeedPickerModal';
+import { ApiResponse } from '@hooks/useAxios';
+import { Integration } from '@interfaces/integration';
+import { useLoader } from '@hooks/useLoader';
 import { useMediaQuery } from '@material-ui/core';
-import { Feed } from '../../../interfaces/feed';
-import { Data } from '../../../interfaces/feedPicker';
-import { useCreateDataFromFeed } from '../../../hooks/useCreateDataFromFeed';
-import FeedPickerModal from '../../common/FeedPickerModal';
-import { ApiResponse } from '../../../hooks/useAxios';
-import { Integration } from '../../../interfaces/integration';
-import { useLoader } from '../../../hooks/useLoader';
-import FeedPickerMobile from '../../common/FeedPickerMobile/FeedPickerMobile';
+import FeedPickerMobile from '@components/common/FeedPickerMobile/FeedPickerMobile';
 
 interface Props {
   open: boolean;

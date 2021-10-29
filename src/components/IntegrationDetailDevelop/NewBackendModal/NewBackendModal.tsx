@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { BackendClient } from '../../../interfaces/backendClient';
-import BaseBackendModal from '../BaseBackendModal';
+import { BackendClient } from '@interfaces/backendClient';
+import BaseBackendModal from '@components/IntegrationDetailDevelop/BaseBackendModal';
 
 interface Props {
   open: boolean;

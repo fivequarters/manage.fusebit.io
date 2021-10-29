@@ -4,22 +4,20 @@ import { Container, Button, Menu, Drawer } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { Link, useHistory, useParams } from 'react-router-dom';
+import accountImg from '@assets/account.svg';
+import { Props } from '@interfaces/Navbar';
+import arrow from '@assets/down-arrow-white.svg';
+import rightArrow from '@assets/arrow-right-black.svg';
+import check from '@assets/check.svg';
+import { signOut, useAuthContext } from '@hooks/useAuthContext';
+import { useAccountIntegrationsGetAll } from '@hooks/api/v2/account/integration/useGetAll';
+import { useAccountConnectorsGetAll } from '@hooks/api/v2/account/connector/useGetAll';
+import { Integration } from '@interfaces/integration';
+import { Connector } from '@interfaces/connector';
+import burguer from '@assets/burguer.svg';
+import cross from '@assets/cross.svg';
+import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 import * as SC from './styles';
-import accountImg from '../../../assets/account.svg';
-import { Props } from '../../../interfaces/Navbar';
-import arrow from '../../../assets/down-arrow-white.svg';
-import rightArrow from '../../../assets/arrow-right-black.svg';
-import check from '../../../assets/check.svg';
-import { signOut, useAuthContext } from '../../../hooks/useAuthContext';
-import { useAccountIntegrationsGetAll } from '../../../hooks/api/v2/account/integration/useGetAll';
-import { useAccountConnectorsGetAll } from '../../../hooks/api/v2/account/connector/useGetAll';
-import { Integration } from '../../../interfaces/integration';
-import { Connector } from '../../../interfaces/connector';
-
-import burguer from '../../../assets/burguer.svg';
-import cross from '../../../assets/cross.svg';
-
-import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 
 // TODO: Refactor, split and remove nested ternary expressions
 
@@ -319,8 +317,12 @@ const Navbar: React.FC<Props> = ({
             )}
           </SC.FlexDown>
           <SC.LinksContainer>
-            <SC.LinkA href="https://fusebit.io/contact">Support</SC.LinkA>
-            <SC.LinkA href="https://developer.fusebit.io">Docs</SC.LinkA>
+            <SC.LinkA target="_blank" rel="noreferrer" href="https://fusebit.io/contact">
+              Support
+            </SC.LinkA>
+            <SC.LinkA target="_blank" rel="noreferrer" href="https://developer.fusebit.io">
+              Docs
+            </SC.LinkA>
           </SC.LinksContainer>
           <SC.ButtonWrapper active={Boolean(anchorUserDropdown) && !loggingOut}>
             <Button
@@ -425,8 +427,12 @@ const Navbar: React.FC<Props> = ({
               <SC.Br />
 
               <SC.UserDropdownLinksWrapper>
-                <SC.UserDropdownLinkA href="https://fusebit.io/contact">Support</SC.UserDropdownLinkA>
-                <SC.UserDropdownLinkA href="https://developer.fusebit.io">Docs</SC.UserDropdownLinkA>
+                <SC.UserDropdownLinkA target="_blank" rel="noreferrer" href="https://fusebit.io/contact">
+                  Support
+                </SC.UserDropdownLinkA>
+                <SC.UserDropdownLinkA target="_blank" rel="noreferrer" href="https://developer.fusebit.io">
+                  Docs
+                </SC.UserDropdownLinkA>
               </SC.UserDropdownLinksWrapper>
 
               <SC.UserButtonWrapper>

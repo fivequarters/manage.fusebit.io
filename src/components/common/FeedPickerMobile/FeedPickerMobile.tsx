@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Drawer, MobileStepper, Button, IconButton } from '@material-ui/core';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import _startCase from 'lodash.startcase';
-import FeedPickerMobileChoose from './FeedPickerMobileChoose';
-import FeedPickerMobileCreate from './FeedPickerMobileCreate';
+import cross from '@assets/cross.svg';
 import useFeed from '../../../hooks/useFeed';
 import { Feed } from '../../../interfaces/feed';
 import ItemList from '../ItemList/ItemList';
@@ -11,7 +10,8 @@ import { urlOrSvgToImage } from '../../../utils/utils';
 import { Data } from '../../../interfaces/feedPicker';
 import { DefaultFilters } from '../../../hooks/useFilterFeed';
 import Loader from '../Loader';
-import cross from '../../../assets/cross.svg';
+import FeedPickerMobileCreate from './FeedPickerMobileCreate';
+import FeedPickerMobileChoose from './FeedPickerMobileChoose';
 
 interface Props {
   onSubmit: (feed: Feed, data: Data) => void;

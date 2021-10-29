@@ -1,5 +1,5 @@
 import http from 'http';
-import { Feed } from '../interfaces/feed';
+import { Feed } from '@interfaces/feed';
 
 const { REACT_APP_INTEGRATIONS_FEED_URL, REACT_APP_CONNECTORS_FEED_URL } = process.env;
 
