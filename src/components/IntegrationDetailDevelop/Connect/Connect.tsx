@@ -1,20 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button, Input } from '@material-ui/core';
-import { useParams } from 'react-router-dom';
 import * as SC from './styles';
 import * as CSC from '../../globalStyle';
 import CopyLine from '../../common/CopyLine';
-import { useCopy } from '../../../hooks/useCopy';
-import { useAuthContext } from '../../../hooks/useAuthContext';
-import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 
 import { LinkSampleApp } from './LinkSampleApp';
-import { useAccountIntegrationsGetOne } from '../../../hooks/api/v2/account/integration/useGetOne';
 import { Integration } from '../../../interfaces/integration';
-import { useBackendUpdateOne } from '../../../hooks/api/v1/backend/useUpdateOne';
-import DeleteBackendModal from '../DeleteBackendModal';
-
-const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
+import useConnect from './uesConnect';
 
 interface Props {
   onClose: Function;
@@ -50,74 +42,33 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
     },
     ref
   ) => {
-    const { id: integrationId } = useParams<{ id: string }>();
-    const { getRedirectLink } = useGetRedirectLink();
-    const { userData } = useAuthContext();
-    const [editMode, setEditMode] = useState(false);
-    const [editedBackendClientId, setEditedBackendClientId] = useState(name);
-    const [backendClientId, setBackendClientId] = useState(name);
-    const { handleCopy, copiedLine } = useCopy();
-    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-    const [saving, setSaving] = useState(false);
-
-    const integrationBaseUrl = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v2${getRedirectLink(`/integration/${integrationId}`)}`;
-    const { mutateAsync: updateBackend } = useBackendUpdateOne();
-
-    const { data: integrationData } = useAccountIntegrationsGetOne({
-      enabled: userData.token,
-      id: integrationId,
-      accountId: userData.accountId,
-      subscriptionId: userData.subscriptionId,
+    const {
+      backendClientId,
+      componentMap,
+      copiedLine,
+      editMode,
+      editedBackendClientId,
+      handleCancel,
+      handleClose,
+      handleCopy,
+      handleSave,
+      integrationBaseUrl,
+      isSampleAppEnabled,
+      saving,
+      setEditMode,
+      setEditedBackendClientId,
+    } = useConnect({
+      disableCopy,
+      id,
+      name,
+      keyIsCopied,
+      onChange,
+      onClose,
+      setShowWarning,
+      showWarning,
     });
 
-    const handleClose = () => {
-      if (disableCopy) {
-        onClose();
-      } else if (setShowWarning) {
-        if (keyIsCopied || showWarning) {
-          onClose();
-        } else {
-          setShowWarning(true);
-        }
-      }
-    };
-
-    const handleSave = async () => {
-      setSaving(true);
-      await updateBackend({ id, updatedBackend: { name: editedBackendClientId } });
-      if (disableCopy) {
-        onChange?.(); // if its the first time its created, we dont call onChange
-      }
-      setBackendClientId(editedBackendClientId);
-      setEditMode(false);
-      setSaving(false);
-    };
-
-    const handleCancel = () => {
-      setEditedBackendClientId(backendClientId);
-      setEditMode(false);
-    };
-
-    const supportedTypeMap: Record<string, string> = {
-      slackConnector: 'slack',
-    };
-    const componentMap =
-      integrationData?.data.data?.components
-        ?.map((component) => supportedTypeMap[component.name])
-        .filter((type) => !!type)
-        .reduce<Record<string, string>>((acc, cur) => {
-          acc[cur] = integrationData?.data.id;
-          return acc;
-        }, {}) || {};
-    const isSampleAppEnabled = !!Object.keys(componentMap).length;
-
-    return deleteModalOpen ? (
-      <DeleteBackendModal
-        open={deleteModalOpen}
-        setOpen={setDeleteModalOpen}
-        onConfirm={() => onDelete({ isApplication: true, id })}
-      />
-    ) : (
+    return (
       <SC.Card open={open} ref={ref} tabIndex={-1}>
         <SC.Wrapper>
           <CSC.Close onClick={handleClose} />
@@ -174,13 +125,13 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
               </>
             )}
           </SC.SmallTitleWrapper>
-          <SC.SmallTitleWrapper>
+          <SC.SmallTitle>
             <SC.SmallTitle>
               <strong>Integration Base URL:</strong> {integrationBaseUrl}
             </SC.SmallTitle>
             <CSC.Copy onClick={() => handleCopy(integrationBaseUrl as string)} margin="0 0 0 20px" />
             <SC.CopySuccess copy={copiedLine}>Copied to clipboard!</SC.CopySuccess>
-          </SC.SmallTitleWrapper>
+          </SC.SmallTitle>
 
           <SC.Subtitle>Key</SC.Subtitle>
           <CopyLine
@@ -271,7 +222,7 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
 
           <CSC.Flex margin="50px 0 0 auto" width="max-content">
             <Button
-              onClick={() => setDeleteModalOpen(true)}
+              onClick={() => onDelete()}
               style={{ width: '200px', marginRight: '32px' }}
               variant="outlined"
               color="primary"

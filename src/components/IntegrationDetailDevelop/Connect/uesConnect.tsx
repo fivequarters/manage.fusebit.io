@@ -1,0 +1,107 @@
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useCopy } from '../../../hooks/useCopy';
+import { useAuthContext } from '../../../hooks/useAuthContext';
+import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
+import { useAccountIntegrationsGetOne } from '../../../hooks/api/v2/account/integration/useGetOne';
+import { useBackendUpdateOne } from '../../../hooks/api/v1/backend/useUpdateOne';
+
+const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
+
+interface Props {
+  onClose: any;
+  disableCopy: any;
+  keyIsCopied: any;
+  showWarning: any;
+  name: any;
+  setShowWarning: any;
+  onChange: any;
+  id: any;
+}
+
+const useConnect = ({ onClose, disableCopy, keyIsCopied, showWarning, name, setShowWarning, onChange, id }: Props) => {
+  const { id: integrationId } = useParams<{ id: string }>();
+  const { getRedirectLink } = useGetRedirectLink();
+  const { userData } = useAuthContext();
+  const [editMode, setEditMode] = useState(false);
+  const [editedBackendClientId, setEditedBackendClientId] = useState(name);
+  const [backendClientId, setBackendClientId] = useState(name);
+  const { handleCopy, copiedLine } = useCopy();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  const integrationBaseUrl = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v2${getRedirectLink(`/integration/${integrationId}`)}`;
+  const { mutateAsync: updateBackend } = useBackendUpdateOne();
+
+  const { data: integrationData } = useAccountIntegrationsGetOne({
+    enabled: userData.token,
+    id: integrationId,
+    accountId: userData.accountId,
+    subscriptionId: userData.subscriptionId,
+  });
+
+  const handleClose = () => {
+    if (disableCopy) {
+      onClose();
+    } else if (setShowWarning) {
+      if (keyIsCopied || showWarning) {
+        onClose();
+      } else {
+        setShowWarning(true);
+      }
+    }
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    await updateBackend({ id, updatedBackend: { name: editedBackendClientId } });
+    if (disableCopy) {
+      onChange?.(); // if its the first time its created, we dont call onChange
+    }
+    setBackendClientId(editedBackendClientId);
+    setEditMode(false);
+    setSaving(false);
+  };
+
+  const handleCancel = () => {
+    setEditedBackendClientId(backendClientId);
+    setEditMode(false);
+  };
+
+  const supportedTypeMap: Record<string, string> = {
+    slackConnector: 'slack',
+  };
+  const componentMap =
+    integrationData?.data.data?.components
+      ?.map((component) => supportedTypeMap[component.name])
+      .filter((type) => !!type)
+      .reduce<Record<string, string>>((acc, cur) => {
+        acc[cur] = integrationData?.data.id;
+        return acc;
+      }, {}) || {};
+  const isSampleAppEnabled = !!Object.keys(componentMap).length;
+
+  return {
+    isSampleAppEnabled,
+    integrationBaseUrl,
+    integrationData,
+    integrationId,
+    componentMap,
+    handleClose,
+    handleSave,
+    handleCancel,
+    handleCopy,
+    copiedLine,
+    editMode,
+    backendClientId,
+    editedBackendClientId,
+    setEditedBackendClientId,
+    setEditMode,
+    setBackendClientId,
+    deleteModalOpen,
+    setDeleteModalOpen,
+    saving,
+  };
+};
+
+export default useConnect;
