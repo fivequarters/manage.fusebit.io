@@ -24,6 +24,17 @@ export const lightTheme: Theme = createMuiTheme({
         borderRadius: '8px 8px 0 0',
       },
     },
+    MuiListItem: {
+      root: {
+        borderRadius: 4,
+        '&:selected': {
+          backgroundColor: 'rgba(215, 229, 255, 0.4) !important',
+        },
+        '&:hover': {
+          backgroundColor: 'rgba(215, 229, 255, 0.4) !important',
+        },
+      },
+    },
   },
   props: {
     MuiCheckbox: {
