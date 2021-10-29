@@ -317,8 +317,12 @@ const Navbar: React.FC<Props> = ({
             )}
           </SC.FlexDown>
           <SC.LinksContainer>
-            <SC.LinkA href="https://fusebit.io/contact">Support</SC.LinkA>
-            <SC.LinkA href="https://developer.fusebit.io">Docs</SC.LinkA>
+            <SC.LinkA target="_blank" rel="noreferrer" href="https://fusebit.io/contact">
+              Support
+            </SC.LinkA>
+            <SC.LinkA target="_blank" rel="noreferrer" href="https://developer.fusebit.io">
+              Docs
+            </SC.LinkA>
           </SC.LinksContainer>
           <SC.ButtonWrapper active={Boolean(anchorUserDropdown) && !loggingOut}>
             <Button
@@ -423,8 +427,12 @@ const Navbar: React.FC<Props> = ({
               <SC.Br />
 
               <SC.UserDropdownLinksWrapper>
-                <SC.UserDropdownLinkA href="https://fusebit.io/contact">Support</SC.UserDropdownLinkA>
-                <SC.UserDropdownLinkA href="https://developer.fusebit.io">Docs</SC.UserDropdownLinkA>
+                <SC.UserDropdownLinkA target="_blank" rel="noreferrer" href="https://fusebit.io/contact">
+                  Support
+                </SC.UserDropdownLinkA>
+                <SC.UserDropdownLinkA target="_blank" rel="noreferrer" href="https://developer.fusebit.io">
+                  Docs
+                </SC.UserDropdownLinkA>
               </SC.UserDropdownLinksWrapper>
 
               <SC.UserButtonWrapper>

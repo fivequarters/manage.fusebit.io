@@ -183,7 +183,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
           {loading || !activeTemplate ? (
             <Loader />
           ) : (
-            <Box overflow="hidden auto">
+            <Box overflow="hidden auto" maxHeight="340px">
               {filteredFeed.map((feedEntry) => {
                 return (
                   <SC.ColumnItem
@@ -221,7 +221,9 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
                 <SC.ConnectorVersion>{activeTemplate.version}</SC.ConnectorVersion>
               </SC.ConnectorTitleWrapper>
               <SC.GeneralInfoWrapper>
-                <SC.ConnectorDescription>{activeTemplate.description || ''}</SC.ConnectorDescription>
+                <SC.ConnectorDescription linkTarget="_blank">
+                  {activeTemplate.description || ''}
+                </SC.ConnectorDescription>
                 {activeTemplate.outOfPlan || (
                   <SC.FormWrapper>
                     <BaseJsonForm
