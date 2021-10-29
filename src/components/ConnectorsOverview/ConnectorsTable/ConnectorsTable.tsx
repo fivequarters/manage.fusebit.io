@@ -11,8 +11,8 @@ import { useAccountConnectorsGetAll } from '@hooks/api/v2/account/connector/useG
 import { Connector } from '@interfaces/connector';
 import useQueryParam from '@hooks/useQueryParam';
 import DeleteConnectorModal from '../DeleteConnectorModal';
-import GetIdentities from './GetIdentities';
 import CreateConnectorModal from '../CreateConnectorModal';
+import GetIdentities from './GetIdentities';
 
 const ConnectorsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();

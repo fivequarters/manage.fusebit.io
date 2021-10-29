@@ -10,8 +10,8 @@ import { useAuthContext } from '../../../hooks/useAuthContext';
 import { Account } from '../../../interfaces/account';
 import { useAccountUserGetAll } from '../../../hooks/api/v1/account/user/useGetAll';
 import DeleteUserModal from '../DeleteUserModal';
-import NameColumn from './NameColumn';
 import CreateUserModal from '../NewUserModal';
+import NameColumn from './NameColumn';
 
 const UsersTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();

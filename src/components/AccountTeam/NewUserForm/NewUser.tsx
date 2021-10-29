@@ -6,8 +6,8 @@ import { NewUserData } from '@interfaces/newUserData';
 import { startCase } from '@utils/utils';
 import CopyLine from '@components/common/CopyLine';
 import BaseJsonForm from '@components/common/BaseJsonForm';
-import * as SC from './styles';
 import * as CSC from '../../globalStyle';
+import * as SC from './styles';
 
 const schema = {
   type: 'object',

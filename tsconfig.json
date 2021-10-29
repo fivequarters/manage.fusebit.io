@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "target": "es2015",
-    "baseUrl": "./src",
     "lib": [
       "dom",
       "dom.iterable",
@@ -29,5 +28,5 @@
     "**/node_modules/*",
     "build"
   ],
-  "extends": "./base-tsconfig.json"
+  "extends": "./tsconfig.paths.json"
 }
