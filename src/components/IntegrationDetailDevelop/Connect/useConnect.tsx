@@ -8,15 +8,15 @@ import { useBackendUpdateOne } from '../../../hooks/api/v1/backend/useUpdateOne'
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
-interface Props {
-  onClose: any;
-  disableCopy: any;
-  keyIsCopied: any;
-  showWarning: any;
-  name: any;
-  setShowWarning: any;
-  onChange: any;
-  id: any;
+export interface Props {
+  onClose: Function;
+  onChange?: () => void;
+  id: string;
+  name: string;
+  keyIsCopied?: boolean;
+  showWarning?: boolean;
+  setShowWarning?: Function;
+  disableCopy?: boolean;
 }
 
 const useConnect = ({ onClose, disableCopy, keyIsCopied, showWarning, name, setShowWarning, onChange, id }: Props) => {
