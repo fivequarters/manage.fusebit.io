@@ -1,6 +1,7 @@
 import { useQuery } from 'react-query';
 import { Params } from '@interfaces/api';
-import { useAxios, FusebitAxios } from '@hooks/useAxios';
+import { Integration } from '@interfaces/integration';
+import { FusebitAxios, useAxios } from '@hooks/useAxios';
 
 export const ACCOUNT_INTEGRATIONS_GET_ALL = 'accountIntegrationsGetAll';
 
@@ -14,7 +15,7 @@ export const getAllIntegrations = <T>(axiosInstance: FusebitAxios, params: Param
   );
 };
 
-export const useAccountIntegrationsGetAll = <T>(params: Params) => {
+export const useAccountIntegrationsGetAll = <T = { items: Integration[] }>(params: Params) => {
   const { axios } = useAxios();
 
   const { enabled, ...queryParams } = params;

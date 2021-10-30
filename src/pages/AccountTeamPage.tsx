@@ -1,5 +1,4 @@
 import { FC, ReactElement } from 'react';
-import Navbar from '@components/common/Navbar';
 import { useTrackPage } from '@hooks/useTrackPage';
 import Layout from '@components/common/Layout';
 import AccountLayout from '@components/common/AccountLayout';
@@ -10,7 +9,6 @@ const AccountSettingsPage: FC<{}> = (): ReactElement => {
 
   return (
     <Layout>
-      <Navbar sectionName="Account" authenticationLink={true} authentication={true} />
       <AccountLayout active="team">
         <UsersTable />
       </AccountLayout>
