@@ -1,21 +1,21 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { CircularProgress, useMediaQuery } from '@material-ui/core';
-import ListItem from '../ListItem';
-import { useModal } from '../../../hooks/useModal';
-import ConfirmationPrompt from '../../common/ConfirmationPrompt';
-import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
-import { useGetMatchingConnectorFeed } from '../../../hooks/api/useGetMatchingConnectorFeed';
-import { useEntityApi } from '../../../hooks/useEntityApi';
-import { Integration } from '../../../interfaces/integration';
-import { ApiResponse } from '../../../hooks/useAxios';
-import { useLoader } from '../../../hooks/useLoader';
-import LineConnector from '../../common/LineConnector';
-import { INTEGRATION_CARD_ID } from '../IntegrationCard/IntegrationCard';
-import { CARD_OVERLAPPING_MEDIA_QUERY } from '../constants';
-import { FinalConnector } from '../../../interfaces/integrationDetailDevelop';
-import notFoundIcon from '../../../assets/warning-red.svg';
-import { urlOrSvgToImage } from '../../../utils/utils';
+import ListItem from '@components/IntegrationDetailDevelop/ListItem';
+import { useModal } from '@hooks/useModal';
+import ConfirmationPrompt from '@components/common/ConfirmationPrompt';
+import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
+import { useGetMatchingConnectorFeed } from '@hooks/api/useGetMatchingConnectorFeed';
+import { useEntityApi } from '@hooks/useEntityApi';
+import { Integration } from '@interfaces/integration';
+import { ApiResponse } from '@hooks/useAxios';
+import { useLoader } from '@hooks/useLoader';
+import LineConnector from '@components/common/LineConnector';
+import { INTEGRATION_CARD_ID } from '@components/IntegrationDetailDevelop/IntegrationCard/IntegrationCard';
+import { CARD_OVERLAPPING_MEDIA_QUERY } from '@components/IntegrationDetailDevelop/constants';
+import { FinalConnector } from '@interfaces/integrationDetailDevelop';
+import notFoundIcon from '@assets/warning-red.svg';
+import { urlOrSvgToImage } from '@utils/utils';
 
 interface Props {
   className?: string;

@@ -1,5 +1,5 @@
 import { FC, ReactNode } from 'react';
-import { AuthStatus, useAuthContext, signIn } from '../hooks/useAuthContext';
+import { AuthStatus, useAuthContext, signIn } from '@hooks/useAuthContext';
 
 const ProtectedRoute: FC<{ children: ReactNode }> = ({ children }) => {
   const { authStatus, checkAuthStatus } = useAuthContext();

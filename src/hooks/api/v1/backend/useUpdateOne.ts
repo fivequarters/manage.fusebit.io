@@ -1,13 +1,13 @@
 import { AxiosInstance } from 'axios';
 import { useMutation, useQueryClient } from 'react-query';
-import { BackendClient } from '../../../../interfaces/backendClient';
-import { User } from '../../../../interfaces/user';
-import { Storage } from '../../../../interfaces/storage';
-import { patchClient } from '../../../../utils/clients';
-import { createAxiosClient } from '../../../../utils/utils';
-import { useAuthContext } from '../../../useAuthContext';
+import { BackendClient } from '@interfaces/backendClient';
+import { User } from '@interfaces/user';
+import { Storage } from '@interfaces/storage';
+import { patchClient } from '@utils/clients';
+import { createAxiosClient } from '@utils/utils';
+import { useAuthContext } from '@hooks/useAuthContext';
+import { BACKEND_LIST_STORAGE_ID } from '@utils/constants';
 import { BACKEND_GET_ALL, getBackendClients } from './useGetAll';
-import { BACKEND_LIST_STORAGE_ID } from '../../../../utils/constants';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 

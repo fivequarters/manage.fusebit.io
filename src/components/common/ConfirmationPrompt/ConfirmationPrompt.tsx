@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Modal, Backdrop } from '@material-ui/core';
+import * as CSC from '@components/globalStyle';
 import * as SC from './styles';
-import * as CSC from '../../globalStyle';
 
 interface Props {
   open: boolean;

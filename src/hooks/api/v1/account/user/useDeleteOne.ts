@@ -1,9 +1,9 @@
 import { useMutation } from 'react-query';
-import { Params } from '../../../../../interfaces/api';
-import { useAxios } from '../../../../useAxios';
+import { Params } from '@interfaces/api';
+import { useAxios } from '@hooks/useAxios';
+import useOptimisticDelete from '@hooks/useOptimisticDelete';
+import { useAuthContext } from '@hooks/useAuthContext';
 import { ACCOUNT_USER_GET_ALL } from './useGetAll';
-import useOptimisticDelete from '../../../../useOptimisticDelete';
-import { useAuthContext } from '../../../../useAuthContext';
 
 export const useAccountUserDeleteOne = <T>() => {
   const { axios } = useAxios();

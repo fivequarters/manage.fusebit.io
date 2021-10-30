@@ -1,4 +1,4 @@
-import { ApiResponse } from '../../useAxios';
+import { ApiResponse } from '@hooks/useAxios';
 
 export const entityLoopThrough = async <T = any>(
   get: (next?: string) => Promise<ApiResponse<{ next: string; items: T[] }>>

@@ -1,16 +1,16 @@
 import { useQueryClient } from 'react-query';
-import { Entity, Feed } from '../interfaces/feed';
-import { InnerConnector, Integration } from '../interfaces/integration';
-import { Operation } from '../interfaces/operation';
-import { findMatchingConnectorFeed, getAllDependenciesFromFeed, linkPackageJson } from '../utils/utils';
+import { Entity, Feed } from '@interfaces/feed';
+import { InnerConnector, Integration } from '@interfaces/integration';
+import { Operation } from '@interfaces/operation';
+import { findMatchingConnectorFeed, getAllDependenciesFromFeed, linkPackageJson } from '@utils/utils';
+import { Connector } from '@interfaces/connector';
+import { FinalConnector } from '@interfaces/integrationDetailDevelop';
 import { useAccountIntegrationUpdateIntegration } from './api/v2/account/integration/useUpdateOne';
 import { ApiResponse } from './useAxios';
 import { useAuthContext } from './useAuthContext';
 import { useError } from './useError';
 import { useLoader } from './useLoader';
-import { Connector } from '../interfaces/connector';
 import { ACCOUNT_INTEGRATIONS_GET_ONE } from './api/v2/account/integration/useGetOne';
-import { FinalConnector } from '../interfaces/integrationDetailDevelop';
 import { ACCOUNT_CONNECTORS_GET_ALL } from './api/v2/account/connector/useGetAll';
 
 const useConnector = () => {

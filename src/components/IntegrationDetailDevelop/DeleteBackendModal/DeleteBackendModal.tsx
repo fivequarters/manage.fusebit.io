@@ -1,4 +1,4 @@
-import ConfirmationPrompt from '../../common/ConfirmationPrompt';
+import ConfirmationPrompt from '@components/common/ConfirmationPrompt';
 
 interface Props {
   open: boolean;

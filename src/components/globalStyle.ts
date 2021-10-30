@@ -1,8 +1,8 @@
 import styled, { createGlobalStyle, css, keyframes } from 'styled-components';
 
-import spinner from '../assets/spinner.svg';
-import cross from '../assets/cross.svg';
-import copy from '../assets/copy.svg';
+import spinner from '@assets/spinner.svg';
+import cross from '@assets/cross.svg';
+import copy from '@assets/copy.svg';
 
 export default createGlobalStyle`
    :root {

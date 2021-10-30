@@ -2,10 +2,10 @@ import { createMuiTheme, responsiveFontSizes, ThemeProvider } from '@material-ui
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import CookieConsent from 'react-cookie-consent';
 import { ReactQueryDevtools } from 'react-query/devtools';
+import DashboardRoutes from '@components/DashboardRoutes';
+import { ContextProvider } from '@hooks/useAuthContext';
+import { APP_TITLE } from '@utils/constants';
 import { lightTheme } from './theme/appTheme';
-import { APP_TITLE } from './utils/constants';
-import { ContextProvider } from './hooks/useAuthContext';
-import DashboardRoutes from './components/DashboardRoutes';
 
 const App = () => (
   <HelmetProvider>

@@ -1,8 +1,8 @@
 import { useQuery, UseQueryOptions } from 'react-query';
-import { Params } from '../../../../../../interfaces/api';
-import { Install } from '../../../../../../interfaces/install';
-import { ApiResponse, FusebitAxios, useAxios } from '../../../../../useAxios';
-import { useAuthContext } from '../../../../../useAuthContext';
+import { Params } from '@interfaces/api';
+import { Install } from '@interfaces/install';
+import { ApiResponse, FusebitAxios, useAxios } from '@hooks/useAxios';
+import { useAuthContext } from '@hooks/useAuthContext';
 
 export const getAllInstalls = <T>(axiosInstall: FusebitAxios, params: Params, queryParams?: Params) => {
   return axiosInstall<T>(

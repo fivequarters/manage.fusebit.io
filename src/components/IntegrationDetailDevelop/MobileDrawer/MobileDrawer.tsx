@@ -1,10 +1,10 @@
 import React from 'react';
 import { Drawer, Button } from '@material-ui/core';
+import * as CSC from '@components/globalStyle';
+import play from '@assets/play.svg';
+import info from '@assets/info.svg';
+import useEditor from '@components/IntegrationDetailDevelop/FusebitEditor/useEditor';
 import * as SC from './styles';
-import * as CSC from '../../globalStyle';
-import play from '../../../assets/play.svg';
-import info from '../../../assets/info.svg';
-import useEditor from '../FusebitEditor/useEditor';
 
 interface Props {
   open: boolean;

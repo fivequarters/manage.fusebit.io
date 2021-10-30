@@ -3,9 +3,9 @@
   "version": "1.1.2",
   "description": "Fusebit portal",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject",
     "prettier": "git ls-tree -r `git branch --show-current` --name-only | grep -E \"\\.[tj]?sx?$\" | grep -v public | grep -v build | xargs -P 1 prettier --write",
     "prepare": "husky install",
@@ -16,6 +16,7 @@
   "author": "Litebox",
   "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
+    "@craco/craco": "^6.4.0",
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
     "@jsonforms/core": "3.0.0-alpha.1",
@@ -94,6 +95,7 @@
     "@typescript-eslint/eslint-plugin": "^4.11.1",
     "eslint-config-airbnb-typescript": "^12.0.0",
     "eslint-config-prettier": "^7.2.0",
+    "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-json": "^2.1.2",
     "eslint-plugin-jsx-a11y": "^6.4.1",

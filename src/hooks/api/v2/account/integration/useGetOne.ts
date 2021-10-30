@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
-import { Params } from '../../../../../interfaces/api';
-import { Integration } from '../../../../../interfaces/integration';
-import { useAxios } from '../../../../useAxios';
+import { Params } from '@interfaces/api';
+import { Integration } from '@interfaces/integration';
+import { useAxios } from '@hooks/useAxios';
 
 export const ACCOUNT_INTEGRATIONS_GET_ONE = 'accountIntegrationsGetOne';
 

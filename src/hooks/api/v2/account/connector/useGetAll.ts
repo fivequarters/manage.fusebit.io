@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
-import { Params } from '../../../../../interfaces/api';
-import { Connector } from '../../../../../interfaces/connector';
-import { FusebitAxios, useAxios } from '../../../../useAxios';
+import { Params } from '@interfaces/api';
+import { Connector } from '@interfaces/connector';
+import { FusebitAxios, useAxios } from '@hooks/useAxios';
 
 export const ACCOUNT_CONNECTORS_GET_ALL = 'accountConnectorsGetAll';
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import Mustache from 'mustache';
+import { Data } from '@interfaces/feedPicker';
+import { Feed, ParsedFeed } from '@interfaces/feed';
 import { useAuthContext } from './useAuthContext';
-import { Data } from '../interfaces/feedPicker';
-import { Feed, ParsedFeed } from '../interfaces/feed';
 
 const walkObjectStrings = (obj: any, func: (value: string) => string): any => {
   Object.entries(obj).forEach(([key, value]) => {

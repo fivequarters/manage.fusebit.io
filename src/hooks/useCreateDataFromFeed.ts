@@ -1,12 +1,12 @@
 import { useQueryClient } from 'react-query';
-import { useReplaceMustache } from './useReplaceMustache';
-import { Entity, Feed, ParsedFeed } from '../interfaces/feed';
-import { Data } from '../interfaces/feedPicker';
+import { Entity, Feed, ParsedFeed } from '@interfaces/feed';
+import { Data } from '@interfaces/feedPicker';
+import { trackEvent } from '@utils/analytics';
+import { Integration } from '@interfaces/integration';
+import { ApiResponse } from './useAxios';
 import { useError } from './useError';
 import { useEntityApi } from './useEntityApi';
-import { trackEvent } from '../utils/analytics';
-import { Integration } from '../interfaces/integration';
-import { ApiResponse } from './useAxios';
+import { useReplaceMustache } from './useReplaceMustache';
 import { ACCOUNT_INTEGRATIONS_GET_ONE } from './api/v2/account/integration/useGetOne';
 
 const getCommonTags = (feed: Feed, entityType: 'integration' | 'connector') => {
