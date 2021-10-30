@@ -1,9 +1,9 @@
 import axios, { AxiosInstance } from 'axios';
 import _startCase from 'lodash.startcase';
-import { Entity, EntityComponent, Feed } from '../interfaces/feed';
-import { FinalConnector } from '../interfaces/integrationDetailDevelop';
+import { Entity, EntityComponent, Feed } from '@interfaces/feed';
+import { FinalConnector } from '@interfaces/integrationDetailDevelop';
+import { Install } from '@interfaces/install';
 import { integrationsFeed, connectorsFeed } from '../static/feed';
-import { Install } from '../interfaces/install';
 import { X_USER_AGENT } from './constants';
 
 export const findMatchingConnectorFeed = async (connector: Entity | FinalConnector) => {
@@ -41,7 +41,7 @@ export const startCase = (str: string) => {
 };
 
 export const getConnectorsFromInstall = (install: Install) =>
-  Object.keys(install.data).map((key) => install?.data[key]?.parentEntityId);
+  Object.keys(install.data || {}).map((key) => install?.data[key]?.parentEntityId);
 
 export const getAllDependenciesFromFeed = (feed: Feed) => {
   const { entities } = feed?.configuration || {};

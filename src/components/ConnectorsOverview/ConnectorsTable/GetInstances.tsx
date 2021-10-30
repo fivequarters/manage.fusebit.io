@@ -1,8 +1,8 @@
 import React from 'react';
-import * as CSC from '../../globalStyle';
-import { useAccountIntegrationInstallGetAll } from '../../../hooks/api/v2/account/integration/install/useGetAll';
-import { useAuthContext } from '../../../hooks/useAuthContext';
-import { InstallList } from '../../../interfaces/install';
+import { useAccountIntegrationInstallGetAll } from '@hooks/api/v2/account/integration/install/useGetAll';
+import { useAuthContext } from '@hooks/useAuthContext';
+import { InstallList } from '@interfaces/install';
+import * as CSC from '@components/globalStyle';
 
 interface Props {
   id: string;

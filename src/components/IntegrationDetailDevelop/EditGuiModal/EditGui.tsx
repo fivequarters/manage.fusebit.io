@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Button, ButtonGroup } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { Props } from '@interfaces/edit';
+import { useAuthContext } from '@hooks/useAuthContext';
+import { useLoader } from '@hooks/useLoader';
+import play from '@assets/play.svg';
+import settings from '@assets/settings.svg';
+import save from '@assets/save.svg';
+import question from '@assets/question.svg';
+import logo from '@assets/logo.svg';
+import ConfigureRunnerModal from '@components/IntegrationDetailDevelop/ConfigureRunnerModal';
+import { trackEvent } from '@utils/analytics';
+import ConfirmationPrompt from '@components/common/ConfirmationPrompt';
+import { useTrackPage } from '@hooks/useTrackPage';
+import FusebitEditor from '@components/IntegrationDetailDevelop/FusebitEditor';
+import useEditor from '@components/IntegrationDetailDevelop/FusebitEditor/useEditor';
 import * as SC from './styles';
-import { Props } from '../../../interfaces/edit';
-import { useAuthContext } from '../../../hooks/useAuthContext';
-import { useLoader } from '../../../hooks/useLoader';
-import play from '../../../assets/play.svg';
-import settings from '../../../assets/settings.svg';
-import save from '../../../assets/save.svg';
-import question from '../../../assets/question.svg';
-import logo from '../../../assets/logo.svg';
-import ConfigureRunnerModal from '../ConfigureRunnerModal';
-import { trackEvent } from '../../../utils/analytics';
-import ConfirmationPrompt from '../../common/ConfirmationPrompt';
-import { useTrackPage } from '../../../hooks/useTrackPage';
-import FusebitEditor from '../FusebitEditor';
-import useEditor from '../FusebitEditor/useEditor';
 
 const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationId }, ref) => {
   const { userData } = useAuthContext();

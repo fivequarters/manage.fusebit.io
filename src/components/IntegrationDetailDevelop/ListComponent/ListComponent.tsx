@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Backdrop, Fade, Modal } from '@material-ui/core';
+import cross from '@assets/cross.svg';
+import server from '@assets/server.svg';
+import Connect from '@components/IntegrationDetailDevelop/Connect';
+import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
+import { ListComponentProps } from '@interfaces/integrationDetailDevelop';
+import ConfirmationPrompt from '@components/common/ConfirmationPrompt';
+import { findMatchingConnectorFeed, urlOrSvgToImage } from '@utils/utils';
+import * as CSC from '@components/globalStyle';
 import * as SC from './styles';
-import * as CSC from '../../globalStyle';
-import cross from '../../../assets/cross.svg';
-import server from '../../../assets/server.svg';
-import Connect from '../Connect';
-import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
-import { ListComponentProps } from '../../../interfaces/integrationDetailDevelop';
-import ConfirmationPrompt from '../../common/ConfirmationPrompt';
-import { findMatchingConnectorFeed, urlOrSvgToImage } from '../../../utils/utils';
 
 const NOT_FOUND_ICON = '/images/warning-red.svg';
 const CLOSE_ICON_CLASS = 'close';

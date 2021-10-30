@@ -1,6 +1,6 @@
 import { Backdrop, Modal, Fade } from '@material-ui/core';
-import Connect from '../Connect';
-import useDeleteBackend from '../hooks/useDeleteBackend';
+import Connect from '@components/IntegrationDetailDevelop/Connect';
+import useDeleteBackend from '@components/IntegrationDetailDevelop/hooks/useDeleteBackend';
 
 interface Props extends Omit<React.ComponentProps<typeof Connect>, 'onDelete'> {
   open: boolean;

@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
-import { Params } from '../../../../../interfaces/api';
-import { useAxios } from '../../../../useAxios';
+import { Params } from '@interfaces/api';
+import { useAxios } from '@hooks/useAxios';
 
 export const ACCOUNT_CONNECTORS_GET_ONE_CONFIG = 'accountConnectorsGetOneConfig';
 

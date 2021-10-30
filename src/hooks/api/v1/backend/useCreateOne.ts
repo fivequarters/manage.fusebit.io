@@ -1,15 +1,15 @@
 import { AxiosInstance } from 'axios';
 import { useMutation, useQueryClient } from 'react-query';
-import { BackendClient } from '../../../../interfaces/backendClient';
-import { User } from '../../../../interfaces/user';
-import { putBackendClients } from './utils/putBackendClients';
-import { addClientIdentity, createClient } from '../../../../utils/clients';
-import { generateKeyPair } from '../../../../utils/crypto';
-import { createIssuer } from '../../../../utils/issuer';
-import { generateNonExpiringToken } from '../../../../utils/jwt';
-import { createAxiosClient } from '../../../../utils/utils';
-import { useAuthContext } from '../../../useAuthContext';
+import { BackendClient } from '@interfaces/backendClient';
+import { User } from '@interfaces/user';
+import { addClientIdentity, createClient } from '@utils/clients';
+import { generateKeyPair } from '@utils/crypto';
+import { createIssuer } from '@utils/issuer';
+import { generateNonExpiringToken } from '@utils/jwt';
+import { createAxiosClient } from '@utils/utils';
+import { useAuthContext } from '@hooks/useAuthContext';
 import { BACKEND_GET_ALL, getBackendClients } from './useGetAll';
+import { putBackendClients } from './utils/putBackendClients';
 
 export async function createBackendClient(axiosClient: AxiosInstance, user: User): Promise<BackendClient> {
   const backendClients = await getBackendClients(axiosClient, user.accountId || '', user.subscriptionId || '');

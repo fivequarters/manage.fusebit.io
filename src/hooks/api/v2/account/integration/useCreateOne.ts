@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from 'react-query';
-import { Params } from '../../../../../interfaces/api';
-import { DEFAULT_INTEGRATION_CONFIG } from '../../../../../utils/localStorage';
-import { useAxios } from '../../../../useAxios';
+import { Params } from '@interfaces/api';
+import { DEFAULT_INTEGRATION_CONFIG } from '@utils/localStorage';
+import { useAxios } from '@hooks/useAxios';
 
 export const useAccountIntegrationCreateIntegration = <T>() => {
   const { axios } = useAxios();

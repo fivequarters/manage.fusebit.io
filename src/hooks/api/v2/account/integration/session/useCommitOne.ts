@@ -1,7 +1,7 @@
 import { useMutation } from 'react-query';
-import { Params } from '../../../../../../interfaces/api';
-import { useAxios } from '../../../../../useAxios';
-import { useAuthContext } from '../../../../../useAuthContext';
+import { Params } from '@interfaces/api';
+import { useAxios } from '@hooks/useAxios';
+import { useAuthContext } from '@hooks/useAuthContext';
 
 export const useAccountIntegrationCommitSession = () => {
   const { axios } = useAxios({ ignoreInterceptors: true });

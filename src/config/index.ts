@@ -1,3 +1,4 @@
+import { RouteItem } from '@interfaces/router';
 import ConnectorsOverviewPage from '../pages/ConnectorsOverviewPage';
 import IntegrationsOverviewPage from '../pages/IntegrationsOverviewPage';
 import IntegrationDetailDevelopPage from '../pages/IntegrationDetailDevelopPage';
@@ -11,7 +12,6 @@ import AuthCallbackPage from '../pages/AuthCallbackPage';
 import NotFoundPage from '../pages/NotFoundPage';
 import AccountSettingsPage from '../pages/AccountSettingsPage';
 import AccountTeamPage from '../pages/AccountTeamPage';
-import { RouteItem } from '../interfaces/router';
 
 // define app routes
 export const routes: Array<RouteItem> = [

@@ -1,14 +1,14 @@
 import { useEffect, useCallback, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { getAllInstalls } from '../../../hooks/api/v2/account/integration/install/useGetAll';
-import { useAccountIntegrationCreateSession } from '../../../hooks/api/v2/account/integration/session/useCreateOne';
-import { useAccountIntegrationCommitSession } from '../../../hooks/api/v2/account/integration/session/useCommitOne';
-import { useAccountIntegrationTestIntegration } from '../../../hooks/api/v2/account/integration/useTestOne';
-import { useAxios } from '../../../hooks/useAxios';
-import { useAuthContext } from '../../../hooks/useAuthContext';
-import { InstallList } from '../../../interfaces/install';
-import { trackEvent } from '../../../utils/analytics';
-import { STATIC_TENANT_ID } from '../../../utils/constants';
+import { getAllInstalls } from '@hooks/api/v2/account/integration/install/useGetAll';
+import { useAccountIntegrationCreateSession } from '@hooks/api/v2/account/integration/session/useCreateOne';
+import { useAccountIntegrationCommitSession } from '@hooks/api/v2/account/integration/session/useCommitOne';
+import { useAccountIntegrationTestIntegration } from '@hooks/api/v2/account/integration/useTestOne';
+import { useAxios } from '@hooks/useAxios';
+import { useAuthContext } from '@hooks/useAuthContext';
+import { InstallList } from '@interfaces/install';
+import { trackEvent } from '@utils/analytics';
+import { STATIC_TENANT_ID } from '@utils/constants';
 import useIsSaving from './useIsSaving';
 
 interface Props {

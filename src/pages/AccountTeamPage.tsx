@@ -1,8 +1,8 @@
 import { FC, ReactElement } from 'react';
-import { useTrackPage } from '../hooks/useTrackPage';
-import Layout from '../components/common/Layout';
-import AccountLayout from '../components/common/AccountLayout';
-import UsersTable from '../components/AccountTeam/UsersTable';
+import { useTrackPage } from '@hooks/useTrackPage';
+import Layout from '@components/common/Layout';
+import AccountLayout from '@components/common/AccountLayout';
+import UsersTable from '@components/AccountTeam/UsersTable';
 
 const AccountSettingsPage: FC<{}> = (): ReactElement => {
   useTrackPage('Team Overview', 'Team');

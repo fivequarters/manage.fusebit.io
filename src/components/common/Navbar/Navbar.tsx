@@ -2,11 +2,11 @@ import { Container, IconButton, Box, useMediaQuery } from '@material-ui/core';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { useAuthContext } from '../../../hooks/useAuthContext';
-import navbarBg from '../../../assets/navbar.svg';
-import companyLogo from '../../../assets/company-logo.svg';
-import burguer from '../../../assets/burguer.svg';
-import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
+import navbarBg from '@assets/navbar.svg';
+import companyLogo from '@assets/company-logo.svg';
+import burguer from '@assets/burguer.svg';
+import { useAuthContext } from '@hooks/useAuthContext';
+import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 import UserMenu from '../UserMenu/UserMenu';
 import UserDrawerMobile from '../UserDrawerMobile';
 
