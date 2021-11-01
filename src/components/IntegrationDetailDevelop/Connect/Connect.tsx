@@ -162,11 +162,11 @@ const Connect: React.FC<Props> = ({
       {showWarning && !keyIsCopied ? (
         <SC.WarningWrapper>
           <SC.WarningIcon />
-          You did not copy the key above. It will be lost after you close this window.
+          <p>You did not copy the key above. It will be lost after you close this window.</p>
         </SC.WarningWrapper>
       ) : (
         !disableCopy && (
-          <CSC.Flex margin="0 0 10px 0">
+          <CSC.Flex>
             <SC.DisclaimerIcon />
             <SC.Disclaimer>
               For security reasons, <strong>this is the last time you will see this key.</strong>

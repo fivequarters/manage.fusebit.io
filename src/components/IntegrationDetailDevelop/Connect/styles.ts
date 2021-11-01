@@ -74,8 +74,8 @@ export const Disclaimer = styled.p`
 `;
 
 export const DisclaimerIcon = styled.div`
-  height: 20px;
-  width: 20px;
+  min-height: 20px;
+  min-width: 20px;
   background-image: url(${disclaimer});
   background-size: contain;
   background-repeat: no-repeat;
@@ -126,20 +126,33 @@ export const WarningWrapper = styled.div`
   padding: 24px;
   background-color: var(--yellow);
   border-radius: 8px;
-  margin-top: 18px;
+
+  @media only screen and (max-width: 420px) {
+    padding: 16px;
+  }
 
   p {
     font-size: 14px;
     line-height: 20px;
+    margin: 0;
     color: var(--black);
+
+    @media only screen and (max-width: 420px) {
+      font-size: 12px;
+      line-height: 16px;
+    }
+
+    @media only screen and (max-width: 325px) {
+      font-size: 11px;
+    }
   }
 `;
 
 export const WarningIcon = styled.div`
-  height: 19px;
-  width: 22px;
+  min-height: 19px;
+  min-width: 22px;
   background-image: url(${warning});
   background-size: contain;
   background-repeat: no-repeat;
-  margin-right: 17px;
+  margin-right: 16px;
 `;
