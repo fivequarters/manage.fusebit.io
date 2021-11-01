@@ -1,7 +1,7 @@
-import { Client } from '../interfaces/client';
-import { KeyPair } from '../interfaces/keyPair';
-import { Issuer } from '../interfaces/issuer';
-import { TokenPayload } from '../interfaces/tokenPayload';
+import { Client } from '@interfaces/client';
+import { KeyPair } from '@interfaces/keyPair';
+import { Issuer } from '@interfaces/issuer';
+import { TokenPayload } from '@interfaces/tokenPayload';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 

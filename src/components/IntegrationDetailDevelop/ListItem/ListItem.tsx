@@ -1,7 +1,7 @@
 import { Box, Icon, Typography } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
-import { Close } from '../../globalStyle';
+import { Close } from '@components/globalStyle';
 
 const StyledContainer = styled(Box)`
   &:not(:last-child) {

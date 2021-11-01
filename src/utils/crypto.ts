@@ -1,4 +1,4 @@
-import { KeyPair } from '../interfaces/keyPair';
+import { KeyPair } from '@interfaces/keyPair';
 
 function arrayBufferToBase64(arrayBuffer: ArrayBuffer): string {
   const byteArray = new Uint8Array(arrayBuffer);

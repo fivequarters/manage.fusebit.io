@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import disclaimer from '../../../assets/disclaimer.svg';
-import time from '../../../assets/time.svg';
-import warning from '../../../assets/black-warning.svg';
+import disclaimer from '@assets/disclaimer.svg';
+import time from '@assets/time.svg';
+import warning from '@assets/black-warning.svg';
 
 export const Wrapper = styled.div`
   display: flex;

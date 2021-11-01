@@ -1,9 +1,9 @@
 import { Backdrop, Modal, Fade, useMediaQuery, Drawer } from '@material-ui/core';
 import { useState } from 'react';
 import styled from 'styled-components';
-import Connect from '../Connect';
-import DeleteBackendModal from '../DeleteBackendModal';
-import useDeleteBackend from '../hooks/useDeleteBackend';
+import DeleteBackendModal from '@components/IntegrationDetailDevelop/DeleteBackendModal';
+import Connect from '@components/IntegrationDetailDevelop/Connect';
+import useDeleteBackend from '@components/IntegrationDetailDevelop/hooks/useDeleteBackend';
 
 interface Props extends Omit<React.ComponentProps<typeof Connect>, 'onDelete'> {
   open: boolean;

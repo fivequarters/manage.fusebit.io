@@ -1,8 +1,8 @@
 import React from 'react';
+import copyIcon from '@assets/copy.svg';
+import { Props } from '@interfaces/copyLine';
+import { useCopy } from '@hooks/useCopy';
 import * as SC from './styles';
-import copyIcon from '../../../assets/copy.svg';
-import { Props } from '../../../interfaces/copyLine';
-import { useCopy } from '../../../hooks/useCopy';
 
 // TODO: Refactor this component and remove extra logic as highlightedText. Use Typography From MUI instead of plain text.
 

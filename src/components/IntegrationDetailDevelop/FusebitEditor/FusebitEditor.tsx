@@ -1,6 +1,6 @@
 /* eslint-disable react/destructuring-assignment */
 import React from 'react';
-import { Context } from '../../../interfaces/editGui';
+import { Context } from '@interfaces/editGui';
 
 export default class FusebitEditor extends React.Component<any> {
   private el: any;

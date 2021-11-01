@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { getAnalyticsClient } from '../utils/analytics';
-import { PRODUCTION_HOST } from '../utils/constants';
+import { getAnalyticsClient } from '@utils/analytics';
+import { PRODUCTION_HOST } from '@utils/constants';
 
 export function useTrackPage(pageName: string, objectLocation: String) {
   useEffect(() => {

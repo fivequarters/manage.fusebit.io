@@ -1,15 +1,14 @@
 import { useQuery, UseQueryOptions } from 'react-query';
-import { Params } from '../../../../../../../interfaces/api';
-import { useAxios } from '../../../../../../useAxios';
-import { useAuthContext } from '../../../../../../useAuthContext';
-import { getAllIntegrations } from '../../../integration/useGetAll';
-import { getAllInstalls } from '../../../integration/install/useGetAll';
-
-import { Integration } from '../../../../../../../interfaces/integration';
-import { Install, InstallList } from '../../../../../../../interfaces/install';
-import { useError } from '../../../../../../useError';
-import { entityLoopThrough } from '../../../../utils';
-import { getConnectorsFromInstall } from '../../../../../../../utils/utils';
+import { Params } from '@interfaces/api';
+import { useAxios } from '@hooks/useAxios';
+import { useAuthContext } from '@hooks/useAuthContext';
+import { getAllIntegrations } from '@hooks/api/v2/account/integration/useGetAll';
+import { getAllInstalls } from '@hooks/api/v2/account/integration/install/useGetAll';
+import { Integration } from '@interfaces/integration';
+import { Install, InstallList } from '@interfaces/install';
+import { useError } from '@hooks/useError';
+import { entityLoopThrough } from '@hooks/api/v2/utils';
+import { getConnectorsFromInstall } from '@utils/utils';
 
 export const ACCOUNT_CONNECTOR_IDENTITY_INSTALLS_GET_ALL = 'accountConnectorIdentityInstallsGetAll';
 

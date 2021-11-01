@@ -1,8 +1,8 @@
 import { useMutation } from 'react-query';
-import { Params } from '../../../../../../interfaces/api';
-import { CreateSessionPayload } from '../../../../../../interfaces/createSessionPayload';
-import { useAxios } from '../../../../../useAxios';
-import { useAuthContext } from '../../../../../useAuthContext';
+import { Params } from '@interfaces/api';
+import { CreateSessionPayload } from '@interfaces/createSessionPayload';
+import { useAxios } from '@hooks/useAxios';
+import { useAuthContext } from '@hooks/useAuthContext';
 
 export const useAccountIntegrationCreateSession = () => {
   const { axios } = useAxios();

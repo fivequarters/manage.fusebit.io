@@ -1,12 +1,11 @@
 import React from 'react';
 import { Button, Input } from '@material-ui/core';
-import * as SC from './styles';
-import * as CSC from '../../globalStyle';
-import CopyLine from '../../common/CopyLine';
-
+import * as CSC from '@components/globalStyle';
+import CopyLine from '@components/common/CopyLine';
+import { Integration } from '@interfaces/integration';
 import { LinkSampleApp } from './LinkSampleApp';
-import { Integration } from '../../../interfaces/integration';
 import useConnect, { Props as UseConnectProps } from './useConnect';
+import * as SC from './styles';
 
 interface Props extends UseConnectProps {
   open: boolean;

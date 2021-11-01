@@ -1,7 +1,7 @@
 import { useMutation } from 'react-query';
-import { Params } from '../../../../../interfaces/api';
-import { useAuthContext } from '../../../../useAuthContext';
-import { useAxios } from '../../../../useAxios';
+import { Params } from '@interfaces/api';
+import { useAuthContext } from '@hooks/useAuthContext';
+import { useAxios } from '@hooks/useAxios';
 
 export const useAccountUpdateOne = <T>() => {
   const { axios } = useAxios();

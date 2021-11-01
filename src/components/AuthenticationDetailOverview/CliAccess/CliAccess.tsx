@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
+import { Props } from '@interfaces/cliAccess';
+import CopyLine from '@components/common/CopyLine';
+import * as CSC from '@components/globalStyle';
 import * as SC from './styles';
-import * as CSC from '../../globalStyle';
-import { Props } from '../../../interfaces/cliAccess';
-import CopyLine from '../../common/CopyLine';
 
 const CliAccess = React.forwardRef<HTMLDivElement, Props>(({ open, onClose }, ref) => {
   return (

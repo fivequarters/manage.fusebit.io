@@ -1,20 +1,20 @@
 import { Box, useMediaQuery } from '@material-ui/core';
 import { useEffect, useState } from 'react';
-import { useBackendCreateOne } from '../../../hooks/api/v1/backend/useCreateOne';
-import { useBackendGetAll } from '../../../hooks/api/v1/backend/useGetAll';
-import { useLoader } from '../../../hooks/useLoader';
-import { useModal } from '../../../hooks/useModal';
-import useUpdateLineConnectors from '../../../hooks/useUpdateLineConnectors';
-import { BackendClient } from '../../../interfaces/backendClient';
-import { trackEvent } from '../../../utils/analytics';
-import Button from '../../common/Button/Button';
-import LineConnector from '../../common/LineConnector';
-import BackendItem from '../BackendItem';
-import BaseCard from '../BaseCard';
-import { CARD_OVERLAPPING_MEDIA_QUERY } from '../constants';
-import EmptyBackendList from '../EmptyBackendList';
-import { INTEGRATION_CARD_ID } from '../IntegrationCard/IntegrationCard';
-import NewBackendModal from '../NewBackendModal';
+import { useBackendCreateOne } from '@hooks/api/v1/backend/useCreateOne';
+import { useBackendGetAll } from '@hooks/api/v1/backend/useGetAll';
+import { useLoader } from '@hooks/useLoader';
+import { useModal } from '@hooks/useModal';
+import useUpdateLineConnectors from '@hooks/useUpdateLineConnectors';
+import { BackendClient } from '@interfaces/backendClient';
+import { trackEvent } from '@utils/analytics';
+import Button from '@components/common/Button/Button';
+import LineConnector from '@components/common/LineConnector';
+import BackendItem from '@components/IntegrationDetailDevelop/BackendItem';
+import BaseCard from '@components/IntegrationDetailDevelop/BaseCard';
+import { CARD_OVERLAPPING_MEDIA_QUERY } from '@components/IntegrationDetailDevelop/constants';
+import EmptyBackendList from '@components/IntegrationDetailDevelop/EmptyBackendList';
+import { INTEGRATION_CARD_ID } from '@components/IntegrationDetailDevelop/IntegrationCard/IntegrationCard';
+import NewBackendModal from '@components/IntegrationDetailDevelop/NewBackendModal';
 
 interface Props {
   className?: string;

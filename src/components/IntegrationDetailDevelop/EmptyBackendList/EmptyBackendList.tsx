@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import dottedBox from '../../../assets/dotted-box.svg';
+import dottedBox from '@assets/dotted-box.svg';
 
 const StyledDashContainer = styled.div`
   position: relative;

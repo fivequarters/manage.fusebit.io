@@ -3,8 +3,8 @@ import { ControlProps, schemaMatches, rankWith, and, uiTypeIs, RankedTester } fr
 import { withJsonFormsControlProps } from '@jsonforms/react';
 import { Box, IconButton } from '@material-ui/core';
 import styled from 'styled-components';
-import { useCopy } from '../../../../hooks/useCopy';
-import copyIcon from '../../../../assets/copy.svg';
+import { useCopy } from '@hooks/useCopy';
+import copyIcon from '@assets/copy.svg';
 
 const StyledCopySuccess = styled.p<{ copy: boolean }>`
   position: absolute;

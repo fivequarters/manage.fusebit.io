@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { X_USER_AGENT } from '../utils/constants';
+import { X_USER_AGENT } from '@utils/constants';
 import { signIn, useAuthContext } from './useAuthContext';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;

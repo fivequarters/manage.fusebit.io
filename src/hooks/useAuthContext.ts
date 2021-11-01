@@ -1,7 +1,7 @@
 import constate from 'constate';
 import { useState } from 'react';
-import { User } from '../interfaces/user';
-import { getAnalyticsClient } from '../utils/analytics';
+import { User } from '@interfaces/user';
+import { getAnalyticsClient } from '@utils/analytics';
 
 const {
   REACT_APP_AUTH0_DOMAIN,

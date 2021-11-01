@@ -1,6 +1,6 @@
 import { useMutation } from 'react-query';
-import { Params } from '../../../../../interfaces/api';
-import { useAxios } from '../../../../useAxios';
+import { Params } from '@interfaces/api';
+import { useAxios } from '@hooks/useAxios';
 
 export const useAccountUserCreateToken = <T>() => {
   const { axios } = useAxios();

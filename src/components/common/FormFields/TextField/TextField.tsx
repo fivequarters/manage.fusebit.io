@@ -1,7 +1,7 @@
 import { TextFieldProps } from '@material-ui/core';
 import React from 'react';
+import { BaseFieldProps } from '@components/common/FormFields/types';
 import * as SC from './styles';
-import { BaseFieldProps } from '../types';
 
 type Props = TextFieldProps & BaseFieldProps;
 

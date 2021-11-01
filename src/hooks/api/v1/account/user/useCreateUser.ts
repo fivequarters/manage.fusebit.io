@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from 'react-query';
-import { Params } from '../../../../../interfaces/api';
-import { useAxios } from '../../../../useAxios';
+import { Params } from '@interfaces/api';
+import { useAxios } from '@hooks/useAxios';
 import { ACCOUNT_USER_GET_ALL } from './useGetAll';
 
 export const useAccountUserCreateUser = <T>() => {

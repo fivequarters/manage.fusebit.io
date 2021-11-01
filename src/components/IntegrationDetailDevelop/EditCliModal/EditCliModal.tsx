@@ -1,7 +1,7 @@
 import { Modal, Fade, Backdrop, Button } from '@material-ui/core';
+import * as CSC from '@components/globalStyle';
+import CopyLine from '@components/common/CopyLine';
 import * as SC from './styles';
-import * as CSC from '../../globalStyle';
-import CopyLine from '../../common/CopyLine';
 
 interface Props {
   open: boolean;
