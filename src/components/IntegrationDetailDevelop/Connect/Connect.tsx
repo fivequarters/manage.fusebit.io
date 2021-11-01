@@ -45,6 +45,9 @@ const Connect: React.FC<Props> = ({
     setEditedBackendClientId,
     buttonsCrashing,
     smallPhone,
+    deleteAndOkButtonsWidth,
+    connectYourBackendButtonsSize,
+    timeDescriptionWidth,
   } = useConnect({
     disableCopy,
     id,
@@ -55,38 +58,6 @@ const Connect: React.FC<Props> = ({
     setShowWarning,
     showWarning,
   });
-
-  const deleteAndOkButtonsWidth = () => {
-    if (smallPhone) {
-      return '136px';
-    }
-    if (buttonsCrashing) {
-      return '156px';
-    }
-    return '200px';
-  };
-
-  const connectYourBackendButtonsSize = () => {
-    if (smallPhone && isSampleAppEnabled) {
-      return 'small';
-    }
-    if (buttonsCrashing) {
-      return 'medium';
-    }
-    return 'large';
-  };
-
-  const timeDescriptionWidth = () => {
-    if (smallPhone) {
-      return '140px';
-    }
-
-    if (buttonsCrashing) {
-      return '165px';
-    }
-
-    return '100%';
-  };
 
   return (
     <SC.Wrapper>
@@ -233,7 +204,10 @@ const Connect: React.FC<Props> = ({
       >
         <Button
           onClick={() => onDelete()}
-          style={{ width: deleteAndOkButtonsWidth(), marginRight: buttonsCrashing ? '16px' : '32px' }}
+          style={{
+            width: deleteAndOkButtonsWidth(),
+            marginRight: buttonsCrashing ? '16px' : '32px',
+          }}
           variant="outlined"
           color="primary"
           size={buttonsCrashing ? 'medium' : 'large'}

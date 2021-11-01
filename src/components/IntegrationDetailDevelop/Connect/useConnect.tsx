@@ -84,6 +84,42 @@ const useConnect = ({ onClose, disableCopy, keyIsCopied, showWarning, name, setS
       }, {}) || {};
   const isSampleAppEnabled = !!Object.keys(componentMap).length;
 
+  const connectYourBackendButtonsSize = () => {
+    if (smallPhone && isSampleAppEnabled) {
+      return 'small';
+    }
+
+    if (buttonsCrashing) {
+      return 'medium';
+    }
+
+    return 'large';
+  };
+
+  const deleteAndOkButtonsWidth = () => {
+    if (smallPhone) {
+      return '136px';
+    }
+
+    if (buttonsCrashing) {
+      return '156px';
+    }
+
+    return '200px';
+  };
+
+  const timeDescriptionWidth = () => {
+    if (smallPhone) {
+      return '140px';
+    }
+
+    if (buttonsCrashing) {
+      return '165px';
+    }
+
+    return '100%';
+  };
+
   return {
     isSampleAppEnabled,
     integrationBaseUrl,
@@ -106,6 +142,9 @@ const useConnect = ({ onClose, disableCopy, keyIsCopied, showWarning, name, setS
     saving,
     buttonsCrashing,
     smallPhone,
+    connectYourBackendButtonsSize,
+    deleteAndOkButtonsWidth,
+    timeDescriptionWidth,
   };
 };
 
