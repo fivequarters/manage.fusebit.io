@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useMediaQuery } from '@material-ui/core';
 import { useCopy } from '../../../hooks/useCopy';
 import { useAuthContext } from '../../../hooks/useAuthContext';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
@@ -29,6 +30,8 @@ const useConnect = ({ onClose, disableCopy, keyIsCopied, showWarning, name, setS
   const { handleCopy, copiedLine } = useCopy();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [saving, setSaving] = useState(false);
+  const buttonsCrashing = useMediaQuery('(max-width: 665px)');
+  const smallPhone = useMediaQuery('(max-width: 360px)');
 
   const integrationBaseUrl = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v2${getRedirectLink(`/integration/${integrationId}`)}`;
   const { mutateAsync: updateBackend } = useBackendUpdateOne();
@@ -101,6 +104,8 @@ const useConnect = ({ onClose, disableCopy, keyIsCopied, showWarning, name, setS
     deleteModalOpen,
     setDeleteModalOpen,
     saving,
+    buttonsCrashing,
+    smallPhone,
   };
 };
 

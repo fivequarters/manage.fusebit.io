@@ -8,6 +8,15 @@ export const Wrapper = styled.div`
   flex-direction: column;
   width: 667px;
   padding-top: 0px;
+
+  @media only screen and (max-width: 880px) {
+    width: 100%;
+    padding: 56px 24px;
+  }
+
+  @media only screen and (max-width: 370px) {
+    padding: 56px 16px;
+  }
 `;
 
 export const SmallTitleWrapper = styled.div`
@@ -42,12 +51,13 @@ export const Hr = styled.div`
   margin: 40px 0;
 `;
 
-export const Subtitle = styled.h3`
+export const Subtitle = styled.h3<{ margin?: string }>`
   font-size: 20px;
   line-height: 26px;
   font-weight: 600;
   color: var(--black);
   margin-bottom: 16px;
+  margin: ${(props) => props.margin && props.margin};
 `;
 
 export const Disclaimer = styled.p`

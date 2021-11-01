@@ -5,9 +5,11 @@ import { createSampleAppClientUrl } from '@utils/backendClients';
 
 interface IProps {
   componentMap: Record<string, string>;
+  buttonsCrashing?: boolean;
+  buttonsSize?: 'small' | 'medium' | 'large';
 }
 
-export const LinkSampleApp: React.FC<IProps> = ({ componentMap }: IProps) => {
+export const LinkSampleApp: React.FC<IProps> = ({ componentMap, buttonsCrashing, buttonsSize }) => {
   const { userData: user } = useAuthContext();
 
   const [url, setUrl] = useState<string>();
@@ -20,13 +22,13 @@ export const LinkSampleApp: React.FC<IProps> = ({ componentMap }: IProps) => {
 
   return url ? (
     <Button
-      style={{ margin: '0 auto', width: '293px' }}
+      style={{ width: buttonsCrashing ? 'fit-content' : '293px' }}
       target="_blank"
       rel="noopener"
       href={url}
       variant="outlined"
       color="primary"
-      size="large"
+      size={buttonsSize || 'large'}
     >
       Run a Sample App!
     </Button>

@@ -43,6 +43,8 @@ const Connect: React.FC<Props> = ({
     saving,
     setEditMode,
     setEditedBackendClientId,
+    buttonsCrashing,
+    smallPhone,
   } = useConnect({
     disableCopy,
     id,
@@ -53,6 +55,38 @@ const Connect: React.FC<Props> = ({
     setShowWarning,
     showWarning,
   });
+
+  const deleteAndOkButtonsWidth = () => {
+    if (smallPhone) {
+      return '136px';
+    }
+    if (buttonsCrashing) {
+      return '156px';
+    }
+    return '200px';
+  };
+
+  const connectYourBackendButtonsSize = () => {
+    if (smallPhone && isSampleAppEnabled) {
+      return 'small';
+    }
+    if (buttonsCrashing) {
+      return 'medium';
+    }
+    return 'large';
+  };
+
+  const timeDescriptionWidth = () => {
+    if (smallPhone) {
+      return '140px';
+    }
+
+    if (buttonsCrashing) {
+      return '165px';
+    }
+
+    return '100%';
+  };
 
   return (
     <SC.Wrapper>
@@ -141,84 +175,81 @@ const Connect: React.FC<Props> = ({
         )
       )}
 
-      <SC.Subtitle style={{ margin: '32px auto 16px' }}>Connect your Backend</SC.Subtitle>
+      <SC.Subtitle margin="32px auto">Connect your Backend</SC.Subtitle>
       <CSC.Flex flexDown>
-        <CSC.Flex>
-          <Button
-            style={{ margin: '0 auto', width: '293px' }}
-            target="_blank"
-            rel="noopener"
-            href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
-            variant="outlined"
-            color="primary"
-            size="large"
-          >
-            Follow guide
-          </Button>
+        <Box
+          display="flex"
+          alignItems={!isSampleAppEnabled && 'center'}
+          justifyContent={!isSampleAppEnabled && 'center'}
+        >
+          <Box display="flex" flexDirection="column">
+            <Button
+              style={{ width: buttonsCrashing ? 'fit-content' : '293px' }}
+              target="_blank"
+              rel="noopener"
+              href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
+              variant="outlined"
+              color="primary"
+              size={connectYourBackendButtonsSize()}
+            >
+              Follow guide
+            </Button>
+            <Box display="flex" alignItems="center">
+              <SC.TimeIcon />
+              <SC.TimeDescription>10 minutes</SC.TimeDescription>
+            </Box>
+          </Box>
           {isSampleAppEnabled && (
             <>
-              or
-              <LinkSampleApp componentMap={componentMap} />
+              <Box display="flex" margin={smallPhone ? '5px auto auto' : '10.5px auto auto'}>
+                or
+              </Box>
+              <Box display="flex" flexDirection="column">
+                <LinkSampleApp
+                  buttonsSize={connectYourBackendButtonsSize()}
+                  buttonsCrashing={buttonsCrashing}
+                  componentMap={componentMap}
+                />
+                <Box display="flex" flexDirection="column" alignItems="left" justifyContent="left">
+                  <Box display="flex" alignItems="center">
+                    <SC.TimeIcon />
+                    <SC.TimeDescription>2 minutes.</SC.TimeDescription>
+                  </Box>
+                  <Box maxWidth={timeDescriptionWidth()}>
+                    <SC.TimeDescription margin="0">Already configured to work with this integration</SC.TimeDescription>
+                  </Box>
+                </Box>
+              </Box>
             </>
           )}
-        </CSC.Flex>
-        <CSC.Flex>
-          <div style={{ display: 'flex', alignItems: 'center', margin: '0 auto' }}>
-            <SC.TimeIcon />
-            <SC.TimeDescription>10 minutes</SC.TimeDescription>
-          </div>
-          {isSampleAppEnabled && (
-            <div style={{ display: 'flex', alignItems: 'center', margin: '0 auto' }}>
-              <SC.TimeIcon />
-              <SC.TimeDescription>2 minutes.</SC.TimeDescription>
-            </div>
-          )}
-        </CSC.Flex>
+        </Box>
       </CSC.Flex>
-      {/* <CSC.Flex margin="32px 0 0 0">
-            <CSC.Flex flexDown width="293px" margin="0 0 auto 0">
-              <Button
-                target="_blank"
-                rel="noopener"
-                href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
-                variant="outlined"
-                color="primary"
-                size="large"
-              >
-                Follow guide
-              </Button>
-              <CSC.Flex>
-                <SC.TimeIcon />
-                <SC.TimeDescription>10 minutes</SC.TimeDescription>
-              </CSC.Flex>
-            </CSC.Flex>
-            <SC.Or>or</SC.Or>
-            <CSC.Flex flexDown width="293px">
-              <Button variant="outlined" color="primary" size="large">
-                Launch sample app
-              </Button>
-              <CSC.Flex>
-                <SC.TimeIcon />
-                <SC.TimeDescription>2 minutes</SC.TimeDescription>
-              </CSC.Flex>
-              <SC.TimeDescription margin="0">Already configured to work with this integration</SC.TimeDescription>
-            </CSC.Flex>
-          </CSC.Flex> */}
-
-      <CSC.Flex margin="50px 0 0 auto" width="max-content">
+      <Box
+        display="flex"
+        alignItems="center"
+        position="relative"
+        margin={buttonsCrashing ? '50px auto 0' : '50px 0 0 auto'}
+        width="max-content"
+      >
         <Button
           onClick={() => onDelete()}
-          style={{ width: '200px', marginRight: '32px' }}
+          style={{ width: deleteAndOkButtonsWidth(), marginRight: buttonsCrashing ? '16px' : '32px' }}
           variant="outlined"
           color="primary"
-          size="large"
+          size={buttonsCrashing ? 'medium' : 'large'}
         >
           Delete
         </Button>
-        <Button onClick={handleClose} style={{ width: '200px' }} variant="contained" color="primary" size="large">
+        <Button
+          onClick={handleClose}
+          style={{ width: deleteAndOkButtonsWidth() }}
+          variant="contained"
+          color="primary"
+          size={buttonsCrashing ? 'medium' : 'large'}
+        >
           OK
         </Button>
-      </CSC.Flex>
+      </Box>
     </SC.Wrapper>
   );
 };
