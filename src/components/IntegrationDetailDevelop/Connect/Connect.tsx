@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Input } from '@material-ui/core';
+import { Box, Button, Input } from '@material-ui/core';
 import * as CSC from '@components/globalStyle';
 import CopyLine from '@components/common/CopyLine';
 import { Integration } from '@interfaces/integration';
@@ -110,13 +110,13 @@ const Connect: React.FC<Props> = ({
           </>
         )}
       </SC.SmallTitleWrapper>
-      <SC.SmallTitle>
+      <Box display="flex" alignItems="center" mb="15px" position="relative">
         <SC.SmallTitle>
           <strong>Integration Base URL:</strong> {integrationBaseUrl}
         </SC.SmallTitle>
         <CSC.Copy onClick={() => handleCopy(integrationBaseUrl as string)} margin="0 0 0 20px" />
         <SC.CopySuccess copy={copiedLine}>Copied to clipboard!</SC.CopySuccess>
-      </SC.SmallTitle>
+      </Box>
 
       <SC.Subtitle>Key</SC.Subtitle>
       <CopyLine
