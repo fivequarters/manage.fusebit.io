@@ -45,9 +45,6 @@ const Connect: React.FC<Props> = ({
     setEditedBackendClientId,
     buttonsCrashing,
     smallPhone,
-    deleteAndOkButtonsWidth,
-    connectYourBackendButtonsSize,
-    timeDescriptionWidth,
   } = useConnect({
     disableCopy,
     id,
@@ -161,7 +158,17 @@ const Connect: React.FC<Props> = ({
               href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
               variant="outlined"
               color="primary"
-              size={connectYourBackendButtonsSize()}
+              size={(() => {
+                if (smallPhone && isSampleAppEnabled) {
+                  return 'small';
+                }
+
+                if (buttonsCrashing) {
+                  return 'medium';
+                }
+
+                return 'large';
+              })()}
             >
               Follow guide
             </Button>
@@ -177,7 +184,17 @@ const Connect: React.FC<Props> = ({
               </Box>
               <Box display="flex" flexDirection="column">
                 <LinkSampleApp
-                  buttonsSize={connectYourBackendButtonsSize()}
+                  buttonsSize={(() => {
+                    if (smallPhone && isSampleAppEnabled) {
+                      return 'small';
+                    }
+
+                    if (buttonsCrashing) {
+                      return 'medium';
+                    }
+
+                    return 'large';
+                  })()}
                   buttonsCrashing={buttonsCrashing}
                   componentMap={componentMap}
                 />
@@ -186,7 +203,19 @@ const Connect: React.FC<Props> = ({
                     <SC.TimeIcon />
                     <SC.TimeDescription>2 minutes.</SC.TimeDescription>
                   </Box>
-                  <Box maxWidth={timeDescriptionWidth()}>
+                  <Box
+                    maxWidth={(() => {
+                      if (smallPhone) {
+                        return '140px';
+                      }
+
+                      if (buttonsCrashing) {
+                        return '165px';
+                      }
+
+                      return '100%';
+                    })()}
+                  >
                     <SC.TimeDescription margin="0">Already configured to work with this integration</SC.TimeDescription>
                   </Box>
                 </Box>
@@ -205,7 +234,17 @@ const Connect: React.FC<Props> = ({
         <Button
           onClick={() => onDelete()}
           style={{
-            width: deleteAndOkButtonsWidth(),
+            width: (() => {
+              if (smallPhone) {
+                return '136px';
+              }
+
+              if (buttonsCrashing) {
+                return '156px';
+              }
+
+              return '200px';
+            })(),
             marginRight: buttonsCrashing ? '16px' : '32px',
           }}
           variant="outlined"
@@ -216,7 +255,19 @@ const Connect: React.FC<Props> = ({
         </Button>
         <Button
           onClick={handleClose}
-          style={{ width: deleteAndOkButtonsWidth() }}
+          style={{
+            width: (() => {
+              if (smallPhone) {
+                return '136px';
+              }
+
+              if (buttonsCrashing) {
+                return '156px';
+              }
+
+              return '200px';
+            })(),
+          }}
           variant="contained"
           color="primary"
           size={buttonsCrashing ? 'medium' : 'large'}
