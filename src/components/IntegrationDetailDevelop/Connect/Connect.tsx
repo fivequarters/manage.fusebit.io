@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Input } from '@material-ui/core';
+import { Box, Button, Input, Typography } from '@material-ui/core';
 import * as CSC from '@components/globalStyle';
 import CopyLine from '@components/common/CopyLine';
 import { Integration } from '@interfaces/integration';
@@ -133,7 +133,7 @@ const Connect: React.FC<Props> = ({
       {showWarning && !keyIsCopied ? (
         <SC.WarningWrapper>
           <SC.WarningIcon />
-          <p>You did not copy the key above. It will be lost after you close this window.</p>
+          <Typography>You did not copy the key above. It will be lost after you close this window.</Typography>
         </SC.WarningWrapper>
       ) : (
         !disableCopy && (
