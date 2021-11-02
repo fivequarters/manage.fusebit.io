@@ -22,8 +22,11 @@ export const useCreateDataFromFeed = () => {
   const { createError } = useError();
   const queryClient = useQueryClient();
 
-  const createFromFeed = async (parsedFeed: ParsedFeed, commonTags: Record<string, string>) =>
-    Promise.all(parsedFeed.configuration.entities.map((e) => createEntity(e, commonTags)));
+  const createFromFeed = async (
+    parsedFeed: ParsedFeed,
+    commonTags: Record<string, string>,
+    approveOnProcessing?: boolean
+  ) => Promise.all(parsedFeed.configuration.entities.map((e) => createEntity(e, commonTags, approveOnProcessing)));
 
   const createIntegrationAndConnector = async (activeFeed: Feed, data: Data) => {
     try {
@@ -35,7 +38,7 @@ export const useCreateDataFromFeed = () => {
         integration: commonTags['fusebit.feedId'],
       });
 
-      const res = await createFromFeed(parsedFeed, commonTags);
+      const res = await createFromFeed(parsedFeed, commonTags, true);
 
       return {
         connector: res[0].data,

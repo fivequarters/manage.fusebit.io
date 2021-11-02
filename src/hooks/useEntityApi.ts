@@ -46,7 +46,11 @@ export const useEntityApi = (preventLoader?: boolean) => {
   const deleteConnector = useAccountConnectorDeleteConnector<Operation>();
   const deleteAccount = useAccountUserDeleteOne<Operation>();
 
-  const createEntity = async (entity: Entity, commonTags?: { [key: string]: string }) => {
+  const createEntity = async (
+    entity: Entity,
+    commonTags?: { [key: string]: string },
+    approveOnProcessing?: boolean
+  ) => {
     const obj = {
       data: entity.data,
       id: entity.id,
@@ -63,7 +67,7 @@ export const useEntityApi = (preventLoader?: boolean) => {
       newEntity = await createIntegration.mutateAsync(obj);
     }
 
-    await waitForEntityStateChange(entity.entityType, [entity.id]);
+    await waitForEntityStateChange(entity.entityType, [entity.id], approveOnProcessing);
 
     return newEntity;
   };

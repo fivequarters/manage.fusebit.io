@@ -46,7 +46,7 @@ export const useLoader = () => {
     }
   };
 
-  const waitForEntityStateChange = async (entityType: string, entityIds: string[]) => {
+  const waitForEntityStateChange = async (entityType: string, entityIds: string[], approveOnProcessing?: boolean) => {
     const intervalIds: { [key: string]: number } = {};
     const promises = entityIds.map((entityId: string) => {
       return new Promise((accept: Function, reject: Function) => {
@@ -68,7 +68,9 @@ export const useLoader = () => {
                   },
                 };
 
-                if (response.data.state === OperationState.active) {
+                if (response.data.state === OperationStatus.creating && approveOnProcessing) {
+                  accept({});
+                } else if (response.data.state === OperationState.active) {
                   if (response.data.operationState.status === OperationStatus.success) {
                     accept({});
                   } else if (response.data.operationState.status === OperationStatus.failed) {
