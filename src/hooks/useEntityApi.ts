@@ -7,6 +7,7 @@ import { InnerConnector, Integration } from '@interfaces/integration';
 import { findMatchingConnectorFeed, getAllDependenciesFromFeed, linkPackageJson } from '@utils/utils';
 import { EntitiesType } from '@interfaces/entities';
 import { Account } from '@interfaces/account';
+import { INTEGRATION_PROCESSING_POSTFIX } from '@utils/constants';
 import { useLoader } from './useLoader';
 import { useAccountConnectorCreateConnector } from './api/v2/account/connector/useCreateOne';
 import { useAccountIntegrationCreateIntegration } from './api/v2/account/integration/useCreateOne';
@@ -46,7 +47,11 @@ export const useEntityApi = (preventLoader?: boolean) => {
   const deleteConnector = useAccountConnectorDeleteConnector<Operation>();
   const deleteAccount = useAccountUserDeleteOne<Operation>();
 
-  const createEntity = async (entity: Entity, commonTags?: { [key: string]: string }) => {
+  const createEntity = async (
+    entity: Entity,
+    commonTags?: { [key: string]: string },
+    disableWaitforOperations?: boolean
+  ) => {
     const obj = {
       data: entity.data,
       id: entity.id,
@@ -61,25 +66,12 @@ export const useEntityApi = (preventLoader?: boolean) => {
       newEntity = await createConnector.mutateAsync(obj);
     } else {
       newEntity = await createIntegration.mutateAsync(obj);
-      localStorage.setItem(`${entity.id}'-peding-processing'`, 'true');
+      localStorage.setItem(`${entity.id}${INTEGRATION_PROCESSING_POSTFIX}`, 'true');
     }
 
-    // const dataToStore = {
-    //   entityType: entity.entityType,
-    //   entityIdArray: [entity.id],
-    // };
-
-    // const data = localStorage.getItem('integrationDataToProcess');
-
-    // if (data) {
-    //   const parsedData = JSON.parse(data);
-    //   parsedData.push(dataToStore);
-    //   localStorage.setItem('integrationDataToProcess', JSON.stringify(parsedData));
-    // } else {
-    //   localStorage.setItem('integrationDataToProcess', JSON.stringify([dataToStore]));
-    // }
-
-    // await waitForEntityStateChange(entity.entityType, [entity.id]);
+    if (!disableWaitforOperations) {
+      await waitForEntityStateChange(entity.entityType, [entity.id]);
+    }
 
     return newEntity;
   };
