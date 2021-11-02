@@ -56,6 +56,42 @@ const Connect: React.FC<Props> = ({
     showWarning,
   });
 
+  const getButtonSize = (() => {
+    if (smallPhone && isSampleAppEnabled) {
+      return 'small';
+    }
+
+    if (buttonsCrashing) {
+      return 'medium';
+    }
+
+    return 'large';
+  })();
+
+  const getTimeDescriptionWidth = (() => {
+    if (smallPhone) {
+      return '140px';
+    }
+
+    if (buttonsCrashing) {
+      return '165px';
+    }
+
+    return '100%';
+  })();
+
+  const getMainButtonWidth = (() => {
+    if (smallPhone) {
+      return '136px';
+    }
+
+    if (buttonsCrashing) {
+      return '156px';
+    }
+
+    return '200px';
+  })();
+
   return (
     <SC.Wrapper>
       <CSC.Close onClick={handleClose} />
@@ -158,21 +194,11 @@ const Connect: React.FC<Props> = ({
               href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
               variant="outlined"
               color="primary"
-              size={(() => {
-                if (smallPhone && isSampleAppEnabled) {
-                  return 'small';
-                }
-
-                if (buttonsCrashing) {
-                  return 'medium';
-                }
-
-                return 'large';
-              })()}
+              size={getButtonSize}
             >
               Follow guide
             </Button>
-            <Box display="flex" alignItems="center">
+            <Box display="flex" alignItems="center" justifyContent={!isSampleAppEnabled && 'center'}>
               <SC.TimeIcon />
               <SC.TimeDescription>10 minutes</SC.TimeDescription>
             </Box>
@@ -184,17 +210,7 @@ const Connect: React.FC<Props> = ({
               </Box>
               <Box display="flex" flexDirection="column">
                 <LinkSampleApp
-                  buttonsSize={(() => {
-                    if (smallPhone && isSampleAppEnabled) {
-                      return 'small';
-                    }
-
-                    if (buttonsCrashing) {
-                      return 'medium';
-                    }
-
-                    return 'large';
-                  })()}
+                  buttonsSize={getButtonSize}
                   buttonsCrashing={buttonsCrashing}
                   componentMap={componentMap}
                 />
@@ -203,19 +219,7 @@ const Connect: React.FC<Props> = ({
                     <SC.TimeIcon />
                     <SC.TimeDescription>2 minutes.</SC.TimeDescription>
                   </Box>
-                  <Box
-                    maxWidth={(() => {
-                      if (smallPhone) {
-                        return '140px';
-                      }
-
-                      if (buttonsCrashing) {
-                        return '165px';
-                      }
-
-                      return '100%';
-                    })()}
-                  >
+                  <Box maxWidth={getTimeDescriptionWidth}>
                     <SC.TimeDescription margin="0">Already configured to work with this integration</SC.TimeDescription>
                   </Box>
                 </Box>
@@ -234,17 +238,7 @@ const Connect: React.FC<Props> = ({
         <Button
           onClick={() => onDelete()}
           style={{
-            width: (() => {
-              if (smallPhone) {
-                return '136px';
-              }
-
-              if (buttonsCrashing) {
-                return '156px';
-              }
-
-              return '200px';
-            })(),
+            width: getMainButtonWidth,
             marginRight: buttonsCrashing ? '16px' : '32px',
           }}
           variant="outlined"
@@ -256,17 +250,7 @@ const Connect: React.FC<Props> = ({
         <Button
           onClick={handleClose}
           style={{
-            width: (() => {
-              if (smallPhone) {
-                return '136px';
-              }
-
-              if (buttonsCrashing) {
-                return '156px';
-              }
-
-              return '200px';
-            })(),
+            width: getMainButtonWidth,
           }}
           variant="contained"
           color="primary"
