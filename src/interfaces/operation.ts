@@ -30,7 +30,6 @@ export enum OperationStatus {
   success = 'success',
   failed = 'failed',
   processing = 'processing',
-  creating = 'creating',
 }
 
 export enum OperationErrorCode {

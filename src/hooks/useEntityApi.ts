@@ -46,11 +46,7 @@ export const useEntityApi = (preventLoader?: boolean) => {
   const deleteConnector = useAccountConnectorDeleteConnector<Operation>();
   const deleteAccount = useAccountUserDeleteOne<Operation>();
 
-  const createEntity = async (
-    entity: Entity,
-    commonTags?: { [key: string]: string },
-    approveOnProcessing?: boolean
-  ) => {
+  const createEntity = async (entity: Entity, commonTags?: { [key: string]: string }) => {
     const obj = {
       data: entity.data,
       id: entity.id,
@@ -65,9 +61,25 @@ export const useEntityApi = (preventLoader?: boolean) => {
       newEntity = await createConnector.mutateAsync(obj);
     } else {
       newEntity = await createIntegration.mutateAsync(obj);
+      localStorage.setItem(`${entity.id}'-peding-processing'`, 'true');
     }
 
-    await waitForEntityStateChange(entity.entityType, [entity.id], approveOnProcessing);
+    // const dataToStore = {
+    //   entityType: entity.entityType,
+    //   entityIdArray: [entity.id],
+    // };
+
+    // const data = localStorage.getItem('integrationDataToProcess');
+
+    // if (data) {
+    //   const parsedData = JSON.parse(data);
+    //   parsedData.push(dataToStore);
+    //   localStorage.setItem('integrationDataToProcess', JSON.stringify(parsedData));
+    // } else {
+    //   localStorage.setItem('integrationDataToProcess', JSON.stringify([dataToStore]));
+    // }
+
+    // await waitForEntityStateChange(entity.entityType, [entity.id]);
 
     return newEntity;
   };
