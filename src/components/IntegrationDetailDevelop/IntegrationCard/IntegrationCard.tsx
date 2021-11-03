@@ -20,6 +20,7 @@ import useEditor from '@components/IntegrationDetailDevelop/FusebitEditor/useEdi
 import MobileDrawer from '@components/IntegrationDetailDevelop/MobileDrawer';
 import { INTEGRATION_PROCESSING_SUFFIX } from '@utils/constants';
 import { useLoader } from '@hooks/useLoader';
+import UpAndDownDots from '@components/common/animations/UpAndDownDots';
 
 const StyledCard = styled(Card)`
   display: flex;
@@ -87,7 +88,11 @@ const IntegrationCard: React.FC<Props> = ({ className }) => {
 
   const getButtonContent = (() => {
     if (processing) {
-      return 'Processing...';
+      return (
+        <>
+          Processing <UpAndDownDots dots={[{ id: 'dotOne' }, { id: 'dotTwo' }, { id: 'dotThree' }]} />
+        </>
+      );
     }
 
     if (isEditing) {
