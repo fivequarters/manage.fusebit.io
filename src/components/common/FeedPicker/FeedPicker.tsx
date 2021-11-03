@@ -45,7 +45,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
       <SC.Close onClick={() => onClose()} src={cross} alt="close" height="12" width="12" />
       <SC.Title>{`New ${feedTypeName}`}</SC.Title>
       <SC.Flex>
-        <SC.Column id="asd">
+        <SC.Column>
           {loading ? (
             <Box minWidth="254px">
               <Loader />

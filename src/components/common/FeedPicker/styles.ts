@@ -55,7 +55,7 @@ export const Column = styled.div<{ border?: boolean }>`
   display: flex;
   flex-direction: column;
   max-height: 390px;
-  overflow-y: auto;
+  overflow-y: scroll;
   flex-shrink: 0;
   z-index: 0;
 
