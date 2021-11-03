@@ -23,7 +23,7 @@ const signOut = () => {
 };
 
 const signIn = (silent?: boolean): void => {
-  const requestedPath = window.location.pathname;
+  const requestedPath = window.location.pathname + window.location.search;
   const authLink = [
     REACT_APP_AUTH0_DOMAIN,
     '/authorize?response_type=token',
