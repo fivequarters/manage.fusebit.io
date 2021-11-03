@@ -55,7 +55,6 @@ export const Column = styled.div<{ border?: boolean }>`
   display: flex;
   flex-direction: column;
   max-height: 390px;
-  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
   overflow-y: auto;
   flex-shrink: 0;
   z-index: 0;
@@ -63,16 +62,6 @@ export const Column = styled.div<{ border?: boolean }>`
   @media only screen and (max-width: 1100px) {
     height: 100%;
   }
-`;
-
-export const ColumnGradient = styled.div`
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 100%;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
-  z-index: 20;
 `;
 
 export const ColumnItem = styled.div<{ active: boolean; capitalize?: boolean }>`
