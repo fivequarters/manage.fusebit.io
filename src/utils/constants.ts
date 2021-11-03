@@ -10,4 +10,4 @@ export const STATIC_TENANT_ID = 'user-1';
 
 export const PRODUCTION_HOST = 'manage.fusebit.io';
 
-export const INTEGRATION_PROCESSING_POSTFIX = '-pending-processing';
+export const INTEGRATION_PROCESSING_SUFFIX = '-pending-processing';

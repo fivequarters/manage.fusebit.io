@@ -7,7 +7,7 @@ import { InnerConnector, Integration } from '@interfaces/integration';
 import { findMatchingConnectorFeed, getAllDependenciesFromFeed, linkPackageJson } from '@utils/utils';
 import { EntitiesType } from '@interfaces/entities';
 import { Account } from '@interfaces/account';
-import { INTEGRATION_PROCESSING_POSTFIX } from '@utils/constants';
+import { INTEGRATION_PROCESSING_SUFFIX } from '@utils/constants';
 import { useLoader } from './useLoader';
 import { useAccountConnectorCreateConnector } from './api/v2/account/connector/useCreateOne';
 import { useAccountIntegrationCreateIntegration } from './api/v2/account/integration/useCreateOne';
@@ -66,7 +66,7 @@ export const useEntityApi = (preventLoader?: boolean) => {
       newEntity = await createConnector.mutateAsync(obj);
     } else {
       newEntity = await createIntegration.mutateAsync(obj);
-      localStorage.setItem(`${entity.id}${INTEGRATION_PROCESSING_POSTFIX}`, 'true');
+      localStorage.setItem(`${entity.id}${INTEGRATION_PROCESSING_SUFFIX}`, 'true');
     }
 
     if (!disableWaitforOperations) {

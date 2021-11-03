@@ -18,7 +18,7 @@ import Button from '@components/common/Button/Button';
 import EditGuiModal from '@components/IntegrationDetailDevelop/EditGuiModal';
 import useEditor from '@components/IntegrationDetailDevelop/FusebitEditor/useEditor';
 import MobileDrawer from '@components/IntegrationDetailDevelop/MobileDrawer';
-import { INTEGRATION_PROCESSING_POSTFIX } from '@utils/constants';
+import { INTEGRATION_PROCESSING_SUFFIX } from '@utils/constants';
 import { useLoader } from '@hooks/useLoader';
 
 const StyledCard = styled(Card)`
@@ -59,7 +59,7 @@ const IntegrationCard: React.FC<Props> = ({ className }) => {
   const integrationData = useGetIntegrationFromCache();
   const { waitForEntityStateChange } = useLoader();
   const [processing, setProcessing] = useState(false);
-  const processingKey = `${integrationData?.data.id}${INTEGRATION_PROCESSING_POSTFIX}`;
+  const processingKey = `${integrationData?.data.id}${INTEGRATION_PROCESSING_SUFFIX}`;
 
   useEffect(() => {
     if (integrationData?.data.id) {
@@ -74,14 +74,12 @@ const IntegrationCard: React.FC<Props> = ({ className }) => {
           };
           dataToProcess.push(newComponentToProcess);
         });
-        (async () => {
-          for (let i = 0; i < dataToProcess.length; i++) {
-            const { entityId, entityType } = dataToProcess[i];
-            await waitForEntityStateChange(entityType, [entityId]);
-          }
+        Promise.all(
+          dataToProcess.map(({ entityType, entityId }) => waitForEntityStateChange(entityType, [entityId]))
+        ).then(() => {
           localStorage.removeItem(processingKey);
           setProcessing(false);
-        })();
+        });
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
