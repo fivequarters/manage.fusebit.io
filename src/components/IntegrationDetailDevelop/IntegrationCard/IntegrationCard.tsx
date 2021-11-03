@@ -90,7 +90,7 @@ const IntegrationCard: React.FC<Props> = ({ className }) => {
     if (processing) {
       return (
         <>
-          Processing <UpAndDownDots dots={[{ id: 'dotOne' }, { id: 'dotTwo' }, { id: 'dotThree' }]} />
+          Processing <UpAndDownDots />
         </>
       );
     }
