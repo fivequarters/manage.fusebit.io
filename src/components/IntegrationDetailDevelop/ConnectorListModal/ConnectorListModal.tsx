@@ -8,7 +8,7 @@ import { useLoader } from '@hooks/useLoader';
 import { Connector } from '@interfaces/connector';
 import { Entity } from '@interfaces/feed';
 import { InnerConnector, Integration } from '@interfaces/integration';
-import ListComponent from '@components/IntegrationDetailDevelop/ListComponent';
+import ExistingConnectorItem from '@components/IntegrationDetailDevelop/ExistingConnectorItem';
 import * as SC from './styles';
 
 interface Props {
@@ -75,12 +75,7 @@ const ConnectorListModal = ({ onClose, open }: Props) => {
                 })
                 .map((connector) => {
                   return (
-                    <ListComponent
-                      handleClick={handleLinkConnector}
-                      key={connector.id}
-                      // @ts-ignore
-                      connector={connector}
-                    />
+                    <ExistingConnectorItem handleClick={handleLinkConnector} key={connector.id} connector={connector} />
                   );
                 })}
             </div>

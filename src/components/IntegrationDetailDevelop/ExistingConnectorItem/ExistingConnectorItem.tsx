@@ -11,14 +11,13 @@ export interface Props {
   handleClick: (connector: Entity) => Promise<void>;
 }
 
-const ListComponent: React.FC<Props> = ({ connector, handleClick }) => {
+const ExistingConnectorItem: React.FC<Props> = ({ connector, handleClick }) => {
   const { data: connectorFeed, isLoading } = useGetMatchingConnectorFeed({ connector });
 
   return (
     <ListItem
       id={connector.id}
-      // @ts-ignore
-      onClick={() => handleClick(connector)}
+      onClick={() => handleClick({ ...connector, entityType: 'connector' } as Entity)}
       icon={
         isLoading ? (
           <CircularProgress size={20} />
@@ -31,4 +30,4 @@ const ListComponent: React.FC<Props> = ({ connector, handleClick }) => {
   );
 };
 
-export default ListComponent;
+export default ExistingConnectorItem;

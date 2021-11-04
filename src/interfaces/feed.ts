@@ -1,3 +1,6 @@
+import { Connector } from './connector';
+import { Integration } from './integration';
+
 interface uischemaElement {
   type: string;
   scope: string;
@@ -21,29 +24,15 @@ export interface EntityComponent {
   skip?: boolean;
 }
 
-export interface Entity {
-  entityType: string;
-  id: string;
-  isApplication?: boolean;
-  data: {
-    id?: string;
-    files: {
-      'package.json': string;
-      [x: string]: string;
-    };
-    handler?: string;
-    configuration?: {
-      [key: string]: any;
-    };
-    components?: EntityComponent[];
-    componentTags?: {
-      [key: string]: any;
-    };
-  };
-  tags: {
-    [key: string]: string;
-  };
+export interface ConnectorEntity extends Connector {
+  entityType: 'connector';
 }
+
+export interface IntegrationEntity extends Integration {
+  entityType: 'integration';
+}
+
+export type Entity = ConnectorEntity | IntegrationEntity;
 
 export interface Feed {
   id: string;

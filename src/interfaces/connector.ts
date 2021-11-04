@@ -2,7 +2,10 @@ export interface Connector {
   id: string;
   data: {
     configuration: object;
-    files: object;
+    files: {
+      'package.json': string;
+      [x: string]: string;
+    };
     handler: string;
     id: string;
   };
