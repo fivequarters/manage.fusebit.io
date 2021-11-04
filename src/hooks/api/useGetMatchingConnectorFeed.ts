@@ -39,7 +39,7 @@ interface Props {
 }
 
 export const useGetMatchingConnectorFeed = ({ connector }: Props) => {
-  return useQuery(['getMatchingConnectorFeed', { id: connector?.id }], () => findMatchingConnectorFeed(connector), {
+  return useQuery(['getMatchingConnectorFeed', { id: connector.id }], () => findMatchingConnectorFeed(connector), {
     enabled: !connector.missing,
   });
 };
