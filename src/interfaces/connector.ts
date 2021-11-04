@@ -12,6 +12,7 @@ export interface Connector {
     [key: string]: any;
   };
   version: string;
+  missing?: boolean;
 }
 
 interface Element {

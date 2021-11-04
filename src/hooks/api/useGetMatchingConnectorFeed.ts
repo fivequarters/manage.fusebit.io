@@ -35,11 +35,11 @@ export const findMatchingConnectorFeed = async (connector: Connector | FinalConn
 };
 
 interface Props {
-  connector: FinalConnector;
+  connector: Connector | FinalConnector;
 }
 
 export const useGetMatchingConnectorFeed = ({ connector }: Props) => {
-  return useQuery(['getMatchingConnectorFeed', { id: connector.id }], () => findMatchingConnectorFeed(connector), {
+  return useQuery(['getMatchingConnectorFeed', { id: connector?.id }], () => findMatchingConnectorFeed(connector), {
     enabled: !connector.missing,
   });
 };

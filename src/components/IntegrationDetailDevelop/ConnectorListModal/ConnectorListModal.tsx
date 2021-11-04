@@ -76,12 +76,10 @@ const ConnectorListModal = ({ onClose, open }: Props) => {
                 .map((connector) => {
                   return (
                     <ListComponent
-                      onLinkConnectorClick={handleLinkConnector}
-                      linkConnector
+                      handleClick={handleLinkConnector}
                       key={connector.id}
                       // @ts-ignore
                       connector={connector}
-                      onConnectorDelete={() => {}}
                     />
                   );
                 })}
