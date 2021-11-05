@@ -25,7 +25,7 @@ const NotFoundPage: FC<{}> = (): ReactElement => {
       localStorage.removeItem('connectorsContract');
       history.push(getRedirectLink(`/connectors/overview${connectorsContract}`));
     } else if (userData.accountId && userData.subscriptionId && userData.token) {
-      history.push(getRedirectLink('/integrations/overview'));
+      history.push(getRedirectLink(`/integrations/overview${location.search}`));
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

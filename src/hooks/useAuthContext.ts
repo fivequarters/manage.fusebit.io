@@ -23,14 +23,18 @@ const signOut = () => {
 };
 
 const signIn = (silent?: boolean): void => {
-  const requestedPath = window.location.pathname + window.location.search;
+  const requestedPath = window.location.pathname;
+  const requestedSearch = window.location.search;
+  if (requestedSearch.indexOf('requestedPath') < 0) {
+    localStorage.setItem('requestedSearch', window.location.search);
+  }
   const authLink = [
     REACT_APP_AUTH0_DOMAIN,
     '/authorize?response_type=token',
     `&client_id=${REACT_APP_AUTH0_CLIENT_ID}`,
     `&audience=${REACT_APP_FUSEBIT_DEPLOYMENT}`,
     `&redirect_uri=${window.location.origin}/callback?silentAuth=${silent ? 'true' : 'false'}`,
-    `%26requestedPath=${requestedPath === '/callback' ? '/' : requestedPath}`,
+    `%26requestedPath=${requestedPath === '/callback' ? `/` : requestedPath}`,
     '&scope=openid profile email',
     silent ? '&prompt=none' : '',
   ].join('');
