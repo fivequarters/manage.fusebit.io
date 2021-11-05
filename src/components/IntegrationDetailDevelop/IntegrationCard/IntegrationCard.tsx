@@ -8,7 +8,7 @@ import {
   useTheme,
   Typography,
 } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import fusebitLogo from '@assets/fusebit-logo.svg';
@@ -20,7 +20,6 @@ import useEditor from '@components/IntegrationDetailDevelop/FusebitEditor/useEdi
 import MobileDrawer from '@components/IntegrationDetailDevelop/MobileDrawer';
 import { INTEGRATION_PROCESSING_SUFFIX } from '@utils/constants';
 import { useLoader } from '@hooks/useLoader';
-import UpAndDownDots from '@components/common/animations/UpAndDownDots';
 
 const StyledCard = styled(Card)`
   display: flex;
@@ -46,12 +45,14 @@ const StyledActions = styled(CardActions)`
 `;
 
 interface Props {
+  processing: boolean;
+  setProcessing: (newValue: boolean) => void;
   className?: string;
 }
 
 export const INTEGRATION_CARD_ID = 'integration-card';
 
-const IntegrationCard: React.FC<Props> = ({ className }) => {
+const IntegrationCard: React.FC<Props> = ({ processing, setProcessing, className }) => {
   const [editGuiModalOpen, setEditGuiModalOpen] = useModal();
   const { handleEdit, isEditing } = useEditor({ enableListener: false, onReadyToRun: () => setEditGuiModalOpen(true) });
   const theme = useTheme();
@@ -59,7 +60,6 @@ const IntegrationCard: React.FC<Props> = ({ className }) => {
   const matchesMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const integrationData = useGetIntegrationFromCache();
   const { waitForEntityStateChange } = useLoader();
-  const [processing, setProcessing] = useState(false);
   const processingKey = `${integrationData?.data.id}${INTEGRATION_PROCESSING_SUFFIX}`;
 
   useEffect(() => {
@@ -85,22 +85,6 @@ const IntegrationCard: React.FC<Props> = ({ className }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [integrationData]);
-
-  const getButtonContent = (() => {
-    if (processing) {
-      return (
-        <>
-          Processing <UpAndDownDots />
-        </>
-      );
-    }
-
-    if (isEditing) {
-      return <CircularProgress size={20} />;
-    }
-
-    return 'Edit';
-  })();
 
   return (
     <>
@@ -140,7 +124,12 @@ const IntegrationCard: React.FC<Props> = ({ className }) => {
             color="primary"
             disabled={isEditing || processing}
           >
-            {getButtonContent}
+            <>
+              {(isEditing || processing) && (
+                <CircularProgress color="inherit" size={20} style={{ marginRight: '10px' }} />
+              )}
+              Edit
+            </>
           </Button>
         </StyledActions>
       </StyledCard>
