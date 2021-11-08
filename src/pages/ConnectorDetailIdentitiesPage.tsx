@@ -6,12 +6,14 @@ import TabComponent from '@components/common/TabComponent';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 import IdentitiesTable from '@components/ConnectorDetailIdentities/IdentitiesTable';
 import ConnectorsNavbar from '@components/common/ConnectorsNavbar';
+import useTitle from '@hooks/useTitle';
 
 const ConnectorDetailIdentitiesPage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
   const { getRedirectLink } = useGetRedirectLink();
 
   useTrackPage('Connector Identities', 'Connector');
+  useTitle(id);
 
   return (
     <Layout>

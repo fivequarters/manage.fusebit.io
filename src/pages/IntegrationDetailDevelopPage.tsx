@@ -9,6 +9,7 @@ import TabComponent from '@components/common/TabComponent';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 import Diagram from '@components/IntegrationDetailDevelop/Diagram';
 import IntegrationsNavbar from '@components/common/IntegrationsNavbar';
+import useTitle from '@hooks/useTitle';
 
 const IntegrationDetailDevelopPage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
@@ -22,6 +23,7 @@ const IntegrationDetailDevelopPage: FC<{}> = (): ReactElement => {
   const { getRedirectLink } = useGetRedirectLink();
 
   useTrackPage('Integration Develop', 'Integration');
+  useTitle(id);
 
   return (
     <Layout>
