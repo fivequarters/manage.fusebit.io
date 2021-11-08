@@ -55,7 +55,7 @@ const InstallsTable = () => {
   const handleDelete = () => {
     trackEvent('Installs Delete Tenant Clicked', 'Integration');
     setDeleteOpen(false);
-    handleRowDelete('Install', 'installs-table');
+    handleRowDelete('Install');
   };
 
   return (

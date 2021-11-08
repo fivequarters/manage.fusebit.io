@@ -31,6 +31,11 @@ export default createGlobalStyle`
       z-index: 0 !important;
     }
 
+    // TODO: Review if this can be moved to the notistack provider
+    .SnackbarItem-variantError {
+      background-color: #D32F2F !important;
+    }
+
     button {
       &:hover {
         cursor: pointer;
