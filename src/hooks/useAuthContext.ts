@@ -22,12 +22,27 @@ const signOut = () => {
   window.location.href = `${REACT_APP_AUTH0_DOMAIN}/v2/logout?returnTo=${REACT_APP_LOGOUT_REDIRECT_URL}`;
 };
 
-const signIn = (silent?: boolean): void => {
-  const requestedPath = window.location.pathname;
-  const requestedSearch = window.location.search;
+const setSignInLocalStorageItems = (requestedPath: string, requestedSearch: string) => {
+  // If we are not in the callback url and pathname matches signup, open the signup modal on auth0, otherwise open the login modal
+  if (requestedPath.indexOf('callback') < 0) {
+    if (window.location.pathname.indexOf('signup') > 0) {
+      localStorage.setItem('screenHint', 'signup');
+    } else {
+      localStorage.setItem('screenHint', 'login');
+    }
+  }
+
+  // Save the search params for the AuthCallbackPage navigatePostAuth
   if (requestedSearch.indexOf('requestedPath') < 0) {
     localStorage.setItem('requestedSearch', window.location.search);
   }
+};
+
+const signIn = (silent?: boolean): void => {
+  const requestedPath = window.location.pathname;
+  const requestedSearch = window.location.search;
+  setSignInLocalStorageItems(requestedPath, requestedSearch);
+
   const authLink = [
     REACT_APP_AUTH0_DOMAIN,
     '/authorize?response_type=token',
@@ -36,8 +51,10 @@ const signIn = (silent?: boolean): void => {
     `&redirect_uri=${window.location.origin}/callback?silentAuth=${silent ? 'true' : 'false'}`,
     `%26requestedPath=${requestedPath === '/callback' ? `/` : requestedPath}`,
     '&scope=openid profile email',
+    `&screen_hint=${localStorage.getItem('screenHint')}`,
     silent ? '&prompt=none' : '',
   ].join('');
+
   window.location.href = authLink;
 };
 
