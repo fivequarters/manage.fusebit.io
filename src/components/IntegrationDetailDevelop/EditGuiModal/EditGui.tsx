@@ -83,7 +83,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     setDirtyState(false);
   };
 
-  const handleKeyPress = () => {
+  const handleKeyUp = () => {
     setDirtyState(window.editor?.dirtyState);
   };
 
@@ -154,7 +154,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
             <SC.Close onClick={handleClose} />
           </SC.CloseHeader>
         )}
-        <SC.FusebitEditorContainer onKeyUp={handleKeyPress}>
+        <SC.FusebitEditorContainer onKeyUp={handleKeyUp}>
           <FusebitEditor
             boundaryId="integration"
             functionId={integrationId}
