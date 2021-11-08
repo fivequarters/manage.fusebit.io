@@ -28,6 +28,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     onReadyToLogin: () => setLoginFlowModalOpen(true),
     isMounted,
   });
+  const [dirtyState, setDirtyState] = useState(false);
 
   useTrackPage('Web Editor', 'Web Editor');
 
@@ -80,10 +81,15 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     const context = window.editor;
     trackEvent('Save Button Clicked', 'Web Editor');
     await context?._server.saveFunction(context);
+    setDirtyState(false);
+  };
+
+  const handleKeyPress = () => {
+    setDirtyState(window.editor?.dirtyState);
   };
 
   const handleClose = () => {
-    if (window.editor?.dirtyState) {
+    if (dirtyState) {
       setUnsavedWarning(true);
     } else {
       onClose();
@@ -119,7 +125,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
                 <img
                   src={save}
                   style={{
-                    opacity: isSaving ? 0.4 : 1,
+                    opacity: isSaving || !dirtyState ? 0.4 : 1,
                   }}
                   alt="play"
                   height="16"
@@ -130,7 +136,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
               size="small"
               variant="outlined"
               color="primary"
-              disabled={isSaving}
+              disabled={isSaving || !dirtyState}
             >
               Save
             </Button>
@@ -159,7 +165,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
             <SC.Close onClick={handleClose} />
           </SC.CloseHeader>
         )}
-        <SC.FusebitEditorContainer>
+        <SC.FusebitEditorContainer onKeyUp={handleKeyPress}>
           <FusebitEditor
             boundaryId="integration"
             functionId={integrationId}
