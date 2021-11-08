@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Button, ButtonGroup } from '@material-ui/core';
+import { SaveOutlined, PlayArrowOutlined } from '@material-ui/icons';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Props } from '@interfaces/edit';
 import { useAuthContext } from '@hooks/useAuthContext';
 import { useLoader } from '@hooks/useLoader';
-import play from '@assets/play.svg';
 import settings from '@assets/settings.svg';
-import save from '@assets/save.svg';
 import question from '@assets/question.svg';
 import logo from '@assets/logo.svg';
 import ConfigureRunnerModal from '@components/IntegrationDetailDevelop/ConfigureRunnerModal';
@@ -121,17 +120,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
           <SC.CloseHeader>
             <Button
               style={{ marginRight: '16px' }}
-              startIcon={
-                <img
-                  src={save}
-                  style={{
-                    opacity: isSaving || !dirtyState ? 0.4 : 1,
-                  }}
-                  alt="play"
-                  height="16"
-                  width="16"
-                />
-              }
+              startIcon={<SaveOutlined />}
               onClick={handleSave}
               size="small"
               variant="outlined"
@@ -142,7 +131,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
             </Button>
             <ButtonGroup variant="contained">
               <Button
-                startIcon={<img src={play} alt="play" height="16" width="16" />}
+                startIcon={<PlayArrowOutlined />}
                 size="small"
                 variant="contained"
                 color="primary"
