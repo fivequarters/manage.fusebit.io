@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Button, Modal, Backdrop } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import { ValidationMode } from '@jsonforms/core';
 
 import { useHistory, useParams } from 'react-router-dom';
@@ -168,16 +168,7 @@ const Overview: React.FC = () => {
         title="Are you sure you want to delete this user?"
         description="Deleting this user will remove all of their access to Fusebit. You will have to re-add them again"
       />
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={cliOpen}
-        onClose={() => setCliOpen(false)}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-      >
-        <CliAccess open={cliOpen} onClose={() => setCliOpen(false)} />
-      </Modal>
+      <CliAccess open={cliOpen} onClose={() => setCliOpen(false)} />
       {accountData?.data.id === userId ? (
         <SC.UserCard>
           <SC.UserInfoContainer>
