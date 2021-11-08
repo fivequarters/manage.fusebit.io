@@ -1,17 +1,13 @@
 import { createMuiTheme, responsiveFontSizes, ThemeProvider } from '@material-ui/core/styles';
-import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { HelmetProvider } from 'react-helmet-async';
 import CookieConsent from 'react-cookie-consent';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import DashboardRoutes from '@components/DashboardRoutes';
 import { ContextProvider } from '@hooks/useAuthContext';
-import { APP_TITLE } from '@utils/constants';
 import { lightTheme } from './theme/appTheme';
 
 const App = () => (
   <HelmetProvider>
-    <Helmet>
-      <title>{APP_TITLE}</title>
-    </Helmet>
     <ContextProvider>
       {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />}
       <ThemeProvider theme={responsiveFontSizes(createMuiTheme(lightTheme))}>
