@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Backdrop, Fade, Modal } from '@material-ui/core';
 import cross from '@assets/cross.svg';
 import server from '@assets/server.svg';
 import Connect from '@components/IntegrationDetailDevelop/Connect';
@@ -92,28 +91,17 @@ const ListComponent: React.FC<ListComponentProps> = ({
         }
         confirmationButtonText={connector.isApplication ? 'Delete' : 'Remove'}
       />
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
+      <Connect
+        onDelete={handleConnectorDelete}
+        token={`*************${connector.tokenSignature?.slice(-4)}`}
+        name={connector.name || ''}
+        onChange={onChange}
+        id={connector.id || ''}
+        disableCopy
         open={connectOpen}
         onClose={() => setConnectOpen(false)}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-      >
-        <Fade in={connectOpen}>
-          <Connect
-            onDelete={handleConnectorDelete}
-            token={`*************${connector.tokenSignature?.slice(-4)}`}
-            name={connector.name || ''}
-            onChange={onChange}
-            id={connector.id || ''}
-            disableCopy
-            open={connectOpen}
-            onClose={() => setConnectOpen(false)}
-            integration={integration}
-          />
-        </Fade>
-      </Modal>
+        integration={integration}
+      />
       {icon === '' ? (
         <CSC.Spinner margin="0 16px 0 0" />
       ) : (
