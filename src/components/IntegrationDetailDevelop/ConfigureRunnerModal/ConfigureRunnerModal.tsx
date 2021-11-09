@@ -85,7 +85,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
         <CSC.Close onClick={() => setOpen(false)} />
         <CSC.ModalTitle margin="0 0 16px 0">Configure runner</CSC.ModalTitle>
         <Box display="flex" mt="30px">
-          <Box display="flex" flexDirection="column" alignItems="center" width="max-content" margin="0 48px 0 0">
+          <Box display="flex" flexDirection="column" width="max-content" margin="0 48px 0 0">
             <Label>Verb</Label>
             <SC.VerbSelect
               value={formValues?.method}
@@ -105,7 +105,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
               ))}
             </SC.VerbSelect>
           </Box>
-          <Box display="flex" flexDirection="column" alignItems="center">
+          <Box display="flex" flexDirection="column" width="100%">
             <Label>URL</Label>
             <div>
               <TextField

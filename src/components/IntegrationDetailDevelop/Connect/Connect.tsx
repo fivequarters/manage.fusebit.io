@@ -196,7 +196,7 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
             </SC.WarningWrapper>
           ) : (
             !disableCopy && (
-              <Box display="flex" margin="0 0 10px 0">
+              <Box display="flex" alignItems="center" margin="0 0 10px 0">
                 <SC.DisclaimerIcon />
                 <SC.Disclaimer>
                   For security reasons, <strong>this is the last time you will see this key.</strong>
@@ -206,7 +206,7 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
           )}
 
           <SC.Subtitle style={{ margin: '32px auto 16px' }}>Connect your Backend</SC.Subtitle>
-          <Box display="flex" flexDirection="column" alignItems="center">
+          <Box display="flex" flexDirection="column">
             <Box display="flex">
               <Button
                 style={{ margin: '0 auto', width: '293px' }}
@@ -221,21 +221,21 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
               </Button>
               {isSampleAppEnabled && (
                 <>
-                  or
+                  <Box margin="auto">or</Box>
                   <LinkSampleApp componentMap={componentMap} />
                 </>
               )}
             </Box>
             <Box display="flex">
-              <div style={{ display: 'flex', alignItems: 'center', margin: '0 auto' }}>
+              <Box display="flex" alignItems="center" margin="0 auto">
                 <SC.TimeIcon />
                 <SC.TimeDescription>10 minutes</SC.TimeDescription>
-              </div>
+              </Box>
               {isSampleAppEnabled && (
-                <div style={{ display: 'flex', alignItems: 'center', margin: '0 auto' }}>
+                <Box display="flex" alignItems="center" margin="0 auto">
                   <SC.TimeIcon />
                   <SC.TimeDescription>2 minutes.</SC.TimeDescription>
-                </div>
+                </Box>
               )}
             </Box>
           </Box>
