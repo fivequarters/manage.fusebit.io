@@ -1,12 +1,18 @@
 import React from 'react';
 import copyIcon from '@assets/copy.svg';
-import { Props } from '@interfaces/copyLine';
 import { useCopy } from '@hooks/useCopy';
 import * as SC from './styles';
 
-// TODO: Refactor this component and remove extra logic as highlightedText. Use Typography From MUI instead of plain text.
+interface Props {
+  text: string;
+  children?: React.ReactNode;
+  horizontalScrollbar?: boolean;
+  warning?: boolean;
+  onCopy?: Function;
+  disableCopy?: boolean;
+}
 
-const CopyLine: React.FC<Props> = ({ text, highlightedText, horizontalScrollbar, warning, onCopy, disableCopy }) => {
+const CopyLine: React.FC<Props> = ({ text, children, horizontalScrollbar, warning, onCopy, disableCopy }) => {
   const [fadeChange, setFadeChange] = React.useState(false);
   const { handleCopy, copiedLine } = useCopy();
 
@@ -31,23 +37,7 @@ const CopyLine: React.FC<Props> = ({ text, highlightedText, horizontalScrollbar,
       </SC.LineInstructionCopy>
       <SC.LineInstructionFade disabled={disableCopy} warning={warning} change={fadeChange} />
       <SC.LineInstruction warning={warning} horizontalScrollbar={horizontalScrollbar}>
-        <p>
-          {highlightedText && <span className="unselectable">$</span>}
-          {highlightedText
-            ? text.split(' ').map((word) => {
-                let foundWord = false;
-                highlightedText.split(' ').forEach((wordToHightlight) => {
-                  if (wordToHightlight.match(word)) {
-                    foundWord = true;
-                  }
-                });
-                if (foundWord) {
-                  return <strong key={word}>{word}</strong>;
-                }
-                return `${word} `;
-              })
-            : text}
-        </p>
+        {children || <SC.Text>{text}</SC.Text>}
       </SC.LineInstruction>
       <SC.CopySuccess copy={copiedLine}>Copied to clipboard!</SC.CopySuccess>
     </SC.LineInstructionWrapper>

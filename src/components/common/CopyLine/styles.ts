@@ -1,3 +1,4 @@
+import { Typography } from '@material-ui/core';
 import styled from 'styled-components';
 
 export const LineInstructionWrapper = styled.div<{ disableCursorPointer?: boolean }>`
@@ -34,12 +35,6 @@ export const LineInstruction = styled.div<{ horizontalScrollbar?: boolean; warni
   width: 100%;
   color: var(--black);
   display: flex;
-
-  & > p {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin: 0;
-  }
 
   & > span {
     color: var(--primary-color);
@@ -133,4 +128,9 @@ export const CopySuccess = styled.p<{ copy: boolean }>`
   visibility: ${(props) => (props.copy ? 'visible' : 'hidden')};
   margin-left: auto;
   transition: all 0.5s linear;
+`;
+
+export const Text = styled(Typography)`
+  font-family: Courier;
+  overflow-x: hidden;
 `;
