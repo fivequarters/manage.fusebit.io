@@ -32,7 +32,7 @@ interface Props {
   integration?: Integration;
 }
 
-const Connect = React.forwardRef<HTMLDivElement, Props>(
+const ConnectModal = React.forwardRef<HTMLDivElement, Props>(
   (
     {
       id,
@@ -280,4 +280,4 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
   }
 );
 
-export default Connect;
+export default ConnectModal;

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import cross from '@assets/cross.svg';
 import server from '@assets/server.svg';
-import Connect from '@components/IntegrationDetailDevelop/Connect';
+import ConnectModal from '@components/IntegrationDetailDevelop/ConnectModal';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 import { ListComponentProps } from '@interfaces/integrationDetailDevelop';
 import ConfirmationPrompt from '@components/common/ConfirmationPrompt';
@@ -91,7 +91,7 @@ const ListComponent: React.FC<ListComponentProps> = ({
         }
         confirmationButtonText={connector.isApplication ? 'Delete' : 'Remove'}
       />
-      <Connect
+      <ConnectModal
         onDelete={handleConnectorDelete}
         token={`*************${connector.tokenSignature?.slice(-4)}`}
         name={connector.name || ''}
