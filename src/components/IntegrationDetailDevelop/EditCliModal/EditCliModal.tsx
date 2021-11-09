@@ -1,4 +1,4 @@
-import { Modal, Fade, Backdrop, Button } from '@material-ui/core';
+import { Modal, Fade, Backdrop, Button, Box } from '@material-ui/core';
 import * as CSC from '@components/globalStyle';
 import CopyLine from '@components/common/CopyLine';
 import * as SC from './styles';
@@ -24,29 +24,29 @@ const EditCliModal = ({ open, onClose, integrationId }: Props) => {
           <CSC.Close onClick={() => onClose()} />
           <CSC.ModalTitle>Edit {integrationId}</CSC.ModalTitle>
 
-          <CSC.Flex>
+          <Box display="flex">
             <CSC.LineTitle>1. Install the Fusebit CLI</CSC.LineTitle>
-          </CSC.Flex>
+          </Box>
           <CopyLine text="npm install @fusebit/cli -g" highlightedText="install -g" />
 
-          <CSC.Flex>
+          <Box display="flex">
             <CSC.LineTitle>2. Download the integration code</CSC.LineTitle>
-          </CSC.Flex>
+          </Box>
           <CopyLine
             text={`fuse integration get ${integrationId} --dir ${integrationId}`}
             highlightedText="get --dir"
             horizontalScrollbar
           />
 
-          <CSC.Flex>
+          <Box display="flex">
             <CSC.LineTitle>
               3. Explore the code on disk and check out README.md for instructions on how to run your integration
             </CSC.LineTitle>
-          </CSC.Flex>
+          </Box>
 
-          <CSC.Flex>
+          <Box display="flex">
             <CSC.LineTitle>3. After making your code changes run</CSC.LineTitle>
-          </CSC.Flex>
+          </Box>
           <CopyLine
             text={`fuse integration deploy ${integrationId} -d ${integrationId}`}
             highlightedText="deploy -d"

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { ValidationMode } from '@jsonforms/core';
 import debounce from 'lodash.debounce';
-import { Feed, ParsedFeed } from '../interfaces/feed';
-import { trackEvent } from '../utils/analytics';
+import { useMediaQuery } from '@material-ui/core';
+import { Feed, ParsedFeed } from '@interfaces/feed';
+import { trackEvent } from '@utils/analytics';
+import { Data } from '@interfaces/feedPicker';
 import { integrationsFeed, connectorsFeed } from '../static/feed';
-import { Data } from '../interfaces/feedPicker';
 import useFilterFeed from './useFilterFeed';
 import { useQuery } from './useQuery';
 import { useReplaceMustache } from './useReplaceMustache';
@@ -27,6 +28,7 @@ const useFeed = ({ isIntegration, onSubmit, onClose, open }: Props) => {
   const { replaceMustache } = useReplaceMustache();
   const [activeTemplate, setActiveTemplate] = React.useState<ParsedFeed>();
   const filtedFeed = useFilterFeed({ feed });
+  const isMobile = useMediaQuery('max-width: 1100px');
 
   const feedTypeName = isIntegration ? 'Integration' : 'Connector';
 
@@ -166,6 +168,7 @@ const useFeed = ({ isIntegration, onSubmit, onClose, open }: Props) => {
     handleSubmit,
     feedTypeName,
     ...filtedFeed,
+    isMobile,
   };
 };
 

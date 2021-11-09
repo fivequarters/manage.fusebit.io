@@ -185,14 +185,6 @@ export const LineTitle = styled.h4<{ margin?: string }>`
   }
 `;
 
-export const Flex = styled.div<{ margin?: string; flexDown?: boolean; alignCenter?: boolean; width?: string }>`
-  display: flex;
-  flex-direction: ${(props) => props.flexDown && 'column'};
-  align-items: ${(props) => !props.flexDown && 'center'};
-  width: ${(props) => (props.width ? props.width : '100%')};
-  margin: ${(props) => props.margin && props.margin};
-`;
-
 export const CloseIconMixin = css`
   height: 12px;
   width: 12px;

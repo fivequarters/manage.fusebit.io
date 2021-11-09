@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@material-ui/core';
+import { Box, Button } from '@material-ui/core';
 import { Props } from '@interfaces/cliAccess';
 import CopyLine from '@components/common/CopyLine';
 import * as CSC from '@components/globalStyle';
@@ -11,14 +11,14 @@ const CliAccess = React.forwardRef<HTMLDivElement, Props>(({ open, onClose }, re
       <CSC.Close onClick={() => onClose()} />
       <CSC.ModalTitle>Grant CLI Access</CSC.ModalTitle>
 
-      <CSC.Flex>
+      <Box display="flex">
         <CSC.LineTitle>1. Install the Fusebit CLI</CSC.LineTitle>
-      </CSC.Flex>
+      </Box>
       <CopyLine text="npm install @fusebit/cli -g" highlightedText="install -g" />
 
-      <CSC.Flex>
+      <Box display="flex">
         <CSC.LineTitle>2. Run the following initialization command</CSC.LineTitle>
-      </CSC.Flex>
+      </Box>
       <CopyLine text="fuse init" highlightedText="init" />
 
       <SC.ButtonsWrapper>

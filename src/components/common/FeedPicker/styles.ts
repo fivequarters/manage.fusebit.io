@@ -40,16 +40,6 @@ export const Title = styled.h2`
   margin-bottom: 49px;
 `;
 
-export const Flex = styled.div<{ alignItems?: boolean }>`
-  display: flex;
-  align-items: ${(props) => props.alignItems && 'center'};
-
-  @media only screen and (max-width: 1100px) {
-    display: flex;
-    flex-direction: column;
-  }
-`;
-
 export const Column = styled.div<{ border?: boolean }>`
   display: flex;
   flex-direction: column;
@@ -274,22 +264,4 @@ export const GeneralInfoWrapper = styled.div`
   position: relative;
   height: 350px;
   overflow-y: auto;
-`;
-
-export const MobileVisible = styled.div`
-  width: 100%;
-  display: none;
-
-  @media only screen and (max-width: 1100px) {
-    display: flex;
-  }
-`;
-
-export const MobileHidden = styled.div`
-  width: 100%;
-  display: flex;
-
-  @media only screen and (max-width: 1100px) {
-    display: none;
-  }
 `;

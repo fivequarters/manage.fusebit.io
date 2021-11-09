@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Button, Modal, Backdrop } from '@material-ui/core';
+import { Button, Modal, Backdrop, Box } from '@material-ui/core';
 import { ValidationMode } from '@jsonforms/core';
 
 import { useHistory, useParams } from 'react-router-dom';
@@ -200,7 +200,7 @@ const Overview: React.FC = () => {
             </div>
             <SC.UserImage alt="user" src={isAdmin ? userData.picture : accountImg} height="88" width="88" />
 
-            <SC.FlexDown>
+            <Box display="flex" flexDirection="column" width="100%">
               <SC.UserName>
                 {accountData?.data.firstName} {accountData?.data.lastName}
               </SC.UserName>
@@ -210,7 +210,7 @@ const Overview: React.FC = () => {
                 <CSC.Copy margin="0 6px 0 auto" onClick={() => handleCopy(accountData?.data.id || '')} />
               </SC.UserId>
               <SC.CopySuccess copy={copiedLine}>Copied to clipboard!</SC.CopySuccess>
-            </SC.FlexDown>
+            </Box>
           </SC.UserInfoContainer>
           {!editInformation ? (
             <>

@@ -10,12 +10,6 @@ export const Overview = styled.div`
   }
 `;
 
-export const FlexDown = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
 export const UserCard = styled.div`
   position: relative;
   display: flex;

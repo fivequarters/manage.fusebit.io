@@ -85,7 +85,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
         <CSC.Close onClick={() => setOpen(false)} />
         <CSC.ModalTitle margin="0 0 16px 0">Configure runner</CSC.ModalTitle>
         <Box display="flex" mt="30px">
-          <CSC.Flex width="max-content" margin="0 48px 0 0" flexDown>
+          <Box display="flex" flexDirection="column" alignItems="center" width="max-content" margin="0 48px 0 0">
             <Label>Verb</Label>
             <SC.VerbSelect
               value={formValues?.method}
@@ -104,8 +104,8 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
                 </SC.VerbItem>
               ))}
             </SC.VerbSelect>
-          </CSC.Flex>
-          <CSC.Flex flexDown>
+          </Box>
+          <Box display="flex" flexDirection="column" alignItems="center">
             <Label>URL</Label>
             <div>
               <TextField
@@ -121,7 +121,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
               />
               {formErrors.url && <SC.ErrorMessage>{formErrors.url}</SC.ErrorMessage>}
             </div>
-          </CSC.Flex>
+          </Box>
         </Box>
         {formValues?.method !== 'get' && (
           <Box display="flex" mt="15px" flexDirection="column">

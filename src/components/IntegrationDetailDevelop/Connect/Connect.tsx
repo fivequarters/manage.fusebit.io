@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Input } from '@material-ui/core';
+import { Box, Button, Input } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import * as CSC from '@components/globalStyle';
 import CopyLine from '@components/common/CopyLine';
@@ -196,18 +196,18 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
             </SC.WarningWrapper>
           ) : (
             !disableCopy && (
-              <CSC.Flex margin="0 0 10px 0">
+              <Box display="flex" margin="0 0 10px 0">
                 <SC.DisclaimerIcon />
                 <SC.Disclaimer>
                   For security reasons, <strong>this is the last time you will see this key.</strong>
                 </SC.Disclaimer>
-              </CSC.Flex>
+              </Box>
             )
           )}
 
           <SC.Subtitle style={{ margin: '32px auto 16px' }}>Connect your Backend</SC.Subtitle>
-          <CSC.Flex flexDown>
-            <CSC.Flex>
+          <Box display="flex" flexDirection="column" alignItems="center">
+            <Box display="flex">
               <Button
                 style={{ margin: '0 auto', width: '293px' }}
                 target="_blank"
@@ -225,8 +225,8 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
                   <LinkSampleApp componentMap={componentMap} />
                 </>
               )}
-            </CSC.Flex>
-            <CSC.Flex>
+            </Box>
+            <Box display="flex">
               <div style={{ display: 'flex', alignItems: 'center', margin: '0 auto' }}>
                 <SC.TimeIcon />
                 <SC.TimeDescription>10 minutes</SC.TimeDescription>
@@ -237,10 +237,10 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
                   <SC.TimeDescription>2 minutes.</SC.TimeDescription>
                 </div>
               )}
-            </CSC.Flex>
-          </CSC.Flex>
-          {/* <CSC.Flex margin="32px 0 0 0">
-            <CSC.Flex flexDown width="293px" margin="0 0 auto 0">
+            </Box>
+          </Box>
+          {/* <Box display="flex" margin="32px 0 0 0">
+            <Box display="flex" flexDown width="293px" margin="0 0 auto 0">
               <Button
                 target="_blank"
                 rel="noopener"
@@ -251,25 +251,25 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
               >
                 Follow guide
               </Button>
-              <CSC.Flex>
+              <Box display="flex">
                 <SC.TimeIcon />
                 <SC.TimeDescription>10 minutes</SC.TimeDescription>
-              </CSC.Flex>
+              </Box>
             </CSC.Flex>
             <SC.Or>or</SC.Or>
-            <CSC.Flex flexDown width="293px">
+            <Box display="flex" flexDown width="293px">
               <Button variant="outlined" color="primary" size="large">
                 Launch sample app
               </Button>
-              <CSC.Flex>
+              <Box display="flex">
                 <SC.TimeIcon />
                 <SC.TimeDescription>2 minutes</SC.TimeDescription>
-              </CSC.Flex>
+              </Box>
               <SC.TimeDescription margin="0">Already configured to work with this integration</SC.TimeDescription>
             </CSC.Flex>
           </CSC.Flex> */}
 
-          <CSC.Flex margin="50px 0 0 auto" width="max-content">
+          <Box display="flex" margin="50px 0 0 auto" width="max-content">
             <Button
               onClick={() => setDeleteModalOpen(true)}
               style={{ width: '200px', marginRight: '32px' }}
@@ -282,7 +282,7 @@ const Connect = React.forwardRef<HTMLDivElement, Props>(
             <Button onClick={handleClose} style={{ width: '200px' }} variant="contained" color="primary" size="large">
               OK
             </Button>
-          </CSC.Flex>
+          </Box>
         </SC.Wrapper>
       </SC.Card>
     );
