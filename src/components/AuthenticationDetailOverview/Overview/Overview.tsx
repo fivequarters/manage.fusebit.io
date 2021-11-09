@@ -5,7 +5,7 @@ import { ValidationMode } from '@jsonforms/core';
 import { useHistory, useParams } from 'react-router-dom';
 import dots from '@assets/dots.svg';
 import { useAuthContext } from '@hooks/useAuthContext';
-import CliAccess from '@components/AuthenticationDetailOverview/CliAccess';
+import CliAccessModal from '@components/AuthenticationDetailOverview/CliAccessModal';
 import { useAccountUserGetOne } from '@hooks/api/v1/account/user/useGetOne';
 import { useAccountUserUpdateOne } from '@hooks/api/v1/account/user/useUpdateOne';
 import accountImg from '@assets/account.svg';
@@ -168,7 +168,7 @@ const Overview: React.FC = () => {
         title="Are you sure you want to delete this user?"
         description="Deleting this user will remove all of their access to Fusebit. You will have to re-add them again"
       />
-      <CliAccess open={cliOpen} onClose={() => setCliOpen(false)} />
+      <CliAccessModal open={cliOpen} onClose={() => setCliOpen(false)} />
       {accountData?.data.id === userId ? (
         <SC.UserCard>
           <SC.UserInfoContainer>

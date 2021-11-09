@@ -5,7 +5,7 @@ import CopyLine from '@components/common/CopyLine';
 import * as CSC from '@components/globalStyle';
 import * as SC from './styles';
 
-const CliAccess = React.forwardRef<HTMLDivElement, Props>(({ open, onClose }, ref) => {
+const CliAccessModal = React.forwardRef<HTMLDivElement, Props>(({ open, onClose }, ref) => {
   return (
     <Modal
       aria-labelledby="transition-modal-title"
@@ -41,4 +41,4 @@ const CliAccess = React.forwardRef<HTMLDivElement, Props>(({ open, onClose }, re
   );
 });
 
-export default CliAccess;
+export default CliAccessModal;
