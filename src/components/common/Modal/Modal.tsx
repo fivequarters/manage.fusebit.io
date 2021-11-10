@@ -6,7 +6,7 @@ import * as SC from './styles';
 interface Props extends DialogProps {
   onClose: () => void;
   open: boolean;
-  content: React.ReactNode;
+  children: React.ReactNode;
   disableActions?: boolean;
   title?: string;
   onAccept?: () => void;
@@ -23,7 +23,7 @@ const Modal: React.FC<Props> = ({
   title,
   cancelButtonText,
   acceptButtonText,
-  content,
+  children,
   disableActions,
   ...props
 }) => {
@@ -34,7 +34,7 @@ const Modal: React.FC<Props> = ({
         <SC.CloseWrapper aria-label="close" onClick={onClose}>
           <CloseIcon />
         </SC.CloseWrapper>
-        {content}
+        {children}
       </SC.Content>
       {!disableActions && (
         <DialogActions>

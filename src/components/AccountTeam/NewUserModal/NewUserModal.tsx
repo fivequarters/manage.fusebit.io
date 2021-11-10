@@ -12,14 +12,9 @@ const CreateUserModal = ({ onClose, open }: Props) => {
   const { _createUser } = useEntityApi();
 
   return (
-    <Modal
-      content={<CreateUserForm createUser={_createUser} onClose={onClose} />}
-      disableActions
-      open={open}
-      onClose={onClose}
-      closeAfterTransition
-      BackdropComponent={Backdrop}
-    />
+    <Modal disableActions open={open} onClose={onClose} closeAfterTransition BackdropComponent={Backdrop}>
+      <CreateUserForm createUser={_createUser} onClose={onClose} />
+    </Modal>
   );
 };
 
