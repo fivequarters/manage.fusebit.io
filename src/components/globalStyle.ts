@@ -157,10 +157,11 @@ export const ModalTitle = styled.h2<{ margin?: string }>`
   text-align: center;
 `;
 
-export const ModalDescription = styled.p<{ textAlign?: string; margin?: string }>`
+export const ModalDescription = styled.p<{ textAlign?: string; margin?: string; maxWidth?: string }>`
   font-size: 16px;
   line-height: 22px;
   color: var(--black);
+  max-width: ${(props) => props.maxWidth && props.maxWidth};
   margin: ${(props) => (props.margin ? props.margin : 0)};
   text-align: ${(props) => props.textAlign && props.textAlign};
   margin-bottom: 24px;

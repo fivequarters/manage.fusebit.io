@@ -30,7 +30,7 @@ const Modal: React.FC<Props> = ({
   return (
     <Dialog onClose={onClose} open={open} {...props}>
       {title && <SC.Title>{title}</SC.Title>}
-      <SC.Content>
+      <SC.Content hasPadding={disableActions}>
         <SC.CloseWrapper aria-label="close" onClick={onClose}>
           <CloseIcon />
         </SC.CloseWrapper>
@@ -40,11 +40,11 @@ const Modal: React.FC<Props> = ({
         <DialogActions>
           <Box display="flex" alignItems="center" justifyContent="center" width="100%" pb="32px">
             {hasCancel && (
-              <Button variant="outlined" onClick={onClose} color="primary">
+              <Button style={{ width: 77, marginRight: 16 }} variant="outlined" onClick={onClose} color="primary">
                 {cancelButtonText || 'Cancel'}
               </Button>
             )}
-            <Button style={{ width: 200 }} variant="contained" onClick={onAccept} color="primary">
+            <Button style={{ width: !hasCancel ? 200 : 77 }} variant="contained" onClick={onAccept} color="primary">
               {acceptButtonText || 'Accept'}
             </Button>
           </Box>

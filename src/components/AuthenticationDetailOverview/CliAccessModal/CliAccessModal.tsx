@@ -6,7 +6,11 @@ import Modal from '@components/common/Modal';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  min-width: 600px;
+  width: 600px;
+
+  @media only screen and (max-width: 880px) {
+    width: 100%;
+  }
 `;
 
 const CliAccessModal = React.forwardRef<HTMLDivElement, Props>(({ open, onClose }, ref) => {

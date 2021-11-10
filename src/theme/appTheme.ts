@@ -35,6 +35,11 @@ export const lightTheme: Theme = createMuiTheme({
         },
       },
     },
+    MuiDialog: {
+      paperWidthSm: {
+        maxWidth: '100%',
+      },
+    },
   },
   props: {
     MuiCheckbox: {
