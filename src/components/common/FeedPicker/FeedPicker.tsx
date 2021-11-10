@@ -2,7 +2,6 @@ import React from 'react';
 import { Box, Button, TextField } from '@material-ui/core';
 import { Props } from '@interfaces/feedPicker';
 import search from '@assets/search.svg';
-import cross from '@assets/cross.svg';
 import Loader from '@components/common/Loader';
 import { useTrackPage } from '@hooks/useTrackPage';
 import { urlOrSvgToImage } from '@utils/utils';
@@ -42,8 +41,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
   };
 
   return (
-    <SC.Card onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)} open={open} ref={ref} tabIndex={-1}>
-      <SC.Close onClick={() => onClose()} src={cross} alt="close" height="12" width="12" />
+    <SC.Card onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)} ref={ref} tabIndex={-1}>
       <SC.Title>{`New ${feedTypeName}`}</SC.Title>
       <SC.Flex>
         <SC.Column>
