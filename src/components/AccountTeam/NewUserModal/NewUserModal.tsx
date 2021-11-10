@@ -1,5 +1,5 @@
 import { Backdrop } from '@material-ui/core';
-import Modal from '@material-ui/core/Modal';
+import Modal from '@components/common/Modal';
 import { useEntityApi } from '@hooks/useEntityApi';
 import CreateUserForm from '@components/AccountTeam/NewUserForm';
 
@@ -13,15 +13,13 @@ const CreateUserModal = ({ onClose, open }: Props) => {
 
   return (
     <Modal
-      aria-labelledby="transition-modal-title"
-      aria-describedby="transition-modal-description"
+      content={<CreateUserForm createUser={_createUser} onClose={onClose} />}
+      disableActions
       open={open}
       onClose={onClose}
       closeAfterTransition
       BackdropComponent={Backdrop}
-    >
-      <CreateUserForm createUser={_createUser} open={open} onClose={onClose} />
-    </Modal>
+    />
   );
 };
 

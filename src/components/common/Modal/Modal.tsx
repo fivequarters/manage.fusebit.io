@@ -7,7 +7,8 @@ interface Props extends DialogProps {
   onClose: () => void;
   open: boolean;
   content: React.ReactNode;
-  title: string;
+  disableActions?: boolean;
+  title?: string;
   onAccept?: () => void;
   hasCancel?: boolean;
   cancelButtonText?: string;
@@ -23,29 +24,32 @@ const Modal: React.FC<Props> = ({
   cancelButtonText,
   acceptButtonText,
   content,
+  disableActions,
   ...props
 }) => {
   return (
     <Dialog onClose={onClose} open={open} {...props}>
-      <SC.Title>{title}</SC.Title>
+      {title && <SC.Title>{title}</SC.Title>}
       <SC.Content>
         <SC.CloseWrapper aria-label="close" onClick={onClose}>
           <CloseIcon />
         </SC.CloseWrapper>
         {content}
       </SC.Content>
-      <DialogActions>
-        <Box display="flex" alignItems="center" justifyContent="center" width="100%" pb="32px">
-          {hasCancel && (
-            <Button variant="outlined" onClick={onClose} color="primary">
-              {cancelButtonText || 'Cancel'}
+      {!disableActions && (
+        <DialogActions>
+          <Box display="flex" alignItems="center" justifyContent="center" width="100%" pb="32px">
+            {hasCancel && (
+              <Button variant="outlined" onClick={onClose} color="primary">
+                {cancelButtonText || 'Cancel'}
+              </Button>
+            )}
+            <Button style={{ width: 200 }} variant="contained" onClick={onAccept} color="primary">
+              {acceptButtonText || 'Accept'}
             </Button>
-          )}
-          <Button style={{ width: 200 }} variant="contained" onClick={onAccept} color="primary">
-            {acceptButtonText || 'Accept'}
-          </Button>
-        </Box>
-      </DialogActions>
+          </Box>
+        </DialogActions>
+      )}
     </Dialog>
   );
 };

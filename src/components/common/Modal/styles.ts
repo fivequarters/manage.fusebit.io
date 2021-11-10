@@ -22,4 +22,5 @@ export const Title = styled(DialogTitle)`
 export const Content = styled(DialogContent)`
   padding: 40px;
   padding-top: 24px;
+  width: 100%;
 `;
