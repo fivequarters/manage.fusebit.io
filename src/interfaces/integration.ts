@@ -23,7 +23,7 @@ export interface InnerConnector {
 export interface Integration {
   id: string;
   data: IntegrationData;
-  tags?: Tags;
+  tags: Tags;
 }
 
 export interface Props {
