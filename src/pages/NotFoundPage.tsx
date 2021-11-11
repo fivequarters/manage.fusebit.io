@@ -3,6 +3,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import * as CSC from '@components/globalStyle';
 import { useAuthContext } from '@hooks/useAuthContext';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
+import useTitle from '@hooks/useTitle';
 
 const NotFoundPage: FC<{}> = (): ReactElement => {
   const history = useHistory();
@@ -10,6 +11,7 @@ const NotFoundPage: FC<{}> = (): ReactElement => {
   const { getRedirectLink } = useGetRedirectLink();
   const [showLoader, setShowLoader] = useState(false);
   const location = useLocation();
+  useTitle('Page Not Found');
 
   useEffect(() => {
     if (location.pathname === '/') {

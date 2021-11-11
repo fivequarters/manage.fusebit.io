@@ -14,9 +14,12 @@ import ConfirmationPrompt from '@components/common/ConfirmationPrompt';
 import { useTrackPage } from '@hooks/useTrackPage';
 import FusebitEditor from '@components/IntegrationDetailDevelop/FusebitEditor';
 import useEditor from '@components/IntegrationDetailDevelop/FusebitEditor/useEditor';
+import { useParams } from 'react-router-dom';
+import useTitle from '@hooks/useTitle';
 import * as SC from './styles';
 
 const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationId }, ref) => {
+  const { id } = useParams<{ id: string }>();
   const { userData } = useAuthContext();
   const [isMounted, setIsMounted] = useState(false);
   const [configureRunnerActive, setConfigureRunnerActive] = useState(false);
@@ -30,6 +33,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const [dirtyState, setDirtyState] = useState(false);
 
   useTrackPage('Web Editor', 'Web Editor');
+  useTitle(`${id} Editor`);
 
   useEffect(() => {
     const createAddNewItemElement = (lastItem: Element) => {

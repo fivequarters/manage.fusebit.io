@@ -4,9 +4,11 @@ import Layout from '@components/common/Layout';
 import TabComponent from '@components/common/TabComponent';
 import { useTrackPage } from '@hooks/useTrackPage';
 import ConnectorsNavbar from '@components/common/ConnectorsNavbar';
+import useTitle from '@hooks/useTitle';
 
 const ConnectorsOverviewPage: FC<{}> = (): ReactElement => {
   useTrackPage('Connectors Overview', 'Connectors');
+  useTitle('Connectors');
 
   return (
     <Layout>
