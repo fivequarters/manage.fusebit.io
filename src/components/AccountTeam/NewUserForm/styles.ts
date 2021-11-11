@@ -17,6 +17,6 @@ export const FormInputWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   margin-top: 48px;
+  justify-content: center;
 `;
