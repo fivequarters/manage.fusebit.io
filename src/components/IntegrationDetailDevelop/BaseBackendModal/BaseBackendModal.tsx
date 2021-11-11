@@ -1,4 +1,4 @@
-import { Backdrop, Modal, Fade } from '@material-ui/core';
+import Modal from '@components/common/Modal';
 import Connect from '@components/IntegrationDetailDevelop/ConnectModal';
 import useDeleteBackend from '@components/IntegrationDetailDevelop/hooks/useDeleteBackend';
 
@@ -11,17 +11,8 @@ const BaseBackendModal = ({ open, onClose, id, ...props }: Props) => {
   const { handleDelete } = useDeleteBackend({ onClose: () => onClose(true), id });
 
   return (
-    <Modal
-      aria-labelledby="transition-modal-title"
-      aria-describedby="transition-modal-description"
-      open={open}
-      onClose={() => onClose()}
-      closeAfterTransition
-      BackdropComponent={Backdrop}
-    >
-      <Fade in={open}>
-        <Connect open={open} onClose={() => onClose()} onDelete={handleDelete} id={id} {...props} />
-      </Fade>
+    <Modal open={open} onClose={() => onClose()}>
+      <Connect open={open} onClose={() => onClose()} onDelete={handleDelete} id={id} {...props} />
     </Modal>
   );
 };
