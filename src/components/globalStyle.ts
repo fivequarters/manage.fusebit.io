@@ -21,6 +21,14 @@ export default createGlobalStyle`
         }
     }
 
+    .monaco-editor {
+      a {
+          span {
+              display: initial;
+          }
+      }
+    }
+
     #pendo-text-7f2119cd { // this is pendo launch guide, for some reason it doesnt have cursor pointer by default ):
       &:hover {
         cursor: pointer;
@@ -29,6 +37,11 @@ export default createGlobalStyle`
 
     #_pendo-badge_jF5N6MCHUdDHNs8d6qkdUArNI6M { // this is pendo launch guide wrapper
       z-index: 0 !important;
+    }
+
+    // TODO: Review if this can be moved to the notistack provider
+    .SnackbarItem-variantError {
+      background-color: #D32F2F !important;
     }
 
     button {

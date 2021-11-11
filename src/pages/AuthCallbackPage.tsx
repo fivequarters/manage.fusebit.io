@@ -9,6 +9,7 @@ import { AuthStatus, signIn, useAuthContext } from '@hooks/useAuthContext';
 import useFirstTimeVisitor from '@hooks/useFirstTimeVisitor';
 import { Auth0Profile } from '@interfaces/auth0Profile';
 import { Company } from '@interfaces/company';
+import { User } from '@interfaces/user';
 
 const {
   REACT_APP_AUTH0_DOMAIN,
@@ -89,8 +90,8 @@ const AuthCallbackPage: FC<{}> = (): ReactElement => {
           history.push(requestedPath);
         };
 
-        const user = { ...auth0Profile, ...company };
-        getAnalyticsClient().ready(() => {
+        const user: User = { email: fusebitProfile.email, ...auth0Profile, ...company };
+        getAnalyticsClient(user).ready(() => {
           trackAuthEvent(user, fusebitProfile, isSignUpEvent, navigatePostAuth);
         });
       });
