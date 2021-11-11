@@ -2,6 +2,7 @@ export interface FusebitProfile {
   accountId?: string;
   subscriptionId?: string;
   userId?: string;
+  email?: string;
 }
 
 export interface Auth0Token {
