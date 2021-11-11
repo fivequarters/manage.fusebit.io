@@ -21,6 +21,14 @@ export default createGlobalStyle`
         }
     }
 
+    .monaco-editor {
+      a {
+          span {
+              display: initial;
+          }
+      }
+    }
+
     #pendo-text-7f2119cd { // this is pendo launch guide, for some reason it doesnt have cursor pointer by default ):
       &:hover {
         cursor: pointer;
@@ -215,8 +223,8 @@ export const CloseIconMixin = css`
 `;
 
 export const Copy = styled.div<{ margin?: string }>`
-  height: 12px;
-  width: 12px;
+  min-height: 12px;
+  min-width: 12px;
   background-image: url(${copy});
   background-repeat: no-repeat;
   background-size: contain;

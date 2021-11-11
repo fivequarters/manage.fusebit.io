@@ -80,6 +80,7 @@ export const LineInstructionFade = styled.div<{
   height: 50px;
   width: ${(props) => (props.change && !props.disabled ? '300px' : '60px')};
   background-image: linear-gradient(to left, #eff5ff 10%, rgba(255, 255, 255, 0) 100%);
+  border-radius: 4px 4px 0 0;
   z-index: 1;
   transition: width 0.25s linear;
 
@@ -89,10 +90,15 @@ export const LineInstructionFade = styled.div<{
     width: 300px !important;
   }
 
+  @media only screen and (max-width: 350px) {
+    width: 100% !important;
+  }
+
   ${(props) =>
     props.warning &&
     `
-      border-radius: 4px;
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
       border: 2px solid #F83420;
       border-left: 0;
   `}

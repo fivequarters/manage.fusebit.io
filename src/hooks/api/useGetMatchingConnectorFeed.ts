@@ -35,7 +35,7 @@ export const findMatchingConnectorFeed = async (connector: Connector | FinalConn
 };
 
 interface Props {
-  connector: FinalConnector;
+  connector: Connector | FinalConnector;
 }
 
 export const useGetMatchingConnectorFeed = ({ connector }: Props) => {

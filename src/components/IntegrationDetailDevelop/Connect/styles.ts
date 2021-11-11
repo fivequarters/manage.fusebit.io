@@ -3,43 +3,20 @@ import disclaimer from '@assets/disclaimer.svg';
 import time from '@assets/time.svg';
 import warning from '@assets/black-warning.svg';
 
-export const Card = styled.div<{ open: boolean }>`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: white;
-  opacity: ${(props) => (props.open ? 1 : 0)};
-  padding: 40px 96px;
-  border-radius: 8px;
-  width: 859px;
-  height: 700px;
-  box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
-  transition: all 1s linear;
-
-  @media only screen and (max-width: 870px) {
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    padding: 32px;
-    padding-top: 200px;
-    left: 0;
-    top: auto;
-    bottom: 0;
-    border-radius: 0;
-    transform: translate(0, 0);
-  }
-`;
-
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 667px;
   padding-top: 0px;
+
+  @media only screen and (max-width: 880px) {
+    width: 100%;
+    padding: 56px 24px;
+  }
+
+  @media only screen and (max-width: 370px) {
+    padding: 56px 16px;
+  }
 `;
 
 export const SmallTitleWrapper = styled.div`
@@ -74,12 +51,13 @@ export const Hr = styled.div`
   margin: 40px 0;
 `;
 
-export const Subtitle = styled.h3`
+export const Subtitle = styled.h3<{ margin?: string }>`
   font-size: 20px;
   line-height: 26px;
   font-weight: 600;
   color: var(--black);
   margin-bottom: 16px;
+  margin: ${(props) => props.margin && props.margin};
 `;
 
 export const Disclaimer = styled.p`
@@ -96,8 +74,8 @@ export const Disclaimer = styled.p`
 `;
 
 export const DisclaimerIcon = styled.div`
-  height: 20px;
-  width: 20px;
+  min-height: 20px;
+  min-width: 20px;
   background-image: url(${disclaimer});
   background-size: contain;
   background-repeat: no-repeat;
@@ -148,20 +126,33 @@ export const WarningWrapper = styled.div`
   padding: 24px;
   background-color: var(--yellow);
   border-radius: 8px;
-  margin-top: 18px;
+
+  @media only screen and (max-width: 420px) {
+    padding: 16px;
+  }
 
   p {
     font-size: 14px;
     line-height: 20px;
+    margin: 0;
     color: var(--black);
+
+    @media only screen and (max-width: 420px) {
+      font-size: 12px;
+      line-height: 16px;
+    }
+
+    @media only screen and (max-width: 325px) {
+      font-size: 11px;
+    }
   }
 `;
 
 export const WarningIcon = styled.div`
-  height: 19px;
-  width: 22px;
+  min-height: 19px;
+  min-width: 22px;
   background-image: url(${warning});
   background-size: contain;
   background-repeat: no-repeat;
-  margin-right: 17px;
+  margin-right: 16px;
 `;

@@ -31,7 +31,6 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
     onSubmit,
     onClose,
   });
-
   useTrackPage(`${feedTypeName} New Modal`, `${feedTypeName}s`);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -80,7 +79,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
           {loading || !activeTemplate ? (
             <Loader />
           ) : (
-            <Box overflow="hidden auto" maxHeight="340px">
+            <Box>
               {filteredFeed.map((feedEntry) => {
                 return (
                   <SC.ColumnItem
