@@ -39,6 +39,9 @@ export const lightTheme: Theme = createMuiTheme({
       paperWidthSm: {
         maxWidth: '100%',
       },
+      paperScrollPaper: {
+        maxHeight: '100%',
+      },
     },
   },
   props: {
