@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Box, Grid, useMediaQuery } from '@material-ui/core';
 import styled, { css } from 'styled-components';
 import { Xwrapper } from 'react-xarrows';
@@ -38,6 +39,7 @@ interface Props {
 }
 
 const Diagram: React.FC<Props> = ({ isLoading }) => {
+  const [processing, setProcessing] = useState(false);
   const matchesCardOverlapping = useMediaQuery(CARD_OVERLAPPING_MEDIA_QUERY);
 
   return (
@@ -51,10 +53,14 @@ const Diagram: React.FC<Props> = ({ isLoading }) => {
               <StyledYourApplicationCard $matchesCardOverlapping={matchesCardOverlapping} />
             </Grid>
             <Grid item xs={matchesCardOverlapping ? 12 : 4}>
-              <StyledIntegrationCard $matchesCardOverlapping={matchesCardOverlapping} />
+              <StyledIntegrationCard
+                processing={processing}
+                setProcessing={setProcessing}
+                $matchesCardOverlapping={matchesCardOverlapping}
+              />
             </Grid>
             <Grid item xs={matchesCardOverlapping ? 12 : 4}>
-              <StyledConnectorsCard $matchesCardOverlapping={matchesCardOverlapping} />
+              <StyledConnectorsCard processing={processing} $matchesCardOverlapping={matchesCardOverlapping} />
             </Grid>
           </Grid>
           {matchesCardOverlapping ? (

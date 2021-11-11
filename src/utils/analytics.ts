@@ -25,7 +25,7 @@ const mockedAnalyticsClient = {
   user: null,
 } as any;
 
-export const getAnalyticsClient: (brandNewUser?: User) => SegmentAnalytics.AnalyticsJS = (brandNewUser) => {
+export const getAnalyticsClient: (user?: User) => SegmentAnalytics.AnalyticsJS = (user) => {
   // if already defined, returns it
   if (analyticsClient) {
     return analyticsClient;
@@ -46,10 +46,8 @@ export const getAnalyticsClient: (brandNewUser?: User) => SegmentAnalytics.Analy
   }
 
   // if it is prod, we track only non-fusebit and non-litebox users
-  if (!brandNewUser || !brandNewUser.email) {
-    throw new Error('Analytics not defined yet and got no new user.');
-  }
-  const isExternalUser = !brandNewUser.email.endsWith('@fusebit.io') && !brandNewUser.email.endsWith('@litebox.ai');
+  const isExternalUser =
+    !user || !user.email || (!user.email.endsWith('@fusebit.io') && !user.email.endsWith('@litebox.ai'));
   analyticsClient = isExternalUser ? analytics : mockedAnalyticsClient;
   return analyticsClient;
 };

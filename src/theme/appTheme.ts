@@ -10,7 +10,7 @@ export const lightTheme: Theme = createMuiTheme({
       main: 'rgba(215, 229, 255, 0.4)',
     },
     background: {
-      default: 'white',
+      default: '#fff',
     },
   },
   overrides: {

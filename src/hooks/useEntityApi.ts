@@ -7,6 +7,7 @@ import { InnerConnector, Integration } from '@interfaces/integration';
 import { findMatchingConnectorFeed, getAllDependenciesFromFeed, linkPackageJson } from '@utils/utils';
 import { EntitiesType } from '@interfaces/entities';
 import { Account } from '@interfaces/account';
+import { INTEGRATION_PROCESSING_SUFFIX } from '@utils/constants';
 import { useLoader } from './useLoader';
 import { useAccountConnectorCreateConnector } from './api/v2/account/connector/useCreateOne';
 import { useAccountIntegrationCreateIntegration } from './api/v2/account/integration/useCreateOne';
@@ -46,7 +47,11 @@ export const useEntityApi = (preventLoader?: boolean) => {
   const deleteConnector = useAccountConnectorDeleteConnector<Operation>();
   const deleteAccount = useAccountUserDeleteOne<Operation>();
 
-  const createEntity = async (entity: Entity, commonTags?: { [key: string]: string }) => {
+  const createEntity = async (
+    entity: Entity,
+    commonTags?: { [key: string]: string },
+    disableWaitforOperations?: boolean
+  ) => {
     const obj = {
       data: entity.data,
       id: entity.id,
@@ -61,9 +66,12 @@ export const useEntityApi = (preventLoader?: boolean) => {
       newEntity = await createConnector.mutateAsync(obj);
     } else {
       newEntity = await createIntegration.mutateAsync(obj);
+      localStorage.setItem(`${entity.id}${INTEGRATION_PROCESSING_SUFFIX}`, 'true');
     }
 
-    await waitForEntityStateChange(entity.entityType, [entity.id]);
+    if (!disableWaitforOperations) {
+      await waitForEntityStateChange(entity.entityType, [entity.id]);
+    }
 
     return newEntity;
   };
@@ -199,7 +207,7 @@ export const useEntityApi = (preventLoader?: boolean) => {
     }
   };
 
-  const massiveDelete = async (ids: string[], type: EntitiesType, callback?: Function, errorContainer?: string) => {
+  const massiveDelete = async (ids: string[], type: EntitiesType, callback?: Function) => {
     try {
       createLoader();
       for (let i = 0; i < ids.length; i++) {
@@ -229,7 +237,7 @@ export const useEntityApi = (preventLoader?: boolean) => {
       }
       if (callback) callback();
     } catch (e) {
-      createError(e, errorContainer);
+      createError(e);
     } finally {
       removeLoader();
     }
