@@ -222,8 +222,8 @@ export const CloseIconMixin = css`
 `;
 
 export const Copy = styled.div<{ margin?: string }>`
-  height: 12px;
-  width: 12px;
+  min-height: 12px;
+  min-width: 12px;
   background-image: url(${copy});
   background-repeat: no-repeat;
   background-size: contain;
