@@ -51,11 +51,13 @@ export const Flex = styled.div<{ alignItems?: boolean }>`
 `;
 
 export const Column = styled.div<{ border?: boolean }>`
+  position: relative;
   display: flex;
   flex-direction: column;
-  max-height: 490px;
-  overflow-y: auto;
+  max-height: 390px;
+  overflow-y: scroll;
   flex-shrink: 0;
+  z-index: 0;
 
   @media only screen and (max-width: 1100px) {
     height: 100%;
