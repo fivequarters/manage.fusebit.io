@@ -75,6 +75,7 @@ export const LineInstructionFade = styled.div<{
   height: 50px;
   width: ${(props) => (props.change && !props.disabled ? '300px' : '60px')};
   background-image: linear-gradient(to left, #eff5ff 10%, rgba(255, 255, 255, 0) 100%);
+  border-radius: 4px;
   z-index: 1;
   transition: width 0.25s linear;
 
@@ -84,12 +85,16 @@ export const LineInstructionFade = styled.div<{
     width: 300px !important;
   }
 
+  @media only screen and (max-width: 350px) {
+    width: 100% !important;
+  }
+
   ${(props) =>
     props.warning &&
     `
-      border-radius: 4px;
       border: 2px solid #F83420;
       border-left: 0;
+      border-radius: 0px 4px 4px 0px;
   `}
 `;
 
@@ -133,4 +138,6 @@ export const CopySuccess = styled.p<{ copy: boolean }>`
 export const Text = styled(Typography)`
   font-family: Courier;
   overflow-x: hidden;
+  overflow-y: visible;
+  line-height: normal;
 `;

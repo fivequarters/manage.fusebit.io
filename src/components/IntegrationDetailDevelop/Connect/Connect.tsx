@@ -1,292 +1,266 @@
-import React, { useState } from 'react';
-import { Button, Input } from '@material-ui/core';
-import { useParams } from 'react-router-dom';
+import React from 'react';
+import { Box, Button, Input, Typography } from '@material-ui/core';
 import * as CSC from '@components/globalStyle';
 import CopyLine from '@components/common/CopyLine';
-import { useCopy } from '@hooks/useCopy';
-import { useAuthContext } from '@hooks/useAuthContext';
-import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
-
-import { useAccountIntegrationsGetOne } from '@hooks/api/v2/account/integration/useGetOne';
 import { Integration } from '@interfaces/integration';
-import { useBackendUpdateOne } from '@hooks/api/v1/backend/useUpdateOne';
-import DeleteBackendModal from '../DeleteBackendModal';
 import { LinkSampleApp } from './LinkSampleApp';
+import useConnect, { Props as UseConnectProps } from './useConnect';
 import * as SC from './styles';
 
-const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
-
-interface Props {
-  onClose: Function;
-  onDelete: Function;
-  onChange?: () => void;
+interface Props extends UseConnectProps {
   open: boolean;
-  id: string;
-  name: string;
   token: string;
-  keyIsCopied?: boolean;
-  setKeyIsCopied?: Function;
-  showWarning?: boolean;
-  setShowWarning?: Function;
-  disableCopy?: boolean;
   integration?: Integration;
+  setKeyIsCopied?: Function;
+  onDelete: Function;
 }
 
-const Connect = React.forwardRef<HTMLDivElement, Props>(
-  (
-    {
-      id,
-      name,
-      token,
-      onClose,
-      onChange,
-      onDelete,
-      open,
-      setKeyIsCopied,
-      keyIsCopied,
-      setShowWarning,
-      showWarning,
-      disableCopy,
-    },
-    ref
-  ) => {
-    const { id: integrationId } = useParams<{ id: string }>();
-    const { getRedirectLink } = useGetRedirectLink();
-    const { userData } = useAuthContext();
-    const [editMode, setEditMode] = useState(false);
-    const [editedBackendClientId, setEditedBackendClientId] = useState(name);
-    const [backendClientId, setBackendClientId] = useState(name);
-    const { handleCopy, copiedLine } = useCopy();
-    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-    const [saving, setSaving] = useState(false);
+const Connect: React.FC<Props> = ({
+  id,
+  name,
+  token,
+  onClose,
+  onChange,
+  onDelete,
+  setKeyIsCopied,
+  keyIsCopied,
+  setShowWarning,
+  showWarning,
+  disableCopy,
+}) => {
+  const {
+    backendClientId,
+    componentMap,
+    copiedLine,
+    editMode,
+    editedBackendClientId,
+    handleCancel,
+    handleClose,
+    handleCopy,
+    handleSave,
+    integrationBaseUrl,
+    isSampleAppEnabled,
+    saving,
+    setEditMode,
+    setEditedBackendClientId,
+    buttonsCrashing,
+    smallPhone,
+  } = useConnect({
+    disableCopy,
+    id,
+    name,
+    keyIsCopied,
+    onChange,
+    onClose,
+    setShowWarning,
+    showWarning,
+  });
 
-    const integrationBaseUrl = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v2${getRedirectLink(`/integration/${integrationId}`)}`;
-    const { mutateAsync: updateBackend } = useBackendUpdateOne();
+  const getButtonSize = (() => {
+    if (smallPhone && isSampleAppEnabled) {
+      return 'small';
+    }
 
-    const { data: integrationData } = useAccountIntegrationsGetOne({
-      enabled: userData.token,
-      id: integrationId,
-      accountId: userData.accountId,
-      subscriptionId: userData.subscriptionId,
-    });
+    if (buttonsCrashing) {
+      return 'medium';
+    }
 
-    const handleClose = () => {
-      if (disableCopy) {
-        onClose();
-      } else if (setShowWarning) {
-        if (keyIsCopied || showWarning) {
-          onClose();
-        } else {
-          setShowWarning(true);
-        }
-      }
-    };
+    return 'large';
+  })();
 
-    const handleSave = async () => {
-      setSaving(true);
-      await updateBackend({ id, updatedBackend: { name: editedBackendClientId } });
-      if (disableCopy) {
-        onChange?.(); // if its the first time its created, we dont call onChange
-      }
-      setBackendClientId(editedBackendClientId);
-      setEditMode(false);
-      setSaving(false);
-    };
+  const getTimeDescriptionWidth = (() => {
+    if (smallPhone) {
+      return '140px';
+    }
 
-    const handleCancel = () => {
-      setEditedBackendClientId(backendClientId);
-      setEditMode(false);
-    };
+    if (buttonsCrashing) {
+      return '165px';
+    }
 
-    const supportedTypeMap: Record<string, string> = {
-      slackConnector: 'slack',
-    };
-    const componentMap =
-      integrationData?.data.data?.components
-        ?.map((component) => supportedTypeMap[component.name])
-        .filter((type) => !!type)
-        .reduce<Record<string, string>>((acc, cur) => {
-          acc[cur] = integrationData?.data.id;
-          return acc;
-        }, {}) || {};
-    const isSampleAppEnabled = !!Object.keys(componentMap).length;
+    return '100%';
+  })();
 
-    return deleteModalOpen ? (
-      <DeleteBackendModal
-        open={deleteModalOpen}
-        setOpen={setDeleteModalOpen}
-        onConfirm={() => onDelete({ isApplication: true, id })}
-      />
-    ) : (
-      <SC.Card open={open} ref={ref} tabIndex={-1}>
-        <SC.Wrapper>
-          <CSC.Close onClick={handleClose} />
+  const getMainButtonWidth = (() => {
+    if (smallPhone) {
+      return '136px';
+    }
 
-          <CSC.ModalTitle margin="0 0 42px 0">{backendClientId}</CSC.ModalTitle>
-          <SC.SmallTitleWrapper>
-            <SC.SmallTitle>
-              <strong>Key Name:</strong>
-            </SC.SmallTitle>
-            {!editMode ? (
-              <>
-                <SC.SmallTitle>&nbsp; {backendClientId}</SC.SmallTitle>
-                <Button
-                  style={{ marginLeft: '24px' }}
-                  onClick={() => setEditMode(true)}
-                  variant="outlined"
-                  color="primary"
-                  size="small"
-                >
-                  Edit
-                </Button>
-              </>
-            ) : (
-              <>
-                <Input
-                  id="standard-adornment-weight"
-                  value={editedBackendClientId}
-                  onChange={(e) => setEditedBackendClientId(e.target.value)}
-                  aria-describedby="standard-backend-Client-Id-helper-text"
-                  style={{ width: '214px', marginLeft: '8.5px' }}
-                  inputProps={{
-                    'aria-label': 'Name',
-                  }}
-                />
-                <Button
-                  disabled={saving}
-                  style={{ marginLeft: '24px', width: '70px' }}
-                  onClick={handleSave}
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                >
-                  {saving ? 'Saving...' : 'Save'}
-                </Button>
-                <Button
-                  style={{ marginLeft: '16px' }}
-                  onClick={handleCancel}
-                  variant="outlined"
-                  color="primary"
-                  size="small"
-                >
-                  Cancel
-                </Button>
-              </>
-            )}
-          </SC.SmallTitleWrapper>
-          <SC.SmallTitleWrapper>
-            <SC.SmallTitle>
-              <strong>Integration Base URL:</strong> {integrationBaseUrl}
-            </SC.SmallTitle>
-            <CSC.Copy onClick={() => handleCopy(integrationBaseUrl as string)} margin="0 0 0 20px" />
-            <SC.CopySuccess copy={copiedLine}>Copied to clipboard!</SC.CopySuccess>
-          </SC.SmallTitleWrapper>
+    if (buttonsCrashing) {
+      return '156px';
+    }
 
-          <SC.Subtitle>Key</SC.Subtitle>
-          <CopyLine
-            disableCopy={disableCopy}
-            warning={showWarning && !keyIsCopied}
-            onCopy={() => setKeyIsCopied && setKeyIsCopied(true)}
-            text={token}
-          />
-          {showWarning && !keyIsCopied ? (
-            <SC.WarningWrapper>
-              <SC.WarningIcon />
-              You did not copy the key above. It will be lost after you close this window.
-            </SC.WarningWrapper>
-          ) : (
-            !disableCopy && (
-              <CSC.Flex margin="0 0 10px 0">
-                <SC.DisclaimerIcon />
-                <SC.Disclaimer>
-                  For security reasons, <strong>this is the last time you will see this key.</strong>
-                </SC.Disclaimer>
-              </CSC.Flex>
-            )
-          )}
+    return '200px';
+  })();
 
-          <SC.Subtitle style={{ margin: '32px auto 16px' }}>Connect your Backend</SC.Subtitle>
-          <CSC.Flex flexDown>
-            <CSC.Flex>
-              <Button
-                style={{ margin: '0 auto', width: '293px' }}
-                target="_blank"
-                rel="noopener"
-                href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
-                variant="outlined"
-                color="primary"
-                size="large"
-              >
-                Follow guide
-              </Button>
-              {isSampleAppEnabled && (
-                <>
-                  or
-                  <LinkSampleApp componentMap={componentMap} />
-                </>
-              )}
-            </CSC.Flex>
-            <CSC.Flex>
-              <div style={{ display: 'flex', alignItems: 'center', margin: '0 auto' }}>
-                <SC.TimeIcon />
-                <SC.TimeDescription>10 minutes</SC.TimeDescription>
-              </div>
-              {isSampleAppEnabled && (
-                <div style={{ display: 'flex', alignItems: 'center', margin: '0 auto' }}>
-                  <SC.TimeIcon />
-                  <SC.TimeDescription>2 minutes.</SC.TimeDescription>
-                </div>
-              )}
-            </CSC.Flex>
-          </CSC.Flex>
-          {/* <CSC.Flex margin="32px 0 0 0">
-            <CSC.Flex flexDown width="293px" margin="0 0 auto 0">
-              <Button
-                target="_blank"
-                rel="noopener"
-                href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
-                variant="outlined"
-                color="primary"
-                size="large"
-              >
-                Follow guide
-              </Button>
-              <CSC.Flex>
-                <SC.TimeIcon />
-                <SC.TimeDescription>10 minutes</SC.TimeDescription>
-              </CSC.Flex>
-            </CSC.Flex>
-            <SC.Or>or</SC.Or>
-            <CSC.Flex flexDown width="293px">
-              <Button variant="outlined" color="primary" size="large">
-                Launch sample app
-              </Button>
-              <CSC.Flex>
-                <SC.TimeIcon />
-                <SC.TimeDescription>2 minutes</SC.TimeDescription>
-              </CSC.Flex>
-              <SC.TimeDescription margin="0">Already configured to work with this integration</SC.TimeDescription>
-            </CSC.Flex>
-          </CSC.Flex> */}
+  return (
+    <SC.Wrapper>
+      <CSC.Close onClick={handleClose} />
 
-          <CSC.Flex margin="50px 0 0 auto" width="max-content">
+      <CSC.ModalTitle margin="0 0 42px 0">{backendClientId}</CSC.ModalTitle>
+      <SC.SmallTitleWrapper>
+        <SC.SmallTitle>
+          <strong>Key Name:</strong>
+        </SC.SmallTitle>
+        {!editMode ? (
+          <>
+            <SC.SmallTitle>&nbsp; {backendClientId}</SC.SmallTitle>
             <Button
-              onClick={() => setDeleteModalOpen(true)}
-              style={{ width: '200px', marginRight: '32px' }}
+              style={{ marginLeft: '24px' }}
+              onClick={() => setEditMode(true)}
               variant="outlined"
               color="primary"
-              size="large"
+              size="small"
             >
-              Delete
+              Edit
             </Button>
-            <Button onClick={handleClose} style={{ width: '200px' }} variant="contained" color="primary" size="large">
-              OK
+          </>
+        ) : (
+          <>
+            <Input
+              id="standard-adornment-weight"
+              value={editedBackendClientId}
+              onChange={(e) => setEditedBackendClientId(e.target.value)}
+              aria-describedby="standard-backend-Client-Id-helper-text"
+              style={{ width: '214px', marginLeft: '8.5px' }}
+              inputProps={{
+                'aria-label': 'Name',
+              }}
+            />
+            <Button
+              disabled={saving}
+              style={{ marginLeft: '24px', width: '70px' }}
+              onClick={handleSave}
+              variant="contained"
+              color="primary"
+              size="small"
+            >
+              {saving ? 'Saving...' : 'Save'}
             </Button>
+            <Button
+              style={{ marginLeft: '16px' }}
+              onClick={handleCancel}
+              variant="outlined"
+              color="primary"
+              size="small"
+            >
+              Cancel
+            </Button>
+          </>
+        )}
+      </SC.SmallTitleWrapper>
+      <Box display="flex" alignItems="center" mb="15px" position="relative">
+        <SC.SmallTitle>
+          <strong>Integration Base URL:</strong> {integrationBaseUrl}
+        </SC.SmallTitle>
+        <CSC.Copy onClick={() => handleCopy(integrationBaseUrl as string)} margin="0 0 0 20px" />
+        <SC.CopySuccess copy={copiedLine}>Copied to clipboard!</SC.CopySuccess>
+      </Box>
+
+      <SC.Subtitle>Key</SC.Subtitle>
+      <CopyLine
+        disableCopy={disableCopy}
+        warning={showWarning && !keyIsCopied}
+        onCopy={() => setKeyIsCopied && setKeyIsCopied(true)}
+        text={token}
+      />
+      {showWarning && !keyIsCopied ? (
+        <SC.WarningWrapper>
+          <SC.WarningIcon />
+          <Typography>You did not copy the key above. It will be lost after you close this window.</Typography>
+        </SC.WarningWrapper>
+      ) : (
+        !disableCopy && (
+          <CSC.Flex>
+            <SC.DisclaimerIcon />
+            <SC.Disclaimer>
+              For security reasons, <strong>this is the last time you will see this key.</strong>
+            </SC.Disclaimer>
           </CSC.Flex>
-        </SC.Wrapper>
-      </SC.Card>
-    );
-  }
-);
+        )
+      )}
+
+      <SC.Subtitle margin="32px auto">Connect your Backend</SC.Subtitle>
+      <CSC.Flex flexDown>
+        <Box
+          display="flex"
+          alignItems={!isSampleAppEnabled && 'center'}
+          justifyContent={!isSampleAppEnabled && 'center'}
+        >
+          <Box display="flex" flexDirection="column">
+            <Button
+              style={{ width: buttonsCrashing ? 'fit-content' : '293px' }}
+              target="_blank"
+              rel="noopener"
+              href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
+              variant="outlined"
+              color="primary"
+              size={getButtonSize}
+            >
+              Follow guide
+            </Button>
+            <Box display="flex" alignItems="center" justifyContent={!isSampleAppEnabled && 'center'}>
+              <SC.TimeIcon />
+              <SC.TimeDescription>10 minutes</SC.TimeDescription>
+            </Box>
+          </Box>
+          {isSampleAppEnabled && (
+            <>
+              <Box display="flex" margin={smallPhone ? '5px auto auto' : '10.5px auto auto'}>
+                or
+              </Box>
+              <Box display="flex" flexDirection="column">
+                <LinkSampleApp
+                  buttonsSize={getButtonSize}
+                  buttonsCrashing={buttonsCrashing}
+                  componentMap={componentMap}
+                />
+                <Box display="flex" flexDirection="column" alignItems="left" justifyContent="left">
+                  <Box display="flex" alignItems="center">
+                    <SC.TimeIcon />
+                    <SC.TimeDescription>2 minutes.</SC.TimeDescription>
+                  </Box>
+                  <Box maxWidth={getTimeDescriptionWidth}>
+                    <SC.TimeDescription margin="0">Already configured to work with this integration</SC.TimeDescription>
+                  </Box>
+                </Box>
+              </Box>
+            </>
+          )}
+        </Box>
+      </CSC.Flex>
+      <Box
+        display="flex"
+        alignItems="center"
+        position="relative"
+        margin={buttonsCrashing ? '50px auto 0' : '50px 0 0 auto'}
+        width="max-content"
+      >
+        <Button
+          onClick={() => onDelete()}
+          style={{
+            width: getMainButtonWidth,
+            marginRight: buttonsCrashing ? '16px' : '32px',
+          }}
+          variant="outlined"
+          color="primary"
+          size={buttonsCrashing ? 'medium' : 'large'}
+        >
+          Delete
+        </Button>
+        <Button
+          onClick={handleClose}
+          style={{
+            width: getMainButtonWidth,
+          }}
+          variant="contained"
+          color="primary"
+          size={buttonsCrashing ? 'medium' : 'large'}
+        >
+          OK
+        </Button>
+      </Box>
+    </SC.Wrapper>
+  );
+};
 
 export default Connect;

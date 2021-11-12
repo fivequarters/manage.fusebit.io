@@ -22,6 +22,7 @@ import useUpdateLineConnectors from '@hooks/useUpdateLineConnectors';
 import { trackEvent } from '@utils/analytics';
 
 interface Props {
+  processing: boolean;
   className?: string;
 }
 
@@ -46,7 +47,7 @@ const StyledSeeMoreLink = styled.a`
   }
 `;
 
-const ConnectorsCard: React.FC<Props> = ({ className }) => {
+const ConnectorsCard: React.FC<Props> = ({ className, processing }) => {
   const { userData } = useAuthContext();
   const [connectorModalOpen, setConnectorModalOpen] = useModal();
   const [linkExistingModalOpen, setLinkExistingModalOpen] = useModal();
@@ -116,7 +117,13 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
         isLoading={isLoading}
         actions={
           <>
-            <Button mode="add" size={matchesMobile ? 'medium' : 'large'} fullWidth onClick={handleAddNewConnector}>
+            <Button
+              mode="add"
+              size={matchesMobile ? 'medium' : 'large'}
+              fullWidth
+              onClick={handleAddNewConnector}
+              disabled={processing}
+            >
               Add new
             </Button>
             <Button
@@ -124,7 +131,7 @@ const ConnectorsCard: React.FC<Props> = ({ className }) => {
               mode="add"
               fullWidth
               onClick={handleLinkExistingConnector}
-              disabled={isLinkExistingDisabled}
+              disabled={isLinkExistingDisabled || processing}
             >
               Link existing
             </Button>
