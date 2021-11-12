@@ -109,7 +109,7 @@ const useFeed = ({ isIntegration, onSubmit, onClose, open }: Props) => {
   const handlePlanUpsell = () => {
     if (rawActiveTemplate) {
       if (isIntegration) {
-        trackEvent('Interest in Integration', 'Integrations', { tag: rawActiveTemplate.id });
+        trackEvent('New Integration Enable Button Clicked', 'Integrations', { integration: rawActiveTemplate.id });
       } else {
         trackEvent('Interest in Connector', 'Connectors', { tag: rawActiveTemplate.id });
       }
