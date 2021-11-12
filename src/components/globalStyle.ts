@@ -1,7 +1,5 @@
 import styled, { createGlobalStyle, css, keyframes } from 'styled-components';
-
 import spinner from '@assets/spinner.svg';
-import cross from '@assets/cross.svg';
 import copy from '@assets/copy.svg';
 import { IconButton } from '@material-ui/core';
 
@@ -203,26 +201,6 @@ export const Flex = styled.div<{ margin?: string; flexDown?: boolean; alignCente
   margin: ${(props) => props.margin && props.margin};
 `;
 
-export const CloseIconMixin = css`
-  height: 12px;
-  width: 12px;
-  object-fit: contain;
-  position: absolute;
-  background-image: url(${cross});
-  background-repeat: no-repeat;
-  top: 32px;
-  right: 32px;
-  transition: all 0.25s linear;
-  border: none;
-  background-color: transparent;
-  background-size: contain;
-
-  &:hover {
-    cursor: pointer;
-    transform: rotate(90deg);
-  }
-`;
-
 export const Copy = styled.div<{ margin?: string }>`
   min-height: 12px;
   min-width: 12px;
@@ -241,8 +219,4 @@ export const CloseWrapper = styled(IconButton)`
   right: 16px;
   top: 16px;
   color: var(--black);
-`;
-
-export const Close = styled.button`
-  ${CloseIconMixin}
 `;

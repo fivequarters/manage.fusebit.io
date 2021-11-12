@@ -16,6 +16,7 @@ import FusebitEditor from '@components/IntegrationDetailDevelop/FusebitEditor';
 import useEditor from '@components/IntegrationDetailDevelop/FusebitEditor/useEditor';
 import { useParams } from 'react-router-dom';
 import useTitle from '@hooks/useTitle';
+import CloseIcon from '@material-ui/icons/Close';
 import * as SC from './styles';
 
 const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationId }, ref) => {
@@ -155,7 +156,9 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
               </SC.ActionsHelpLink>
               <SC.ActionsHelpImage src={question} alt="question" height="16" width="16" />
             </SC.ActionsHelpWrapper>
-            <SC.Close onClick={handleClose} />
+            <SC.CloseWrapper onClick={handleClose}>
+              <CloseIcon fontSize="small" />
+            </SC.CloseWrapper>
           </SC.CloseHeader>
         )}
         <SC.FusebitEditorContainer onKeyUp={handleKeyUp}>
