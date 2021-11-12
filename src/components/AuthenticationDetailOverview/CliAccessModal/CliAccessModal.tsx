@@ -15,7 +15,7 @@ const Wrapper = styled.div`
 
 const CliAccessModal = React.forwardRef<HTMLDivElement, Props>(({ open, onClose }, ref) => {
   return (
-    <Modal title="Grant CLI Access" open={open} onAccept={() => onClose()} onClose={() => onClose()}>
+    <Modal title="Grant CLI Access" open={open} onAccept={onClose} onClose={onClose}>
       <Wrapper ref={ref}>
         <CSC.Flex>
           <CSC.LineTitle>1. Install the Fusebit CLI</CSC.LineTitle>

@@ -43,15 +43,15 @@ const BaseBackendModal = ({ open, onClose, id, ...props }: Props) => {
     if (isMobile) {
       return (
         <Drawer anchor="bottom" open={open}>
-          <Connect open={open} onClose={() => onClose()} onDelete={() => setDeleteModalOpen(true)} id={id} {...props} />
+          <Connect open={open} onClose={onClose} onDelete={() => setDeleteModalOpen(true)} id={id} {...props} />
         </Drawer>
       );
     }
 
     return (
-      <Modal disableActions open={open} onClose={() => onClose()}>
+      <Modal disableActions open={open} onClose={onClose}>
         <StyledCard tabIndex={-1}>
-          <Connect open={open} onClose={() => onClose()} onDelete={() => setDeleteModalOpen(true)} id={id} {...props} />
+          <Connect open={open} onClose={onClose} onDelete={() => setDeleteModalOpen(true)} id={id} {...props} />
         </StyledCard>
       </Modal>
     );
