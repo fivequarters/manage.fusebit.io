@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Button, Dialog, DialogActions, DialogProps } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
+import * as CSC from '@components/globalStyle';
 import * as SC from './styles';
 
 interface Props extends DialogProps {
@@ -31,9 +32,9 @@ const Modal: React.FC<Props> = ({
     <Dialog onClose={onClose} open={open} {...props}>
       {title && <SC.Title>{title}</SC.Title>}
       <SC.Content hasPadding={disableActions}>
-        <SC.CloseWrapper aria-label="close" onClick={onClose}>
+        <CSC.CloseWrapper aria-label="close" onClick={onClose}>
           <CloseIcon />
-        </SC.CloseWrapper>
+        </CSC.CloseWrapper>
         {children}
       </SC.Content>
       {!disableActions && (

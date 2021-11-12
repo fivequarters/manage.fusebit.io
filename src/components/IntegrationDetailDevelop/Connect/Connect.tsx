@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Button, Input, Typography } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 import * as CSC from '@components/globalStyle';
 import CopyLine from '@components/common/CopyLine';
 import { Integration } from '@interfaces/integration';
@@ -45,6 +46,7 @@ const Connect: React.FC<Props> = ({
     setEditedBackendClientId,
     buttonsCrashing,
     smallPhone,
+    isMobile,
   } = useConnect({
     disableCopy,
     id,
@@ -94,7 +96,11 @@ const Connect: React.FC<Props> = ({
 
   return (
     <SC.Wrapper>
-      <CSC.Close onClick={handleClose} />
+      {isMobile && (
+        <CSC.CloseWrapper aria-label="close" onClick={onClose}>
+          <CloseIcon />
+        </CSC.CloseWrapper>
+      )}
 
       <CSC.ModalTitle margin="0 0 42px 0">{backendClientId}</CSC.ModalTitle>
       <SC.SmallTitleWrapper>

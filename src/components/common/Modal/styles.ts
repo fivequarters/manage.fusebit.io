@@ -1,12 +1,5 @@
-import { DialogContent, DialogTitle, IconButton } from '@material-ui/core';
+import { DialogContent, DialogTitle } from '@material-ui/core';
 import styled from 'styled-components';
-
-export const CloseWrapper = styled(IconButton)`
-  position: absolute;
-  right: 16px;
-  top: 16px;
-  color: var(--black);
-`;
 
 export const Title = styled(DialogTitle)`
   padding-top: 64px;

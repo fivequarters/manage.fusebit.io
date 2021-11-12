@@ -10,7 +10,7 @@ import { useBackendUpdateOne } from '../../../hooks/api/v1/backend/useUpdateOne'
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
 export interface Props {
-  onClose: Function;
+  onClose: () => void;
   onChange?: () => void;
   id: string;
   name: string;
@@ -30,6 +30,7 @@ const useConnect = ({ onClose, disableCopy, keyIsCopied, showWarning, name, setS
   const { handleCopy, copiedLine } = useCopy();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [saving, setSaving] = useState(false);
+  const isMobile = useMediaQuery('(max-width: 880px)');
   const buttonsCrashing = useMediaQuery('(max-width: 665px)');
   const smallPhone = useMediaQuery('(max-width: 360px)');
 
@@ -106,6 +107,7 @@ const useConnect = ({ onClose, disableCopy, keyIsCopied, showWarning, name, setS
     saving,
     buttonsCrashing,
     smallPhone,
+    isMobile,
   };
 };
 

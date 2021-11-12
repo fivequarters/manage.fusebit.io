@@ -1,32 +1,24 @@
-import { Backdrop, Modal, Fade, useMediaQuery, Drawer } from '@material-ui/core';
+import { useMediaQuery, Drawer } from '@material-ui/core';
 import { useState } from 'react';
 import styled from 'styled-components';
 import DeleteBackendModal from '@components/IntegrationDetailDevelop/DeleteBackendModal';
 import Connect from '@components/IntegrationDetailDevelop/Connect';
 import useDeleteBackend from '@components/IntegrationDetailDevelop/hooks/useDeleteBackend';
+import Modal from '@components/common/Modal';
 
 interface Props extends Omit<React.ComponentProps<typeof Connect>, 'onDelete'> {
   open: boolean;
   onClose: (force?: boolean) => void;
 }
 
-export const StyledCard = styled.div<{ open: boolean }>`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+export const StyledCard = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: white;
-  opacity: ${(props) => (props.open ? 1 : 0)};
-  padding: 40px 96px;
+  padding: 15px 40px;
   border-radius: 8px;
-  width: 859px;
-  height: 700px;
-  box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
-  transition: all 1s linear;
 
   @media only screen and (max-width: 870px) {
     width: 100%;
@@ -57,25 +49,10 @@ const BaseBackendModal = ({ open, onClose, id, ...props }: Props) => {
     }
 
     return (
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={open}
-        onClose={() => onClose()}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-      >
-        <Fade in={open}>
-          <StyledCard open={open} tabIndex={-1}>
-            <Connect
-              open={open}
-              onClose={() => onClose()}
-              onDelete={() => setDeleteModalOpen(true)}
-              id={id}
-              {...props}
-            />
-          </StyledCard>
-        </Fade>
+      <Modal disableActions open={open} onClose={() => onClose()}>
+        <StyledCard tabIndex={-1}>
+          <Connect open={open} onClose={() => onClose()} onDelete={() => setDeleteModalOpen(true)} id={id} {...props} />
+        </StyledCard>
       </Modal>
     );
   };
