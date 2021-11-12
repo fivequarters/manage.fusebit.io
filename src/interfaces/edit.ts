@@ -3,3 +3,13 @@ export interface Props {
   onClose: () => void;
   integrationId: string;
 }
+
+export interface SaveStatus {
+  boundaryId: string;
+  buildId: string;
+  functionId: string;
+  location: string;
+  progress: number;
+  status: 'completed' | string;
+  subscriptionId: string;
+}

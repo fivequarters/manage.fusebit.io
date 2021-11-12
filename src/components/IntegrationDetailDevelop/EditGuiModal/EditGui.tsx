@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, Button, ButtonGroup } from '@material-ui/core';
 import { SaveOutlined, PlayArrowOutlined } from '@material-ui/icons';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Props } from '@interfaces/edit';
+import { Props, SaveStatus } from '@interfaces/edit';
 import { useAuthContext } from '@hooks/useAuthContext';
 import { useLoader } from '@hooks/useLoader';
 import settings from '@assets/settings.svg';
@@ -16,6 +16,7 @@ import FusebitEditor from '@components/IntegrationDetailDevelop/FusebitEditor';
 import useEditor from '@components/IntegrationDetailDevelop/FusebitEditor/useEditor';
 import { useParams } from 'react-router-dom';
 import useTitle from '@hooks/useTitle';
+import { useError } from '@hooks/useError';
 import * as SC from './styles';
 
 const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationId }, ref) => {
@@ -31,6 +32,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     isMounted,
   });
   const [dirtyState, setDirtyState] = useState(false);
+  const { createError } = useError();
 
   useTrackPage('Web Editor', 'Web Editor');
   useTitle(`${id} Editor`);
@@ -79,6 +81,23 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   }, [isMounted, createLoader, removeLoader]);
 
   useEffect(() => {}, []);
+
+  const handleSaveAndRun = async () => {
+    try {
+      if (dirtyState) {
+        const context = window.editor;
+        const status: SaveStatus = await context?._server.saveFunction(context);
+        if (status.status === 'completed') {
+          setDirtyState(false);
+          handleRun();
+        }
+      } else {
+        handleRun();
+      }
+    } catch (e) {
+      createError(e);
+    }
+  };
 
   const handleSave = async () => {
     const context = window.editor;
@@ -139,7 +158,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
                 size="small"
                 variant="contained"
                 color="primary"
-                onClick={handleRun}
+                onClick={handleSaveAndRun}
                 disabled={isFindingInstall || isSaving}
               >
                 {isFindingInstall ? <CircularProgress size={20} /> : 'Run'}
