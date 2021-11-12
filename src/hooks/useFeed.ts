@@ -50,7 +50,7 @@ const useFeed = ({ isIntegration, onSubmit, onClose, open }: Props) => {
           setActiveTemplate(template);
           setImmediate(() => {
             trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
-              [feedTypeName.toLowerCase()]: template.name,
+              [feedTypeName.toLowerCase()]: template.id,
               [`${feedTypeName.toLowerCase()}Default`]: true,
             });
           });
@@ -98,7 +98,7 @@ const useFeed = ({ isIntegration, onSubmit, onClose, open }: Props) => {
   const handleTemplateChange = (template: Feed) => {
     setRawActiveTemplate(template);
     trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
-      [feedTypeName.toLowerCase()]: template.name,
+      [feedTypeName.toLowerCase()]: template.id,
       [`${feedTypeName.toLowerCase()}Default`]: false,
     });
     replaceMustache(data, template).then((_template) => {
@@ -128,9 +128,9 @@ const useFeed = ({ isIntegration, onSubmit, onClose, open }: Props) => {
   };
 
   const handleJsonFormsChange = ({ errors: _errors, data: _data }: { errors: any; data: any }) => {
-    if (data?.ui?.toggle && activeTemplate) {
+    if (_data?.ui?.toggle && activeTemplate) {
       trackEvent('New Integration Customize Clicked', 'Integrations', {
-        integration: activeTemplate.name,
+        integration: activeTemplate.id,
       });
     }
     if (_errors) {
