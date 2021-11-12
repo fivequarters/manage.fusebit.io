@@ -92,7 +92,7 @@ const AuthCallbackPage: FC<{}> = (): ReactElement => {
           history.push(requestedPath + requestedSearch);
         };
 
-        const user: User = { email: fusebitProfile.email, ...auth0Profile, ...company };
+        const user: User = { email: fusebitProfile?.email, ...auth0Profile, ...company };
         getAnalyticsClient(user).ready(() => {
           trackAuthEvent(user, fusebitProfile, isSignUpEvent, navigatePostAuth);
         });
