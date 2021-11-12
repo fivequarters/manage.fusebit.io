@@ -6,7 +6,8 @@ import Modal from '@components/common/Modal';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  width: 600px;
+  width: 650px;
+  padding: 0 40px;
 
   @media only screen and (max-width: 880px) {
     width: 100%;
