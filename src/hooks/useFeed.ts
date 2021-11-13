@@ -111,7 +111,7 @@ const useFeed = ({ isIntegration, onSubmit, onClose, open }: Props) => {
       if (isIntegration) {
         trackEvent('New Integration Enable Button Clicked', 'Integrations', { integration: rawActiveTemplate.id });
       } else {
-        trackEvent('New Connector Enable Button Clicked', 'Connectors', { integration: rawActiveTemplate.id });
+        trackEvent('New Connector Enable Button Clicked', 'Connectors', { connector: rawActiveTemplate.id });
       }
       window.Intercom('showNewMessage', `I'm interested in enabling ${rawActiveTemplate.name}`);
     }
