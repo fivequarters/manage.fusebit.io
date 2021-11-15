@@ -6,8 +6,66 @@ import { NewUserData } from '@interfaces/newUserData';
 import { startCase } from '@utils/utils';
 import CopyLine from '@components/common/CopyLine';
 import BaseJsonForm from '@components/common/BaseJsonForm';
+import styled from 'styled-components';
 import * as CSC from '../../globalStyle';
-import * as SC from './styles';
+
+const StyledCard = styled.div<{ open: boolean }>`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  opacity: ${(props) => (props.open ? 1 : 0)};
+  padding: 64px;
+  height: 544px;
+  width: 642px;
+  border-radius: 8px;
+  box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
+  transition: all 1s linear;
+
+  @media only screen and (max-width: 660px) {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    padding: 32px;
+    left: 0;
+    top: auto;
+    bottom: 0;
+    transform: translate(0, 0);
+  }
+`;
+
+const StyledFormWrapper = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0px auto;
+  width: 400px;
+
+  @media only screen and (max-width: 660px) {
+    width: 100%;
+  }
+`;
+
+const StyledFormInputWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: 64px;
+
+  @media only screen and (max-width: 880px) {
+  }
+`;
+
+const StyledUserCreatedButtonWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 90px;
+`;
 
 const schema = {
   type: 'object',
@@ -91,12 +149,12 @@ const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ open, onClose,
   };
 
   return (
-    <SC.Card open={open} ref={ref} tabIndex={-1}>
+    <StyledCard open={open} ref={ref} tabIndex={-1}>
       <CSC.Close onClick={() => onClose()} />
       {!userCreated ? (
         <>
           <CSC.ModalTitle>New User</CSC.ModalTitle>
-          <SC.FormWrapper>
+          <StyledFormWrapper>
             <BaseJsonForm
               schema={schema}
               uischema={uischema}
@@ -109,7 +167,7 @@ const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ open, onClose,
               }}
               validationMode={validationMode}
             />
-            <SC.FormInputWrapper>
+            <StyledFormInputWrapper>
               <Button
                 disabled={isSubmitting}
                 onClick={handleSubmit}
@@ -121,8 +179,8 @@ const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ open, onClose,
               >
                 {isSubmitting ? 'Creating...' : 'Create'}
               </Button>
-            </SC.FormInputWrapper>
-          </SC.FormWrapper>
+            </StyledFormInputWrapper>
+          </StyledFormWrapper>
         </>
       ) : (
         <>
@@ -134,7 +192,7 @@ const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ open, onClose,
             eight hours.
           </CSC.ModalDescription>
           <CopyLine text={token} />
-          <SC.UserCreatedButtonWrapper>
+          <StyledUserCreatedButtonWrapper>
             <Button
               onClick={() => onClose()}
               style={{ width: '200px' }}
@@ -145,10 +203,10 @@ const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ open, onClose,
             >
               Done
             </Button>
-          </SC.UserCreatedButtonWrapper>
+          </StyledUserCreatedButtonWrapper>
         </>
       )}
-    </SC.Card>
+    </StyledCard>
   );
 });
 

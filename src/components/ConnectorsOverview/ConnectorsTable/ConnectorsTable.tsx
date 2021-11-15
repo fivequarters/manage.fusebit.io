@@ -65,7 +65,7 @@ const ConnectorsTable = () => {
         selected={selected}
       />
       <BaseTable
-        emptyTableText="Your connectors list is empty, please create a connector"
+        emptyTableText="Your connectors list is empty, please create an integration"
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
         page={page}
