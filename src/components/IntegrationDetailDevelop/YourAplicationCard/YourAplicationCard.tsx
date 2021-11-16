@@ -48,7 +48,7 @@ const YourAplication: React.FC<Props> = ({ className }) => {
       <BaseCard
         id="your-application"
         className={className}
-        title="Your Application"
+        title="Your Applications"
         isLoading={isLoading}
         actions={
           <Button

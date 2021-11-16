@@ -1,14 +1,4 @@
-import { InnerConnector, Integration } from './integration';
-
-export interface ListComponentProps {
-  connector: FinalConnector;
-  id?: string;
-  onChange?: () => void;
-  onConnectorDelete: Function;
-  onLinkConnectorClick?: Function;
-  linkConnector?: boolean;
-  integration?: Integration;
-}
+import { InnerConnector } from './integration';
 
 export interface FinalConnector extends InnerConnector {
   missing?: boolean;

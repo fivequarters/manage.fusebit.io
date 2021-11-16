@@ -1,4 +1,4 @@
-import { Backdrop, CircularProgress, Fade, Modal } from '@material-ui/core';
+import { CircularProgress } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { useAccountConnectorsGetAll } from '@hooks/api/v2/account/connector/useGetAll';
 import { useAccountIntegrationsGetOne } from '@hooks/api/v2/account/integration/useGetOne';
@@ -8,7 +8,8 @@ import { useLoader } from '@hooks/useLoader';
 import { Connector } from '@interfaces/connector';
 import { Entity } from '@interfaces/feed';
 import { InnerConnector, Integration } from '@interfaces/integration';
-import ListComponent from '@components/IntegrationDetailDevelop/ListComponent';
+import ExistingConnectorItem from '@components/IntegrationDetailDevelop/ExistingConnectorItem';
+import Modal from '@components/common/Modal';
 import * as SC from './styles';
 
 interface Props {
@@ -47,48 +48,31 @@ const ConnectorListModal = ({ onClose, open }: Props) => {
   };
 
   return (
-    <Modal
-      aria-labelledby="transition-modal-title"
-      aria-describedby="transition-modal-description"
-      open={open}
-      onClose={onClose}
-      closeAfterTransition
-      BackdropComponent={Backdrop}
-    >
-      <Fade in={open}>
-        <SC.ConnectorList>
-          <SC.CardTitle>Connectors</SC.CardTitle>
-          {isLoadingIntegration || isLoadingConnectors ? (
-            <CircularProgress size={20} />
-          ) : (
-            <div>
-              {connectors?.data.items
-                .filter((item: Connector) => {
-                  let returnItem = true;
+    <Modal title="Connectors" disableActions open={open} onClose={onClose}>
+      <SC.ConnectorList>
+        {isLoadingIntegration || isLoadingConnectors ? (
+          <CircularProgress size={20} />
+        ) : (
+          <div>
+            {connectors?.data.items
+              .filter((item: Connector) => {
+                let returnItem = true;
 
-                  integrationData?.data.data.components.forEach((connector: InnerConnector) => {
-                    if (connector.entityId === item.id) {
-                      returnItem = false;
-                    }
-                  });
-                  return returnItem;
-                })
-                .map((connector) => {
-                  return (
-                    <ListComponent
-                      onLinkConnectorClick={handleLinkConnector}
-                      linkConnector
-                      key={connector.id}
-                      // @ts-ignore
-                      connector={connector}
-                      onConnectorDelete={() => {}}
-                    />
-                  );
-                })}
-            </div>
-          )}
-        </SC.ConnectorList>
-      </Fade>
+                integrationData?.data.data.components.forEach((connector: InnerConnector) => {
+                  if (connector.entityId === item.id) {
+                    returnItem = false;
+                  }
+                });
+                return returnItem;
+              })
+              .map((connector) => {
+                return (
+                  <ExistingConnectorItem handleClick={handleLinkConnector} key={connector.id} connector={connector} />
+                );
+              })}
+          </div>
+        )}
+      </SC.ConnectorList>
     </Modal>
   );
 };

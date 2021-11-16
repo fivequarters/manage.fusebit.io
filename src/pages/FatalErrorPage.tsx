@@ -5,9 +5,11 @@ import FatalError from '@components/FatalError';
 import Navbar from '@components/common/Navbar';
 import NavbarBreadcrumb from '@components/common/NavbarBreadcrumb';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
+import useTitle from '@hooks/useTitle';
 
 const FataErrorPage: FC<{}> = (): ReactElement => {
   const history = useHistory();
+  useTitle('Forbidden');
 
   const { getRedirectLink } = useGetRedirectLink();
   return (

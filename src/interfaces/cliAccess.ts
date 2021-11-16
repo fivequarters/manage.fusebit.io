@@ -1,4 +1,4 @@
 export interface Props {
   open: boolean;
-  onClose: Function;
+  onClose: () => void;
 }

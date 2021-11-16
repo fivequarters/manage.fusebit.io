@@ -1,8 +1,7 @@
 import styled, { createGlobalStyle, css, keyframes } from 'styled-components';
-
 import spinner from '@assets/spinner.svg';
-import cross from '@assets/cross.svg';
 import copy from '@assets/copy.svg';
+import { IconButton } from '@material-ui/core';
 
 export default createGlobalStyle`
    :root {
@@ -19,6 +18,14 @@ export default createGlobalStyle`
         span {
             display: block;
         }
+    }
+
+    .monaco-editor {
+      a {
+          span {
+              display: initial;
+          }
+      }
     }
 
     #pendo-text-7f2119cd { // this is pendo launch guide, for some reason it doesnt have cursor pointer by default ):
@@ -157,10 +164,11 @@ export const ModalTitle = styled.h2<{ margin?: string }>`
   text-align: center;
 `;
 
-export const ModalDescription = styled.p<{ textAlign?: string; margin?: string }>`
+export const ModalDescription = styled.p<{ textAlign?: string; margin?: string; maxWidth?: string }>`
   font-size: 16px;
   line-height: 22px;
   color: var(--black);
+  max-width: ${(props) => props.maxWidth && props.maxWidth};
   margin: ${(props) => (props.margin ? props.margin : 0)};
   text-align: ${(props) => props.textAlign && props.textAlign};
   margin-bottom: 24px;
@@ -185,29 +193,9 @@ export const LineTitle = styled.h4<{ margin?: string }>`
   }
 `;
 
-export const CloseIconMixin = css`
-  height: 12px;
-  width: 12px;
-  object-fit: contain;
-  position: absolute;
-  background-image: url(${cross});
-  background-repeat: no-repeat;
-  top: 32px;
-  right: 32px;
-  transition: all 0.25s linear;
-  border: none;
-  background-color: transparent;
-  background-size: contain;
-
-  &:hover {
-    cursor: pointer;
-    transform: rotate(90deg);
-  }
-`;
-
 export const Copy = styled.div<{ margin?: string }>`
-  height: 12px;
-  width: 12px;
+  min-height: 12px;
+  min-width: 12px;
   background-image: url(${copy});
   background-repeat: no-repeat;
   background-size: contain;
@@ -218,6 +206,9 @@ export const Copy = styled.div<{ margin?: string }>`
   }
 `;
 
-export const Close = styled.button`
-  ${CloseIconMixin}
+export const CloseWrapper = styled(IconButton)`
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  color: var(--black);
 `;

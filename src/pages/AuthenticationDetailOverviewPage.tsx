@@ -8,9 +8,11 @@ import TabComponent from '@components/common/TabComponent';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 import { useAuthContext } from '@hooks/useAuthContext';
 import NavbarBreadcrumb from '@components/common/NavbarBreadcrumb';
+import useTitle from '@hooks/useTitle';
 
 const AuthenticationDetailPage: FC<{}> = (): ReactElement => {
   useTrackPage('Team User Details', 'Team');
+  useTitle('Account');
   const history = useHistory();
   const { getRedirectLink } = useGetRedirectLink();
   const { userData } = useAuthContext();

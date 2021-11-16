@@ -1,19 +1,11 @@
 import styled from 'styled-components';
 import ReactMarkdown from 'react-markdown';
 
-export const Card = styled.div<{ open: boolean }>`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  opacity: ${(props) => (props.open ? 1 : 0)};
-  padding: 64px;
-  width: 1140px;
-  height: 671px;
-  border-radius: 8px;
-  box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
-  transition: all 1s linear;
+export const Card = styled.div`
+  padding: 24px;
+  padding-bottom: 0;
+  width: 1025px;
+  height: 590px;
 
   @media only screen and (max-width: 1145px) {
     width: 100%;
@@ -41,11 +33,13 @@ export const Title = styled.h2`
 `;
 
 export const Column = styled.div<{ border?: boolean }>`
+  position: relative;
   display: flex;
   flex-direction: column;
-  max-height: 490px;
-  overflow-y: auto;
+  max-height: 390px;
+  overflow-y: scroll;
   flex-shrink: 0;
+  z-index: 0;
 
   @media only screen and (max-width: 1100px) {
     height: 100%;
