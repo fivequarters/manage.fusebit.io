@@ -1,22 +1,5 @@
 import styled from 'styled-components';
 
-export const Flex = styled.div`
-  display: flex;
-  padding-bottom: 100px;
-
-  @media only screen and (max-width: 880px) {
-    flex-direction: column;
-    align-items: center;
-  }
-`;
-
-export const FlexDown = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  width: 100%;
-`;
-
 export const InfoWrapper = styled.div`
   display: flex;
   align-items: center;
