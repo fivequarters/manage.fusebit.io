@@ -3,18 +3,9 @@ import { MenuItem, Select } from '@material-ui/core';
 import Textarea from '@components/common/FormFields/Textarea';
 
 export const Card = styled.div<{ open: boolean }>`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  opacity: ${(props) => (props.open ? 1 : 0)};
-  padding: 64px;
+  padding: 0 32px;
   width: 795px;
   border-radius: 8px;
-  box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
-  outline: transparent;
-  transition: all 1s linear;
 
   @media only screen and (max-width: 550px) {
     width: 100%;

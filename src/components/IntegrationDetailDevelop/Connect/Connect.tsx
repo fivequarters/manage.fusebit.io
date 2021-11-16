@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Button, Input, Typography } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 import * as CSC from '@components/globalStyle';
 import CopyLine from '@components/common/CopyLine';
 import { Integration } from '@interfaces/integration';
@@ -45,6 +46,7 @@ const Connect: React.FC<Props> = ({
     setEditedBackendClientId,
     buttonsCrashing,
     smallPhone,
+    isMobile,
   } = useConnect({
     disableCopy,
     id,
@@ -94,7 +96,11 @@ const Connect: React.FC<Props> = ({
 
   return (
     <SC.Wrapper>
-      <CSC.Close onClick={handleClose} />
+      {isMobile && (
+        <CSC.CloseWrapper aria-label="close" onClick={onClose}>
+          <CloseIcon />
+        </CSC.CloseWrapper>
+      )}
 
       <CSC.ModalTitle margin="0 0 42px 0">{backendClientId}</CSC.ModalTitle>
       <SC.SmallTitleWrapper>
@@ -170,17 +176,17 @@ const Connect: React.FC<Props> = ({
         </SC.WarningWrapper>
       ) : (
         !disableCopy && (
-          <CSC.Flex>
+          <Box display="flex" alignItems="center">
             <SC.DisclaimerIcon />
             <SC.Disclaimer>
               For security reasons, <strong>this is the last time you will see this key.</strong>
             </SC.Disclaimer>
-          </CSC.Flex>
+          </Box>
         )
       )}
 
       <SC.Subtitle margin="32px auto">Connect your Backend</SC.Subtitle>
-      <CSC.Flex flexDown>
+      <Box display="flex" flexDirection="column">
         <Box
           display="flex"
           alignItems={!isSampleAppEnabled && 'center'}
@@ -227,7 +233,7 @@ const Connect: React.FC<Props> = ({
             </>
           )}
         </Box>
-      </CSC.Flex>
+      </Box>
       <Box
         display="flex"
         alignItems="center"

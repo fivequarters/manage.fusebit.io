@@ -2,7 +2,6 @@ import React from 'react';
 import { Box, Button, TextField } from '@material-ui/core';
 import { Props } from '@interfaces/feedPicker';
 import search from '@assets/search.svg';
-import cross from '@assets/cross.svg';
 import Loader from '@components/common/Loader';
 import { useTrackPage } from '@hooks/useTrackPage';
 import { urlOrSvgToImage } from '@utils/utils';
@@ -26,6 +25,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
     validationMode,
     loading,
     feedTypeName,
+    isMobile,
   } = useFeed({
     open,
     isIntegration,
@@ -41,10 +41,9 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
   };
 
   return (
-    <SC.Card onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)} open={open} ref={ref} tabIndex={-1}>
-      <SC.Close onClick={() => onClose()} src={cross} alt="close" height="12" width="12" />
+    <SC.Card onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)} ref={ref} tabIndex={-1}>
       <SC.Title>{`New ${feedTypeName}`}</SC.Title>
-      <SC.Flex>
+      <Box display="flex" flexDirection={isMobile && 'column'}>
         <SC.Column>
           {loading ? (
             <Box minWidth="254px">
@@ -134,34 +133,20 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
                   </SC.FormWrapper>
                 )}
               </SC.GeneralInfoWrapper>
-              <SC.MobileHidden>
-                <Button
-                  onClick={handleSubmit}
-                  style={{ width: '200px', marginTop: 'auto', marginLeft: 'auto' }}
-                  fullWidth={false}
-                  size="large"
-                  color="primary"
-                  variant="contained"
-                >
-                  {activeTemplate.outOfPlan ? 'Enable' : 'Create'}
-                </Button>
-              </SC.MobileHidden>
-              <SC.MobileVisible>
-                <Button
-                  onClick={handleSubmit}
-                  style={{ width: '200px', margin: 'auto' }}
-                  fullWidth={false}
-                  size="large"
-                  color="primary"
-                  variant="contained"
-                >
-                  {activeTemplate.outOfPlan ? 'Enable' : 'Create'}
-                </Button>
-              </SC.MobileVisible>
+              <Button
+                onClick={handleSubmit}
+                style={{ width: '200px', margin: isMobile ? 'auto' : 'auto 0 0 auto' }}
+                fullWidth={false}
+                size="large"
+                color="primary"
+                variant="contained"
+              >
+                {activeTemplate.outOfPlan ? 'Enable' : 'Create'}
+              </Button>
             </>
           )}
         </SC.ConnectorInfo>
-      </SC.Flex>
+      </Box>
     </SC.Card>
   );
 });
