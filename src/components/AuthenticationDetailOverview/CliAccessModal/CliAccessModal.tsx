@@ -3,7 +3,6 @@ import { Backdrop, Button, Modal } from '@material-ui/core';
 import { Props } from '@interfaces/cliAccess';
 import CopyLine from '@components/common/CopyLine';
 import * as CSC from '@components/globalStyle';
-import HighlightedCommand from '@components/common/HighlightedCommand';
 import * as SC from './styles';
 
 const CliAccessModal = React.forwardRef<HTMLDivElement, Props>(({ open, onClose }, ref) => {
@@ -24,14 +23,14 @@ const CliAccessModal = React.forwardRef<HTMLDivElement, Props>(({ open, onClose 
           <CSC.LineTitle>1. Install the Fusebit CLI</CSC.LineTitle>
         </CSC.Flex>
         <CopyLine text="npm install @fusebit/cli -g">
-          <HighlightedCommand command="npm install @fusebit/cli -g" keyWords="install -g" />
+          <strong>$</strong> npm <strong>install</strong> @fusebit/cli <strong>-g</strong>
         </CopyLine>
 
         <CSC.Flex>
           <CSC.LineTitle>2. Run the following initialization command</CSC.LineTitle>
         </CSC.Flex>
         <CopyLine text="fuse init">
-          <HighlightedCommand command="fuse init" keyWords="init" />
+          <strong>$</strong> fuse <strong>init</strong>
         </CopyLine>
 
         <SC.ButtonsWrapper>
