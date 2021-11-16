@@ -1,7 +1,39 @@
 import React from 'react';
-import { Box, Button, Dialog, DialogActions, DialogProps } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogProps,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+} from '@material-ui/core';
+import styled from 'styled-components';
 import CloseIcon from '@material-ui/icons/Close';
-import * as SC from './styles';
+
+const StyledCloseWrapper = styled(IconButton)`
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  color: var(--black);
+`;
+
+const StyledTitle = styled(DialogTitle)`
+  padding-top: 64px;
+  > h2 {
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: 600;
+    color: var(--black);
+    text-align: center;
+  }
+`;
+
+const StyledContent = styled(DialogContent)`
+  padding: 40px;
+  padding-top: 24px;
+`;
 
 interface Props extends DialogProps {
   onClose: () => void;
@@ -27,13 +59,13 @@ const Modal: React.FC<Props> = ({
 }) => {
   return (
     <Dialog onClose={onClose} open={open} {...props}>
-      <SC.Title>{title}</SC.Title>
-      <SC.Content>
-        <SC.CloseWrapper aria-label="close" onClick={onClose}>
+      <StyledTitle>{title}</StyledTitle>
+      <StyledContent>
+        <StyledCloseWrapper aria-label="close" onClick={onClose}>
           <CloseIcon />
-        </SC.CloseWrapper>
+        </StyledCloseWrapper>
         {content}
-      </SC.Content>
+      </StyledContent>
       <DialogActions>
         <Box display="flex" alignItems="center" justifyContent="center" width="100%" pb="32px">
           {hasCancel && (
