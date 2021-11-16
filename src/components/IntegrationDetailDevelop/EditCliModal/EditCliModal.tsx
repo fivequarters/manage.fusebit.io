@@ -28,15 +28,19 @@ const EditCliModal = ({ open, onClose, integrationId }: Props) => {
             <CSC.LineTitle>1. Install the Fusebit CLI</CSC.LineTitle>
           </CSC.Flex>
           <CopyLine text="npm install @fusebit/cli -g">
-            <strong>$</strong> npm <strong>install</strong> @fusebit/cli <strong>-g</strong>
+            <p>
+              <strong>$</strong> npm <strong>install</strong> @fusebit/cli <strong>-g</strong>
+            </p>
           </CopyLine>
 
           <CSC.Flex>
             <CSC.LineTitle>2. Download the integration code</CSC.LineTitle>
           </CSC.Flex>
           <CopyLine text={`fuse integration get ${integrationId} --dir ${integrationId}`} horizontalScrollbar>
-            <strong>$</strong> fuse integration <strong>get</strong> {integrationId} <strong>--dir</strong>{' '}
-            {integrationId}
+            <p>
+              <strong>$</strong> fuse integration <strong>get</strong> {integrationId} <strong>--dir</strong>{' '}
+              {integrationId}
+            </p>
           </CopyLine>
 
           <CSC.Flex>
@@ -49,8 +53,10 @@ const EditCliModal = ({ open, onClose, integrationId }: Props) => {
             <CSC.LineTitle>3. After making your code changes run</CSC.LineTitle>
           </CSC.Flex>
           <CopyLine text={`fuse integration deploy ${integrationId} -d ${integrationId}`} horizontalScrollbar>
-            <strong>$</strong> fuse integration <strong>deploy</strong> {integrationId} <strong>-d</strong>{' '}
-            {integrationId}
+            <p>
+              <strong>$</strong> fuse integration <strong>deploy</strong> {integrationId} <strong>-d</strong>{' '}
+              {integrationId}
+            </p>
           </CopyLine>
 
           <SC.ButtonsWrapper>

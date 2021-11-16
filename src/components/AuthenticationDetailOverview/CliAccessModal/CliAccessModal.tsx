@@ -23,14 +23,18 @@ const CliAccessModal = React.forwardRef<HTMLDivElement, Props>(({ open, onClose 
           <CSC.LineTitle>1. Install the Fusebit CLI</CSC.LineTitle>
         </CSC.Flex>
         <CopyLine text="npm install @fusebit/cli -g">
-          <strong>$</strong> npm <strong>install</strong> @fusebit/cli <strong>-g</strong>
+          <p>
+            <strong>$</strong> npm <strong>install</strong> @fusebit/cli <strong>-g</strong>
+          </p>
         </CopyLine>
 
         <CSC.Flex>
           <CSC.LineTitle>2. Run the following initialization command</CSC.LineTitle>
         </CSC.Flex>
         <CopyLine text="fuse init">
-          <strong>$</strong> fuse <strong>init</strong>
+          <p>
+            <strong>$</strong> fuse <strong>init</strong>
+          </p>
         </CopyLine>
 
         <SC.ButtonsWrapper>

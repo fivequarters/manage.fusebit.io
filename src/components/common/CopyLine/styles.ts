@@ -35,17 +35,15 @@ export const LineInstruction = styled.div<{ horizontalScrollbar?: boolean; warni
   width: 100%;
   color: var(--black);
   display: flex;
+  overflow: hidden;
 
-  & > span {
-    color: var(--primary-color);
-    font-weight: 400;
-    margin: 0 10px;
+  & p {
+    margin: 0;
+    text-overflow: ellipsis;
   }
 
   & > strong {
-    color: var(--primary-color);
-    font-weight: 400;
-    margin: 0 10px;
+    color: var(--black);
   }
 
   .unselectable {
