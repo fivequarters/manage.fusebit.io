@@ -15,7 +15,7 @@ interface Props {
 }
 
 const Label: React.FC<Props> = ({ children }) => {
-  return <StyledLabel>{children} </StyledLabel>;
+  return <StyledLabel>{children}</StyledLabel>;
 };
 
 export default Label;
