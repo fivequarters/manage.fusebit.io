@@ -37,7 +37,7 @@ const CopyLine: React.FC<Props> = ({ text, children, horizontalScrollbar, warnin
       </SC.LineInstructionCopy>
       <SC.LineInstructionFade disabled={disableCopy} warning={warning} change={fadeChange} />
       <SC.LineInstruction warning={warning} horizontalScrollbar={horizontalScrollbar}>
-        {children || <SC.Text>{text}</SC.Text>}
+        {children}
       </SC.LineInstruction>
       <SC.CopySuccess copy={copiedLine}>Copied to clipboard!</SC.CopySuccess>
     </SC.LineInstructionWrapper>
