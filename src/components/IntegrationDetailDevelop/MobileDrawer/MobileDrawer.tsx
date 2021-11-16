@@ -4,6 +4,7 @@ import * as CSC from '@components/globalStyle';
 import play from '@assets/play.svg';
 import info from '@assets/info.svg';
 import useEditor from '@components/IntegrationDetailDevelop/FusebitEditor/useEditor';
+import CloseIcon from '@material-ui/icons/Close';
 import * as SC from './styles';
 
 interface Props {
@@ -17,7 +18,9 @@ const MobileDrawer = ({ open, onClose }: Props) => {
   return (
     <Drawer anchor="bottom" open={open} onClose={onClose}>
       <SC.GuiMobileWrapper>
-        <CSC.Close onClick={onClose} />
+        <CSC.CloseWrapper onClick={onClose}>
+          <CloseIcon fontSize="small" />
+        </CSC.CloseWrapper>
         <Button
           startIcon={<img src={play} alt="play" height="16" width="16" />}
           style={{ width: '200px' }}

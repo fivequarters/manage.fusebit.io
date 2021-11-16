@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, Backdrop, Box } from '@material-ui/core';
+import { Button, Box } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { getIntegrationConfig } from '@utils/localStorage';
 import Label from '@components/common/FormFields/Label';
 import TextField from '@components/common/FormFields/TextField';
+import Modal from '@components/common/Modal';
 import * as CSC from '@components/globalStyle';
 import * as SC from './styles';
 
@@ -73,18 +74,9 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
   };
 
   return (
-    <Modal
-      aria-labelledby="transition-modal-title"
-      aria-describedby="transition-modal-description"
-      open={open}
-      onClose={() => setOpen(false)}
-      closeAfterTransition
-      BackdropComponent={Backdrop}
-    >
+    <Modal title="Configure runner" disableActions open={open} onClose={() => setOpen(false)}>
       <SC.Card open={open} tabIndex={-1}>
-        <CSC.Close onClick={() => setOpen(false)} />
-        <CSC.ModalTitle margin="0 0 16px 0">Configure runner</CSC.ModalTitle>
-        <Box display="flex" mt="30px">
+        <Box display="flex">
           <CSC.Flex width="max-content" margin="0 48px 0 0" flexDown>
             <Label>Verb</Label>
             <SC.VerbSelect

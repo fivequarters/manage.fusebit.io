@@ -1,8 +1,8 @@
 import { Avatar } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import { Account } from '../../../interfaces/account';
-import accountImg from '../../../assets/account.svg';
-import { useAuthContext } from '../../../hooks/useAuthContext';
+import { Account } from '@interfaces/account';
+import accountImg from '@assets/account.svg';
+import { useAuthContext } from '@hooks/useAuthContext';
 import * as SC from './styles';
 
 interface Props {

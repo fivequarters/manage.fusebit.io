@@ -58,7 +58,7 @@ const uischema = {
   ],
 };
 
-const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, createUser }, ref) => {
+const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ onClose, createUser }, ref) => {
   const [data, setData] = React.useState<NewUserData>({
     firstName: undefined,
     lastName: undefined,
@@ -91,11 +91,10 @@ const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ open, onClose,
   };
 
   return (
-    <SC.Card open={open} ref={ref} tabIndex={-1}>
-      <CSC.Close onClick={() => onClose()} />
+    <div ref={ref}>
       {!userCreated ? (
         <>
-          <CSC.ModalTitle>New User</CSC.ModalTitle>
+          <CSC.ModalTitle margin="48px 0">New User</CSC.ModalTitle>
           <SC.FormWrapper>
             <BaseJsonForm
               schema={schema}
@@ -126,7 +125,7 @@ const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ open, onClose,
         </>
       ) : (
         <>
-          <CSC.ModalTitle margin="0 0 100px 0">
+          <CSC.ModalTitle margin="48px 0">
             User {startCase(data.firstName || '')} {startCase(data.lastName || '')} Created!
           </CSC.ModalTitle>
           <CSC.ModalDescription>
@@ -134,7 +133,7 @@ const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ open, onClose,
             eight hours.
           </CSC.ModalDescription>
           <CopyLine text={token} />
-          <SC.UserCreatedButtonWrapper>
+          <SC.FormInputWrapper>
             <Button
               onClick={() => onClose()}
               style={{ width: '200px' }}
@@ -145,10 +144,10 @@ const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ open, onClose,
             >
               Done
             </Button>
-          </SC.UserCreatedButtonWrapper>
+          </SC.FormInputWrapper>
         </>
       )}
-    </SC.Card>
+    </div>
   );
 });
 
