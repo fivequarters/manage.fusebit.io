@@ -132,20 +132,18 @@ const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ onClose, creat
             Securely share the following link with the user. The one-time use token included in the link expires in
             eight hours.
           </CSC.ModalDescription>
+          <CopyLine text={token}>{token}</CopyLine>
           <SC.FormInputWrapper>
-            <CopyLine text={token}>{token}</CopyLine>
-            <SC.UserCreatedButtonWrapper>
-              <Button
-                onClick={() => onClose()}
-                style={{ width: '200px' }}
-                fullWidth={false}
-                size="large"
-                color="primary"
-                variant="contained"
-              >
-                Done
-              </Button>
-            </SC.UserCreatedButtonWrapper>
+            <Button
+              onClick={() => onClose()}
+              style={{ width: '200px' }}
+              fullWidth={false}
+              size="large"
+              color="primary"
+              variant="contained"
+            >
+              Done
+            </Button>
           </SC.FormInputWrapper>
         </>
       )}
