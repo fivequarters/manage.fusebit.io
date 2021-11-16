@@ -9,7 +9,36 @@ import { Connector } from '@interfaces/connector';
 import { Entity } from '@interfaces/feed';
 import { InnerConnector, Integration } from '@interfaces/integration';
 import ExistingConnectorItem from '@components/IntegrationDetailDevelop/ExistingConnectorItem';
-import * as SC from './styles';
+import styled from 'styled-components';
+
+const StyledCardTitle = styled.h4`
+  font-size: 16px;
+  line-height: 18px;
+  font-weight: 600;
+  color: var(--black);
+  margin-bottom: 16px;
+`;
+
+const StyledConnectorList = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  padding: 0 32px 12px;
+  border-radius: 8px;
+  box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
+  width: fit-content;
+  transition: all 1s linear;
+  > div {
+    max-height: 350px;
+    overflow: auto;
+  }
+`;
 
 interface Props {
   open: boolean;
@@ -56,8 +85,8 @@ const ConnectorListModal = ({ onClose, open }: Props) => {
       BackdropComponent={Backdrop}
     >
       <Fade in={open}>
-        <SC.ConnectorList>
-          <SC.CardTitle>Connectors</SC.CardTitle>
+        <StyledConnectorList>
+          <StyledCardTitle>Connectors</StyledCardTitle>
           {isLoadingIntegration || isLoadingConnectors ? (
             <CircularProgress size={20} />
           ) : (
@@ -80,7 +109,7 @@ const ConnectorListModal = ({ onClose, open }: Props) => {
                 })}
             </div>
           )}
-        </SC.ConnectorList>
+        </StyledConnectorList>
       </Fade>
     </Modal>
   );
