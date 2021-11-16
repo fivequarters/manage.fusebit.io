@@ -23,8 +23,8 @@ export const integrationsFeed = async (): Promise<Feed[]> => {
   });
 };
 
-export const useAccountGetOne = (params: Params) => {
-  return useQuery(['accountGetOne'], integrationsFeed, {
+export const useGetIntegrationsFeed = (params: Params) => {
+  return useQuery(['getIntegrationsFeed'], integrationsFeed, {
     enabled: !!params.enabled,
   });
 };
