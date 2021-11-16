@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Wrapper = styled.div`
+const StyledWrapper = styled.div`
   margin-top: -5px;
   margin-left: -5px;
 
