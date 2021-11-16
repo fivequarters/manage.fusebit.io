@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { Button } from '@material-ui/core';
+import styled from 'styled-components';
 
 import { ValidationMode } from '@jsonforms/core';
 import { useAccountConnectorsGetOne } from '@hooks/api/v2/account/connector/useGetOne';
@@ -13,7 +14,46 @@ import { trackEvent } from '@utils/analytics';
 import InformationalBanner from '@components/common/InformationalBanner';
 import BaseJsonForm from '@components/common/BaseJsonForm';
 import * as CSC from '@components/globalStyle';
-import * as SC from './styles';
+
+const StyledFlex = styled.div`
+  display: flex;
+  padding-bottom: 100px;
+
+  @media only screen and (max-width: 880px) {
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+
+const StyledFlexDown = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+`;
+
+const StyledFormWrapper = styled.form`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 20px;
+
+  @media only screen and (max-width: 880px) {
+    margin-left: 0;
+  }
+`;
+
+const StyledFormInputWrapper = styled.div`
+  margin-top: 24px;
+  margin-bottom: 49px;
+
+  @media only screen and (max-width: 880px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+`;
 
 const ConfigureForm: React.FC = () => {
   const history = useHistory();
@@ -84,10 +124,10 @@ const ConfigureForm: React.FC = () => {
   }
 
   return (
-    <SC.Flex>
-      <SC.FlexDown>
+    <StyledFlex>
+      <StyledFlexDown>
         {config?.data && !loading ? (
-          <SC.FormWrapper>
+          <StyledFormWrapper>
             {configureAppDocUrl ? (
               <InformationalBanner>
                 By default, Connectors use Fusebit demonstration credentials, which are intended for testing only. When
@@ -139,7 +179,7 @@ const ConfigureForm: React.FC = () => {
               }}
               validationMode={validationMode}
             />
-            <SC.FormInputWrapper>
+            <StyledFormInputWrapper>
               <Button
                 onClick={handleSubmit}
                 style={{ width: '200px' }}
@@ -150,15 +190,15 @@ const ConfigureForm: React.FC = () => {
               >
                 Save
               </Button>
-            </SC.FormInputWrapper>
-          </SC.FormWrapper>
+            </StyledFormInputWrapper>
+          </StyledFormWrapper>
         ) : (
           <CSC.LoaderContainer>
             <CSC.Spinner />
           </CSC.LoaderContainer>
         )}
-      </SC.FlexDown>
-    </SC.Flex>
+      </StyledFlexDown>
+    </StyledFlex>
   );
 };
 
