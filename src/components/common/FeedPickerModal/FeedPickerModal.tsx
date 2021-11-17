@@ -15,7 +15,8 @@ const FeedPickerModal = ({ open, onClose, onSubmit, isIntegration }: Props) => {
   const queryClient = useQueryClient();
 
   const handleClose = () => {
-    queryClient.invalidateQueries(['getIntegrationsFeed', 'getConnectorsFeed']);
+    queryClient.invalidateQueries('getIntegrationsFeed');
+    queryClient.invalidateQueries('getConnectorsFeed');
     onClose();
   };
 

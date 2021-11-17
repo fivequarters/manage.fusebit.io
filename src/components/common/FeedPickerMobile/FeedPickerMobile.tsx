@@ -4,7 +4,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import _startCase from 'lodash.startcase';
 import cross from '@assets/cross.svg';
 import { useQueryClient } from 'react-query';
-import useFeed from '@hooks/useFeed';
+import useFeedPicker from '@hooks/useFeedPicker';
 import { Feed } from '@interfaces/feed';
 import { urlOrSvgToImage } from '@utils/utils';
 import { Data } from '@interfaces/feedPicker';
@@ -42,7 +42,7 @@ const FeedPickerMobile: React.FC<Props> = ({ isIntegration, onSubmit, open, onCl
     setData,
     setActiveFilter,
     feedTypeName,
-  } = useFeed({
+  } = useFeedPicker({
     open,
     isIntegration,
     onSubmit,
@@ -62,7 +62,8 @@ const FeedPickerMobile: React.FC<Props> = ({ isIntegration, onSubmit, open, onCl
   }, [open, setActiveFilter, setActiveTemplate, setData, setRawActiveTemplate]);
 
   const handleClose = () => {
-    queryClient.invalidateQueries(['getIntegrationsFeed', 'getConnectorsFeed']);
+    queryClient.invalidateQueries('getIntegrationsFeed');
+    queryClient.invalidateQueries('getConnectorsFeed');
     onClose();
   };
 

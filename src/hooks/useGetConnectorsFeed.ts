@@ -1,7 +1,6 @@
 import http from 'http';
-import { Params } from '@interfaces/api';
 import { Feed } from '@interfaces/feed';
-import { useQuery } from 'react-query';
+import { useQuery, UseQueryOptions } from 'react-query';
 
 const { REACT_APP_CONNECTORS_FEED_URL } = process.env;
 
@@ -20,8 +19,6 @@ export const connectorsFeed = async (): Promise<Feed[]> => {
   });
 };
 
-export const useGetConnectorsFeed = (params: Params) => {
-  return useQuery(['getConnectorsFeed'], connectorsFeed, {
-    enabled: !!params.enabled,
-  });
+export const useGetConnectorsFeed = (options?: UseQueryOptions<Feed[]>) => {
+  return useQuery(['getConnectorsFeed'], connectorsFeed, options);
 };

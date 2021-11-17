@@ -7,7 +7,7 @@ import { useTrackPage } from '@hooks/useTrackPage';
 import { urlOrSvgToImage } from '@utils/utils';
 import BaseJsonForm from '@components/common/BaseJsonForm';
 import { DefaultFilters } from '@hooks/useFilterFeed';
-import useFeed from '@hooks/useFeed';
+import useFeedPicker from '@hooks/useFeedPicker';
 import * as SC from './styles';
 
 const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onSubmit, isIntegration }, ref) => {
@@ -26,7 +26,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
     loading,
     feedTypeName,
     isMobile,
-  } = useFeed({
+  } = useFeedPicker({
     open,
     isIntegration,
     onSubmit,

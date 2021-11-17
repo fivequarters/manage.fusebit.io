@@ -1,7 +1,6 @@
 import http from 'http';
-import { Params } from '@interfaces/api';
 import { Feed } from '@interfaces/feed';
-import { useQuery } from 'react-query';
+import { useQuery, UseQueryOptions } from 'react-query';
 
 const { REACT_APP_INTEGRATIONS_FEED_URL } = process.env;
 
@@ -23,8 +22,6 @@ export const integrationsFeed = async (): Promise<Feed[]> => {
   });
 };
 
-export const useGetIntegrationsFeed = (params: Params) => {
-  return useQuery(['getIntegrationsFeed'], integrationsFeed, {
-    enabled: !!params.enabled,
-  });
+export const useGetIntegrationsFeed = (options?: UseQueryOptions<Feed[]>) => {
+  return useQuery(['getIntegrationsFeed'], integrationsFeed, options);
 };
