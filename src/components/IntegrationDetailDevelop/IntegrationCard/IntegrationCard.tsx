@@ -20,6 +20,7 @@ import useEditor from '@components/IntegrationDetailDevelop/FusebitEditor/useEdi
 import MobileDrawer from '@components/IntegrationDetailDevelop/MobileDrawer';
 import { INTEGRATION_PROCESSING_SUFFIX } from '@utils/constants';
 import { useLoader } from '@hooks/useLoader';
+import { useError } from '@hooks/useError';
 
 const StyledCard = styled(Card)`
   display: flex;
@@ -60,6 +61,7 @@ const IntegrationCard: React.FC<Props> = ({ processing, setProcessing, className
   const matchesMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const integrationData = useGetIntegrationFromCache();
   const { waitForEntityStateChange } = useLoader();
+  const { createError } = useError();
   const processingKey = `${integrationData?.data.id}${INTEGRATION_PROCESSING_SUFFIX}`;
 
   useEffect(() => {
@@ -75,12 +77,14 @@ const IntegrationCard: React.FC<Props> = ({ processing, setProcessing, className
           };
           dataToProcess.push(newComponentToProcess);
         });
-        Promise.all(
-          dataToProcess.map(({ entityType, entityId }) => waitForEntityStateChange(entityType, [entityId]))
-        ).then(() => {
-          localStorage.removeItem(processingKey);
-          setProcessing(false);
-        });
+        Promise.all(dataToProcess.map(({ entityType, entityId }) => waitForEntityStateChange(entityType, [entityId])))
+          .then(() => {
+            localStorage.removeItem(processingKey);
+            setProcessing(false);
+          })
+          .catch((e) => {
+            createError(e);
+          });
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
