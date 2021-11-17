@@ -34,23 +34,15 @@ export const LineInstruction = styled.div<{ horizontalScrollbar?: boolean; warni
   width: 100%;
   color: var(--black);
   display: flex;
+  overflow: hidden;
 
-  & > p {
-    overflow: hidden;
-    text-overflow: ellipsis;
+  & p {
     margin: 0;
-  }
-
-  & > span {
-    color: var(--primary-color);
-    font-weight: 400;
-    margin: 0 10px;
+    text-overflow: ellipsis;
   }
 
   & > strong {
-    color: var(--primary-color);
-    font-weight: 400;
-    margin: 0 10px;
+    color: var(--black);
   }
 
   .unselectable {
@@ -80,7 +72,7 @@ export const LineInstructionFade = styled.div<{
   height: 50px;
   width: ${(props) => (props.change && !props.disabled ? '300px' : '60px')};
   background-image: linear-gradient(to left, #eff5ff 10%, rgba(255, 255, 255, 0) 100%);
-  border-radius: 4px 4px 0 0;
+  border-radius: 4px;
   z-index: 1;
   transition: width 0.25s linear;
 
@@ -97,10 +89,9 @@ export const LineInstructionFade = styled.div<{
   ${(props) =>
     props.warning &&
     `
-      border-top-right-radius: 4px;
-      border-bottom-right-radius: 4px;
       border: 2px solid #F83420;
       border-left: 0;
+      border-radius: 0px 4px 4px 0px;
   `}
 `;
 
