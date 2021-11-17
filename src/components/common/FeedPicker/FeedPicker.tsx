@@ -81,7 +81,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
             <Loader />
           ) : (
             <Box>
-              {filteredFeed.map((feedEntry) => {
+              {filteredFeed.sort().map((feedEntry) => {
                 return (
                   <SC.ColumnItem
                     key={feedEntry.id}
