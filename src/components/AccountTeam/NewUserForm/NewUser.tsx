@@ -6,8 +6,29 @@ import { NewUserData } from '@interfaces/newUserData';
 import { startCase } from '@utils/utils';
 import CopyLine from '@components/common/CopyLine';
 import BaseJsonForm from '@components/common/BaseJsonForm';
+import styled from 'styled-components';
 import * as CSC from '../../globalStyle';
-import * as SC from './styles';
+
+const StyledFormWrapper = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0px auto;
+  width: 400px;
+
+  @media only screen and (max-width: 660px) {
+    width: 100%;
+  }
+`;
+
+const StyledFormInputWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 48px;
+  justify-content: center;
+`;
 
 const schema = {
   type: 'object',
@@ -58,7 +79,7 @@ const uischema = {
   ],
 };
 
-const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, createUser }, ref) => {
+const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ onClose, createUser }, ref) => {
   const [data, setData] = React.useState<NewUserData>({
     firstName: undefined,
     lastName: undefined,
@@ -91,12 +112,11 @@ const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ open, onClose,
   };
 
   return (
-    <SC.Card open={open} ref={ref} tabIndex={-1}>
-      <CSC.Close onClick={() => onClose()} />
+    <div ref={ref}>
       {!userCreated ? (
         <>
-          <CSC.ModalTitle>New User</CSC.ModalTitle>
-          <SC.FormWrapper>
+          <CSC.ModalTitle margin="48px 0">New User</CSC.ModalTitle>
+          <StyledFormWrapper>
             <BaseJsonForm
               schema={schema}
               uischema={uischema}
@@ -109,7 +129,7 @@ const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ open, onClose,
               }}
               validationMode={validationMode}
             />
-            <SC.FormInputWrapper>
+            <StyledFormInputWrapper>
               <Button
                 disabled={isSubmitting}
                 onClick={handleSubmit}
@@ -121,20 +141,20 @@ const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ open, onClose,
               >
                 {isSubmitting ? 'Creating...' : 'Create'}
               </Button>
-            </SC.FormInputWrapper>
-          </SC.FormWrapper>
+            </StyledFormInputWrapper>
+          </StyledFormWrapper>
         </>
       ) : (
         <>
-          <CSC.ModalTitle margin="0 0 100px 0">
+          <CSC.ModalTitle margin="48px 0">
             User {startCase(data.firstName || '')} {startCase(data.lastName || '')} Created!
           </CSC.ModalTitle>
           <CSC.ModalDescription>
             Securely share the following link with the user. The one-time use token included in the link expires in
             eight hours.
           </CSC.ModalDescription>
-          <CopyLine text={token} />
-          <SC.UserCreatedButtonWrapper>
+          <CopyLine text={token}>{token}</CopyLine>
+          <StyledFormInputWrapper>
             <Button
               onClick={() => onClose()}
               style={{ width: '200px' }}
@@ -145,10 +165,10 @@ const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ open, onClose,
             >
               Done
             </Button>
-          </SC.UserCreatedButtonWrapper>
+          </StyledFormInputWrapper>
         </>
       )}
-    </SC.Card>
+    </div>
   );
 });
 

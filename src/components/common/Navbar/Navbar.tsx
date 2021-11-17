@@ -100,8 +100,12 @@ const Navbar: React.FC = ({ children }) => {
               </IconButton>
             ) : (
               <StyledLinkContainer display="flex" alignItems="center">
-                <StyledLink href="https://fusebit.io/contact">Support</StyledLink>
-                <StyledLink href="https://developer.fusebit.io">Docs</StyledLink>
+                <StyledLink href="https://fusebit.io/contact" target="_blank">
+                  Support
+                </StyledLink>
+                <StyledLink href="https://developer.fusebit.io" target="_blank">
+                  Docs
+                </StyledLink>
                 <UserMenu />
               </StyledLinkContainer>
             )}
