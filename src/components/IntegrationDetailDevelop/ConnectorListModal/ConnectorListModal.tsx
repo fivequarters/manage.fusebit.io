@@ -10,7 +10,20 @@ import { Entity } from '@interfaces/feed';
 import { InnerConnector, Integration } from '@interfaces/integration';
 import ExistingConnectorItem from '@components/IntegrationDetailDevelop/ExistingConnectorItem';
 import Modal from '@components/common/Modal';
-import * as SC from './styles';
+import styled from 'styled-components';
+
+const StyledConnectorList = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+
+  > div {
+    max-height: 350px;
+    overflow: auto;
+  }
+`;
 
 interface Props {
   open: boolean;
@@ -49,7 +62,7 @@ const ConnectorListModal = ({ onClose, open }: Props) => {
 
   return (
     <Modal title="Connectors" disableActions open={open} onClose={onClose}>
-      <SC.ConnectorList>
+      <StyledConnectorList>
         {isLoadingIntegration || isLoadingConnectors ? (
           <CircularProgress size={20} />
         ) : (
@@ -72,7 +85,7 @@ const ConnectorListModal = ({ onClose, open }: Props) => {
               })}
           </div>
         )}
-      </SC.ConnectorList>
+      </StyledConnectorList>
     </Modal>
   );
 };

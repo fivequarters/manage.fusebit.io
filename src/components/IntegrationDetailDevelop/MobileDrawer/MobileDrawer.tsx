@@ -1,11 +1,40 @@
 import React from 'react';
+import styled from 'styled-components';
 import { Drawer, Button } from '@material-ui/core';
 import * as CSC from '@components/globalStyle';
 import play from '@assets/play.svg';
 import info from '@assets/info.svg';
 import useEditor from '@components/IntegrationDetailDevelop/FusebitEditor/useEditor';
 import CloseIcon from '@material-ui/icons/Close';
-import * as SC from './styles';
+
+const StyledGuiMobileWrapper = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  padding-top: 76px;
+`;
+
+const StyledGuiMobileNotSupportedWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 40px;
+`;
+
+const StyledGuiMobileNotSupportedIcon = styled.img`
+  height: 16px;
+  width: 16px;
+  object-fit: contain;
+`;
+
+const StyledGuiMobileNotSupportedText = styled.div`
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--black);
+  margin-left: 12px;
+`;
 
 interface Props {
   open: boolean;
@@ -17,7 +46,7 @@ const MobileDrawer = ({ open, onClose }: Props) => {
 
   return (
     <Drawer anchor="bottom" open={open} onClose={onClose}>
-      <SC.GuiMobileWrapper>
+      <StyledGuiMobileWrapper>
         <CSC.CloseWrapper onClick={onClose}>
           <CloseIcon fontSize="small" />
         </CSC.CloseWrapper>
@@ -32,11 +61,11 @@ const MobileDrawer = ({ open, onClose }: Props) => {
         >
           {isRunning ? 'Running...' : 'Run'}
         </Button>
-        <SC.GuiMobileNotSupportedWrapper>
-          <SC.GuiMobileNotSupportedIcon src={info} alt="not supported" height="16" width="16" />
-          <SC.GuiMobileNotSupportedText>Editing is not supported on this device</SC.GuiMobileNotSupportedText>
-        </SC.GuiMobileNotSupportedWrapper>
-      </SC.GuiMobileWrapper>
+        <StyledGuiMobileNotSupportedWrapper>
+          <StyledGuiMobileNotSupportedIcon src={info} alt="not supported" height="16" width="16" />
+          <StyledGuiMobileNotSupportedText>Editing is not supported on this device</StyledGuiMobileNotSupportedText>
+        </StyledGuiMobileNotSupportedWrapper>
+      </StyledGuiMobileWrapper>
     </Drawer>
   );
 };
