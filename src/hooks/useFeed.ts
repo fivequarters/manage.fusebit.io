@@ -145,6 +145,16 @@ const useFeed = ({ isIntegration, onSubmit, onClose, open }: Props) => {
     return activeTemplate?.outOfPlan ? handlePlanUpsell() : handleAdd();
   };
 
+  const sortFeedAlphabetically = (firstEntryName: string, secondEntryName: string, firstEntryId: string) => {
+    if (firstEntryName < secondEntryName && firstEntryId.indexOf('custom-planned') < 0) {
+      return -1;
+    }
+    if (secondEntryName > firstEntryName) {
+      return 1;
+    }
+    return 0;
+  };
+
   return {
     rawActiveTemplate,
     setRawActiveTemplate,
@@ -169,6 +179,7 @@ const useFeed = ({ isIntegration, onSubmit, onClose, open }: Props) => {
     feedTypeName,
     ...filtedFeed,
     isMobile,
+    sortFeedAlphabetically,
   };
 };
 

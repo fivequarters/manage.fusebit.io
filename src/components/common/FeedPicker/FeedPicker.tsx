@@ -26,6 +26,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
     loading,
     feedTypeName,
     isMobile,
+    sortFeedAlphabetically,
   } = useFeed({
     open,
     isIntegration,
@@ -81,23 +82,25 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
             <Loader />
           ) : (
             <Box>
-              {filteredFeed.sort().map((feedEntry) => {
-                return (
-                  <SC.ColumnItem
-                    key={feedEntry.id}
-                    onClick={() => handleTemplateChange(feedEntry)}
-                    active={feedEntry.id === activeTemplate.id}
-                  >
-                    <SC.ColumnItemImage
-                      src={urlOrSvgToImage(feedEntry.smallIcon)}
-                      alt={feedEntry.name}
-                      height="18"
-                      width="18"
-                    />
-                    {feedEntry.name}
-                  </SC.ColumnItem>
-                );
-              })}
+              {filteredFeed
+                .sort((a, b) => sortFeedAlphabetically(a.name.toLowerCase(), b.name.toLowerCase(), a.id))
+                .map((feedEntry) => {
+                  return (
+                    <SC.ColumnItem
+                      key={feedEntry.id}
+                      onClick={() => handleTemplateChange(feedEntry)}
+                      active={feedEntry.id === activeTemplate.id}
+                    >
+                      <SC.ColumnItemImage
+                        src={urlOrSvgToImage(feedEntry.smallIcon)}
+                        alt={feedEntry.name}
+                        height="18"
+                        width="18"
+                      />
+                      {feedEntry.name}
+                    </SC.ColumnItem>
+                  );
+                })}
             </Box>
           )}
         </SC.Column>
