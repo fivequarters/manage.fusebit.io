@@ -1,5 +1,33 @@
 import React from 'react';
-import * as SC from './styles';
+import styled from 'styled-components';
+
+const StyledBanner = styled.div`
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  margin-bottom: 48px;
+`;
+
+const StyledDescription = styled.p`
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  color: var(--black);
+  margin: 0;
+
+  & > strong {
+    font-weight: 500;
+    line-height: 16px;
+  }
+
+  & > a,
+  a:visited,
+  a:link {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 1px;
+  }
+`;
 
 interface Props {
   children: React.ReactNode;
@@ -8,9 +36,9 @@ interface Props {
 
 const InformationalBanner: React.FC<Props> = ({ children, className }) => {
   return (
-    <SC.Banner className={className}>
-      <SC.Description>{children}</SC.Description>
-    </SC.Banner>
+    <StyledBanner className={className}>
+      <StyledDescription>{children}</StyledDescription>
+    </StyledBanner>
   );
 };
 

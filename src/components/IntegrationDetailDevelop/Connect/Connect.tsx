@@ -4,9 +4,149 @@ import CloseIcon from '@material-ui/icons/Close';
 import * as CSC from '@components/globalStyle';
 import CopyLine from '@components/common/CopyLine';
 import { Integration } from '@interfaces/integration';
+import styled from 'styled-components';
+import disclaimer from '@assets/disclaimer.svg';
+import time from '@assets/time.svg';
+import warning from '@assets/black-warning.svg';
 import { LinkSampleApp } from './LinkSampleApp';
 import useConnect, { Props as UseConnectProps } from './useConnect';
-import * as SC from './styles';
+
+const StyledWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 667px;
+  padding-top: 0px;
+
+  @media only screen and (max-width: 880px) {
+    width: 100%;
+    padding: 56px 24px;
+  }
+
+  @media only screen and (max-width: 370px) {
+    padding: 56px 16px;
+  }
+`;
+
+const StyledSmallTitleWrapper = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+`;
+
+const StyledSmallTitle = styled.h4`
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 400;
+  color: var(--black);
+  margin: 0;
+  max-width: 600px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+
+  strong {
+    font-weight: 600;
+    line-height: 18px;
+  }
+`;
+
+const StyledSubtitle = styled.h3<{ margin?: string }>`
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 600;
+  color: var(--black);
+  margin-bottom: 16px;
+  margin: ${(props) => props.margin && props.margin};
+`;
+
+const StyledDisclaimer = styled.p`
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  color: var(--black);
+  margin-left: 14px;
+
+  strong {
+    font-weight: 500;
+    line-height: 16px;
+  }
+`;
+
+const StyledDisclaimerIcon = styled.div`
+  min-height: 20px;
+  min-width: 20px;
+  background-image: url(${disclaimer});
+  background-size: contain;
+  background-repeat: no-repeat;
+`;
+
+const StyledTimeIcon = styled.div`
+  height: 14px;
+  width: 14px;
+  background-image: url(${time});
+  background-size: contain;
+  background-repeat: no-repeat;
+`;
+
+const StyledTimeDescription = styled.p<{ margin?: string }>`
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 300;
+  color: var(--black);
+  margin-left: 10px;
+  margin: ${(props) => props.margin && props.margin};
+`;
+
+const StyledCopySuccess = styled.p<{ copy: boolean }>`
+  position: absolute;
+  bottom: -35px;
+  font-size: 14px;
+  line-height: 16px;
+  color: var(--grey);
+  opacity: ${(props) => (props.copy ? 1 : 0)};
+  visibility: ${(props) => (props.copy ? 'visible' : 'hidden')};
+  margin-left: auto;
+  transition: all 0.5s linear;
+`;
+
+const StyledWarningWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 24px;
+  background-color: var(--yellow);
+  border-radius: 8px;
+
+  @media only screen and (max-width: 420px) {
+    padding: 16px;
+  }
+
+  p {
+    font-size: 14px;
+    line-height: 20px;
+    margin: 0;
+    color: var(--black);
+
+    @media only screen and (max-width: 420px) {
+      font-size: 12px;
+      line-height: 16px;
+    }
+
+    @media only screen and (max-width: 325px) {
+      font-size: 11px;
+    }
+  }
+`;
+
+const StyledWarningIcon = styled.div`
+  min-height: 19px;
+  min-width: 22px;
+  background-image: url(${warning});
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: 16px;
+`;
 
 interface Props extends UseConnectProps {
   open: boolean;
@@ -95,7 +235,7 @@ const Connect: React.FC<Props> = ({
   })();
 
   return (
-    <SC.Wrapper>
+    <StyledWrapper>
       {isMobile && (
         <CSC.CloseWrapper aria-label="close" onClick={onClose}>
           <CloseIcon />
@@ -103,13 +243,13 @@ const Connect: React.FC<Props> = ({
       )}
 
       <CSC.ModalTitle margin="0 0 42px 0">{backendClientId}</CSC.ModalTitle>
-      <SC.SmallTitleWrapper>
-        <SC.SmallTitle>
+      <StyledSmallTitleWrapper>
+        <StyledSmallTitle>
           <strong>Key Name:</strong>
-        </SC.SmallTitle>
+        </StyledSmallTitle>
         {!editMode ? (
           <>
-            <SC.SmallTitle>&nbsp; {backendClientId}</SC.SmallTitle>
+            <StyledSmallTitle>&nbsp; {backendClientId}</StyledSmallTitle>
             <Button
               style={{ marginLeft: '24px' }}
               onClick={() => setEditMode(true)}
@@ -153,39 +293,42 @@ const Connect: React.FC<Props> = ({
             </Button>
           </>
         )}
-      </SC.SmallTitleWrapper>
+      </StyledSmallTitleWrapper>
       <Box display="flex" alignItems="center" mb="15px" position="relative">
-        <SC.SmallTitle>
+        <StyledSmallTitle>
           <strong>Integration Base URL:</strong> {integrationBaseUrl}
-        </SC.SmallTitle>
+        </StyledSmallTitle>
         <CSC.Copy onClick={() => handleCopy(integrationBaseUrl as string)} margin="0 0 0 20px" />
-        <SC.CopySuccess copy={copiedLine}>Copied to clipboard!</SC.CopySuccess>
+        <StyledCopySuccess copy={copiedLine}>Copied to clipboard!</StyledCopySuccess>
       </Box>
 
-      <SC.Subtitle>Key</SC.Subtitle>
+      <StyledSubtitle>Key</StyledSubtitle>
       <CopyLine
         disableCopy={disableCopy}
         warning={showWarning && !keyIsCopied}
         onCopy={() => setKeyIsCopied && setKeyIsCopied(true)}
         text={token}
-      />
+      >
+        {token}
+      </CopyLine>
+
       {showWarning && !keyIsCopied ? (
-        <SC.WarningWrapper>
-          <SC.WarningIcon />
+        <StyledWarningWrapper>
+          <StyledWarningIcon />
           <Typography>You did not copy the key above. It will be lost after you close this window.</Typography>
-        </SC.WarningWrapper>
+        </StyledWarningWrapper>
       ) : (
         !disableCopy && (
           <Box display="flex" alignItems="center">
-            <SC.DisclaimerIcon />
-            <SC.Disclaimer>
+            <StyledDisclaimerIcon />
+            <StyledDisclaimer>
               For security reasons, <strong>this is the last time you will see this key.</strong>
-            </SC.Disclaimer>
+            </StyledDisclaimer>
           </Box>
         )
       )}
 
-      <SC.Subtitle margin="32px auto">Connect your Backend</SC.Subtitle>
+      <StyledSubtitle margin="32px auto">Connect your Backend</StyledSubtitle>
       <Box display="flex" flexDirection="column">
         <Box
           display="flex"
@@ -205,8 +348,8 @@ const Connect: React.FC<Props> = ({
               Follow guide
             </Button>
             <Box display="flex" alignItems="center" justifyContent={!isSampleAppEnabled && 'center'}>
-              <SC.TimeIcon />
-              <SC.TimeDescription>10 minutes</SC.TimeDescription>
+              <StyledTimeIcon />
+              <StyledTimeDescription>10 minutes</StyledTimeDescription>
             </Box>
           </Box>
           {isSampleAppEnabled && (
@@ -222,11 +365,13 @@ const Connect: React.FC<Props> = ({
                 />
                 <Box display="flex" flexDirection="column" alignItems="left" justifyContent="left">
                   <Box display="flex" alignItems="center">
-                    <SC.TimeIcon />
-                    <SC.TimeDescription>2 minutes.</SC.TimeDescription>
+                    <StyledTimeIcon />
+                    <StyledTimeDescription>2 minutes.</StyledTimeDescription>
                   </Box>
                   <Box maxWidth={getTimeDescriptionWidth}>
-                    <SC.TimeDescription margin="0">Already configured to work with this integration</SC.TimeDescription>
+                    <StyledTimeDescription margin="0">
+                      Already configured to work with this integration
+                    </StyledTimeDescription>
                   </Box>
                 </Box>
               </Box>
@@ -265,7 +410,7 @@ const Connect: React.FC<Props> = ({
           OK
         </Button>
       </Box>
-    </SC.Wrapper>
+    </StyledWrapper>
   );
 };
 
