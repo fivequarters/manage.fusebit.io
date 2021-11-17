@@ -1,6 +1,5 @@
 import React from 'react';
 import copyIcon from '@assets/copy.svg';
-import { Props } from '@interfaces/copyLine';
 import { useCopy } from '@hooks/useCopy';
 import styled from 'styled-components';
 
@@ -38,36 +37,15 @@ const StyledLineInstruction = styled.div<{ horizontalScrollbar?: boolean; warnin
   width: 100%;
   color: var(--black);
   display: flex;
+  overflow: hidden;
 
-  & > p {
-    overflow: hidden;
-    text-overflow: ellipsis;
+  & p {
     margin: 0;
-  }
-
-  & > span {
-    color: var(--primary-color);
-    font-weight: 400;
-    margin: 0 10px;
+    text-overflow: ellipsis;
   }
 
   & > strong {
-    color: var(--primary-color);
-    font-weight: 400;
-    margin: 0 10px;
-  }
-
-  .unselectable {
-    -webkit-user-select: none; /* Safari */
-    -moz-user-select: none; /* Firefox */
-    -ms-user-select: none; /* IE10+/Edge */
-    user-select: none; /* Standard */
-  }
-
-  @media only screen and (max-width: 1250px) {
-    font-size: 14px;
-    line-height: 16px;
-    width: 100%;
+    color: var(--black);
   }
 `;
 
@@ -84,7 +62,7 @@ const StyledLineInstructionFade = styled.div<{
   height: 50px;
   width: ${(props) => (props.change && !props.disabled ? '300px' : '60px')};
   background-image: linear-gradient(to left, #eff5ff 10%, rgba(255, 255, 255, 0) 100%);
-  border-radius: 4px 4px 0 0;
+  border-radius: 4px;
   z-index: 1;
   transition: width 0.25s linear;
 
@@ -101,10 +79,9 @@ const StyledLineInstructionFade = styled.div<{
   ${(props) =>
     props.warning &&
     `
-      border-top-right-radius: 4px;
-      border-bottom-right-radius: 4px;
       border: 2px solid #F83420;
       border-left: 0;
+      border-radius: 0px 4px 4px 0px;
   `}
 `;
 
@@ -145,9 +122,16 @@ const StyledCopySuccess = styled.p<{ copy: boolean }>`
   transition: all 0.5s linear;
 `;
 
-// TODO: Refactor this component and remove extra logic as highlightedText. Use Typography From MUI instead of plain text.
+interface Props {
+  text: string;
+  children?: React.ReactNode;
+  horizontalScrollbar?: boolean;
+  warning?: boolean;
+  onCopy?: Function;
+  disableCopy?: boolean;
+}
 
-const CopyLine: React.FC<Props> = ({ text, highlightedText, horizontalScrollbar, warning, onCopy, disableCopy }) => {
+const CopyLine: React.FC<Props> = ({ text, children, horizontalScrollbar, warning, onCopy, disableCopy }) => {
   const [fadeChange, setFadeChange] = React.useState(false);
   const { handleCopy, copiedLine } = useCopy();
 
@@ -172,23 +156,7 @@ const CopyLine: React.FC<Props> = ({ text, highlightedText, horizontalScrollbar,
       </StyledLineInstructionCopy>
       <StyledLineInstructionFade disabled={disableCopy} warning={warning} change={fadeChange} />
       <StyledLineInstruction warning={warning} horizontalScrollbar={horizontalScrollbar}>
-        <p>
-          {highlightedText && <span className="unselectable">$</span>}
-          {highlightedText
-            ? text.split(' ').map((word) => {
-                let foundWord = false;
-                highlightedText.split(' ').forEach((wordToHightlight) => {
-                  if (wordToHightlight.match(word)) {
-                    foundWord = true;
-                  }
-                });
-                if (foundWord) {
-                  return <strong key={word}>{word}</strong>;
-                }
-                return `${word} `;
-              })
-            : text}
-        </p>
+        {children}
       </StyledLineInstruction>
       <StyledCopySuccess copy={copiedLine}>Copied to clipboard!</StyledCopySuccess>
     </StyledLineInstructionWrapper>

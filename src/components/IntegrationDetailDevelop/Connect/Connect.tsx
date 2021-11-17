@@ -308,7 +308,10 @@ const Connect: React.FC<Props> = ({
         warning={showWarning && !keyIsCopied}
         onCopy={() => setKeyIsCopied && setKeyIsCopied(true)}
         text={token}
-      />
+      >
+        {token}
+      </CopyLine>
+
       {showWarning && !keyIsCopied ? (
         <StyledWarningWrapper>
           <StyledWarningIcon />
