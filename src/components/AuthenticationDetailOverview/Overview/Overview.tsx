@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Button } from '@material-ui/core';
+import { Button, Box } from '@material-ui/core';
 import { ValidationMode } from '@jsonforms/core';
 import { useHistory, useParams } from 'react-router-dom';
 import dots from '@assets/dots.svg';
@@ -29,12 +29,6 @@ const StyledOverview = styled.div`
     flex-direction: column;
     align-items: center;
   }
-`;
-
-const StyledFlexDown = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
 `;
 
 const StyledUserCard = styled.div`
@@ -396,7 +390,7 @@ const Overview: React.FC = () => {
             </div>
             <StyledUserImage alt="user" src={isAdmin ? userData.picture : accountImg} height="88" width="88" />
 
-            <StyledFlexDown>
+            <Box display="flex" flexDirection="column" width="100%">
               <StyledUserName>
                 {accountData?.data.firstName} {accountData?.data.lastName}
               </StyledUserName>
@@ -406,7 +400,7 @@ const Overview: React.FC = () => {
                 <CSC.Copy margin="0 6px 0 auto" onClick={() => handleCopy(accountData?.data.id || '')} />
               </StyledUserId>
               <StyledCopySuccess copy={copiedLine}>Copied to clipboard!</StyledCopySuccess>
-            </StyledFlexDown>
+            </Box>
           </StyledUserInfoContainer>
           {!editInformation ? (
             <>

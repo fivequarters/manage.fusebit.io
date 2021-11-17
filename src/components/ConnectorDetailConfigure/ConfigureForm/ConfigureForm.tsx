@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { Button } from '@material-ui/core';
 import styled from 'styled-components';
+import { Box, Button, useMediaQuery } from '@material-ui/core';
 
 import { ValidationMode } from '@jsonforms/core';
 import { useAccountConnectorsGetOne } from '@hooks/api/v2/account/connector/useGetOne';
@@ -14,23 +14,6 @@ import { trackEvent } from '@utils/analytics';
 import InformationalBanner from '@components/common/InformationalBanner';
 import BaseJsonForm from '@components/common/BaseJsonForm';
 import * as CSC from '@components/globalStyle';
-
-const StyledFlex = styled.div`
-  display: flex;
-  padding-bottom: 100px;
-
-  @media only screen and (max-width: 880px) {
-    flex-direction: column;
-    align-items: center;
-  }
-`;
-
-const StyledFlexDown = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  width: 100%;
-`;
 
 const StyledFormWrapper = styled.form`
   display: flex;
@@ -82,6 +65,7 @@ const ConfigureForm: React.FC = () => {
     id: connectorData?.data.tags['fusebit.feedId'],
     type: connectorData?.data.tags['fusebit.feedType'],
   });
+  const isMobile = useMediaQuery('max-width: 880px');
 
   useEffect(() => {
     const unlisten = history.listen((location) => {
@@ -124,8 +108,8 @@ const ConfigureForm: React.FC = () => {
   }
 
   return (
-    <StyledFlex>
-      <StyledFlexDown>
+    <Box display="flex" flexDirection={isMobile && 'column'} alignItems={isMobile && 'center'} mb="100px">
+      <Box display="flex" flexDirection="column" position="relative" width="100%">
         {config?.data && !loading ? (
           <StyledFormWrapper>
             {configureAppDocUrl ? (
@@ -197,8 +181,8 @@ const ConfigureForm: React.FC = () => {
             <CSC.Spinner />
           </CSC.LoaderContainer>
         )}
-      </StyledFlexDown>
-    </StyledFlex>
+      </Box>
+    </Box>
   );
 };
 

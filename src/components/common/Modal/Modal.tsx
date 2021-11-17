@@ -1,45 +1,34 @@
 import React from 'react';
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogProps,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-} from '@material-ui/core';
+import { Box, Button, Dialog, DialogActions, DialogProps, DialogContent, DialogTitle } from '@material-ui/core';
 import styled from 'styled-components';
 import CloseIcon from '@material-ui/icons/Close';
-
-const StyledCloseWrapper = styled(IconButton)`
-  position: absolute;
-  right: 16px;
-  top: 16px;
-  color: var(--black);
-`;
+import * as CSC from '@components/globalStyle';
 
 const StyledTitle = styled(DialogTitle)`
   padding-top: 64px;
+
   > h2 {
     font-size: 24px;
     line-height: 30px;
     font-weight: 600;
+    max-width: 350px;
+    margin: 0 auto;
     color: var(--black);
     text-align: center;
   }
 `;
 
-const StyledContent = styled(DialogContent)`
-  padding: 40px;
-  padding-top: 24px;
+export const StyledContent = styled(DialogContent)<{ hasPadding?: boolean }>`
+  padding: ${(props) => props.hasPadding && '24px 40px 40px'};
+  width: 100%;
 `;
 
 interface Props extends DialogProps {
   onClose: () => void;
   open: boolean;
-  content: React.ReactNode;
-  title: string;
+  children: React.ReactNode;
+  disableActions?: boolean;
+  title?: string;
   onAccept?: () => void;
   hasCancel?: boolean;
   cancelButtonText?: string;
@@ -54,30 +43,33 @@ const Modal: React.FC<Props> = ({
   title,
   cancelButtonText,
   acceptButtonText,
-  content,
+  children,
+  disableActions,
   ...props
 }) => {
   return (
     <Dialog onClose={onClose} open={open} {...props}>
-      <StyledTitle>{title}</StyledTitle>
-      <StyledContent>
-        <StyledCloseWrapper aria-label="close" onClick={onClose}>
+      {title && <StyledTitle>{title}</StyledTitle>}
+      <StyledContent hasPadding={disableActions}>
+        <CSC.CloseWrapper aria-label="close" onClick={onClose}>
           <CloseIcon />
-        </StyledCloseWrapper>
-        {content}
+        </CSC.CloseWrapper>
+        {children}
       </StyledContent>
-      <DialogActions>
-        <Box display="flex" alignItems="center" justifyContent="center" width="100%" pb="32px">
-          {hasCancel && (
-            <Button variant="outlined" onClick={onClose} color="primary">
-              {cancelButtonText || 'Cancel'}
+      {!disableActions && (
+        <DialogActions>
+          <Box display="flex" alignItems="center" justifyContent="center" width="100%" pb="32px">
+            {hasCancel && (
+              <Button style={{ width: 77, marginRight: 16 }} variant="outlined" onClick={onClose} color="primary">
+                {cancelButtonText || 'Cancel'}
+              </Button>
+            )}
+            <Button style={{ width: !hasCancel ? 200 : 77 }} variant="contained" onClick={onAccept} color="primary">
+              {acceptButtonText || 'Accept'}
             </Button>
-          )}
-          <Button style={{ width: 200 }} variant="contained" onClick={onAccept} color="primary">
-            {acceptButtonText || 'Accept'}
-          </Button>
-        </Box>
-      </DialogActions>
+          </Box>
+        </DialogActions>
+      )}
     </Dialog>
   );
 };

@@ -1,26 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, Backdrop, Box, MenuItem, Select } from '@material-ui/core';
+import { Button, Box, MenuItem, Select } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { getIntegrationConfig } from '@utils/localStorage';
 import Label from '@components/common/FormFields/Label';
 import styled from 'styled-components';
 import Textarea from '@components/common/FormFields/Textarea';
 import TextField from '@components/common/FormFields/TextField';
-import * as CSC from '@components/globalStyle';
+import Modal from '@components/common/Modal';
 
-const StyledCard = styled.div<{ open: boolean }>`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  opacity: ${(props) => (props.open ? 1 : 0)};
-  padding: 64px;
+const StyledCard = styled.div`
+  padding: 0 32px;
   width: 795px;
   border-radius: 8px;
-  box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
-  outline: transparent;
-  transition: all 1s linear;
 
   @media only screen and (max-width: 550px) {
     width: 100%;
@@ -124,19 +115,10 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
   };
 
   return (
-    <Modal
-      aria-labelledby="transition-modal-title"
-      aria-describedby="transition-modal-description"
-      open={open}
-      onClose={() => setOpen(false)}
-      closeAfterTransition
-      BackdropComponent={Backdrop}
-    >
-      <StyledCard open={open} tabIndex={-1}>
-        <CSC.Close onClick={() => setOpen(false)} />
-        <CSC.ModalTitle margin="0 0 16px 0">Configure runner</CSC.ModalTitle>
-        <Box display="flex" mt="30px">
-          <CSC.Flex width="max-content" margin="0 48px 0 0" flexDown>
+    <Modal title="Configure runner" disableActions open={open} onClose={() => setOpen(false)}>
+      <StyledCard tabIndex={-1}>
+        <Box display="flex">
+          <Box display="flex" flexDirection="column" width="max-content" margin="0 48px 0 0">
             <Label>Verb</Label>
             <StyledVerbSelect
               value={formValues?.method}
@@ -155,8 +137,8 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
                 </StyledVerbItem>
               ))}
             </StyledVerbSelect>
-          </CSC.Flex>
-          <CSC.Flex flexDown>
+          </Box>
+          <Box display="flex" flexDirection="column" width="100%">
             <Label>URL</Label>
             <div>
               <TextField
@@ -172,7 +154,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
               />
               {formErrors.url && <StyledErrorMessage>{formErrors.url}</StyledErrorMessage>}
             </div>
-          </CSC.Flex>
+          </Box>
         </Box>
         {formValues?.method !== 'get' && (
           <Box display="flex" mt="15px" flexDirection="column">

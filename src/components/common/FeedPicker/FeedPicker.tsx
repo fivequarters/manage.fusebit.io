@@ -4,7 +4,6 @@ import ReactMarkdown from 'react-markdown';
 import { Box, Button, TextField } from '@material-ui/core';
 import { Props } from '@interfaces/feedPicker';
 import search from '@assets/search.svg';
-import cross from '@assets/cross.svg';
 import Loader from '@components/common/Loader';
 import { useTrackPage } from '@hooks/useTrackPage';
 import { urlOrSvgToImage } from '@utils/utils';
@@ -12,19 +11,11 @@ import BaseJsonForm from '@components/common/BaseJsonForm';
 import { DefaultFilters } from '@hooks/useFilterFeed';
 import useFeed from '@hooks/useFeed';
 
-const StyledCard = styled.div<{ open: boolean }>`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  opacity: ${(props) => (props.open ? 1 : 0)};
-  padding: 64px;
-  width: 1140px;
-  height: 671px;
-  border-radius: 8px;
-  box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
-  transition: all 1s linear;
+const StyledCard = styled.div`
+  padding: 24px;
+  padding-bottom: 0;
+  width: 1025px;
+  height: 590px;
 
   @media only screen and (max-width: 1145px) {
     width: 100%;
@@ -49,16 +40,6 @@ const StyledTitle = styled.h2`
   font-weight: 600;
   margin: 0;
   margin-bottom: 49px;
-`;
-
-const StyledFlex = styled.div<{ alignItems?: boolean }>`
-  display: flex;
-  align-items: ${(props) => props.alignItems && 'center'};
-
-  @media only screen and (max-width: 1100px) {
-    display: flex;
-    flex-direction: column;
-  }
 `;
 
 const StyledColumn = styled.div<{ border?: boolean }>`
@@ -212,43 +193,10 @@ const StyledFormWrapper = styled.div`
   }
 `;
 
-const StyledClose = styled.img`
-  height: 12px;
-  width: 12px;
-  object-fit: contain;
-  position: absolute;
-  top: 32px;
-  right: 32px;
-  transition: all 0.25s linear;
-
-  &:hover {
-    cursor: pointer;
-    transform: rotate(90deg);
-  }
-`;
-
 const StyledGeneralInfoWrapper = styled.div`
   position: relative;
   height: 350px;
   overflow-y: auto;
-`;
-
-const StyledMobileVisible = styled.div`
-  width: 100%;
-  display: none;
-
-  @media only screen and (max-width: 1100px) {
-    display: flex;
-  }
-`;
-
-const StyledMobileHidden = styled.div`
-  width: 100%;
-  display: flex;
-
-  @media only screen and (max-width: 1100px) {
-    display: none;
-  }
 `;
 
 const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onSubmit, isIntegration }, ref) => {
@@ -266,6 +214,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
     validationMode,
     loading,
     feedTypeName,
+    isMobile,
   } = useFeed({
     open,
     isIntegration,
@@ -281,10 +230,9 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
   };
 
   return (
-    <StyledCard onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)} open={open} ref={ref} tabIndex={-1}>
-      <StyledClose onClick={() => onClose()} src={cross} alt="close" height="12" width="12" />
+    <StyledCard onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)} ref={ref} tabIndex={-1}>
       <StyledTitle>{`New ${feedTypeName}`}</StyledTitle>
-      <StyledFlex>
+      <Box display="flex" flexDirection={isMobile && 'column'}>
         <StyledColumn>
           {loading ? (
             <Box minWidth="254px">
@@ -374,34 +322,20 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
                   </StyledFormWrapper>
                 )}
               </StyledGeneralInfoWrapper>
-              <StyledMobileHidden>
-                <Button
-                  onClick={handleSubmit}
-                  style={{ width: '200px', marginTop: 'auto', marginLeft: 'auto' }}
-                  fullWidth={false}
-                  size="large"
-                  color="primary"
-                  variant="contained"
-                >
-                  {activeTemplate.outOfPlan ? 'Enable' : 'Create'}
-                </Button>
-              </StyledMobileHidden>
-              <StyledMobileVisible>
-                <Button
-                  onClick={handleSubmit}
-                  style={{ width: '200px', margin: 'auto' }}
-                  fullWidth={false}
-                  size="large"
-                  color="primary"
-                  variant="contained"
-                >
-                  {activeTemplate.outOfPlan ? 'Enable' : 'Create'}
-                </Button>
-              </StyledMobileVisible>
+              <Button
+                onClick={handleSubmit}
+                style={{ width: '200px', margin: isMobile ? 'auto' : 'auto 0 0 auto' }}
+                fullWidth={false}
+                size="large"
+                color="primary"
+                variant="contained"
+              >
+                {activeTemplate.outOfPlan ? 'Enable' : 'Create'}
+              </Button>
             </>
           )}
         </StyledConnectorInfo>
-      </StyledFlex>
+      </Box>
     </StyledCard>
   );
 });

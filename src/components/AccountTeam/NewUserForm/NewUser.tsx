@@ -9,32 +9,6 @@ import BaseJsonForm from '@components/common/BaseJsonForm';
 import styled from 'styled-components';
 import * as CSC from '../../globalStyle';
 
-const StyledCard = styled.div<{ open: boolean }>`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  opacity: ${(props) => (props.open ? 1 : 0)};
-  padding: 64px;
-  height: 544px;
-  width: 642px;
-  border-radius: 8px;
-  box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
-  transition: all 1s linear;
-
-  @media only screen and (max-width: 660px) {
-    width: 100%;
-    height: 100%;
-    border-radius: 0;
-    padding: 32px;
-    left: 0;
-    top: auto;
-    bottom: 0;
-    transform: translate(0, 0);
-  }
-`;
-
 const StyledFormWrapper = styled.form`
   display: flex;
   flex-direction: column;
@@ -58,13 +32,6 @@ const StyledFormInputWrapper = styled.div`
 
   @media only screen and (max-width: 880px) {
   }
-`;
-
-const StyledUserCreatedButtonWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 90px;
 `;
 
 const schema = {
@@ -116,7 +83,7 @@ const uischema = {
   ],
 };
 
-const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, createUser }, ref) => {
+const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ onClose, createUser }, ref) => {
   const [data, setData] = React.useState<NewUserData>({
     firstName: undefined,
     lastName: undefined,
@@ -149,11 +116,10 @@ const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ open, onClose,
   };
 
   return (
-    <StyledCard open={open} ref={ref} tabIndex={-1}>
-      <CSC.Close onClick={() => onClose()} />
+    <div ref={ref}>
       {!userCreated ? (
         <>
-          <CSC.ModalTitle>New User</CSC.ModalTitle>
+          <CSC.ModalTitle margin="48px 0">New User</CSC.ModalTitle>
           <StyledFormWrapper>
             <BaseJsonForm
               schema={schema}
@@ -184,7 +150,7 @@ const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ open, onClose,
         </>
       ) : (
         <>
-          <CSC.ModalTitle margin="0 0 100px 0">
+          <CSC.ModalTitle margin="48px 0">
             User {startCase(data.firstName || '')} {startCase(data.lastName || '')} Created!
           </CSC.ModalTitle>
           <CSC.ModalDescription>
@@ -192,7 +158,7 @@ const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ open, onClose,
             eight hours.
           </CSC.ModalDescription>
           <CopyLine text={token} />
-          <StyledUserCreatedButtonWrapper>
+          <StyledFormInputWrapper>
             <Button
               onClick={() => onClose()}
               style={{ width: '200px' }}
@@ -203,10 +169,10 @@ const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ open, onClose,
             >
               Done
             </Button>
-          </StyledUserCreatedButtonWrapper>
+          </StyledFormInputWrapper>
         </>
       )}
-    </StyledCard>
+    </div>
   );
 });
 

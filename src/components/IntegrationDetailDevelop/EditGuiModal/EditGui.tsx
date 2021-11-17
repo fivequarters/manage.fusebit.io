@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, ButtonGroup } from '@material-ui/core';
+import { Box, Button, ButtonGroup, IconButton } from '@material-ui/core';
 import { SaveOutlined, PlayArrowOutlined } from '@material-ui/icons';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Props } from '@interfaces/edit';
@@ -17,12 +17,12 @@ import useEditor from '@components/IntegrationDetailDevelop/FusebitEditor/useEdi
 import { useParams } from 'react-router-dom';
 import useTitle from '@hooks/useTitle';
 import styled from 'styled-components';
-import { CloseIconMixin } from '@components/globalStyle';
 import file from '@assets/file.svg';
 import cogs from '@assets/cogs.svg';
 import clock from '@assets/clock.svg';
 import playEditor from '@assets/play-editor.svg';
 import add from '@assets/add.svg';
+import CloseIcon from '@material-ui/icons/Close';
 
 const StyledEditorContainer = styled.div`
   .fa {
@@ -174,14 +174,14 @@ const StyledEditorContainer = styled.div`
   }
 `;
 
-const StyledClose = styled.div`
-  ${CloseIconMixin}
+const StyledCloseWrapper = styled(IconButton)`
   top: 0;
   right: 0;
+  color: var(--black);
   position: relative;
   z-index: 1;
-  height: 12px;
-  width: 12px;
+  height: 30px;
+  width: 30px;
   margin-left: auto;
   background-size: cover;
 `;
@@ -408,7 +408,9 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
               </StyledActionsHelpLink>
               <StyledActionsHelpImage src={question} alt="question" height="16" width="16" />
             </StyledActionsHelpWrapper>
-            <StyledClose onClick={handleClose} />
+            <StyledCloseWrapper onClick={handleClose}>
+              <CloseIcon fontSize="small" />
+            </StyledCloseWrapper>
           </StyledCloseHeader>
         )}
         <StyledFusebitEditorContainer onKeyUp={handleKeyUp}>
