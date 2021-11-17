@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import styled from 'styled-components';
 import { Box, Button, useMediaQuery } from '@material-ui/core';
 
 import { ValidationMode } from '@jsonforms/core';
@@ -13,7 +14,29 @@ import { trackEvent } from '@utils/analytics';
 import InformationalBanner from '@components/common/InformationalBanner';
 import BaseJsonForm from '@components/common/BaseJsonForm';
 import * as CSC from '@components/globalStyle';
-import * as SC from './styles';
+
+const StyledFormWrapper = styled.form`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 20px;
+
+  @media only screen and (max-width: 880px) {
+    margin-left: 0;
+  }
+`;
+
+const StyledFormInputWrapper = styled.div`
+  margin-top: 24px;
+  margin-bottom: 49px;
+
+  @media only screen and (max-width: 880px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+`;
 
 const ConfigureForm: React.FC = () => {
   const history = useHistory();
@@ -88,7 +111,7 @@ const ConfigureForm: React.FC = () => {
     <Box display="flex" flexDirection={isMobile && 'column'} alignItems={isMobile && 'center'} mb="100px">
       <Box display="flex" flexDirection="column" position="relative" width="100%">
         {config?.data && !loading ? (
-          <SC.FormWrapper>
+          <StyledFormWrapper>
             {configureAppDocUrl ? (
               <InformationalBanner>
                 By default, Connectors use Fusebit demonstration credentials, which are intended for testing only. When
@@ -140,7 +163,7 @@ const ConfigureForm: React.FC = () => {
               }}
               validationMode={validationMode}
             />
-            <SC.FormInputWrapper>
+            <StyledFormInputWrapper>
               <Button
                 onClick={handleSubmit}
                 style={{ width: '200px' }}
@@ -151,8 +174,8 @@ const ConfigureForm: React.FC = () => {
               >
                 Save
               </Button>
-            </SC.FormInputWrapper>
-          </SC.FormWrapper>
+            </StyledFormInputWrapper>
+          </StyledFormWrapper>
         ) : (
           <CSC.LoaderContainer>
             <CSC.Spinner />

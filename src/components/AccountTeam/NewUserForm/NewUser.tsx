@@ -6,8 +6,29 @@ import { NewUserData } from '@interfaces/newUserData';
 import { startCase } from '@utils/utils';
 import CopyLine from '@components/common/CopyLine';
 import BaseJsonForm from '@components/common/BaseJsonForm';
+import styled from 'styled-components';
 import * as CSC from '../../globalStyle';
-import * as SC from './styles';
+
+const StyledFormWrapper = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0px auto;
+  width: 400px;
+
+  @media only screen and (max-width: 660px) {
+    width: 100%;
+  }
+`;
+
+const StyledFormInputWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 48px;
+  justify-content: center;
+`;
 
 const schema = {
   type: 'object',
@@ -95,7 +116,7 @@ const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ onClose, creat
       {!userCreated ? (
         <>
           <CSC.ModalTitle margin="48px 0">New User</CSC.ModalTitle>
-          <SC.FormWrapper>
+          <StyledFormWrapper>
             <BaseJsonForm
               schema={schema}
               uischema={uischema}
@@ -108,7 +129,7 @@ const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ onClose, creat
               }}
               validationMode={validationMode}
             />
-            <SC.FormInputWrapper>
+            <StyledFormInputWrapper>
               <Button
                 disabled={isSubmitting}
                 onClick={handleSubmit}
@@ -120,8 +141,8 @@ const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ onClose, creat
               >
                 {isSubmitting ? 'Creating...' : 'Create'}
               </Button>
-            </SC.FormInputWrapper>
-          </SC.FormWrapper>
+            </StyledFormInputWrapper>
+          </StyledFormWrapper>
         </>
       ) : (
         <>
@@ -133,7 +154,7 @@ const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ onClose, creat
             eight hours.
           </CSC.ModalDescription>
           <CopyLine text={token}>{token}</CopyLine>
-          <SC.FormInputWrapper>
+          <StyledFormInputWrapper>
             <Button
               onClick={() => onClose()}
               style={{ width: '200px' }}
@@ -144,7 +165,7 @@ const CreateUserForm = React.forwardRef<HTMLDivElement, Props>(({ onClose, creat
             >
               Done
             </Button>
-          </SC.FormInputWrapper>
+          </StyledFormInputWrapper>
         </>
       )}
     </div>

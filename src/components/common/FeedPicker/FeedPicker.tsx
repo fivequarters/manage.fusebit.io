@@ -1,4 +1,6 @@
 import React from 'react';
+import styled from 'styled-components';
+import ReactMarkdown from 'react-markdown';
 import { Box, Button, TextField } from '@material-ui/core';
 import { Props } from '@interfaces/feedPicker';
 import search from '@assets/search.svg';
@@ -8,7 +10,194 @@ import { urlOrSvgToImage } from '@utils/utils';
 import BaseJsonForm from '@components/common/BaseJsonForm';
 import { DefaultFilters } from '@hooks/useFilterFeed';
 import useFeedPicker from '@hooks/useFeedPicker';
-import * as SC from './styles';
+
+const StyledCard = styled.div`
+  padding: 24px;
+  padding-bottom: 0;
+  width: 1025px;
+  height: 590px;
+
+  @media only screen and (max-width: 1145px) {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+  }
+
+  @media only screen and (max-width: 1100px) {
+    left: 0;
+    top: auto;
+    bottom: 0;
+    transform: translate(0, 0);
+    border-radius: 0;
+    padding: 32px;
+  }
+`;
+
+const StyledTitle = styled.h2`
+  font-size: 24px;
+  line-height: 26px;
+  color: var(--black);
+  font-weight: 600;
+  margin: 0;
+  margin-bottom: 49px;
+`;
+
+const StyledColumn = styled.div<{ border?: boolean }>`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-height: 390px;
+  overflow-y: scroll;
+  flex-shrink: 0;
+  z-index: 0;
+
+  @media only screen and (max-width: 1100px) {
+    height: 100%;
+  }
+`;
+
+const StyledColumnItem = styled.div<{ active: boolean; capitalize?: boolean }>`
+  display: flex;
+  align-items: center;
+  padding: 11px 16px;
+  font-size: 16px;
+  line-height: 18px;
+  background-color: ${(props) => props.active && 'var(--secondary-color)'};
+  font-weight: ${(props) => (props.active ? 600 : 400)};
+  width: 254px;
+  transition: background-color 0.2s linear;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  ${(props) => props.capitalize && 'text-transform: capitalize;'}
+
+  &:hover {
+    cursor: pointer;
+    background-color: var(--secondary-color);
+  }
+
+  @media only screen and (max-width: 1100px) {
+    width: 100%;
+  }
+`;
+
+const StyledColumnItemImage = styled.img`
+  height: 18px;
+  width: 18px;
+  object-fit: contain;
+  margin-right: 16px;
+`;
+
+const StyledColumnBr = styled.div`
+  width: 1px;
+  height: 321px;
+  background-color: #959595;
+  opacity: 0.3;
+  margin: 0 32px;
+
+  @media only screen and (max-width: 1100px) {
+    width: 100%;
+    height: 1px;
+    margin: 32px 0;
+  }
+`;
+
+const StyledColumnSearchWrapper = styled.div`
+  position: relative;
+  margin-bottom: 32px;
+  min-width: 254px;
+`;
+
+const StyledColumnSearchIcon = styled.img`
+  position: absolute;
+  right: 0;
+  top: 40%;
+  transform: translateY(-50%);
+  height: 24px;
+  width: 24px;
+  object-fit: contain;
+`;
+
+const StyledConnectorInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-left: 24px;
+  width: 100%;
+
+  @media only screen and (max-width: 1100px) {
+    padding-left: 0;
+  }
+`;
+
+const StyledConnectorImage = styled.img`
+  height: 28px;
+  width: 28px;
+  object-fit: contain;
+  margin-right: 16px;
+`;
+
+const StyledConnectorTitle = styled.h3`
+  font-size: 20px;
+  line-height: 26px;
+  color: var(--black);
+  margin: 0;
+`;
+
+const StyledConnectorTitleWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 12px;
+  margin-bottom: 12px;
+`;
+
+const StyledConnectorVersion = styled.div`
+  font-size: 12px;
+  line-height: 14px;
+  font-weight: 300;
+  color: var(--black);
+  margin-left: auto;
+`;
+
+const StyledConnectorDescription = styled(ReactMarkdown)`
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--black);
+  max-width: 300px;
+
+  p {
+    margin: 0;
+    margin-top: 16px;
+  }
+
+  a {
+    color: var(--black);
+    text-decoration: underline;
+    transition: all 0.25s linear;
+
+    &:hover {
+      color: var(--primary-color);
+    }
+  }
+  @media only screen and (max-width: 1100px) {
+    max-width: none;
+  }
+`;
+
+const StyledFormWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 316px;
+  margin-top: 15px;
+
+  @media only screen and (max-width: 1100px) {
+    width: 100%;
+  }
+`;
+
+const StyledGeneralInfoWrapper = styled.div`
+  position: relative;
+  height: 350px;
+  overflow-y: auto;
+`;
 
 const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onSubmit, isIntegration }, ref) => {
   const {
@@ -41,88 +230,88 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
   };
 
   return (
-    <SC.Card onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)} ref={ref} tabIndex={-1}>
-      <SC.Title>{`New ${feedTypeName}`}</SC.Title>
+    <StyledCard onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)} ref={ref} tabIndex={-1}>
+      <StyledTitle>{`New ${feedTypeName}`}</StyledTitle>
       <Box display="flex" flexDirection={isMobile && 'column'}>
-        <SC.Column>
+        <StyledColumn>
           {loading ? (
             <Box minWidth="254px">
               <Loader />
             </Box>
           ) : (
             <>
-              <SC.ColumnItem
+              <StyledColumnItem
                 onClick={() => handleFilterChange(DefaultFilters.ALL)}
                 active={activeFilter === DefaultFilters.ALL}
                 capitalize
               >
                 {DefaultFilters.ALL}
-              </SC.ColumnItem>
+              </StyledColumnItem>
               {allTags.map((tag) => (
-                <SC.ColumnItem
+                <StyledColumnItem
                   active={tag === activeFilter}
                   key={tag}
                   onClick={() => handleFilterChange(tag)}
                   capitalize
                 >
                   {tag}
-                </SC.ColumnItem>
+                </StyledColumnItem>
               ))}
             </>
           )}
-        </SC.Column>
-        <SC.ColumnBr />
-        <SC.Column border>
-          <SC.ColumnSearchWrapper>
+        </StyledColumn>
+        <StyledColumnBr />
+        <StyledColumn border>
+          <StyledColumnSearchWrapper>
             <TextField fullWidth onChange={(e) => debouncedSetSearchFilter(e.target.value)} label="Search" />
-            <SC.ColumnSearchIcon src={search} alt={`Search ${feedTypeName}`} height="24" width="24" />
-          </SC.ColumnSearchWrapper>
+            <StyledColumnSearchIcon src={search} alt={`Search ${feedTypeName}`} height="24" width="24" />
+          </StyledColumnSearchWrapper>
           {loading || !activeTemplate ? (
             <Loader />
           ) : (
             <Box>
               {filteredFeed.map((feedEntry) => {
                 return (
-                  <SC.ColumnItem
+                  <StyledColumnItem
                     key={feedEntry.id}
                     onClick={() => handleTemplateChange(feedEntry)}
                     active={feedEntry.id === activeTemplate.id}
                   >
-                    <SC.ColumnItemImage
+                    <StyledColumnItemImage
                       src={urlOrSvgToImage(feedEntry.smallIcon)}
                       alt={feedEntry.name}
                       height="18"
                       width="18"
                     />
                     {feedEntry.name}
-                  </SC.ColumnItem>
+                  </StyledColumnItem>
                 );
               })}
             </Box>
           )}
-        </SC.Column>
-        <SC.ColumnBr />
-        <SC.ConnectorInfo>
+        </StyledColumn>
+        <StyledColumnBr />
+        <StyledConnectorInfo>
           {loading || !activeTemplate ? (
             <Loader />
           ) : (
             <>
-              <SC.ConnectorTitleWrapper>
-                <SC.ConnectorImage
+              <StyledConnectorTitleWrapper>
+                <StyledConnectorImage
                   src={urlOrSvgToImage(activeTemplate.smallIcon)}
                   alt={activeTemplate.name || 'slack'}
                   height="28"
                   width="28"
                 />
-                <SC.ConnectorTitle>{activeTemplate.name}</SC.ConnectorTitle>
-                <SC.ConnectorVersion>{activeTemplate.version}</SC.ConnectorVersion>
-              </SC.ConnectorTitleWrapper>
-              <SC.GeneralInfoWrapper>
-                <SC.ConnectorDescription linkTarget="_blank">
+                <StyledConnectorTitle>{activeTemplate.name}</StyledConnectorTitle>
+                <StyledConnectorVersion>{activeTemplate.version}</StyledConnectorVersion>
+              </StyledConnectorTitleWrapper>
+              <StyledGeneralInfoWrapper>
+                <StyledConnectorDescription linkTarget="_blank">
                   {activeTemplate.description || ''}
-                </SC.ConnectorDescription>
+                </StyledConnectorDescription>
                 {activeTemplate.outOfPlan || (
-                  <SC.FormWrapper>
+                  <StyledFormWrapper>
                     <BaseJsonForm
                       schema={activeTemplate.configuration.schema}
                       uischema={activeTemplate.configuration.uischema}
@@ -130,9 +319,9 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
                       onChange={handleJsonFormsChange}
                       validationMode={validationMode}
                     />
-                  </SC.FormWrapper>
+                  </StyledFormWrapper>
                 )}
-              </SC.GeneralInfoWrapper>
+              </StyledGeneralInfoWrapper>
               <Button
                 onClick={handleSubmit}
                 style={{ width: '200px', margin: isMobile ? 'auto' : 'auto 0 0 auto' }}
@@ -145,9 +334,9 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
               </Button>
             </>
           )}
-        </SC.ConnectorInfo>
+        </StyledConnectorInfo>
       </Box>
-    </SC.Card>
+    </StyledCard>
   );
 });
 

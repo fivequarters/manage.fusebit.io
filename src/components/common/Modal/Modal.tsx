@@ -1,8 +1,27 @@
 import React from 'react';
-import { Box, Button, Dialog, DialogActions, DialogProps } from '@material-ui/core';
+import { Box, Button, Dialog, DialogActions, DialogProps, DialogContent, DialogTitle } from '@material-ui/core';
+import styled from 'styled-components';
 import CloseIcon from '@material-ui/icons/Close';
 import * as CSC from '@components/globalStyle';
-import * as SC from './styles';
+
+const StyledTitle = styled(DialogTitle)`
+  padding-top: 64px;
+
+  > h2 {
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: 600;
+    max-width: 350px;
+    margin: 0 auto;
+    color: var(--black);
+    text-align: center;
+  }
+`;
+
+export const StyledContent = styled(DialogContent)<{ hasPadding?: boolean }>`
+  padding: ${(props) => props.hasPadding && '24px 40px 40px'};
+  width: 100%;
+`;
 
 interface Props extends DialogProps {
   onClose: () => void;
@@ -30,13 +49,13 @@ const Modal: React.FC<Props> = ({
 }) => {
   return (
     <Dialog onClose={onClose} open={open} {...props}>
-      {title && <SC.Title>{title}</SC.Title>}
-      <SC.Content hasPadding={disableActions}>
+      {title && <StyledTitle>{title}</StyledTitle>}
+      <StyledContent hasPadding={disableActions}>
         <CSC.CloseWrapper aria-label="close" onClick={onClose}>
           <CloseIcon />
         </CSC.CloseWrapper>
         {children}
-      </SC.Content>
+      </StyledContent>
       {!disableActions && (
         <DialogActions>
           <Box display="flex" alignItems="center" justifyContent="center" width="100%" pb="32px">
