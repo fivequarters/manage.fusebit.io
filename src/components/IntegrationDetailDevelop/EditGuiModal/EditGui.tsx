@@ -82,6 +82,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
 
   useEffect(() => {}, []);
 
+  // TODO: Implement events from the editor to know its state
   const handleSaveAndRun = async () => {
     try {
       if (dirtyState) {
