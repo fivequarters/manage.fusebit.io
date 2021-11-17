@@ -145,6 +145,7 @@ const useFeed = ({ isIntegration, onSubmit, onClose, open }: Props) => {
   const handleSubmit = () => {
     return activeTemplate?.outOfPlan ? handlePlanUpsell() : handleAdd();
   };
+
   const orderAlpha = (unsortedFeed: Feed[]) => {
     const list: Feed[] = orderBy(unsortedFeed, [(feedEntry: Feed) => feedEntry.name.toLowerCase()], ['asc']);
 
