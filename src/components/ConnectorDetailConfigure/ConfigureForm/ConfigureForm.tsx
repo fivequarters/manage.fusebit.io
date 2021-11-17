@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { Button } from '@material-ui/core';
+import { Box, Button, useMediaQuery } from '@material-ui/core';
 
 import { ValidationMode } from '@jsonforms/core';
 import { useAccountConnectorsGetOne } from '@hooks/api/v2/account/connector/useGetOne';
@@ -42,6 +42,7 @@ const ConfigureForm: React.FC = () => {
     id: connectorData?.data.tags['fusebit.feedId'],
     type: connectorData?.data.tags['fusebit.feedType'],
   });
+  const isMobile = useMediaQuery('max-width: 880px');
 
   useEffect(() => {
     const unlisten = history.listen((location) => {
@@ -84,8 +85,8 @@ const ConfigureForm: React.FC = () => {
   }
 
   return (
-    <SC.Flex>
-      <SC.FlexDown>
+    <Box display="flex" flexDirection={isMobile && 'column'} alignItems={isMobile && 'center'} mb="100px">
+      <Box display="flex" flexDirection="column" position="relative" width="100%">
         {config?.data && !loading ? (
           <SC.FormWrapper>
             {configureAppDocUrl ? (
@@ -157,8 +158,8 @@ const ConfigureForm: React.FC = () => {
             <CSC.Spinner />
           </CSC.LoaderContainer>
         )}
-      </SC.FlexDown>
-    </SC.Flex>
+      </Box>
+    </Box>
   );
 };
 

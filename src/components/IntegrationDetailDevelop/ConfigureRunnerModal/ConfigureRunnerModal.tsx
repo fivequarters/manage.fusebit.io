@@ -5,7 +5,6 @@ import { getIntegrationConfig } from '@utils/localStorage';
 import Label from '@components/common/FormFields/Label';
 import TextField from '@components/common/FormFields/TextField';
 import Modal from '@components/common/Modal';
-import * as CSC from '@components/globalStyle';
 import * as SC from './styles';
 
 interface Props {
@@ -77,7 +76,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
     <Modal title="Configure runner" disableActions open={open} onClose={() => setOpen(false)}>
       <SC.Card open={open} tabIndex={-1}>
         <Box display="flex">
-          <CSC.Flex width="max-content" margin="0 48px 0 0" flexDown>
+          <Box display="flex" flexDirection="column" width="max-content" margin="0 48px 0 0">
             <Label>Verb</Label>
             <SC.VerbSelect
               value={formValues?.method}
@@ -96,8 +95,8 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
                 </SC.VerbItem>
               ))}
             </SC.VerbSelect>
-          </CSC.Flex>
-          <CSC.Flex flexDown>
+          </Box>
+          <Box display="flex" flexDirection="column" width="100%">
             <Label>URL</Label>
             <div>
               <TextField
@@ -113,7 +112,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
               />
               {formErrors.url && <SC.ErrorMessage>{formErrors.url}</SC.ErrorMessage>}
             </div>
-          </CSC.Flex>
+          </Box>
         </Box>
         {formValues?.method !== 'get' && (
           <Box display="flex" mt="15px" flexDirection="column">

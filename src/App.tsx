@@ -13,7 +13,8 @@ const App = () => (
         location="bottom"
         buttonText="Accept"
         cookieName="CookieConsent"
-        style={{ background: 'rgba(215, 229, 255, 0.4)' }}
+        style={{ background: 'rgba(215, 229, 255, 0.4)', justifyContent: 'initial' }}
+        contentStyle={{ flex: 'initial' }}
         buttonStyle={{
           borderRadius: '4px',
           border: '1px solid #F83420',

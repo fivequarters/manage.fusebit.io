@@ -25,6 +25,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
     validationMode,
     loading,
     feedTypeName,
+    isMobile,
   } = useFeed({
     open,
     isIntegration,
@@ -42,7 +43,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
   return (
     <SC.Card onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)} ref={ref} tabIndex={-1}>
       <SC.Title>{`New ${feedTypeName}`}</SC.Title>
-      <SC.Flex>
+      <Box display="flex" flexDirection={isMobile && 'column'}>
         <SC.Column>
           {loading ? (
             <Box minWidth="254px">
@@ -132,34 +133,20 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
                   </SC.FormWrapper>
                 )}
               </SC.GeneralInfoWrapper>
-              <SC.MobileHidden>
-                <Button
-                  onClick={handleSubmit}
-                  style={{ width: '200px', marginTop: 'auto', marginLeft: 'auto' }}
-                  fullWidth={false}
-                  size="large"
-                  color="primary"
-                  variant="contained"
-                >
-                  {activeTemplate.outOfPlan ? 'Enable' : 'Create'}
-                </Button>
-              </SC.MobileHidden>
-              <SC.MobileVisible>
-                <Button
-                  onClick={handleSubmit}
-                  style={{ width: '200px', margin: 'auto' }}
-                  fullWidth={false}
-                  size="large"
-                  color="primary"
-                  variant="contained"
-                >
-                  {activeTemplate.outOfPlan ? 'Enable' : 'Create'}
-                </Button>
-              </SC.MobileVisible>
+              <Button
+                onClick={handleSubmit}
+                style={{ width: '200px', margin: isMobile ? 'auto' : 'auto 0 0 auto' }}
+                fullWidth={false}
+                size="large"
+                color="primary"
+                variant="contained"
+              >
+                {activeTemplate.outOfPlan ? 'Enable' : 'Create'}
+              </Button>
             </>
           )}
         </SC.ConnectorInfo>
-      </SC.Flex>
+      </Box>
     </SC.Card>
   );
 });

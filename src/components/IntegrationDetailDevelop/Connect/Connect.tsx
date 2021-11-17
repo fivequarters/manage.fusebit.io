@@ -176,17 +176,17 @@ const Connect: React.FC<Props> = ({
         </SC.WarningWrapper>
       ) : (
         !disableCopy && (
-          <CSC.Flex>
+          <Box display="flex" alignItems="center">
             <SC.DisclaimerIcon />
             <SC.Disclaimer>
               For security reasons, <strong>this is the last time you will see this key.</strong>
             </SC.Disclaimer>
-          </CSC.Flex>
+          </Box>
         )
       )}
 
       <SC.Subtitle margin="32px auto">Connect your Backend</SC.Subtitle>
-      <CSC.Flex flexDown>
+      <Box display="flex" flexDirection="column">
         <Box
           display="flex"
           alignItems={!isSampleAppEnabled && 'center'}
@@ -233,7 +233,7 @@ const Connect: React.FC<Props> = ({
             </>
           )}
         </Box>
-      </CSC.Flex>
+      </Box>
       <Box
         display="flex"
         alignItems="center"
