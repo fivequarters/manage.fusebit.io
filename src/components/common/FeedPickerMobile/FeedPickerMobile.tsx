@@ -132,7 +132,7 @@ const FeedPickerMobile: React.FC<Props> = ({ isIntegration, onSubmit, open, onCl
             backButton={null}
           />
           <Box width="66px" display="flex" justifyContent="flex-end">
-            <IconButton size="small" onClick={onClose}>
+            <IconButton size="small" onClick={handleClose}>
               <img src={cross} alt="close" height={10} width={10} />
             </IconButton>
           </Box>
