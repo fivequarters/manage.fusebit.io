@@ -40,7 +40,7 @@ const FeedPickerMobile: React.FC<Props> = ({ isIntegration, onSubmit, open, onCl
     setData,
     setActiveFilter,
     feedTypeName,
-    sortFeedAlphabetically,
+    orderAlpha,
   } = useFeed({
     open,
     isIntegration,
@@ -81,17 +81,15 @@ const FeedPickerMobile: React.FC<Props> = ({ isIntegration, onSubmit, open, onCl
     },
   }));
 
-  const entities = filteredFeed
-    .sort((a, b) => sortFeedAlphabetically(a.name.toLowerCase(), b.name.toLowerCase(), a.id))
-    .map((entity) => ({
-      text: entity.name,
-      icon: <img src={urlOrSvgToImage(entity.smallIcon)} alt="connector" height={18} width={18} />,
-      id: entity.id,
-      onClick: () => {
-        handleTemplateChange(entity);
-        handleNext();
-      },
-    }));
+  const entities = orderAlpha(filteredFeed).map((entity) => ({
+    text: entity.name,
+    icon: <img src={urlOrSvgToImage(entity.smallIcon)} alt="connector" height={18} width={18} />,
+    id: entity.id,
+    onClick: () => {
+      handleTemplateChange(entity);
+      handleNext();
+    },
+  }));
 
   const steps = [
     <ItemList key="1" items={filters} activeItem={activeFilter} />,
