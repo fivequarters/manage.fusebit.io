@@ -26,12 +26,8 @@ const StyledFormInputWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 48px;
   justify-content: center;
-  position: absolute;
-  bottom: 64px;
-
-  @media only screen and (max-width: 880px) {
-  }
 `;
 
 const schema = {
