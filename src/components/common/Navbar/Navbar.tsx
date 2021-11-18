@@ -56,6 +56,25 @@ const StyledLinkContainer = styled(Box)`
   }
 `;
 
+const sendSupportMessage = () => {
+  setTimeout(() => {
+    const intercomFrame = document.querySelector<HTMLIFrameElement>("iframe[name='intercom-messenger-frame']");
+    if (!intercomFrame || !intercomFrame.contentDocument) {
+      return sendSupportMessage();
+    }
+    const sendButton = intercomFrame.contentDocument.querySelector<HTMLButtonElement>('.intercom-composer-send-button');
+    if (!sendButton) {
+      return sendSupportMessage();
+    }
+    sendButton.click();
+  }, 200);
+};
+
+const openSupportMessage = () => {
+  window.Intercom('showNewMessage', 'Hi, Fusebit team. I have a question!');
+  sendSupportMessage();
+};
+
 const Navbar: React.FC = ({ children }) => {
   const { userData } = useAuthContext();
   const { getRedirectLink } = useGetRedirectLink();
@@ -101,9 +120,7 @@ const Navbar: React.FC = ({ children }) => {
               </IconButton>
             ) : (
               <StyledLinkContainer display="flex" alignItems="center">
-                <StyledLink onClick={() => window.Intercom('showNewMessage', 'Hi Fusebit team, I need some help!')}>
-                  Support
-                </StyledLink>
+                <StyledLink onClick={() => openSupportMessage()}>Support</StyledLink>
                 <StyledLink href="https://developer.fusebit.io" target="_blank">
                   Docs
                 </StyledLink>
