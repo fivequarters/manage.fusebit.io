@@ -68,8 +68,10 @@ const AuthCallbackPage: FC<{}> = (): ReactElement => {
         );
         signIn(false);
         return;
-        // eslint-disable-next-line no-else-return
-      } else if (error !== 'login_required') {
+      } else if (error === 'login_required') {
+        signIn();
+        return;
+      } else if (error) {
         // eslint-disable-next-line no-console
         console.error('Callback URL called with an unknown error.', location, errorDescription);
         history.push('/fatal-error');
