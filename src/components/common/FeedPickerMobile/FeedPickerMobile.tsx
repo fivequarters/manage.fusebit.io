@@ -4,7 +4,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import _startCase from 'lodash.startcase';
 import cross from '@assets/cross.svg';
 import { useQueryClient } from 'react-query';
-import useFeed from '@hooks/useFeed';
+import useFeedPicker from '@hooks/useFeedPicker';
 import { Feed } from '@interfaces/feed';
 import { urlOrSvgToImage } from '@utils/utils';
 import { Data } from '@interfaces/feedPicker';
@@ -43,7 +43,7 @@ const FeedPickerMobile: React.FC<Props> = ({ isIntegration, onSubmit, open, onCl
     setActiveFilter,
     feedTypeName,
     orderAlpha,
-  } = useFeed({
+  } = useFeedPicker({
     open,
     isIntegration,
     onSubmit,
@@ -63,7 +63,8 @@ const FeedPickerMobile: React.FC<Props> = ({ isIntegration, onSubmit, open, onCl
   }, [open, setActiveFilter, setActiveTemplate, setData, setRawActiveTemplate]);
 
   const handleClose = () => {
-    queryClient.invalidateQueries(['getIntegrationsFeed', 'getConnectorsFeed']);
+    queryClient.invalidateQueries('getIntegrationsFeed');
+    queryClient.invalidateQueries('getConnectorsFeed');
     onClose();
   };
 
@@ -132,7 +133,7 @@ const FeedPickerMobile: React.FC<Props> = ({ isIntegration, onSubmit, open, onCl
             backButton={null}
           />
           <Box width="66px" display="flex" justifyContent="flex-end">
-            <IconButton size="small" onClick={onClose}>
+            <IconButton size="small" onClick={handleClose}>
               <img src={cross} alt="close" height={10} width={10} />
             </IconButton>
           </Box>

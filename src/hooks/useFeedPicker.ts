@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { ValidationMode } from '@jsonforms/core';
 import debounce from 'lodash.debounce';
 import { useMediaQuery } from '@material-ui/core';
@@ -6,11 +6,10 @@ import { Feed, ParsedFeed } from '@interfaces/feed';
 import { trackEvent } from '@utils/analytics';
 import { Data } from '@interfaces/feedPicker';
 import orderBy from 'lodash.orderby';
+import { useQueryClient } from 'react-query';
 import useFilterFeed from './useFilterFeed';
 import { useQuery } from './useQuery';
 import { useReplaceMustache } from './useReplaceMustache';
-import { useGetIntegrationsFeed } from './useGetIntegrationsFeed';
-import { useGetConnectorsFeed } from './useGetConnectorsFeed';
 
 interface Props {
   isIntegration?: boolean;
@@ -19,8 +18,7 @@ interface Props {
   open: boolean;
 }
 
-const useFeed = ({ isIntegration, onSubmit, onClose, open }: Props) => {
-  const [feed, setFeed] = useState<Feed[]>([]);
+const useFeedPicker = ({ isIntegration, onSubmit, onClose, open }: Props) => {
   const query = useQuery();
   const [rawActiveTemplate, setRawActiveTemplate] = React.useState<Feed>();
   const [errors, setErrors] = React.useState<object[]>([]);
@@ -28,54 +26,51 @@ const useFeed = ({ isIntegration, onSubmit, onClose, open }: Props) => {
   const [data, setData] = React.useState<any>({});
   const { replaceMustache } = useReplaceMustache();
   const [activeTemplate, setActiveTemplate] = React.useState<ParsedFeed>();
-  const filteredFeed = useFilterFeed({ feed });
   const isMobile = useMediaQuery('max-width: 1100px');
 
   const feedTypeName = isIntegration ? 'Integration' : 'Connector';
 
-  const { data: integrationsFeedData, isLoading: isLoadingIntegrations } = useGetIntegrationsFeed({
-    enabled: isIntegration,
-  });
+  const queryClient = useQueryClient();
 
-  const { data: connectorsFeedData, isLoading: isLoadingConnectors } = useGetConnectorsFeed({
-    enabled: !isIntegration,
-  });
-
-  const isLoading = isLoadingConnectors || isLoadingIntegrations;
-
-  const handleMount = (newFeed: Feed[]) => {
-    const key = query.get('key');
-    setFeed(newFeed);
-    for (let i = 0; i < newFeed.length; i++) {
-      if (newFeed[i].id === key) {
-        setRawActiveTemplate(newFeed[i]);
-        replaceMustache(data, newFeed[i]).then((template) => setActiveTemplate(template));
-        return;
-      }
-    }
-
-    setRawActiveTemplate(newFeed[0]);
-    replaceMustache(data, newFeed[0]).then((template) => {
-      setActiveTemplate(template);
-      setImmediate(() => {
-        trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
-          [feedTypeName.toLowerCase()]: template.id,
-          [`${feedTypeName.toLowerCase()}Default`]: true,
-        });
-      });
-    });
-  };
+  const feed = useMemo(
+    () =>
+      isIntegration
+        ? queryClient.getQueryData<Feed[]>('getIntegrationsFeed') || []
+        : queryClient.getQueryData<Feed[]>('getConnectorsFeed') || [],
+    [isIntegration, queryClient]
+  );
 
   useEffect(() => {
-    if (isIntegration && integrationsFeedData) {
-      handleMount(integrationsFeedData);
-    } else if (!isIntegration && connectorsFeedData) {
-      handleMount(connectorsFeedData);
-    }
-    return () => {};
+    if (feed.length > 0) {
+      const key = query.get('key');
 
+      for (let i = 0; i < (feed || []).length; i++) {
+        if ((feed || [])[i].id === key) {
+          setRawActiveTemplate(feed[i]);
+          replaceMustache(data, feed[i]).then((template) => setActiveTemplate(template));
+          return;
+        }
+      }
+
+      setRawActiveTemplate(feed[0]);
+      replaceMustache(data, feed[0]).then((template) => {
+        setActiveTemplate(template);
+        setImmediate(() => {
+          trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
+            [feedTypeName.toLowerCase()]: template.id,
+            [`${feedTypeName.toLowerCase()}Default`]: true,
+          });
+        });
+      });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isIntegration, open, integrationsFeedData, connectorsFeedData]);
+  }, [isIntegration, open, feed]);
+
+  const filteredFeed = useFilterFeed({ feed });
+
+  const isLoading = isIntegration
+    ? queryClient.getQueryState('getIntegrationsFeed')?.status === 'loading'
+    : queryClient.getQueryState('getConnectorsFeed')?.status === 'loading';
 
   const debouncedSetSearchFilter = debounce((keyword: string) => {
     if (isIntegration) {
@@ -182,8 +177,6 @@ const useFeed = ({ isIntegration, onSubmit, onClose, open }: Props) => {
     activeTemplate,
     setActiveTemplate,
     handleTemplateChange,
-    feed,
-    setFeed,
     loading: isLoading,
     handleSubmit,
     feedTypeName,
@@ -193,4 +186,4 @@ const useFeed = ({ isIntegration, onSubmit, onClose, open }: Props) => {
   };
 };
 
-export default useFeed;
+export default useFeedPicker;
