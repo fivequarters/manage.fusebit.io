@@ -53,9 +53,16 @@ const AuthCallbackPage: FC<{}> = (): ReactElement => {
       const token = urlParams.get('access_token') || undefined;
 
       if (error || !token) {
-        if (error && error !== 'login_required') {
+        const errorDescription = urlParams.get('error_description');
+        if (error === 'unauthorized') {
+          console.error(errorDescription);
+          signIn(false);
+          return;
+        } else if (!token || error !== 'login_required') {
           // eslint-disable-next-line no-console
-          console.error('Callback URL called without token or with an unknown error.', location);
+          console.error('Callback URL called without token or with an unknown error.', location, errorDescription);
+          history.push('/fatal-error');
+          return;
         }
         signIn();
         return;
