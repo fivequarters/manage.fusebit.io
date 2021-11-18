@@ -45,6 +45,7 @@ const StyledLink = styled.a`
   font-weight: 500;
   text-decoration: none;
   color: white;
+  cursor: pointer;
 `;
 
 const StyledLinkContainer = styled(Box)`
@@ -100,7 +101,7 @@ const Navbar: React.FC = ({ children }) => {
               </IconButton>
             ) : (
               <StyledLinkContainer display="flex" alignItems="center">
-                <StyledLink href="https://fusebit.io/contact" target="_blank">
+                <StyledLink onClick={() => window.Intercom('showNewMessage', 'Hi Fusebit team, I need some help!')}>
                   Support
                 </StyledLink>
                 <StyledLink href="https://developer.fusebit.io" target="_blank">
