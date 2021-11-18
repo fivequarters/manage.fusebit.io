@@ -56,7 +56,8 @@ const AuthCallbackPage: FC<{}> = (): ReactElement => {
       if (!token) {
         // eslint-disable-next-line no-console
         console.error('Callback URL called without token. Redirecting to the sign in form.');
-        return signIn(false);
+        signIn(false);
+        return;
       }
 
       if (error === 'unauthorized') {
@@ -65,13 +66,18 @@ const AuthCallbackPage: FC<{}> = (): ReactElement => {
           'Callback URL called with an authorized error. Redirecting to the sign in form.',
           errorDescription
         );
-        return signIn(false);
+        signIn(false);
+        return;
+        // eslint-disable-next-line no-else-return
       } else if (error === 'login_required') {
-        return signIn();
+        signIn();
+        return;
+        // eslint-disable-next-line no-else-return
       } else if (error) {
         // eslint-disable-next-line no-console
         console.error('Callback URL called with an unknown error.', location, errorDescription);
-        return history.push('/fatal-error');
+        history.push('/fatal-error');
+        return;
       }
 
       const decoded = jwt_decode<Auth0Token>(token);
