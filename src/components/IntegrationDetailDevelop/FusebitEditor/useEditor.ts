@@ -63,9 +63,9 @@ const useEditor = ({ enableListener = true, isMounted = false, onReadyToRun, onR
         hasSessionChanged.current = true;
 
         try {
-          await commitSession({ id, sessionId: e.newValue });
-
           localStorage.removeItem(LOCALSTORAGE_SESSION_URL_KEY);
+
+          await commitSession({ id, sessionId: e.newValue });
 
           await testIntegration({ id, tenantId: STATIC_TENANT_ID });
 
