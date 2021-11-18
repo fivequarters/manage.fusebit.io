@@ -42,6 +42,7 @@ const FeedPickerMobile: React.FC<Props> = ({ isIntegration, onSubmit, open, onCl
     setData,
     setActiveFilter,
     feedTypeName,
+    orderAlpha,
   } = useFeed({
     open,
     isIntegration,
@@ -87,7 +88,7 @@ const FeedPickerMobile: React.FC<Props> = ({ isIntegration, onSubmit, open, onCl
     },
   }));
 
-  const entities = filteredFeed.map((entity) => ({
+  const entities = orderAlpha(filteredFeed).map((entity) => ({
     text: entity.name,
     icon: <img src={urlOrSvgToImage(entity.smallIcon)} alt="connector" height={18} width={18} />,
     id: entity.id,

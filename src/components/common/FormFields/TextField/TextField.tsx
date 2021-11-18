@@ -1,12 +1,22 @@
-import { TextFieldProps } from '@material-ui/core';
 import React from 'react';
+import { TextFieldProps, TextField as MuiTextField } from '@material-ui/core';
+import styled from 'styled-components';
+import { inputBlueMixin, withError } from '@components/globalStyle';
 import { BaseFieldProps } from '@components/common/FormFields/types';
-import * as SC from './styles';
+
+const StyledMUITextField = styled(MuiTextField)<{ $fieldVariant: 'default' | 'customBlue'; $hasError?: boolean }>`
+  ${(props) =>
+    props.$fieldVariant === 'customBlue' &&
+    `
+        ${inputBlueMixin}
+    `}
+  ${withError}
+`;
 
 type Props = TextFieldProps & BaseFieldProps;
 
 const TextField: React.FC<Props> = ({ fieldVariant = 'default', hasError, ...props }) => {
-  return <SC.MUITextField $fieldVariant={fieldVariant} $hasError={hasError} {...props} />;
+  return <StyledMUITextField $fieldVariant={fieldVariant} $hasError={hasError} {...props} />;
 };
 
 export default TextField;

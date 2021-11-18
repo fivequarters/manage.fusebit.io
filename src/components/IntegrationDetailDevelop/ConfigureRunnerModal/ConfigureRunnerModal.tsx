@@ -1,11 +1,53 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Box } from '@material-ui/core';
+import { Button, Box, MenuItem, Select } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { getIntegrationConfig } from '@utils/localStorage';
 import Label from '@components/common/FormFields/Label';
+import styled from 'styled-components';
+import Textarea from '@components/common/FormFields/Textarea';
 import TextField from '@components/common/FormFields/TextField';
 import Modal from '@components/common/Modal';
-import * as SC from './styles';
+
+const StyledCard = styled.div`
+  padding: 0 32px;
+  width: 795px;
+  border-radius: 8px;
+
+  @media only screen and (max-width: 550px) {
+    width: 100%;
+    left: 0;
+    top: auto;
+    bottom: 0;
+    transform: translate(0, 0);
+  }
+`;
+
+const StyledButtonsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15px;
+`;
+
+const StyledErrorMessage = styled.p`
+  line-height: 20px;
+  margin: 5px 0 0 0;
+  color: var(--primary-color);
+`;
+
+const StyledPayloadTextarea = styled(Textarea)`
+  height: 250px !important;
+`;
+
+const StyledVerbSelect = styled(Select)`
+  width: 110px;
+  margin-top: 19px;
+  font-size: 14px;
+`;
+
+const StyledVerbItem = styled(MenuItem)`
+  font-size: 14px;
+`;
 
 interface Props {
   open: boolean;
@@ -74,11 +116,11 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
 
   return (
     <Modal title="Configure runner" disableActions open={open} onClose={() => setOpen(false)}>
-      <SC.Card open={open} tabIndex={-1}>
+      <StyledCard tabIndex={-1}>
         <Box display="flex">
           <Box display="flex" flexDirection="column" width="max-content" margin="0 48px 0 0">
             <Label>Verb</Label>
-            <SC.VerbSelect
+            <StyledVerbSelect
               value={formValues?.method}
               onChange={(e: any) => {
                 const newValues = {
@@ -90,11 +132,11 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
               }}
             >
               {Verbs.map((verb) => (
-                <SC.VerbItem key={verb} value={verb}>
+                <StyledVerbItem key={verb} value={verb}>
                   {verb.toLocaleUpperCase()}
-                </SC.VerbItem>
+                </StyledVerbItem>
               ))}
-            </SC.VerbSelect>
+            </StyledVerbSelect>
           </Box>
           <Box display="flex" flexDirection="column" width="100%">
             <Label>URL</Label>
@@ -110,7 +152,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
                 onBlur={() => validateForm()}
                 value={formValues?.url}
               />
-              {formErrors.url && <SC.ErrorMessage>{formErrors.url}</SC.ErrorMessage>}
+              {formErrors.url && <StyledErrorMessage>{formErrors.url}</StyledErrorMessage>}
             </div>
           </Box>
         </Box>
@@ -118,7 +160,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
           <Box display="flex" mt="15px" flexDirection="column">
             <Label>Payload</Label>
             <div>
-              <SC.PayloadTextarea
+              <StyledPayloadTextarea
                 fieldVariant="customBlue"
                 hasError={!!formErrors.payload}
                 onChange={(e: any) => {
@@ -129,11 +171,11 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
                 value={formValues?.payload}
                 onBlur={() => validateForm()}
               />
-              {formErrors.payload && <SC.ErrorMessage>{formErrors.payload}</SC.ErrorMessage>}
+              {formErrors.payload && <StyledErrorMessage>{formErrors.payload}</StyledErrorMessage>}
             </div>
           </Box>
         )}
-        <SC.ButtonsWrapper>
+        <StyledButtonsWrapper>
           <Button
             onClick={handleSave}
             style={{ width: '200px', marginLeft: 'auto' }}
@@ -144,8 +186,8 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
           >
             Save
           </Button>
-        </SC.ButtonsWrapper>
-      </SC.Card>
+        </StyledButtonsWrapper>
+      </StyledCard>
     </Modal>
   );
 };

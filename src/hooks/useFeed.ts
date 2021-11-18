@@ -5,6 +5,7 @@ import { useMediaQuery } from '@material-ui/core';
 import { Feed, ParsedFeed } from '@interfaces/feed';
 import { trackEvent } from '@utils/analytics';
 import { Data } from '@interfaces/feedPicker';
+import orderBy from 'lodash.orderby';
 import useFilterFeed from './useFilterFeed';
 import { useQuery } from './useQuery';
 import { useReplaceMustache } from './useReplaceMustache';
@@ -151,6 +152,19 @@ const useFeed = ({ isIntegration, onSubmit, onClose, open }: Props) => {
     return activeTemplate?.outOfPlan ? handlePlanUpsell() : handleAdd();
   };
 
+  const orderAlpha = (unsortedFeed: Feed[]) => {
+    const list: Feed[] = orderBy(unsortedFeed, [(feedEntry: Feed) => feedEntry.name.toLowerCase()], ['asc']);
+
+    const index = list.findIndex((a: Feed) => a.id === 'custom-planned');
+
+    if (index > -1) {
+      const removedItem: Feed = list.splice(index, 1)[0];
+      list.push(removedItem);
+    }
+
+    return list;
+  };
+
   return {
     rawActiveTemplate,
     setRawActiveTemplate,
@@ -175,6 +189,7 @@ const useFeed = ({ isIntegration, onSubmit, onClose, open }: Props) => {
     feedTypeName,
     ...filteredFeed,
     isMobile,
+    orderAlpha,
   };
 };
 

@@ -1,8 +1,33 @@
 import { TableCell, TableHead, TableRow, Checkbox } from '@material-ui/core';
 import arrowRight from '@assets/arrow-right.svg';
 import arrowLeft from '@assets/arrow-left.svg';
+import styled from 'styled-components';
 import { BaseTableProps } from './types';
-import * as SC from './styles';
+
+const StyledTableCellMobile = styled.div`
+  position: relative;
+  width: 100%;
+
+  p {
+    width: max-content;
+    margin: 0;
+  }
+`;
+
+const StyledRightArrow = styled.img`
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 16px;
+  width: 16px;
+  object-fit: contain;
+  background-repeat: no-repeat;
+`;
+
+const StyledLeftArrow = styled(StyledRightArrow)`
+  left: -25px;
+`;
 
 const MobileBaseTableHeader = ({
   rows,
@@ -35,12 +60,12 @@ const MobileBaseTableHeader = ({
         </TableCell>
         <TableCell style={{ whiteSpace: 'nowrap' }}>{headers[0].value}</TableCell>
         <TableCell align="left">
-          <SC.TableCellMobile>
+          <StyledTableCellMobile>
             <p>{mobileArrowColumns[mobileColumnIndex].value}</p>
             {mobileArrowColumns.length > 1 && (
               <>
                 {!!mobileArrowColumns[mobileColumnIndex - 1] && (
-                  <SC.LeftArrow
+                  <StyledLeftArrow
                     onClick={onPreviousCellSelect}
                     src={arrowLeft}
                     alt="previous-cell"
@@ -50,11 +75,17 @@ const MobileBaseTableHeader = ({
                 )}
 
                 {!!mobileArrowColumns[mobileColumnIndex + 1] && (
-                  <SC.RightArrow onClick={onNextCellSelect} src={arrowRight} alt="next-cell" height="16" width="16" />
+                  <StyledRightArrow
+                    onClick={onNextCellSelect}
+                    src={arrowRight}
+                    alt="next-cell"
+                    height="16"
+                    width="16"
+                  />
                 )}
               </>
             )}
-          </SC.TableCellMobile>
+          </StyledTableCellMobile>
         </TableCell>
       </TableRow>
     </TableHead>
