@@ -37,6 +37,7 @@ export type Entity = ConnectorEntity | IntegrationEntity;
 export interface Feed {
   id: string;
   name: string;
+  private?: boolean;
   description: string;
   smallIcon: string;
   largeIcon: string;
