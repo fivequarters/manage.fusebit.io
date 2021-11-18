@@ -54,6 +54,7 @@ const AuthCallbackPage: FC<{}> = (): ReactElement => {
       const errorDescription = urlParams.get('error_description');
 
       if (!token) {
+        // eslint-disable-next-line no-console
         console.error('Callback URL called without token. Redirecting to the sign in form.');
         signIn(false);
         return;
