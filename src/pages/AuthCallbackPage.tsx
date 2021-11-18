@@ -55,6 +55,7 @@ const AuthCallbackPage: FC<{}> = (): ReactElement => {
       if (error || !token) {
         const errorDescription = urlParams.get('error_description');
         if (error === 'unauthorized') {
+          // eslint-disable-next-line no-console
           console.error(errorDescription);
           signIn(false);
           return;
