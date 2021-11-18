@@ -51,22 +51,27 @@ const AuthCallbackPage: FC<{}> = (): ReactElement => {
       const urlParams = new URLSearchParams(location.hash.substring(1));
       const error = urlParams.get('error');
       const token = urlParams.get('access_token') || undefined;
+      const errorDescription = urlParams.get('error_description');
 
-      if (error || !token) {
-        const errorDescription = urlParams.get('error_description');
-        if (error === 'unauthorized') {
-          // eslint-disable-next-line no-console
-          console.error(errorDescription);
-          signIn(false);
-          return;
-          // eslint-disable-next-line no-else-return
-        } else if (!token || error !== 'login_required') {
-          // eslint-disable-next-line no-console
-          console.error('Callback URL called without token or with an unknown error.', location, errorDescription);
-          history.push('/fatal-error');
-          return;
-        }
-        signIn();
+      if (!token) {
+        console.error('Callback URL called without token. Redirecting to the sign in form.');
+        signIn(false);
+        return;
+      }
+
+      if (error === 'unauthorized') {
+        // eslint-disable-next-line no-console
+        console.error(
+          'Callback URL called with an authorized error. Redirecting to the sign in form.',
+          errorDescription
+        );
+        signIn(false);
+        return;
+        // eslint-disable-next-line no-else-return
+      } else if (error !== 'login_required') {
+        // eslint-disable-next-line no-console
+        console.error('Callback URL called with an unknown error.', location, errorDescription);
+        history.push('/fatal-error');
         return;
       }
 
