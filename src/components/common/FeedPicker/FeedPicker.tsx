@@ -215,6 +215,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
     loading,
     feedTypeName,
     isMobile,
+    orderAlpha,
   } = useFeed({
     open,
     isIntegration,
@@ -270,7 +271,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
             <Loader />
           ) : (
             <Box>
-              {filteredFeed
+              {orderAlpha(filteredFeed)
                 .filter((feedEntry) => !feedEntry.private)
                 .map((feedEntry) => {
                   return (
