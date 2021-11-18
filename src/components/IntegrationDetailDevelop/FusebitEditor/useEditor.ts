@@ -107,15 +107,14 @@ const useEditor = ({ enableListener = true, isMounted = false, onReadyToRun, onR
     try {
       const hasInstall = await findInstall();
 
-      if (hasInstall) {
-        onReadyToRun?.();
-      } else {
+      if (!hasInstall) {
         await handleNoInstallFound();
-        onReadyToRun?.();
       }
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log(error);
+    } finally {
+      onReadyToRun?.();
     }
   };
 
