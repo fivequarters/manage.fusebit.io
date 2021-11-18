@@ -57,8 +57,8 @@ const AuthCallbackPage: FC<{}> = (): ReactElement => {
         if (error === 'unauthorized') {
           console.error(errorDescription);
           signIn(false);
-          // eslint-disable-next-line no-else-return
           return;
+          // eslint-disable-next-line no-else-return
         } else if (!token || error !== 'login_required') {
           // eslint-disable-next-line no-console
           console.error('Callback URL called without token or with an unknown error.', location, errorDescription);
