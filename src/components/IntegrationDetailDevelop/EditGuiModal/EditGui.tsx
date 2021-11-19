@@ -271,6 +271,8 @@ const addNewIcon = `
     background-repeat: no-repeat;
 `;
 
+// TODO: Implement useEditorEvents to listen dirty state events from the editor to know its state
+
 const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationId }, ref) => {
   const { id } = useParams<{ id: string }>();
   const { userData } = useAuthContext();
@@ -333,7 +335,6 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
 
   useEffect(() => {}, []);
 
-  // TODO: Implement events from the editor to know its state
   const handleSaveAndRun = async () => {
     if (dirtyState) {
       const context = window.editor;
