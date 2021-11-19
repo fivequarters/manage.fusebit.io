@@ -20,7 +20,6 @@ export const useAccountIntegrationTestIntegration = () => {
         payload,
         url = `/api/tenant/${encodeURIComponent(tenantId)}/test`,
       } = getIntegrationConfig(id).runner;
-
       return axios(`${integrationUrl}/${id}${url}`, method, payload, {
         'Content-Type': 'application/json',
       });
@@ -39,7 +38,7 @@ export const useAccountIntegrationTestIntegration = () => {
         );
       },
       onError: (err) => {
-        window.editor?.finishRun(JSON.stringify(err));
+        window.editor?.finishRun(JSON.stringify((err as any).response.data));
       },
       onSuccess: (res) => {
         const data = res.data ? ` \n${JSON.stringify(res.data, null, ' ')}` : '';
