@@ -38,7 +38,27 @@ export const useAccountIntegrationTestIntegration = () => {
         );
       },
       onError: (err) => {
-        window.editor?.finishRun(JSON.stringify((err as any).response.data));
+        const error = err as any;
+        if (error.response) {
+          // HTTP error
+          return window.editor?.finishRun(JSON.stringify(error.response.data, null, 2));
+        }
+
+        if (error.status) {
+          // Misc. network or CORS error
+          return window.editor?.finishRun(`${error.status}`);
+        }
+
+        // Fall through to the default handler
+        if (error.isAxiosError && error.config.headers.Authorization) {
+          // Strip out sensitive headers
+          error.config.headers.Authorization = '... present ...';
+        }
+
+        // The stack is usually some internal part of the website; not useful for the end user.
+        delete error.stack;
+
+        return window.editor?.finishRun(`${JSON.stringify(error, null, 2)}`);
       },
       onSuccess: (res) => {
         const data = res.data ? ` \n${JSON.stringify(res.data, null, ' ')}` : '';
