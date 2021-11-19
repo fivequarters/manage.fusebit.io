@@ -23,7 +23,6 @@ import clock from '@assets/clock.svg';
 import playEditor from '@assets/play-editor.svg';
 import add from '@assets/add.svg';
 import CloseIcon from '@material-ui/icons/Close';
-import { useError } from '@hooks/useError';
 
 const StyledEditorContainer = styled.div`
   .fa {
@@ -285,7 +284,6 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     isMounted,
   });
   const [dirtyState, setDirtyState] = useState(false);
-  const { createError } = useError();
 
   useTrackPage('Web Editor', 'Web Editor');
   useTitle(`${id} Editor`);
@@ -337,22 +335,17 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
 
   // TODO: Implement events from the editor to know its state
   const handleSaveAndRun = async () => {
-    try {
-      if (dirtyState) {
-        const context = window.editor;
-        const status: SaveStatus = await context?._server.saveFunction(context);
-        if (status.status === 'completed') {
-          setDirtyState(false);
-          handleRun();
-        }
-      } else {
+    if (dirtyState) {
+      const context = window.editor;
+      const status: SaveStatus = await context?._server.saveFunction(context);
+      if (status.status === 'completed') {
+        setDirtyState(false);
         handleRun();
       }
-    } catch (e) {
-      createError(e);
+    } else {
+      handleRun();
     }
   };
-
   const handleSave = async () => {
     const context = window.editor;
     trackEvent('Save Button Clicked', 'Web Editor');
