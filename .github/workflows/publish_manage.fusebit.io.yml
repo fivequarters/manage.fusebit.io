@@ -55,7 +55,7 @@ jobs:
         env:
           REACT_APP_DEPLOYMENT_KEY: Production
           REACT_APP_FUSEBIT_DEPLOYMENT: https://api.us-west-1.on.fusebit.io
-          REACT_APP_AUTH0_DOMAIN: https://fusebit.auth0.com
+          REACT_APP_AUTH0_DOMAIN: https://auth.fusebit.io
           REACT_APP_AUTH0_CLIENT_ID: NIfqE4hpPOXuIhllkxndlafSKcKesEfc
           REACT_APP_LOGOUT_REDIRECT_URL: https://fusebit.io
           REACT_APP_INTEGRATIONS_FEED_URL: https://manage.fusebit.io/feed/integrationsFeed.json
