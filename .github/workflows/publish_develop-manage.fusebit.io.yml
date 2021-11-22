@@ -60,7 +60,7 @@ jobs:
         env:
           REACT_APP_DEPLOYMENT_KEY: Develop
           REACT_APP_FUSEBIT_DEPLOYMENT: https://stage.us-west-2.fusebit.io
-          REACT_APP_AUTH0_DOMAIN: https://fusebit.auth0.com
+          REACT_APP_AUTH0_DOMAIN: https://auth.fusebit.io
           REACT_APP_AUTH0_CLIENT_ID: dimuls6VLYgXpD7UYCo6yPdKAXPXjQng
           REACT_APP_LOGOUT_REDIRECT_URL: https://fusebit.io
           REACT_APP_INTEGRATIONS_FEED_URL: https://develop-manage.fusebit.io/feed/integrationsFeed.json
