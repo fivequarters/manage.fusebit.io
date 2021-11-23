@@ -160,6 +160,7 @@ const Connect: React.FC<Props> = ({
   id,
   name,
   token,
+  integration,
   onClose,
   onChange,
   onDelete,
@@ -362,6 +363,7 @@ const Connect: React.FC<Props> = ({
                   buttonsSize={getButtonSize}
                   buttonsCrashing={buttonsCrashing}
                   componentMap={componentMap}
+                  integration={integration}
                 />
                 <Box display="flex" flexDirection="column" alignItems="left" justifyContent="left">
                   <Box display="flex" alignItems="center">
