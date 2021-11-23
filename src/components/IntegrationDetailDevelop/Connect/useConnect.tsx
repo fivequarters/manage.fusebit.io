@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { useMediaQuery } from '@material-ui/core';
 import useSampleApp from '@hooks/useSampleApp';
 import { useCopy } from '../../../hooks/useCopy';
-import { useAuthContext } from '../../../hooks/useAuthContext';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import { useBackendUpdateOne } from '../../../hooks/api/v1/backend/useUpdateOne';
 
@@ -23,7 +22,6 @@ export interface Props {
 const useConnect = ({ onClose, disableCopy, keyIsCopied, showWarning, name, setShowWarning, onChange, id }: Props) => {
   const { id: integrationId } = useParams<{ id: string }>();
   const { getRedirectLink } = useGetRedirectLink();
-  const { userData } = useAuthContext();
   const [editMode, setEditMode] = useState(false);
   const [editedBackendClientId, setEditedBackendClientId] = useState(name);
   const [backendClientId, setBackendClientId] = useState(name);
