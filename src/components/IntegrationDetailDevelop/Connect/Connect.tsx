@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import disclaimer from '@assets/disclaimer.svg';
 import time from '@assets/time.svg';
 import warning from '@assets/black-warning.svg';
+import { trackEvent } from '@utils/analytics';
 import { LinkSampleApp } from './LinkSampleApp';
 import useConnect, { Props as UseConnectProps } from './useConnect';
 
@@ -235,6 +236,11 @@ const Connect: React.FC<Props> = ({
     return '200px';
   })();
 
+  const enterEditMode = () => {
+    trackEvent('Backend Edit Name Clicked', 'Integration', { Integration: integration?.tags['fusebit.feedId'] });
+    setEditMode(true);
+  };
+
   return (
     <StyledWrapper>
       {isMobile && (
@@ -253,7 +259,7 @@ const Connect: React.FC<Props> = ({
             <StyledSmallTitle>&nbsp; {backendClientId}</StyledSmallTitle>
             <Button
               style={{ marginLeft: '24px' }}
-              onClick={() => setEditMode(true)}
+              onClick={() => enterEditMode()}
               variant="outlined"
               color="primary"
               size="small"
