@@ -141,6 +141,20 @@ const ConfigureForm: React.FC = () => {
                   newData.clientSecret = '';
                 }
 
+                if (data && data.mode?.useProduction !== newData.mode?.useProduction && newData.mode?.useProduction) {
+                  trackEvent('Enable Product Credentials Toggled On', 'Connector', {
+                    Connector: connectorData?.data.tags['fusebit.feedId'],
+                  });
+                } else if (
+                  data &&
+                  data.mode?.useProduction !== newData.mode?.useProduction &&
+                  newData.mode?.useProduction == false
+                ) {
+                  trackEvent('Enable Product Credentials Toggled Off', 'Connector', {
+                    Connector: connectorData?.data.tags['fusebit.feedId'],
+                  });
+                }
+
                 if (
                   !newData.mode?.useProduction &&
                   !(newData.clientId?.length > 0 && newData.clientSecret?.length > 0)
