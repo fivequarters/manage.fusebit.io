@@ -148,7 +148,7 @@ const ConfigureForm: React.FC = () => {
                 } else if (
                   data &&
                   data.mode?.useProduction !== newData.mode?.useProduction &&
-                  newData.mode?.useProduction == false
+                  newData.mode?.useProduction === false
                 ) {
                   trackEvent('Enable Product Credentials Toggled Off', 'Connector', {
                     Connector: connectorData?.data.tags['fusebit.feedId'],
