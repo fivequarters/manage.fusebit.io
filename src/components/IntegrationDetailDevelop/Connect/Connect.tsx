@@ -351,6 +351,11 @@ const Connect: React.FC<Props> = ({
               variant="outlined"
               color="primary"
               size={getButtonSize}
+              onClick={() => {
+                trackEvent('Backend Docs Follow Guide Button Clicked', 'My Application', {
+                  Integration: integration?.tags['fusebit.feedId'],
+                });
+              }}
             >
               Follow guide
             </Button>
