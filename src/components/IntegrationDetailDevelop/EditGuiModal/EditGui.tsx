@@ -24,6 +24,9 @@ import playEditor from '@assets/play-editor.svg';
 import add from '@assets/add.svg';
 import CloseIcon from '@material-ui/icons/Close';
 import { useError } from '@hooks/useError';
+import { createSampleAppClientUrl } from '@utils/backendClients';
+import { useAccountIntegrationsGetOne } from '../../../hooks/api/v2/account/integration/useGetOne';
+import { EditGuiSampleApp } from './EditGuiSampleApp';
 
 const StyledEditorContainer = styled.div`
   .fa {
@@ -372,6 +375,31 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     }
   };
 
+  // Sample App URL Return
+
+  const { data: integrationData } = useAccountIntegrationsGetOne({
+    enabled: userData.token,
+    id: integrationId,
+    accountId: userData.accountId,
+    subscriptionId: userData.subscriptionId,
+  });
+
+  const supportedTypeMap: Record<string, string> = {
+    slackConnector: 'slack',
+    asanaConnector: 'hubspot',
+  };
+
+  const componentMap =
+    integrationData?.data.data?.components
+      ?.map((component) => supportedTypeMap[component.name])
+      .filter((type) => !!type)
+      .reduce<Record<string, string>>((acc, cur) => {
+        acc[cur] = integrationData?.data.id;
+        return acc;
+      }, {}) || {};
+
+  const isSampleAppEnabled = !!Object.keys(componentMap).length;
+
   return (
     <Box>
       <ConfirmationPrompt
@@ -423,6 +451,11 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
             </ButtonGroup>
             <h3>{integrationId}</h3>
             <StyledActionsHelpWrapper>
+              {isSampleAppEnabled && (
+                <StyledActionsHelpLink target="_blank">
+                  <EditGuiSampleApp componentMap={componentMap} />
+                </StyledActionsHelpLink>
+              )}
               <StyledActionsHelpLink target="_blank" href="https://developer.fusebit.io/docs/developing-locally">
                 Edit locally
               </StyledActionsHelpLink>
