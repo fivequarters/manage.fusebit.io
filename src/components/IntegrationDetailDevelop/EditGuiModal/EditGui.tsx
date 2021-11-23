@@ -423,7 +423,13 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
             </ButtonGroup>
             <h3>{integrationId}</h3>
             <StyledActionsHelpWrapper>
-              <StyledActionsHelpLink target="_blank" href="https://developer.fusebit.io/docs/developing-locally">
+              <StyledActionsHelpLink
+                target="_blank"
+                href="https://developer.fusebit.io/docs/developing-locally"
+                onClick={() => {
+                  trackEvent('Docs Developing Locally Link Clicked', 'Web Editor');
+                }}
+              >
                 Edit locally
               </StyledActionsHelpLink>
               <StyledActionsHelpImage src={question} alt="question" height="16" width="16" />
