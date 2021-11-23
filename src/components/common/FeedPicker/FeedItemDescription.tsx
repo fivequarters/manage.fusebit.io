@@ -43,7 +43,7 @@ const FeedItemDescription = ({ description, templateId, isIntegration }: Props) 
           if (parent.attributes.getNamedItem('data-segment')?.value === 'track') {
             trackEvent(
               `New ${isIntegration ? 'Integration' : 'Connector'} Docs Learn More Link Clicked`,
-              isIntegration ? 'Integration' : 'Connector',
+              isIntegration ? 'Integrations' : 'Connectors',
               { [isIntegration ? 'Integration' : 'Connector']: templateId }
             );
           }
