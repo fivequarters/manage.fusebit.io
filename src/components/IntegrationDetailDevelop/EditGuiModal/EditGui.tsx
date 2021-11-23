@@ -24,7 +24,7 @@ import playEditor from '@assets/play-editor.svg';
 import add from '@assets/add.svg';
 import CloseIcon from '@material-ui/icons/Close';
 import { useError } from '@hooks/useError';
-import { useAccountIntegrationsGetOne } from '../../../hooks/api/v2/account/integration/useGetOne';
+import useSampleApp from '@hooks/useSampleApp';
 import { EditGuiSampleApp } from './EditGuiSampleApp';
 
 const StyledEditorContainer = styled.div`
@@ -288,6 +288,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   });
   const [dirtyState, setDirtyState] = useState(false);
   const { createError } = useError();
+  const { componentMap, isSampleAppEnabled } = useSampleApp();
 
   useTrackPage('Web Editor', 'Web Editor');
   useTitle(`${id} Editor`);
@@ -373,30 +374,6 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       onClose();
     }
   };
-
-  // Sample App URL Return
-
-  const { data: integrationData } = useAccountIntegrationsGetOne({
-    enabled: userData.token,
-    id: integrationId,
-    accountId: userData.accountId,
-    subscriptionId: userData.subscriptionId,
-  });
-
-  const supportedTypeMap: Record<string, string> = {
-    slackConnector: 'slack',
-  };
-
-  const componentMap =
-    integrationData?.data.data?.components
-      ?.map((component) => supportedTypeMap[component.name])
-      .filter((type) => !!type)
-      .reduce<Record<string, string>>((acc, cur) => {
-        acc[cur] = integrationData?.data.id;
-        return acc;
-      }, {}) || {};
-
-  const isSampleAppEnabled = !!Object.keys(componentMap).length;
 
   return (
     <Box>
