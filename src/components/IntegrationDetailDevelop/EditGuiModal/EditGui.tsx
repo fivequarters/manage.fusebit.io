@@ -385,7 +385,6 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
 
   const supportedTypeMap: Record<string, string> = {
     slackConnector: 'slack',
-    asanaConnector: 'hubspot',
   };
 
   const componentMap =
