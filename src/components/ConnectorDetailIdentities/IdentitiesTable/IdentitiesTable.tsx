@@ -11,10 +11,14 @@ import ConfirmationPrompt from '@components/common/ConfirmationPrompt';
 import InformationalBanner from '@components/common/InformationalBanner';
 import Tag from '@components/common/Tag';
 import { trackEvent } from '@utils/analytics';
+import { useAccountConnectorsGetOne } from '@hooks/api/v2/account/connector/useGetOne';
+import { Connector } from '@interfaces/connector';
+import { useAuthContext } from '@hooks/useAuthContext';
 import AssociatedInstalls from './AssociatedInstalls';
 import AssociatedIntegrations from './AssociatedIntegrations';
 
 const IdentitiesTable = () => {
+  const { userData } = useAuthContext();
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
   const { id } = useParams<{ id: string }>();
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -22,6 +26,14 @@ const IdentitiesTable = () => {
   const { data: identities, isLoading } = useAccountConnectorIdentityGetAll<IdentityList>({
     id,
   });
+
+  const { data: connectorResponse } = useAccountConnectorsGetOne<Connector>({
+    enabled: userData.token,
+    id,
+    accountId: userData.accountId,
+    subscriptionId: userData.subscriptionId,
+  });
+  const connector = connectorResponse?.data;
 
   const rows = (identities?.data?.items || []).map((identity) => {
     const connectorId = identity.tags['fusebit.parentEntityId'];
@@ -64,6 +76,11 @@ const IdentitiesTable = () => {
           target="_blank"
           rel="noreferrer"
           href="https://developer.fusebit.io/docs/fusebit-system-architecture#installation-lifecycle"
+          onClick={() => {
+            trackEvent('Identities Docs Learn More Link Clicked', 'Connector', {
+              Connector: connector?.tags['fusebit.feedId'],
+            });
+          }}
         >
           Learn more about Identities here
         </a>
