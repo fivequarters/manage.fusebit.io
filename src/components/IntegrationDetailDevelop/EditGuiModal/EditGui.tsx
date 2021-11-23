@@ -24,7 +24,6 @@ import playEditor from '@assets/play-editor.svg';
 import add from '@assets/add.svg';
 import CloseIcon from '@material-ui/icons/Close';
 import { useError } from '@hooks/useError';
-import { createSampleAppClientUrl } from '@utils/backendClients';
 import { useAccountIntegrationsGetOne } from '../../../hooks/api/v2/account/integration/useGetOne';
 import { EditGuiSampleApp } from './EditGuiSampleApp';
 
