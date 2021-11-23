@@ -83,7 +83,7 @@ const useConnect = ({ onClose, disableCopy, keyIsCopied, showWarning, name, setS
     buttonsCrashing,
     smallPhone,
     isMobile,
-    ...useSampleApp,
+    ...useSampleApp(),
   };
 };
 
