@@ -13,7 +13,7 @@ interface IProps {
 }
 
 const openSampleApp = (url: string, integration?: Integration) => {
-  trackEvent('Run Sample App Clicked', 'Integration', { Integration: integration?.tags['fusebit.feedId'] });
+  trackEvent('Run Sample App Button Clicked', 'My Application', { Integration: integration?.tags['fusebit.feedId'] });
   const sampleAppTab = window.open() as Window;
   sampleAppTab.opener = null;
   sampleAppTab.location.href = url;

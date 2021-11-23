@@ -237,7 +237,9 @@ const Connect: React.FC<Props> = ({
   })();
 
   const enterEditMode = () => {
-    trackEvent('Backend Edit Name Clicked', 'Integration', { Integration: integration?.tags['fusebit.feedId'] });
+    trackEvent('Backend Edit Name Button Clicked', 'My Application', {
+      Integration: integration?.tags['fusebit.feedId'],
+    });
     setEditMode(true);
   };
 

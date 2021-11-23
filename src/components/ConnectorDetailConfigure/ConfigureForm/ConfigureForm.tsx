@@ -151,16 +151,18 @@ const ConfigureForm: React.FC = () => {
                 }
 
                 if (data && data.mode?.useProduction !== newData.mode?.useProduction && newData.mode?.useProduction) {
-                  trackEvent('Enable Product Credentials Toggled On', 'Connector', {
+                  trackEvent('Enable Production Credentials Clicked', 'Connector', {
                     Connector: connectorData?.data.tags['fusebit.feedId'],
+                    State: 'On',
                   });
                 } else if (
                   data &&
                   data.mode?.useProduction !== newData.mode?.useProduction &&
                   newData.mode?.useProduction === false
                 ) {
-                  trackEvent('Enable Product Credentials Toggled Off', 'Connector', {
+                  trackEvent('Enable Production Credentials Clicked', 'Connector', {
                     Connector: connectorData?.data.tags['fusebit.feedId'],
+                    State: 'Off',
                   });
                 }
 
