@@ -7,27 +7,23 @@ import { connectorsFeed, integrationsFeed } from '../../static/feed';
 export const findMatchingConnectorFeed = async (connector: Connector | FinalConnector) => {
   return new Promise<Feed>((accept, reject) => {
     if (connector.tags) {
-      const feedtype = connector.tags['fusebit.feedType'];
+      const service = connector.tags['fusebit.service'].replace(/\s+/g, '-').toLowerCase();
       const feedId = connector.tags['fusebit.feedId'];
-      if (feedtype === 'integration') {
-        integrationsFeed().then((feed) => {
-          feed.forEach((item) => {
-            if (item.id === feedId) {
-              return accept(item);
-            }
-          });
-          return reject({});
+      connectorsFeed().then((feed) => {
+        feed.forEach((item) => {
+          if (item.id.match(service)) {
+            return accept(item);
+          }
         });
-      } else {
-        connectorsFeed().then((feed) => {
-          feed.forEach((item) => {
-            if (item.id === feedId) {
-              return accept(item);
-            }
-          });
-          return reject({});
+      });
+
+      integrationsFeed().then((feed) => {
+        feed.forEach((item) => {
+          if (item.id === feedId) {
+            return accept(item);
+          }
         });
-      }
+      });
     } else {
       return reject({});
     }
