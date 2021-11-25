@@ -6,14 +6,17 @@ import { connectorsFeed, integrationsFeed } from '../../static/feed';
 
 export const findMatchingConnectorFeed = async (connector: Connector | FinalConnector) => {
   return new Promise<Feed>((accept, reject) => {
-    if (connector.tags) {
-      const service = connector.tags['fusebit.service'].replace(/\s+/g, '-').toLowerCase();
+    if (connector.tags && connector.data?.handler) {
       const feedId = connector.tags['fusebit.feedId'];
+      const handler = connector.data?.handler;
       connectorsFeed().then((feed) => {
         feed.forEach((item) => {
-          if (item.id.match(service)) {
-            return accept(item);
-          }
+          const entities = Object.keys(item.configuration.entities);
+          entities.forEach((entity) => {
+            if (item.configuration.entities[entity].data.handler === handler) {
+              return accept(item);
+            }
+          });
         });
       });
 

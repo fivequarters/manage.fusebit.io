@@ -6,6 +6,7 @@ export interface IntegrationData {
     'package.json': string;
     [x: string]: string;
   };
+  handler: string;
   componentTags: {
     [key: string]: any;
   };
