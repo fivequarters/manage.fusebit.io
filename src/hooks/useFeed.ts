@@ -43,6 +43,10 @@ const useFeed = ({ isIntegration, onSubmit, onClose, open }: Props) => {
         setFeed(_feed);
         for (let i = 0; i < _feed.length; i++) {
           if (_feed[i].id === key) {
+            // When explicitly loading an entry, remove the private designation so that it shows up in the
+            // middle list.
+            delete _feed[i].private;
+            setRawActiveTemplate(_feed[i]);
             replaceMustache(data, _feed[i]).then((template) => setActiveTemplate(template));
             return;
           }
