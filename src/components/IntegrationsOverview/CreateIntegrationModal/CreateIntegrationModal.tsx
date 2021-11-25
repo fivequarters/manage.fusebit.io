@@ -23,7 +23,7 @@ const CreateIntegrationModal = ({ open, onClose }: Props) => {
   const handleCreate = async (feed: Feed, data: Data) => {
     try {
       createLoader();
-      const { integration } = (await createIntegrationAndConnector(feed, data)) || {};
+      const integration = await createIntegrationAndConnector(feed, data);
 
       history.push(getRedirectLink(`/integration/${integration?.id || ''}/develop`));
     } finally {
