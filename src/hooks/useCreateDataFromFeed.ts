@@ -39,7 +39,6 @@ export const useCreateDataFromFeed = () => {
       });
 
       const res = await createFromFeed(parsedFeed, commonTags, true);
-      const integration = res.find((entity) => entity.data.entityType === 'integration');
 
       return res.find((r) => r.data.entityType === 'integration')?.data;
     } catch (e) {
