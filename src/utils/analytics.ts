@@ -55,11 +55,7 @@ export const getAnalyticsClient: (user?: User, issuedByAuth0?: boolean) => Segme
   }
 
   // if it is prod, we track only non-fusebit and non-litebox users
-  const isExternalUser =
-    !issuedByAuth0 ||
-    !user ||
-    !user.email ||
-    (!user.email.endsWith('@fusebit.io') && !user.email.endsWith('@litebox.ai'));
+  !user || !user.email || (!user.email.endsWith('@fusebit.io') && !user.email.endsWith('@litebox.ai'));
   analyticsClient = isExternalUser ? analytics : mockedAnalyticsClient;
   return analyticsClient;
 };
