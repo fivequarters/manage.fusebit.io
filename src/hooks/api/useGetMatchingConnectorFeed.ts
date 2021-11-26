@@ -1,36 +1,28 @@
 import { useQuery } from 'react-query';
 import { Connector } from '@interfaces/connector';
-import { Feed } from '@interfaces/feed';
 import { FinalConnector } from '@interfaces/integrationDetailDevelop';
-import { connectorsFeed, integrationsFeed } from '../../static/feed';
+import { connectorsFeed as getConnectorsFeed, integrationsFeed as getIntegrationsFeed } from '../../static/feed';
 
 export const findMatchingConnectorFeed = async (connector: Connector | FinalConnector) => {
-  return new Promise<Feed>((accept, reject) => {
-    if (connector.tags && connector.data?.handler) {
-      const feedId = connector.tags['fusebit.feedId'];
-      const handler = connector.data?.handler;
-      connectorsFeed().then((feed) => {
-        feed.forEach((item) => {
-          const entities = Object.keys(item.configuration.entities);
-          entities.forEach((entity) => {
-            if (item.configuration.entities[entity].data.handler === handler) {
-              return accept(item);
-            }
-          });
-        });
-      });
+  let connectorData;
+  const handler = connector.data?.handler;
+  const connectorsFeed = await getConnectorsFeed();
 
-      integrationsFeed().then((feed) => {
-        feed.forEach((item) => {
-          if (item.id === feedId) {
-            return accept(item);
-          }
-        });
-      });
-    } else {
-      return reject({});
-    }
+  connectorData = connectorsFeed.find((item) => {
+    const entities = Object.keys(item.configuration.entities);
+
+    return entities.find((entity) => item.configuration.entities[entity].data.handler === handler);
   });
+
+  if (!connectorData) {
+    const feedId = connector?.tags?.['fusebit.feedId'];
+
+    const integrationsFeed = await getIntegrationsFeed();
+
+    connectorData = integrationsFeed.find((item) => item.id === feedId);
+  }
+
+  return connectorData;
 };
 
 interface Props {
