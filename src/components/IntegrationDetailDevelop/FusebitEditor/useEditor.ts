@@ -10,6 +10,7 @@ import { InstallList } from '@interfaces/install';
 import { trackEvent } from '@utils/analytics';
 import { STATIC_TENANT_ID } from '@utils/constants';
 import { useError } from '@hooks/useError';
+import { storeIntegrationInfo, getIntegrationConfig, resetIntegrationInfo } from '@utils/localStorage';
 import useEditorEvents from './useEditorEvents';
 
 interface Props {
@@ -20,7 +21,6 @@ interface Props {
 }
 
 const LOCALSTORAGE_SESSION_KEY = 'session';
-const LOCALSTORAGE_SESSION_URL_KEY = 'sessionUrl';
 
 const useEditor = ({ enableListener = true, isMounted = false, onReadyToRun, onReadyToLogin } = {} as Props) => {
   const { id } = useParams<{ id: string }>();
@@ -65,8 +65,6 @@ const useEditor = ({ enableListener = true, isMounted = false, onReadyToRun, onR
         hasSessionChanged.current = true;
 
         try {
-          localStorage.removeItem(LOCALSTORAGE_SESSION_URL_KEY);
-
           await commitSession({ id, sessionId: e.newValue });
 
           await testIntegration({ id, tenantId: STATIC_TENANT_ID });
@@ -99,10 +97,13 @@ const useEditor = ({ enableListener = true, isMounted = false, onReadyToRun, onR
   const handleNoInstallFound = async () => {
     const res = await createSesssion({ id, tenantId: STATIC_TENANT_ID });
 
-    localStorage.setItem(LOCALSTORAGE_SESSION_URL_KEY, res.data.targetUrl);
+    storeIntegrationInfo(id, { session: { url: res.data.targetUrl } });
   };
 
-  const handleLogin = () => window.open(localStorage.getItem(LOCALSTORAGE_SESSION_URL_KEY) || '')?.focus();
+  const handleLogin = () => {
+    window.open(getIntegrationConfig(id).session?.url);
+    resetIntegrationInfo(id);
+  };
 
   const handleEdit = async () => {
     trackEvent('Develop Edit Web Button Clicked', 'Integration');
@@ -125,9 +126,9 @@ const useEditor = ({ enableListener = true, isMounted = false, onReadyToRun, onR
     trackEvent('Run Button Clicked', 'Web Editor');
 
     try {
-      const url = localStorage.getItem(LOCALSTORAGE_SESSION_URL_KEY) || '';
+      const config = getIntegrationConfig(id);
 
-      if (url) {
+      if (config.session?.url) {
         if (onReadyToLogin) {
           onReadyToLogin();
         } else {
