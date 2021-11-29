@@ -5,7 +5,15 @@ export interface FinalConnector extends InnerConnector {
   id: string;
   tokenSignature?: string;
   isApplication?: boolean;
-  data?: object;
+  data?: {
+    configuration: object;
+    files: {
+      'package.json': string;
+      [x: string]: string;
+    };
+    handler: string;
+    id: string;
+  };
   tags?: {
     [key: string]: any;
   };
