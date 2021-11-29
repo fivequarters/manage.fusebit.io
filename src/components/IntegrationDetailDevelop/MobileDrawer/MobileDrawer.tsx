@@ -1,11 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Drawer, Button } from '@material-ui/core';
+import { Drawer, Button, Box, Typography } from '@material-ui/core';
 import * as CSC from '@components/globalStyle';
 import play from '@assets/play.svg';
 import info from '@assets/info.svg';
 import useEditor from '@components/IntegrationDetailDevelop/FusebitEditor/useEditor';
 import CloseIcon from '@material-ui/icons/Close';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const StyledGuiMobileWrapper = styled.div`
   position: relative;
@@ -34,6 +35,22 @@ const StyledGuiMobileNotSupportedText = styled.div`
   line-height: 20px;
   color: var(--black);
   margin-left: 12px;
+`;
+
+const StyledLogWrapper = styled(Box)`
+  background-color: var(--secondary-color);
+  color: var(--black);
+`;
+
+const StyledLogTitle = styled(Typography)`
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--black);
+`;
+
+const StyledLog = styled(Box)`
+  background-color: #ffffff;
+  word-wrap: break-word;
 `;
 
 interface Props {
@@ -66,6 +83,30 @@ const MobileDrawer = ({ open, onClose }: Props) => {
           <StyledGuiMobileNotSupportedText>Editing is not supported on this device</StyledGuiMobileNotSupportedText>
         </StyledGuiMobileNotSupportedWrapper>
       </StyledGuiMobileWrapper>
+      <StyledLogWrapper padding="21px 30px 0">
+        <Box display="flex" alignItems="center">
+          <StyledLogTitle>Log Console</StyledLogTitle>
+          <Box marginLeft="auto" color="inherit">
+            <DeleteIcon color="inherit" style={{ width: '20px' }} />
+          </Box>
+        </Box>
+        <StyledLog
+          fontSize="10px"
+          lineHeight="11.5px"
+          fontFamily="Courier"
+          height="165px"
+          padding="15px 7px"
+          borderRadius="4px"
+          marginTop="10px"
+          overflow="scroll"
+        >
+          [3:21:55 PM] SERVER STDOUT: Sending POST request to
+          https://api.us-west-1.on.fusebit.io/v2/account/acc-c77ac40bf57b4650/subscription/sub-800d88b500e14eeb/integration/LinearMobileTest/api/tenant/user-1/test
+          [3:21:57 PM] SERVER STDOUT: Received response status 200 [3:21:55 PM] SERVER STDOUT: Sending POST request to
+          https://api.us-west-1.on.fusebit.io/v2/account/acc-c77ac40bf57b4650/subscription/sub-800d88b500e14eeb/integration/LinearMobileTest/api/tenant/user-1/test
+          [3:21:57 PM] SERVER STDOUT: Received response status 200
+        </StyledLog>
+      </StyledLogWrapper>
     </Drawer>
   );
 };
