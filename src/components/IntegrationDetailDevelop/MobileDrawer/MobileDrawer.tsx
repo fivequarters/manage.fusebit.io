@@ -156,7 +156,7 @@ const MobileDrawer = ({ open, onClose, integrationId }: Props) => {
                 overflow="scroll"
               >
                 {logs.map((log) => (
-                  <p key={log}>{log}</p>
+                  <p key={log.id}>{log.msg}</p>
                 ))}
               </StyledLog>
             </StyledLogWrapper>

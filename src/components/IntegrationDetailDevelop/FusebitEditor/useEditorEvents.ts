@@ -9,9 +9,10 @@ interface Props {
 const useEditorEvents = ({ isMounted }: Props) => {
   const [isSaving, setIsSaving] = useState(false);
   const [errorBuild, setErrorBuild] = useState('');
-  const [logs, setLogs] = useState<string[]>([]);
+  const [logs, setLogs] = useState<{ msg: string; id: number }[]>([]);
 
   const logWithTime = (msg: string) => {
+    const id = Date.now();
     const time = new Date();
     const formattedTime = time.toLocaleTimeString('en-US', {
       hour: 'numeric',
@@ -19,7 +20,7 @@ const useEditorEvents = ({ isMounted }: Props) => {
       second: 'numeric',
       hour12: true,
     });
-    return `[${formattedTime}] ${msg}`;
+    return { id, msg: `[${formattedTime}] ${msg}` };
   };
 
   useEffect(() => {
