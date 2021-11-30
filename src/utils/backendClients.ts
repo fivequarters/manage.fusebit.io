@@ -8,7 +8,7 @@ export async function createSampleAppClientUrl(user: User, integrations: Record<
   const url = new URL(`${REACT_APP_SAMPLE_APP_URL}`);
 
   const configuration = {
-    SLACK_INTEGRATION_ID: integrations.slack,
+    SLACK_BOT_INTEGRATION_ID: integrations.slack,
     HUBSPOT_INTEGRATION_ID: undefined,
     FUSEBIT_INTEGRATION_URL: `${REACT_APP_FUSEBIT_DEPLOYMENT}/v2/account/${accountId}/subscription/${subscriptionId}/integration`,
     FUSEBIT_JWT: token,
