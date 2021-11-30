@@ -9,7 +9,7 @@ import { useTrackPage } from '@hooks/useTrackPage';
 import { urlOrSvgToImage } from '@utils/utils';
 import BaseJsonForm from '@components/common/BaseJsonForm';
 import { DefaultFilters } from '@hooks/useFilterFeed';
-import useFeed from '@hooks/useFeed';
+import useFeedPicker from '@hooks/useFeedPicker';
 
 const StyledCard = styled.div`
   padding: 24px;
@@ -216,7 +216,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
     feedTypeName,
     isMobile,
     orderAlpha,
-  } = useFeed({
+  } = useFeedPicker({
     open,
     isIntegration,
     onSubmit,
