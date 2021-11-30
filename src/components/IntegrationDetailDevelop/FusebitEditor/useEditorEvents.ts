@@ -1,3 +1,4 @@
+import { LogData, LogEntry, LogEntryError, LogError } from '@interfaces/logs';
 import { useEffect, useState } from 'react';
 import { EditorEvents } from '../../../enums/editor';
 
@@ -8,6 +9,18 @@ interface Props {
 const useEditorEvents = ({ isMounted }: Props) => {
   const [isSaving, setIsSaving] = useState(false);
   const [errorBuild, setErrorBuild] = useState('');
+  const [logs, setLogs] = useState<string[]>([]);
+
+  const logWithTime = (msg: string) => {
+    const time = new Date();
+    const formattedTime = time.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: true,
+    });
+    return `[${formattedTime}] ${msg}`;
+  };
 
   useEffect(() => {
     if (isMounted) {
@@ -20,13 +33,26 @@ const useEditorEvents = ({ isMounted }: Props) => {
         setIsSaving(false);
         setErrorBuild(`There was an error in the build: ${e.error.message}`);
       });
+      window.editor.on(EditorEvents.LogsAttached, () => {
+        setLogs([...logs, logWithTime('Attached to real-time logs...')]);
+      });
+      window.editor.on(EditorEvents.LogsEntry, (e: LogEntry) => {
+        const logData = JSON.parse(e.data) as LogData;
+        setLogs([...logs, logWithTime(logData.msg)]);
+      });
+      window.editor.on(EditorEvents.RunnerFinished, (e: LogEntryError) => {
+        const logData = JSON.parse(e.error) as LogError;
+        setLogs([...logs, logWithTime(logData.message)]);
+      });
     }
-  }, [isMounted, isSaving]);
+  }, [isMounted, isSaving, logs]);
 
   return {
     isSaving,
     errorBuild,
     setErrorBuild,
+    logs,
+    setLogs,
   };
 };
 

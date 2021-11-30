@@ -32,7 +32,7 @@ const useEditor = ({ enableListener = true, isMounted = false, onReadyToRun, onR
   const [isFindingInstall, setIsFindingInstall] = useState(false);
   // Prevent beign called multiple times if user has multiple tabs open
   const hasSessionChanged = useRef(false);
-  const { isSaving, errorBuild, setErrorBuild } = useEditorEvents({ isMounted });
+  const { isSaving, errorBuild, setErrorBuild, logs, setLogs } = useEditorEvents({ isMounted });
   const { createError } = useError();
 
   const findInstall = useCallback(async () => {
@@ -161,6 +161,8 @@ const useEditor = ({ enableListener = true, isMounted = false, onReadyToRun, onR
     handleLogin,
     isRunning: isTesting || isCommiting,
     isEditing: isFindingInstall || isCreatingSession,
+    logs,
+    setLogs,
   };
 };
 
