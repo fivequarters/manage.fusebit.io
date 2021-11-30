@@ -27,6 +27,7 @@ import { useError } from '@hooks/useError';
 import useSampleApp from '@hooks/useSampleApp';
 import { EditGuiSampleApp } from './EditGuiSampleApp';
 
+
 const StyledEditorContainer = styled.div`
   .fa {
     background-size: cover;
@@ -274,6 +275,8 @@ const addNewIcon = `
     background-repeat: no-repeat;
 `;
 
+// TODO: Implement useEditorEvents to listen dirty state events
+
 const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationId }, ref) => {
   const { id } = useParams<{ id: string }>();
   const { userData } = useAuthContext();
@@ -338,24 +341,18 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
 
   useEffect(() => {}, []);
 
-  // TODO: Implement events from the editor to know its state
   const handleSaveAndRun = async () => {
-    try {
-      if (dirtyState) {
-        const context = window.editor;
-        const status: SaveStatus = await context?._server.saveFunction(context);
-        if (status.status === 'completed') {
-          setDirtyState(false);
-          handleRun();
-        }
-      } else {
+    if (dirtyState) {
+      const context = window.editor;
+      const status: SaveStatus = await context?._server.saveFunction(context);
+      if (status.status === 'completed') {
+        setDirtyState(false);
         handleRun();
       }
-    } catch (e) {
-      createError(e);
+    } else {
+      handleRun();
     }
   };
-
   const handleSave = async () => {
     const context = window.editor;
     trackEvent('Save Button Clicked', 'Web Editor');
