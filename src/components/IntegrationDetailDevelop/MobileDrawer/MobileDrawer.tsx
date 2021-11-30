@@ -86,6 +86,12 @@ const MobileDrawer = ({ open, onClose, integrationId }: Props) => {
     setLogs([]);
   };
 
+  const handleClose = () => {
+    handleLogClear();
+    setIsMounted(false);
+    onClose();
+  };
+
   return (
     <>
       {open && (
@@ -113,56 +119,52 @@ const MobileDrawer = ({ open, onClose, integrationId }: Props) => {
         </StyledEditorWrapper>
       )}
 
-      {isMounted && (
-        <Drawer anchor="bottom" open={open} onClose={onClose}>
-          <>
-            <StyledGuiMobileWrapper>
-              <CSC.CloseWrapper onClick={onClose}>
-                <CloseIcon fontSize="small" />
-              </CSC.CloseWrapper>
-              <Button
-                startIcon={<img src={play} alt="play" height="16" width="16" />}
-                style={{ width: '200px' }}
-                size="large"
-                variant="contained"
-                color="primary"
-                onClick={handleRun}
-                disabled={isRunning}
-              >
-                {isRunning ? 'Running...' : 'Run'}
-              </Button>
-              <StyledGuiMobileNotSupportedWrapper>
-                <StyledGuiMobileNotSupportedIcon src={info} alt="not supported" height="16" width="16" />
-                <StyledGuiMobileNotSupportedText>
-                  Editing is not supported on this device
-                </StyledGuiMobileNotSupportedText>
-              </StyledGuiMobileNotSupportedWrapper>
-            </StyledGuiMobileWrapper>
-            <StyledLogWrapper padding="21px 30px 0">
-              <Box display="flex" alignItems="center">
-                <StyledLogTitle>Log Console</StyledLogTitle>
-                <Box marginLeft="auto" color="inherit" onClick={handleLogClear}>
-                  <DeleteIcon color="inherit" style={{ width: '20px' }} />
-                </Box>
+      <Drawer anchor="bottom" open={open && isMounted} onClose={handleClose}>
+        <>
+          <StyledGuiMobileWrapper>
+            <CSC.CloseWrapper onClick={handleClose}>
+              <CloseIcon fontSize="small" />
+            </CSC.CloseWrapper>
+            <Button
+              startIcon={<img src={play} alt="play" height="16" width="16" />}
+              style={{ width: '200px' }}
+              size="large"
+              variant="contained"
+              color="primary"
+              onClick={handleRun}
+              disabled={isRunning}
+            >
+              {isRunning ? 'Running...' : 'Run'}
+            </Button>
+            <StyledGuiMobileNotSupportedWrapper>
+              <StyledGuiMobileNotSupportedIcon src={info} alt="not supported" height="16" width="16" />
+              <StyledGuiMobileNotSupportedText>Editing is not supported on this device</StyledGuiMobileNotSupportedText>
+            </StyledGuiMobileNotSupportedWrapper>
+          </StyledGuiMobileWrapper>
+          <StyledLogWrapper padding="21px 30px 0">
+            <Box display="flex" alignItems="center">
+              <StyledLogTitle>Log Console</StyledLogTitle>
+              <Box marginLeft="auto" color="inherit" onClick={handleLogClear}>
+                <DeleteIcon color="inherit" style={{ width: '20px' }} />
               </Box>
-              <StyledLog
-                fontSize="10px"
-                lineHeight="11.5px"
-                fontFamily="Courier"
-                height="165px"
-                padding="15px 7px"
-                borderRadius="4px"
-                marginTop="10px"
-                overflow="scroll"
-              >
-                {logs.map((log) => (
-                  <p key={log.id}>{log.msg}</p>
-                ))}
-              </StyledLog>
-            </StyledLogWrapper>
-          </>
-        </Drawer>
-      )}
+            </Box>
+            <StyledLog
+              fontSize="10px"
+              lineHeight="11.5px"
+              fontFamily="Courier"
+              height="165px"
+              padding="15px 7px"
+              borderRadius="4px"
+              marginTop="10px"
+              overflow="scroll"
+            >
+              {logs.map((log) => (
+                <p key={log.id}>{log.msg}</p>
+              ))}
+            </StyledLog>
+          </StyledLogWrapper>
+        </>
+      </Drawer>
     </>
   );
 };
