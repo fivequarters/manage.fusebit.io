@@ -6,6 +6,7 @@ export interface FusebitProfile {
 }
 
 export interface Auth0Token {
+  iss: string;
   'https://fusebit.io/profile': FusebitProfile;
   'https://fusebit.io/new-user'?: boolean;
 }

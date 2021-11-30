@@ -19,7 +19,7 @@ If you are running the portal locally against the Stage deployment, configure .e
 ```
 REACT_APP_FUSEBIT_DEPLOYMENT=https://stage.us-west-2.fusebit.io
 REACT_APP_AUTH0_AUDIENCE=https://stage.us-west-2.fusebit.io
-REACT_APP_AUTH0_DOMAIN=https://fusebit.auth0.com
+REACT_APP_AUTH0_DOMAIN=https://auth.fusebit.io
 REACT_APP_AUTH0_CLIENT_ID=dimuls6VLYgXpD7UYCo6yPdKAXPXjQng
 REACT_APP_LOGOUT_REDIRECT_URL=https://fusebit.io
 REACT_APP_SEGMENT_ANALYTICS_TAG=VJm74fG8GSNVZHwQ3xAbMIaM2upyXSjT
@@ -37,7 +37,7 @@ If you are running the portal locally against the production Fusebit deployment,
 ```
 REACT_APP_DEPLOYMENT_KEY=Production
 REACT_APP_FUSEBIT_DEPLOYMENT=https://api.us-west-1.on.fusebit.io
-REACT_APP_AUTH0_DOMAIN=https://fusebit.auth0.com
+REACT_APP_AUTH0_DOMAIN=https://auth.fusebit.io
 REACT_APP_AUTH0_CLIENT_ID=NIfqE4hpPOXuIhllkxndlafSKcKesEfc
 REACT_APP_LOGOUT_REDIRECT_URL=http://localhost:3000
 REACT_APP_INTEGRATIONS_FEED_URL=http://localhost:3000/feed/integrationsFeed.json
@@ -51,7 +51,7 @@ REACT_APP_SAMPLE_APP_KEY=TheCommonTokenWithTheSampleApp
 
 ```
 REACT_APP_FUSEBIT_DEPLOYMENT=https://api.us-west-1.on.fusebit.io
-REACT_APP_AUTH0_DOMAIN=https://fusebit.auth0.com
+REACT_APP_AUTH0_DOMAIN=https://auth.fusebit.io
 REACT_APP_AUTH0_CLIENT_ID=NIfqE4hpPOXuIhllkxndlafSKcKesEfc
 REACT_APP_LOGOUT_REDIRECT_URL=https://fusebit.io
 REACT_APP_INTEGRATIONS_FEED_URL=https://portal-fusebit-io.vercel.app/feed/connectorsFeed.json

@@ -230,6 +230,18 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
     }
   };
 
+  const activeRef = React.useRef<HTMLInputElement>(null);
+  const activeId = activeTemplate?.id;
+
+  React.useEffect(() => {
+    if (activeId && activeRef.current) {
+      activeRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+    // eslint complains about including activeRef.current, but it works well to cause the scroll once the item
+    // has been identified.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeId, activeRef.current]);
+
   return (
     <StyledCard onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)} ref={ref} tabIndex={-1}>
       <StyledTitle>{`New ${feedTypeName}`}</StyledTitle>
@@ -273,23 +285,22 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
             <Box>
               {orderAlpha(filteredFeed)
                 .filter((feedEntry) => !feedEntry.private)
-                .map((feedEntry) => {
-                  return (
-                    <StyledColumnItem
-                      key={feedEntry.id}
-                      onClick={() => handleTemplateChange(feedEntry)}
-                      active={feedEntry.id === activeTemplate.id}
-                    >
-                      <StyledColumnItemImage
-                        src={urlOrSvgToImage(feedEntry.smallIcon)}
-                        alt={feedEntry.name}
-                        height="18"
-                        width="18"
-                      />
-                      {feedEntry.name}
-                    </StyledColumnItem>
-                  );
-                })}
+                .map((feedEntry) => (
+                  <StyledColumnItem
+                    key={feedEntry.id}
+                    onClick={() => handleTemplateChange(feedEntry)}
+                    active={feedEntry.id === activeTemplate.id}
+                    ref={feedEntry.id === activeTemplate.id ? activeRef : undefined}
+                  >
+                    <StyledColumnItemImage
+                      src={urlOrSvgToImage(feedEntry.smallIcon)}
+                      alt={feedEntry.name}
+                      height="18"
+                      width="18"
+                    />
+                    {feedEntry.name}
+                  </StyledColumnItem>
+                ))}
             </Box>
           )}
         </StyledColumn>

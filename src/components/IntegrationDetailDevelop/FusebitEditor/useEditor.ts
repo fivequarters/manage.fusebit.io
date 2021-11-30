@@ -9,7 +9,8 @@ import { useAuthContext } from '@hooks/useAuthContext';
 import { InstallList } from '@interfaces/install';
 import { trackEvent } from '@utils/analytics';
 import { STATIC_TENANT_ID } from '@utils/constants';
-import useIsSaving from './useIsSaving';
+import { useError } from '@hooks/useError';
+import useEditorEvents from './useEditorEvents';
 
 interface Props {
   enableListener?: boolean;
@@ -31,7 +32,8 @@ const useEditor = ({ enableListener = true, isMounted = false, onReadyToRun, onR
   const [isFindingInstall, setIsFindingInstall] = useState(false);
   // Prevent beign called multiple times if user has multiple tabs open
   const hasSessionChanged = useRef(false);
-  const isSaving = useIsSaving({ isMounted });
+  const { isSaving, errorBuild, setErrorBuild } = useEditorEvents({ isMounted });
+  const { createError } = useError();
 
   const findInstall = useCallback(async () => {
     try {
@@ -139,6 +141,13 @@ const useEditor = ({ enableListener = true, isMounted = false, onReadyToRun, onR
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    if (errorBuild) {
+      createError({ message: errorBuild });
+      setErrorBuild('');
+    }
+  }, [errorBuild, createError, setErrorBuild]);
 
   return {
     handleRun,

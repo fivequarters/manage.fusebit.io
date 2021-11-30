@@ -46,6 +46,9 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open }: Props) => {
 
       for (let i = 0; i < (feed || []).length; i++) {
         if ((feed || [])[i].id === key) {
+          // When explicitly loading an entry, remove the private designation so that it shows up in the
+          // middle list.
+          delete feed[i].private;
           setRawActiveTemplate(feed[i]);
           replaceMustache(data, feed[i]).then((template) => setActiveTemplate(template));
           return;

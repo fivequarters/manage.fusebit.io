@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, Button, ButtonGroup, IconButton } from '@material-ui/core';
 import { SaveOutlined, PlayArrowOutlined } from '@material-ui/icons';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Props } from '@interfaces/edit';
+import { Props, SaveStatus } from '@interfaces/edit';
 import { useAuthContext } from '@hooks/useAuthContext';
 import { useLoader } from '@hooks/useLoader';
 import settings from '@assets/settings.svg';
@@ -23,6 +23,8 @@ import clock from '@assets/clock.svg';
 import playEditor from '@assets/play-editor.svg';
 import add from '@assets/add.svg';
 import CloseIcon from '@material-ui/icons/Close';
+import useSampleApp from '@hooks/useSampleApp';
+import { EditGuiSampleApp } from './EditGuiSampleApp';
 
 const StyledEditorContainer = styled.div`
   .fa {
@@ -271,6 +273,8 @@ const addNewIcon = `
     background-repeat: no-repeat;
 `;
 
+// TODO: Implement useEditorEvents to listen dirty state events
+
 const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationId }, ref) => {
   const { id } = useParams<{ id: string }>();
   const { userData } = useAuthContext();
@@ -284,6 +288,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     isMounted,
   });
   const [dirtyState, setDirtyState] = useState(false);
+  const { componentMap, isSampleAppEnabled } = useSampleApp();
 
   useTrackPage('Web Editor', 'Web Editor');
   useTitle(`${id} Editor`);
@@ -333,6 +338,18 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
 
   useEffect(() => {}, []);
 
+  const handleSaveAndRun = async () => {
+    if (dirtyState) {
+      const context = window.editor;
+      const status: SaveStatus = await context?._server.saveFunction(context);
+      if (status.status === 'completed') {
+        setDirtyState(false);
+        handleRun();
+      }
+    } else {
+      handleRun();
+    }
+  };
   const handleSave = async () => {
     const context = window.editor;
     trackEvent('Save Button Clicked', 'Web Editor');
@@ -392,7 +409,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
                 size="small"
                 variant="contained"
                 color="primary"
-                onClick={handleRun}
+                onClick={handleSaveAndRun}
                 disabled={isFindingInstall || isSaving}
               >
                 {isFindingInstall ? <CircularProgress size={20} /> : 'Run'}
@@ -403,6 +420,11 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
             </ButtonGroup>
             <h3>{integrationId}</h3>
             <StyledActionsHelpWrapper>
+              {isSampleAppEnabled && (
+                <StyledActionsHelpLink target="_blank">
+                  <EditGuiSampleApp componentMap={componentMap} />
+                </StyledActionsHelpLink>
+              )}
               <StyledActionsHelpLink target="_blank" href="https://developer.fusebit.io/docs/developing-locally">
                 Edit locally
               </StyledActionsHelpLink>

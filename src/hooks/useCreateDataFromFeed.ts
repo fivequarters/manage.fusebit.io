@@ -40,10 +40,7 @@ export const useCreateDataFromFeed = () => {
 
       const res = await createFromFeed(parsedFeed, commonTags, true);
 
-      return {
-        connector: res[0].data,
-        integration: res[1].data,
-      };
+      return res.find((r) => r.data.entityType === 'integration')?.data;
     } catch (e) {
       createError(e);
     }
