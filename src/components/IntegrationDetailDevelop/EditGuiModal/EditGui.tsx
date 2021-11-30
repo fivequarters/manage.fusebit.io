@@ -23,10 +23,8 @@ import clock from '@assets/clock.svg';
 import playEditor from '@assets/play-editor.svg';
 import add from '@assets/add.svg';
 import CloseIcon from '@material-ui/icons/Close';
-import { useError } from '@hooks/useError';
 import useSampleApp from '@hooks/useSampleApp';
 import { EditGuiSampleApp } from './EditGuiSampleApp';
-
 
 const StyledEditorContainer = styled.div`
   .fa {
@@ -290,7 +288,6 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     isMounted,
   });
   const [dirtyState, setDirtyState] = useState(false);
-  const { createError } = useError();
   const { componentMap, isSampleAppEnabled } = useSampleApp();
 
   useTrackPage('Web Editor', 'Web Editor');
