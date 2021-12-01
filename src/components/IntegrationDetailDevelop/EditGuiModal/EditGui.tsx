@@ -24,6 +24,7 @@ import playEditor from '@assets/play-editor.svg';
 import add from '@assets/add.svg';
 import CloseIcon from '@material-ui/icons/Close';
 import useSampleApp from '@hooks/useSampleApp';
+import { useAccountIntegrationsGetOne } from '@hooks/api/v2/account/integration/useGetOne';
 import { EditGuiSampleApp } from './EditGuiSampleApp';
 
 const StyledEditorContainer = styled.div`
@@ -290,6 +291,14 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const [dirtyState, setDirtyState] = useState(false);
   const { componentMap, isSampleAppEnabled } = useSampleApp();
 
+  const { data: integrationResponse } = useAccountIntegrationsGetOne({
+    enabled: userData.token,
+    id: integrationId,
+    accountId: userData.accountId,
+    subscriptionId: userData.subscriptionId,
+  });
+  const integration = integrationResponse?.data;
+
   useTrackPage('Web Editor', 'Web Editor');
   useTitle(`${id} Editor`);
 
@@ -425,7 +434,15 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
                   <EditGuiSampleApp componentMap={componentMap} />
                 </StyledActionsHelpLink>
               )}
-              <StyledActionsHelpLink target="_blank" href="https://developer.fusebit.io/docs/developing-locally">
+              <StyledActionsHelpLink
+                target="_blank"
+                href="https://developer.fusebit.io/docs/developing-locally"
+                onClick={() => {
+                  trackEvent('Docs Developing Locally Link Clicked', 'Web Editor', {
+                    Integration: integration?.tags['fusebit.feedId'],
+                  });
+                }}
+              >
                 Edit locally
               </StyledActionsHelpLink>
               <StyledActionsHelpImage src={question} alt="question" height="16" width="16" />

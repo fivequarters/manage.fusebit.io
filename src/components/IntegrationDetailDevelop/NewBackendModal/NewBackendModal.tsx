@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { BackendClient } from '@interfaces/backendClient';
 import BaseBackendModal from '@components/IntegrationDetailDevelop/BaseBackendModal';
+import { useGetIntegrationFromCache } from '@hooks/useGetIntegrationFromCache';
 
 interface Props {
   open: boolean;
@@ -11,6 +12,7 @@ interface Props {
 const NewBackendModal = ({ open, onClose, backendClient }: Props) => {
   const [showWarning, setShowWarning] = useState(false);
   const [keyIsCopied, setKeyIsCopied] = useState(false);
+  const integrationData = useGetIntegrationFromCache();
 
   const handleCloseWithWarning = async (force?: boolean) => {
     if (force || keyIsCopied || showWarning) {
@@ -38,6 +40,7 @@ const NewBackendModal = ({ open, onClose, backendClient }: Props) => {
       setKeyIsCopied={setKeyIsCopied}
       open={open}
       onClose={handleCloseWithWarning}
+      integration={integrationData?.data}
     />
   );
 };

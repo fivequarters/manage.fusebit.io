@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import ReactMarkdown from 'react-markdown';
 import { Box, Button, TextField } from '@material-ui/core';
 import { Props } from '@interfaces/feedPicker';
 import search from '@assets/search.svg';
@@ -10,6 +9,7 @@ import { urlOrSvgToImage } from '@utils/utils';
 import BaseJsonForm from '@components/common/BaseJsonForm';
 import { DefaultFilters } from '@hooks/useFilterFeed';
 import useFeedPicker from '@hooks/useFeedPicker';
+import FeedItemDescription from './FeedItemDescription';
 
 const StyledCard = styled.div`
   padding: 24px;
@@ -157,31 +157,6 @@ const StyledConnectorVersion = styled.div`
   margin-left: auto;
 `;
 
-const StyledConnectorDescription = styled(ReactMarkdown)`
-  font-size: 14px;
-  line-height: 20px;
-  color: var(--black);
-  max-width: 300px;
-
-  p {
-    margin: 0;
-    margin-top: 16px;
-  }
-
-  a {
-    color: var(--black);
-    text-decoration: underline;
-    transition: all 0.25s linear;
-
-    &:hover {
-      color: var(--primary-color);
-    }
-  }
-  @media only screen and (max-width: 1100px) {
-    max-width: none;
-  }
-`;
-
 const StyledFormWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -321,9 +296,11 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(({ open, onClose, onS
                 <StyledConnectorVersion>{activeTemplate.version}</StyledConnectorVersion>
               </StyledConnectorTitleWrapper>
               <StyledGeneralInfoWrapper>
-                <StyledConnectorDescription linkTarget="_blank">
-                  {activeTemplate.description || ''}
-                </StyledConnectorDescription>
+                <FeedItemDescription
+                  description={activeTemplate.description || ''}
+                  templateId={activeTemplate.id}
+                  isIntegration={isIntegration}
+                />
                 {activeTemplate.outOfPlan || (
                   <StyledFormWrapper>
                     <BaseJsonForm

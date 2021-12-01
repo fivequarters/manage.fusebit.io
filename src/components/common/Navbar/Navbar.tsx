@@ -7,6 +7,7 @@ import companyLogo from '@assets/company-logo.svg';
 import burguer from '@assets/burguer.svg';
 import { useAuthContext } from '@hooks/useAuthContext';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
+import { trackEvent } from '@utils/analytics';
 import UserMenu from '../UserMenu/UserMenu';
 import UserDrawerMobile from '../UserDrawerMobile';
 
@@ -71,6 +72,7 @@ const sendSupportMessage = () => {
 };
 
 const openSupportMessage = () => {
+  trackEvent('Support Link Clicked', 'Header');
   window.Intercom('showNewMessage', 'Hi, Fusebit team. I have a question!');
   sendSupportMessage();
 };
@@ -121,7 +123,13 @@ const Navbar: React.FC = ({ children }) => {
             ) : (
               <StyledLinkContainer display="flex" alignItems="center">
                 <StyledLink onClick={() => openSupportMessage()}>Support</StyledLink>
-                <StyledLink href="https://developer.fusebit.io" target="_blank">
+                <StyledLink
+                  href="https://developer.fusebit.io"
+                  target="_blank"
+                  onClick={() => {
+                    trackEvent('Docs Link Clicked', 'Header');
+                  }}
+                >
                   Docs
                 </StyledLink>
                 <UserMenu />

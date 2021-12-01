@@ -2,11 +2,14 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { format } from 'date-fns';
 import BaseTable from '@components/common/BaseTable';
+import { useAuthContext } from '@hooks/useAuthContext';
 import { useEntityTable } from '@hooks/useEntityTable';
 import { usePagination } from '@hooks/usePagination';
 import { useAccountIntegrationInstallGetAll } from '@hooks/api/v2/account/integration/install/useGetAll';
+import { useAccountIntegrationsGetOne } from '@hooks/api/v2/account/integration/useGetOne';
 import CodeBlock from '@components/common/CodeBlock';
 import { InstallList } from '@interfaces/install';
+import { Integration } from '@interfaces/integration';
 import Tag from '@components/common/Tag';
 import ConfirmationPrompt from '@components/common/ConfirmationPrompt';
 import InformationalBanner from '@components/common/InformationalBanner';
@@ -17,8 +20,17 @@ import AssociatedIdentities from './AssociatedIdentities';
 const InstallsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
   const { id } = useParams<{ id: string }>();
+  const { userData } = useAuthContext();
   const [deleteOpen, setDeleteOpen] = useState(false);
   const { data: installs, isLoading } = useAccountIntegrationInstallGetAll<InstallList>({ id });
+  const { data: integrationResponse } = useAccountIntegrationsGetOne<Integration>({
+    enabled: userData.token,
+    id,
+    accountId: userData.accountId,
+    subscriptionId: userData.subscriptionId,
+  });
+
+  const integration = integrationResponse?.data;
 
   const rows = (installs?.data?.items || []).map((install) => {
     const connectorIds = getConnectorsFromInstall(install);
@@ -66,6 +78,11 @@ const InstallsTable = () => {
           target="_blank"
           rel="noreferrer"
           href="https://developer.fusebit.io/docs/fusebit-system-architecture#installation-lifecycle"
+          onClick={() => {
+            trackEvent('Installs Docs Learn More Link Clicked', 'Integration', {
+              Integration: integration?.tags['fusebit.feedId'],
+            });
+          }}
         >
           Learn more about Installations in the docs here
         </a>
