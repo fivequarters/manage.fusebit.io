@@ -24,8 +24,8 @@ import playEditor from '@assets/play-editor.svg';
 import add from '@assets/add.svg';
 import CloseIcon from '@material-ui/icons/Close';
 import useSampleApp from '@hooks/useSampleApp';
-import { EditGuiSampleApp } from './EditGuiSampleApp';
 import { useAccountIntegrationsGetOne } from '@hooks/api/v2/account/integration/useGetOne';
+import { EditGuiSampleApp } from './EditGuiSampleApp';
 
 const StyledEditorContainer = styled.div`
   .fa {
