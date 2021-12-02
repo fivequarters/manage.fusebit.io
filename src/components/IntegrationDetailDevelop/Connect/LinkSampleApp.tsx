@@ -6,11 +6,8 @@ import useSampleApp from '@hooks/useSampleApp';
 import { StyledTimeIcon, StyledTimeDescription } from './mixins';
 
 interface IProps {
-  id?: string;
   buttonsCrashing?: boolean;
-  buttonsSize?: 'small' | 'medium' | 'large';
   integration?: Integration;
-  timeDescriptionWidth: string;
   smallPhone: boolean;
 }
 
@@ -22,44 +19,90 @@ const openSampleApp = (url: string, integration?: Integration) => {
   sampleAppTab.focus();
 };
 
-export const LinkSampleApp: React.FC<IProps> = ({
-  buttonsCrashing,
-  buttonsSize,
-  integration,
-  timeDescriptionWidth,
-  smallPhone,
-}) => {
+export const FooterActions: React.FC<IProps> = ({ buttonsCrashing, integration, smallPhone }) => {
   const { url } = useSampleApp();
 
-  return url ? (
-    <>
-      <Box display="flex" margin={smallPhone ? '5px auto auto' : '10.5px auto auto'}>
-        or
-      </Box>
-      <Box display="flex" flexDirection="column">
-        <Button
-          style={{ width: buttonsCrashing ? 'fit-content' : '293px' }}
-          onClick={() => {
-            openSampleApp(url, integration);
-          }}
-          variant="outlined"
-          color="primary"
-          size={buttonsSize || 'large'}
-        >
-          Run a Sample App!
-        </Button>
-        <Box display="flex" flexDirection="column" alignItems="left" justifyContent="left">
-          <Box display="flex" alignItems="center">
+  const getButtonSize = (() => {
+    if (smallPhone && url) {
+      return 'small';
+    }
+
+    if (buttonsCrashing) {
+      return 'medium';
+    }
+
+    return 'large';
+  })();
+
+  const getTimeDescriptionWidth = (() => {
+    if (smallPhone) {
+      return '140px';
+    }
+
+    if (buttonsCrashing) {
+      return '165px';
+    }
+
+    return '100%';
+  })();
+
+  return (
+    <Box display="flex" flexDirection="column">
+      <Box display="flex" alignItems={!url && 'center'} justifyContent={!url && 'center'}>
+        <Box display="flex" flexDirection="column">
+          <Button
+            style={{ width: buttonsCrashing ? 'fit-content' : '293px' }}
+            target="_blank"
+            rel="noopener"
+            href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
+            variant="outlined"
+            color="primary"
+            size={getButtonSize}
+            onClick={() => {
+              trackEvent('Backend Docs Follow Guide Button Clicked', 'My Application', {
+                Integration: integration?.tags['fusebit.feedId'],
+              });
+            }}
+          >
+            Follow guide
+          </Button>
+          <Box display="flex" alignItems="center" justifyContent={!url && 'center'}>
             <StyledTimeIcon />
-            <StyledTimeDescription>2 minutes.</StyledTimeDescription>
-          </Box>
-          <Box maxWidth={timeDescriptionWidth}>
-            <StyledTimeDescription margin="0">Already configured to work with this integration</StyledTimeDescription>
+            <StyledTimeDescription>10 minutes</StyledTimeDescription>
           </Box>
         </Box>
+        {url && (
+          <>
+            <Box display="flex" margin={smallPhone ? '5px auto auto' : '10.5px auto auto'}>
+              or
+            </Box>
+            <Box display="flex" flexDirection="column">
+              <Button
+                style={{ width: buttonsCrashing ? 'fit-content' : '293px' }}
+                onClick={() => {
+                  openSampleApp(url, integration);
+                }}
+                variant="outlined"
+                color="primary"
+                size={getButtonSize || 'large'}
+              >
+                Run a Sample App!
+              </Button>
+              <Box display="flex" flexDirection="column" alignItems="left" justifyContent="left">
+                <Box display="flex" alignItems="center">
+                  <StyledTimeIcon />
+                  <StyledTimeDescription>2 minutes.</StyledTimeDescription>
+                </Box>
+                <Box maxWidth={getTimeDescriptionWidth}>
+                  <StyledTimeDescription margin="0">
+                    Already configured to work with this integration
+                  </StyledTimeDescription>
+                </Box>
+              </Box>
+            </Box>
+          </>
+        )}
       </Box>
-    </>
-  ) : (
-    <></>
+    </Box>
   );
 };

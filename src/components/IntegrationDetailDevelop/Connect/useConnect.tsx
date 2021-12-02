@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useMediaQuery } from '@material-ui/core';
-import useSampleApp from '@hooks/useSampleApp';
 import { useCopy } from '../../../hooks/useCopy';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import { useBackendUpdateOne } from '../../../hooks/api/v1/backend/useUpdateOne';
@@ -83,7 +82,6 @@ const useConnect = ({ onClose, disableCopy, keyIsCopied, showWarning, name, setS
     buttonsCrashing,
     smallPhone,
     isMobile,
-    ...useSampleApp(),
   };
 };
 
