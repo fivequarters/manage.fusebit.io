@@ -1,6 +1,7 @@
-import { LogData, LogEntry, LogEntryError, LogError } from '@interfaces/logs';
+import { LogData, LogEntry, LogEntryError } from '@interfaces/logs';
 import { useEffect, useState } from 'react';
 import { EditorEvents } from '../../../enums/editor';
+import { logWithTime } from './utils';
 
 interface Props {
   isMounted: boolean;
@@ -10,18 +11,6 @@ const useEditorEvents = ({ isMounted }: Props) => {
   const [isSaving, setIsSaving] = useState(false);
   const [errorBuild, setErrorBuild] = useState('');
   const [logs, setLogs] = useState<{ msg: string; id: number }[]>([]);
-
-  const logWithTime = (msg: string) => {
-    const id = Date.now();
-    const time = new Date();
-    const formattedTime = time.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: 'numeric',
-      second: 'numeric',
-      hour12: true,
-    });
-    return { id, msg: `[${formattedTime}] ${msg}` };
-  };
 
   useEffect(() => {
     if (isMounted) {
@@ -42,8 +31,7 @@ const useEditorEvents = ({ isMounted }: Props) => {
         setLogs([...logs, logWithTime(logData.msg)]);
       });
       window.editor.on(EditorEvents.RunnerFinished, (e: LogEntryError) => {
-        const logData = JSON.parse(e.error) as LogError;
-        setLogs([...logs, logWithTime(logData.message)]);
+        setLogs([...logs, logWithTime(e.error)]);
       });
     }
   }, [isMounted, isSaving, logs]);

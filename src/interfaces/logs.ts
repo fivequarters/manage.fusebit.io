@@ -16,28 +16,4 @@ export interface LogEntryError {
 export interface LogError {
   message: string;
   name: string;
-  config: {
-    url: string;
-    method: string;
-    data: string;
-    headers: {
-      Accept: string;
-      'Content-Type': string;
-      'X-User-Agent': string;
-      Authorization: string;
-    };
-    params: object;
-    transformRequest: any[];
-    transformResponse: any[];
-    timeout: number;
-    xsrfCookieName: string;
-    xsrfHeaderName: string;
-    maxContentLength: number;
-    maxBodyLength: number;
-    transitional: {
-      silentJSONParsing: boolean;
-      forcedJSONParsing: boolean;
-      clarifyTimeoutError: boolean;
-    };
-  };
 }
