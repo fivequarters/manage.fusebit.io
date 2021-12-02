@@ -9,6 +9,7 @@ import FooterLinks from '@components/IntegrationDetailDevelop/FooterLinks';
 import IntegrationCard from '@components/IntegrationDetailDevelop/IntegrationCard';
 import LinksTitle from '@components/IntegrationDetailDevelop/LinksTitle';
 import YourAplication from '@components/IntegrationDetailDevelop/YourAplicationCard';
+import { Integration } from '@interfaces/integration';
 
 const centerMixin = (props: { $matchesCardOverlapping: boolean }) =>
   props.$matchesCardOverlapping &&
@@ -36,9 +37,10 @@ const StyledConnectorsCard = styled(ConnectorsCard)<{ $matchesCardOverlapping: b
 
 interface Props {
   isLoading: boolean;
+  integration?: Integration;
 }
 
-const Diagram: React.FC<Props> = ({ isLoading }) => {
+const Diagram: React.FC<Props> = ({ isLoading, integration }) => {
   const [processing, setProcessing] = useState(false);
   const matchesCardOverlapping = useMediaQuery(CARD_OVERLAPPING_MEDIA_QUERY);
 
@@ -66,20 +68,23 @@ const Diagram: React.FC<Props> = ({ isLoading }) => {
           {matchesCardOverlapping ? (
             <Box display="flex" flexDirection="column" maxWidth="389px" m="0 auto">
               <LinksTitle />
-              <FooterLinks links={['connectingFusebit', 'gettingStarted', 'programmingModel']} />
+              <FooterLinks
+                links={['connectingFusebit', 'gettingStarted', 'programmingModel']}
+                integration={integration}
+              />
             </Box>
           ) : (
             <Grid container>
               <Grid item xs={4}>
                 <Box display="flex" flexDirection="column">
                   <LinksTitle />
-                  <FooterLinks links={['connectingFusebit']} />
+                  <FooterLinks links={['connectingFusebit']} integration={integration} />
                 </Box>
               </Grid>
               <Grid item xs={4}>
                 <Box display="flex" flexDirection="column" width="285px" m="0 auto">
                   <LinksTitle />
-                  <FooterLinks links={['gettingStarted', 'programmingModel']} />
+                  <FooterLinks links={['gettingStarted', 'programmingModel']} integration={integration} />
                 </Box>
               </Grid>
             </Grid>

@@ -1,15 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@material-ui/core';
 import { useAuthContext } from '@hooks/useAuthContext';
+import { trackEvent } from '@utils/analytics';
 import { createSampleAppClientUrl } from '@utils/backendClients';
+import { Integration } from '@interfaces/integration';
 
 interface IProps {
   componentMap: Record<string, string>;
   buttonsCrashing?: boolean;
   buttonsSize?: 'small' | 'medium' | 'large';
+  integration?: Integration;
 }
 
-export const LinkSampleApp: React.FC<IProps> = ({ componentMap, buttonsCrashing, buttonsSize }) => {
+const openSampleApp = (url: string, integration?: Integration) => {
+  trackEvent('Run Sample App Button Clicked', 'My Application', { Integration: integration?.tags['fusebit.feedId'] });
+  const sampleAppTab = window.open() as Window;
+  sampleAppTab.opener = null;
+  sampleAppTab.location.href = url;
+  sampleAppTab.focus();
+};
+
+export const LinkSampleApp: React.FC<IProps> = ({ componentMap, buttonsCrashing, buttonsSize, integration }) => {
   const { userData: user } = useAuthContext();
 
   const [url, setUrl] = useState<string>();
@@ -23,9 +34,9 @@ export const LinkSampleApp: React.FC<IProps> = ({ componentMap, buttonsCrashing,
   return url ? (
     <Button
       style={{ width: buttonsCrashing ? 'fit-content' : '293px' }}
-      target="_blank"
-      rel="noopener"
-      href={url}
+      onClick={() => {
+        openSampleApp(url, integration);
+      }}
       variant="outlined"
       color="primary"
       size={buttonsSize || 'large'}

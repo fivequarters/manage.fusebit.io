@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import disclaimer from '@assets/disclaimer.svg';
 import time from '@assets/time.svg';
 import warning from '@assets/black-warning.svg';
+import { trackEvent } from '@utils/analytics';
 import { LinkSampleApp } from './LinkSampleApp';
 import useConnect, { Props as UseConnectProps } from './useConnect';
 
@@ -160,6 +161,7 @@ const Connect: React.FC<Props> = ({
   id,
   name,
   token,
+  integration,
   onClose,
   onChange,
   onDelete,
@@ -234,6 +236,13 @@ const Connect: React.FC<Props> = ({
     return '200px';
   })();
 
+  const enterEditMode = () => {
+    trackEvent('Backend Edit Name Button Clicked', 'My Application', {
+      Integration: integration?.tags['fusebit.feedId'],
+    });
+    setEditMode(true);
+  };
+
   return (
     <StyledWrapper>
       {isMobile && (
@@ -252,7 +261,7 @@ const Connect: React.FC<Props> = ({
             <StyledSmallTitle>&nbsp; {backendClientId}</StyledSmallTitle>
             <Button
               style={{ marginLeft: '24px' }}
-              onClick={() => setEditMode(true)}
+              onClick={() => enterEditMode()}
               variant="outlined"
               color="primary"
               size="small"
@@ -344,6 +353,11 @@ const Connect: React.FC<Props> = ({
               variant="outlined"
               color="primary"
               size={getButtonSize}
+              onClick={() => {
+                trackEvent('Backend Docs Follow Guide Button Clicked', 'My Application', {
+                  Integration: integration?.tags['fusebit.feedId'],
+                });
+              }}
             >
               Follow guide
             </Button>
@@ -362,6 +376,7 @@ const Connect: React.FC<Props> = ({
                   buttonsSize={getButtonSize}
                   buttonsCrashing={buttonsCrashing}
                   componentMap={componentMap}
+                  integration={integration}
                 />
                 <Box display="flex" flexDirection="column" alignItems="left" justifyContent="left">
                   <Box display="flex" alignItems="center">
