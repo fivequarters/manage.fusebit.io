@@ -2,9 +2,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useMediaQuery } from '@material-ui/core';
 import { useCopy } from '../../../hooks/useCopy';
-import { useAuthContext } from '../../../hooks/useAuthContext';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
-import { useAccountIntegrationsGetOne } from '../../../hooks/api/v2/account/integration/useGetOne';
 import { useBackendUpdateOne } from '../../../hooks/api/v1/backend/useUpdateOne';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
@@ -23,7 +21,6 @@ export interface Props {
 const useConnect = ({ onClose, disableCopy, keyIsCopied, showWarning, name, setShowWarning, onChange, id }: Props) => {
   const { id: integrationId } = useParams<{ id: string }>();
   const { getRedirectLink } = useGetRedirectLink();
-  const { userData } = useAuthContext();
   const [editMode, setEditMode] = useState(false);
   const [editedBackendClientId, setEditedBackendClientId] = useState(name);
   const [backendClientId, setBackendClientId] = useState(name);
@@ -36,13 +33,6 @@ const useConnect = ({ onClose, disableCopy, keyIsCopied, showWarning, name, setS
 
   const integrationBaseUrl = `${REACT_APP_FUSEBIT_DEPLOYMENT}/v2${getRedirectLink(`/integration/${integrationId}`)}`;
   const { mutateAsync: updateBackend } = useBackendUpdateOne();
-
-  const { data: integrationData } = useAccountIntegrationsGetOne({
-    enabled: userData.token,
-    id: integrationId,
-    accountId: userData.accountId,
-    subscriptionId: userData.subscriptionId,
-  });
 
   const handleClose = () => {
     if (disableCopy) {
@@ -72,25 +62,9 @@ const useConnect = ({ onClose, disableCopy, keyIsCopied, showWarning, name, setS
     setEditMode(false);
   };
 
-  const supportedTypeMap: Record<string, string> = {
-    slackConnector: 'slack',
-  };
-  const componentMap =
-    integrationData?.data.data?.components
-      ?.map((component) => supportedTypeMap[component.name])
-      .filter((type) => !!type)
-      .reduce<Record<string, string>>((acc, cur) => {
-        acc[cur] = integrationData?.data.id;
-        return acc;
-      }, {}) || {};
-  const isSampleAppEnabled = !!Object.keys(componentMap).length;
-
   return {
-    isSampleAppEnabled,
     integrationBaseUrl,
-    integrationData,
     integrationId,
-    componentMap,
     handleClose,
     handleSave,
     handleCancel,

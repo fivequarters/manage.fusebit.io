@@ -3,13 +3,15 @@ import { signJwt } from './jwt';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT, REACT_APP_SAMPLE_APP_URL, REACT_APP_SAMPLE_APP_KEY } = process.env;
 
-export async function createSampleAppClientUrl(user: User, integrations: Record<string, string>): Promise<string> {
+export async function createSampleAppClientUrl(
+  user: User,
+  enabledIntegrations?: Record<string, string>
+): Promise<string> {
   const { accountId, subscriptionId, token } = user;
   const url = new URL(`${REACT_APP_SAMPLE_APP_URL}`);
 
   const configuration = {
-    SLACK_INTEGRATION_ID: integrations.slack,
-    HUBSPOT_INTEGRATION_ID: undefined,
+    ...enabledIntegrations,
     FUSEBIT_INTEGRATION_URL: `${REACT_APP_FUSEBIT_DEPLOYMENT}/v2/account/${accountId}/subscription/${subscriptionId}/integration`,
     FUSEBIT_JWT: token,
   };

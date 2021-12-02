@@ -6,9 +6,9 @@ import CopyLine from '@components/common/CopyLine';
 import { Integration } from '@interfaces/integration';
 import styled from 'styled-components';
 import disclaimer from '@assets/disclaimer.svg';
-import time from '@assets/time.svg';
 import warning from '@assets/black-warning.svg';
-import { LinkSampleApp } from './LinkSampleApp';
+import { trackEvent } from '@utils/analytics';
+import FooterActions from './FooterActions';
 import useConnect, { Props as UseConnectProps } from './useConnect';
 
 const StyledWrapper = styled.div`
@@ -81,23 +81,6 @@ const StyledDisclaimerIcon = styled.div`
   background-repeat: no-repeat;
 `;
 
-const StyledTimeIcon = styled.div`
-  height: 14px;
-  width: 14px;
-  background-image: url(${time});
-  background-size: contain;
-  background-repeat: no-repeat;
-`;
-
-const StyledTimeDescription = styled.p<{ margin?: string }>`
-  font-size: 12px;
-  line-height: 16px;
-  font-weight: 300;
-  color: var(--black);
-  margin-left: 10px;
-  margin: ${(props) => props.margin && props.margin};
-`;
-
 const StyledCopySuccess = styled.p<{ copy: boolean }>`
   position: absolute;
   bottom: -35px;
@@ -160,6 +143,7 @@ const Connect: React.FC<Props> = ({
   id,
   name,
   token,
+  integration,
   onClose,
   onChange,
   onDelete,
@@ -171,7 +155,6 @@ const Connect: React.FC<Props> = ({
 }) => {
   const {
     backendClientId,
-    componentMap,
     copiedLine,
     editMode,
     editedBackendClientId,
@@ -180,7 +163,6 @@ const Connect: React.FC<Props> = ({
     handleCopy,
     handleSave,
     integrationBaseUrl,
-    isSampleAppEnabled,
     saving,
     setEditMode,
     setEditedBackendClientId,
@@ -198,30 +180,6 @@ const Connect: React.FC<Props> = ({
     showWarning,
   });
 
-  const getButtonSize = (() => {
-    if (smallPhone && isSampleAppEnabled) {
-      return 'small';
-    }
-
-    if (buttonsCrashing) {
-      return 'medium';
-    }
-
-    return 'large';
-  })();
-
-  const getTimeDescriptionWidth = (() => {
-    if (smallPhone) {
-      return '140px';
-    }
-
-    if (buttonsCrashing) {
-      return '165px';
-    }
-
-    return '100%';
-  })();
-
   const getMainButtonWidth = (() => {
     if (smallPhone) {
       return '136px';
@@ -233,6 +191,13 @@ const Connect: React.FC<Props> = ({
 
     return '200px';
   })();
+
+  const enterEditMode = () => {
+    trackEvent('Backend Edit Name Button Clicked', 'My Application', {
+      Integration: integration?.tags['fusebit.feedId'],
+    });
+    setEditMode(true);
+  };
 
   return (
     <StyledWrapper>
@@ -252,7 +217,7 @@ const Connect: React.FC<Props> = ({
             <StyledSmallTitle>&nbsp; {backendClientId}</StyledSmallTitle>
             <Button
               style={{ marginLeft: '24px' }}
-              onClick={() => setEditMode(true)}
+              onClick={() => enterEditMode()}
               variant="outlined"
               color="primary"
               size="small"
@@ -329,56 +294,8 @@ const Connect: React.FC<Props> = ({
       )}
 
       <StyledSubtitle margin="32px auto">Connect your Backend</StyledSubtitle>
-      <Box display="flex" flexDirection="column">
-        <Box
-          display="flex"
-          alignItems={!isSampleAppEnabled && 'center'}
-          justifyContent={!isSampleAppEnabled && 'center'}
-        >
-          <Box display="flex" flexDirection="column">
-            <Button
-              style={{ width: buttonsCrashing ? 'fit-content' : '293px' }}
-              target="_blank"
-              rel="noopener"
-              href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
-              variant="outlined"
-              color="primary"
-              size={getButtonSize}
-            >
-              Follow guide
-            </Button>
-            <Box display="flex" alignItems="center" justifyContent={!isSampleAppEnabled && 'center'}>
-              <StyledTimeIcon />
-              <StyledTimeDescription>10 minutes</StyledTimeDescription>
-            </Box>
-          </Box>
-          {isSampleAppEnabled && (
-            <>
-              <Box display="flex" margin={smallPhone ? '5px auto auto' : '10.5px auto auto'}>
-                or
-              </Box>
-              <Box display="flex" flexDirection="column">
-                <LinkSampleApp
-                  buttonsSize={getButtonSize}
-                  buttonsCrashing={buttonsCrashing}
-                  componentMap={componentMap}
-                />
-                <Box display="flex" flexDirection="column" alignItems="left" justifyContent="left">
-                  <Box display="flex" alignItems="center">
-                    <StyledTimeIcon />
-                    <StyledTimeDescription>2 minutes.</StyledTimeDescription>
-                  </Box>
-                  <Box maxWidth={getTimeDescriptionWidth}>
-                    <StyledTimeDescription margin="0">
-                      Already configured to work with this integration
-                    </StyledTimeDescription>
-                  </Box>
-                </Box>
-              </Box>
-            </>
-          )}
-        </Box>
-      </Box>
+      <FooterActions smallPhone={smallPhone} buttonsCrashing={buttonsCrashing} integration={integration} />
+
       <Box
         display="flex"
         alignItems="center"

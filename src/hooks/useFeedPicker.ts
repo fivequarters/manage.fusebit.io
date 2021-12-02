@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { ValidationMode } from '@jsonforms/core';
 import debounce from 'lodash.debounce';
 import { useMediaQuery } from '@material-ui/core';
@@ -6,7 +6,7 @@ import { Feed, ParsedFeed } from '@interfaces/feed';
 import { trackEvent } from '@utils/analytics';
 import { Data } from '@interfaces/feedPicker';
 import orderBy from 'lodash.orderby';
-import { integrationsFeed, connectorsFeed } from '../static/feed';
+import { useQueryClient } from 'react-query';
 import useFilterFeed from './useFilterFeed';
 import { useQuery } from './useQuery';
 import { useReplaceMustache } from './useReplaceMustache';
@@ -18,9 +18,7 @@ interface Props {
   open: boolean;
 }
 
-const useFeed = ({ isIntegration, onSubmit, onClose, open }: Props) => {
-  const [feed, setFeed] = useState<Feed[]>([]);
-  const [loading, setLoading] = useState(false);
+const useFeedPicker = ({ isIntegration, onSubmit, onClose, open }: Props) => {
   const query = useQuery();
   const [rawActiveTemplate, setRawActiveTemplate] = React.useState<Feed>();
   const [errors, setErrors] = React.useState<object[]>([]);
@@ -28,52 +26,54 @@ const useFeed = ({ isIntegration, onSubmit, onClose, open }: Props) => {
   const [data, setData] = React.useState<any>({});
   const { replaceMustache } = useReplaceMustache();
   const [activeTemplate, setActiveTemplate] = React.useState<ParsedFeed>();
-  const filtedFeed = useFilterFeed({ feed });
   const isMobile = useMediaQuery('max-width: 1100px');
 
   const feedTypeName = isIntegration ? 'Integration' : 'Connector';
 
+  const queryClient = useQueryClient();
+
+  const feed = useMemo(
+    () =>
+      isIntegration
+        ? queryClient.getQueryData<Feed[]>('getIntegrationsFeed') || []
+        : queryClient.getQueryData<Feed[]>('getConnectorsFeed') || [],
+    [isIntegration, queryClient]
+  );
+
   useEffect(() => {
-    const key = query.get('key');
+    if (feed.length > 0) {
+      const key = query.get('key');
 
-    setLoading(true);
-
-    (isIntegration ? integrationsFeed() : connectorsFeed())
-      .then((_feed) => {
-        setFeed(_feed);
-        for (let i = 0; i < _feed.length; i++) {
-          if (_feed[i].id === key) {
-            // When explicitly loading an entry, remove the private designation so that it shows up in the
-            // middle list.
-            delete _feed[i].private;
-            setRawActiveTemplate(_feed[i]);
-            replaceMustache(data, _feed[i]).then((template) => setActiveTemplate(template));
-            return;
-          }
+      for (let i = 0; i < (feed || []).length; i++) {
+        if ((feed || [])[i].id === key) {
+          // When explicitly loading an entry, remove the private designation so that it shows up in the
+          // middle list.
+          delete feed[i].private;
+          setRawActiveTemplate(feed[i]);
+          replaceMustache(data, feed[i]).then((template) => setActiveTemplate(template));
+          return;
         }
+      }
 
-        setRawActiveTemplate(_feed[0]);
-        replaceMustache(data, _feed[0]).then((template) => {
-          setActiveTemplate(template);
-          setImmediate(() => {
-            trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
-              [feedTypeName.toLowerCase()]: template.id,
-              [`${feedTypeName.toLowerCase()}Default`]: true,
-            });
+      setRawActiveTemplate(feed[0]);
+      replaceMustache(data, feed[0]).then((template) => {
+        setActiveTemplate(template);
+        setImmediate(() => {
+          trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
+            [feedTypeName.toLowerCase()]: template.id,
+            [`${feedTypeName.toLowerCase()}Default`]: true,
           });
         });
-      })
-      .catch((error) => {
-        // eslint-disable-next-line no-console
-        console.log(error);
-      })
-      .finally(() => {
-        setLoading(false);
       });
-
-    return () => {};
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isIntegration, open]);
+  }, [isIntegration, open, feed]);
+
+  const filteredFeed = useFilterFeed({ feed });
+
+  const isLoading = isIntegration
+    ? queryClient.getQueryState('getIntegrationsFeed')?.status === 'loading'
+    : queryClient.getQueryState('getConnectorsFeed')?.status === 'loading';
 
   const debouncedSetSearchFilter = debounce((keyword: string) => {
     if (isIntegration) {
@@ -81,7 +81,7 @@ const useFeed = ({ isIntegration, onSubmit, onClose, open }: Props) => {
     } else {
       trackEvent('New Connector Search Submitted', 'Connectors');
     }
-    filtedFeed.setSearchFilter(keyword.trim());
+    filteredFeed.setSearchFilter(keyword.trim());
   }, 500);
 
   const handleAdd = () => {
@@ -131,7 +131,7 @@ const useFeed = ({ isIntegration, onSubmit, onClose, open }: Props) => {
     } else {
       trackEvent('New Connector Catalog Clicked', 'Connectors', { tag: filter });
     }
-    filtedFeed.setActiveFilter(filter);
+    filteredFeed.setActiveFilter(filter);
   };
 
   const handleJsonFormsChange = ({ errors: _errors, data: _data }: { errors: any; data: any }) => {
@@ -180,15 +180,13 @@ const useFeed = ({ isIntegration, onSubmit, onClose, open }: Props) => {
     activeTemplate,
     setActiveTemplate,
     handleTemplateChange,
-    feed,
-    setFeed,
-    loading,
+    loading: isLoading,
     handleSubmit,
     feedTypeName,
-    ...filtedFeed,
+    ...filteredFeed,
     isMobile,
     orderAlpha,
   };
 };
 
-export default useFeed;
+export default useFeedPicker;
