@@ -1,17 +1,34 @@
 import React from 'react';
 import { Box, Button } from '@material-ui/core';
+import { trackEvent } from '@utils/analytics';
+import { Integration } from '@interfaces/integration';
 import useSampleApp from '@hooks/useSampleApp';
-import { StyledTimeDescription, StyledTimeIcon } from './mixins';
+import { StyledTimeIcon, StyledTimeDescription } from './mixins';
 
 interface IProps {
   id?: string;
   buttonsCrashing?: boolean;
   buttonsSize?: 'small' | 'medium' | 'large';
-  smallPhone: boolean;
+  integration?: Integration;
   timeDescriptionWidth: string;
+  smallPhone: boolean;
 }
 
-export const LinkSampleApp: React.FC<IProps> = ({ buttonsCrashing, buttonsSize, smallPhone, timeDescriptionWidth }) => {
+const openSampleApp = (url: string, integration?: Integration) => {
+  trackEvent('Run Sample App Button Clicked', 'My Application', { Integration: integration?.tags['fusebit.feedId'] });
+  const sampleAppTab = window.open() as Window;
+  sampleAppTab.opener = null;
+  sampleAppTab.location.href = url;
+  sampleAppTab.focus();
+};
+
+export const LinkSampleApp: React.FC<IProps> = ({
+  buttonsCrashing,
+  buttonsSize,
+  integration,
+  timeDescriptionWidth,
+  smallPhone,
+}) => {
   const { url } = useSampleApp();
 
   return url ? (
@@ -22,9 +39,9 @@ export const LinkSampleApp: React.FC<IProps> = ({ buttonsCrashing, buttonsSize, 
       <Box display="flex" flexDirection="column">
         <Button
           style={{ width: buttonsCrashing ? 'fit-content' : '293px' }}
-          target="_blank"
-          rel="noopener"
-          href={url}
+          onClick={() => {
+            openSampleApp(url, integration);
+          }}
           variant="outlined"
           color="primary"
           size={buttonsSize || 'large'}
@@ -42,5 +59,7 @@ export const LinkSampleApp: React.FC<IProps> = ({ buttonsCrashing, buttonsSize, 
         </Box>
       </Box>
     </>
-  ) : null;
+  ) : (
+    <></>
+  );
 };

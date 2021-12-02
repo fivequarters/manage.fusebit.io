@@ -116,7 +116,16 @@ const ConfigureForm: React.FC = () => {
               <InformationalBanner>
                 By default, Connectors use Fusebit demonstration credentials, which are intended for testing only. When
                 you are ready for production use, supply your own credentials below, as described in{' '}
-                <a target="_blank" rel="noreferrer" href={configureAppDocUrl}>
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  href={configureAppDocUrl}
+                  onClick={() => {
+                    trackEvent('Docs In This Guide Link Clicked', 'Connector', {
+                      Connector: connectorData?.data.tags['fusebit.feedId'],
+                    });
+                  }}
+                >
                   this guide
                 </a>
                 .
@@ -139,6 +148,22 @@ const ConfigureForm: React.FC = () => {
                 ) {
                   newData.clientId = '';
                   newData.clientSecret = '';
+                }
+
+                if (data && data.mode?.useProduction !== newData.mode?.useProduction && newData.mode?.useProduction) {
+                  trackEvent('Enable Production Credentials Clicked', 'Connector', {
+                    Connector: connectorData?.data.tags['fusebit.feedId'],
+                    State: 'On',
+                  });
+                } else if (
+                  data &&
+                  data.mode?.useProduction !== newData.mode?.useProduction &&
+                  newData.mode?.useProduction === false
+                ) {
+                  trackEvent('Enable Production Credentials Clicked', 'Connector', {
+                    Connector: connectorData?.data.tags['fusebit.feedId'],
+                    State: 'Off',
+                  });
                 }
 
                 if (

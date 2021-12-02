@@ -1,3 +1,5 @@
+import { Integration } from '@interfaces/integration';
+import { trackEvent } from '@utils/analytics';
 import styled from 'styled-components';
 
 export const StyledLink = styled.a`
@@ -39,9 +41,10 @@ export const StyledBullet = styled.div`
 
 interface Props {
   links: ('connectingFusebit' | 'gettingStarted' | 'programmingModel')[];
+  integration?: Integration;
 }
 
-const FooterLinks = ({ links }: Props) => {
+const FooterLinks = ({ links, integration }: Props) => {
   return (
     <>
       {links.includes('connectingFusebit') && (
@@ -49,13 +52,27 @@ const FooterLinks = ({ links }: Props) => {
           target="_blank"
           rel="noopener_noreferrer"
           href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
+          onClick={() =>
+            trackEvent('Docs Connect Fusebit Link Clicked', 'Integration', {
+              Integration: integration?.tags['fusebit.feedId'],
+            })
+          }
         >
           <StyledBullet />
           Connecting Fusebit with Your Application
         </StyledLink>
       )}
       {links.includes('gettingStarted') && (
-        <StyledLink target="_blank" rel="noopener_noreferrer" href="https://developer.fusebit.io/docs/getting-started">
+        <StyledLink
+          target="_blank"
+          onClick={() =>
+            trackEvent('Docs Getting Started Link Clicked', 'Integration', {
+              Integration: integration?.tags['fusebit.feedId'],
+            })
+          }
+          rel="noopener_noreferrer"
+          href="https://developer.fusebit.io/docs/getting-started"
+        >
           <StyledBullet />
           Getting Started
         </StyledLink>
@@ -64,6 +81,11 @@ const FooterLinks = ({ links }: Props) => {
         <StyledLink
           target="_blank"
           rel="noopener_noreferrer"
+          onClick={() =>
+            trackEvent('Docs Programming Model Link Clicked', 'Integration', {
+              Integration: integration?.tags['fusebit.feedId'],
+            })
+          }
           href="https://developer.fusebit.io/docs/integration-programming-model"
         >
           <StyledBullet />

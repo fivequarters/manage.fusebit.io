@@ -7,6 +7,7 @@ import { Integration } from '@interfaces/integration';
 import styled from 'styled-components';
 import disclaimer from '@assets/disclaimer.svg';
 import warning from '@assets/black-warning.svg';
+import { trackEvent } from '@utils/analytics';
 import { LinkSampleApp } from './LinkSampleApp';
 import useConnect, { Props as UseConnectProps } from './useConnect';
 import { StyledTimeIcon, StyledTimeDescription } from './mixins';
@@ -143,6 +144,7 @@ const Connect: React.FC<Props> = ({
   id,
   name,
   token,
+  integration,
   onClose,
   onChange,
   onDelete,
@@ -216,6 +218,13 @@ const Connect: React.FC<Props> = ({
     return '200px';
   })();
 
+  const enterEditMode = () => {
+    trackEvent('Backend Edit Name Button Clicked', 'My Application', {
+      Integration: integration?.tags['fusebit.feedId'],
+    });
+    setEditMode(true);
+  };
+
   return (
     <StyledWrapper>
       {isMobile && (
@@ -234,7 +243,7 @@ const Connect: React.FC<Props> = ({
             <StyledSmallTitle>&nbsp; {backendClientId}</StyledSmallTitle>
             <Button
               style={{ marginLeft: '24px' }}
-              onClick={() => setEditMode(true)}
+              onClick={() => enterEditMode()}
               variant="outlined"
               color="primary"
               size="small"
@@ -326,6 +335,11 @@ const Connect: React.FC<Props> = ({
               variant="outlined"
               color="primary"
               size={getButtonSize}
+              onClick={() => {
+                trackEvent('Backend Docs Follow Guide Button Clicked', 'My Application', {
+                  Integration: integration?.tags['fusebit.feedId'],
+                });
+              }}
             >
               Follow guide
             </Button>
@@ -339,6 +353,7 @@ const Connect: React.FC<Props> = ({
             buttonsCrashing={buttonsCrashing}
             smallPhone={smallPhone}
             timeDescriptionWidth={getTimeDescriptionWidth}
+            integration={integration}
           />
         </Box>
       </Box>

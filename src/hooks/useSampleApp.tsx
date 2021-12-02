@@ -12,10 +12,10 @@ const useSampleApp = () => {
   const queryClient = useQueryClient();
   const { userData } = useAuthContext();
   const integration = useGetIntegrationFromCache();
+  const feed = queryClient.getQueryData<Feed[]>('getIntegrationsFeed');
+  const integrationFeed = (feed || []).find((i) => i.id === integration?.data.tags['fusebit.feedId']);
 
   useEffect(() => {
-    const feed = queryClient.getQueryData<Feed[]>('getIntegrationsFeed');
-    const integrationFeed = (feed || []).find((i) => i.id === integration?.data.tags['fusebit.feedId']);
     const config: Record<string, string> = {};
     const isEnabled =
       integrationFeed?.sampleConfig?.isEnabled || DEFAULT_ENABLED_APPS.includes(integrationFeed?.id || '');
@@ -28,9 +28,11 @@ const useSampleApp = () => {
 
       getSampleAppUrl();
     }
-  }, [integration, queryClient, userData]);
+  }, [integration, queryClient, userData, integrationFeed, feed]);
 
   return {
+    isSampleAppEnabled:
+      integrationFeed?.sampleConfig?.isEnabled || DEFAULT_ENABLED_APPS.includes(integrationFeed?.id || ''),
     url,
   };
 };

@@ -14,23 +14,29 @@ import useTitle from '@hooks/useTitle';
 const IntegrationDetailDevelopPage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
   const { userData } = useAuthContext();
-  const { isLoading } = useAccountIntegrationsGetOne<Integration>({
+  const { isLoading, data } = useAccountIntegrationsGetOne<Integration>({
     enabled: userData.token,
     id,
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
   });
+
   const { getRedirectLink } = useGetRedirectLink();
 
   useTrackPage('Integration Develop', 'Integration');
   useTitle(id);
+
+  const integration = data?.data;
 
   return (
     <Layout>
       <IntegrationsNavbar />
       <TabComponent
         tabNames={['Develop', 'Installs']}
-        tabObjects={[<Diagram key="diagram" isLoading={isLoading} />, getRedirectLink(`/integration/${id}/installs`)]}
+        tabObjects={[
+          <Diagram key="diagram" isLoading={isLoading} integration={integration} />,
+          getRedirectLink(`/integration/${id}/installs`),
+        ]}
       />
     </Layout>
   );
