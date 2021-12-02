@@ -82,6 +82,15 @@ const MobileDrawer = ({ open, onClose, integrationId }: Props) => {
     }
   }, [isMounted, open, createLoader]);
 
+  useEffect(() => {
+    if (logs.length > 0) {
+      const mobileLog = document.getElementById('mobile-log');
+      if (mobileLog) {
+        mobileLog.scrollTop = mobileLog.scrollHeight;
+      }
+    }
+  }, [logs]);
+
   const handleLogClear = () => {
     setLogs([]);
   };
@@ -138,7 +147,9 @@ const MobileDrawer = ({ open, onClose, integrationId }: Props) => {
             </Button>
             <StyledGuiMobileNotSupportedWrapper>
               <StyledGuiMobileNotSupportedIcon src={info} alt="not supported" height="16" width="16" />
-              <StyledGuiMobileNotSupportedText>Editing is not supported on this device</StyledGuiMobileNotSupportedText>
+              <StyledGuiMobileNotSupportedText>
+                Editing is currently only available on desktop mode
+              </StyledGuiMobileNotSupportedText>
             </StyledGuiMobileNotSupportedWrapper>
           </StyledGuiMobileWrapper>
           <StyledLogWrapper padding="21px 30px 0">
@@ -149,6 +160,7 @@ const MobileDrawer = ({ open, onClose, integrationId }: Props) => {
               </Box>
             </Box>
             <StyledLog
+              id="mobile-log"
               fontSize="10px"
               lineHeight="11.5px"
               fontFamily="Courier"
