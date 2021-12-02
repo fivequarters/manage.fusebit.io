@@ -19,8 +19,12 @@ const useSampleApp = () => {
     const config: Record<string, string> = {};
     const isEnabled =
       integrationFeed?.resources?.sampleConfig?.isEnabled || DEFAULT_ENABLED_APPS.includes(integrationFeed?.id || '');
+    let isMounted = true;
     const getSampleAppUrl = async () => {
-      setUrl(await createSampleAppClientUrl(userData, config));
+      const sampleAppClientUrl = await createSampleAppClientUrl(userData, config);
+      if (isMounted) {
+        setUrl(sampleAppClientUrl);
+      }
     };
 
     if (isEnabled) {
@@ -28,6 +32,10 @@ const useSampleApp = () => {
 
       getSampleAppUrl();
     }
+
+    return () => {
+      isMounted = false;
+    };
   }, [integration, queryClient, userData]);
 
   return {
