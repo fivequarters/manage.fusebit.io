@@ -18,7 +18,7 @@ const useSampleApp = () => {
     const integrationFeed = (feed || []).find((i) => i.id === integration?.data.tags['fusebit.feedId']);
     const config: Record<string, string> = {};
     const isEnabled =
-      integrationFeed?.sampleConfig?.isEnabled || DEFAULT_ENABLED_APPS.includes(integrationFeed?.id || '');
+      integrationFeed?.resources?.sampleConfig?.isEnabled || DEFAULT_ENABLED_APPS.includes(integrationFeed?.id || '');
     const getSampleAppUrl = async () => {
       setUrl(await createSampleAppClientUrl(userData, config));
     };
