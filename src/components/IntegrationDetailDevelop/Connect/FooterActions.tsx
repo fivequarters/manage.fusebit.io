@@ -19,7 +19,7 @@ const openSampleApp = (url: string, integration?: Integration) => {
   sampleAppTab.focus();
 };
 
-export const FooterActions: React.FC<IProps> = ({ buttonsCrashing, integration, smallPhone }) => {
+const FooterActions: React.FC<IProps> = ({ buttonsCrashing, integration, smallPhone }) => {
   const { url } = useSampleApp();
 
   const getButtonSize = (() => {
@@ -106,3 +106,5 @@ export const FooterActions: React.FC<IProps> = ({ buttonsCrashing, integration, 
     </Box>
   );
 };
+
+export default FooterActions;

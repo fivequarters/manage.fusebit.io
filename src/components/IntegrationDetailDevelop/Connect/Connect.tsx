@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import disclaimer from '@assets/disclaimer.svg';
 import warning from '@assets/black-warning.svg';
 import { trackEvent } from '@utils/analytics';
-import { FooterActions } from './LinkSampleApp';
+import FooterActions from './FooterActions';
 import useConnect, { Props as UseConnectProps } from './useConnect';
 
 const StyledWrapper = styled.div`
