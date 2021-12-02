@@ -6,10 +6,10 @@ import CopyLine from '@components/common/CopyLine';
 import { Integration } from '@interfaces/integration';
 import styled from 'styled-components';
 import disclaimer from '@assets/disclaimer.svg';
-import time from '@assets/time.svg';
 import warning from '@assets/black-warning.svg';
 import { LinkSampleApp } from './LinkSampleApp';
 import useConnect, { Props as UseConnectProps } from './useConnect';
+import { StyledTimeIcon, StyledTimeDescription } from './mixins';
 
 const StyledWrapper = styled.div`
   display: flex;
@@ -79,23 +79,6 @@ const StyledDisclaimerIcon = styled.div`
   background-image: url(${disclaimer});
   background-size: contain;
   background-repeat: no-repeat;
-`;
-
-const StyledTimeIcon = styled.div`
-  height: 14px;
-  width: 14px;
-  background-image: url(${time});
-  background-size: contain;
-  background-repeat: no-repeat;
-`;
-
-const StyledTimeDescription = styled.p<{ margin?: string }>`
-  font-size: 12px;
-  line-height: 16px;
-  font-weight: 300;
-  color: var(--black);
-  margin-left: 10px;
-  margin: ${(props) => props.margin && props.margin};
 `;
 
 const StyledCopySuccess = styled.p<{ copy: boolean }>`
@@ -171,7 +154,6 @@ const Connect: React.FC<Props> = ({
 }) => {
   const {
     backendClientId,
-    componentMap,
     copiedLine,
     editMode,
     editedBackendClientId,
@@ -352,31 +334,12 @@ const Connect: React.FC<Props> = ({
               <StyledTimeDescription>10 minutes</StyledTimeDescription>
             </Box>
           </Box>
-          {isSampleAppEnabled && (
-            <>
-              <Box display="flex" margin={smallPhone ? '5px auto auto' : '10.5px auto auto'}>
-                or
-              </Box>
-              <Box display="flex" flexDirection="column">
-                <LinkSampleApp
-                  buttonsSize={getButtonSize}
-                  buttonsCrashing={buttonsCrashing}
-                  componentMap={componentMap}
-                />
-                <Box display="flex" flexDirection="column" alignItems="left" justifyContent="left">
-                  <Box display="flex" alignItems="center">
-                    <StyledTimeIcon />
-                    <StyledTimeDescription>2 minutes.</StyledTimeDescription>
-                  </Box>
-                  <Box maxWidth={getTimeDescriptionWidth}>
-                    <StyledTimeDescription margin="0">
-                      Already configured to work with this integration
-                    </StyledTimeDescription>
-                  </Box>
-                </Box>
-              </Box>
-            </>
-          )}
+          <LinkSampleApp
+            buttonsSize={getButtonSize}
+            buttonsCrashing={buttonsCrashing}
+            smallPhone={smallPhone}
+            timeDescriptionWidth={getTimeDescriptionWidth}
+          />
         </Box>
       </Box>
       <Box

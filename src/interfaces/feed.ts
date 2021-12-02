@@ -75,6 +75,20 @@ export interface Feed {
     entities: Record<string, Entity>;
     components?: EntityComponent[];
   };
+  sampleConfig?: {
+    isEnabled?: boolean;
+    isGetEnabled?: boolean;
+    isPostEnabled?: boolean;
+    texts?: {
+      postSuccess?: string;
+      itemName?: string;
+      itemNamePlural?: string;
+      fields?: string[];
+      columns?: string[];
+      postFail?: string;
+      getFail?: string;
+    };
+  };
 }
 
 export type ParsedFeed = Omit<Feed, 'configuration'> & {

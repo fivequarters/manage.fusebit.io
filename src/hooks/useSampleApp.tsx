@@ -1,36 +1,39 @@
-import { useParams } from 'react-router-dom';
-import { useAccountIntegrationsGetOne } from './api/v2/account/integration/useGetOne';
+import { Feed } from '@interfaces/feed';
+import { createSampleAppClientUrl } from '@utils/backendClients';
+import { useEffect, useState } from 'react';
+import { useQueryClient } from 'react-query';
 import { useAuthContext } from './useAuthContext';
+import { useGetIntegrationFromCache } from './useGetIntegrationFromCache';
+
+const DEFAULT_ENABLED_APPS = ['slack-bot'];
 
 const useSampleApp = () => {
-  const { id: integrationId } = useParams<{ id: string }>();
+  const [url, setUrl] = useState('');
+  const queryClient = useQueryClient();
   const { userData } = useAuthContext();
+  const integration = useGetIntegrationFromCache();
+  const feed = queryClient.getQueryData<Feed[]>('getIntegrationsFeed');
+  const integrationFeed = (feed || []).find((i) => i.id === integration?.data.tags['fusebit.feedId']);
 
-  const { data: integrationData } = useAccountIntegrationsGetOne({
-    enabled: userData.token,
-    id: integrationId,
-    accountId: userData.accountId,
-    subscriptionId: userData.subscriptionId,
-  });
+  useEffect(() => {
+    const config: Record<string, string> = {};
+    const isEnabled =
+      integrationFeed?.sampleConfig?.isEnabled || DEFAULT_ENABLED_APPS.includes(integrationFeed?.id || '');
+    const getSampleAppUrl = async () => {
+      setUrl(await createSampleAppClientUrl(userData, config));
+    };
 
-  const supportedTypeMap: Record<string, string> = {
-    slackConnector: 'slack',
-  };
+    if (isEnabled) {
+      config[`${integrationFeed?.id}_INTEGRATION_ID`.replaceAll('-', '_').toUpperCase()] = integration?.data.id || '';
 
-  const componentMap =
-    integrationData?.data.data?.components
-      ?.map((component) => supportedTypeMap[component.name])
-      .filter((type) => !!type)
-      .reduce<Record<string, string>>((acc, cur) => {
-        acc[cur] = integrationData?.data.id;
-        return acc;
-      }, {}) || {};
-
-  const isSampleAppEnabled = !!Object.keys(componentMap).length;
+      getSampleAppUrl();
+    }
+  }, [integration, queryClient, userData, integrationFeed, feed]);
 
   return {
-    isSampleAppEnabled,
-    componentMap,
+    isSampleAppEnabled:
+      integrationFeed?.sampleConfig?.isEnabled || DEFAULT_ENABLED_APPS.includes(integrationFeed?.id || ''),
+    url,
   };
 };
 
