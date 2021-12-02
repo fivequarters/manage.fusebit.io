@@ -48,7 +48,22 @@ export interface Feed {
     catalog: string;
   };
   resources: {
-    configureAppDocUrl: string;
+    configureAppDocUrl?: string;
+    sampleConfig?: {
+      isEnabled?: boolean;
+      isGetEnabled?: boolean;
+      isPostEnabled?: boolean;
+      terms: {
+        postSuccess?: string;
+        postFail?: string;
+        getFail?: string;
+        itemName?: string;
+        properties?: {
+          name?: string;
+          label?: string;
+        }[];
+      };
+    };
   };
   configuration: {
     title: string;

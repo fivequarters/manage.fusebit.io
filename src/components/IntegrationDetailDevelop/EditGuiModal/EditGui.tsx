@@ -23,7 +23,6 @@ import clock from '@assets/clock.svg';
 import playEditor from '@assets/play-editor.svg';
 import add from '@assets/add.svg';
 import CloseIcon from '@material-ui/icons/Close';
-import useSampleApp from '@hooks/useSampleApp';
 import { useAccountIntegrationsGetOne } from '@hooks/api/v2/account/integration/useGetOne';
 import { EditGuiSampleApp } from './EditGuiSampleApp';
 
@@ -289,7 +288,6 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     isMounted,
   });
   const [dirtyState, setDirtyState] = useState(false);
-  const { componentMap, isSampleAppEnabled } = useSampleApp();
 
   const { data: integrationResponse } = useAccountIntegrationsGetOne({
     enabled: userData.token,
@@ -429,11 +427,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
             </ButtonGroup>
             <h3>{integrationId}</h3>
             <StyledActionsHelpWrapper>
-              {isSampleAppEnabled && (
-                <StyledActionsHelpLink target="_blank">
-                  <EditGuiSampleApp componentMap={componentMap} />
-                </StyledActionsHelpLink>
-              )}
+              <EditGuiSampleApp />
               <StyledActionsHelpLink
                 target="_blank"
                 href="https://developer.fusebit.io/docs/developing-locally"
