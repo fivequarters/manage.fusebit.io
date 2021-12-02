@@ -217,7 +217,6 @@ export const useEntityApi = (preventLoader?: boolean) => {
             accountId: userData.accountId,
             subscriptionId: userData.subscriptionId,
           });
-          localStorage.removeItem(ids[i]);
         } else if (type === 'Connector') {
           await deleteConnector.mutateAsync({
             id: ids[i],
