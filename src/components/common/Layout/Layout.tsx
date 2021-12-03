@@ -24,8 +24,8 @@ const Layout: FC<Props> = ({ children }) => {
   const { userData } = useAuthContext();
 
   useEffect(() => {
-    // @ts-ignore
-    if (userData.userId && userData.accountId) {
+    const { pendo } = window as any;
+    if (userData.userId && userData.accountId && pendo) {
       pendo.initialize({
         visitor: {
           id: userData.userId || '', // Required if user is logged in
