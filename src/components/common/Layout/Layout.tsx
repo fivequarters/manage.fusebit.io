@@ -25,7 +25,7 @@ const Layout: FC<Props> = ({ children }) => {
 
   useEffect(() => {
     const { pendo } = window as any;
-    if (userData.userId && userData.accountId && pendo) {
+    if (userData.userId && userData.accountId && pendo && pendo.initialize) {
       pendo.initialize({
         visitor: {
           id: userData.userId || '', // Required if user is logged in
