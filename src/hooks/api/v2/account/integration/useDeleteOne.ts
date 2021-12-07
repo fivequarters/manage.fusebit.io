@@ -15,8 +15,16 @@ export const useAccountIntegrationDeleteIntegration = <T>() => {
     ],
   });
 
-  return useMutation((params: Params) => {
-    const { accountId, subscriptionId, ...data } = params;
-    return axios<T>(`/v2/account/${accountId}/subscription/${subscriptionId}/integration/${data.id}`, 'delete');
-  }, optimisticDelete);
+  return useMutation(
+    (params: Params) => {
+      const { accountId, subscriptionId, ...data } = params;
+      return axios<T>(`/v2/account/${accountId}/subscription/${subscriptionId}/integration/${data.id}`, 'delete');
+    },
+    {
+      ...optimisticDelete,
+      onSuccess: (data, variables: Params) => {
+        localStorage.removeItem(variables.id);
+      },
+    }
+  );
 };

@@ -6,6 +6,9 @@ export interface IntegrationConfig {
     url: string;
     payload: string;
   };
+  session?: {
+    url: string;
+  };
 }
 
 export const DEFAULT_INTEGRATION_CONFIG: IntegrationConfig = {
@@ -14,6 +17,15 @@ export const DEFAULT_INTEGRATION_CONFIG: IntegrationConfig = {
     url: `/api/tenant/${STATIC_TENANT_ID}/test`,
     payload: '{}',
   },
+};
+
+export const storeIntegrationInfo = (integrationId: string, newData: object) => {
+  const previous = JSON.parse(localStorage.getItem(integrationId) || '');
+  localStorage.setItem(integrationId, JSON.stringify({ ...previous, ...newData }));
+};
+
+export const resetIntegrationInfo = (integrationId: string) => {
+  localStorage.setItem(integrationId, JSON.stringify(DEFAULT_INTEGRATION_CONFIG));
 };
 
 export const getIntegrationConfig = (integrationId: string) =>
