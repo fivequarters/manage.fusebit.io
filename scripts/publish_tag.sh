@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=$(cat package.json | jq .version)
+VERSION=$(cat package.json | jq -r .version)
 
 git tag ${VERSION} || true
 
