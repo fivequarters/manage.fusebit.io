@@ -121,14 +121,14 @@ const useEditor = (
 
       storeIntegrationConfig(id, { session: { url: res.data.targetUrl } });
     },
-    [createSesssion, getTenantId, id, integrationData]
+    [createSesssion, getTenantId, id]
   );
 
   const handleLogin = useCallback(() => {
     console.log('HANDLE LOGIN', integrationConfig, integrationConfig.session?.url);
     window.open(integrationConfig.session?.url); // ?.focus();
     resetIntegrationConfig(id, tenantId);
-  }, [id, integrationConfig.session?.url, tenantId]);
+  }, [id, integrationConfig.session?.url, tenantId, integrationConfig.session?.url]);
 
   const handleRun = useCallback(async () => {
     trackEvent('Run Button Clicked', 'Web Editor');

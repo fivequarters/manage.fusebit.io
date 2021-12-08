@@ -30,7 +30,6 @@ import clock from '@assets/clock.svg';
 import playEditor from '@assets/play-editor.svg';
 import add from '@assets/add.svg';
 import CloseIcon from '@material-ui/icons/Close';
-import { useAccountIntegrationsGetOne } from '@hooks/api/v2/account/integration/useGetOne';
 import { useInvalidateIntegration } from '@hooks/useInvalidateIntegration';
 import { EditGuiSampleApp } from './EditGuiSampleApp';
 
