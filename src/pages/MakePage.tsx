@@ -42,7 +42,7 @@ const MakePage: FC<{}> = (): ReactElement => {
             )}
             {!error && (
               <Box pt="50px" width="100%">
-                <h1>Let's create {connectors.map((c) => c.name).join(' + ')} integration!</h1>
+                <h1>Let's create a {connectors.map((c) => c.name).join(' + ')} integration!</h1>
                 <p>With just a few lines of code, you will be able to:</p>
                 <ul>
                   {snippets.map((s) => (

@@ -48,7 +48,6 @@ const useEditor = (
   const { isSaving, errorBuild, setErrorBuild } = useEditorEvents({ isMounted });
   const { createError } = useError();
   const tenantId = getTenantId();
-  const integrationConfig = getIntegrationConfig(id, tenantId);
 
   const findInstall = useCallback(async () => {
     try {
@@ -109,34 +108,28 @@ const useEditor = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enableListener, integrationData, runPending]);
 
-  const handleMissingOrIncompleteInstall = useCallback(
-    async (connectorsWithoutIdentity: string[], install?: Install) => {
-      console.log('HANDLE MISSING OR INCOMPLETE INSTALL', connectorsWithoutIdentity, install);
-      const res = await createSesssion({
-        id,
-        tenantId: getTenantId(),
-        install,
-        components: connectorsWithoutIdentity.length && connectorsWithoutIdentity,
-      });
+  const handleMissingOrIncompleteInstall = async (connectorsWithoutIdentity: string[], install?: Install) => {
+    const res = await createSesssion({
+      id,
+      tenantId: getTenantId(),
+      install,
+      components: connectorsWithoutIdentity.length && connectorsWithoutIdentity,
+    });
 
-      storeIntegrationConfig(id, { session: { url: res.data.targetUrl } });
-    },
-    [createSesssion, getTenantId, id]
-  );
+    storeIntegrationConfig(id, { session: { url: res.data.targetUrl } });
+  };
 
-  const handleLogin = useCallback(() => {
-    console.log('HANDLE LOGIN', integrationConfig, integrationConfig.session?.url);
-    window.open(integrationConfig.session?.url); // ?.focus();
+  const handleLogin = () => {
+    const url = getIntegrationConfig(id, tenantId).session?.url;
+    window.open(url);
     resetIntegrationConfig(id, tenantId);
-  }, [id, integrationConfig.session?.url, tenantId, integrationConfig.session?.url]);
+  };
 
-  const handleRun = useCallback(async () => {
+  const handleRun = async () => {
     trackEvent('Run Button Clicked', 'Web Editor');
 
     try {
-      const url = integrationConfig.session?.url;
-
-      console.log('HANDLE RUN', url, !!onReadyToLogin, id, getTenantId(), integrationConfig, runPending);
+      const url = getIntegrationConfig(id, tenantId).session?.url;
 
       if (url) {
         if (onReadyToLogin) {
@@ -152,10 +145,9 @@ const useEditor = (
       console.log(error);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getTenantId, id, integrationConfig.session?.url]);
+  };
 
-  const handleEdit = useCallback(async () => {
-    console.log('HANDLE EDIT', integrationData, !!onMissingIdentities);
+  const handleEdit = async () => {
     trackEvent('Develop Edit Web Button Clicked', 'Integration');
     try {
       const install = await findInstall();
@@ -194,22 +186,15 @@ const useEditor = (
       // eslint-disable-next-line no-console
       console.log(error);
     }
-  }, [
-    findInstall,
-    handleMissingOrIncompleteInstall,
-    handleRun,
-    integrationData?.data.data.components,
-    onMissingIdentities,
-    onReadyToRun,
-    runPending,
-  ]);
+  };
 
   useEffect(() => {
     if (needsInitialization && integrationData) {
       setNeedsInitialization(false);
       handleEdit();
     }
-  }, [needsInitialization, integrationData, handleEdit]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [needsInitialization, integrationData]);
 
   useEffect(() => {
     if (errorBuild) {

@@ -294,17 +294,10 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const [addSnippetModalOpen, setAddSnippetModalOpen] = useState(false);
   const [missingIdentities, setMissingIdentities] = useState<InnerConnector[] | undefined>(undefined);
   const integrationData = useGetIntegrationFromCache();
-  // const { data: integrationData } = useAccountIntegrationsGetOne({
-  //   enabled: userData.token,
-  //   id: integrationId,
-  //   accountId: userData.accountId,
-  //   subscriptionId: userData.subscriptionId,
-  // });
-  // const integration = integrationData?.data;
   const { handleRun, handleLogin, isFindingInstall, isSaving, setNeedsInitialization, setRunPending } = useEditor({
     integrationData,
     onReadyToLogin: () =>
-      (integrationData?.data.data.components || []).length > 0 ? setLoginFlowModalOpen(true) : handleLogin(),
+      !missingIdentities || missingIdentities.length > 0 ? setLoginFlowModalOpen(true) : handleLogin(),
     onMissingIdentities: setMissingIdentities,
     isMounted,
   });
@@ -359,17 +352,14 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   }, [isMounted, isLoading, createLoader, removeLoader]);
 
   const handleSaveAndRun = async () => {
-    console.log('HANDLE SAVE AND RUN', dirtyState);
     if (dirtyState) {
       const context = window.editor;
       const status: SaveStatus = await context?._server.saveFunction(context);
       if (status.status === 'completed') {
-        console.log('BEFORE INVALIDATE');
         await invalidateIntegration();
         setRunPending(true);
         setNeedsInitialization(true);
         setDirtyState(false);
-        console.log('AFTER INVALIDATE');
       }
     } else {
       handleRun();

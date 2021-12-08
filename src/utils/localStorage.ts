@@ -32,5 +32,6 @@ export const storeIntegrationConfig = (integrationId: string, newData: object) =
 };
 
 export const resetIntegrationConfig = (integrationId: string, tenantId: string) => {
+  // console.log('RESET', integrationId, tenantId);
   localStorage.setItem(integrationId, JSON.stringify(getDefaultIntegrationConfig(tenantId)));
 };

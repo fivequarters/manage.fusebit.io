@@ -47,7 +47,6 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet }: Pr
   );
 
   useEffect(() => {
-    console.log('IN EFFECT', feed);
     if (feed.length > 0) {
       const key = query.get('key');
 
