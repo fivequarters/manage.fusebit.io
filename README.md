@@ -28,6 +28,7 @@ REACT_APP_CONNECTORS_FEED_URL=http://localhost:3000/feed/connectorsFeed.json
 REACT_APP_ENABLE_ONLINE_EDITOR=false
 REACT_APP_SAMPLE_APP_URL=https://task-sample-app.on.fusebit.io
 REACT_APP_SAMPLE_APP_KEY=TheCommonTokenWithTheSampleApp
+REACT_APP_VERSION=develop
 ```
 
 ### Localhost over Production
@@ -44,7 +45,8 @@ REACT_APP_INTEGRATIONS_FEED_URL=http://localhost:3000/feed/integrationsFeed.json
 REACT_APP_CONNECTORS_FEED_URL=http://localhost:3000/feed/connectorsFeed.json
 REACT_APP_ENABLE_ONLINE_EDITOR=false
 REACT_APP_SAMPLE_APP_URL=https://task-sample-app.on.fusebit.io
-REACT_APP_SAMPLE_APP_KEY=TheCommonTokenWithTheSampleApp
+REACT_APP_SAMPLE_APP_KEY=TheCommonTokenWithTheSampleAppr
+REACT_APP_VERSION=develop
 ```
 
 ### Vercel over Production
@@ -59,6 +61,7 @@ REACT_APP_CONNECTORS_FEED_URL=https://portal-fusebit-io.vercel.app/feed/connecto
 REACT_APP_ENABLE_ONLINE_EDITOR=false
 REACT_APP_SAMPLE_APP_URL=https://task-sample-app.on.fusebit.io
 REACT_APP_SAMPLE_APP_KEY=TheCommonTokenWithTheSampleApp
+REACT_APP_VERSION=develop
 ```
 
 ## Running and serving a dev build
