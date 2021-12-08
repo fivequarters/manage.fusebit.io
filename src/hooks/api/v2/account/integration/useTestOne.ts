@@ -6,33 +6,32 @@ import { getIntegrationConfig } from '@utils/localStorage';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
-export const useAccountIntegrationTestIntegration = () => {
+export const useAccountIntegrationTestIntegration = (integrationId: string) => {
   const { axios } = useAxios({ ignoreInterceptors: true });
-  const { userData } = useAuthContext();
+  const { userData, getTenantId } = useAuthContext();
+  const integrationConfig = getIntegrationConfig(integrationId, getTenantId());
 
   const integrationUrl = `/v2/account/${userData.accountId}/subscription/${userData.subscriptionId}/integration`;
 
   return useMutation(
     (params: Params) => {
-      const { id, tenantId } = params;
+      const { tenantId } = params;
       const {
         method = 'post',
         payload,
         url = `/api/tenant/${encodeURIComponent(tenantId)}/test`,
-      } = getIntegrationConfig(id).runner;
-      return axios(`${integrationUrl}/${id}${url}`, method, payload, {
+      } = integrationConfig.runner;
+      return axios(`${integrationUrl}/${integrationId}${url}`, method, payload, {
         'Content-Type': 'application/json',
       });
     },
     {
-      onMutate: (params: Params) => {
-        const { method, url } = getIntegrationConfig(params.id).runner;
+      onMutate: () => {
+        const { method, url } = integrationConfig.runner;
 
         window.editor?.serverLogsEntry(
           JSON.stringify({
-            msg: `Sending ${method.toUpperCase()} request to ${REACT_APP_FUSEBIT_DEPLOYMENT}${integrationUrl}/${
-              params.id
-            }${url}`,
+            msg: `Sending ${method.toUpperCase()} request to ${REACT_APP_FUSEBIT_DEPLOYMENT}${integrationUrl}/${integrationId}${url}`,
             level: 30,
           })
         );

@@ -70,7 +70,7 @@ const IntegrationsTable = () => {
         selected={selected}
       />
       <BaseTable
-        emptyTableText="Your integrations list is empty, please create an integration"
+        emptyTableText="Your integration list is empty, please create an integration"
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
         page={page}
