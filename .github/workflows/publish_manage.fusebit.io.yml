@@ -1,6 +1,11 @@
 ###################################################################
 # Auto-created by the cicd-actions tool
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      versionToPublish:
+        description: 'The version to manually publish, must be a valid git tag i.e. "v7.20.0".'
+        default: 'main'
 name: Publish manage.fusebit.io
 jobs:
   deploy:
@@ -43,6 +48,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+          ref: ${{ github.event.inputs.versionToPublish }}
       - name: Setup Environments and Profiles
         env:
           SECRET_FUSEBIT_PROFILE: ${{secrets.FUSEBIT_STAGE_US_WEST_2}}
