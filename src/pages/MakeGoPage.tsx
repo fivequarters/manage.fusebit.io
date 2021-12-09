@@ -16,7 +16,7 @@ import { InnerConnector } from '@interfaces/integration';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 
 const MakeGoPage: FC<{}> = (): ReactElement => {
-  useTrackPage('Make Go Landing', 'Make');
+  useTrackPage('Make Snippet Go Page', 'Make Snippet');
   useTitle('Fusebit');
   const history = useHistory();
   const { error, snippets, connectors, formatSnippet, getProviderVersion } = useSnippets();
@@ -42,7 +42,7 @@ const MakeGoPage: FC<{}> = (): ReactElement => {
               const data: Data = {
                 [entityName]: { id: connectorId },
               };
-              return createConnector(connector, data);
+              return createConnector(connector, data, true);
             })
           );
           const connectorEntityMap: { [key: string]: Entity } = {};
@@ -109,7 +109,7 @@ const MakeGoPage: FC<{}> = (): ReactElement => {
             [entityName]: { id: integrationId },
           };
           // complete integration creation
-          await createIntegrationAndConnector(newIntegrationFeed, data);
+          await createIntegrationAndConnector(newIntegrationFeed, data, true);
           history.replace(getRedirectLink(`/integration/${integrationId}/edit`));
         } catch (e) {
           setCreateError(`There was an error creating a connector required by the integration: ${e.message}`);

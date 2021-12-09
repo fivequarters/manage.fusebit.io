@@ -9,7 +9,7 @@ import Navbar from '@components/common/Navbar';
 import useSnippets from '@hooks/useSnippets';
 
 const MakePage: FC<{}> = (): ReactElement => {
-  useTrackPage('Make Landing', 'Make');
+  useTrackPage('Make Snippet Landing Page', 'Make Snippet');
   useTitle('Fusebit');
   const { snippets: snippetsParam } = useParams<{ snippets: string }>();
   const history = useHistory();

@@ -204,7 +204,13 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(
       onClose,
     });
 
-    useTrackPage(`${feedTypeName} New Modal`, `${feedTypeName}s`);
+    let pageName = `${feedTypeName} New Modal`;
+    let objectLocation = `${feedTypeName}s`;
+    if (isSnippet) {
+      pageName = `Web Editor Add Snippet Modal`;
+      objectLocation = `Web Editor`;
+    }
+    useTrackPage(pageName, objectLocation);
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
       if (e.key === 'Enter') {

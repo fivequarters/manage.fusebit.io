@@ -104,7 +104,7 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet }: Pr
     if (isIntegration) {
       trackEvent('New Integration Search Submitted', 'Integrations');
     } else if (isSnippet) {
-      trackEvent('New Snippet Search Submitted', 'Snippets');
+      trackEvent('Add Snippet Search Submitted', 'Add Snippet');
     } else {
       trackEvent('New Connector Search Submitted', 'Connectors');
     }
@@ -133,11 +133,16 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet }: Pr
     setRawActiveTemplate(template);
     if (snippet) {
       setRawActiveSnippet(snippet);
+      trackEvent(`New Snippet Selected`, `Add Snippet`, {
+        snippet: `${template.id}-${snippet.id}`,
+        snippetDefault: false,
+      });
+    } else {
+      trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
+        [feedTypeName.toLowerCase()]: template.id,
+        [`${feedTypeName.toLowerCase()}Default`]: false,
+      });
     }
-    trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
-      [feedTypeName.toLowerCase()]: template.id,
-      [`${feedTypeName.toLowerCase()}Default`]: false,
-    });
     replaceMustache(data, template).then((_template) => {
       setActiveTemplate(_template);
     });

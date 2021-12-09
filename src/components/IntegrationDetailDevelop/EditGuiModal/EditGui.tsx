@@ -376,6 +376,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   };
 
   const handleAddSnippet = async () => {
+    trackEvent('Snippets Button Clicked', 'Web Editor');
     setAddSnippetModalOpen(true);
   };
 
@@ -386,6 +387,9 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     snippet?: Snippet
   ) => {
     if (window.editor && feed && snippet) {
+      trackEvent('Add Button Clicked', 'Add Snippet', {
+        snippet: `${feed.id}-${snippet.id}`,
+      });
       if (newConnector) {
         const connectorTemplate = (feed.configuration.components as EntityComponent[])[0];
         // Add newly created connector to integration's configuration
