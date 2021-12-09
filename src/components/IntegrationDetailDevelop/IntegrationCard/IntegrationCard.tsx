@@ -93,7 +93,11 @@ const IntegrationCard: React.FC<Props> = ({ processing, setProcessing, className
   return (
     <>
       {matchesMobile ? (
-        <MobileDrawer open={editGuiModalOpen} onClose={() => setEditGuiModalOpen(false)} />
+        <MobileDrawer
+          integrationId={integrationData?.data.id || ''}
+          open={editGuiModalOpen}
+          onClose={() => setEditGuiModalOpen(false)}
+        />
       ) : (
         <EditGuiModal
           onClose={() => {
