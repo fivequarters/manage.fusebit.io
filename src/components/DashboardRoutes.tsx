@@ -14,20 +14,25 @@ const DashboardRoutes: FC<{}> = () => {
           key={`${route.key}`}
           path={`${route.path}`}
           render={() => {
-            const RouteComponent = route.component;
-            if (!route.public) {
-              return (
-                // Error Boundary should be the first element in the route
-                // and not above the Switch to make the routing in the fatal error screen
-                // work properly
-                <ErrorBoundary FallbackComponent={FatalError}>
+            const getRoute = () => {
+              const RouteComponent = route.component;
+
+              if (!route.public) {
+                return (
                   <ProtectedRoute>
                     <RouteComponent />
                   </ProtectedRoute>
-                </ErrorBoundary>
-              );
-            }
-            return <RouteComponent />;
+                );
+              }
+              return <RouteComponent />;
+            };
+
+            return (
+              // Error Boundary should be the first element in the route
+              // and not above the Switch to make the routing in the fatal error screen
+              // work properly
+              <ErrorBoundary FallbackComponent={FatalError}>{getRoute()}</ErrorBoundary>
+            );
           }}
           exact
         />
