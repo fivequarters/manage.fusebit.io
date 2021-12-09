@@ -145,7 +145,7 @@ const useEditor = ({ enableListener = true, isMounted = false, onReadyToRun, onR
 
   useEffect(() => {
     if (errorBuild) {
-      createError({ message: errorBuild });
+      createError({ message: errorBuild.length <= 300 ? errorBuild : 'The build failed' });
       setErrorBuild('');
     }
   }, [errorBuild, createError, setErrorBuild]);
