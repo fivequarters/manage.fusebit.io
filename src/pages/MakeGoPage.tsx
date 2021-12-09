@@ -3,7 +3,7 @@ import { Box, Container } from '@material-ui/core';
 import { useTrackPage } from '@hooks/useTrackPage';
 import Layout from '@components/common/Layout';
 import useTitle from '@hooks/useTitle';
-import { useHistory, Link } from 'react-router-dom';
+import { useHistory, Link, useParams } from 'react-router-dom';
 import NavbarBreadcrumb from '@components/common/NavbarBreadcrumb/NavbarBreadcrumb';
 import Navbar from '@components/common/Navbar';
 import useSnippets from '@hooks/useSnippets';
@@ -16,8 +16,9 @@ import { InnerConnector } from '@interfaces/integration';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 
 const MakeGoPage: FC<{}> = (): ReactElement => {
-  useTrackPage('Make Snippet Go Page', 'Make Snippet');
   useTitle('Fusebit');
+  const { snippets: snippetsParam } = useParams<{ snippets: string }>();
+  useTrackPage('Make Snippet Go Page', 'Make Snippet', { snippets: snippetsParam });
   const history = useHistory();
   const { error, snippets, connectors, formatSnippet, getProviderVersion } = useSnippets();
   const [createError, setCreateError] = useState<string | undefined>(undefined);

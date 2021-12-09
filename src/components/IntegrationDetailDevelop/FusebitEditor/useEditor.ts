@@ -45,7 +45,7 @@ const useEditor = (
   const [runPending, setRunPending] = useState(false);
   // Prevent beign called multiple times if user has multiple tabs open
   const hasSessionChanged = useRef(false);
-  const { isSaving, errorBuild, setErrorBuild } = useEditorEvents({ isMounted });
+  const { isSaving, errorBuild, setErrorBuild, logs, setLogs } = useEditorEvents({ isMounted });
   const { createError } = useError();
   const tenantId = getTenantId();
 
@@ -222,6 +222,8 @@ const useEditor = (
     },
     runPending,
     setRunPending,
+    logs,
+    setLogs,
   };
 };
 
