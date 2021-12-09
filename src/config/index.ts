@@ -7,7 +7,6 @@ import ConnectorDetailConfigurePage from '../pages/ConnectorDetailConfigurePage'
 import ConnectorDetailIdentitiesPage from '../pages/ConnectorDetailIdentitiesPage';
 import LoggedOutErrorPage from '../pages/LoggedOutErrorPage';
 import AuthenticationDetailOverviewPage from '../pages/AuthenticationDetailOverviewPage';
-import FatalErrorPage from '../pages/FatalErrorPage';
 import AuthCallbackPage from '../pages/AuthCallbackPage';
 import NotFoundPage from '../pages/NotFoundPage';
 import AccountSettingsPage from '../pages/AccountSettingsPage';
@@ -71,11 +70,6 @@ export const routes: Array<RouteItem> = [
     key: 'router-authentication-detail-overview',
     path: '/account/:accountId/subscription/:subscriptionId/authentication/:userId/overview',
     component: AuthenticationDetailOverviewPage,
-  },
-  {
-    key: 'router-fatal-error',
-    path: '/fatal-error',
-    component: FatalErrorPage,
   },
   {
     key: '404',
