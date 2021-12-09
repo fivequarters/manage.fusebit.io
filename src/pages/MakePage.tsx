@@ -1,6 +1,7 @@
 import { FC, ReactElement } from 'react';
 import { Box, Container, Button } from '@material-ui/core';
 import { useTrackPage } from '@hooks/useTrackPage';
+import { trackEvent } from '@utils/analytics';
 import Layout from '@components/common/Layout';
 import useTitle from '@hooks/useTitle';
 import { useHistory, Link, useParams } from 'react-router-dom';
@@ -14,6 +15,11 @@ const MakePage: FC<{}> = (): ReactElement => {
   useTrackPage('Make Snippet Landing Page', 'Make Snippet', { snippets: snippetsParam });
   const history = useHistory();
   const { error, snippets, connectors } = useSnippets();
+
+  const handleGo = () => {
+    trackEvent('Go Button Clicked', 'Make Snippet', { snippets: snippetsParam });
+    history.push(`/make-go/${snippetsParam}`);
+  };
 
   if (snippets && connectors) {
     return (
@@ -51,7 +57,7 @@ const MakePage: FC<{}> = (): ReactElement => {
                 </ul>
                 <p>Log in or create a free Fusebit account to get started!</p>
                 <Button
-                  onClick={() => history.push(`/make-go/${snippetsParam}`)}
+                  onClick={handleGo}
                   style={{ width: '200px', marginTop: '50px' }}
                   fullWidth={false}
                   size="large"

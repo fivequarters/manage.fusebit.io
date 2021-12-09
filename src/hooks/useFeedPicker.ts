@@ -47,7 +47,7 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet }: Pr
   );
 
   useEffect(() => {
-    if (feed.length > 0) {
+    if (feed.length > 0 && open) {
       const key = query.get('key');
 
       let templateToActivate: Feed | undefined;
@@ -75,7 +75,7 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet }: Pr
         setRawActiveTemplate(templateToActivate);
         replaceMustache(data, templateToActivate).then((template) => {
           setActiveTemplate(template);
-          if (!key) {
+          if (!key && !isSnippet) {
             setImmediate(() => {
               trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
                 [feedTypeName.toLowerCase()]: template.id,
@@ -88,6 +88,10 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet }: Pr
           setRawActiveSnippet(templateToActivate.snippets[0]);
           // TODO replace snippet mustache
           setActiveSnippet(templateToActivate.snippets[0]);
+          trackEvent(`New Snippet Selected`, `Add Snippet`, {
+            snippet: `${templateToActivate.id}-${templateToActivate.snippets[0].id}`,
+            snippetDefault: true,
+          });
         }
       }
     }
