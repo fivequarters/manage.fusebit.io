@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Box, Drawer, MobileStepper, Button, IconButton } from '@material-ui/core';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import _startCase from 'lodash.startcase';
@@ -9,6 +9,7 @@ import { Feed } from '@interfaces/feed';
 import { urlOrSvgToImage } from '@utils/utils';
 import { Data } from '@interfaces/feedPicker';
 import { DefaultFilters } from '@hooks/useFilterFeed';
+import { useQuery } from '@hooks/useQuery';
 import ItemList from '../ItemList/ItemList';
 import Loader from '../Loader';
 import FeedPickerMobileCreate from './FeedPickerMobileCreate';
@@ -24,6 +25,8 @@ interface Props {
 const FeedPickerMobile: React.FC<Props> = ({ isIntegration, onSubmit, open, onClose }) => {
   const [step, setStep] = useState(0);
   const queryClient = useQueryClient();
+  const query = useQuery();
+  const firstTimeOpened = useRef(true);
   const {
     activeFilter,
     allTags,
@@ -49,6 +52,19 @@ const FeedPickerMobile: React.FC<Props> = ({ isIntegration, onSubmit, open, onCl
     onSubmit,
     onClose,
   });
+
+  useEffect(() => {
+    const key = query.get('key');
+    if (open && firstTimeOpened.current && key) {
+      filteredFeed.forEach((feed) => {
+        if (feed.id === key) {
+          handleTemplateChange(feed);
+          setStep(2);
+        }
+      });
+      firstTimeOpened.current = false;
+    }
+  }, [open, query, filteredFeed, handleTemplateChange]);
 
   useEffect(() => {
     return () => {
