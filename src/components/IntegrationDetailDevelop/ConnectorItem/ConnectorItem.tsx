@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import { CircularProgress, useMediaQuery } from '@material-ui/core';
 import ListItem from '@components/IntegrationDetailDevelop/ListItem';
@@ -45,15 +45,14 @@ const ConnectorItem: React.FC<Props> = ({ className, connector, integrationData 
       removeLoader();
     }
   };
-
-  const getName = (() => {
+  const name = useMemo(() => {
     if (connector.missing && integrationData?.data.id !== connector.id) {
       return `${connector.id} is not found`;
     }
     return connector.id;
-  })();
+  }, [connector, integrationData]);
 
-  const getIcon = (() => {
+  const icon = useMemo(() => {
     if (connector.missing && integrationData?.data.id === connector.id) {
       const feedId = integrationData.data.tags['fusebit.feedId'];
       const feed = queryClient.getQueryData<Feed[]>('getIntegrationsFeed');
@@ -61,7 +60,7 @@ const ConnectorItem: React.FC<Props> = ({ className, connector, integrationData 
       return integrationFeed?.smallIcon;
     }
     return connectorFeed?.smallIcon ? urlOrSvgToImage(connectorFeed?.smallIcon) : notFoundIcon;
-  })();
+  }, [connectorFeed, connector, integrationData, queryClient]);
 
   return (
     <>
@@ -77,8 +76,8 @@ const ConnectorItem: React.FC<Props> = ({ className, connector, integrationData 
         id={connector.id}
         onClick={handleClick}
         className={className}
-        icon={isLoading ? <CircularProgress size={20} /> : <img src={getIcon} alt="connector" height={20} width={20} />}
-        name={getName}
+        icon={isLoading ? <CircularProgress size={20} /> : <img src={icon} alt="connector" height={20} width={20} />}
+        name={name}
         onDelete={toggleDeleteConnectorModal}
       />
       {!matchesCardOverlapping && (
