@@ -46,10 +46,11 @@ const YourAplication: React.FC<Props> = ({ className }) => {
   };
 
   const openSampleApp = (href?: string, integration?: Integration) => {
+    trackEvent('Run Sample App Button Clicked', 'My Application', {
+      Integration: integration?.tags['fusebit.feedId'],
+    });
+
     if (href) {
-      trackEvent('Run Sample App Button Clicked', 'My Application', {
-        Integration: integration?.tags['fusebit.feedId'],
-      });
       const sampleAppTab = window.open() as Window;
       sampleAppTab.opener = null;
       sampleAppTab.location.href = href;
