@@ -11,6 +11,7 @@ import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 import Navbar from '@components/common/Navbar';
 import Layout from '@components/common/Layout';
 import NavbarBreadcrumb from '@components/common/NavbarBreadcrumb';
+import { Box } from '@material-ui/core';
 
 const StyledWrapper = styled.div`
   display: flex;
@@ -44,7 +45,6 @@ const StyledDescription = styled.p`
   font-size: 16px;
   line-height: 22px;
   color: var(--black);
-  text-align: center;
   max-width: 578px;
   margin-bottom: 20px;
 
@@ -108,7 +108,14 @@ const FatalError: React.FC<FallbackProps> = ({ error }) => {
           </StyledIconButton>
         </StyledDescription>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <StyledDescription>{error.stack}</StyledDescription>
+          <Box
+            maxWidth={600}
+            padding={5}
+            borderRadius="8px"
+            style={{ wordWrap: 'break-word', backgroundColor: 'var(--secondary-color)' }}
+          >
+            {error.stack}
+          </Box>
         </Collapse>
         <StyledHr />
       </StyledWrapper>
