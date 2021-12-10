@@ -2,23 +2,15 @@ import React from 'react';
 import { Box, Button } from '@material-ui/core';
 import { trackEvent } from '@utils/analytics';
 import { Integration } from '@interfaces/integration';
-import useSampleApp from '@hooks/useSampleApp';
 import { StyledTimeIcon, StyledTimeDescription } from './mixins';
 
 interface IProps {
   buttonsCrashing?: boolean;
   integration?: Integration;
-  smallPhone: boolean;
 }
 
-const FooterActions: React.FC<IProps> = ({ buttonsCrashing, integration, smallPhone }) => {
-  const { url } = useSampleApp();
-
+const FooterActions: React.FC<IProps> = ({ buttonsCrashing, integration }) => {
   const getButtonSize = (() => {
-    if (smallPhone && url) {
-      return 'small';
-    }
-
     if (buttonsCrashing) {
       return 'medium';
     }
@@ -28,7 +20,7 @@ const FooterActions: React.FC<IProps> = ({ buttonsCrashing, integration, smallPh
 
   return (
     <Box display="flex" flexDirection="column">
-      <Box display="flex" alignItems={!url && 'center'} justifyContent={!url && 'center'}>
+      <Box display="flex" alignItems="center" justifyContent="center">
         <Box display="flex" flexDirection="column">
           <Button
             style={{ width: buttonsCrashing ? 'fit-content' : '293px' }}
@@ -46,7 +38,7 @@ const FooterActions: React.FC<IProps> = ({ buttonsCrashing, integration, smallPh
           >
             Follow guide
           </Button>
-          <Box display="flex" alignItems="center" justifyContent={!url && 'center'}>
+          <Box display="flex" alignItems="center" justifyContent="center">
             <StyledTimeIcon />
             <StyledTimeDescription>10 minutes</StyledTimeDescription>
           </Box>
