@@ -15,7 +15,6 @@ import { CARD_OVERLAPPING_MEDIA_QUERY } from '@components/IntegrationDetailDevel
 import EmptyBackendList from '@components/IntegrationDetailDevelop/EmptyBackendList';
 import { INTEGRATION_CARD_ID } from '@components/IntegrationDetailDevelop/IntegrationCard/IntegrationCard';
 import NewBackendModal from '@components/IntegrationDetailDevelop/NewBackendModal';
-import { Integration } from '@interfaces/integration';
 import useSampleApp from '@hooks/useSampleApp';
 import { useGetIntegrationFromCache } from '@hooks/useGetIntegrationFromCache';
 import NoSampleAppModal from '../NoSampleAppModal';
@@ -45,15 +44,15 @@ const YourAplication: React.FC<Props> = ({ className }) => {
     toggleNewBackend();
   };
 
-  const openSampleApp = (href?: string, integration?: Integration) => {
+  const openSampleApp = () => {
     trackEvent('Run Sample App Button Clicked', 'My Application', {
-      Integration: integration?.tags['fusebit.feedId'],
+      Integration: integrationData?.data?.tags['fusebit.feedId'],
     });
 
-    if (href) {
+    if (url) {
       const sampleAppTab = window.open() as Window;
       sampleAppTab.opener = null;
-      sampleAppTab.location.href = href;
+      sampleAppTab.location.href = url;
       sampleAppTab.focus();
     } else {
       setNoSampleAppModalOpen(true);
@@ -92,7 +91,7 @@ const YourAplication: React.FC<Props> = ({ className }) => {
               style={{
                 width: 200,
               }}
-              onClick={() => openSampleApp(url, integrationData?.data)}
+              onClick={() => openSampleApp()}
             >
               Sample App
             </Button>
