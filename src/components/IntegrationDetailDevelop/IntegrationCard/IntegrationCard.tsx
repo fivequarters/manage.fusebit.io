@@ -1,13 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardActions,
-  Box,
-  CircularProgress,
-  useMediaQuery,
-  useTheme,
-  Typography,
-} from '@material-ui/core';
+import { Card, CardContent, CardActions, Box, CircularProgress, Typography } from '@material-ui/core';
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -17,7 +8,6 @@ import { useModal } from '@hooks/useModal';
 import Button from '@components/common/Button/Button';
 import EditGuiModal from '@components/IntegrationDetailDevelop/EditGuiModal';
 import useEditor from '@components/IntegrationDetailDevelop/FusebitEditor/useEditor';
-import MobileDrawer from '@components/IntegrationDetailDevelop/MobileDrawer';
 import { INTEGRATION_PROCESSING_SUFFIX } from '@utils/constants';
 import { useLoader } from '@hooks/useLoader';
 import { useError } from '@hooks/useError';
@@ -56,9 +46,7 @@ export const INTEGRATION_CARD_ID = 'integration-card';
 const IntegrationCard: React.FC<Props> = ({ processing, setProcessing, className }) => {
   const [editGuiModalOpen, setEditGuiModalOpen] = useModal();
   const { handleEdit, isEditing } = useEditor({ enableListener: false, onReadyToRun: () => setEditGuiModalOpen(true) });
-  const theme = useTheme();
   const { id } = useParams<{ id: string }>();
-  const matchesMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const integrationData = useGetIntegrationFromCache();
   const { waitForEntityStateChange } = useLoader();
   const { createError } = useError();
@@ -92,21 +80,13 @@ const IntegrationCard: React.FC<Props> = ({ processing, setProcessing, className
 
   return (
     <>
-      {matchesMobile ? (
-        <MobileDrawer
-          integrationId={integrationData?.data.id || ''}
-          open={editGuiModalOpen}
-          onClose={() => setEditGuiModalOpen(false)}
-        />
-      ) : (
-        <EditGuiModal
-          onClose={() => {
-            setEditGuiModalOpen(false);
-          }}
-          open={editGuiModalOpen}
-          integrationId={integrationData?.data.id || ''}
-        />
-      )}
+      <EditGuiModal
+        onClose={() => {
+          setEditGuiModalOpen(false);
+        }}
+        open={editGuiModalOpen}
+        integrationId={integrationData?.data.id || ''}
+      />
       <StyledCard id={INTEGRATION_CARD_ID} className={className}>
         <StyledContent>
           <Box display="flex" mb="14px" justifyContent="center">

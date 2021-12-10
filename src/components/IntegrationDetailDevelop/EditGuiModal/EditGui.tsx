@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, ButtonGroup, IconButton } from '@material-ui/core';
+import { Box, Button, ButtonGroup, IconButton, useMediaQuery, useTheme } from '@material-ui/core';
 import { SaveOutlined, PlayArrowOutlined } from '@material-ui/icons';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Props, SaveStatus } from '@interfaces/edit';
@@ -24,6 +24,7 @@ import playEditor from '@assets/play-editor.svg';
 import add from '@assets/add.svg';
 import CloseIcon from '@material-ui/icons/Close';
 import { useAccountIntegrationsGetOne } from '@hooks/api/v2/account/integration/useGetOne';
+import MobileDrawer from '../MobileDrawer';
 import { EditGuiSampleApp } from './EditGuiSampleApp';
 
 const StyledEditorContainer = styled.div`
@@ -238,7 +239,7 @@ const StyledActionsHelpImage = styled.img`
   }
 `;
 
-const StyledFusebitEditorContainer = styled.div`
+const StyledFusebitEditorContainer = styled(Box)`
   position: relative;
 `;
 
@@ -283,11 +284,13 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const [unsavedWarning, setUnsavedWarning] = useState(false);
   const { createLoader, removeLoader } = useLoader();
   const [loginFlowModalOpen, setLoginFlowModalOpen] = useState(false);
-  const { handleRun, handleLogin, isFindingInstall, isSaving } = useEditor({
+  const { handleRun, handleLogin, isFindingInstall, isSaving, logs, setLogs, isRunning } = useEditor({
     onReadyToLogin: () => setLoginFlowModalOpen(true),
     isMounted,
   });
   const [dirtyState, setDirtyState] = useState(false);
+  const theme = useTheme();
+  const matchesMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const { data: integrationResponse } = useAccountIntegrationsGetOne({
     enabled: userData.token,
@@ -397,7 +400,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       />
       <ConfigureRunnerModal open={configureRunnerActive} setOpen={setConfigureRunnerActive} />
       <StyledEditorContainer ref={ref}>
-        {isMounted && (
+        {isMounted && !matchesMobile && (
           <StyledCloseHeader>
             <Button
               style={{ marginRight: '16px' }}
@@ -446,7 +449,12 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
             </StyledCloseWrapper>
           </StyledCloseHeader>
         )}
-        <StyledFusebitEditorContainer onKeyUp={handleKeyUp}>
+        <StyledFusebitEditorContainer
+          onKeyUp={handleKeyUp}
+          position={matchesMobile && 'absolute'}
+          left={matchesMobile && '-100vw'}
+          bottom={matchesMobile && '-100vh'}
+        >
           <FusebitEditor
             boundaryId="integration"
             functionId={integrationId}
@@ -466,7 +474,19 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
               setIsMounted(true);
             }}
           />
-          {isMounted && <StyledFusebitEditorLogo src={logo} alt="fusebit logo" height="20" width="80" />}
+          {isMounted && !matchesMobile && (
+            <StyledFusebitEditorLogo src={logo} alt="fusebit logo" height="20" width="80" />
+          )}
+          {isMounted && matchesMobile && (
+            <MobileDrawer
+              open={isMounted}
+              onClose={handleClose}
+              clearLogs={() => setLogs([])}
+              handleRun={handleRun}
+              isRunning={isRunning}
+              logs={logs}
+            />
+          )}
         </StyledFusebitEditorContainer>
       </StyledEditorContainer>
     </Box>
