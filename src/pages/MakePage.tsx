@@ -1,6 +1,6 @@
 import { FC, ReactElement } from 'react';
 import { Box, Container, Button } from '@material-ui/core';
-import { useTrackPage } from '@hooks/useTrackPage';
+import { useTrackUnauthenticatedPage } from '@hooks/useTrackPage';
 import { trackEvent } from '@utils/analytics';
 import Layout from '@components/common/Layout';
 import useTitle from '@hooks/useTitle';
@@ -12,7 +12,7 @@ import useSnippets from '@hooks/useSnippets';
 const MakePage: FC<{}> = (): ReactElement => {
   useTitle('Fusebit');
   const { snippets: snippetsParam } = useParams<{ snippets: string }>();
-  useTrackPage('Make Snippet Landing Page', 'Make Snippet', { snippets: snippetsParam });
+  useTrackUnauthenticatedPage('Make Snippet Landing Page', 'Make Snippet', { snippets: snippetsParam });
   const history = useHistory();
   const { error, snippets, connectors } = useSnippets();
 
