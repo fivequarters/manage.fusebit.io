@@ -1,7 +1,6 @@
 import Layout from '@components/common/Layout';
 import EditGui from '@components/IntegrationDetailDevelop/EditGuiModal/EditGui';
 import useTitle from '@hooks/useTitle';
-import { useTrackPage } from '@hooks/useTrackPage';
 import { FC, ReactElement } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useAccountIntegrationsGetOne } from '@hooks/api/v2/account/integration/useGetOne';
