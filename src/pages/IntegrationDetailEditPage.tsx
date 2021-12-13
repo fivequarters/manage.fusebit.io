@@ -19,7 +19,6 @@ const IntegrationDetailEditPage: FC<{}> = (): ReactElement => {
     subscriptionId: userData.subscriptionId,
   });
 
-  useTrackPage('Integration Edit', 'Integration');
   useTitle(id);
 
   const handleClose = () => {
