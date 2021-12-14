@@ -19,9 +19,10 @@ interface Props {
   onClose: () => void;
   open: boolean;
   isIntegration: boolean;
+  isSnippet?: boolean;
 }
 
-const FeedPickerMobile: React.FC<Props> = ({ isIntegration, onSubmit, open, onClose }) => {
+const FeedPickerMobile: React.FC<Props> = ({ isIntegration, onSubmit, open, onClose, isSnippet }) => {
   const [step, setStep] = useState(0);
   const queryClient = useQueryClient();
   const {
@@ -46,6 +47,7 @@ const FeedPickerMobile: React.FC<Props> = ({ isIntegration, onSubmit, open, onCl
   } = useFeedPicker({
     open,
     isIntegration,
+    isSnippet,
     onSubmit,
     onClose,
   });

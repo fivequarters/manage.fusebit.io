@@ -34,6 +34,13 @@ export interface IntegrationEntity extends Integration {
 
 export type Entity = ConnectorEntity | IntegrationEntity;
 
+export interface Snippet {
+  id: string;
+  name: string;
+  description: string;
+  code: string;
+}
+
 export interface Feed {
   id: string;
   name: string;
@@ -90,6 +97,7 @@ export interface Feed {
     entities: Record<string, Entity>;
     components?: EntityComponent[];
   };
+  snippets?: Snippet[];
 }
 
 export type ParsedFeed = Omit<Feed, 'configuration'> & {

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import { ValidationMode } from '@jsonforms/core';
 import debounce from 'lodash.debounce';
 import { useMediaQuery } from '@material-ui/core';
-import { Feed, ParsedFeed } from '@interfaces/feed';
+import { Feed, Snippet, ParsedFeed } from '@interfaces/feed';
 import { trackEvent } from '@utils/analytics';
 import { Data } from '@interfaces/feedPicker';
 import orderBy from 'lodash.orderby';
@@ -13,22 +13,28 @@ import { useReplaceMustache } from './useReplaceMustache';
 
 interface Props {
   isIntegration?: boolean;
-  onSubmit: (feed: Feed, data: Data) => void;
+  isSnippet?: boolean;
+  onSubmit: (feed: Feed, data: Data, snippet?: Snippet) => void;
   onClose?: () => void;
   open: boolean;
 }
 
-const useFeedPicker = ({ isIntegration, onSubmit, onClose, open }: Props) => {
+const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet }: Props) => {
   const query = useQuery();
   const [rawActiveTemplate, setRawActiveTemplate] = React.useState<Feed>();
+  const [rawActiveSnippet, setRawActiveSnippet] = React.useState<Snippet>();
   const [errors, setErrors] = React.useState<object[]>([]);
   const [validationMode, setValidationMode] = React.useState<ValidationMode>('ValidateAndHide');
   const [data, setData] = React.useState<any>({});
   const { replaceMustache } = useReplaceMustache();
   const [activeTemplate, setActiveTemplate] = React.useState<ParsedFeed>();
+  const [activeSnippet, setActiveSnippet] = React.useState<Snippet>();
   const isMobile = useMediaQuery('max-width: 1100px');
 
-  const feedTypeName = isIntegration ? 'Integration' : 'Connector';
+  let feedTypeName = isIntegration ? 'Integration' : 'Connector';
+  if (isSnippet) {
+    feedTypeName = 'Snippet';
+  }
 
   const queryClient = useQueryClient();
 
@@ -41,35 +47,58 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open }: Props) => {
   );
 
   useEffect(() => {
-    if (feed.length > 0) {
+    if (feed.length > 0 && open) {
       const key = query.get('key');
 
-      for (let i = 0; i < (feed || []).length; i++) {
-        if ((feed || [])[i].id === key) {
-          // When explicitly loading an entry, remove the private designation so that it shows up in the
-          // middle list.
-          delete feed[i].private;
-          setRawActiveTemplate(feed[i]);
-          replaceMustache(data, feed[i]).then((template) => setActiveTemplate(template));
-          return;
+      let templateToActivate: Feed | undefined;
+      if (isSnippet) {
+        // find first connector with snippets
+        const result = feed.find((f) => f.snippets && f.snippets.length > 0);
+        if (result) {
+          templateToActivate = result;
+        }
+      } else if (key) {
+        [templateToActivate] = feed;
+        for (let i = 0; i < feed.length; i++) {
+          if (feed[i].id === key) {
+            templateToActivate = feed[i];
+            // When explicitly loading an entry, remove the private designation so that it shows up in the
+            // middle list.
+            delete templateToActivate.private;
+            break;
+          }
+        }
+      } else {
+        [templateToActivate] = feed;
+      }
+      if (templateToActivate) {
+        setRawActiveTemplate(templateToActivate);
+        replaceMustache(data, templateToActivate).then((template) => {
+          setActiveTemplate(template);
+          if (!key && !isSnippet) {
+            setImmediate(() => {
+              trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
+                [feedTypeName.toLowerCase()]: template.id,
+                [`${feedTypeName.toLowerCase()}Default`]: true,
+              });
+            });
+          }
+        });
+        if (isSnippet && templateToActivate.snippets && templateToActivate.snippets.length > 0) {
+          setRawActiveSnippet(templateToActivate.snippets[0]);
+          // TODO replace snippet mustache
+          setActiveSnippet(templateToActivate.snippets[0]);
+          trackEvent(`New Snippet Selected`, `Add Snippet`, {
+            snippet: `${templateToActivate.id}-${templateToActivate.snippets[0].id}`,
+            snippetDefault: true,
+          });
         }
       }
-
-      setRawActiveTemplate(feed[0]);
-      replaceMustache(data, feed[0]).then((template) => {
-        setActiveTemplate(template);
-        setImmediate(() => {
-          trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
-            [feedTypeName.toLowerCase()]: template.id,
-            [`${feedTypeName.toLowerCase()}Default`]: true,
-          });
-        });
-      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isIntegration, open, feed]);
+  }, [isIntegration, isSnippet, open, feed]);
 
-  const filteredFeed = useFilterFeed({ feed });
+  const filteredFeed = useFilterFeed({ feed, filterSnippets: isSnippet });
 
   const isLoading = isIntegration
     ? queryClient.getQueryState('getIntegrationsFeed')?.status === 'loading'
@@ -78,6 +107,8 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open }: Props) => {
   const debouncedSetSearchFilter = debounce((keyword: string) => {
     if (isIntegration) {
       trackEvent('New Integration Search Submitted', 'Integrations');
+    } else if (isSnippet) {
+      trackEvent('Add Snippet Search Submitted', 'Add Snippet');
     } else {
       trackEvent('New Connector Search Submitted', 'Connectors');
     }
@@ -98,19 +129,31 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open }: Props) => {
       }
 
       // send data with customized form
-      onSubmit(rawActiveTemplate as Feed, { ...data });
+      onSubmit(rawActiveTemplate as Feed, { ...data }, isSnippet ? rawActiveSnippet : undefined);
     }
   };
 
-  const handleTemplateChange = (template: Feed) => {
+  const handleTemplateChange = (template: Feed, snippet?: Snippet) => {
     setRawActiveTemplate(template);
-    trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
-      [feedTypeName.toLowerCase()]: template.id,
-      [`${feedTypeName.toLowerCase()}Default`]: false,
-    });
+    if (snippet) {
+      setRawActiveSnippet(snippet);
+      trackEvent(`New Snippet Selected`, `Add Snippet`, {
+        snippet: `${template.id}-${snippet.id}`,
+        snippetDefault: false,
+      });
+    } else {
+      trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
+        [feedTypeName.toLowerCase()]: template.id,
+        [`${feedTypeName.toLowerCase()}Default`]: false,
+      });
+    }
     replaceMustache(data, template).then((_template) => {
       setActiveTemplate(_template);
     });
+    if (snippet) {
+      // TODO replace snippet mustache
+      setActiveSnippet(snippet);
+    }
   };
 
   const handlePlanUpsell = () => {
@@ -163,9 +206,21 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open }: Props) => {
     return list;
   };
 
+  const getFullTemplateId = (template: Feed, snippet?: Snippet) => {
+    return snippet ? `${template.id}-${snippet.id}` : template.id;
+  };
+
+  const getFullTemplateName = (template: Feed, snippet?: Snippet) => {
+    return snippet ? `${template.name} - ${snippet.name}` : template.name;
+  };
+
   return {
+    getFullTemplateId,
+    getFullTemplateName,
     rawActiveTemplate,
     setRawActiveTemplate,
+    rawActiveSnippet,
+    setRawActiveSnippet,
     errors,
     setErrors,
     validationMode,
@@ -179,6 +234,8 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open }: Props) => {
     debouncedSetSearchFilter,
     activeTemplate,
     setActiveTemplate,
+    activeSnippet,
+    setActiveSnippet,
     handleTemplateChange,
     loading: isLoading,
     handleSubmit,

@@ -2,6 +2,7 @@ import { RouteItem } from '@interfaces/router';
 import ConnectorsOverviewPage from '../pages/ConnectorsOverviewPage';
 import IntegrationsOverviewPage from '../pages/IntegrationsOverviewPage';
 import IntegrationDetailDevelopPage from '../pages/IntegrationDetailDevelopPage';
+import IntegrationDetailEditPage from '../pages/IntegrationDetailEditPage';
 import IntegrationDetailInstallsPage from '../pages/IntegrationDetailInstallsPage';
 import ConnectorDetailConfigurePage from '../pages/ConnectorDetailConfigurePage';
 import ConnectorDetailIdentitiesPage from '../pages/ConnectorDetailIdentitiesPage';
@@ -10,6 +11,8 @@ import AuthenticationDetailOverviewPage from '../pages/AuthenticationDetailOverv
 import AuthCallbackPage from '../pages/AuthCallbackPage';
 import NotFoundPage from '../pages/NotFoundPage';
 import AccountSettingsPage from '../pages/AccountSettingsPage';
+import MakePage from '../pages/MakePage';
+import MakeGoPage from '../pages/MakeGoPage';
 import AccountTeamPage from '../pages/AccountTeamPage';
 
 // define app routes
@@ -30,6 +33,11 @@ export const routes: Array<RouteItem> = [
     component: IntegrationDetailDevelopPage,
   },
   {
+    key: 'router-integration-detail-develop',
+    path: '/account/:accountId/subscription/:subscriptionId/integration/:id/edit',
+    component: IntegrationDetailEditPage,
+  },
+  {
     key: 'router-integration-detail-installs',
     path: '/account/:accountId/subscription/:subscriptionId/integration/:id/installs',
     component: IntegrationDetailInstallsPage,
@@ -43,6 +51,17 @@ export const routes: Array<RouteItem> = [
     key: 'router-connector-detail-identities',
     path: '/account/:accountId/subscription/:subscriptionId/connector/:id/identities',
     component: ConnectorDetailIdentitiesPage,
+  },
+  {
+    key: 'router-make',
+    path: '/make/:snippets',
+    component: MakePage,
+    public: true,
+  },
+  {
+    key: 'router-make-go',
+    path: '/make-go/:snippets',
+    component: MakeGoPage,
   },
   {
     key: 'router-auth-callback',

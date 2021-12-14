@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import ReactMarkdown from 'react-markdown';
 import { trackEvent } from '@utils/analytics';
 
-const StyledConnectorDescription = styled(ReactMarkdown)`
+export const StyledConnectorDescription = styled(ReactMarkdown)`
   font-size: 14px;
   line-height: 20px;
   color: var(--black);
@@ -32,20 +32,21 @@ interface Props {
   description: string;
   templateId: string;
   isIntegration: boolean | undefined;
+  isSnippet: boolean | undefined;
 }
 
-const FeedItemDescription = ({ description, templateId, isIntegration }: Props) => {
+const FeedItemDescription = ({ description, templateId, isIntegration, isSnippet }: Props) => {
   useEffect(() => {
+    let itemName = isIntegration ? 'Integration' : 'Connector';
+    if (isSnippet) {
+      itemName = 'Snippet';
+    }
     const linkClickListener = (event: MouseEvent) => {
       if (event.target instanceof HTMLElement && event.target.nodeName.toLowerCase() === 'a') {
         let parent = event.target.parentElement;
         while (parent !== null) {
           if (parent.attributes.getNamedItem('data-segment')?.value === 'track') {
-            trackEvent(
-              `New ${isIntegration ? 'Integration' : 'Connector'} Docs Learn More Link Clicked`,
-              isIntegration ? 'Integrations' : 'Connectors',
-              { [isIntegration ? 'Integration' : 'Connector']: templateId }
-            );
+            trackEvent(`New ${itemName} Docs Learn More Link Clicked`, `${itemName}s`, { [itemName]: templateId });
           }
           parent = parent.parentElement;
         }
@@ -55,7 +56,7 @@ const FeedItemDescription = ({ description, templateId, isIntegration }: Props) 
     return () => {
       document.removeEventListener('click', linkClickListener);
     };
-  }, [isIntegration, templateId]);
+  }, [isIntegration, isSnippet, templateId]);
   return (
     <div data-segment="track">
       <StyledConnectorDescription linkTarget="_blank">{description}</StyledConnectorDescription>

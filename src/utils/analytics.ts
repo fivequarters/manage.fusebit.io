@@ -25,10 +25,11 @@ const mockedAnalyticsClient = {
   user: null,
 } as any;
 
-export const getAnalyticsClient: (user?: User, issuedByAuth0?: boolean) => SegmentAnalytics.AnalyticsJS = (
-  user,
-  issuedByAuth0
-) => {
+export const getAnalyticsClient: (
+  user?: User,
+  issuedByAuth0?: boolean,
+  allowUnauthenticated?: boolean
+) => SegmentAnalytics.AnalyticsJS = (user, issuedByAuth0, allowUnauthenticated) => {
   // if already defined, returns it
   if (analyticsClient) {
     return analyticsClient;
@@ -36,13 +37,13 @@ export const getAnalyticsClient: (user?: User, issuedByAuth0?: boolean) => Segme
 
   // ad blocker workaround for Segment (if it is an array, it means ad blocker got in our way)
   const isAdBlockerEnabled = Array.isArray(analytics);
-  if (isAdBlockerEnabled) {
+  if (isAdBlockerEnabled && !allowUnauthenticated) {
     analyticsClient = mockedAnalyticsClient;
     return analyticsClient;
   }
 
   // users that were not authenticated by Auth0 are not tracked
-  if (!issuedByAuth0) {
+  if (!issuedByAuth0 && !allowUnauthenticated) {
     analyticsClient = mockedAnalyticsClient;
     return analyticsClient;
   }
@@ -57,7 +58,7 @@ export const getAnalyticsClient: (user?: User, issuedByAuth0?: boolean) => Segme
   // if it is prod, we track only non-fusebit and non-litebox users
   const isExternalUser =
     !user || !user.email || (!user.email.endsWith('@fusebit.io') && !user.email.endsWith('@litebox.ai'));
-  analyticsClient = isExternalUser ? analytics : mockedAnalyticsClient;
+  analyticsClient = isExternalUser || allowUnauthenticated ? analytics : mockedAnalyticsClient;
   return analyticsClient;
 };
 

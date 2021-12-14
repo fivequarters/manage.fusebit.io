@@ -28,7 +28,7 @@ export const useLoader = () => {
     }
   };
 
-  const createLoader = () => {
+  const createLoader = (text?: string) => {
     const loaderExists = !!document.getElementById('loader');
     if (loaderExists) return;
     const loader = document.createElement('div');
@@ -36,7 +36,7 @@ export const useLoader = () => {
     loader.setAttribute('style', css);
     loader.innerHTML = '<img src="/loader.svg" width="100" height="100">';
     document.body.appendChild(loader);
-    const loaderText = localStorage.getItem('loaderText');
+    const loaderText = text || localStorage.getItem('loaderText');
     if (loaderText !== null) {
       const title = document.createElement('div');
       title.setAttribute('id', 'loaderTitle');

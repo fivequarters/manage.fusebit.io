@@ -77,7 +77,12 @@ const openSupportMessage = () => {
   sendSupportMessage();
 };
 
-const Navbar: React.FC = ({ children }) => {
+interface Props {
+  hideUserMenu?: boolean;
+  logoUrl?: string;
+}
+
+const Navbar: React.FC<Props> = ({ children, hideUserMenu, logoUrl }) => {
   const { userData } = useAuthContext();
   const { getRedirectLink } = useGetRedirectLink();
   const isMobile = useMediaQuery('(max-width: 880px)');
@@ -93,7 +98,7 @@ const Navbar: React.FC = ({ children }) => {
         width: 56,
       };
 
-  const rootUrl = getRedirectLink('/integrations/overview');
+  const rootUrl = logoUrl || getRedirectLink('/integrations/overview');
 
   return (
     <>
@@ -132,7 +137,7 @@ const Navbar: React.FC = ({ children }) => {
                 >
                   Docs
                 </StyledLink>
-                <UserMenu />
+                {!hideUserMenu && <UserMenu />}
               </StyledLinkContainer>
             )}
           </Box>

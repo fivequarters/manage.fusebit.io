@@ -1,7 +1,8 @@
-import constate from 'constate';
-import { useState } from 'react';
 import { User } from '@interfaces/user';
 import { getAnalyticsClient } from '@utils/analytics';
+import constate from 'constate';
+import { useState } from 'react';
+import { STATIC_TENANT_ID } from '@utils/constants';
 
 const {
   REACT_APP_AUTH0_DOMAIN,
@@ -35,13 +36,17 @@ const setSignInLocalStorageItems = (requestedPath: string, requestedSearch: stri
   // Save the search params for the AuthCallbackPage navigatePostAuth
   if (requestedSearch.indexOf('requestedPath') < 0) {
     localStorage.setItem('requestedSearch', window.location.search);
+    if (window.location.hash && window.location.hash !== '#') {
+      localStorage.setItem('requestedHash', window.location.hash);
+    }
   }
 };
 
 const signIn = (silent?: boolean): void => {
-  const requestedPath = window.location.pathname;
   const requestedSearch = window.location.search;
-  setSignInLocalStorageItems(requestedPath, requestedSearch);
+  setSignInLocalStorageItems(window.location.pathname, requestedSearch);
+  const urlSearchParams = new URLSearchParams(window.location.search);
+  const requestedPath = (urlSearchParams.get('requestedPath') || window.location.pathname).replace(/ /g, '+');
 
   const authLink = [
     REACT_APP_AUTH0_DOMAIN,
@@ -49,7 +54,7 @@ const signIn = (silent?: boolean): void => {
     `&client_id=${REACT_APP_AUTH0_CLIENT_ID}`,
     `&audience=${REACT_APP_FUSEBIT_DEPLOYMENT}`,
     `&redirect_uri=${window.location.origin}/callback?silentAuth=${silent ? 'true' : 'false'}`,
-    `%26requestedPath=${requestedPath === '/callback' ? `/` : requestedPath}`,
+    `%26requestedPath=${requestedPath === '/callback' ? `/` : encodeURIComponent(requestedPath)}`,
     '&scope=openid profile email',
     `&screen_hint=${localStorage.getItem('screenHint')}`,
     silent ? '&prompt=none' : '',
@@ -71,12 +76,15 @@ const _useAuthContext = () => {
     setAuthStatus(AuthStatus.AUTHENTICATED);
   };
 
+  const getTenantId = () => userData.userId || STATIC_TENANT_ID;
+
   return {
     checkAuthStatus,
     userData,
     setUserData,
     authStatus,
     setAuthStatus,
+    getTenantId,
   };
 };
 

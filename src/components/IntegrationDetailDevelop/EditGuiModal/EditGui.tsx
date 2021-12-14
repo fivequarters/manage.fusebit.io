@@ -1,14 +1,21 @@
+import { Snippet, Feed, ConnectorEntity, EntityComponent } from '@interfaces/feed';
+import { InnerConnector, IntegrationData } from '@interfaces/integration';
 import React, { useState, useEffect } from 'react';
 import { Box, Button, ButtonGroup, IconButton } from '@material-ui/core';
-import { SaveOutlined, PlayArrowOutlined } from '@material-ui/icons';
+import { SaveOutlined, PlayArrowOutlined, CodeOutlined } from '@material-ui/icons';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Props, SaveStatus } from '@interfaces/edit';
 import { useAuthContext } from '@hooks/useAuthContext';
 import { useLoader } from '@hooks/useLoader';
+import { useGetConnectorsFeed } from '@hooks/useGetConnectorsFeed';
+import { useGetIntegrationFromCache } from '@hooks/useGetIntegrationFromCache';
+import useSnippets from '@hooks/useSnippets';
 import settings from '@assets/settings.svg';
+import settingsPrimary from '@assets/settings-primary.svg';
 import question from '@assets/question.svg';
 import logo from '@assets/logo.svg';
 import ConfigureRunnerModal from '@components/IntegrationDetailDevelop/ConfigureRunnerModal';
+import AddSnippetToIntegrationModal from '@components/IntegrationDetailDevelop/AddSnippetToIntegrationModal';
 import { trackEvent } from '@utils/analytics';
 import ConfirmationPrompt from '@components/common/ConfirmationPrompt';
 import { useTrackPage } from '@hooks/useTrackPage';
@@ -23,7 +30,7 @@ import clock from '@assets/clock.svg';
 import playEditor from '@assets/play-editor.svg';
 import add from '@assets/add.svg';
 import CloseIcon from '@material-ui/icons/Close';
-import { useAccountIntegrationsGetOne } from '@hooks/api/v2/account/integration/useGetOne';
+import { useInvalidateIntegration } from '@hooks/useInvalidateIntegration';
 import { EditGuiSampleApp } from './EditGuiSampleApp';
 
 const StyledEditorContainer = styled.div`
@@ -275,27 +282,28 @@ const addNewIcon = `
 
 // TODO: Implement useEditorEvents to listen dirty state events
 
-const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationId }, ref) => {
+const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationId, isLoading }, ref) => {
   const { id } = useParams<{ id: string }>();
+  const connectorFeed = useGetConnectorsFeed();
   const { userData } = useAuthContext();
   const [isMounted, setIsMounted] = useState(false);
   const [configureRunnerActive, setConfigureRunnerActive] = useState(false);
   const [unsavedWarning, setUnsavedWarning] = useState(false);
   const { createLoader, removeLoader } = useLoader();
   const [loginFlowModalOpen, setLoginFlowModalOpen] = useState(false);
-  const { handleRun, handleLogin, isFindingInstall, isSaving } = useEditor({
-    onReadyToLogin: () => setLoginFlowModalOpen(true),
+  const [addSnippetModalOpen, setAddSnippetModalOpen] = useState(false);
+  const [missingIdentities, setMissingIdentities] = useState<InnerConnector[] | undefined>(undefined);
+  const integrationData = useGetIntegrationFromCache();
+  const { handleRun, handleLogin, isFindingInstall, isSaving, setNeedsInitialization, setRunPending } = useEditor({
+    integrationData,
+    onReadyToLogin: () =>
+      !missingIdentities || missingIdentities.length > 0 ? setLoginFlowModalOpen(true) : handleLogin(),
+    onMissingIdentities: setMissingIdentities,
     isMounted,
   });
   const [dirtyState, setDirtyState] = useState(false);
-
-  const { data: integrationResponse } = useAccountIntegrationsGetOne({
-    enabled: userData.token,
-    id: integrationId,
-    accountId: userData.accountId,
-    subscriptionId: userData.subscriptionId,
-  });
-  const integration = integrationResponse?.data;
+  const { invalidateIntegration } = useInvalidateIntegration();
+  const { formatSnippet, getProviderVersion } = useSnippets();
 
   useTrackPage('Web Editor', 'Web Editor');
   useTitle(`${id} Editor`);
@@ -331,7 +339,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       lastItem.parentNode?.insertBefore(addNew, lastItem.nextSibling);
     };
 
-    if (isMounted) {
+    if (isMounted && !isLoading) {
       removeLoader();
       const items = document.getElementsByClassName('fusebit-nav-file');
       const lastItem = items?.[items.length - 1];
@@ -341,27 +349,98 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     } else {
       createLoader();
     }
-  }, [isMounted, createLoader, removeLoader]);
-
-  useEffect(() => {}, []);
+  }, [isMounted, isLoading, createLoader, removeLoader]);
 
   const handleSaveAndRun = async () => {
     if (dirtyState) {
       const context = window.editor;
       const status: SaveStatus = await context?._server.saveFunction(context);
       if (status.status === 'completed') {
+        await invalidateIntegration();
+        setRunPending(true);
+        setNeedsInitialization(true);
         setDirtyState(false);
-        handleRun();
       }
     } else {
       handleRun();
     }
   };
+
   const handleSave = async () => {
     const context = window.editor;
     trackEvent('Save Button Clicked', 'Web Editor');
     await context?._server.saveFunction(context);
+    await invalidateIntegration();
     setDirtyState(false);
+    setNeedsInitialization(true);
+  };
+
+  const handleAddSnippet = async () => {
+    trackEvent('Snippets Button Clicked', 'Web Editor');
+    setAddSnippetModalOpen(true);
+  };
+
+  const handleAddSnippetClose = (
+    newConnector?: ConnectorEntity,
+    existingConnector?: InnerConnector,
+    feed?: Feed,
+    snippet?: Snippet
+  ) => {
+    if (window.editor && feed && snippet) {
+      trackEvent('Add Button Clicked', 'Add Snippet', {
+        snippet: `${feed.id}-${snippet.id}`,
+      });
+
+      const addConnectorToConfig = (connector: ConnectorEntity) => {
+        const connectorTemplate = (feed.configuration.components as EntityComponent[])[0];
+        // Add newly created connector to integration's configuration
+        const configuration = JSON.parse(window.editor.getConfigurationSettings()) as IntegrationData;
+        configuration.components.push({
+          ...connectorTemplate,
+          name: connector.id,
+          entityId: connector.id,
+        });
+        window.editor.setSettingsConfiguration(JSON.stringify(configuration));
+
+        // Add provider dependency to package.json of the integration
+        const providerVersion = getProviderVersion(feed);
+        window.editor.selectFile('package.json');
+        const content = JSON.parse(window.editor.getSelectedFileContent());
+        content.dependencies[connectorTemplate.provider] = providerVersion;
+        window.editor.setSelectedFileContent(JSON.stringify(content, null, 2));
+      };
+
+      const addSnippetCode = () => {
+        // Add snippets at the end of integration.js
+        window.editor.selectFile('integration.js');
+        const newContent = formatSnippet(
+          feed,
+          snippet,
+          integrationId,
+          newConnector?.id || (existingConnector?.entityId as string),
+          newConnector?.id || (existingConnector?.name as string)
+        );
+        const content = window.editor.getSelectedFileContent();
+        window.editor.setSelectedFileContent(content + newContent);
+
+        // Make sure the editor reloads the updated integration.js
+        window.editor.selectedFileName = '';
+        window.editor.selectFile('integration.js');
+
+        // Scroll to the beginning of the snippet within integration.js in the editor
+        const lineCountInNewContent = (newContent.match(/\n/g) || []).length;
+        window.editor._monaco.revealLineNearTop(
+          window.editor._monaco.getModel().getLineCount() - lineCountInNewContent
+        );
+        setDirtyState(true);
+      };
+
+      if (newConnector) {
+        addConnectorToConfig(newConnector);
+      }
+      addSnippetCode();
+    }
+    setAddSnippetModalOpen(false);
   };
 
   const handleKeyUp = () => {
@@ -376,6 +455,46 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     }
   };
 
+  const assumeHasConnectors = !isMounted || !!window.editor?.specification.data.components.length;
+
+  let missingConnectorNames: string[] = [];
+  if (connectorFeed.data && integrationData) {
+    const connectors =
+      missingIdentities || integrationData.data.data.components.filter((c) => c.entityType === 'connector');
+    missingConnectorNames = connectors
+      .map((c) => connectorFeed.data.find((c1) => c1.configuration.components?.[0].provider === c.provider)?.name)
+      .filter((name) => !!name) as string[];
+  }
+
+  const loginFlowModalDescription = (
+    <>
+      Before running the integration, you need to authorize access to{' '}
+      {missingConnectorNames.length === 0 && 'the target systems. '}
+      {missingConnectorNames.length === 1 && (
+        <>
+          <strong>{missingConnectorNames[0]}</strong>.{' '}
+        </>
+      )}
+      {missingConnectorNames.length === 2 && (
+        <>
+          <strong>{missingConnectorNames[0]}</strong> and <strong>{missingConnectorNames[1]}</strong>.{' '}
+        </>
+      )}
+      {missingConnectorNames.length > 2 &&
+        missingConnectorNames.map((n, i) =>
+          i < missingConnectorNames.length - 1 ? (
+            <>
+              <strong>{n}</strong>,{' '}
+            </>
+          ) : (
+            <>
+              and <strong>{n}</strong>.{' '}
+            </>
+          )
+        )}
+    </>
+  );
+
   return (
     <Box>
       <ConfirmationPrompt
@@ -383,20 +502,25 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
         setOpen={setUnsavedWarning}
         handleConfirmation={onClose}
         title="​Are you sure you want to discard unsaved changes?"
-        description="You have made some unsaved changes to your Integration. Closing this window will discard those changes."
+        description="You have some unsaved changes in your Integration. Closing this window will discard those changes."
         confirmationButtonText="Discard"
       />
       <ConfirmationPrompt
         open={loginFlowModalOpen}
         setOpen={setLoginFlowModalOpen}
         handleConfirmation={handleLogin}
-        title="Start login flow?"
-        description="The integration needs to know the Identity of the user on whose behalf to execute. For development purposes, please log in as your own user."
+        title="Start authorization"
+        description={loginFlowModalDescription}
         confirmationButtonText="Start"
         hideCancelButton
       />
       <ConfigureRunnerModal open={configureRunnerActive} setOpen={setConfigureRunnerActive} />
       <StyledEditorContainer ref={ref}>
+        <AddSnippetToIntegrationModal
+          open={addSnippetModalOpen}
+          onClose={handleAddSnippetClose}
+          integrationData={integrationData}
+        />
         {isMounted && (
           <StyledCloseHeader>
             <Button
@@ -410,21 +534,41 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
             >
               Save
             </Button>
-            <ButtonGroup variant="contained">
+            <ButtonGroup variant={assumeHasConnectors ? 'contained' : 'outlined'} style={{ marginRight: '16px' }}>
               <Button
                 startIcon={<PlayArrowOutlined />}
                 size="small"
-                variant="contained"
+                variant={assumeHasConnectors ? 'contained' : 'outlined'}
                 color="primary"
                 onClick={handleSaveAndRun}
                 disabled={isFindingInstall || isSaving}
               >
                 {isFindingInstall ? <CircularProgress size={20} /> : 'Run'}
               </Button>
-              <Button onClick={() => setConfigureRunnerActive(true)} size="small" variant="contained" color="primary">
-                <img src={settings} alt="settings" height="16" width="16" />
+              <Button
+                onClick={() => setConfigureRunnerActive(true)}
+                size="small"
+                variant={assumeHasConnectors ? 'contained' : 'outlined'}
+                color="primary"
+              >
+                {assumeHasConnectors ? (
+                  <img src={settings} alt="settings" height="16" width="16" />
+                ) : (
+                  <img src={settingsPrimary} alt="settings" height="16" width="16" />
+                )}
               </Button>
             </ButtonGroup>
+            <Button
+              style={{ marginRight: '16px' }}
+              startIcon={<CodeOutlined />}
+              onClick={handleAddSnippet}
+              size="small"
+              variant={assumeHasConnectors ? 'outlined' : 'contained'}
+              color="primary"
+              disabled={isSaving || !isMounted}
+            >
+              Snippets
+            </Button>
             <h3>{integrationId}</h3>
             <StyledActionsHelpWrapper>
               <EditGuiSampleApp />
@@ -433,7 +577,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
                 href="https://developer.fusebit.io/docs/developing-locally"
                 onClick={() => {
                   trackEvent('Docs Developing Locally Link Clicked', 'Web Editor', {
-                    Integration: integration?.tags['fusebit.feedId'],
+                    Integration: integrationData?.data?.tags['fusebit.feedId'],
                   });
                 }}
               >

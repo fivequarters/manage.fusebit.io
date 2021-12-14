@@ -1,10 +1,12 @@
-import { Feed } from './feed';
+import { Feed, Snippet } from './feed';
 
 export interface Props {
   open: boolean;
   onClose: () => void;
-  onSubmit: (feed: Feed, data: Data) => void;
+  onSubmit: (feed: Feed, data: Data, snippet?: Snippet) => void;
   isIntegration?: boolean;
+  isSnippet?: boolean;
+  hasConnectorDependency?: (feed: Feed) => boolean;
 }
 
 export interface Data {
