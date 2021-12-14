@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import { CircularProgress, useMediaQuery } from '@material-ui/core';
 import ListItem from '@components/IntegrationDetailDevelop/ListItem';
@@ -16,6 +16,8 @@ import { CARD_OVERLAPPING_MEDIA_QUERY } from '@components/IntegrationDetailDevel
 import { FinalConnector } from '@interfaces/integrationDetailDevelop';
 import notFoundIcon from '@assets/warning-red.svg';
 import { urlOrSvgToImage } from '@utils/utils';
+import { useQueryClient } from 'react-query';
+import { Feed } from '@interfaces/feed';
 
 interface Props {
   className?: string;
@@ -24,6 +26,7 @@ interface Props {
 }
 
 const ConnectorItem: React.FC<Props> = ({ className, connector, integrationData }) => {
+  const queryClient = useQueryClient();
   const [deleteConnectorModalOpen, setDeleteConnectorModal, toggleDeleteConnectorModal] = useModal();
   const { data: connectorFeed, isLoading } = useGetMatchingConnectorFeed({ connector });
   const { getRedirectLink } = useGetRedirectLink();
@@ -42,6 +45,22 @@ const ConnectorItem: React.FC<Props> = ({ className, connector, integrationData 
       removeLoader();
     }
   };
+  const name = useMemo(() => {
+    if (connector.missing && integrationData?.data.id !== connector.id) {
+      return `${connector.id} is not found`;
+    }
+    return connector.id;
+  }, [connector, integrationData]);
+
+  const icon = useMemo(() => {
+    if (connector.missing && integrationData?.data.id === connector.id) {
+      const feedId = integrationData.data.tags['fusebit.feedId'];
+      const feed = queryClient.getQueryData<Feed[]>('getIntegrationsFeed');
+      const integrationFeed = (feed || []).find((i) => i.id === feedId);
+      return integrationFeed?.smallIcon;
+    }
+    return connectorFeed?.smallIcon ? urlOrSvgToImage(connectorFeed?.smallIcon) : notFoundIcon;
+  }, [connectorFeed, connector, integrationData, queryClient]);
 
   return (
     <>
@@ -57,19 +76,8 @@ const ConnectorItem: React.FC<Props> = ({ className, connector, integrationData 
         id={connector.id}
         onClick={handleClick}
         className={className}
-        icon={
-          isLoading ? (
-            <CircularProgress size={20} />
-          ) : (
-            <img
-              src={connector.missing ? notFoundIcon : urlOrSvgToImage(connectorFeed?.smallIcon)}
-              alt="connector"
-              height={20}
-              width={20}
-            />
-          )
-        }
-        name={connector.missing ? `${connector.id} is not found` : connector.id}
+        icon={isLoading ? <CircularProgress size={20} /> : <img src={icon} alt="connector" height={20} width={20} />}
+        name={name}
         onDelete={toggleDeleteConnectorModal}
       />
       {!matchesCardOverlapping && (
