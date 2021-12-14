@@ -2,6 +2,7 @@ export interface Props {
   open?: boolean;
   onClose: () => void;
   integrationId: string;
+  isLoading?: boolean;
 }
 
 export interface SaveStatus {

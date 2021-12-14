@@ -1,16 +1,13 @@
-import { Card, CardContent, CardActions, Box, CircularProgress, Typography } from '@material-ui/core';
-import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import styled from 'styled-components';
 import fusebitLogo from '@assets/fusebit-logo.svg';
-import { useGetIntegrationFromCache } from '@hooks/useGetIntegrationFromCache';
-import { useModal } from '@hooks/useModal';
 import Button from '@components/common/Button/Button';
-import EditGuiModal from '@components/IntegrationDetailDevelop/EditGuiModal';
-import useEditor from '@components/IntegrationDetailDevelop/FusebitEditor/useEditor';
-import { INTEGRATION_PROCESSING_SUFFIX } from '@utils/constants';
+import { useGetIntegrationFromCache } from '@hooks/useGetIntegrationFromCache';
 import { useLoader } from '@hooks/useLoader';
 import { useError } from '@hooks/useError';
+import { Box, Card, CardActions, CardContent, CircularProgress, Typography } from '@material-ui/core';
+import { INTEGRATION_PROCESSING_SUFFIX } from '@utils/constants';
+import React, { useEffect } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import styled from 'styled-components';
 
 const StyledCard = styled(Card)`
   display: flex;
@@ -44,8 +41,7 @@ interface Props {
 export const INTEGRATION_CARD_ID = 'integration-card';
 
 const IntegrationCard: React.FC<Props> = ({ processing, setProcessing, className }) => {
-  const [editGuiModalOpen, setEditGuiModalOpen] = useModal();
-  const { handleEdit, isEditing } = useEditor({ enableListener: false, onReadyToRun: () => setEditGuiModalOpen(true) });
+  const history = useHistory();
   const { id } = useParams<{ id: string }>();
   const integrationData = useGetIntegrationFromCache();
   const { waitForEntityStateChange } = useLoader();
@@ -80,13 +76,6 @@ const IntegrationCard: React.FC<Props> = ({ processing, setProcessing, className
 
   return (
     <>
-      <EditGuiModal
-        onClose={() => {
-          setEditGuiModalOpen(false);
-        }}
-        open={editGuiModalOpen}
-        integrationId={integrationData?.data.id || ''}
-      />
       <StyledCard id={INTEGRATION_CARD_ID} className={className}>
         <StyledContent>
           <Box display="flex" mb="14px" justifyContent="center">
@@ -106,16 +95,14 @@ const IntegrationCard: React.FC<Props> = ({ processing, setProcessing, className
         </StyledContent>
         <StyledActions>
           <Button
-            onClick={handleEdit}
+            onClick={() => history.push('edit')}
             style={{ width: '200px' }}
             variant="contained"
             color="primary"
-            disabled={isEditing || processing}
+            disabled={processing}
           >
             <>
-              {(isEditing || processing) && (
-                <CircularProgress color="inherit" size={20} style={{ marginRight: '10px' }} />
-              )}
+              {processing && <CircularProgress color="inherit" size={20} style={{ marginRight: '10px' }} />}
               Edit
             </>
           </Button>

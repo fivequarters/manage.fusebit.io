@@ -28,15 +28,17 @@ export const useCreateDataFromFeed = () => {
     disableWaitforOperations?: boolean
   ) => Promise.all(parsedFeed.configuration.entities.map((e) => createEntity(e, commonTags, disableWaitforOperations)));
 
-  const createIntegrationAndConnector = async (activeFeed: Feed, data: Data) => {
+  const createIntegrationAndConnector = async (activeFeed: Feed, data: Data, skipTracking?: boolean) => {
     try {
       const parsedFeed = await replaceMustache(data, activeFeed);
 
       const commonTags = getCommonTags(activeFeed, 'integration');
 
-      trackEvent('New Integration Create Button Clicked', 'Integrations', {
-        integration: commonTags['fusebit.feedId'],
-      });
+      if (!skipTracking) {
+        trackEvent('New Integration Create Button Clicked', 'Integrations', {
+          integration: commonTags['fusebit.feedId'],
+        });
+      }
 
       const res = await createFromFeed(parsedFeed, commonTags, true);
 
@@ -46,13 +48,15 @@ export const useCreateDataFromFeed = () => {
     }
   };
 
-  const createConnector = async (activeFeed: Feed, data: Data) => {
+  const createConnector = async (activeFeed: Feed, data: Data, skipTracking?: boolean) => {
     try {
       const parsedFeed = await replaceMustache(data, activeFeed);
 
       const commonTags = getCommonTags(activeFeed, 'connector');
 
-      trackEvent('New Connector Create Button Clicked', 'Connectors', { connector: commonTags['fusebit.feedId'] });
+      if (!skipTracking) {
+        trackEvent('New Connector Create Button Clicked', 'Connectors', { connector: commonTags['fusebit.feedId'] });
+      }
 
       const res = await createFromFeed(parsedFeed, commonTags);
 

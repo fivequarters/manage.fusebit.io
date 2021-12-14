@@ -1,5 +1,5 @@
 import FeedPicker from '@components/common/FeedPicker';
-import { Feed } from '@interfaces/feed';
+import { Feed, Snippet } from '@interfaces/feed';
 import { Data } from '@interfaces/feedPicker';
 import Modal from '@components/common/Modal';
 import { useQueryClient } from 'react-query';
@@ -7,11 +7,13 @@ import { useQueryClient } from 'react-query';
 interface Props {
   open: boolean;
   onClose: () => void;
-  onSubmit: (feed: Feed, data: Data) => void;
+  onSubmit: (feed: Feed, data: Data, snippet?: Snippet) => void;
   isIntegration: boolean;
+  isSnippet?: boolean;
+  hasConnectorDependency?: (feed: Feed) => boolean;
 }
 
-const FeedPickerModal = ({ open, onClose, onSubmit, isIntegration }: Props) => {
+const FeedPickerModal = ({ open, onClose, onSubmit, isIntegration, isSnippet, hasConnectorDependency }: Props) => {
   const queryClient = useQueryClient();
 
   const handleClose = () => {
@@ -22,7 +24,14 @@ const FeedPickerModal = ({ open, onClose, onSubmit, isIntegration }: Props) => {
 
   return (
     <Modal disableActions open={open} onClose={handleClose}>
-      <FeedPicker isIntegration={isIntegration} onSubmit={onSubmit} open={open} onClose={handleClose} />
+      <FeedPicker
+        isIntegration={isIntegration}
+        isSnippet={isSnippet}
+        hasConnectorDependency={hasConnectorDependency}
+        onSubmit={onSubmit}
+        open={open}
+        onClose={handleClose}
+      />
     </Modal>
   );
 };

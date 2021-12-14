@@ -84,12 +84,14 @@ const AuthCallbackPage: FC<{}> = (): ReactElement => {
 
         const navigatePostAuth = () => {
           const urlSearchParams = new URLSearchParams(window.location.search);
-          const requestedPath = urlSearchParams.get('requestedPath') || '/';
-          const requestedSearch = localStorage.getItem('requestedSearch');
+          const requestedPath = (urlSearchParams.get('requestedPath') || '/').replace(/ /g, '+');
+          const requestedSearch = localStorage.getItem('requestedSearch') || '';
+          const requestedHash = localStorage.getItem('requestedHash') || '';
 
           setFirstTimeVisitor(true);
           localStorage.removeItem('requestedSearch');
-          history.push(requestedPath + requestedSearch);
+          localStorage.removeItem('requestedHash');
+          history.push(requestedPath + requestedSearch + requestedHash);
         };
 
         const user: User = { email: fusebitProfile?.email, ...auth0Profile, ...company };

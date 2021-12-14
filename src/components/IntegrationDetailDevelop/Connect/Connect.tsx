@@ -294,7 +294,7 @@ const Connect: React.FC<Props> = ({
       )}
 
       <StyledSubtitle margin="32px auto">Connect your Backend</StyledSubtitle>
-      <FooterActions smallPhone={smallPhone} buttonsCrashing={buttonsCrashing} integration={integration} />
+      <FooterActions buttonsCrashing={buttonsCrashing} integration={integration} />
 
       <Box
         display="flex"
