@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Drawer, MobileStepper, Button, IconButton } from '@material-ui/core';
+import { Box, Drawer, MobileStepper, Button, IconButton, useMediaQuery } from '@material-ui/core';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import _startCase from 'lodash.startcase';
 import cross from '@assets/cross.svg';
@@ -25,6 +25,7 @@ interface Props {
 const FeedPickerMobile: React.FC<Props> = ({ isIntegration, onSubmit, open, onClose, isSnippet }) => {
   const [step, setStep] = useState(0);
   const queryClient = useQueryClient();
+  const isSmallPhone = useMediaQuery('(max-width:360px)');
   const {
     activeFilter,
     allTags,
@@ -143,7 +144,7 @@ const FeedPickerMobile: React.FC<Props> = ({ isIntegration, onSubmit, open, onCl
         <Box component="h4" fontWeight={600} fontSize={20} color="#333333" mt="16px" mb="48px" textAlign="center">
           New {feedTypeName}
         </Box>
-        <Box height="440px" mb="15px" overflow="auto">
+        <Box height={isSmallPhone ? '340px' : '440px'} mb="15px" overflow="auto">
           {loading ? <Loader /> : steps[step]}
         </Box>
         <Box m="0 auto" maxWidth="200px">
