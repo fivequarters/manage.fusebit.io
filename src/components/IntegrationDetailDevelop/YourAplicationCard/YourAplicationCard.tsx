@@ -15,14 +15,20 @@ import { CARD_OVERLAPPING_MEDIA_QUERY } from '@components/IntegrationDetailDevel
 import EmptyBackendList from '@components/IntegrationDetailDevelop/EmptyBackendList';
 import { INTEGRATION_CARD_ID } from '@components/IntegrationDetailDevelop/IntegrationCard/IntegrationCard';
 import NewBackendModal from '@components/IntegrationDetailDevelop/NewBackendModal';
+import useSampleApp from '@hooks/useSampleApp';
+import { useGetIntegrationFromCache } from '@hooks/useGetIntegrationFromCache';
+import NoSampleAppModal from '../NoSampleAppModal';
 
 interface Props {
   className?: string;
 }
 
 const YourAplication: React.FC<Props> = ({ className }) => {
+  const { url } = useSampleApp();
+  const integrationData = useGetIntegrationFromCache();
   const [newBackendOpen, setBackendOpen, toggleNewBackend] = useModal();
   const [createdBackend, setCreatedBackend] = useState<BackendClient>();
+  const [noSampleAppModalOpen, setNoSampleAppModalOpen] = useState(false);
   const { data: backends = [], isLoading } = useBackendGetAll();
   const { mutateAsync } = useBackendCreateOne();
   const { createLoader, removeLoader } = useLoader();
@@ -38,6 +44,21 @@ const YourAplication: React.FC<Props> = ({ className }) => {
     toggleNewBackend();
   };
 
+  const openSampleApp = () => {
+    trackEvent('Run Sample App Button Clicked', 'My Application', {
+      Integration: integrationData?.data?.tags['fusebit.feedId'],
+    });
+
+    if (url) {
+      const sampleAppTab = window.open() as Window;
+      sampleAppTab.opener = null;
+      sampleAppTab.location.href = url;
+      sampleAppTab.focus();
+    } else {
+      setNoSampleAppModalOpen(true);
+    }
+  };
+
   useEffect(() => {
     updateLines();
   }, [backends, updateLines]);
@@ -45,23 +66,36 @@ const YourAplication: React.FC<Props> = ({ className }) => {
   return (
     <>
       <NewBackendModal backendClient={createdBackend} open={newBackendOpen} onClose={() => setBackendOpen(false)} />
+      <NoSampleAppModal open={noSampleAppModalOpen} onClose={() => setNoSampleAppModalOpen(false)} />
       <BaseCard
         id="your-application"
         className={className}
         title="Your Applications"
         isLoading={isLoading}
         actions={
-          <Button
-            mode="add"
-            size="large"
-            style={{
-              width: 200,
-            }}
-            onClick={handleConnect}
-            disabled={backends.length >= 5} // TODO: Maybe backend validation?
-          >
-            Connect
-          </Button>
+          <>
+            <Button
+              mode="add"
+              size="large"
+              style={{
+                width: 200,
+              }}
+              onClick={handleConnect}
+              disabled={backends.length >= 5} // TODO: Maybe backend validation?
+            >
+              Connect
+            </Button>
+            <Button
+              mode="search"
+              size="large"
+              style={{
+                width: 200,
+              }}
+              onClick={() => openSampleApp()}
+            >
+              Sample App
+            </Button>
+          </>
         }
       >
         <Box>

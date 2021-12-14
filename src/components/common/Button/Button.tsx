@@ -1,9 +1,16 @@
 import { Button as MUIButton, ButtonProps } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import SearchIcon from '@material-ui/icons/Search';
 
 const BUTTON_MODES: { [k: string]: Partial<ButtonProps> } = {
   add: {
     startIcon: <AddIcon />,
+    size: 'large',
+    variant: 'outlined',
+    color: 'primary',
+  },
+  search: {
+    startIcon: <SearchIcon />,
     size: 'large',
     variant: 'outlined',
     color: 'primary',
