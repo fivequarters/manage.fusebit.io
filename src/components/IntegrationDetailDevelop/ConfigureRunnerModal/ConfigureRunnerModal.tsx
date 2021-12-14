@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Box, MenuItem, Select } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { getIntegrationConfig } from '@utils/localStorage';
+import { useAuthContext } from '@hooks/useAuthContext';
 import Label from '@components/common/FormFields/Label';
 import styled from 'styled-components';
 import Textarea from '@components/common/FormFields/Textarea';
@@ -66,15 +67,18 @@ const Verbs = ['get', 'post', 'put', 'patch', 'delete'];
 
 const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
   const { id } = useParams<{ id: string }>();
-  const [formValues, setFormValues] = useState(getIntegrationConfig(id).runner);
+  const { getTenantId } = useAuthContext();
+  const tenantId = getTenantId();
+  const integrationConfig = getIntegrationConfig(id, tenantId);
+  const [formValues, setFormValues] = useState(integrationConfig.runner);
   const [formErrors, setFormErrors] = useState<Partial<Errors>>({});
 
   useEffect(() => {
     return () => {
-      setFormValues(getIntegrationConfig(id).runner);
+      setFormValues(getIntegrationConfig(id, tenantId).runner);
       setFormErrors({});
     };
-  }, [open, id]);
+  }, [open, id, tenantId]);
 
   const validateForm = (newValues?: any) => {
     const { method, url, payload } = newValues || formValues || {};
@@ -109,7 +113,7 @@ const ConfigureRunnerModal: React.FC<Props> = ({ open, setOpen }) => {
     const isValid = validateForm();
 
     if (isValid) {
-      localStorage.setItem(id, JSON.stringify({ ...getIntegrationConfig(id), runner: formValues }));
+      localStorage.setItem(id, JSON.stringify({ ...integrationConfig, runner: formValues }));
       setOpen(false);
     }
   };

@@ -7,7 +7,7 @@ interface Props {
   setOpen: Function;
   handleConfirmation: Function;
   title: string;
-  description: string;
+  description: string | React.ReactElement;
   confirmationButtonText?: string;
   hideCancelButton?: boolean;
 }
