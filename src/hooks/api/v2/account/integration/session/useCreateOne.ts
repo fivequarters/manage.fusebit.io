@@ -10,21 +10,21 @@ export const useAccountIntegrationCreateSession = () => {
 
   return useMutation((params: Params) => {
     const { id, tenantId, components, install } = params;
-    const payload =
-      install && components
-        ? {
-            // update select components of an existing install
-            redirectUrl: `${window.location.origin}${window.location.pathname}`,
-            installId: install.id,
-            components,
-          }
-        : {
-            // create new install
-            redirectUrl: `${window.location.origin}${window.location.pathname}`,
-            tags: {
-              'fusebit.tenantId': tenantId,
-            },
-          };
+    let payload: any = {
+      redirectUrl: `${window.location.origin}${window.location.pathname}`,
+    };
+    if (install && components) {
+      // update select components of an existing install
+      payload = { ...payload, installId: install.id, components };
+    } else {
+      // create new install
+      payload = {
+        ...payload,
+        tags: {
+          'fusebit.tenantId': tenantId,
+        },
+      };
+    }
     return axios<CreateSessionPayload>(
       `/v2/account/${userData.accountId}/subscription/${userData.subscriptionId}/integration/${id}/session`,
       'post',

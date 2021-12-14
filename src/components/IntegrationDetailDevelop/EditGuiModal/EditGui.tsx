@@ -390,14 +390,15 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       trackEvent('Add Button Clicked', 'Add Snippet', {
         snippet: `${feed.id}-${snippet.id}`,
       });
-      if (newConnector) {
+
+      const addConnectorToConfig = (connector: ConnectorEntity) => {
         const connectorTemplate = (feed.configuration.components as EntityComponent[])[0];
         // Add newly created connector to integration's configuration
         const configuration = JSON.parse(window.editor.getConfigurationSettings()) as IntegrationData;
         configuration.components.push({
           ...connectorTemplate,
-          name: newConnector.id,
-          entityId: newConnector.id,
+          name: connector.id,
+          entityId: connector.id,
         });
         window.editor.setSettingsConfiguration(JSON.stringify(configuration));
 
@@ -407,28 +408,37 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
         const content = JSON.parse(window.editor.getSelectedFileContent());
         content.dependencies[connectorTemplate.provider] = providerVersion;
         window.editor.setSelectedFileContent(JSON.stringify(content, null, 2));
+      };
+
+      const addSnippetCode = () => {
+        // Add snippets at the end of integration.js
+        window.editor.selectFile('integration.js');
+        const newContent = formatSnippet(
+          feed,
+          snippet,
+          integrationId,
+          newConnector?.id || (existingConnector?.entityId as string),
+          newConnector?.id || (existingConnector?.name as string)
+        );
+        const content = window.editor.getSelectedFileContent();
+        window.editor.setSelectedFileContent(content + newContent);
+
+        // Make sure the editor reloads the updated integration.js
+        window.editor.selectedFileName = '';
+        window.editor.selectFile('integration.js');
+
+        // Scroll to the beginning of the snippet within integration.js in the editor
+        const lineCountInNewContent = (newContent.match(/\n/g) || []).length;
+        window.editor._monaco.revealLineNearTop(
+          window.editor._monaco.getModel().getLineCount() - lineCountInNewContent
+        );
+        setDirtyState(true);
+      };
+
+      if (newConnector) {
+        addConnectorToConfig(newConnector);
       }
-
-      // Add snippets at the end of integration.js
-      window.editor.selectFile('integration.js');
-      const newContent = formatSnippet(
-        feed,
-        snippet,
-        integrationId,
-        newConnector?.id || (existingConnector?.entityId as string),
-        newConnector?.id || (existingConnector?.name as string)
-      );
-      const content = window.editor.getSelectedFileContent();
-      window.editor.setSelectedFileContent(content + newContent);
-
-      // Make sure the editor reloads the updated integration.js
-      window.editor.selectedFileName = '';
-      window.editor.selectFile('integration.js');
-
-      // Scroll to the beginning of the snippet within integration.js in the editor
-      const lineCountInNewContent = (newContent.match(/\n/g) || []).length;
-      window.editor._monaco.revealLineNearTop(window.editor._monaco.getModel().getLineCount() - lineCountInNewContent);
-      setDirtyState(true);
+      addSnippetCode();
     }
     setAddSnippetModalOpen(false);
   };

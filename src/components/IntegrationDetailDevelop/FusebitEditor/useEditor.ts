@@ -153,13 +153,11 @@ const useEditor = (
       const install = await findInstall();
 
       // Determine connectors that do not have an identity defined as part of the install
-      const connectorsWithoutIdentity: InnerConnector[] = [];
+      let connectorsWithoutIdentity: InnerConnector[] = [];
       if (install) {
-        (integrationData?.data.data.components || []).forEach((component) => {
-          if (component.entityType === 'connector' && !install.data[component.name]) {
-            connectorsWithoutIdentity.push(component);
-          }
-        });
+        connectorsWithoutIdentity = (integrationData?.data.data.components || []).filter(
+          (component) => component.entityType === 'connector' && !install.data[component.name]
+        );
       }
 
       onMissingIdentities?.(install ? connectorsWithoutIdentity : undefined);

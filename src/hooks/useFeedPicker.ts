@@ -98,7 +98,7 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet }: Pr
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isIntegration, isSnippet, open, feed]);
 
-  const filteredFeed = useFilterFeed({ feed });
+  const filteredFeed = useFilterFeed({ feed, filterSnippets: isSnippet });
 
   const isLoading = isIntegration
     ? queryClient.getQueryState('getIntegrationsFeed')?.status === 'loading'

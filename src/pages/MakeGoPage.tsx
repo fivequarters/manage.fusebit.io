@@ -33,9 +33,9 @@ const MakeGoPage: FC<{}> = (): ReactElement => {
       (async () => {
         createLoader('Creating integration...');
         setIsCreating(true);
-        try {
+
+        const createAllConnectors = async (random: number) => {
           // Create all connectors
-          const random = Math.floor(Math.random() * 899 + 100);
           const entities = await Promise.all(
             connectors.map((connector) => {
               const entityName = Object.keys(connector.configuration.entities)[0];
@@ -50,7 +50,10 @@ const MakeGoPage: FC<{}> = (): ReactElement => {
           connectors.forEach((c, i) => {
             connectorEntityMap[c.id] = entities[i] as Entity;
           });
+          return connectorEntityMap;
+        };
 
+        const createCustomIntegrationTemplate = (random: number, connectorEntityMap: { [key: string]: Entity }) => {
           // Construct an new integration template using the custom integration template as the basis
           const customFeed = integrationFeed.data.find((i) => i.id === 'custom') as Feed;
           const integrationId = `int-${connectors.map((c) => c.id).join('-')}-${random}`;
@@ -76,6 +79,7 @@ const MakeGoPage: FC<{}> = (): ReactElement => {
               s.connector
             );
           });
+
           // add integration's components
           connectors.forEach((c) => {
             newComponents.push({
@@ -105,6 +109,17 @@ const MakeGoPage: FC<{}> = (): ReactElement => {
               },
             },
           };
+
+          return { newIntegrationFeed, entityName, integrationId };
+        };
+
+        try {
+          const random = Math.floor(Math.random() * 899 + 100);
+          const connectorEntityMap = await createAllConnectors(random);
+          const { newIntegrationFeed, entityName, integrationId } = createCustomIntegrationTemplate(
+            random,
+            connectorEntityMap
+          );
           // constuct integration template substitution parameters
           const data: Data = {
             [entityName]: { id: integrationId },
