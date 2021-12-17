@@ -4,6 +4,7 @@ import debounce from 'lodash.debounce';
 import { useMediaQuery } from '@material-ui/core';
 import { Feed, Snippet, ParsedFeed } from '@interfaces/feed';
 import { trackEvent } from '@utils/analytics';
+import { sendIntercomMessage } from '@utils/intercom';
 import { Data } from '@interfaces/feedPicker';
 import orderBy from 'lodash.orderby';
 import { useQueryClient } from 'react-query';
@@ -164,6 +165,7 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet }: Pr
         trackEvent('New Connector Enable Button Clicked', 'Connectors', { connector: rawActiveTemplate.id });
       }
       window.Intercom('showNewMessage', `I'm interested in enabling ${rawActiveTemplate.name}`);
+      sendIntercomMessage();
     }
     onClose?.();
   };

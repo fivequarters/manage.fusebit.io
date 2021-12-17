@@ -8,6 +8,7 @@ import burguer from '@assets/burguer.svg';
 import { useAuthContext } from '@hooks/useAuthContext';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 import { trackEvent } from '@utils/analytics';
+import { sendIntercomMessage } from '@utils/intercom';
 import UserMenu from '../UserMenu/UserMenu';
 import UserDrawerMobile from '../UserDrawerMobile';
 
@@ -57,24 +58,10 @@ const StyledLinkContainer = styled(Box)`
   }
 `;
 
-const sendSupportMessage = () => {
-  setTimeout(() => {
-    const intercomFrame = document.querySelector<HTMLIFrameElement>("iframe[name='intercom-messenger-frame']");
-    if (!intercomFrame || !intercomFrame.contentDocument) {
-      return sendSupportMessage();
-    }
-    const sendButton = intercomFrame.contentDocument.querySelector<HTMLButtonElement>('.intercom-composer-send-button');
-    if (!sendButton) {
-      return sendSupportMessage();
-    }
-    sendButton.click();
-  }, 200);
-};
-
 const openSupportMessage = () => {
   trackEvent('Support Link Clicked', 'Header');
   window.Intercom('showNewMessage', 'Hi, Fusebit team. I have a question!');
-  sendSupportMessage();
+  sendIntercomMessage();
 };
 
 interface Props {
