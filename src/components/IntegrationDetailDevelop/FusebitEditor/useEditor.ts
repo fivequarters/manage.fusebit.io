@@ -8,15 +8,12 @@ import { useAxios, ApiResponse } from '@hooks/useAxios';
 import { useAuthContext } from '@hooks/useAuthContext';
 import { InstallList, Install } from '@interfaces/install';
 import { trackEvent } from '@utils/analytics';
-import { useError } from '@hooks/useError';
 import { storeIntegrationConfig, getIntegrationConfig, resetIntegrationConfig } from '@utils/localStorage';
 import { InnerConnector, Integration } from '@interfaces/integration';
-import useEditorEvents from './useEditorEvents';
 
 interface Props {
   integrationData?: ApiResponse<Integration>;
   enableListener?: boolean;
-  isMounted?: boolean;
   onReadyToRun?: () => void;
   onReadyToLogin?: () => void;
   onMissingIdentities?: (connectors?: InnerConnector[]) => void;
@@ -25,14 +22,7 @@ interface Props {
 const LOCALSTORAGE_SESSION_KEY = 'session';
 
 const useEditor = (
-  {
-    integrationData,
-    enableListener = true,
-    isMounted = false,
-    onReadyToRun,
-    onReadyToLogin,
-    onMissingIdentities,
-  } = {} as Props
+  { integrationData, enableListener = true, onReadyToRun, onReadyToLogin, onMissingIdentities } = {} as Props
 ) => {
   const { id } = useParams<{ id: string }>();
   const { userData, getTenantId } = useAuthContext();
@@ -45,8 +35,6 @@ const useEditor = (
   const [runPending, setRunPending] = useState(false);
   // Prevent beign called multiple times if user has multiple tabs open
   const hasSessionChanged = useRef(false);
-  const { isSaving, errorBuild, setErrorBuild, logs, setLogs } = useEditorEvents({ isMounted });
-  const { createError } = useError();
   const tenantId = getTenantId();
 
   const findInstall = useCallback(async () => {
@@ -194,13 +182,6 @@ const useEditor = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [needsInitialization, integrationData]);
 
-  useEffect(() => {
-    if (errorBuild) {
-      createError({ message: 'The build failed' });
-      setErrorBuild('');
-    }
-  }, [errorBuild, createError, setErrorBuild]);
-
   return {
     handleRun,
     handleNoInstallFound: handleMissingOrIncompleteInstall,
@@ -208,7 +189,6 @@ const useEditor = (
     isCreatingSession,
     isTesting,
     isCommiting,
-    isSaving,
     handleEdit,
     handleLogin,
     isRunning: isTesting || isCommiting,
@@ -220,8 +200,6 @@ const useEditor = (
     },
     runPending,
     setRunPending,
-    logs,
-    setLogs,
   };
 };
 

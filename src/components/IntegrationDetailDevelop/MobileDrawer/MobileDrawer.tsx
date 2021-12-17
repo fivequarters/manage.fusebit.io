@@ -6,6 +6,8 @@ import play from '@assets/play.svg';
 import info from '@assets/info.svg';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
+import useEditorEvents from '../FusebitEditor/useEditorEvents';
+import { EditorEvents } from '~/enums/editor';
 
 const StyledGuiMobileWrapper = styled.div`
   position: relative;
@@ -57,11 +59,14 @@ interface Props {
   onClose: () => void;
   handleRun: () => void;
   isRunning: boolean;
-  logs: { msg: string; id: number }[];
-  clearLogs: () => void;
 }
 
-const MobileDrawer = ({ open, onClose, handleRun, isRunning, logs, clearLogs }: Props) => {
+const MobileDrawer = ({ open, onClose, handleRun, isRunning }: Props) => {
+  const { logs, clearLogs } = useEditorEvents({
+    isMounted: open,
+    events: [EditorEvents.LogsEntry, EditorEvents.LogsAttached, EditorEvents.RunnerFinished],
+  });
+
   useEffect(() => {
     if (logs.length > 0) {
       const mobileLog = document.getElementById('mobile-log');
@@ -71,12 +76,8 @@ const MobileDrawer = ({ open, onClose, handleRun, isRunning, logs, clearLogs }: 
     }
   }, [logs]);
 
-  const handleLogClear = () => {
-    clearLogs();
-  };
-
   const handleClose = () => {
-    handleLogClear();
+    clearLogs();
     onClose();
   };
 

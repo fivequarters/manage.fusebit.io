@@ -33,8 +33,11 @@ import PlayArrowOutlined from '@material-ui/icons/PlayArrowOutlined';
 import SaveOutlined from '@material-ui/icons/SaveOutlined';
 import { useInvalidateIntegration } from '@hooks/useInvalidateIntegration';
 import { CodeOutlined } from '@material-ui/icons';
+import { useError } from '@hooks/useError';
 import MobileDrawer from '../MobileDrawer';
+import useEditorEvents from '../FusebitEditor/useEditorEvents';
 import { EditGuiSampleApp } from './EditGuiSampleApp';
+import { EditorEvents } from '~/enums/editor';
 
 const StyledEditorContainer = styled.div`
   .fa {
@@ -299,26 +302,28 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const [addSnippetModalOpen, setAddSnippetModalOpen] = useState(false);
   const [missingIdentities, setMissingIdentities] = useState<InnerConnector[] | undefined>(undefined);
   const integrationData = useGetIntegrationFromCache();
-  const {
-    handleRun,
-    handleLogin,
-    isFindingInstall,
-    isSaving,
-    setNeedsInitialization,
-    setRunPending,
-    isRunning,
-    logs,
-    setLogs,
-  } = useEditor({
+  const { handleRun, handleLogin, isFindingInstall, setNeedsInitialization, setRunPending, isRunning } = useEditor({
     integrationData,
     onReadyToLogin: () =>
       !missingIdentities || missingIdentities.length > 0 ? setLoginFlowModalOpen(true) : handleLogin(),
     onMissingIdentities: setMissingIdentities,
-    isMounted,
   });
   const [dirtyState, setDirtyState] = useState(false);
   const { invalidateIntegration } = useInvalidateIntegration();
   const { formatSnippet, getProviderVersion } = useSnippets();
+  const { createError } = useError();
+
+  const { isSaving, errorBuild, setErrorBuild } = useEditorEvents({
+    isMounted,
+    events: [EditorEvents.BuildStarted, EditorEvents.BuildFinished, EditorEvents.BuildError],
+  });
+
+  useEffect(() => {
+    if (errorBuild) {
+      createError({ message: 'The build failed' });
+      setErrorBuild('');
+    }
+  }, [errorBuild, createError, setErrorBuild]);
 
   useTrackPage('Web Editor', 'Web Editor');
   useTitle(`${id} Editor`);
@@ -634,14 +639,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
             <StyledFusebitEditorLogo src={logo} alt="fusebit logo" height="20" width="80" />
           )}
           {isMounted && matchesMobile && (
-            <MobileDrawer
-              open={isMounted}
-              onClose={handleClose}
-              clearLogs={() => setLogs([])}
-              handleRun={handleRun}
-              isRunning={isRunning}
-              logs={logs}
-            />
+            <MobileDrawer open={isMounted} onClose={handleClose} handleRun={handleRun} isRunning={isRunning} />
           )}
         </StyledFusebitEditorContainer>
       </StyledEditorContainer>

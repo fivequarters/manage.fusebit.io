@@ -5,36 +5,45 @@ import { logWithTime } from './utils';
 
 interface Props {
   isMounted: boolean;
+  events: EditorEvents[];
 }
 
-const useEditorEvents = ({ isMounted }: Props) => {
+const useEditorEvents = ({ isMounted, events }: Props) => {
   const [isSaving, setIsSaving] = useState(false);
   const [errorBuild, setErrorBuild] = useState('');
   const [logs, setLogs] = useState<{ msg: string; id: number }[]>([]);
+  const clearLogs = () => setLogs([]);
 
   useEffect(() => {
-    if (isMounted) {
-      window.editor?.on(EditorEvents.BuildStarted, () => {
+    const config = {
+      [EditorEvents.BuildStarted]: () => {
         setIsSaving(true);
         setErrorBuild('');
-      });
-      window.editor?.on(EditorEvents.BuildFinished, () => setIsSaving(false));
-      window.editor?.on(EditorEvents.BuildError, (e: { error: { message: string } }) => {
+      },
+      [EditorEvents.BuildFinished]: () => {
+        setIsSaving(false);
+      },
+      [EditorEvents.BuildError]: () => (e: { error: { message: string } }) => {
         setIsSaving(false);
         setErrorBuild(`There was an error in the build: ${e.error.message}`);
-      });
-      window.editor.on(EditorEvents.LogsAttached, () => {
-        setLogs([...logs, logWithTime('Attached to real-time logs...')]);
-      });
-      window.editor.on(EditorEvents.LogsEntry, (e: LogEntry) => {
+      },
+      [EditorEvents.LogsAttached]: () => {
+        setLogs((oldLogs) => [...oldLogs, logWithTime('Attached to real-time logs...')]);
+      },
+      [EditorEvents.LogsEntry]: () => (e: LogEntry) => {
         const logData = JSON.parse(e.data) as LogData;
-        setLogs([...logs, logWithTime(logData.msg)]);
-      });
-      window.editor.on(EditorEvents.RunnerFinished, (e: LogEntryError) => {
-        setLogs([...logs, logWithTime(e.error)]);
-      });
+        setLogs((oldLogs) => [...oldLogs, logWithTime(logData.msg)]);
+      },
+      [EditorEvents.RunnerFinished]: () => (e: LogEntryError) => {
+        setLogs((oldLogs) => [...oldLogs, logWithTime(e.error)]);
+      },
+    };
+
+    if (isMounted) {
+      events.forEach((e) => window.editor?.on(e, config[e as keyof typeof config]()));
     }
-  }, [isMounted, isSaving, logs]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMounted]);
 
   return {
     isSaving,
@@ -42,6 +51,7 @@ const useEditorEvents = ({ isMounted }: Props) => {
     setErrorBuild,
     logs,
     setLogs,
+    clearLogs,
   };
 };
 
