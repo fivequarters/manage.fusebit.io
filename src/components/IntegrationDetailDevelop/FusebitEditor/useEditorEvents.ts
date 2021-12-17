@@ -40,7 +40,7 @@ const useEditorEvents = ({ isMounted, events }: Props) => {
     };
 
     if (isMounted) {
-      events.forEach((e) => window.editor?.on(e, config[e as keyof typeof config]()));
+      events.forEach((e) => window.editor?.on(e, config[e as keyof typeof config]));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMounted]);
