@@ -1,8 +1,7 @@
 import { Snippet, Feed, ConnectorEntity, EntityComponent } from '@interfaces/feed';
 import { InnerConnector, IntegrationData } from '@interfaces/integration';
 import React, { useState, useEffect } from 'react';
-import { Box, Button, ButtonGroup, IconButton } from '@material-ui/core';
-import { SaveOutlined, PlayArrowOutlined, CodeOutlined } from '@material-ui/icons';
+import { Box, Button, ButtonGroup, IconButton, useMediaQuery, useTheme } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Props, SaveStatus } from '@interfaces/edit';
 import { useAuthContext } from '@hooks/useAuthContext';
@@ -30,7 +29,11 @@ import clock from '@assets/clock.svg';
 import playEditor from '@assets/play-editor.svg';
 import add from '@assets/add.svg';
 import CloseIcon from '@material-ui/icons/Close';
+import PlayArrowOutlined from '@material-ui/icons/PlayArrowOutlined';
+import SaveOutlined from '@material-ui/icons/SaveOutlined';
 import { useInvalidateIntegration } from '@hooks/useInvalidateIntegration';
+import { CodeOutlined } from '@material-ui/icons';
+import MobileDrawer from '../MobileDrawer';
 import { EditGuiSampleApp } from './EditGuiSampleApp';
 
 const StyledEditorContainer = styled.div`
@@ -245,7 +248,7 @@ const StyledActionsHelpImage = styled.img`
   }
 `;
 
-const StyledFusebitEditorContainer = styled.div`
+const StyledFusebitEditorContainer = styled(Box)`
   position: relative;
 `;
 
@@ -291,10 +294,22 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const [unsavedWarning, setUnsavedWarning] = useState(false);
   const { createLoader, removeLoader } = useLoader();
   const [loginFlowModalOpen, setLoginFlowModalOpen] = useState(false);
+  const theme = useTheme();
+  const matchesMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [addSnippetModalOpen, setAddSnippetModalOpen] = useState(false);
   const [missingIdentities, setMissingIdentities] = useState<InnerConnector[] | undefined>(undefined);
   const integrationData = useGetIntegrationFromCache();
-  const { handleRun, handleLogin, isFindingInstall, isSaving, setNeedsInitialization, setRunPending } = useEditor({
+  const {
+    handleRun,
+    handleLogin,
+    isFindingInstall,
+    isSaving,
+    setNeedsInitialization,
+    setRunPending,
+    isRunning,
+    logs,
+    setLogs,
+  } = useEditor({
     integrationData,
     onReadyToLogin: () =>
       !missingIdentities || missingIdentities.length > 0 ? setLoginFlowModalOpen(true) : handleLogin(),
@@ -521,7 +536,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
           onClose={handleAddSnippetClose}
           integrationData={integrationData}
         />
-        {isMounted && (
+        {isMounted && !matchesMobile && (
           <StyledCloseHeader>
             <Button
               style={{ marginRight: '16px' }}
@@ -590,7 +605,12 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
             </StyledCloseWrapper>
           </StyledCloseHeader>
         )}
-        <StyledFusebitEditorContainer onKeyUp={handleKeyUp}>
+        <StyledFusebitEditorContainer
+          onKeyUp={handleKeyUp}
+          position={matchesMobile && 'absolute'}
+          left={matchesMobile && '-100vw'}
+          bottom={matchesMobile && '-100vh'}
+        >
           <FusebitEditor
             boundaryId="integration"
             functionId={integrationId}
@@ -610,7 +630,19 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
               setIsMounted(true);
             }}
           />
-          {isMounted && <StyledFusebitEditorLogo src={logo} alt="fusebit logo" height="20" width="80" />}
+          {isMounted && !matchesMobile && (
+            <StyledFusebitEditorLogo src={logo} alt="fusebit logo" height="20" width="80" />
+          )}
+          {isMounted && matchesMobile && (
+            <MobileDrawer
+              open={isMounted}
+              onClose={handleClose}
+              clearLogs={() => setLogs([])}
+              handleRun={handleRun}
+              isRunning={isRunning}
+              logs={logs}
+            />
+          )}
         </StyledFusebitEditorContainer>
       </StyledEditorContainer>
     </Box>

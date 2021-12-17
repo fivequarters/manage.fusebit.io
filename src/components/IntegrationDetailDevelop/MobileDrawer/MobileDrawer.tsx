@@ -1,15 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Drawer, Button, Box, Typography } from '@material-ui/core';
 import * as CSC from '@components/globalStyle';
 import play from '@assets/play.svg';
 import info from '@assets/info.svg';
-import useEditor from '@components/IntegrationDetailDevelop/FusebitEditor/useEditor';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { useAuthContext } from '@hooks/useAuthContext';
-import { useLoader } from '@hooks/useLoader';
-import FusebitEditor from '../FusebitEditor';
 
 const StyledGuiMobileWrapper = styled.div`
   position: relative;
@@ -19,14 +15,6 @@ const StyledGuiMobileWrapper = styled.div`
   justify-content: center;
   padding: 24px;
   padding-top: 76px;
-`;
-
-const StyledEditorWrapper = styled.div`
-  position: absolute;
-  height: 1px;
-  width: 1px;
-  left: -100vw;
-  bottom: -100vh;
 `;
 
 const StyledGuiMobileNotSupportedWrapper = styled.div`
@@ -65,23 +53,15 @@ const StyledLog = styled(Box)`
 `;
 
 interface Props {
-  integrationId: string;
   open: boolean;
   onClose: () => void;
+  handleRun: () => void;
+  isRunning: boolean;
+  logs: { msg: string; id: number }[];
+  clearLogs: () => void;
 }
 
-const MobileDrawer = ({ open, onClose, integrationId }: Props) => {
-  const [isMounted, setIsMounted] = useState(false);
-  const { handleRun, isRunning, logs, setLogs } = useEditor({ enableListener: open, isMounted });
-  const { userData } = useAuthContext();
-  const { createLoader, removeLoader } = useLoader();
-
-  useEffect(() => {
-    if (!isMounted && open) {
-      createLoader();
-    }
-  }, [isMounted, open, createLoader]);
-
+const MobileDrawer = ({ open, onClose, handleRun, isRunning, logs, clearLogs }: Props) => {
   useEffect(() => {
     if (logs.length > 0) {
       const mobileLog = document.getElementById('mobile-log');
@@ -92,43 +72,17 @@ const MobileDrawer = ({ open, onClose, integrationId }: Props) => {
   }, [logs]);
 
   const handleLogClear = () => {
-    setLogs([]);
+    clearLogs();
   };
 
   const handleClose = () => {
     handleLogClear();
-    setIsMounted(false);
     onClose();
   };
 
   return (
     <>
-      {open && (
-        <StyledEditorWrapper>
-          <FusebitEditor
-            boundaryId="integration"
-            functionId={integrationId}
-            account={{
-              accountId: userData.accountId,
-              subscriptionId: userData.subscriptionId,
-              baseUrl: process.env.REACT_APP_FUSEBIT_DEPLOYMENT,
-              accessToken: userData.token,
-            }}
-            options={{
-              entityType: 'integration',
-              editor: {
-                navigationPanel: { hideRunnerTool: true, hideScheduleSettings: true },
-              },
-            }}
-            onLoaded={() => {
-              removeLoader();
-              setIsMounted(true);
-            }}
-          />
-        </StyledEditorWrapper>
-      )}
-
-      <Drawer anchor="bottom" open={open && isMounted} onClose={handleClose}>
+      <Drawer anchor="bottom" open={open} onClose={handleClose}>
         <>
           <StyledGuiMobileWrapper>
             <CSC.CloseWrapper onClick={handleClose}>
@@ -155,7 +109,7 @@ const MobileDrawer = ({ open, onClose, integrationId }: Props) => {
           <StyledLogWrapper padding="21px 30px 0">
             <Box display="flex" alignItems="center">
               <StyledLogTitle>Log Console</StyledLogTitle>
-              <Box marginLeft="auto" color="inherit" onClick={handleLogClear}>
+              <Box marginLeft="auto" color="inherit" onClick={clearLogs}>
                 <DeleteIcon color="inherit" style={{ width: '20px' }} />
               </Box>
             </Box>
