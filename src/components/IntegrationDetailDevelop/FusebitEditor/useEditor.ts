@@ -196,7 +196,7 @@ const useEditor = (
 
   useEffect(() => {
     if (errorBuild) {
-      createError({ message: errorBuild });
+      createError({ message: 'The build failed' });
       setErrorBuild('');
     }
   }, [errorBuild, createError, setErrorBuild]);
