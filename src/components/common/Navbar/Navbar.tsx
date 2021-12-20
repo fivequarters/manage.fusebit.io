@@ -90,7 +90,7 @@ const Navbar: React.FC<Props> = ({ children, hideUserMenu, logoUrl }) => {
   const DynamicLink: React.FC = ({ children: innerChildren }) => {
     if (logoUrl) {
       return (
-        <a href={rootUrl} target="blank">
+        <a href={rootUrl} target="_blank">
           {innerChildren}
         </a>
       );
