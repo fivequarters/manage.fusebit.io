@@ -196,6 +196,8 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(
       feedTypeName,
       isMobile,
       orderAlpha,
+      key,
+      setCampaingIntegrationRef,
     } = useFeedPicker({
       open,
       isIntegration,
@@ -293,6 +295,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(
                           key={getFullTemplateId(feedEntry)}
                           onClick={() => handleTemplateChange(feedEntry)}
                           active={feedEntry.id === activeTemplate.id}
+                          ref={(itemRef) => (feedEntry.id === key ? setCampaingIntegrationRef(itemRef) : null)}
                         >
                           <StyledColumnItemImage
                             src={urlOrSvgToImage(feedEntry.smallIcon)}
