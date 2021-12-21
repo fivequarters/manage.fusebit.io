@@ -42,11 +42,11 @@ const StyledTitle = styled.h2`
   margin-bottom: 49px;
 `;
 
-const StyledColumn = styled.div<{ border?: boolean }>`
+const StyledColumn = styled.div<{ border?: boolean; maxHeight?: string }>`
   position: relative;
   display: flex;
   flex-direction: column;
-  max-height: 390px;
+  max-height: ${(props) => props.maxHeight || '390px'};
   overflow-y: scroll;
   flex-shrink: 0;
   z-index: 0;
@@ -256,56 +256,58 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(
               <StyledColumnBr />
             </>
           )}
-          <StyledColumn border>
+          <Box display="flex" flexDirection="column">
             <StyledColumnSearchWrapper>
               <TextField fullWidth onChange={(e) => debouncedSetSearchFilter(e.target.value)} label="Search" />
               <StyledColumnSearchIcon src={search} alt={`Search ${feedTypeName}s`} height="24" width="24" />
             </StyledColumnSearchWrapper>
-            {loading || !activeTemplate ? (
-              <Loader />
-            ) : (
-              <Box>
-                {orderAlpha(filteredFeed)
-                  .filter((feedEntry) => !feedEntry.private)
-                  .map((feedEntry) =>
-                    isSnippet ? (
-                      <>
-                        {feedEntry.snippets?.map((snippet) => (
-                          <StyledColumnItem
-                            width={isSnippet ? 2 : 1}
-                            key={getFullTemplateId(feedEntry, snippet)}
-                            onClick={() => handleTemplateChange(feedEntry, snippet)}
-                            active={feedEntry.id === activeTemplate.id && snippet.id === activeSnippet?.id}
-                          >
-                            <StyledColumnItemImage
-                              src={urlOrSvgToImage(feedEntry.smallIcon)}
-                              alt={getFullTemplateName(feedEntry, snippet)}
-                              height="18"
-                              width="18"
-                            />
-                            {getFullTemplateName(feedEntry, snippet)}
-                          </StyledColumnItem>
-                        ))}
-                      </>
-                    ) : (
-                      <StyledColumnItem
-                        key={getFullTemplateId(feedEntry)}
-                        onClick={() => handleTemplateChange(feedEntry)}
-                        active={feedEntry.id === activeTemplate.id}
-                      >
-                        <StyledColumnItemImage
-                          src={urlOrSvgToImage(feedEntry.smallIcon)}
-                          alt={getFullTemplateName(feedEntry)}
-                          height="18"
-                          width="18"
-                        />
-                        {getFullTemplateName(feedEntry)}
-                      </StyledColumnItem>
-                    )
-                  )}
-              </Box>
-            )}
-          </StyledColumn>
+            <Box>
+              {loading || !activeTemplate ? (
+                <Loader />
+              ) : (
+                <StyledColumn border maxHeight="290px">
+                  {orderAlpha(filteredFeed)
+                    .filter((feedEntry) => !feedEntry.private)
+                    .map((feedEntry) =>
+                      isSnippet ? (
+                        <>
+                          {feedEntry.snippets?.map((snippet) => (
+                            <StyledColumnItem
+                              width={isSnippet ? 2 : 1}
+                              key={getFullTemplateId(feedEntry, snippet)}
+                              onClick={() => handleTemplateChange(feedEntry, snippet)}
+                              active={feedEntry.id === activeTemplate.id && snippet.id === activeSnippet?.id}
+                            >
+                              <StyledColumnItemImage
+                                src={urlOrSvgToImage(feedEntry.smallIcon)}
+                                alt={getFullTemplateName(feedEntry, snippet)}
+                                height="18"
+                                width="18"
+                              />
+                              {getFullTemplateName(feedEntry, snippet)}
+                            </StyledColumnItem>
+                          ))}
+                        </>
+                      ) : (
+                        <StyledColumnItem
+                          key={getFullTemplateId(feedEntry)}
+                          onClick={() => handleTemplateChange(feedEntry)}
+                          active={feedEntry.id === activeTemplate.id}
+                        >
+                          <StyledColumnItemImage
+                            src={urlOrSvgToImage(feedEntry.smallIcon)}
+                            alt={getFullTemplateName(feedEntry)}
+                            height="18"
+                            width="18"
+                          />
+                          {getFullTemplateName(feedEntry)}
+                        </StyledColumnItem>
+                      )
+                    )}
+                </StyledColumn>
+              )}
+            </Box>
+          </Box>
           <StyledColumnBr />
           <StyledConnectorInfo>
             {loading || !activeTemplate ? (
