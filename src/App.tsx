@@ -1,11 +1,4 @@
-import {
-  createTheme,
-  responsiveFontSizes,
-  ThemeProvider,
-  Theme,
-  StyledEngineProvider,
-  adaptV4Theme,
-} from '@mui/material/styles';
+import { createTheme, responsiveFontSizes, ThemeProvider, Theme, StyledEngineProvider } from '@mui/material/styles';
 import CookieConsent from 'react-cookie-consent';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import DashboardRoutes from '@components/DashboardRoutes';
@@ -25,7 +18,7 @@ const App = () => {
     <ContextProvider>
       {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />}
       <StyledEngineProvider injectFirst>
-        <ThemeProvider theme={responsiveFontSizes(createTheme(adaptV4Theme(lightTheme)))}>
+        <ThemeProvider theme={responsiveFontSizes(createTheme(lightTheme))}>
           <CookieConsent
             location="bottom"
             buttonText="Accept"
