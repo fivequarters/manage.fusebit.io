@@ -21,6 +21,7 @@ const StyledLink = styled(Button)<{ active?: boolean }>`
   background-color: ${(props) => props.active && 'var(--secondary-color)'};
   box-shadow: none;
   width: 254px;
+  color: var(--black);
   justify-content: left;
   padding: 11px 16px;
   transition: font-weight 0.1s linear;
@@ -59,9 +60,7 @@ const AccountDrawer: React.FC<Props> = ({ active }) => {
       {links.map((link) => (
         <Box key={link.href} mb="8px">
           <Link to={link.href}>
-            <StyledLink color="inherit" active={active === link.id}>
-              {link.name}
-            </StyledLink>
+            <StyledLink active={active === link.id}>{link.name}</StyledLink>
           </Link>
         </Box>
       ))}
