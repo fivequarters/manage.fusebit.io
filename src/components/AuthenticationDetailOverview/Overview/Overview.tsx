@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Button, Box } from '@material-ui/core';
+import { Button, Box } from '@mui/material';
 import { ValidationMode } from '@jsonforms/core';
 import { useHistory, useParams } from 'react-router-dom';
 import dots from '@assets/dots.svg';

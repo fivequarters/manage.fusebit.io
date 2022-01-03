@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
-import { CircularProgress, useMediaQuery } from '@material-ui/core';
+import { CircularProgress, useMediaQuery } from '@mui/material';
 import ListItem from '@components/IntegrationDetailDevelop/ListItem';
 import { useModal } from '@hooks/useModal';
 import ConfirmationPrompt from '@components/common/ConfirmationPrompt';

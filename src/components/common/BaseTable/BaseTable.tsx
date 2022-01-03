@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Table, TableBody, Button, IconButton, Tooltip, useMediaQuery, TablePagination, Box } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { Table, TableBody, Button, IconButton, Tooltip, useMediaQuery, TablePagination, Box } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { ROWS_PER_PAGE_OPTIONS } from '@hooks/usePagination';
 import * as CSC from '@components/globalStyle';
 import styled from 'styled-components';
@@ -144,8 +144,8 @@ const BaseTable: React.FC<BaseTableProps> = ({
           count={rows.length}
           rowsPerPage={rowsPerPage}
           page={page}
-          onChangePage={(e, value) => onChangePage?.(e, value)}
-          onChangeRowsPerPage={(e) => onChangeRowsPerPage?.(e)}
+          onPageChange={(e, value) => onChangePage?.(e, value)}
+          onRowsPerPageChange={(e) => onChangeRowsPerPage?.(e)}
         />
       </StyledTableContainer>
     );
@@ -179,7 +179,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
             {selected.length} selected
             <StyledDeleteIconWrapper>
               <Tooltip title="Delete">
-                <IconButton onClick={onDeleteAll}>
+                <IconButton onClick={onDeleteAll} size="large">
                   <DeleteIcon />
                 </IconButton>
               </Tooltip>

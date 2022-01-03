@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Box, Button, TextField } from '@material-ui/core';
+import { Box, Button, TextField } from '@mui/material';
 import { Props } from '@interfaces/feedPicker';
 import search from '@assets/search.svg';
 import Loader from '@components/common/Loader';
@@ -223,7 +223,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(
     return (
       <StyledCard onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)} ref={ref} tabIndex={-1}>
         <StyledTitle>{isSnippet ? `Add Snippet` : `New ${feedTypeName}`}</StyledTitle>
-        <Box display="flex" flexDirection={isMobile && 'column'}>
+        <Box display="flex" flexDirection={isMobile ? 'column' : 'row'}>
           {!isSnippet && (
             <>
               <StyledColumn>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Box, MenuItem, Select } from '@material-ui/core';
+import { Button, Box, MenuItem, Select } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { getIntegrationConfig } from '@utils/localStorage';
 import { useAuthContext } from '@hooks/useAuthContext';

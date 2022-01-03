@@ -3,7 +3,7 @@ import Button from '@components/common/Button/Button';
 import { useGetIntegrationFromCache } from '@hooks/useGetIntegrationFromCache';
 import { useLoader } from '@hooks/useLoader';
 import { useError } from '@hooks/useError';
-import { Box, Card, CardActions, CardContent, CircularProgress, Typography } from '@material-ui/core';
+import { Box, Card, CardActions, CardContent, CircularProgress, Typography } from '@mui/material';
 import { INTEGRATION_PROCESSING_SUFFIX } from '@utils/constants';
 import React, { useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';

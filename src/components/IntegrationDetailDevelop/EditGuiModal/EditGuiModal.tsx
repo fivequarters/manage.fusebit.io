@@ -1,4 +1,4 @@
-import { Backdrop, Modal } from '@material-ui/core';
+import { Backdrop, Modal } from '@mui/material';
 import EditGui from './EditGui';
 
 interface Props {

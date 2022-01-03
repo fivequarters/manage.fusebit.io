@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Grid, useMediaQuery } from '@material-ui/core';
+import { Box, Grid, useMediaQuery } from '@mui/material';
 import styled, { css } from 'styled-components';
 import { Xwrapper } from 'react-xarrows';
 import Loader from '@components/common/Loader';

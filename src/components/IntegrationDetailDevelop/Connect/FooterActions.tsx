@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button } from '@material-ui/core';
+import { Box, Button } from '@mui/material';
 import { trackEvent } from '@utils/analytics';
 import { Integration } from '@interfaces/integration';
 import { StyledTimeIcon, StyledTimeDescription } from './mixins';

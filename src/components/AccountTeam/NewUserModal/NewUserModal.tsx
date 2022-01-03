@@ -1,4 +1,4 @@
-import { Backdrop } from '@material-ui/core';
+import { Backdrop } from '@mui/material';
 import Modal from '@components/common/Modal';
 import { useEntityApi } from '@hooks/useEntityApi';
 import CreateUserForm from '@components/AccountTeam/NewUserForm';

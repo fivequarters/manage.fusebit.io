@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardActions } from '@material-ui/core';
+import { Card, CardContent, CardHeader, CardActions } from '@mui/material';
 import styled from 'styled-components';
 import Loader from '@components/common/Loader';
 

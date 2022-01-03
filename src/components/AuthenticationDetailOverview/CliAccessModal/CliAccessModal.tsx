@@ -4,7 +4,7 @@ import CopyLine from '@components/common/CopyLine';
 import * as CSC from '@components/globalStyle';
 import Modal from '@components/common/Modal';
 import styled from 'styled-components';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 
 const StyledWrapper = styled.div`
   width: 650px;

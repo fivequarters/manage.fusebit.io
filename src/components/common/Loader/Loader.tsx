@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, CircularProgress, CircularProgressProps } from '@material-ui/core';
+import { Box, CircularProgress, CircularProgressProps } from '@mui/material';
 
 interface Props extends CircularProgressProps {
   className?: string;

@@ -1,4 +1,4 @@
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useAccountConnectorsGetAll } from '@hooks/api/v2/account/connector/useGetAll';
 import { useAccountIntegrationsGetOne } from '@hooks/api/v2/account/integration/useGetOne';

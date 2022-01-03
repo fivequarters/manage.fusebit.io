@@ -1,4 +1,4 @@
-import { TableCell, TableHead, TableRow, Checkbox } from '@material-ui/core';
+import { TableCell, TableHead, TableRow, Checkbox } from '@mui/material';
 import arrowRight from '@assets/arrow-right.svg';
 import arrowLeft from '@assets/arrow-left.svg';
 import styled from 'styled-components';

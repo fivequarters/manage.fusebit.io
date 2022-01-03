@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { ValidationMode } from '@jsonforms/core';
 import debounce from 'lodash.debounce';
-import { useMediaQuery } from '@material-ui/core';
+import { useMediaQuery } from '@mui/material';
 import { Feed, Snippet, ParsedFeed } from '@interfaces/feed';
 import { trackEvent } from '@utils/analytics';
 import { sendIntercomMessage } from '@utils/intercom';

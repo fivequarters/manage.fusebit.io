@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Box, Drawer, MobileStepper, Button, IconButton, useMediaQuery } from '@material-ui/core';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import { Box, Drawer, MobileStepper, Button, IconButton, useMediaQuery } from '@mui/material';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import _startCase from 'lodash.startcase';
 import cross from '@assets/cross.svg';
 import { useQueryClient } from 'react-query';

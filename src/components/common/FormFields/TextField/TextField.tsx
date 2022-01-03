@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextFieldProps, TextField as MuiTextField } from '@material-ui/core';
+import { TextFieldProps, TextField as MuiTextField } from '@mui/material';
 import styled from 'styled-components';
 import { inputBlueMixin, withError } from '@components/globalStyle';
 import { BaseFieldProps } from '@components/common/FormFields/types';

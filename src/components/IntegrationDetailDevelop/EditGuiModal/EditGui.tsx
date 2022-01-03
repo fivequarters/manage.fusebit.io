@@ -1,8 +1,8 @@
 import { Snippet, Feed, ConnectorEntity, EntityComponent } from '@interfaces/feed';
 import { InnerConnector, IntegrationData } from '@interfaces/integration';
 import React, { useState, useEffect } from 'react';
-import { Box, Button, ButtonGroup, IconButton, useMediaQuery, useTheme } from '@material-ui/core';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import { Box, Button, ButtonGroup, IconButton, useMediaQuery, useTheme } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 import { Props, SaveStatus } from '@interfaces/edit';
 import { useAuthContext } from '@hooks/useAuthContext';
 import { useLoader } from '@hooks/useLoader';
@@ -28,11 +28,11 @@ import cogs from '@assets/cogs.svg';
 import clock from '@assets/clock.svg';
 import playEditor from '@assets/play-editor.svg';
 import add from '@assets/add.svg';
-import CloseIcon from '@material-ui/icons/Close';
-import PlayArrowOutlined from '@material-ui/icons/PlayArrowOutlined';
-import SaveOutlined from '@material-ui/icons/SaveOutlined';
+import CloseIcon from '@mui/icons-material/Close';
+import PlayArrowOutlined from '@mui/icons-material/PlayArrowOutlined';
+import SaveOutlined from '@mui/icons-material/SaveOutlined';
 import { useInvalidateIntegration } from '@hooks/useInvalidateIntegration';
-import { CodeOutlined } from '@material-ui/icons';
+import { CodeOutlined } from '@mui/icons-material';
 import { useError } from '@hooks/useError';
 import MobileDrawer from '../MobileDrawer';
 import useEditorEvents from '../FusebitEditor/useEditorEvents';
@@ -298,7 +298,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const { createLoader, removeLoader } = useLoader();
   const [loginFlowModalOpen, setLoginFlowModalOpen] = useState(false);
   const theme = useTheme();
-  const matchesMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const matchesMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [addSnippetModalOpen, setAddSnippetModalOpen] = useState(false);
   const [missingIdentities, setMissingIdentities] = useState<InnerConnector[] | undefined>(undefined);
   const integrationData = useGetIntegrationFromCache();
@@ -612,9 +612,9 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
         )}
         <StyledFusebitEditorContainer
           onKeyUp={handleKeyUp}
-          position={matchesMobile && 'absolute'}
-          left={matchesMobile && '-100vw'}
-          bottom={matchesMobile && '-100vh'}
+          position={matchesMobile ? 'absolute' : undefined}
+          left={matchesMobile ? '-100vw' : undefined}
+          bottom={matchesMobile ? '-100vh' : undefined}
         >
           <FusebitEditor
             boundaryId="integration"

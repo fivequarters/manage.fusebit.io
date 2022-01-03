@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useMediaQuery } from '@material-ui/core';
+import { useMediaQuery } from '@mui/material';
 import { useCopy } from '../../../hooks/useCopy';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import { useBackendUpdateOne } from '../../../hooks/api/v1/backend/useUpdateOne';

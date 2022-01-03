@@ -1,5 +1,5 @@
 import { useHistory } from 'react-router-dom';
-import { useMediaQuery } from '@material-ui/core';
+import { useMediaQuery } from '@mui/material';
 import { Entity, Feed } from '../../../interfaces/feed';
 import { Data } from '../../../interfaces/feedPicker';
 import { useCreateDataFromFeed } from '../../../hooks/useCreateDataFromFeed';

@@ -1,6 +1,6 @@
-import { Button as MUIButton, ButtonProps } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
-import SearchIcon from '@material-ui/icons/Search';
+import { Button as MUIButton, ButtonProps } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import SearchIcon from '@mui/icons-material/Search';
 
 const BUTTON_MODES: { [k: string]: Partial<ButtonProps> } = {
   add: {

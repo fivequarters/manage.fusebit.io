@@ -1,4 +1,4 @@
-import { Box, useMediaQuery } from '@material-ui/core';
+import { Box, useMediaQuery } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useBackendCreateOne } from '@hooks/api/v1/backend/useCreateOne';
 import { useBackendGetAll } from '@hooks/api/v1/backend/useGetAll';

@@ -1,5 +1,5 @@
 import Modal from '@components/common/Modal';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 
 interface Props {
   open: boolean;

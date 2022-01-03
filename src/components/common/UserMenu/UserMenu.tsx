@@ -1,6 +1,6 @@
-import { Button, Menu, Box } from '@material-ui/core';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import { Button, Menu, Box } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import styled from 'styled-components';
 import { useAuthContext, signOut } from '../../../hooks/useAuthContext';
 import accountImg from '../../../assets/account.svg';
@@ -58,7 +58,6 @@ const UserMenu = () => {
         }}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-        getContentAnchorEl={null}
         anchorEl={anchorEl}
         keepMounted
         open={!!anchorEl}

@@ -1,5 +1,5 @@
-import { Avatar } from '@material-ui/core';
-import Box from '@material-ui/core/Box';
+import { Avatar } from '@mui/material';
+import Box from '@mui/material/Box';
 import styled from 'styled-components';
 import { Account } from '@interfaces/account';
 import accountImg from '@assets/account.svg';
@@ -26,7 +26,7 @@ const NameColumn = ({ account }: Props) => {
         src={isAdmin ? userData.picture || accountImg : accountImg}
         style={{ height: 26, width: 26 }}
       />
-      <Box flex ml="16px" component="p" fontWeight="500" color="var(--primary-color)">
+      <Box display="flex" ml="16px" component="p" fontWeight="500" color="var(--primary-color)">
         {account.firstName} {account.lastName}
       </Box>
       {isAdmin && <StyledCellNameDetail>[me]</StyledCellNameDetail>}

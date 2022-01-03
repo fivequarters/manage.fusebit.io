@@ -1,4 +1,4 @@
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import TextField from '../FormFields/TextField';
 import ItemList from '../ItemList/ItemList';
 

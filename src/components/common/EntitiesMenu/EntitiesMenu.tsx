@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Menu, Drawer, useMediaQuery } from '@material-ui/core';
+import { Menu, Drawer, useMediaQuery } from '@mui/material';
 import { useAccountConnectorsGetAll } from '../../../hooks/api/v2/account/connector/useGetAll';
 import { useAccountIntegrationsGetAll } from '../../../hooks/api/v2/account/integration/useGetAll';
 import { useAuthContext } from '../../../hooks/useAuthContext';
@@ -85,7 +85,6 @@ const EntitiesMenu = ({ desktop, mobile }: Props) => {
           }}
           anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
           transformOrigin={{ horizontal: 'left', vertical: 'top' }}
-          getContentAnchorEl={null}
           anchorEl={desktop.anchorEl}
           keepMounted
           open={!!desktop.anchorEl}

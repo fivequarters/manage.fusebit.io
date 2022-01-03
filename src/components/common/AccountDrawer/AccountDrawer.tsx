@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link, useParams } from 'react-router-dom';
-import { Box, Button, Drawer } from '@material-ui/core';
+import { Box, Button, Drawer } from '@mui/material';
 
 const StyledDrawerComponent = styled(Drawer)`
   > div {
@@ -59,7 +59,7 @@ const AccountDrawer: React.FC<Props> = ({ active }) => {
       {links.map((link) => (
         <Box key={link.href} mb="8px">
           <Link to={link.href}>
-            <StyledLink color="default" active={active === link.id}>
+            <StyledLink color="inherit" active={active === link.id}>
               {link.name}
             </StyledLink>
           </Link>

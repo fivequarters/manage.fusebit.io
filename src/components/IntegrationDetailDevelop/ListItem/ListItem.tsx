@@ -1,5 +1,5 @@
-import { Box, Icon, IconButton, Typography } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
+import { Box, Icon, IconButton, Typography } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import React from 'react';
 import styled from 'styled-components';
 

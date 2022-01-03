@@ -5,7 +5,7 @@ import FeedPickerModal from '@components/common/FeedPickerModal';
 import { ApiResponse } from '@hooks/useAxios';
 import { Integration, InnerConnector } from '@interfaces/integration';
 import { useLoader } from '@hooks/useLoader';
-// import { useMediaQuery } from '@material-ui/core';
+// import { useMediaQuery } from '@mui/material';
 // import FeedPickerMobile from '@components/common/FeedPickerMobile/FeedPickerMobile';
 
 interface Props {

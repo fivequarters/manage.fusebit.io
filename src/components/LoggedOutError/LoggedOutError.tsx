@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import fusebit from '@assets/fusebit-logo.svg';
 import warning from '@assets/warning-red.svg';
 import { signIn } from '@hooks/useAuthContext';

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Box, Button, Dialog, DialogActions, DialogProps, DialogContent, DialogTitle } from '@material-ui/core';
+import { Box, Button, Dialog, DialogActions, DialogProps, DialogContent, DialogTitle } from '@mui/material';
 import styled from 'styled-components';
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from '@mui/icons-material/Close';
 import * as CSC from '@components/globalStyle';
 
 const StyledTitle = styled(DialogTitle)`

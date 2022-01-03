@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import { ValidationMode } from '@jsonforms/core';
 import { Props } from '@interfaces/newUser';
 import { NewUserData } from '@interfaces/newUserData';

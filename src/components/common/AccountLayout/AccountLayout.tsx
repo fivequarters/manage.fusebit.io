@@ -1,4 +1,4 @@
-import { Box, Container } from '@material-ui/core';
+import { Box, Container } from '@mui/material';
 import React from 'react';
 import AccountDrawer from '@components/common/AccountDrawer';
 import AccountNavbar from '../AccountNavbar';

@@ -1,4 +1,4 @@
-import { Box, useMediaQuery } from '@material-ui/core';
+import { Box, useMediaQuery } from '@mui/material';
 import { useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';

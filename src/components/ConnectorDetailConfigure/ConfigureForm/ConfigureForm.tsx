@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { Box, Button, useMediaQuery } from '@material-ui/core';
+import { Box, Button, useMediaQuery } from '@mui/material';
 
 import { ValidationMode } from '@jsonforms/core';
 import { useAccountConnectorsGetOne } from '@hooks/api/v2/account/connector/useGetOne';
@@ -108,7 +108,12 @@ const ConfigureForm: React.FC = () => {
   }
 
   return (
-    <Box display="flex" flexDirection={isMobile && 'column'} alignItems={isMobile && 'center'} mb="100px">
+    <Box
+      display="flex"
+      flexDirection={isMobile ? 'column' : 'row'}
+      alignItems={isMobile ? 'center' : 'stretch'}
+      mb="100px"
+    >
       <Box display="flex" flexDirection="column" position="relative" width="100%">
         {config?.data && !loading ? (
           <StyledFormWrapper>

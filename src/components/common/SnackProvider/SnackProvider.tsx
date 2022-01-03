@@ -6,8 +6,8 @@ import {
   ReportProblemOutlined,
   InfoOutlined,
   Close,
-} from '@material-ui/icons';
-import { Box, IconButton } from '@material-ui/core';
+} from '@mui/icons-material';
+import { Box, IconButton } from '@mui/material';
 
 const boxProps = {
   display: 'flex',

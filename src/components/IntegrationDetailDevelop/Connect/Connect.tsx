@@ -1,6 +1,6 @@
 import React from 'react';
-import { Box, Button, Input, Typography } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
+import { Box, Button, Input, Typography } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import * as CSC from '@components/globalStyle';
 import CopyLine from '@components/common/CopyLine';
 import { Integration } from '@interfaces/integration';

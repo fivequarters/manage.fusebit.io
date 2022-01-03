@@ -1,7 +1,7 @@
 import { MaterialInputControl, MaterialTextCell, MaterialIntegerCell } from '@jsonforms/material-renderers';
 import { ControlProps, schemaMatches, rankWith, and, uiTypeIs, RankedTester } from '@jsonforms/core';
 import { withJsonFormsControlProps } from '@jsonforms/react';
-import { Box, IconButton } from '@material-ui/core';
+import { Box, IconButton } from '@mui/material';
 import styled from 'styled-components';
 import { useCopy } from '@hooks/useCopy';
 import copyIcon from '@assets/copy.svg';

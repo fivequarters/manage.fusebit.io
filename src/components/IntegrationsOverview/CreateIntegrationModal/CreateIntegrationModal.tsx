@@ -5,7 +5,7 @@ import { useCreateDataFromFeed } from '@hooks/useCreateDataFromFeed';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 import FeedPickerModal from '@components/common/FeedPickerModal';
 import { useLoader } from '@hooks/useLoader';
-import { useMediaQuery } from '@material-ui/core';
+import { useMediaQuery } from '@mui/material';
 import FeedPickerMobile from '@components/common/FeedPickerMobile/FeedPickerMobile';
 
 interface Props {

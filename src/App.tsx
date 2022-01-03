@@ -1,4 +1,11 @@
-import { createMuiTheme, responsiveFontSizes, ThemeProvider } from '@material-ui/core/styles';
+import {
+  createTheme,
+  responsiveFontSizes,
+  ThemeProvider,
+  Theme,
+  StyledEngineProvider,
+  adaptV4Theme,
+} from '@mui/material/styles';
 import CookieConsent from 'react-cookie-consent';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import DashboardRoutes from '@components/DashboardRoutes';
@@ -6,32 +13,41 @@ import { ContextProvider } from '@hooks/useAuthContext';
 import useFeeds from '@hooks/useFeeds';
 import { lightTheme } from './theme/appTheme';
 
+declare module '@mui/styles/defaultTheme' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface DefaultTheme extends Theme {}
+}
+
 const App = () => {
   useFeeds();
 
   return (
     <ContextProvider>
       {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />}
-      <ThemeProvider theme={responsiveFontSizes(createMuiTheme(lightTheme))}>
-        <CookieConsent
-          location="bottom"
-          buttonText="Accept"
-          cookieName="CookieConsent"
-          style={{ background: 'rgba(215, 229, 255, 0.4)', justifyContent: 'initial' }}
-          contentStyle={{ flex: 'initial' }}
-          buttonStyle={{
-            borderRadius: '4px',
-            border: '1px solid #F83420',
-            backgroundColor: 'white',
-            color: '#F83420',
-            fontSize: '13px',
-          }}
-          expires={150}
-        >
-          <p style={{ color: '#333333', fontWeight: 500 }}>This website uses cookies to enhance the user experience.</p>
-        </CookieConsent>
-        <DashboardRoutes />
-      </ThemeProvider>
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={responsiveFontSizes(createTheme(adaptV4Theme(lightTheme)))}>
+          <CookieConsent
+            location="bottom"
+            buttonText="Accept"
+            cookieName="CookieConsent"
+            style={{ background: 'rgba(215, 229, 255, 0.4)', justifyContent: 'initial' }}
+            contentStyle={{ flex: 'initial' }}
+            buttonStyle={{
+              borderRadius: '4px',
+              border: '1px solid #F83420',
+              backgroundColor: 'white',
+              color: '#F83420',
+              fontSize: '13px',
+            }}
+            expires={150}
+          >
+            <p style={{ color: '#333333', fontWeight: 500 }}>
+              This website uses cookies to enhance the user experience.
+            </p>
+          </CookieConsent>
+          <DashboardRoutes />
+        </ThemeProvider>
+      </StyledEngineProvider>
     </ContextProvider>
   );
 };

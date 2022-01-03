@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { Drawer, Button, Box, Typography } from '@material-ui/core';
+import { Drawer, Button, Box, Typography } from '@mui/material';
 import * as CSC from '@components/globalStyle';
 import play from '@assets/play.svg';
 import info from '@assets/info.svg';
-import CloseIcon from '@material-ui/icons/Close';
-import DeleteIcon from '@material-ui/icons/Delete';
+import CloseIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/Delete';
 import useEditorEvents from '../FusebitEditor/useEditorEvents';
 import { EditorEvents } from '~/enums/editor';
 

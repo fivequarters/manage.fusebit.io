@@ -6,7 +6,7 @@ import {
   useMediaQuery,
   TableRow as MUITableRow,
   TableCell as MUICellRow,
-} from '@material-ui/core';
+} from '@mui/material';
 import { useQuery } from '@hooks/useQuery';
 import styled, { css } from 'styled-components';
 import upArrowPrimary from '@assets/up-arrow-primary.svg';

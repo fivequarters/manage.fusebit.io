@@ -1,5 +1,5 @@
 import { FC, ReactElement, useState, useEffect } from 'react';
-import { Box, Container } from '@material-ui/core';
+import { Box, Container } from '@mui/material';
 import { useTrackPage } from '@hooks/useTrackPage';
 import Layout from '@components/common/Layout';
 import useTitle from '@hooks/useTitle';

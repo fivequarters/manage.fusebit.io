@@ -1,4 +1,4 @@
-import { Breadcrumbs, Button, Box } from '@material-ui/core';
+import { Breadcrumbs, Button, Box } from '@mui/material';
 import styled from 'styled-components';
 import arrow from '../../../assets/right-arrow-white.svg';
 import arrowDown from '../../../assets/down-arrow-white.svg';

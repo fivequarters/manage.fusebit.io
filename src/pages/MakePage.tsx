@@ -1,5 +1,5 @@
 import { FC, ReactElement } from 'react';
-import { Box, Container, Button } from '@material-ui/core';
+import { Box, Container, Button } from '@mui/material';
 import { useTrackUnauthenticatedPage } from '@hooks/useTrackPage';
 import { trackEvent } from '@utils/analytics';
 import Layout from '@components/common/Layout';

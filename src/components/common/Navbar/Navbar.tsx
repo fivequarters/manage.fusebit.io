@@ -1,4 +1,4 @@
-import { Container, IconButton, Box, useMediaQuery } from '@material-ui/core';
+import { Container, IconButton, Box, useMediaQuery } from '@mui/material';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -87,51 +87,49 @@ const Navbar: React.FC<Props> = ({ children, hideUserMenu, logoUrl }) => {
 
   const rootUrl = logoUrl || getRedirectLink('/integrations/overview');
 
-  return (
-    <>
-      <UserDrawerMobile open={mobileDrawerOpen} onClose={() => setMobileDrawerOpen(false)} />
-      <StyledContainerRoot>
-        <Container maxWidth="lg">
-          <Box display="flex" justifyContent="space-between">
-            <Box display="flex" alignItems="center">
-              <Box mr={isMobile ? '16px' : '24px'}>
-                <Link to={rootUrl}>
-                  <IconButton disableRipple style={logoProps}>
-                    <img src={companyLogo} alt="company logo" {...logoProps} />
-                  </IconButton>
-                </Link>
-              </Box>
-              <Box display="flex" flexDirection="column">
-                <Link to={rootUrl}>
-                  <StyledCompany>{userData.company}</StyledCompany>
-                </Link>
-                {children}
-              </Box>
+  return <>
+    <UserDrawerMobile open={mobileDrawerOpen} onClose={() => setMobileDrawerOpen(false)} />
+    <StyledContainerRoot>
+      <Container maxWidth="lg">
+        <Box display="flex" justifyContent="space-between">
+          <Box display="flex" alignItems="center">
+            <Box mr={isMobile ? '16px' : '24px'}>
+              <Link to={rootUrl}>
+                <IconButton disableRipple style={logoProps} size="large">
+                  <img src={companyLogo} alt="company logo" {...logoProps} />
+                </IconButton>
+              </Link>
             </Box>
-            {isMobile ? (
-              <IconButton size="small" onClick={() => setMobileDrawerOpen(true)}>
-                <img src={burguer} alt="burguer" height="10" width="20" />
-              </IconButton>
-            ) : (
-              <StyledLinkContainer display="flex" alignItems="center">
-                <StyledLink onClick={() => openSupportMessage()}>Support</StyledLink>
-                <StyledLink
-                  href="https://developer.fusebit.io"
-                  target="_blank"
-                  onClick={() => {
-                    trackEvent('Docs Link Clicked', 'Header');
-                  }}
-                >
-                  Docs
-                </StyledLink>
-                {!hideUserMenu && <UserMenu />}
-              </StyledLinkContainer>
-            )}
+            <Box display="flex" flexDirection="column">
+              <Link to={rootUrl}>
+                <StyledCompany>{userData.company}</StyledCompany>
+              </Link>
+              {children}
+            </Box>
           </Box>
-        </Container>
-      </StyledContainerRoot>
-    </>
-  );
+          {isMobile ? (
+            <IconButton size="small" onClick={() => setMobileDrawerOpen(true)}>
+              <img src={burguer} alt="burguer" height="10" width="20" />
+            </IconButton>
+          ) : (
+            <StyledLinkContainer display="flex" alignItems="center">
+              <StyledLink onClick={() => openSupportMessage()}>Support</StyledLink>
+              <StyledLink
+                href="https://developer.fusebit.io"
+                target="_blank"
+                onClick={() => {
+                  trackEvent('Docs Link Clicked', 'Header');
+                }}
+              >
+                Docs
+              </StyledLink>
+              {!hideUserMenu && <UserMenu />}
+            </StyledLinkContainer>
+          )}
+        </Box>
+      </Container>
+    </StyledContainerRoot>
+  </>;
 };
 
 export default Navbar;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { TableCell, TableHead, TableRow, Checkbox } from '@material-ui/core';
+import { TableCell, TableHead, TableRow, Checkbox } from '@mui/material';
 import { BaseTableProps } from './types';
 
 const BaseTableHead = ({

@@ -1,5 +1,5 @@
 import { ValidationMode } from '@jsonforms/core';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { ParsedFeed } from '../../../interfaces/feed';

@@ -2,7 +2,7 @@ import React from 'react';
 import ListItem from '@components/IntegrationDetailDevelop/ListItem';
 import { urlOrSvgToImage } from '@utils/utils';
 import { useGetMatchingConnectorFeed } from '@hooks/api/useGetMatchingConnectorFeed';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress } from '@mui/material';
 import { Entity } from '@interfaces/feed';
 import { Connector } from '@interfaces/connector';
 

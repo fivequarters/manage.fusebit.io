@@ -1,4 +1,4 @@
-import { Box, Button, Drawer } from '@material-ui/core';
+import { Box, Button, Drawer } from '@mui/material';
 import styled from 'styled-components';
 import { signOut } from '../../../hooks/useAuthContext';
 import CompanyTitle from '../CompanyTitle';

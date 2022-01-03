@@ -1,7 +1,7 @@
 import styled, { createGlobalStyle, css, keyframes } from 'styled-components';
 import spinner from '@assets/spinner.svg';
 import copy from '@assets/copy.svg';
-import { IconButton } from '@material-ui/core';
+import { IconButton } from '@mui/material';
 
 export default createGlobalStyle`
    :root {

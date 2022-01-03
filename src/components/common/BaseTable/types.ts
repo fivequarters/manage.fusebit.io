@@ -1,4 +1,4 @@
-import { BoxProps, ButtonProps } from '@material-ui/core';
+import { BoxProps, ButtonProps } from '@mui/material';
 
 export interface BaseTableRow {
   id: string;

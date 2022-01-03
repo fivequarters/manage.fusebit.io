@@ -1,6 +1,6 @@
 import React from 'react';
-import DnsOutlinedIcon from '@material-ui/icons/DnsOutlined';
-import { useMediaQuery } from '@material-ui/core';
+import DnsOutlinedIcon from '@mui/icons-material/DnsOutlined';
+import { useMediaQuery } from '@mui/material';
 import ListItem from '@components/IntegrationDetailDevelop/ListItem';
 import { useModal } from '@hooks/useModal';
 import ExistingBackendModal from '@components/IntegrationDetailDevelop/ExistingBackendModal';

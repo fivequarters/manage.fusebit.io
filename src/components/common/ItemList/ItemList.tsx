@@ -1,6 +1,6 @@
 import React from 'react';
-import { List, ListItem, ListItemText, Box } from '@material-ui/core';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import { List, ListItem, ListItemText, Box } from '@mui/material';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import styled from 'styled-components';
 
 const StyledIconContainer = styled(Box)`

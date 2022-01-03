@@ -1,4 +1,4 @@
-import { useMediaQuery, Drawer } from '@material-ui/core';
+import { useMediaQuery, Drawer } from '@mui/material';
 import { useState } from 'react';
 import styled from 'styled-components';
 import DeleteBackendModal from '@components/IntegrationDetailDevelop/DeleteBackendModal';

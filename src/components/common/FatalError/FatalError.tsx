@@ -2,16 +2,16 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import warning from '@assets/warning-red.svg';
 import { FallbackProps } from 'react-error-boundary';
-import IconButton from '@material-ui/core/IconButton';
-import Collapse from '@material-ui/core/Collapse';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import IconButton from '@mui/material/IconButton';
+import Collapse from '@mui/material/Collapse';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import useTitle from '@hooks/useTitle';
 import { useHistory } from 'react-router-dom';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 import Navbar from '@components/common/Navbar';
 import Layout from '@components/common/Layout';
 import NavbarBreadcrumb from '@components/common/NavbarBreadcrumb';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 
 const StyledWrapper = styled.div`
   display: flex;
