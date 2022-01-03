@@ -37,6 +37,7 @@ const StyledTabLabel = styled.div<{ active: boolean }>`
   font-size: 14px;
   line-height: 16px;
   text-align: center;
+  color: var(--black);
   font-weight: ${(props) => props.active && 700};
   margin-bottom: 18px;
   margin-top: 30px;
