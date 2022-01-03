@@ -45,7 +45,7 @@ const NavbarBreadcrumb: React.FC<Props> = ({ items, lastItemAction = true, isArr
         {items.map((item, index) => {
           const isLastItem = index === items.length - 1;
           return (
-            <StyledButton key={item.text} onClick={(e) => item.onClick(e, isLastItem)}>
+            <StyledButton disableRipple key={item.text} onClick={(e) => item.onClick(e, isLastItem)}>
               <StyledText active={lastItemAction ? isLastItem : item.active}>{item.text}</StyledText>
               {isLastItem && lastItemAction && (
                 <StyledArrowContainer ml="8px" $active={isArrowActive}>
