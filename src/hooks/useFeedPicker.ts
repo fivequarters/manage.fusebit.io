@@ -30,6 +30,7 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet }: Pr
   const { replaceMustache } = useReplaceMustache();
   const [activeTemplate, setActiveTemplate] = React.useState<ParsedFeed>();
   const [activeSnippet, setActiveSnippet] = React.useState<Snippet>();
+  const [campaingIntegrationRef, setCampaingIntegrationRef] = React.useState<HTMLDivElement | null>(null);
   const isMobile = useMediaQuery('max-width: 1100px');
 
   let feedTypeName = isIntegration ? 'Integration' : 'Connector';
@@ -47,10 +48,10 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet }: Pr
     [isIntegration, queryClient]
   );
 
+  const key = query.get('key');
+
   useEffect(() => {
     if (feed.length > 0 && open) {
-      const key = query.get('key');
-
       let templateToActivate: Feed | undefined;
       if (isSnippet) {
         // find first connector with snippets
@@ -98,6 +99,14 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet }: Pr
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isIntegration, isSnippet, open, feed]);
+
+  useEffect(() => {
+    if (campaingIntegrationRef) {
+      campaingIntegrationRef.scrollIntoView({
+        behavior: 'smooth',
+      });
+    }
+  }, [campaingIntegrationRef]);
 
   const filteredFeed = useFilterFeed({ feed, filterSnippets: isSnippet });
 
@@ -245,6 +254,9 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet }: Pr
     ...filteredFeed,
     isMobile,
     orderAlpha,
+    key,
+    campaingIntegrationRef,
+    setCampaingIntegrationRef,
   };
 };
 
