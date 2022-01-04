@@ -45,7 +45,7 @@ const Modal: React.FC<Props> = ({
   ...props
 }) => {
   return (
-    <Dialog onClose={onClose} open={open} {...props}>
+    <Dialog onClose={onClose} open={open} {...props} disableEnforceFocus>
       {title && <StyledTitle>{title}</StyledTitle>}
       <StyledContent hasPadding={disableActions}>
         <CSC.CloseWrapper aria-label="close" onClick={onClose}>

@@ -72,6 +72,7 @@ jobs:
           REACT_APP_INTERCOM_APP_ID: v9ncq3ml
           REACT_APP_SAMPLE_APP_URL: https://task-sample-app.on.fusebit.io
           REACT_APP_SAMPLE_APP_KEY: ${{secrets.SAMPLE_APP_TASK_JWT_SECRET}}
+          REACT_APP_MKT_SITE_BASE_URL: https://fusebit.io
         run: ./scripts/build_tree.sh
       - name: Publish - website
         env:
