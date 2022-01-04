@@ -154,13 +154,15 @@ const MakeGoPage: FC<{}> = (): ReactElement => {
   if (error || createError) {
     return (
       <Layout>
-        <Navbar hideUserMenu={true} logoUrl="/">
+        <Navbar hideUserMenu={true} logoUrl={process.env.REACT_APP_MKT_SITE_BASE_URL}>
           <NavbarBreadcrumb
             lastItemAction={false}
             items={[
               {
                 text: 'Fusebit',
-                onClick: () => history.push('/'),
+                onClick: () => {
+                  window.location.href = process.env.REACT_APP_MKT_SITE_BASE_URL || '';
+                },
               },
             ]}
           />

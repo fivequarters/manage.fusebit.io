@@ -87,6 +87,18 @@ const Navbar: React.FC<Props> = ({ children, hideUserMenu, logoUrl }) => {
 
   const rootUrl = logoUrl || getRedirectLink('/integrations/overview');
 
+  const DynamicLink: React.FC = ({ children: innerChildren }) => {
+    if (logoUrl) {
+      return (
+        <a href={rootUrl} target="_blank" rel="noreferrer">
+          {innerChildren}
+        </a>
+      );
+    }
+
+    return <Link to={rootUrl}>{innerChildren}</Link>;
+  };
+
   return (
     <>
       <UserDrawerMobile open={mobileDrawerOpen} onClose={() => setMobileDrawerOpen(false)} />
@@ -95,16 +107,16 @@ const Navbar: React.FC<Props> = ({ children, hideUserMenu, logoUrl }) => {
           <Box display="flex" justifyContent="space-between">
             <Box display="flex" alignItems="center">
               <Box mr={isMobile ? '16px' : '24px'}>
-                <Link to={rootUrl}>
+                <DynamicLink>
                   <IconButton disableRipple style={logoProps}>
                     <img src={companyLogo} alt="company logo" {...logoProps} />
                   </IconButton>
-                </Link>
+                </DynamicLink>
               </Box>
               <Box display="flex" flexDirection="column">
-                <Link to={rootUrl}>
+                <DynamicLink>
                   <StyledCompany>{userData.company}</StyledCompany>
-                </Link>
+                </DynamicLink>
                 {children}
               </Box>
             </Box>
