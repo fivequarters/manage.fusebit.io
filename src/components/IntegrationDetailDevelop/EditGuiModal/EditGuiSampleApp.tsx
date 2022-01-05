@@ -26,9 +26,7 @@ export const EditGuiSampleApp = () => {
 
   return (
     <>
-      <StyledSampleApp onClick={handleClick} rel="noreferrer">
-        Run a Sample App
-      </StyledSampleApp>
+      <StyledSampleApp onClick={handleClick}>Run a Sample App</StyledSampleApp>
       <NoSampleAppModal open={noSampleAppOpen} onClose={() => setNoSampleAppOpen(false)} />
     </>
   );
