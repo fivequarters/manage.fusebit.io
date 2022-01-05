@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import useSampleApp from '@hooks/useSampleApp';
+import NoSampleAppModal from '../NoSampleAppModal';
 
 const StyledSampleApp = styled.a`
   font-size: 14px;
@@ -7,14 +9,27 @@ const StyledSampleApp = styled.a`
   color: var(--black);
   text-decoration: underline;
   margin-right: 10px;
+  cursor: pointer;
 `;
 
 export const EditGuiSampleApp = () => {
   const { url } = useSampleApp();
+  const [noSampleAppOpen, setNoSampleAppOpen] = useState(false);
 
-  return url ? (
-    <StyledSampleApp target="_blank" rel="noreferrer" href={url}>
-      Run a Sample App
-    </StyledSampleApp>
-  ) : null;
+  const handleClick = () => {
+    if (url) {
+      window.open(url, '_blank', 'noreferrer');
+    } else {
+      setNoSampleAppOpen(true);
+    }
+  };
+
+  return (
+    <>
+      <StyledSampleApp onClick={handleClick} rel="noreferrer">
+        Run a Sample App
+      </StyledSampleApp>
+      <NoSampleAppModal open={noSampleAppOpen} onClose={() => setNoSampleAppOpen(false)} />
+    </>
+  );
 };
