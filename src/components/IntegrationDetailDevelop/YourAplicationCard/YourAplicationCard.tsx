@@ -45,7 +45,7 @@ const YourAplication: React.FC<Props> = ({ className }) => {
   };
 
   const openSampleApp = () => {
-    trackEvent('Run Sample App Button Clicked', 'My Application', {
+    trackEvent('Sample App Clicked', 'My Application', {
       Integration: integrationData?.data?.tags['fusebit.feedId'],
     });
 
