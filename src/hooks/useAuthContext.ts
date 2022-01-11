@@ -76,7 +76,11 @@ const _useAuthContext = () => {
     setAuthStatus(AuthStatus.AUTHENTICATED);
   };
 
-  const getTenantId = () => userData.userId || STATIC_TENANT_ID;
+  const getTenantId = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tenantId = urlParams.get('tenantId');
+    return tenantId || userData.userId || STATIC_TENANT_ID;
+  };
 
   return {
     checkAuthStatus,
