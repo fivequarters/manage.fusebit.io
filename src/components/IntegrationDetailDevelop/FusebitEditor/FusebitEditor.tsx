@@ -1,6 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
 import React from 'react';
 import { Context } from '@interfaces/editGui';
+import { storeIntegrationConfig } from '@utils/localStorage';
 
 export default class FusebitEditor extends React.Component<any> {
   private el: any;
@@ -15,6 +16,7 @@ export default class FusebitEditor extends React.Component<any> {
         .then((editorContext: Context) => {
           this.editorContext = editorContext;
           window.editor = this.editorContext;
+          storeIntegrationConfig(this.props.functionId, { runner: editorContext.specification.data.fusebitEditor });
           if (this.props.onLoaded) {
             this.props.onLoaded();
           }
