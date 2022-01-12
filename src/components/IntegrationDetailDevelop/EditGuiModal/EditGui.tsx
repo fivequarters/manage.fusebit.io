@@ -34,6 +34,8 @@ import SaveOutlined from '@material-ui/icons/SaveOutlined';
 import { useInvalidateIntegration } from '@hooks/useInvalidateIntegration';
 import { CodeOutlined } from '@material-ui/icons';
 import { useError } from '@hooks/useError';
+import { useCopy } from '@hooks/useCopy';
+import { getIntegrationConfig } from '@utils/localStorage';
 import MobileDrawer from '../MobileDrawer';
 import useEditorEvents from '../FusebitEditor/useEditorEvents';
 import { EditGuiSampleApp } from './EditGuiSampleApp';
@@ -291,7 +293,7 @@ const addNewIcon = `
 const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationId, isLoading }, ref) => {
   const { id } = useParams<{ id: string }>();
   const connectorFeed = useGetConnectorsFeed();
-  const { userData } = useAuthContext();
+  const { userData, getTenantId } = useAuthContext();
   const [isMounted, setIsMounted] = useState(false);
   const [configureRunnerActive, setConfigureRunnerActive] = useState(false);
   const [unsavedWarning, setUnsavedWarning] = useState(false);
@@ -312,6 +314,8 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const { invalidateIntegration } = useInvalidateIntegration();
   const { formatSnippet, getProviderVersion } = useSnippets();
   const { createError } = useError();
+  const tenantId = getTenantId();
+  const { handleCopy } = useCopy();
 
   const { isSaving, errorBuild, setErrorBuild } = useEditorEvents({
     isMounted,
@@ -515,6 +519,14 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     </>
   );
 
+  const openConfigureModal = ({ shiftKey }: { shiftKey: boolean }) => {
+    if (shiftKey) {
+      handleCopy(JSON.stringify(getIntegrationConfig(integrationId, tenantId).runner));
+    } else {
+      setConfigureRunnerActive(true);
+    }
+  };
+
   return (
     <Box>
       <ConfirmationPrompt
@@ -566,7 +578,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
                 {isFindingInstall ? <CircularProgress size={20} /> : 'Run'}
               </Button>
               <Button
-                onClick={() => setConfigureRunnerActive(true)}
+                onClick={openConfigureModal}
                 size="small"
                 variant={assumeHasConnectors ? 'contained' : 'outlined'}
                 color="primary"
