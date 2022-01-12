@@ -522,7 +522,6 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const openConfigureModal = ({ shiftKey }: { shiftKey: boolean }) => {
     if (shiftKey) {
       handleCopy(JSON.stringify(getIntegrationConfig(integrationId, tenantId).runner));
-      console.log(`COPIED: ${copiedLine}`);
     } else {
       setConfigureRunnerActive(true);
     }
