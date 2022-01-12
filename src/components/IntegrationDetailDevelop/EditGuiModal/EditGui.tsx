@@ -315,7 +315,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const { formatSnippet, getProviderVersion } = useSnippets();
   const { createError } = useError();
   const tenantId = getTenantId();
-  const { handleCopy, copiedLine } = useCopy();
+  const { handleCopy } = useCopy();
 
   const { isSaving, errorBuild, setErrorBuild } = useEditorEvents({
     isMounted,
