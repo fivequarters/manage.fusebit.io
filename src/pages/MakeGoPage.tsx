@@ -11,7 +11,7 @@ import { useLoader } from '@hooks/useLoader';
 import { useGetIntegrationsFeed } from '@hooks/useGetIntegrationsFeed';
 import { useCreateDataFromFeed } from '@hooks/useCreateDataFromFeed';
 import { Data } from '@interfaces/feedPicker';
-import { Feed, IntegrationEntity, Entity } from '@interfaces/feed';
+import { Feed, IntegrationEntity, Entity, Snippet } from '@interfaces/feed';
 import { InnerConnector } from '@interfaces/integration';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 
@@ -27,17 +27,26 @@ const MakeGoPage: FC<{}> = (): ReactElement => {
   const { createConnector, createIntegrationAndConnector } = useCreateDataFromFeed();
   const integrationFeed = useGetIntegrationsFeed();
   const { getRedirectLink } = useGetRedirectLink();
+  const urlSearchParams = new URLSearchParams(window.location.search);
+  const integrationTemplate = urlSearchParams.get('fusebitIntegrationTemplate');
+  const requestedIntegrationId = urlSearchParams.get('fusebitIntegrationId');
 
   useEffect(() => {
-    if (!isCreating && !error && !createError && snippets && connectors && integrationFeed.data) {
+    if (
+      !isCreating &&
+      !error &&
+      !createError &&
+      ((snippets && connectors) || integrationTemplate) &&
+      integrationFeed.data
+    ) {
       (async () => {
         createLoader('Creating integration...');
         setIsCreating(true);
 
-        const createAllConnectors = async (random: number) => {
+        const createAllConnectors = async (connectors1: Feed[], random: number) => {
           // Create all connectors
           const entities = await Promise.all(
-            connectors.map((connector) => {
+            connectors1.map((connector) => {
               const entityName = Object.keys(connector.configuration.entities)[0];
               const connectorId = `con-${connector.id}-${random}`;
               const data: Data = {
@@ -47,16 +56,24 @@ const MakeGoPage: FC<{}> = (): ReactElement => {
             })
           );
           const connectorEntityMap: { [key: string]: Entity } = {};
-          connectors.forEach((c, i) => {
+          connectors1.forEach((c, i) => {
             connectorEntityMap[c.id] = entities[i] as Entity;
           });
           return connectorEntityMap;
         };
 
-        const createCustomIntegrationTemplate = (random: number, connectorEntityMap: { [key: string]: Entity }) => {
+        const createCustomIntegrationTemplate = (
+          connectors1: Feed[],
+          snippets1: {
+            connector: Feed;
+            snippet: Snippet;
+          }[],
+          random: number,
+          connectorEntityMap: { [key: string]: Entity }
+        ) => {
           // Construct an new integration template using the custom integration template as the basis
-          const customFeed = integrationFeed.data.find((i) => i.id === 'custom') as Feed;
-          const integrationId = `int-${connectors.map((c) => c.id).join('-')}-${random}`;
+          const customFeed = integrationFeed.data.find((i) => i.id === (integrationTemplate || 'custom')) as Feed;
+          const integrationId = requestedIntegrationId || `int-${connectors1.map((c) => c.id).join('-')}-${random}`;
           const entityName = Object.keys(customFeed.configuration.entities)[0];
           const entity = customFeed.configuration.entities[entityName] as IntegrationEntity;
           const packageJson = JSON.parse(entity.data.files['package.json']);
@@ -64,7 +81,7 @@ const MakeGoPage: FC<{}> = (): ReactElement => {
           const newComponents: InnerConnector[] = [];
 
           // add snippets
-          snippets.forEach((s) => {
+          snippets1.forEach((s) => {
             // modify integration.js
             const newContent = formatSnippet(
               s.connector,
@@ -81,7 +98,7 @@ const MakeGoPage: FC<{}> = (): ReactElement => {
           });
 
           // add integration's components
-          connectors.forEach((c) => {
+          connectors1.forEach((c) => {
             newComponents.push({
               ...(c.configuration.components?.[0] as InnerConnector),
               entityId: connectorEntityMap[c.id]?.id as string,
@@ -115,18 +132,40 @@ const MakeGoPage: FC<{}> = (): ReactElement => {
 
         try {
           const random = Math.floor(Math.random() * 899 + 100);
-          const connectorEntityMap = await createAllConnectors(random);
-          const { newIntegrationFeed, entityName, integrationId } = createCustomIntegrationTemplate(
-            random,
-            connectorEntityMap
-          );
-          // constuct integration template substitution parameters
-          const data: Data = {
-            [entityName]: { id: integrationId },
-          };
-          // complete integration creation
-          await createIntegrationAndConnector(newIntegrationFeed, data, true);
-          history.replace(getRedirectLink(`/integration/${integrationId}/edit`));
+          if (snippets && connectors) {
+            const connectorEntityMap = await createAllConnectors(connectors, random);
+            const { newIntegrationFeed, entityName, integrationId } = createCustomIntegrationTemplate(
+              connectors,
+              snippets,
+              random,
+              connectorEntityMap
+            );
+            // construct integration template substitution parameters
+            const data: Data = {
+              [entityName]: { id: integrationId },
+            };
+            // complete integration creation
+            await createIntegrationAndConnector(newIntegrationFeed, data, true);
+            // go to edit page
+            history.replace(getRedirectLink(`/integration/${integrationId}/edit`));
+          } else {
+            // request to create a custom integration from a named template without snippets -
+            // skip creating custom integration feed
+            const integrationId = requestedIntegrationId || `int-${random}`;
+            const requestedFeed = integrationFeed.data.find((i) => i.id === (integrationTemplate || 'custom')) as Feed;
+            if (!requestedFeed) {
+              throw new Error(`The integration template '${integrationTemplate}' was not found.`);
+            }
+            // construct integration template substitution parameters
+            const entityName = Object.keys(requestedFeed.configuration.entities)[0];
+            const data: Data = {
+              [entityName]: { id: integrationId },
+            };
+            // complete integration creation
+            await createIntegrationAndConnector(requestedFeed, data, true);
+            // go to edit page
+            history.replace(getRedirectLink(`/integration/${integrationId}/edit`));
+          }
         } catch (e) {
           setCreateError(`There was an error creating a connector required by the integration: ${e.message}`);
         } finally {
@@ -149,6 +188,8 @@ const MakeGoPage: FC<{}> = (): ReactElement => {
     history,
     integrationFeed.data,
     isCreating,
+    integrationTemplate,
+    requestedIntegrationId,
   ]);
 
   if (error || createError) {

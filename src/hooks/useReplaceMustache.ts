@@ -61,7 +61,18 @@ export const useReplaceMustache = () => {
             },
             feed: { ...JSON.parse(JSON.stringify(feed)) },
           },
+          query: {},
         };
+
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const fusebitParams = urlSearchParams.get('fusebitParams');
+        if (fusebitParams) {
+          try {
+            global.query = JSON.parse(fusebitParams);
+          } catch (e) {
+            // empty
+          }
+        }
 
         // No really good reason to delete this besides it making it difficult to console.log the globals.
         delete global.consts.feed.configuration;
