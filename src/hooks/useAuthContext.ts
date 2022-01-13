@@ -47,17 +47,19 @@ const signIn = (silent?: boolean): void => {
   setSignInLocalStorageItems(window.location.pathname, requestedSearch);
   const urlSearchParams = new URLSearchParams(window.location.search);
   const requestedPath = (urlSearchParams.get('requestedPath') || window.location.pathname).replace(/ /g, '+');
+  const connection = urlSearchParams.get('fusebitConnection');
 
   const authLink = [
     REACT_APP_AUTH0_DOMAIN,
     '/authorize?response_type=token',
+    connection ? `&connection=${encodeURIComponent(connection)}` : '',
     `&client_id=${REACT_APP_AUTH0_CLIENT_ID}`,
     `&audience=${REACT_APP_FUSEBIT_DEPLOYMENT}`,
     `&redirect_uri=${window.location.origin}/callback?silentAuth=${silent ? 'true' : 'false'}`,
     `%26requestedPath=${requestedPath === '/callback' ? `/` : encodeURIComponent(requestedPath)}`,
     '&scope=openid profile email',
     `&screen_hint=${localStorage.getItem('screenHint')}`,
-    silent ? '&prompt=none' : '',
+    silent && !connection ? '&prompt=none' : '',
   ].join('');
 
   window.location.href = authLink;

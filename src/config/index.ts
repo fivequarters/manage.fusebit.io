@@ -64,6 +64,11 @@ export const routes: Array<RouteItem> = [
     component: MakeGoPage,
   },
   {
+    key: 'router-make-go',
+    path: '/make-go',
+    component: MakeGoPage,
+  },
+  {
     key: 'router-auth-callback',
     path: '/callback',
     component: AuthCallbackPage,
