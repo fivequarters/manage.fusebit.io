@@ -271,6 +271,14 @@ const StyledTitle = styled.h3`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+
+  @media only screen and (max-width: 1350px) {
+    max-width: 400px;
+  }
+
+  @media only screen and (max-width: 1150px) {
+    max-width: 225px;
+  }
 `;
 
 const addNewStyles = `
