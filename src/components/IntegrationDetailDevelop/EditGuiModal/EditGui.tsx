@@ -266,6 +266,21 @@ const StyledFusebitEditorLogo = styled.img`
   object-fit: contain;
 `;
 
+const StyledTitle = styled.h3`
+  max-width: 600px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  @media only screen and (max-width: 1350px) {
+    max-width: 400px;
+  }
+
+  @media only screen and (max-width: 1150px) {
+    max-width: 225px;
+  }
+`;
+
 const addNewStyles = `
   position: relative;
   font-family: 'Poppins';
@@ -601,7 +616,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
             >
               Snippets
             </Button>
-            <h3>{integrationId}</h3>
+            <StyledTitle>{integrationId}</StyledTitle>
             <StyledActionsHelpWrapper>
               <EditGuiSampleApp />
               <StyledActionsHelpLink
