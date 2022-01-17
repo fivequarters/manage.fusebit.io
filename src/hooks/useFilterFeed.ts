@@ -14,9 +14,17 @@ const useFilterFeed = ({ feed = [], filterSnippets }: Props) => {
   const [searchFilter, setSearchFilter] = useState('');
   const [activeFilter, setActiveFilter] = useState<string>(DefaultFilters.ALL);
 
-  const allTags = useMemo(() => [...new Set(feed.map((feedEntry) => feedEntry.tags.catalog.split(',')).flat())], [
-    feed,
-  ]);
+  const allTags = useMemo(
+    () => [
+      ...new Set(
+        feed
+          .filter((feedEntry) => feedEntry.tags.catalog !== '' && !feedEntry.private)
+          .map((feedEntry) => feedEntry.tags.catalog.split(','))
+          .flat()
+      ),
+    ],
+    [feed]
+  );
 
   const searchTerms = searchFilter
     .split(/\s+/)
