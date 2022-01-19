@@ -5,7 +5,10 @@ import { Box, Button, useMediaQuery } from '@material-ui/core';
 
 import { ValidationMode } from '@jsonforms/core';
 import { useAccountConnectorsGetOne } from '@hooks/api/v2/account/connector/useGetOne';
-import { useAccountConnectorsGetOneConfig } from '@hooks/api/v2/account/connector/useGetOneConfig';
+import {
+  ACCOUNT_CONNECTORS_GET_ONE_CONFIG,
+  useAccountConnectorsGetOneConfig,
+} from '@hooks/api/v2/account/connector/useGetOneConfig';
 import { useAuthContext } from '@hooks/useAuthContext';
 import { Connector, ConnectorConfig } from '@interfaces/connector';
 import { useEntityApi } from '@hooks/useEntityApi';
@@ -14,6 +17,7 @@ import { trackEvent } from '@utils/analytics';
 import InformationalBanner from '@components/common/InformationalBanner';
 import BaseJsonForm from '@components/common/BaseJsonForm';
 import * as CSC from '@components/globalStyle';
+import { useQueryClient } from 'react-query';
 
 const StyledFormWrapper = styled.form`
   display: flex;
@@ -66,11 +70,13 @@ const ConfigureForm: React.FC = () => {
     type: connectorData?.data.tags['fusebit.feedType'],
   });
   const isMobile = useMediaQuery('max-width: 880px');
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const unlisten = history.listen((location) => {
-      setConnectorId(location.pathname.split('/')[6]);
       setLoading(true);
+      setConnectorId(location.pathname.split('/')[6]);
+      setJsonFormsInputs(undefined);
     });
 
     return () => unlisten();
@@ -91,12 +97,16 @@ const ConfigureForm: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectorId]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (errors.length > 0) {
       setValidationMode('ValidateAndShow');
     } else {
       trackEvent('Configure Save Button Clicked', 'Connector');
-      updateEntity(connectorData, data);
+      await updateEntity(connectorData, data);
+      queryClient.invalidateQueries([
+        ACCOUNT_CONNECTORS_GET_ONE_CONFIG,
+        { accountId: userData.accountId, id, subscriptionId: userData.subscriptionId },
+      ]);
     }
   };
 
