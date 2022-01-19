@@ -5,7 +5,10 @@ import { Box, Button, useMediaQuery } from '@material-ui/core';
 
 import { ValidationMode } from '@jsonforms/core';
 import { useAccountConnectorsGetOne } from '@hooks/api/v2/account/connector/useGetOne';
-import { useAccountConnectorsGetOneConfig } from '@hooks/api/v2/account/connector/useGetOneConfig';
+import {
+  ACCOUNT_CONNECTORS_GET_ONE_CONFIG,
+  useAccountConnectorsGetOneConfig,
+} from '@hooks/api/v2/account/connector/useGetOneConfig';
 import { useAuthContext } from '@hooks/useAuthContext';
 import { Connector, ConnectorConfig } from '@interfaces/connector';
 import { useEntityApi } from '@hooks/useEntityApi';
@@ -101,8 +104,8 @@ const ConfigureForm: React.FC = () => {
       trackEvent('Configure Save Button Clicked', 'Connector');
       await updateEntity(connectorData, data);
       queryClient.removeQueries([
-        'accountConnectorsGetOneConfig',
-        { accountId: 'acc-6988c93c237 94128', id: 'error2', subscriptionId: 'sub-23b8db5600df43c7' },
+        ACCOUNT_CONNECTORS_GET_ONE_CONFIG,
+        { accountId: userData.accountId, id, subscriptionId: userData.subscriptionId },
       ]);
     }
   };
