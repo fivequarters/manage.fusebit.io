@@ -14,6 +14,7 @@ import { trackEvent } from '@utils/analytics';
 import InformationalBanner from '@components/common/InformationalBanner';
 import BaseJsonForm from '@components/common/BaseJsonForm';
 import * as CSC from '@components/globalStyle';
+import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 
 const StyledFormWrapper = styled.form`
   display: flex;
@@ -43,6 +44,7 @@ const ConfigureForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [connectorId, setConnectorId] = useState(id);
   const { userData } = useAuthContext();
+  const { getRedirectLink } = useGetRedirectLink();
   const { data: connectorData, refetch: reloadConnector } = useAccountConnectorsGetOne<Connector>({
     enabled: userData.token,
     id: connectorId,
@@ -67,10 +69,26 @@ const ConfigureForm: React.FC = () => {
   });
   const isMobile = useMediaQuery('max-width: 880px');
 
+  const reloadData = async () => {
+    if (userData.subscriptionId) {
+      setJsonFormsInputs(undefined);
+      await reloadConnector();
+      await reloadConfig();
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     const unlisten = history.listen((location) => {
-      setConnectorId(location.pathname.split('/')[6]);
+      // this is only true if the path is the configure form path
+      const newConnectorId = location.pathname.split('/')?.[6];
+      const configureFormPath = getRedirectLink(`/connector/${newConnectorId}/configure`);
       setLoading(true);
+      setConnectorId(newConnectorId);
+      if (location.pathname !== configureFormPath) {
+        // going to a location different to the configure form
+        reloadData();
+      }
     });
 
     return () => unlisten();
@@ -78,13 +96,6 @@ const ConfigureForm: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const reloadData = async () => {
-      if (userData.subscriptionId) {
-        await reloadConnector();
-        await reloadConfig();
-        setLoading(false);
-      }
-    };
     reloadData();
 
     return () => {};
