@@ -103,7 +103,7 @@ const ConfigureForm: React.FC = () => {
     } else {
       trackEvent('Configure Save Button Clicked', 'Connector');
       await updateEntity(connectorData, data);
-      queryClient.removeQueries([
+      queryClient.invalidateQueries([
         ACCOUNT_CONNECTORS_GET_ONE_CONFIG,
         { accountId: userData.accountId, id, subscriptionId: userData.subscriptionId },
       ]);
