@@ -1,5 +1,6 @@
 import { useGetConnectorsFeed } from './useGetConnectorsFeed';
 import { useGetIntegrationsFeed } from './useGetIntegrationsFeed';
+import { useGetIntegrationsForkFeed } from './useGetIntegrationsForkFeed';
 
 const useFeeds = () => {
   useGetIntegrationsFeed({
@@ -7,6 +8,10 @@ const useFeeds = () => {
   });
 
   useGetConnectorsFeed({
+    cacheTime: Infinity,
+  });
+
+  useGetIntegrationsForkFeed({
     cacheTime: Infinity,
   });
 };

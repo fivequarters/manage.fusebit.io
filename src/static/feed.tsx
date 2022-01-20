@@ -5,6 +5,7 @@ const { REACT_APP_INTEGRATIONS_FEED_URL, REACT_APP_CONNECTORS_FEED_URL } = proce
 
 export const integrationsFeed = async (): Promise<Feed[]> => {
   return new Promise((accept) => {
+    console.warn('########################### SECONDARY FUNCTION IS FETCHING');
     const req = http.get(
       REACT_APP_INTEGRATIONS_FEED_URL || 'http://localhost:3000/feed/integrationsFeed.json',
       (res) => {

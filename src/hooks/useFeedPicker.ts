@@ -11,17 +11,20 @@ import { useQueryClient } from 'react-query';
 import useFilterFeed from './useFilterFeed';
 import { useQuery } from './useQuery';
 import { useReplaceMustache } from './useReplaceMustache';
+import { useFeedQuery } from './useFeedQuery';
 
 interface Props {
   isIntegration?: boolean;
   isSnippet?: boolean;
+  isFork?: boolean;
   onSubmit: (feed: Feed, data: Data, snippet?: Snippet) => void;
   onClose?: () => void;
   open: boolean;
 }
 
-const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet }: Props) => {
+const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFork }: Props) => {
   const query = useQuery();
+  const { integrationsFeedQueryKey } = useFeedQuery();
   const [rawActiveTemplate, setRawActiveTemplate] = React.useState<Feed>();
   const [rawActiveSnippet, setRawActiveSnippet] = React.useState<Snippet>();
   const [errors, setErrors] = React.useState<object[]>([]);
@@ -34,19 +37,23 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet }: Pr
   const isMobile = useMediaQuery('max-width: 1100px');
 
   let feedTypeName = isIntegration ? 'Integration' : 'Connector';
+  if (isFork) {
+    feedTypeName = 'Fork';
+  }
   if (isSnippet) {
     feedTypeName = 'Snippet';
   }
 
   const queryClient = useQueryClient();
 
-  const feed = useMemo(
-    () =>
-      isIntegration
-        ? queryClient.getQueryData<Feed[]>('getIntegrationsFeed') || []
-        : queryClient.getQueryData<Feed[]>('getConnectorsFeed') || [],
-    [isIntegration, queryClient]
-  );
+  const feed = useMemo(() => {
+    if (isFork) {
+      return queryClient.getQueryData<Feed[]>(integrationsFeedQueryKey) || [];
+    }
+    return isIntegration
+      ? queryClient.getQueryData<Feed[]>('getIntegrationsFeed') || []
+      : queryClient.getQueryData<Feed[]>('getConnectorsFeed') || [];
+  }, [isIntegration, queryClient, isFork, integrationsFeedQueryKey]);
 
   const key = query.get('key');
 
