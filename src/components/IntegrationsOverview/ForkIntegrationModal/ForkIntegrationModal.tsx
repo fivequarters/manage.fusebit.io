@@ -4,7 +4,6 @@ import { Data } from '@interfaces/feedPicker';
 import { useCreateDataFromFeed } from '@hooks/useCreateDataFromFeed';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 import { useLoader } from '@hooks/useLoader';
-import { useMediaQuery } from '@material-ui/core';
 import FeedForkModal from '@components/common/FeedForkModal/FeedForkModal';
 
 interface Props {
