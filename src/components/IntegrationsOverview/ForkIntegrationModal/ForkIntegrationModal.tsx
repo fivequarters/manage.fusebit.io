@@ -17,7 +17,6 @@ const ForkIntegrationModal = ({ open, onClose }: Props) => {
   const { createIntegrationAndConnector } = useCreateDataFromFeed();
   const history = useHistory();
   const { getRedirectLink } = useGetRedirectLink();
-  const isMobile = useMediaQuery('(max-width:880px)');
 
   const handleCreate = async (feed: Feed, data: Data) => {
     try {
