@@ -14,7 +14,7 @@ const useFilterFeed = ({ feed = [], filterSnippets }: Props) => {
   const [searchFilter, setSearchFilter] = useState('');
   const [activeFilter, setActiveFilter] = useState<string>(DefaultFilters.ALL);
 
-  const allTags = useMemo(() => [...new Set(feed.map((feedEntry) => feedEntry.tags.catalog.split(',')).flat())], [
+  const allTags = useMemo(() => [...new Set(feed?.map((feedEntry) => feedEntry.tags.catalog?.split(',')).flat())], [
     feed,
   ]);
 

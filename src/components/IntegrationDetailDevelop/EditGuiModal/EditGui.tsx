@@ -523,11 +523,14 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     </>
   );
 
-  console.log('=-=-=-=-=-=-=-=-=');
+  const handleFork = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const feedUrl = urlParams.get('feedUrl');
+    window.location.href = `/?forkFeedUrl=${feedUrl}`;
+  };
+
   const urlParams = new URLSearchParams(window.location.search);
   const isForkMode = urlParams.get('fork');
-  console.log('fork', isForkMode);
-  console.log('=-=-=-=-=-=-=-=-=');
 
   return (
     <Box>
@@ -643,7 +646,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
                 <StyledForkAndEditWrapper>
                   <Button
                     startIcon={<ForkOutline height={16} width={16} />}
-                    onClick={handleAddSnippet}
+                    onClick={handleFork}
                     size="small"
                     variant="contained"
                     color="primary"

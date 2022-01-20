@@ -8,7 +8,6 @@ export const integrationsForkFeed = async (url?: string): Promise<Feed | undefin
     return;
   }
   return new Promise((accept) => {
-    console.log('fetching: ', url);
     const req = http.get(url, (res) => {
       let data = '';
       res.on('data', (stream) => {
@@ -25,7 +24,6 @@ export const integrationsForkFeed = async (url?: string): Promise<Feed | undefin
 };
 
 export const useGetIntegrationsForkFeed = (options?: UseQueryOptions<Feed | undefined>) => {
-  console.log('FEED: fetching forks');
-  const { integrationsFeedUrl, integrationsFeedQueryKey } = useFeedQuery();
-  return useQuery(integrationsFeedQueryKey, () => integrationsForkFeed(integrationsFeedUrl), options);
+  const { forkFeedUrl, integrationsFeedQueryKey } = useFeedQuery();
+  return useQuery(integrationsFeedQueryKey, () => integrationsForkFeed(forkFeedUrl), options);
 };

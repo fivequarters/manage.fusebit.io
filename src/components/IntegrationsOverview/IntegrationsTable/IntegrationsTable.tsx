@@ -20,8 +20,8 @@ import GetInstalls from './GetInstalls';
 const IntegrationsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
   const [newModalOpen, setNewModal, toggleNewModal] = useModal();
-  const { integrationsFeedUrl } = useFeedQuery();
-  const [forkModalOpen, setForkModal] = useModal(!!integrationsFeedUrl);
+  const { forkFeedUrl } = useFeedQuery();
+  const [forkModalOpen, setForkModal] = useModal(!!forkFeedUrl);
   const [deleteModalOpen, setDeleteModal, toggleDeleteModal] = useModal();
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();

@@ -23,6 +23,5 @@ export const integrationsFeed = async (): Promise<Feed[]> => {
 };
 
 export const useGetIntegrationsFeed = (options?: UseQueryOptions<Feed[]>) => {
-  console.log('FEED: fetching list');
   return useQuery('getIntegrationsFeed', integrationsFeed, options);
 };
