@@ -30,10 +30,7 @@ const ForkIntegrationModal = ({ open, onClose }: Props) => {
     }
   };
 
-  return <>{isMobile ? <FeedForkMobile /> : <FeedForkModal onClose={onClose} onSubmit={handleCreate} open={open} />}</>;
+  return <FeedForkModal onClose={onClose} onSubmit={handleCreate} open={open} />;
 };
-
-// TODO
-const FeedForkMobile = () => <></>;
 
 export default ForkIntegrationModal;

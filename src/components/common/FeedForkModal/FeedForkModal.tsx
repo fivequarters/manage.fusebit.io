@@ -3,8 +3,6 @@ import { Data } from '@interfaces/feedPicker';
 import { useFeedQuery } from '@hooks/useFeedQuery';
 import Modal from '@components/common/Modal';
 import { useQueryClient } from 'react-query';
-import { useMemo } from 'react';
-import FeedPicker from '@components/common/FeedPicker';
 import ForkPickerModal from '@components/common/ForkPickerModal';
 
 interface Props {
