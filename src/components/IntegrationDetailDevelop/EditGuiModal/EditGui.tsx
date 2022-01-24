@@ -34,6 +34,8 @@ import SaveOutlined from '@material-ui/icons/SaveOutlined';
 import { useInvalidateIntegration } from '@hooks/useInvalidateIntegration';
 import { CodeOutlined } from '@material-ui/icons';
 import { useError } from '@hooks/useError';
+import { useCopy } from '@hooks/useCopy';
+import { getIntegrationConfig } from '@utils/localStorage';
 import MobileDrawer from '../MobileDrawer';
 import useEditorEvents from '../FusebitEditor/useEditorEvents';
 import { EditGuiSampleApp } from './EditGuiSampleApp';
@@ -272,6 +274,21 @@ const StyledFusebitEditorLogo = styled.img`
   object-fit: contain;
 `;
 
+const StyledTitle = styled.h3`
+  max-width: 600px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  @media only screen and (max-width: 1350px) {
+    max-width: 400px;
+  }
+
+  @media only screen and (max-width: 1150px) {
+    max-width: 225px;
+  }
+`;
+
 const addNewStyles = `
   position: relative;
   font-family: 'Poppins';
@@ -299,7 +316,7 @@ const addNewIcon = `
 const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationId, isLoading }, ref) => {
   const { id } = useParams<{ id: string }>();
   const connectorFeed = useGetConnectorsFeed();
-  const { userData } = useAuthContext();
+  const { userData, getTenantId } = useAuthContext();
   const [isMounted, setIsMounted] = useState(false);
   const [configureRunnerActive, setConfigureRunnerActive] = useState(false);
   const [unsavedWarning, setUnsavedWarning] = useState(false);
@@ -320,6 +337,8 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const { invalidateIntegration } = useInvalidateIntegration();
   const { formatSnippet, getProviderVersion } = useSnippets();
   const { createError } = useError();
+  const tenantId = getTenantId();
+  const { handleCopy } = useCopy();
 
   const { isSaving, errorBuild, setErrorBuild } = useEditorEvents({
     isMounted,
@@ -532,6 +551,14 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const urlParams = new URLSearchParams(window.location.search);
   const isForkMode = urlParams.get('fork');
 
+  const openConfigureModal = ({ shiftKey }: { shiftKey: boolean }) => {
+    if (shiftKey) {
+      handleCopy(JSON.stringify(getIntegrationConfig(integrationId, tenantId).runner));
+    } else {
+      setConfigureRunnerActive(true);
+    }
+  };
+
   return (
     <Box>
       <ConfirmationPrompt
@@ -585,7 +612,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
                     {isFindingInstall ? <CircularProgress size={20} /> : 'Run'}
                   </Button>
                   <Button
-                    onClick={() => setConfigureRunnerActive(true)}
+                    onClick={openConfigureModal}
                     size="small"
                     variant={assumeHasConnectors ? 'contained' : 'outlined'}
                     color="primary"
@@ -608,7 +635,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
                 >
                   Snippets
                 </Button>
-                <h3>{integrationId}</h3>
+                <StyledTitle>{integrationId}</StyledTitle>
                 <StyledActionsHelpWrapper>
                   <EditGuiSampleApp />
                   <StyledActionsHelpLink
