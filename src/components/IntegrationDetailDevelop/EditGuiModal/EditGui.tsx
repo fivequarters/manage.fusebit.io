@@ -542,14 +542,12 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     </>
   );
 
-  const handleFork = () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const feedUrl = urlParams.get('feedUrl');
-    window.location.href = `/?forkFeedUrl=${feedUrl}`;
-  };
-
   const urlParams = new URLSearchParams(window.location.search);
-  const isForkMode = urlParams.get('fork');
+  const forkEditFeedUrl = urlParams.get('forkEditFeedUrl');
+
+  const handleFork = () => {
+    window.location.href = `/?forkFeedUrl=${forkEditFeedUrl}`;
+  };
 
   const openConfigureModal = ({ shiftKey }: { shiftKey: boolean }) => {
     if (shiftKey) {
@@ -587,7 +585,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
         />
         {isMounted && !matchesMobile && (
           <StyledCloseHeader>
-            {!isForkMode && (
+            {!forkEditFeedUrl && (
               <>
                 <Button
                   style={{ marginRight: '16px' }}
@@ -656,7 +654,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
                 </StyledCloseWrapper>
               </>
             )}
-            {isForkMode && (
+            {forkEditFeedUrl && (
               <>
                 <Button
                   startIcon={<PlayArrowOutlined />}

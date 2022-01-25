@@ -30,7 +30,7 @@ export const useReplaceMustache = () => {
   const { userData } = useAuthContext();
 
   const replaceMustache = React.useCallback(
-    async (data: Data, feedMaster: Feed): Promise<ParsedFeed> => {
+    async (data: Data, feedMaster: Feed): Promise<{ feed: ParsedFeed; data: Data }> => {
       // This hurts but it's easy.
       const oldMustacheEscape = Mustache.escape;
       try {
@@ -53,7 +53,7 @@ export const useReplaceMustache = () => {
               const integration: any = Object.entries(feed.configuration.entities).find(
                 ([, entity]) => entity.entityType === 'integration'
               );
-              return integration ? global.entities[integration[0]]?.id() || integration[1].id : '';
+              return integration ? global.entities[integration[0]]?.id || integration[1].id : '';
             },
             random: () => {
               const randBuffer = [...window.crypto.getRandomValues(new Uint8Array(32))];
@@ -83,16 +83,17 @@ export const useReplaceMustache = () => {
             if (!data[name]) {
               data[name] = {};
             }
+            const getId = () => {
+              if (!data[name].id) {
+                data[name].id = `${
+                  entity.entityType === 'integration' ? 'my-integration' : 'my-connector'
+                }-${Math.floor(Math.random() * 1000)}`;
+              }
+              return data[name].id;
+            };
             global.entities[name] = {
               ...data[name],
-              id: () => {
-                if (!data[name].id) {
-                  data[name].id = `${
-                    entity.entityType === 'integration' ? 'my-integration' : 'my-connector'
-                  }-${Math.floor(Math.random() * 1000)}`;
-                }
-                return data[name].id;
-              },
+              id: getId(),
             };
           });
 
@@ -100,7 +101,7 @@ export const useReplaceMustache = () => {
           parsedFeed.configuration.entities = Object.entries(feed.configuration.entities).map(([name, entity]) => {
             const view = {
               this: {
-                id: () => global.entities[name].id(),
+                id: global.entities[name].id,
                 name,
               },
               global,
@@ -110,7 +111,7 @@ export const useReplaceMustache = () => {
         }
         feed.description = Mustache.render(feed.description, { global }, {}, customTags);
 
-        return parsedFeed;
+        return { feed: parsedFeed, data };
       } finally {
         Mustache.escape = oldMustacheEscape;
       }

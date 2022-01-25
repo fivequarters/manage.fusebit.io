@@ -76,14 +76,6 @@ const StyledIntegrationTitleWrapper = styled.div`
   align-self: flex-start;
 `;
 
-const StyledIntegrationVersion = styled.div`
-  font-size: 12px;
-  line-height: 14px;
-  font-weight: 300;
-  color: var(--black);
-  margin-left: auto;
-`;
-
 const StyledFormWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -142,14 +134,15 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(
             ) : (
               <>
                 <StyledIntegrationTitleWrapper>
-                  <StyledIntegrationImage
-                    src={urlOrSvgToImage(activeTemplate.smallIcon)}
-                    alt={activeTemplate.name || 'slack'}
-                    height="28"
-                    width="28"
-                  />
+                  {activeTemplate.smallIcon && (
+                    <StyledIntegrationImage
+                      src={urlOrSvgToImage(activeTemplate.smallIcon)}
+                      alt={activeTemplate.name || 'slack'}
+                      height="28"
+                      width="28"
+                    />
+                  )}
                   <StyledIntegrationTitle>{activeTemplate.name}</StyledIntegrationTitle>
-                  <StyledIntegrationVersion>{activeTemplate.version}</StyledIntegrationVersion>
                 </StyledIntegrationTitleWrapper>
                 <StyledGeneralInfoWrapper>
                   <ForkItemDescription description={activeTemplate.description || ''} templateId={activeTemplate.id} />

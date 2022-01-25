@@ -82,8 +82,9 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
       }
       if (templateToActivate) {
         setRawActiveTemplate(templateToActivate);
-        replaceMustache(data, templateToActivate).then((template) => {
+        replaceMustache(data, templateToActivate).then(({ feed: template, data: _data }) => {
           setActiveTemplate(template);
+          setData(_data);
           if (!key && !isSnippet) {
             setImmediate(() => {
               trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
@@ -164,8 +165,9 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
         [`${feedTypeName.toLowerCase()}Default`]: false,
       });
     }
-    replaceMustache(data, template).then((_template) => {
+    replaceMustache(data, template).then(({ feed: _template, data: _data }) => {
       setActiveTemplate(_template);
+      setData(_data);
     });
     if (snippet) {
       // TODO replace snippet mustache

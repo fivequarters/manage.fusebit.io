@@ -18,7 +18,7 @@ const useFilterFeed = ({ feed = [], filterSnippets }: Props) => {
     () => [
       ...new Set(
         feed
-          ?.filter((feedEntry) => feedEntry.tags.catalog !== '' && !feedEntry.private)
+          ?.filter((feedEntry) => feedEntry.tags.catalog && feedEntry.tags.catalog !== '' && !feedEntry.private)
           .map((feedEntry) => feedEntry.tags.catalog.split(','))
           .flat()
       ),
