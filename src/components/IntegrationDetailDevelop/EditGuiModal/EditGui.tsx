@@ -546,6 +546,9 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const forkEditFeedUrl = urlParams.get('forkEditFeedUrl');
 
   const handleFork = () => {
+    trackEvent('Fork Integration Button', 'Web Editor', {
+      Integration: integrationData?.data?.tags['fusebit.feedId'],
+    });
     window.location.href = `/?forkFeedUrl=${forkEditFeedUrl}`;
   };
 
