@@ -6,13 +6,13 @@ import TabComponent from '@components/common/TabComponent';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 import IntegrationsNavbar from '@components/common/IntegrationsNavbar';
 import useTitle from '@hooks/useTitle';
-import HealthMonitoring from '@components/IntegrationDetailHealthMonitoring/HealthMonitoring';
+import Logging from '@components/IntegrationDetailLogging/Logging';
 
-const IntegrationDetailHealthMonitoringPage: FC<{}> = (): ReactElement => {
+const IntegrationDetailLoggingPage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
   const { getRedirectLink } = useGetRedirectLink();
 
-  useTrackPage('Integration Health Monitoring', 'Integration');
+  useTrackPage('Integration Logging', 'Integration');
   useTitle(id);
 
   return (
@@ -23,8 +23,8 @@ const IntegrationDetailHealthMonitoringPage: FC<{}> = (): ReactElement => {
         tabObjects={[
           getRedirectLink(`/integration/${id}/develop`),
           getRedirectLink(`/integration/${id}/installs`),
-          <HealthMonitoring key="health-monitoring" />,
-          getRedirectLink(`/integration/${id}/logging`),
+          getRedirectLink(`/integration/${id}/health-monitoring`),
+          <Logging key="logging" />,
           getRedirectLink(`/integration/${id}/reliability`),
         ]}
       />
@@ -32,4 +32,4 @@ const IntegrationDetailHealthMonitoringPage: FC<{}> = (): ReactElement => {
   );
 };
 
-export default IntegrationDetailHealthMonitoringPage;
+export default IntegrationDetailLoggingPage;

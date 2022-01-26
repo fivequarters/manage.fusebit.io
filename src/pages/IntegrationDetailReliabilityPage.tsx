@@ -8,7 +8,7 @@ import IntegrationsNavbar from '@components/common/IntegrationsNavbar';
 import useTitle from '@hooks/useTitle';
 import Reliability from '@components/IntegrationDetailReliability/Reliability';
 
-const IntegrationDetailHealthMonitoringPage: FC<{}> = (): ReactElement => {
+const IntegrationDetailReliabilityPage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
   const { getRedirectLink } = useGetRedirectLink();
 
@@ -19,11 +19,12 @@ const IntegrationDetailHealthMonitoringPage: FC<{}> = (): ReactElement => {
     <Layout>
       <IntegrationsNavbar />
       <TabComponent
-        tabNames={['Develop', 'Installs', 'Health Monitoring', 'Reliability']}
+        tabNames={['Develop', 'Installs', 'Health Monitoring', 'Logging', 'Reliability']}
         tabObjects={[
           getRedirectLink(`/integration/${id}/develop`),
           getRedirectLink(`/integration/${id}/installs`),
           getRedirectLink(`/integration/${id}/health-monitoring`),
+          getRedirectLink(`/integration/${id}/logging`),
           <Reliability key="reliability" />,
         ]}
       />
@@ -31,4 +32,4 @@ const IntegrationDetailHealthMonitoringPage: FC<{}> = (): ReactElement => {
   );
 };
 
-export default IntegrationDetailHealthMonitoringPage;
+export default IntegrationDetailReliabilityPage;

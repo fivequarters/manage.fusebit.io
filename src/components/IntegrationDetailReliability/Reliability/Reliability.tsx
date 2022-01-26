@@ -14,7 +14,7 @@ const Reliability = () => {
   return (
     <Box display="flex" alignItems="center" justifyContent="center" pb="108px">
       <Card
-        title="## Guarantee **reliable delivery** of integration data"
+        title="Guarantee **reliable delivery** of integration data"
         description="Reliability, for your customers, means they can trust your integrations to run correctly without the potential for data loss or unexpected delays."
         buttonText="Talk to sales"
         handleClick={handleIntercomPost}

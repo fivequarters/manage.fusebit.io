@@ -14,7 +14,7 @@ const HealthMonitoring = () => {
   return (
     <Box display="flex" alignItems="center" justifyContent="center" pb="108px">
       <Card
-        title="## Don’t spend time worrying about **infrastructure** "
+        title="Don’t spend time worrying about **infrastructure** "
         description="Health enables your team to spend more time on the core business while Fusebit ensures your integrations are running and healthy."
         buttonText="Talk to sales"
         handleClick={handleIntercomPost}

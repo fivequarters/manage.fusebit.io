@@ -13,13 +13,10 @@ const StyledCard = styled(MUICard)`
 `;
 
 const StyledTitle = styled(ReactMarkdown)`
-  padding: 0;
-  h2 {
-    font-size: 24px;
-    line-height: 26px;
-    font-weight: 600;
-    color: var(--black);
-  }
+  font-size: 24px;
+  line-height: 26px;
+  font-weight: 600;
+  color: var(--black);
 
   strong {
     color: var(--primary-color);

@@ -32,11 +32,12 @@ const IntegrationDetailDevelopPage: FC<{}> = (): ReactElement => {
     <Layout>
       <IntegrationsNavbar />
       <TabComponent
-        tabNames={['Develop', 'Installs', 'Health Monitoring', 'Reliability']}
+        tabNames={['Develop', 'Installs', 'Health Monitoring', 'Logging', 'Reliability']}
         tabObjects={[
           <Diagram key="diagram" isLoading={isLoading} integration={integration} />,
           getRedirectLink(`/integration/${id}/installs`),
           getRedirectLink(`/integration/${id}/health-monitoring`),
+          getRedirectLink(`/integration/${id}/logging`),
           getRedirectLink(`/integration/${id}/reliability`),
         ]}
       />
