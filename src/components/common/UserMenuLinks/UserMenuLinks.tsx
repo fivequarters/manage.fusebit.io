@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Link as MUILink, Divider } from '@material-ui/core';
+import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 
 const StyledUserDropdownLinksWrapper = styled.div`
   display: flex;
@@ -40,6 +41,7 @@ interface Props {
 
 const UserMenuLinks: React.FC<Props> = ({ showAll }) => {
   const { accountId } = useParams<{ accountId: string }>();
+  const { getRedirectLink } = useGetRedirectLink();
 
   return (
     <>
@@ -60,6 +62,9 @@ const UserMenuLinks: React.FC<Props> = ({ showAll }) => {
             </MUILink>
             <MUILink underline="none" href="https://developer.fusebit.io">
               <StyledUserDropdownLink>Docs</StyledUserDropdownLink>
+            </MUILink>
+            <MUILink underline="none" href={getRedirectLink('/reliability')}>
+              <StyledUserDropdownLink>Reliability</StyledUserDropdownLink>
             </MUILink>
           </StyledUserDropdownLinksWrapper>
         </>

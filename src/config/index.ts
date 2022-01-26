@@ -15,9 +15,15 @@ import MakePage from '../pages/MakePage';
 import MakeGoPage from '../pages/MakeGoPage';
 import AccountTeamPage from '../pages/AccountTeamPage';
 import IntegrationDetailHealthMonitoringPage from '~/pages/IntegrationDetailHealthMonitoringPage';
+import ReliabilityPage from '~/pages/ReliabilityPage';
 
 // define app routes
 export const routes: Array<RouteItem> = [
+  {
+    key: 'router-reliability',
+    path: '/account/:accountId/subscription/:subscriptionId/reliability',
+    component: ReliabilityPage,
+  },
   {
     key: 'router-connectors-overview',
     path: '/account/:accountId/subscription/:subscriptionId/connectors/overview',
