@@ -212,3 +212,13 @@ export const CloseWrapper = styled(IconButton)`
   top: 16px;
   color: var(--black);
 `;
+
+export const StyledListItem = styled.li`
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--black);
+
+  &:not(:last-child) {
+    margin-bottom: 24px;
+  }
+`;

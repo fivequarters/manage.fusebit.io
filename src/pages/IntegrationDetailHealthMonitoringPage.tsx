@@ -6,6 +6,7 @@ import TabComponent from '@components/common/TabComponent';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 import IntegrationsNavbar from '@components/common/IntegrationsNavbar';
 import useTitle from '@hooks/useTitle';
+import HealthMonitoring from '@components/IntegrationDetailHealthMonitoring/HealthMonitoring';
 
 const IntegrationDetailHealthMonitoringPage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
@@ -22,7 +23,7 @@ const IntegrationDetailHealthMonitoringPage: FC<{}> = (): ReactElement => {
         tabObjects={[
           getRedirectLink(`/integration/${id}/develop`),
           getRedirectLink(`/integration/${id}/installs`),
-          <>asd</>,
+          <HealthMonitoring key="health-monitoring" />,
         ]}
       />
     </Layout>

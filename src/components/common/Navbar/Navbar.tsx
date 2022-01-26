@@ -126,7 +126,7 @@ const Navbar: React.FC<Props> = ({ children, hideUserMenu, logoUrl }) => {
               </IconButton>
             ) : (
               <StyledLinkContainer display="flex" alignItems="center">
-                <StyledLink onClick={() => openSupportMessage()}>Support</StyledLink>
+                <StyledLink onClick={() => openSupportMessage?.()}>Support</StyledLink>
                 <StyledLink
                   href="https://developer.fusebit.io"
                   target="_blank"
