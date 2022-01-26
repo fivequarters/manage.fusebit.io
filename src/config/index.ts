@@ -15,15 +15,10 @@ import MakePage from '../pages/MakePage';
 import MakeGoPage from '../pages/MakeGoPage';
 import AccountTeamPage from '../pages/AccountTeamPage';
 import IntegrationDetailHealthMonitoringPage from '~/pages/IntegrationDetailHealthMonitoringPage';
-import ReliabilityPage from '~/pages/ReliabilityPage';
+import IntegrationDetailReliabilityPage from '~/pages/IntegrationDetailReliabilityPage';
 
 // define app routes
 export const routes: Array<RouteItem> = [
-  {
-    key: 'router-reliability',
-    path: '/account/:accountId/subscription/:subscriptionId/reliability',
-    component: ReliabilityPage,
-  },
   {
     key: 'router-connectors-overview',
     path: '/account/:accountId/subscription/:subscriptionId/connectors/overview',
@@ -53,6 +48,11 @@ export const routes: Array<RouteItem> = [
     key: 'router-integration-detail-installs',
     path: '/account/:accountId/subscription/:subscriptionId/integration/:id/health-monitoring',
     component: IntegrationDetailHealthMonitoringPage,
+  },
+  {
+    key: 'router-reliability',
+    path: '/account/:accountId/subscription/:subscriptionId/integration/:id/reliability',
+    component: IntegrationDetailReliabilityPage,
   },
   {
     key: 'router-connector-detail-configure',

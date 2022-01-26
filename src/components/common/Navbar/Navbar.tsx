@@ -136,14 +136,6 @@ const Navbar: React.FC<Props> = ({ children, hideUserMenu, logoUrl }) => {
                 >
                   Docs
                 </StyledLink>
-                <StyledLink
-                  href={getRedirectLink('/reliability')}
-                  onClick={() => {
-                    trackEvent('Reliability Link Clicked', 'Header');
-                  }}
-                >
-                  Reliability
-                </StyledLink>
                 {!hideUserMenu && <UserMenu />}
               </StyledLinkContainer>
             )}

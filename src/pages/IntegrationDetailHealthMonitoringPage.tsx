@@ -19,11 +19,12 @@ const IntegrationDetailHealthMonitoringPage: FC<{}> = (): ReactElement => {
     <Layout>
       <IntegrationsNavbar />
       <TabComponent
-        tabNames={['Develop', 'Installs', 'Health Monitoring']}
+        tabNames={['Develop', 'Installs', 'Health Monitoring', 'Reliability']}
         tabObjects={[
           getRedirectLink(`/integration/${id}/develop`),
           getRedirectLink(`/integration/${id}/installs`),
           <HealthMonitoring key="health-monitoring" />,
+          getRedirectLink(`/integration/${id}/reliability`),
         ]}
       />
     </Layout>
