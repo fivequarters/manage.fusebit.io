@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card as MUICard, CardContent, CardActions, Typography, Box } from '@material-ui/core';
+import { Card as MUICard, CardContent, CardActions, Typography, Box, useMediaQuery } from '@material-ui/core';
 import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
 import Button from '../Button';
@@ -10,6 +10,10 @@ const StyledCard = styled(MUICard)`
   box-shadow: 0px 20px 48px 0px #34487b1a;
   border-radius: 8px;
   padding: 28px 48px 56px;
+
+  @media only screen and (max-width: 510px) {
+    padding: 0 16px 28px;
+  }
 `;
 
 const StyledTitle = styled(ReactMarkdown)`
@@ -17,6 +21,11 @@ const StyledTitle = styled(ReactMarkdown)`
   line-height: 26px;
   font-weight: 600;
   color: var(--black);
+
+  @media only screen and (max-width: 510px) {
+    font-size: 20px;
+    line-height: 26px;
+  }
 
   strong {
     color: var(--primary-color);
@@ -30,6 +39,11 @@ const StyledDescription = styled(Typography)`
   font-weight: 500;
   margin-bottom: 32px;
   color: var(--black);
+
+  @media only screen and (max-width: 510px) {
+    font-size: 12px;
+    line-height: 16px;
+  }
 `;
 
 interface Props {
@@ -41,6 +55,7 @@ interface Props {
 }
 
 const Card: React.FC<Props> = ({ title, description, buttonText, handleClick, children }) => {
+  const isMobile = useMediaQuery('(max-width: 510px)');
   return (
     <StyledCard>
       <CardContent>
@@ -52,9 +67,9 @@ const Card: React.FC<Props> = ({ title, description, buttonText, handleClick, ch
         <Box margin="0 auto">
           <Button
             onClick={() => handleClick?.()}
-            size="large"
+            size={isMobile ? 'medium' : 'large'}
             variant="contained"
-            style={{ width: '200px', height: '48px' }}
+            style={{ width: isMobile ? 'fit-content' : '200px', height: isMobile ? '32px' : '48px' }}
           >
             {buttonText || 'Accept'}
           </Button>

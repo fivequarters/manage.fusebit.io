@@ -218,6 +218,11 @@ export const StyledListItem = styled.li`
   line-height: 20px;
   color: var(--black);
 
+  @media only screen and (max-width: 510px) {
+    font-size: 12px;
+    line-height: 16px;
+  }
+
   &:not(:last-child) {
     margin-bottom: 24px;
   }
