@@ -12,7 +12,7 @@ const IntegrationDetailHealthMonitoringPage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
   const { getRedirectLink } = useGetRedirectLink();
 
-  useTrackPage('Integration HealthMonitoring', 'Integration');
+  useTrackPage('Integration Health Monitoring', 'Integration');
   useTitle(id);
 
   return (
