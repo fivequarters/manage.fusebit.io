@@ -28,6 +28,7 @@ import cogs from '@assets/cogs.svg';
 import clock from '@assets/clock.svg';
 import playEditor from '@assets/play-editor.svg';
 import add from '@assets/add.svg';
+import { ReactComponent as ForkOutline } from '@assets/fork.svg';
 import CloseIcon from '@material-ui/icons/Close';
 import PlayArrowOutlined from '@material-ui/icons/PlayArrowOutlined';
 import SaveOutlined from '@material-ui/icons/SaveOutlined';
@@ -234,6 +235,13 @@ const StyledActionsHelpWrapper = styled.div`
   transform: translateY(-50%);
   display: flex;
   align-items: center;
+`;
+
+const StyledForkAndEditWrapper = styled.div`
+  position: absolute;
+  right: 48px;
+  top: 50%;
+  transform: translateY(-50%);
 `;
 
 const StyledActionsHelpLink = styled.a`
@@ -534,6 +542,16 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     </>
   );
 
+  const urlParams = new URLSearchParams(window.location.search);
+  const forkEditFeedUrl = urlParams.get('forkEditFeedUrl');
+
+  const handleFork = () => {
+    trackEvent('Fork Integration Button', 'Web Editor', {
+      Integration: integrationData?.data?.tags['fusebit.feedId'],
+    });
+    window.location.href = `/?forkFeedUrl=${forkEditFeedUrl}`;
+  };
+
   const openConfigureModal = ({ shiftKey }: { shiftKey: boolean }) => {
     if (shiftKey) {
       handleCopy(JSON.stringify(getIntegrationConfig(integrationId, tenantId).runner));
@@ -570,71 +588,104 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
         />
         {isMounted && !matchesMobile && (
           <StyledCloseHeader>
-            <Button
-              style={{ marginRight: '16px' }}
-              startIcon={<SaveOutlined />}
-              onClick={handleSave}
-              size="small"
-              variant="outlined"
-              color="primary"
-              disabled={isSaving || !dirtyState}
-            >
-              Save
-            </Button>
-            <ButtonGroup variant={assumeHasConnectors ? 'contained' : 'outlined'} style={{ marginRight: '16px' }}>
-              <Button
-                startIcon={<PlayArrowOutlined />}
-                size="small"
-                variant={assumeHasConnectors ? 'contained' : 'outlined'}
-                color="primary"
-                onClick={handleSaveAndRun}
-                disabled={isFindingInstall || isSaving}
-              >
-                {isFindingInstall ? <CircularProgress size={20} /> : 'Run'}
-              </Button>
-              <Button
-                onClick={openConfigureModal}
-                size="small"
-                variant={assumeHasConnectors ? 'contained' : 'outlined'}
-                color="primary"
-              >
-                {assumeHasConnectors ? (
-                  <img src={settings} alt="settings" height="16" width="16" />
-                ) : (
-                  <img src={settingsPrimary} alt="settings" height="16" width="16" />
-                )}
-              </Button>
-            </ButtonGroup>
-            <Button
-              style={{ marginRight: '16px' }}
-              startIcon={<CodeOutlined />}
-              onClick={handleAddSnippet}
-              size="small"
-              variant={assumeHasConnectors ? 'outlined' : 'contained'}
-              color="primary"
-              disabled={isSaving || !isMounted}
-            >
-              Snippets
-            </Button>
-            <StyledTitle>{integrationId}</StyledTitle>
-            <StyledActionsHelpWrapper>
-              <EditGuiSampleApp />
-              <StyledActionsHelpLink
-                target="_blank"
-                href="https://developer.fusebit.io/docs/developing-locally"
-                onClick={() => {
-                  trackEvent('Docs Developing Locally Link Clicked', 'Web Editor', {
-                    Integration: integrationData?.data?.tags['fusebit.feedId'],
-                  });
-                }}
-              >
-                Edit locally
-              </StyledActionsHelpLink>
-              <StyledActionsHelpImage src={question} alt="question" height="16" width="16" />
-            </StyledActionsHelpWrapper>
-            <StyledCloseWrapper onClick={handleClose}>
-              <CloseIcon fontSize="small" />
-            </StyledCloseWrapper>
+            {!forkEditFeedUrl && (
+              <>
+                <Button
+                  style={{ marginRight: '16px' }}
+                  startIcon={<SaveOutlined />}
+                  onClick={handleSave}
+                  size="small"
+                  variant="outlined"
+                  color="primary"
+                  disabled={isSaving || !dirtyState}
+                >
+                  Save
+                </Button>
+                <ButtonGroup variant={assumeHasConnectors ? 'contained' : 'outlined'} style={{ marginRight: '16px' }}>
+                  <Button
+                    startIcon={<PlayArrowOutlined />}
+                    size="small"
+                    variant={assumeHasConnectors ? 'contained' : 'outlined'}
+                    color="primary"
+                    onClick={handleSaveAndRun}
+                    disabled={isFindingInstall || isSaving}
+                  >
+                    {isFindingInstall ? <CircularProgress size={20} /> : 'Run'}
+                  </Button>
+                  <Button
+                    onClick={openConfigureModal}
+                    size="small"
+                    variant={assumeHasConnectors ? 'contained' : 'outlined'}
+                    color="primary"
+                  >
+                    {assumeHasConnectors ? (
+                      <img src={settings} alt="settings" height="16" width="16" />
+                    ) : (
+                      <img src={settingsPrimary} alt="settings" height="16" width="16" />
+                    )}
+                  </Button>
+                </ButtonGroup>
+                <Button
+                  style={{ marginRight: '16px' }}
+                  startIcon={<CodeOutlined />}
+                  onClick={handleAddSnippet}
+                  size="small"
+                  variant={assumeHasConnectors ? 'outlined' : 'contained'}
+                  color="primary"
+                  disabled={isSaving || !isMounted}
+                >
+                  Snippets
+                </Button>
+                <StyledTitle>{integrationId}</StyledTitle>
+                <StyledActionsHelpWrapper>
+                  <EditGuiSampleApp />
+                  <StyledActionsHelpLink
+                    target="_blank"
+                    href="https://developer.fusebit.io/docs/developing-locally"
+                    onClick={() => {
+                      trackEvent('Docs Developing Locally Link Clicked', 'Web Editor', {
+                        Integration: integrationData?.data?.tags['fusebit.feedId'],
+                      });
+                    }}
+                  >
+                    Edit locally
+                  </StyledActionsHelpLink>
+                  <StyledActionsHelpImage src={question} alt="question" height="16" width="16" />
+                </StyledActionsHelpWrapper>
+                <StyledCloseWrapper onClick={handleClose}>
+                  <CloseIcon fontSize="small" />
+                </StyledCloseWrapper>
+              </>
+            )}
+            {forkEditFeedUrl && (
+              <>
+                <Button
+                  startIcon={<PlayArrowOutlined />}
+                  size="small"
+                  variant="outlined"
+                  color="primary"
+                  onClick={handleSaveAndRun}
+                  disabled={isFindingInstall || isSaving}
+                  style={{ paddingLeft: '45px', paddingRight: '45px' }}
+                >
+                  {isFindingInstall ? <CircularProgress size={20} /> : 'Run'}
+                </Button>
+                <h3>{integrationId}</h3>
+                <StyledForkAndEditWrapper>
+                  <Button
+                    startIcon={<ForkOutline height={16} width={16} />}
+                    onClick={handleFork}
+                    size="small"
+                    variant="contained"
+                    color="primary"
+                    disabled={isSaving || !isMounted}
+                    style={{ paddingLeft: '20px', paddingRight: '20px' }}
+                  >
+                    Fork and Edit
+                  </Button>
+                </StyledForkAndEditWrapper>
+              </>
+            )}
           </StyledCloseHeader>
         )}
         <StyledFusebitEditorContainer

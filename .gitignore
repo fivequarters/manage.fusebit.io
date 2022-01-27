@@ -17,6 +17,7 @@
 .env
 .env.*
 .eslintcache
+.idea
 
 npm-debug.log*
 yarn-debug.log*
