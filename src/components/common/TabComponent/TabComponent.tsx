@@ -117,6 +117,10 @@ const TabComponent: React.FC<Props> = ({ tabNames, tabObjects }) => {
           onChange={handleChange}
           aria-label="Tab Selector"
           scrollButtons="auto"
+          variant="scrollable"
+          TabIndicatorProps={{
+            style: { transition: 'none' },
+          }}
         >
           {tabNames.map((name, index) => (
             <Tab
@@ -135,6 +139,9 @@ const TabComponent: React.FC<Props> = ({ tabNames, tabObjects }) => {
             onChange={handleChange}
             aria-label="Tab Selector"
             scrollButtons="auto"
+            TabIndicatorProps={{
+              style: { transition: 'none' },
+            }}
           >
             {tabNames.map((name, index) => (
               <Tab

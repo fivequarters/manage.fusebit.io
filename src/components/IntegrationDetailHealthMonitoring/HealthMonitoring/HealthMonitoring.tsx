@@ -6,7 +6,7 @@ import { sendIntercomMessage } from '@utils/intercom';
 
 const HealthMonitoring = () => {
   const handleIntercomPost = () => {
-    trackEvent('Talk to Sales Clicked', 'Health Monitoring');
+    trackEvent('Talk to Sales Clicked', 'Health');
     window.Intercom?.('showNewMessage', 'I would like to enable the "Health" feature for my account.');
     sendIntercomMessage();
   };
@@ -14,7 +14,7 @@ const HealthMonitoring = () => {
   return (
     <Box display="flex" alignItems="center" justifyContent="center" pb="108px">
       <Card
-        title="Don’t spend time worrying about **infrastructure** "
+        title="**Don’t spend time** worrying about infrastructure"
         description="Health enables your team to spend more time on the core business while Fusebit ensures your integrations are running and healthy."
         buttonText="Talk to sales"
         handleClick={handleIntercomPost}

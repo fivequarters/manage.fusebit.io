@@ -14,7 +14,7 @@ const Logging = () => {
   return (
     <Box display="flex" alignItems="center" justifyContent="center" pb="108px">
       <Card
-        title="See it all in **one place**"
+        title="See it all **in one place**"
         description="Logging allows you to spend less time searching and more time analyzing how to resolve incidents or performance issues."
         buttonText="Talk to sales"
         handleClick={handleIntercomPost}
