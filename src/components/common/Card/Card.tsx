@@ -6,7 +6,7 @@ import Button from '../Button';
 
 const StyledCard = styled(MUICard)`
   width: fit-content;
-  max-width: 644px;
+  max-width: 704px;
   box-shadow: 0px 20px 48px 0px #34487b1a;
   border-radius: 8px;
   padding: 28px 48px 56px;
