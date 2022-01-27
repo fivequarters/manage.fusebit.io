@@ -28,6 +28,7 @@ import cogs from '@assets/cogs.svg';
 import clock from '@assets/clock.svg';
 import playEditor from '@assets/play-editor.svg';
 import add from '@assets/add.svg';
+import { ReactComponent as ForkOutline } from '@assets/fork.svg';
 import CloseIcon from '@material-ui/icons/Close';
 import PlayArrowOutlined from '@material-ui/icons/PlayArrowOutlined';
 import SaveOutlined from '@material-ui/icons/SaveOutlined';
@@ -39,7 +40,6 @@ import { getIntegrationConfig } from '@utils/localStorage';
 import MobileDrawer from '../MobileDrawer';
 import useEditorEvents from '../FusebitEditor/useEditorEvents';
 import { EditGuiSampleApp } from './EditGuiSampleApp';
-import { ReactComponent as ForkOutline } from './fork.svg';
 import { EditorEvents } from '~/enums/editor';
 
 const StyledEditorContainer = styled.div`
