@@ -30,7 +30,7 @@ export const useCreateDataFromFeed = () => {
 
   const createIntegrationAndConnector = async (activeFeed: Feed, data: Data, skipTracking?: boolean) => {
     try {
-      const parsedFeed = await replaceMustache(data, activeFeed);
+      const { feed: parsedFeed } = await replaceMustache(data, activeFeed);
 
       const commonTags = getCommonTags(activeFeed, 'integration');
 
@@ -50,7 +50,7 @@ export const useCreateDataFromFeed = () => {
 
   const createConnector = async (activeFeed: Feed, data: Data, skipTracking?: boolean) => {
     try {
-      const parsedFeed = await replaceMustache(data, activeFeed);
+      const { feed: parsedFeed } = await replaceMustache(data, activeFeed);
 
       const commonTags = getCommonTags(activeFeed, 'connector');
 

@@ -13,11 +13,15 @@ import { useAccountIntegrationsGetAll } from '@hooks/api/v2/account/integration/
 import useQueryParam from '@hooks/useQueryParam';
 import useFirstTimeVisitor from '@hooks/useFirstTimeVisitor';
 import CreateIntegrationModal from '@components/IntegrationsOverview/CreateIntegrationModal';
+import ForkIntegrationModal from '@components/IntegrationsOverview/ForkIntegrationModal';
+import { useFeedQuery } from '@hooks/useFeedQuery';
 import GetInstalls from './GetInstalls';
 
 const IntegrationsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
   const [newModalOpen, setNewModal, toggleNewModal] = useModal();
+  const { forkFeedUrl } = useFeedQuery();
+  const [forkModalOpen, setForkModal] = useModal(!!forkFeedUrl);
   const [deleteModalOpen, setDeleteModal, toggleDeleteModal] = useModal();
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
@@ -62,7 +66,8 @@ const IntegrationsTable = () => {
 
   return (
     <>
-      <CreateIntegrationModal onClose={toggleNewModal} open={newModalOpen} />
+      <ForkIntegrationModal onClose={() => setForkModal(false)} open={forkModalOpen} />
+      <CreateIntegrationModal onClose={() => setNewModal(false)} open={newModalOpen} />
       <DeleteIntegrationModal
         onConfirm={() => handleRowDelete('Integration')}
         setOpen={setDeleteModal}

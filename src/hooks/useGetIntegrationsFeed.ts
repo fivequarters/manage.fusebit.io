@@ -23,5 +23,5 @@ export const integrationsFeed = async (): Promise<Feed[]> => {
 };
 
 export const useGetIntegrationsFeed = (options?: UseQueryOptions<Feed[]>) => {
-  return useQuery(['getIntegrationsFeed'], integrationsFeed, options);
+  return useQuery('getIntegrationsFeed', integrationsFeed, options);
 };

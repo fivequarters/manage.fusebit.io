@@ -6,6 +6,7 @@ export interface Props {
   onSubmit: (feed: Feed, data: Data, snippet?: Snippet) => void;
   isIntegration?: boolean;
   isSnippet?: boolean;
+  isFork?: boolean;
   hasConnectorDependency?: (feed: Feed) => boolean;
 }
 
