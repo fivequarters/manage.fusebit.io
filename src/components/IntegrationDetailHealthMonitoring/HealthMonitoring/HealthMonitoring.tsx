@@ -3,10 +3,13 @@ import { StyledListItem } from '@components/globalStyle';
 import { Box } from '@material-ui/core';
 import { trackEvent } from '@utils/analytics';
 import { sendIntercomMessage } from '@utils/intercom';
+import { useParams } from 'react-router-dom';
 
 const HealthMonitoring = () => {
+  const { id } = useParams<{ id: string }>();
+
   const handleIntercomPost = () => {
-    trackEvent('Talk to Sales Clicked', 'Health');
+    trackEvent('Talk to Sales Clicked', 'Health', { integration: id });
     window.Intercom?.('showNewMessage', 'I would like to enable the "Health" feature for my account.');
     sendIntercomMessage();
   };

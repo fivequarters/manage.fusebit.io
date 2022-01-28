@@ -3,10 +3,13 @@ import { StyledListItem } from '@components/globalStyle';
 import { Box } from '@material-ui/core';
 import { trackEvent } from '@utils/analytics';
 import { sendIntercomMessage } from '@utils/intercom';
+import { useParams } from 'react-router-dom';
 
 const Logging = () => {
+  const { id } = useParams<{ id: string }>();
+
   const handleIntercomPost = () => {
-    trackEvent('Talk to Sales Clicked', 'Logging');
+    trackEvent('Talk to Sales Clicked', 'Logging', { integration: id });
     window.Intercom?.('showNewMessage', 'I would like to enable the "Logging" feature for my account.');
     sendIntercomMessage();
   };

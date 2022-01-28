@@ -3,10 +3,13 @@ import { StyledListItem } from '@components/globalStyle';
 import { Box } from '@material-ui/core';
 import { trackEvent } from '@utils/analytics';
 import { sendIntercomMessage } from '@utils/intercom';
+import { useParams } from 'react-router-dom';
 
 const Reliability = () => {
+  const { id } = useParams<{ id: string }>();
+
   const handleIntercomPost = () => {
-    trackEvent('Talk to Sales Clicked', 'Reliability');
+    trackEvent('Talk to Sales Clicked', 'Reliability', { integration: id });
     window.Intercom?.('showNewMessage', 'I would like to enable the "Reliability" feature for my account.');
     sendIntercomMessage();
   };
