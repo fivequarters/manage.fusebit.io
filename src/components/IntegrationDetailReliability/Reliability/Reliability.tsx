@@ -9,7 +9,7 @@ const Reliability = () => {
   const { id } = useParams<{ id: string }>();
 
   const handleIntercomPost = () => {
-    trackEvent('Talk to Sales Clicked', 'Reliability', { integration: id });
+    trackEvent('Talk to Sales Button Clicked', 'Reliability', { integration: id });
     window.Intercom?.('showNewMessage', 'I would like to enable the "Reliability" feature for my account.');
     sendIntercomMessage();
   };

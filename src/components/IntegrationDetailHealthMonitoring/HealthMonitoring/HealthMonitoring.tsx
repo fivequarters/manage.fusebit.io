@@ -9,7 +9,7 @@ const HealthMonitoring = () => {
   const { id } = useParams<{ id: string }>();
 
   const handleIntercomPost = () => {
-    trackEvent('Talk to Sales Clicked', 'Health', { integration: id });
+    trackEvent('Talk to Sales Button Clicked', 'Health', { integration: id });
     window.Intercom?.('showNewMessage', 'I would like to enable the "Health" feature for my account.');
     sendIntercomMessage();
   };

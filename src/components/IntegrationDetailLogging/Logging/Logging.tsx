@@ -9,7 +9,7 @@ const Logging = () => {
   const { id } = useParams<{ id: string }>();
 
   const handleIntercomPost = () => {
-    trackEvent('Talk to Sales Clicked', 'Logging', { integration: id });
+    trackEvent('Talk to Sales Button Clicked', 'Logging', { integration: id });
     window.Intercom?.('showNewMessage', 'I would like to enable the "Logging" feature for my account.');
     sendIntercomMessage();
   };
