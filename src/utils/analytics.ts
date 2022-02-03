@@ -36,11 +36,11 @@ export const getAnalyticsClient: (
   }
 
   // ad blocker workaround for Segment (if it is an array, it means ad blocker got in our way)
-  // const isAdBlockerEnabled = Array.isArray(analytics);
-  // if (isAdBlockerEnabled && !allowUnauthenticated) {
-  //   analyticsClient = mockedAnalyticsClient;
-  //   return analyticsClient;
-  // }
+  const isAdBlockerEnabled = Array.isArray(analytics);
+  if (isAdBlockerEnabled && !allowUnauthenticated) {
+    analyticsClient = mockedAnalyticsClient;
+    return analyticsClient;
+  }
 
   // users that were not authenticated by Auth0 are not tracked
   if (!issuedByAuth0 && !allowUnauthenticated) {
