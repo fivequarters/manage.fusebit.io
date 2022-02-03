@@ -551,7 +551,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       'Share',
       {
         Integration: integrationId,
-        domain: 'API'
+        domain: 'API',
       },
       () => {
         window.location.href = `/?forkFeedUrl=${forkEditFeedUrl}`;
