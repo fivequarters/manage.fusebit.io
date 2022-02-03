@@ -93,8 +93,26 @@ const trackEventHandler: TrackEventHandler = (eventName, objectLocation, extraPr
   );
 };
 
+const trackAnonymouseEventHandler: TrackEventHandler = (
+  eventName,
+  objectLocation,
+  extraProperties = {},
+  cb = () => {}
+) => {
+  getAnalyticsClient(undefined, undefined, true).track(
+    eventName,
+    {
+      objectLocation,
+      domain: PRODUCTION_HOST,
+      ...extraProperties,
+    },
+    cb
+  );
+};
+
 // trackEvent is memoized because React re-rendering process makes it get called multiple times for the same event
 export const trackEvent = memoize(trackEventHandler);
+export const trackAnonymouseEvent = memoize(trackAnonymouseEventHandler);
 
 export const trackAuthEvent = (user: User, fusebitProfile: FusebitProfile, isSignUpEvent: boolean, cb = () => {}) => {
   const segmentUser = getAnalyticsClient().user;
