@@ -15,7 +15,7 @@ import question from '@assets/question.svg';
 import logo from '@assets/logo.svg';
 import ConfigureRunnerModal from '@components/IntegrationDetailDevelop/ConfigureRunnerModal';
 import AddSnippetToIntegrationModal from '@components/IntegrationDetailDevelop/AddSnippetToIntegrationModal';
-import { trackEvent } from '@utils/analytics';
+import { trackAnonymouseEvent, trackEvent } from '@utils/analytics';
 import ConfirmationPrompt from '@components/common/ConfirmationPrompt';
 import { useTrackPage } from '@hooks/useTrackPage';
 import FusebitEditor from '@components/IntegrationDetailDevelop/FusebitEditor';
@@ -546,10 +546,17 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const forkEditFeedUrl = urlParams.get('forkEditFeedUrl');
 
   const handleFork = () => {
-    trackEvent('Fork Integration Button', 'Web Editor', {
-      Integration: integrationData?.data?.tags['fusebit.feedId'],
-    });
-    window.location.href = `/?forkFeedUrl=${forkEditFeedUrl}`;
+    trackAnonymouseEvent(
+      'Share Redirect Execution',
+      'Share',
+      {
+        Integration: integrationId,
+        domain: 'API'
+      },
+      () => {
+        window.location.href = `/?forkFeedUrl=${forkEditFeedUrl}`;
+      }
+    );
   };
 
   const openConfigureModal = ({ shiftKey }: { shiftKey: boolean }) => {

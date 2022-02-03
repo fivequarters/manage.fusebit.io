@@ -36,11 +36,11 @@ export const getAnalyticsClient: (
   }
 
   // ad blocker workaround for Segment (if it is an array, it means ad blocker got in our way)
-  const isAdBlockerEnabled = Array.isArray(analytics);
-  if (isAdBlockerEnabled && !allowUnauthenticated) {
-    analyticsClient = mockedAnalyticsClient;
-    return analyticsClient;
-  }
+  // const isAdBlockerEnabled = Array.isArray(analytics);
+  // if (isAdBlockerEnabled && !allowUnauthenticated) {
+  //   analyticsClient = mockedAnalyticsClient;
+  //   return analyticsClient;
+  // }
 
   // users that were not authenticated by Auth0 are not tracked
   if (!issuedByAuth0 && !allowUnauthenticated) {
@@ -93,8 +93,26 @@ const trackEventHandler: TrackEventHandler = (eventName, objectLocation, extraPr
   );
 };
 
+const trackAnonymouseEventHandler: TrackEventHandler = (
+  eventName,
+  objectLocation,
+  extraProperties = {},
+  cb = () => {}
+) => {
+  getAnalyticsClient(undefined, undefined, true).track(
+    eventName,
+    {
+      objectLocation,
+      domain: PRODUCTION_HOST,
+      ...extraProperties,
+    },
+    cb
+  );
+};
+
 // trackEvent is memoized because React re-rendering process makes it get called multiple times for the same event
 export const trackEvent = memoize(trackEventHandler);
+export const trackAnonymouseEvent = memoize(trackAnonymouseEventHandler);
 
 export const trackAuthEvent = (user: User, fusebitProfile: FusebitProfile, isSignUpEvent: boolean, cb = () => {}) => {
   const segmentUser = getAnalyticsClient().user;
