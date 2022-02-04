@@ -28,22 +28,29 @@ const mockedAnalyticsClient = {
 export const getAnalyticsClient: (
   user?: User,
   issuedByAuth0?: boolean,
-  allowUnauthenticated?: boolean
-) => SegmentAnalytics.AnalyticsJS = (user, issuedByAuth0, allowUnauthenticated) => {
+  allowUnauthenticated?: boolean,
+  useCache?: boolean
+) => SegmentAnalytics.AnalyticsJS = (user, issuedByAuth0, allowUnauthenticated, useCache = true) => {
   // if already defined, returns it
-  if (analyticsClient) {
+  if (analyticsClient && useCache) {
     return analyticsClient;
   }
 
   // ad blocker workaround for Segment (if it is an array, it means ad blocker got in our way)
   const isAdBlockerEnabled = Array.isArray(analytics);
   if (isAdBlockerEnabled && !allowUnauthenticated) {
+    if (!useCache) {
+      return mockedAnalyticsClient;
+    }
     analyticsClient = mockedAnalyticsClient;
     return analyticsClient;
   }
 
   // users that were not authenticated by Auth0 are not tracked
   if (!issuedByAuth0 && !allowUnauthenticated) {
+    if (!useCache) {
+      return mockedAnalyticsClient;
+    }
     analyticsClient = mockedAnalyticsClient;
     return analyticsClient;
   }
@@ -51,6 +58,9 @@ export const getAnalyticsClient: (
   // if it is not prod, we can track everything
   const isProd = document.location.host === PRODUCTION_HOST;
   if (!isProd) {
+    if (!useCache) {
+      return analytics;
+    }
     analyticsClient = analytics;
     return analyticsClient;
   }
@@ -58,7 +68,11 @@ export const getAnalyticsClient: (
   // if it is prod, we track only non-fusebit and non-litebox users
   const isExternalUser =
     !user || !user.email || (!user.email.endsWith('@fusebit.io') && !user.email.endsWith('@litebox.ai'));
-  analyticsClient = isExternalUser || allowUnauthenticated ? analytics : mockedAnalyticsClient;
+  const client = isExternalUser || allowUnauthenticated ? analytics : mockedAnalyticsClient;
+  if (!useCache) {
+    return client;
+  }
+  analyticsClient = client;
   return analyticsClient;
 };
 
@@ -99,7 +113,7 @@ const trackAnonymouseEventHandler: TrackEventHandler = (
   extraProperties = {},
   cb = () => {}
 ) => {
-  getAnalyticsClient(undefined, undefined, true).track(
+  getAnalyticsClient(undefined, undefined, true, false).track(
     eventName,
     {
       objectLocation,
