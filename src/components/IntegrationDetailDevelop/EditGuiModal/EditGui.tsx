@@ -561,7 +561,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
 
   const openConfigureModal = ({ shiftKey }: { shiftKey: boolean }) => {
     if (shiftKey) {
-      handleCopy(JSON.stringify(getIntegrationConfig(integrationId, tenantId).runner));
+      handleCopy(`"fusebitEditor": [${JSON.stringify(getIntegrationConfig(integrationId, tenantId).runner)}]`);
     } else {
       setConfigureRunnerActive(true);
     }
