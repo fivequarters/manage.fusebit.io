@@ -509,7 +509,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     const connectors =
       missingIdentities || integrationData.data.data.components.filter((c) => c.entityType === 'connector');
     missingConnectorNames = connectors
-      .map((c) => connectorFeed.data.find((c1) => c1.configuration.components?.[0].provider === c.provider)?.name)
+      .map((c) => connectorFeed.data?.find((c1) => c1.configuration.components?.[0].provider === c.provider)?.name)
       .filter((name) => !!name) as string[];
   }
 
