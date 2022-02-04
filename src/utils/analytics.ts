@@ -25,7 +25,11 @@ const mockedAnalyticsClient = {
   user: null,
 } as any;
 
-const getFreshAnalyticsClient = (user?: User, issuedByAuth0?: boolean, allowUnauthenticated?: boolean): SegmentAnalytics.AnalyticsJS => {
+const getFreshAnalyticsClient = (
+  user?: User,
+  issuedByAuth0?: boolean,
+  allowUnauthenticated?: boolean
+): SegmentAnalytics.AnalyticsJS => {
   // ad blocker workaround for Segment (if it is an array, it means ad blocker got in our way)
   const isAdBlockerEnabled = Array.isArray(analytics);
   if (isAdBlockerEnabled && !allowUnauthenticated) {
@@ -47,9 +51,13 @@ const getFreshAnalyticsClient = (user?: User, issuedByAuth0?: boolean, allowUnau
   const isExternalUser =
     !user || !user.email || (!user.email.endsWith('@fusebit.io') && !user.email.endsWith('@litebox.ai'));
   return isExternalUser || allowUnauthenticated ? analytics : mockedAnalyticsClient;
-}
+};
 
-export const getAnalyticsClient = (user?: User, issuedByAuth0?: boolean, allowUnauthenticated?: boolean): SegmentAnalytics.AnalyticsJS => {
+export const getAnalyticsClient = (
+  user?: User,
+  issuedByAuth0?: boolean,
+  allowUnauthenticated?: boolean
+): SegmentAnalytics.AnalyticsJS => {
   if (!analyticsClient) {
     analyticsClient = getFreshAnalyticsClient(user, issuedByAuth0, allowUnauthenticated);
   }
