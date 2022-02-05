@@ -334,6 +334,13 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     onMissingIdentities: setMissingIdentities,
   });
   const [dirtyState, setDirtyState] = useState(false);
+  const [enableGrafanaLogs] = useState<boolean>(() => {
+    const result =
+      window.location.search.includes('enableGrafanaLogs') || localStorage.getItem('enableGrafanaLogs') === 'true';
+    localStorage.setItem('enableGrafanaLogs', `${!!result}`);
+    return result;
+  });
+
   const { invalidateIntegration } = useInvalidateIntegration();
   const { formatSnippet, getProviderVersion } = useSnippets();
   const { createError } = useError();
@@ -716,6 +723,9 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
               entityType: 'integration',
               editor: {
                 navigationPanel: { hideRunnerTool: true, hideScheduleSettings: true },
+                features: {
+                  enableGrafanaLogs,
+                },
               },
             }}
             onLoaded={() => {
