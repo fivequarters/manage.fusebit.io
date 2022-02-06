@@ -6,6 +6,7 @@ import { STATIC_TENANT_ID } from '@utils/constants';
 
 const {
   REACT_APP_AUTH0_DOMAIN,
+  REACT_APP_AUTH0_AUDIENCE,
   REACT_APP_AUTH0_CLIENT_ID,
   REACT_APP_FUSEBIT_DEPLOYMENT,
   REACT_APP_LOGOUT_REDIRECT_URL,
@@ -54,7 +55,7 @@ const signIn = (silent?: boolean): void => {
     '/authorize?response_type=token',
     connection ? `&connection=${encodeURIComponent(connection)}` : '',
     `&client_id=${REACT_APP_AUTH0_CLIENT_ID}`,
-    `&audience=${REACT_APP_FUSEBIT_DEPLOYMENT}`,
+    `&audience=${REACT_APP_AUTH0_AUDIENCE || REACT_APP_FUSEBIT_DEPLOYMENT}`,
     `&redirect_uri=${window.location.origin}/callback?silentAuth=${silent ? 'true' : 'false'}`,
     `%26requestedPath=${requestedPath === '/callback' ? `/` : encodeURIComponent(requestedPath)}`,
     '&scope=openid profile email',
