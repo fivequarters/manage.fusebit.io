@@ -25,40 +25,42 @@ const mockedAnalyticsClient = {
   user: null,
 } as any;
 
-export const getAnalyticsClient: (
+const getFreshAnalyticsClient = (
   user?: User,
   issuedByAuth0?: boolean,
   allowUnauthenticated?: boolean
-) => SegmentAnalytics.AnalyticsJS = (user, issuedByAuth0, allowUnauthenticated) => {
-  // if already defined, returns it
-  if (analyticsClient) {
-    return analyticsClient;
-  }
-
+): SegmentAnalytics.AnalyticsJS => {
   // ad blocker workaround for Segment (if it is an array, it means ad blocker got in our way)
   const isAdBlockerEnabled = Array.isArray(analytics);
   if (isAdBlockerEnabled && !allowUnauthenticated) {
-    analyticsClient = mockedAnalyticsClient;
-    return analyticsClient;
+    return mockedAnalyticsClient;
   }
 
   // users that were not authenticated by Auth0 are not tracked
   if (!issuedByAuth0 && !allowUnauthenticated) {
-    analyticsClient = mockedAnalyticsClient;
-    return analyticsClient;
+    return mockedAnalyticsClient;
   }
 
   // if it is not prod, we can track everything
   const isProd = document.location.host === PRODUCTION_HOST;
   if (!isProd) {
-    analyticsClient = analytics;
-    return analyticsClient;
+    return analytics;
   }
 
   // if it is prod, we track only non-fusebit and non-litebox users
   const isExternalUser =
     !user || !user.email || (!user.email.endsWith('@fusebit.io') && !user.email.endsWith('@litebox.ai'));
-  analyticsClient = isExternalUser || allowUnauthenticated ? analytics : mockedAnalyticsClient;
+  return isExternalUser || allowUnauthenticated ? analytics : mockedAnalyticsClient;
+};
+
+export const getAnalyticsClient = (
+  user?: User,
+  issuedByAuth0?: boolean,
+  allowUnauthenticated?: boolean
+): SegmentAnalytics.AnalyticsJS => {
+  if (!analyticsClient) {
+    analyticsClient = getFreshAnalyticsClient(user, issuedByAuth0, allowUnauthenticated);
+  }
   return analyticsClient;
 };
 
@@ -99,7 +101,7 @@ const trackAnonymouseEventHandler: TrackEventHandler = (
   extraProperties = {},
   cb = () => {}
 ) => {
-  getAnalyticsClient(undefined, undefined, true).track(
+  getFreshAnalyticsClient(undefined, undefined, true).track(
     eventName,
     {
       objectLocation,
