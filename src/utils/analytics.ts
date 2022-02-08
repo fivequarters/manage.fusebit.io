@@ -116,7 +116,12 @@ const trackAnonymouseEventHandler: TrackEventHandler = (
 export const trackEvent = memoize(trackEventHandler);
 export const trackAnonymouseEvent = memoize(trackAnonymouseEventHandler);
 
-export const trackAuthEvent = (user: User, fusebitProfile: FusebitProfile | undefined, isSignUpEvent: boolean, cb = () => {}) => {
+export const trackAuthEvent = (
+  user: User,
+  fusebitProfile: FusebitProfile | undefined,
+  isSignUpEvent: boolean,
+  cb = () => {}
+) => {
   const segmentUser = getAnalyticsClient().user;
   if (!segmentUser) {
     return cb();
