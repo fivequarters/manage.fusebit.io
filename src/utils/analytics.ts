@@ -116,14 +116,14 @@ const trackAnonymouseEventHandler: TrackEventHandler = (
 export const trackEvent = memoize(trackEventHandler);
 export const trackAnonymouseEvent = memoize(trackAnonymouseEventHandler);
 
-export const trackAuthEvent = (user: User, fusebitProfile: FusebitProfile, isSignUpEvent: boolean, cb = () => {}) => {
+export const trackAuthEvent = (user: User, fusebitProfile: FusebitProfile | undefined, isSignUpEvent: boolean, cb = () => {}) => {
   const segmentUser = getAnalyticsClient().user;
   if (!segmentUser) {
     return cb();
   }
   const isSilentAuthInProgress = silentAuthInProgress();
   const currentSegmentUserId = segmentUser().id();
-  const sameUser = fusebitProfile.userId === currentSegmentUserId;
+  const sameUser = fusebitProfile?.userId === currentSegmentUserId;
 
   const extraSegmentEventProps: { userType: string; authType?: string } = isSignUpEvent
     ? { userType: 'new user' }
@@ -142,7 +142,7 @@ export const trackAuthEvent = (user: User, fusebitProfile: FusebitProfile, isSig
     console.error('Segment has another user identified but silentAuth worked? Something is off.');
   }
 
-  getAnalyticsClient().identify(fusebitProfile.userId, {
+  getAnalyticsClient().identify(fusebitProfile?.userId, {
     ...fusebitProfile,
     ...user,
   } as Object);
