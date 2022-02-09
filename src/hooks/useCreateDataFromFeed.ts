@@ -28,6 +28,26 @@ export const useCreateDataFromFeed = () => {
     disableWaitforOperations?: boolean
   ) => Promise.all(parsedFeed.configuration.entities.map((e) => createEntity(e, commonTags, disableWaitforOperations)));
 
+  const forkIntegrationAndConnector = async (activeFeed: Feed, data: Data, skipTracking?: boolean) => {
+    try {
+      const { feed: parsedFeed } = await replaceMustache(data, activeFeed);
+
+      const commonTags = getCommonTags(activeFeed, 'integration');
+
+      if (!skipTracking) {
+        trackEvent('New Fork Create Button Clicked', 'Integrations', {
+          integration: commonTags['fusebit.feedId'],
+        });
+      }
+
+      const res = await createFromFeed(parsedFeed, commonTags, true);
+
+      return res.find((r) => r.data.entityType === 'integration')?.data;
+    } catch (e) {
+      createError(e);
+    }
+  };
+
   const createIntegrationAndConnector = async (activeFeed: Feed, data: Data, skipTracking?: boolean) => {
     try {
       const { feed: parsedFeed } = await replaceMustache(data, activeFeed);
@@ -87,5 +107,6 @@ export const useCreateDataFromFeed = () => {
     createIntegrationAndConnector,
     createConnector,
     createAndAddConnectorToIntegration,
+    forkIntegrationAndConnector,
   };
 };

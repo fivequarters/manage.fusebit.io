@@ -96,7 +96,10 @@ const AuthCallbackPage: FC<{}> = (): ReactElement => {
 
         const user: User = { email: fusebitProfile?.email, ...auth0Profile, ...company };
         const issuedByAuth0 = decoded.iss.startsWith(process.env.REACT_APP_AUTH0_DOMAIN as string);
-        getAnalyticsClient(user, issuedByAuth0);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const trackAnonymous = urlParams.get('trackAnonymous') == 'true';
+        getAnalyticsClient(user, issuedByAuth0, trackAnonymous);
         trackAuthEvent(user, fusebitProfile, isSignUpEvent, navigatePostAuth);
       });
     } catch (err) {
