@@ -15,7 +15,7 @@ import question from '@assets/question.svg';
 import logo from '@assets/logo.svg';
 import ConfigureRunnerModal from '@components/IntegrationDetailDevelop/ConfigureRunnerModal';
 import AddSnippetToIntegrationModal from '@components/IntegrationDetailDevelop/AddSnippetToIntegrationModal';
-import { trackAnonymouseEvent, trackEvent } from '@utils/analytics';
+import { trackEvent } from '@utils/analytics';
 import ConfirmationPrompt from '@components/common/ConfirmationPrompt';
 import { useTrackPage } from '@hooks/useTrackPage';
 import FusebitEditor from '@components/IntegrationDetailDevelop/FusebitEditor';
@@ -355,11 +355,10 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const urlParams = new URLSearchParams(window.location.search);
   const forkEditFeedUrl = urlParams.get('forkEditFeedUrl');
 
-  if (forkEditFeedUrl) {
-    useTrackPage('Share Redirect Execution', 'Share', { Integration: integrationId, domain: 'API' });
-  } else {
-    useTrackPage('Web Editor', 'Web Editor');
-  }
+  const pageName = forkEditFeedUrl ? 'Share Redirect Execution' : 'Web Editor';
+  const objectLocation = forkEditFeedUrl ? 'Share' : 'Web Editor';
+  const additionalProperties = forkEditFeedUrl ? { Integration: integrationId, domain: 'API' } : undefined;
+  useTrackPage(pageName, objectLocation, additionalProperties);
   useTitle(`${id} Editor`);
 
   useEffect(() => {

@@ -5,7 +5,7 @@ import { PRODUCTION_HOST } from '@utils/constants';
 export function useTrackPage(pageName: string, objectLocation: String, properties?: { [key: string]: string }) {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const trackAnonymous = urlParams.get('trackAnonymous') == 'true';
+    const trackAnonymous = urlParams.get('trackAnonymous') === 'true';
     getAnalyticsClient(undefined, false, trackAnonymous).page(pageName, {
       objectLocation,
       domain: PRODUCTION_HOST,

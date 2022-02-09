@@ -58,8 +58,10 @@ export const getAnalyticsClient = (
   issuedByAuth0?: boolean,
   allowUnauthenticated?: boolean
 ): SegmentAnalytics.AnalyticsJS => {
-  if (!analyticsClient) {
-    analyticsClient = getFreshAnalyticsClient(user, issuedByAuth0, allowUnauthenticated);
+  const searchParams = new URLSearchParams(window.location.search);
+  const trackAnonymous = searchParams.get('trackAnonymous') === 'true';
+  if (!analyticsClient || trackAnonymous) {
+    analyticsClient = getFreshAnalyticsClient(user, issuedByAuth0, trackAnonymous || allowUnauthenticated);
   }
   return analyticsClient;
 };
