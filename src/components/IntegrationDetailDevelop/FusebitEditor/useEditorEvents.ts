@@ -23,18 +23,18 @@ const useEditorEvents = ({ isMounted, events }: Props) => {
       [EditorEvents.BuildFinished]: () => {
         setIsSaving(false);
       },
-      [EditorEvents.BuildError]: () => (e: { error: { message: string } }) => {
+      [EditorEvents.BuildError]: (e: { error: { message: string } }) => {
         setIsSaving(false);
         setErrorBuild(`There was an error in the build: ${e.error.message}`);
       },
       [EditorEvents.LogsAttached]: () => {
         setLogs((oldLogs) => [...oldLogs, logWithTime('Attached to real-time logs...')]);
       },
-      [EditorEvents.LogsEntry]: () => (e: LogEntry) => {
+      [EditorEvents.LogsEntry]: (e: LogEntry) => {
         const logData = JSON.parse(e.data) as LogData;
         setLogs((oldLogs) => [...oldLogs, logWithTime(logData.msg)]);
       },
-      [EditorEvents.RunnerFinished]: () => (e: LogEntryError) => {
+      [EditorEvents.RunnerFinished]: (e: LogEntryError) => {
         setLogs((oldLogs) => [...oldLogs, logWithTime(e.error)]);
       },
     };
