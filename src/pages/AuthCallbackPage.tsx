@@ -96,7 +96,6 @@ const AuthCallbackPage: FC<{}> = (): ReactElement => {
 
         const user: User = { email: fusebitProfile?.email, ...auth0Profile, ...company };
         const issuedByAuth0 = decoded.iss.startsWith(process.env.REACT_APP_AUTH0_DOMAIN as string);
-
         getAnalyticsClient(user, issuedByAuth0);
         trackAuthEvent(user, fusebitProfile, isSignUpEvent, navigatePostAuth);
       });
