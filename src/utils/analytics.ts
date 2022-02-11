@@ -58,8 +58,10 @@ export const getAnalyticsClient = (
   issuedByAuth0?: boolean,
   allowUnauthenticated?: boolean
 ): SegmentAnalytics.AnalyticsJS => {
-  if (!analyticsClient) {
-    analyticsClient = getFreshAnalyticsClient(user, issuedByAuth0, allowUnauthenticated);
+  const searchParams = new URLSearchParams(window.location.search);
+  const trackAnonymous = searchParams.get('trackAnonymous') === 'true';
+  if (!analyticsClient || trackAnonymous) {
+    analyticsClient = getFreshAnalyticsClient(user, issuedByAuth0, trackAnonymous || allowUnauthenticated);
   }
   return analyticsClient;
 };
@@ -116,9 +118,14 @@ const trackAnonymouseEventHandler: TrackEventHandler = (
 export const trackEvent = memoize(trackEventHandler);
 export const trackAnonymouseEvent = memoize(trackAnonymouseEventHandler);
 
-export const trackAuthEvent = (user: User, fusebitProfile: FusebitProfile, isSignUpEvent: boolean, cb = () => {}) => {
+export const trackAuthEvent = (
+  user: User,
+  fusebitProfile: FusebitProfile | undefined,
+  isSignUpEvent: boolean,
+  cb = () => {}
+) => {
   const segmentUser = getAnalyticsClient().user;
-  if (!segmentUser) {
+  if (!segmentUser || !fusebitProfile) {
     return cb();
   }
   const isSilentAuthInProgress = silentAuthInProgress();

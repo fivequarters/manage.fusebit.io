@@ -13,14 +13,14 @@ interface Props {
 
 const ForkIntegrationModal = ({ open, onClose }: Props) => {
   const { createLoader, removeLoader } = useLoader();
-  const { createIntegrationAndConnector } = useCreateDataFromFeed();
+  const { forkIntegrationAndConnector } = useCreateDataFromFeed();
   const history = useHistory();
   const { getRedirectLink } = useGetRedirectLink();
 
   const handleCreate = async (feed: Feed, data: Data) => {
     try {
       createLoader();
-      const integration = await createIntegrationAndConnector(feed, data);
+      const integration = await forkIntegrationAndConnector(feed, data);
 
       history.push(getRedirectLink(`/integration/${integration?.id || ''}/develop`));
     } finally {

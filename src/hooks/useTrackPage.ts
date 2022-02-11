@@ -4,7 +4,13 @@ import { PRODUCTION_HOST } from '@utils/constants';
 
 export function useTrackPage(pageName: string, objectLocation: String, properties?: { [key: string]: string }) {
   useEffect(() => {
-    getAnalyticsClient().page(pageName, { objectLocation, domain: PRODUCTION_HOST, ...properties });
+    const urlParams = new URLSearchParams(window.location.search);
+    const trackAnonymous = urlParams.get('trackAnonymous') === 'true';
+    getAnalyticsClient(undefined, false, trackAnonymous).page(pageName, {
+      objectLocation,
+      domain: PRODUCTION_HOST,
+      ...properties,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageName, objectLocation]);
 }

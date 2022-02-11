@@ -15,7 +15,7 @@ import question from '@assets/question.svg';
 import logo from '@assets/logo.svg';
 import ConfigureRunnerModal from '@components/IntegrationDetailDevelop/ConfigureRunnerModal';
 import AddSnippetToIntegrationModal from '@components/IntegrationDetailDevelop/AddSnippetToIntegrationModal';
-import { trackAnonymouseEvent, trackEvent } from '@utils/analytics';
+import { trackEvent } from '@utils/analytics';
 import ConfirmationPrompt from '@components/common/ConfirmationPrompt';
 import { useTrackPage } from '@hooks/useTrackPage';
 import FusebitEditor from '@components/IntegrationDetailDevelop/FusebitEditor';
@@ -359,7 +359,13 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     }
   }, [errorBuild, createError, setErrorBuild]);
 
-  useTrackPage('Web Editor', 'Web Editor');
+  const urlParams = new URLSearchParams(window.location.search);
+  const forkEditFeedUrl = urlParams.get('forkEditFeedUrl');
+
+  const pageName = forkEditFeedUrl ? 'Share Redirect Execution' : 'Web Editor';
+  const objectLocation = forkEditFeedUrl ? 'Share' : 'Web Editor';
+  const additionalProperties = forkEditFeedUrl ? { Integration: integrationId, domain: 'API' } : undefined;
+  useTrackPage(pageName, objectLocation, additionalProperties);
   useTitle(`${id} Editor`);
 
   useEffect(() => {
@@ -404,6 +410,19 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       createLoader();
     }
   }, [isMounted, isLoading, createLoader, removeLoader]);
+
+  const handleFork = () => {
+    trackEvent(
+      'Fork Button Clicked',
+      'Web Editor',
+      {
+        Integration: integrationId,
+      },
+      () => {
+        window.location.href = `/?forkFeedUrl=${forkEditFeedUrl}`;
+      }
+    );
+  };
 
   const handleSaveAndRun = async () => {
     if (dirtyState) {
@@ -548,23 +567,6 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
         )}
     </>
   );
-
-  const urlParams = new URLSearchParams(window.location.search);
-  const forkEditFeedUrl = urlParams.get('forkEditFeedUrl');
-
-  const handleFork = () => {
-    trackAnonymouseEvent(
-      'Share Redirect Execution',
-      'Share',
-      {
-        Integration: integrationId,
-        domain: 'API',
-      },
-      () => {
-        window.location.href = `/?forkFeedUrl=${forkEditFeedUrl}`;
-      }
-    );
-  };
 
   const openConfigureModal = ({ shiftKey }: { shiftKey: boolean }) => {
     if (shiftKey) {
