@@ -388,7 +388,6 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
         })
       );
     },
-    enabled: !matchesMobile,
   });
 
   useEffect(() => {
@@ -777,7 +776,13 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
             <StyledFusebitEditorLogo src={logo} alt="fusebit logo" height="20" width="80" />
           )}
           {isMounted && matchesMobile && (
-            <MobileDrawer open={isMounted} onClose={handleClose} handleRun={handleRun} isRunning={isRunning} />
+            <MobileDrawer
+              processing={processing}
+              open={isMounted}
+              onClose={handleClose}
+              handleRun={handleRun}
+              isRunning={isRunning}
+            />
           )}
         </StyledFusebitEditorContainer>
       </StyledEditorContainer>
