@@ -59,9 +59,10 @@ interface Props {
   onClose: () => void;
   handleRun: () => void;
   isRunning: boolean;
+  processing: boolean;
 }
 
-const MobileDrawer = ({ open, onClose, handleRun, isRunning }: Props) => {
+const MobileDrawer = ({ open, onClose, handleRun, isRunning, processing }: Props) => {
   const { logs, clearLogs } = useEditorEvents({
     isMounted: open,
     events: [EditorEvents.LogsEntry, EditorEvents.LogsAttached, EditorEvents.RunnerFinished],
@@ -81,6 +82,18 @@ const MobileDrawer = ({ open, onClose, handleRun, isRunning }: Props) => {
     onClose();
   };
 
+  const buttonText = (() => {
+    if (processing) {
+      return 'Processing...';
+    }
+
+    if (isRunning) {
+      return 'Running...';
+    }
+
+    return 'Run';
+  })();
+
   return (
     <>
       <Drawer anchor="bottom" open={open} onClose={handleClose}>
@@ -98,7 +111,7 @@ const MobileDrawer = ({ open, onClose, handleRun, isRunning }: Props) => {
               onClick={handleRun}
               disabled={isRunning}
             >
-              {isRunning ? 'Running...' : 'Run'}
+              {buttonText}
             </Button>
             <StyledGuiMobileNotSupportedWrapper>
               <StyledGuiMobileNotSupportedIcon src={info} alt="not supported" height="16" width="16" />

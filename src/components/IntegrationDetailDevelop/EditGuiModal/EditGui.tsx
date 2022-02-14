@@ -39,6 +39,7 @@ import { useCopy } from '@hooks/useCopy';
 import { getIntegrationConfig } from '@utils/localStorage';
 import MobileDrawer from '../MobileDrawer';
 import useEditorEvents from '../FusebitEditor/useEditorEvents';
+import useProcessing from '../hooks/useProcessing';
 import { EditGuiSampleApp } from './EditGuiSampleApp';
 import { EditorEvents } from '~/enums/editor';
 
@@ -367,6 +368,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const additionalProperties = forkEditFeedUrl ? { Integration: integrationId, domain: 'API' } : undefined;
   useTrackPage(pageName, objectLocation, additionalProperties);
   useTitle(`${id} Editor`);
+  const { processing } = useProcessing();
 
   useEffect(() => {
     const createAddNewItemElement = (lastItem: Element) => {
@@ -568,6 +570,22 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     </>
   );
 
+  const buttonText = (() => {
+    if (processing) {
+      return (
+        <>
+          Building... <CircularProgress size={20} style={{ marginLeft: 10 }} />
+        </>
+      );
+    }
+
+    if (isFindingInstall) {
+      return <CircularProgress size={20} />;
+    }
+
+    return 'Run';
+  })();
+
   const openConfigureModal = ({ shiftKey }: { shiftKey: boolean }) => {
     if (shiftKey) {
       handleCopy(
@@ -615,7 +633,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
                   size="small"
                   variant="outlined"
                   color="primary"
-                  disabled={isSaving || !dirtyState}
+                  disabled={isSaving || !dirtyState || processing}
                 >
                   Save
                 </Button>
@@ -626,9 +644,9 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
                     variant={assumeHasConnectors ? 'contained' : 'outlined'}
                     color="primary"
                     onClick={handleSaveAndRun}
-                    disabled={isFindingInstall || isSaving}
+                    disabled={isFindingInstall || isSaving || processing}
                   >
-                    {isFindingInstall ? <CircularProgress size={20} /> : 'Run'}
+                    {buttonText}
                   </Button>
                   <Button
                     onClick={openConfigureModal}
@@ -738,7 +756,13 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
             <StyledFusebitEditorLogo src={logo} alt="fusebit logo" height="20" width="80" />
           )}
           {isMounted && matchesMobile && (
-            <MobileDrawer open={isMounted} onClose={handleClose} handleRun={handleRun} isRunning={isRunning} />
+            <MobileDrawer
+              processing={processing}
+              open={isMounted}
+              onClose={handleClose}
+              handleRun={handleRun}
+              isRunning={isRunning}
+            />
           )}
         </StyledFusebitEditorContainer>
       </StyledEditorContainer>
