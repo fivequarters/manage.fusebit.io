@@ -1,11 +1,8 @@
 import fusebitLogo from '@assets/fusebit-logo.svg';
 import Button from '@components/common/Button/Button';
 import { useGetIntegrationFromCache } from '@hooks/useGetIntegrationFromCache';
-import { useLoader } from '@hooks/useLoader';
-import { useError } from '@hooks/useError';
-import { Box, Card, CardActions, CardContent, CircularProgress, Typography } from '@material-ui/core';
-import { INTEGRATION_PROCESSING_SUFFIX } from '@utils/constants';
-import React, { useEffect } from 'react';
+import { Box, Card, CardActions, CardContent, Typography } from '@material-ui/core';
+import React from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -33,46 +30,15 @@ const StyledActions = styled(CardActions)`
 `;
 
 interface Props {
-  processing: boolean;
-  setProcessing: (newValue: boolean) => void;
   className?: string;
 }
 
 export const INTEGRATION_CARD_ID = 'integration-card';
 
-const IntegrationCard: React.FC<Props> = ({ processing, setProcessing, className }) => {
+const IntegrationCard: React.FC<Props> = ({ className }) => {
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
   const integrationData = useGetIntegrationFromCache();
-  const { waitForEntityStateChange } = useLoader();
-  const { createError } = useError();
-  const processingKey = `${integrationData?.data.id}${INTEGRATION_PROCESSING_SUFFIX}`;
-
-  useEffect(() => {
-    if (integrationData?.data.id) {
-      const pendingProcessing = localStorage.getItem(processingKey);
-      if (pendingProcessing) {
-        setProcessing(true);
-        const dataToProcess = [{ entityType: 'integration', entityId: integrationData.data.id }];
-        integrationData.data.data.components.forEach((component) => {
-          const newComponentToProcess = {
-            entityType: component.entityType,
-            entityId: component.entityId,
-          };
-          dataToProcess.push(newComponentToProcess);
-        });
-        Promise.all(dataToProcess.map(({ entityType, entityId }) => waitForEntityStateChange(entityType, [entityId])))
-          .then(() => {
-            localStorage.removeItem(processingKey);
-            setProcessing(false);
-          })
-          .catch((e) => {
-            createError(e);
-          });
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [integrationData]);
 
   return (
     <>
@@ -94,17 +60,8 @@ const IntegrationCard: React.FC<Props> = ({ processing, setProcessing, className
           </Box>
         </StyledContent>
         <StyledActions>
-          <Button
-            onClick={() => history.push('edit')}
-            style={{ width: '200px' }}
-            variant="contained"
-            color="primary"
-            disabled={processing}
-          >
-            <>
-              {processing && <CircularProgress color="inherit" size={20} style={{ marginRight: '10px' }} />}
-              Edit
-            </>
+          <Button onClick={() => history.push('edit')} style={{ width: '200px' }} variant="contained" color="primary">
+            <>Edit</>
           </Button>
         </StyledActions>
       </StyledCard>
