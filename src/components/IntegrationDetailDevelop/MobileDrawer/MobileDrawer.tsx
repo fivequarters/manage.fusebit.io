@@ -7,6 +7,9 @@ import info from '@assets/info.svg';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
 import useEditorEvents from '../FusebitEditor/useEditorEvents';
+import useProcessing from '../hooks/useProcessing';
+import { logWithTime } from '../FusebitEditor/utils';
+import { BUILDING_TEXT, BUILD_COMPLETED_TEXT } from '../FusebitEditor/constants';
 import { EditorEvents } from '~/enums/editor';
 
 const StyledGuiMobileWrapper = styled.div`
@@ -59,13 +62,23 @@ interface Props {
   onClose: () => void;
   handleRun: () => void;
   isRunning: boolean;
-  processing: boolean;
 }
 
-const MobileDrawer = ({ open, onClose, handleRun, isRunning, processing }: Props) => {
-  const { logs, clearLogs } = useEditorEvents({
+const MobileDrawer = ({ open, onClose, handleRun, isRunning }: Props) => {
+  const { logs, setLogs, clearLogs } = useEditorEvents({
     isMounted: open,
     events: [EditorEvents.LogsEntry, EditorEvents.LogsAttached, EditorEvents.RunnerFinished],
+  });
+  const { processing } = useProcessing({
+    onProcessingStarted: () => {
+      // wait for the logs to be attached,
+      setTimeout(() => {
+        setLogs((oldLogs) => [...oldLogs, logWithTime(BUILDING_TEXT)]);
+      }, 1000);
+    },
+    onProcessingCompleted: () => {
+      setLogs((oldLogs) => [...oldLogs, logWithTime(BUILD_COMPLETED_TEXT)]);
+    },
   });
 
   useEffect(() => {
@@ -84,7 +97,7 @@ const MobileDrawer = ({ open, onClose, handleRun, isRunning, processing }: Props
 
   const buttonText = (() => {
     if (processing) {
-      return 'Processing...';
+      return 'Building...';
     }
 
     if (isRunning) {
@@ -109,7 +122,7 @@ const MobileDrawer = ({ open, onClose, handleRun, isRunning, processing }: Props
               variant="contained"
               color="primary"
               onClick={handleRun}
-              disabled={isRunning}
+              disabled={isRunning || processing}
             >
               {buttonText}
             </Button>

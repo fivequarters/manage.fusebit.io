@@ -39,6 +39,8 @@ import { useCopy } from '@hooks/useCopy';
 import { getIntegrationConfig } from '@utils/localStorage';
 import MobileDrawer from '../MobileDrawer';
 import useEditorEvents from '../FusebitEditor/useEditorEvents';
+import { logWithTime } from '../FusebitEditor/utils';
+import { BUILDING_TEXT, BUILD_COMPLETED_TEXT } from '../FusebitEditor/constants';
 import useProcessing from '../hooks/useProcessing';
 import { EditGuiSampleApp } from './EditGuiSampleApp';
 import { EditorEvents } from '~/enums/editor';
@@ -368,7 +370,24 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const additionalProperties = forkEditFeedUrl ? { Integration: integrationId, domain: 'API' } : undefined;
   useTrackPage(pageName, objectLocation, additionalProperties);
   useTitle(`${id} Editor`);
-  const { processing } = useProcessing();
+  const { processing } = useProcessing({
+    onProcessingStarted: () => {
+      const intervalID = setInterval(() => {
+        const logs = document.querySelector('.fusebit-logs-content');
+        if (logs?.innerHTML) {
+          logs.innerHTML = `${logs.innerHTML}${logWithTime(BUILDING_TEXT).msg}\n`;
+          clearInterval(intervalID);
+        }
+      }, 500);
+    },
+    onProcessingCompleted: () => {
+      const logs = document.querySelector('.fusebit-logs-content');
+      if (logs) {
+        logs.innerHTML = `${logs.innerHTML}${logWithTime(BUILD_COMPLETED_TEXT).msg}\n`;
+      }
+    },
+    enabled: !matchesMobile,
+  });
 
   useEffect(() => {
     const createAddNewItemElement = (lastItem: Element) => {
@@ -756,13 +775,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
             <StyledFusebitEditorLogo src={logo} alt="fusebit logo" height="20" width="80" />
           )}
           {isMounted && matchesMobile && (
-            <MobileDrawer
-              processing={processing}
-              open={isMounted}
-              onClose={handleClose}
-              handleRun={handleRun}
-              isRunning={isRunning}
-            />
+            <MobileDrawer open={isMounted} onClose={handleClose} handleRun={handleRun} isRunning={isRunning} />
           )}
         </StyledFusebitEditorContainer>
       </StyledEditorContainer>

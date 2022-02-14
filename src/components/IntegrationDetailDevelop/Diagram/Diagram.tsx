@@ -42,7 +42,7 @@ interface Props {
 
 const Diagram: React.FC<Props> = ({ isLoading, integration }) => {
   const matchesCardOverlapping = useMediaQuery(CARD_OVERLAPPING_MEDIA_QUERY);
-  const { processing } = useProcessing();
+  const { processing } = useProcessing({});
 
   return (
     <Xwrapper>
