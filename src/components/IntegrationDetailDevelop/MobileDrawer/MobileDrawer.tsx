@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { Drawer, Button, Box, Typography } from '@material-ui/core';
 import * as CSC from '@components/globalStyle';
@@ -95,7 +95,7 @@ const MobileDrawer = ({ open, onClose, handleRun, isRunning }: Props) => {
     onClose();
   };
 
-  const buttonText = (() => {
+  const buttonText = useMemo(() => {
     if (processing) {
       return 'Building...';
     }
@@ -105,7 +105,7 @@ const MobileDrawer = ({ open, onClose, handleRun, isRunning }: Props) => {
     }
 
     return 'Run';
-  })();
+  }, [processing, isRunning]);
 
   return (
     <>
