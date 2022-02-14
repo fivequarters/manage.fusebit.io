@@ -13,7 +13,6 @@ export interface Context {
   _server: {
     saveFunction: (Context: Context) => Promise<void>;
     runFunction: (Context: Context) => Promise<ServerResponse>;
-    attachServerLogs: (Context: Context) => void;
     [key: string]: any;
   };
   startRun: (url: string) => void;

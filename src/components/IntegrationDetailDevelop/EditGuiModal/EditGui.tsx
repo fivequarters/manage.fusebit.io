@@ -39,7 +39,6 @@ import { useCopy } from '@hooks/useCopy';
 import { getIntegrationConfig } from '@utils/localStorage';
 import MobileDrawer from '../MobileDrawer';
 import useEditorEvents from '../FusebitEditor/useEditorEvents';
-import { logWithTime } from '../FusebitEditor/utils';
 import { BUILDING_TEXT, BUILD_COMPLETED_TEXT } from '../FusebitEditor/constants';
 import useProcessing from '../hooks/useProcessing';
 import { EditGuiSampleApp } from './EditGuiSampleApp';
@@ -372,19 +371,22 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   useTitle(`${id} Editor`);
   const { processing } = useProcessing({
     onProcessingStarted: () => {
-      const intervalID = setInterval(() => {
-        const logs = document.querySelector('.fusebit-logs-content');
-        if (logs?.innerHTML) {
-          logs.innerHTML = `${logs.innerHTML}${logWithTime(BUILDING_TEXT).msg}\n`;
-          clearInterval(intervalID);
-        }
-      }, 500);
+      setTimeout(() => {
+        window.editor?.serverLogsEntry(
+          JSON.stringify({
+            msg: BUILDING_TEXT,
+            level: 30,
+          })
+        );
+      }, 1000);
     },
     onProcessingCompleted: () => {
-      const logs = document.querySelector('.fusebit-logs-content');
-      if (logs) {
-        logs.innerHTML = `${logs.innerHTML}${logWithTime(BUILD_COMPLETED_TEXT).msg}\n`;
-      }
+      window.editor?.serverLogsEntry(
+        JSON.stringify({
+          msg: BUILD_COMPLETED_TEXT,
+          level: 30,
+        })
+      );
     },
     enabled: !matchesMobile,
   });
