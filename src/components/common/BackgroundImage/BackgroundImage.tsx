@@ -10,7 +10,7 @@ const StyledBackgroundImage = styled.div<{ image: string; css?: string }>`
   ${(props) => props.css && props.css};
   background-image: url(${(props) => props.image && props.image});
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
   height: 100%;
   width: 100%;
   position: absolute;

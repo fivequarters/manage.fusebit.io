@@ -18,7 +18,7 @@ const HealthMonitoring = () => {
   };
 
   return (
-    <Box display="flex" alignItems="center" justifyContent="center" pb="108px" position="relative">
+    <Box display="flex" alignItems="center" justifyContent="center" pb="140px" position="relative">
       {!isMobile && <BackgroundImage image={health} />}
       <Card
         title="**Don’t spend time** worrying about infrastructure"
