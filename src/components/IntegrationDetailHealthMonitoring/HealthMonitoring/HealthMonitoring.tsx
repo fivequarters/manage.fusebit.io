@@ -1,12 +1,15 @@
 import Card from '@components/common/Card';
 import { StyledListItem } from '@components/globalStyle';
-import { Box } from '@material-ui/core';
+import { Box, useMediaQuery } from '@material-ui/core';
 import { trackEvent } from '@utils/analytics';
 import { sendIntercomMessage } from '@utils/intercom';
 import { useParams } from 'react-router-dom';
+import health from '@assets/health.png';
+import BackgroundImage from '@components/common/BackgroundImage/BackgroundImage';
 
 const HealthMonitoring = () => {
   const { id } = useParams<{ id: string }>();
+  const isMobile = useMediaQuery('(max-width: 880px)');
 
   const handleIntercomPost = () => {
     trackEvent('Talk to Sales Button Clicked', 'Health', { integration: id });
@@ -15,7 +18,8 @@ const HealthMonitoring = () => {
   };
 
   return (
-    <Box display="flex" alignItems="center" justifyContent="center" pb="108px">
+    <Box display="flex" alignItems="center" justifyContent="center" pb="108px" position="relative">
+      {!isMobile && <BackgroundImage image={health} />}
       <Card
         title="**Don’t spend time** worrying about infrastructure"
         description="Health enables your team to spend more time on the core business while Fusebit ensures your integrations are running and healthy."
