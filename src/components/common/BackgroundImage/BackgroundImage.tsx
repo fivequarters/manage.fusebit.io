@@ -1,13 +1,12 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { FlattenSimpleInterpolation } from 'styled-components';
 
 interface Props {
   image: string;
-  css?: string;
+  css?: FlattenSimpleInterpolation;
 }
 
-const StyledBackgroundImage = styled.div<{ image: string; css?: string }>`
-  ${(props) => props.css && props.css};
+const StyledBackgroundImage = styled.div<{ image: string; css?: FlattenSimpleInterpolation }>`
   background-image: url(${(props) => props.image && props.image});
   background-repeat: no-repeat;
   background-size: cover;
@@ -18,6 +17,7 @@ const StyledBackgroundImage = styled.div<{ image: string; css?: string }>`
   top: -30px;
   opacity: 0.55;
   filter: blur(1.5px);
+  ${(props) => props.css && props.css};
 `;
 
 const BackgroundImage: React.FC<Props> = ({ image, css }) => {
