@@ -16,7 +16,7 @@ const StyledBackgroundImage = styled.div<{ image: string; css?: FlattenSimpleInt
   left: 0px;
   top: -30px;
   opacity: 0.55;
-  filter: blur(1px);
+  filter: blur(2px);
   ${(props) => props.css && props.css};
 `;
 

@@ -27,20 +27,18 @@ const Reliability = () => {
       {!isMobile && <BackgroundImage image={reliability} css={imageStyles} />}
       <Card
         title="Guarantee **reliable delivery** of integration data"
-        description="Reliability, for your customers, means they can trust your integrations to run correctly without the potential for data loss or unexpected delays."
+        description="Your customers can trust your integrations to run correctly without data loss or unexpected delays - even when the remote service misbehaves."
         buttonText="Talk to sales"
         handleClick={handleIntercomPost}
       >
         <ul>
+          <StyledListItem>Automatic outbound throttling and retries for third-party APIs</StyledListItem>
           <StyledListItem>
-            Automatic outbound throttling and retries when third-party APIs traffic volume gets too high
+            Inbound traffic throttling ensures your infrastructure capacity is not exceeded by third-party webhooks and
+            events
           </StyledListItem>
           <StyledListItem>
-            Inbound traffic throttling to ensure your infrastructure capacity is not exceeded by third-party webhooks
-            and events
-          </StyledListItem>
-          <StyledListItem>
-            Clear visibility into failures and manual retry ability when automatic heuristics don’t make sense
+            Clear visibility into failures and manual test when automatic heuristics don't make sense
           </StyledListItem>
         </ul>
       </Card>

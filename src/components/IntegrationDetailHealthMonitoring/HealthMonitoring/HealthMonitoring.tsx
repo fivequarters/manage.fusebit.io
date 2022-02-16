@@ -22,16 +22,16 @@ const HealthMonitoring = () => {
       {!isMobile && <BackgroundImage image={health} />}
       <Card
         title="**Don’t spend time** worrying about infrastructure"
-        description="Health enables your team to spend more time on the core business while Fusebit ensures your integrations are running and healthy."
+        description="Your team spends more time on the core business while Fusebit ensures your integrations are running and healthy."
         buttonText="Talk to sales"
         handleClick={handleIntercomPost}
       >
         <ul>
-          <StyledListItem>Automated health checks ensure integrations stay up with minimal upkeep</StyledListItem>
+          <StyledListItem>Automated health checks ensure integrations stay up</StyledListItem>
           <StyledListItem>
-            Self-service end-user recovery in common situations such as expired credentials
+            Self-service end-user recovery for common situations such as expired credentials
           </StyledListItem>
-          <StyledListItem>Alerting integration with your infrastructure of choice</StyledListItem>
+          <StyledListItem>Alerting integration with your existing operational infrastructure</StyledListItem>
         </ul>
       </Card>
     </Box>

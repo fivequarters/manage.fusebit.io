@@ -22,15 +22,15 @@ const Logging = () => {
       {!isMobile && <BackgroundImage image={logging} />}
       <Card
         title="See it all **in one place**"
-        description="Logging allows you to spend less time searching and more time analyzing how to resolve incidents or performance issues."
+        description="Spend less time searching and more time resolving incidents with Fusebit's end to end logging and tracing infrastructure."
         buttonText="Talk to sales"
         handleClick={handleIntercomPost}
       >
         <ul>
-          <StyledListItem>Centralized logs for all executions of your integration</StyledListItem>
           <StyledListItem>
             Trace requests end-to-end from your system all the way to third-party APIs and webhooks
           </StyledListItem>
+          <StyledListItem>Centralized logs for all executions of your integration</StyledListItem>
           <StyledListItem>Quickly search, filter, and analyze your logs for debugging</StyledListItem>
         </ul>
       </Card>
