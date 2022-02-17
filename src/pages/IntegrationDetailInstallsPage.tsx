@@ -27,7 +27,6 @@ const IntegrationDetailInstallsPage: FC<{}> = (): ReactElement => {
           getRedirectLink(`/integration/${id}/logging`),
           getRedirectLink(`/integration/${id}/reliability`),
         ]}
-        centered
       />
     </Layout>
   );

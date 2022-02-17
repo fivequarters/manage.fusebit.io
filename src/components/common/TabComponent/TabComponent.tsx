@@ -88,7 +88,7 @@ const a11yProps = (index: number) => {
   };
 };
 
-const TabComponent: React.FC<Props> = ({ tabNames, tabObjects, centered }) => {
+const TabComponent: React.FC<Props> = ({ tabNames, tabObjects }) => {
   const history = useHistory();
   const [activeTab, setActiveTab] = React.useState(0);
 
@@ -142,7 +142,6 @@ const TabComponent: React.FC<Props> = ({ tabNames, tabObjects, centered }) => {
             TabIndicatorProps={{
               style: { transition: 'none' },
             }}
-            centered={centered}
           >
             {tabNames.map((name, index) => (
               <Tab
