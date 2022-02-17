@@ -1,6 +1,6 @@
 import { Snippet, Feed, ConnectorEntity, EntityComponent } from '@interfaces/feed';
 import { InnerConnector, IntegrationData } from '@interfaces/integration';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Box, Button, ButtonGroup, IconButton, useMediaQuery, useTheme } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Props, SaveStatus } from '@interfaces/edit';
@@ -39,6 +39,8 @@ import { useCopy } from '@hooks/useCopy';
 import { getIntegrationConfig } from '@utils/localStorage';
 import MobileDrawer from '../MobileDrawer';
 import useEditorEvents from '../FusebitEditor/useEditorEvents';
+import { BUILDING_TEXT, BUILD_COMPLETED_TEXT } from '../FusebitEditor/constants';
+import useProcessing from '../hooks/useProcessing';
 import { EditGuiSampleApp } from './EditGuiSampleApp';
 import { EditorEvents } from '~/enums/editor';
 
@@ -367,6 +369,26 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const additionalProperties = forkEditFeedUrl ? { Integration: integrationId, domain: 'API' } : undefined;
   useTrackPage(pageName, objectLocation, additionalProperties);
   useTitle(`${id} Editor`);
+  const { processing } = useProcessing({
+    onProcessingStarted: () => {
+      setTimeout(() => {
+        window.editor?.serverLogsEntry(
+          JSON.stringify({
+            msg: BUILDING_TEXT,
+            level: 30,
+          })
+        );
+      }, 1000);
+    },
+    onProcessingCompleted: () => {
+      window.editor?.serverLogsEntry(
+        JSON.stringify({
+          msg: BUILD_COMPLETED_TEXT,
+          level: 30,
+        })
+      );
+    },
+  });
 
   useEffect(() => {
     const createAddNewItemElement = (lastItem: Element) => {
@@ -568,6 +590,22 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     </>
   );
 
+  const buttonText = useMemo(() => {
+    if (processing) {
+      return (
+        <>
+          Building... <CircularProgress size={20} style={{ marginLeft: 10 }} />
+        </>
+      );
+    }
+
+    if (isFindingInstall) {
+      return <CircularProgress size={20} />;
+    }
+
+    return 'Run';
+  }, [processing, isFindingInstall]);
+
   const openConfigureModal = ({ shiftKey }: { shiftKey: boolean }) => {
     if (shiftKey) {
       handleCopy(
@@ -615,7 +653,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
                   size="small"
                   variant="outlined"
                   color="primary"
-                  disabled={isSaving || !dirtyState}
+                  disabled={isSaving || !dirtyState || processing}
                 >
                   Save
                 </Button>
@@ -626,9 +664,9 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
                     variant={assumeHasConnectors ? 'contained' : 'outlined'}
                     color="primary"
                     onClick={handleSaveAndRun}
-                    disabled={isFindingInstall || isSaving}
+                    disabled={isFindingInstall || isSaving || processing}
                   >
-                    {isFindingInstall ? <CircularProgress size={20} /> : 'Run'}
+                    {buttonText}
                   </Button>
                   <Button
                     onClick={openConfigureModal}
@@ -738,7 +776,13 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
             <StyledFusebitEditorLogo src={logo} alt="fusebit logo" height="20" width="80" />
           )}
           {isMounted && matchesMobile && (
-            <MobileDrawer open={isMounted} onClose={handleClose} handleRun={handleRun} isRunning={isRunning} />
+            <MobileDrawer
+              processing={processing}
+              open={isMounted}
+              onClose={handleClose}
+              handleRun={handleRun}
+              isRunning={isRunning}
+            />
           )}
         </StyledFusebitEditorContainer>
       </StyledEditorContainer>

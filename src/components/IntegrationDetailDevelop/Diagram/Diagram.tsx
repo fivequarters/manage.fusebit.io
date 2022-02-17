@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Box, Grid, useMediaQuery } from '@material-ui/core';
 import styled, { css } from 'styled-components';
 import { Xwrapper } from 'react-xarrows';
@@ -10,6 +9,7 @@ import IntegrationCard from '@components/IntegrationDetailDevelop/IntegrationCar
 import LinksTitle from '@components/IntegrationDetailDevelop/LinksTitle';
 import YourAplication from '@components/IntegrationDetailDevelop/YourAplicationCard';
 import { Integration } from '@interfaces/integration';
+import useProcessing from '../hooks/useProcessing';
 
 const centerMixin = (props: { $matchesCardOverlapping: boolean }) =>
   props.$matchesCardOverlapping &&
@@ -41,8 +41,8 @@ interface Props {
 }
 
 const Diagram: React.FC<Props> = ({ isLoading, integration }) => {
-  const [processing, setProcessing] = useState(false);
   const matchesCardOverlapping = useMediaQuery(CARD_OVERLAPPING_MEDIA_QUERY);
+  const { processing } = useProcessing({});
 
   return (
     <Xwrapper>
@@ -55,11 +55,7 @@ const Diagram: React.FC<Props> = ({ isLoading, integration }) => {
               <StyledYourApplicationCard $matchesCardOverlapping={matchesCardOverlapping} />
             </Grid>
             <Grid item xs={matchesCardOverlapping ? 12 : 4}>
-              <StyledIntegrationCard
-                processing={processing}
-                setProcessing={setProcessing}
-                $matchesCardOverlapping={matchesCardOverlapping}
-              />
+              <StyledIntegrationCard $matchesCardOverlapping={matchesCardOverlapping} />
             </Grid>
             <Grid item xs={matchesCardOverlapping ? 12 : 4}>
               <StyledConnectorsCard processing={processing} $matchesCardOverlapping={matchesCardOverlapping} />

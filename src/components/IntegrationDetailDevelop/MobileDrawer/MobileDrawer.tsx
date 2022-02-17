@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { Drawer, Button, Box, Typography } from '@material-ui/core';
 import * as CSC from '@components/globalStyle';
@@ -59,9 +59,10 @@ interface Props {
   onClose: () => void;
   handleRun: () => void;
   isRunning: boolean;
+  processing: boolean;
 }
 
-const MobileDrawer = ({ open, onClose, handleRun, isRunning }: Props) => {
+const MobileDrawer = ({ open, onClose, handleRun, isRunning, processing }: Props) => {
   const { logs, clearLogs } = useEditorEvents({
     isMounted: open,
     events: [EditorEvents.LogsEntry, EditorEvents.LogsAttached, EditorEvents.RunnerFinished],
@@ -81,6 +82,18 @@ const MobileDrawer = ({ open, onClose, handleRun, isRunning }: Props) => {
     onClose();
   };
 
+  const buttonText = useMemo(() => {
+    if (processing) {
+      return 'Building...';
+    }
+
+    if (isRunning) {
+      return 'Running...';
+    }
+
+    return 'Run';
+  }, [processing, isRunning]);
+
   return (
     <>
       <Drawer anchor="bottom" open={open} onClose={handleClose}>
@@ -96,9 +109,9 @@ const MobileDrawer = ({ open, onClose, handleRun, isRunning }: Props) => {
               variant="contained"
               color="primary"
               onClick={handleRun}
-              disabled={isRunning}
+              disabled={isRunning || processing}
             >
-              {isRunning ? 'Running...' : 'Run'}
+              {buttonText}
             </Button>
             <StyledGuiMobileNotSupportedWrapper>
               <StyledGuiMobileNotSupportedIcon src={info} alt="not supported" height="16" width="16" />
