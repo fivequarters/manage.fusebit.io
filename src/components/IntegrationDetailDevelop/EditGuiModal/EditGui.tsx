@@ -364,8 +364,8 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const urlParams = new URLSearchParams(window.location.search);
   const forkEditFeedUrl = urlParams.get('forkEditFeedUrl');
 
-  const pageName = forkEditFeedUrl ? 'Share Redirect Execution' : 'Web Editor';
-  const objectLocation = forkEditFeedUrl ? 'Share' : 'Web Editor';
+  const pageName = forkEditFeedUrl ? 'Share Redirect Execution' : 'Web Editor (Read-Only)';
+  const objectLocation = forkEditFeedUrl ? 'Share' : 'Web Editor (Read-Only)';
   const additionalProperties = forkEditFeedUrl ? { Integration: integrationId, domain: 'API' } : undefined;
   useTrackPage(pageName, objectLocation, additionalProperties);
   useTitle(`${id} Editor`);
@@ -436,7 +436,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const handleFork = () => {
     trackEvent(
       'Fork Button Clicked',
-      'Web Editor',
+      'Web Editor (Read-Only)',
       {
         Integration: integrationId,
       },
