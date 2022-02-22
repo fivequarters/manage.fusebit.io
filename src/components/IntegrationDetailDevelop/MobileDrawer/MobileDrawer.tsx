@@ -70,6 +70,8 @@ interface Props {
   processing: boolean;
 }
 
+const DESIRABLE_DISTANCE_TO_BOTTOM = 90;
+
 const MobileDrawer = ({ open, onClose, handleRun, isRunning, processing }: Props) => {
   const { logs, clearLogs } = useEditorEvents({
     isMounted: open,
@@ -172,7 +174,7 @@ const MobileDrawer = ({ open, onClose, handleRun, isRunning, processing }: Props
           <StyledLog
             id="mobile-log"
             fontSize="10px"
-            height={logWrapperHeight - 90}
+            height={logWrapperHeight - DESIRABLE_DISTANCE_TO_BOTTOM}
             lineHeight="11.5px"
             fontFamily="Courier"
             padding="15px 7px"
