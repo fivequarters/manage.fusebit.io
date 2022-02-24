@@ -15,7 +15,6 @@ const StyledCard = styled.div`
   padding: 24px;
   padding-bottom: 0;
   width: 1025px;
-  height: 590px;
 
   @media only screen and (max-width: 1145px) {
     width: 100%;
@@ -120,12 +119,7 @@ const StyledColumnSearchIcon = styled.img`
 const StyledConnectorInfo = styled.div`
   display: flex;
   flex-direction: column;
-  padding-left: 24px;
   width: 100%;
-
-  @media only screen and (max-width: 1100px) {
-    padding-left: 0;
-  }
 `;
 
 const StyledConnectorImage = styled.img`
