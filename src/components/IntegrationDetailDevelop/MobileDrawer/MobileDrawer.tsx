@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { Drawer, Button, Box, Typography } from '@material-ui/core';
 import * as CSC from '@components/globalStyle';
@@ -45,6 +45,9 @@ const StyledGuiMobileNotSupportedText = styled.div`
 `;
 
 const StyledLogWrapper = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   position: relative;
   background-color: var(--secondary-color);
   color: var(--black);
@@ -60,6 +63,7 @@ const StyledLog = styled(Box)`
   position: relative;
   background-color: #ffffff;
   word-wrap: break-word;
+  flex: 1;
 `;
 
 interface Props {
@@ -70,14 +74,11 @@ interface Props {
   processing: boolean;
 }
 
-const DESIRABLE_DISTANCE_TO_BOTTOM = 90;
-
 const MobileDrawer = ({ open, onClose, handleRun, isRunning, processing }: Props) => {
   const { logs, clearLogs } = useEditorEvents({
     isMounted: open,
     events: [EditorEvents.LogsEntry, EditorEvents.LogsAttached, EditorEvents.RunnerFinished],
   });
-  const [logWrapperHeight, setLogWrapperHeight] = useState(0);
 
   useEffect(() => {
     if (logs.length > 0) {
@@ -87,40 +88,6 @@ const MobileDrawer = ({ open, onClose, handleRun, isRunning, processing }: Props
       }
     }
   }, [logs]);
-
-  useEffect(() => {
-    const calculateLogWrapperHeight = (elementHeight: number, viewportHeight: number) => {
-      const guiModalWrapperHeightPorcentage = (elementHeight / viewportHeight) * 100;
-      const logWrapperHeightPorcentage = 100 - guiModalWrapperHeightPorcentage;
-      const LogWrapperHeight = (logWrapperHeightPorcentage * viewportHeight) / 100;
-      return LogWrapperHeight;
-    };
-
-    const setWrapperHeight = (onSetWrapperHeight?: () => void) => {
-      const guiModalWrapper = document.getElementById('guiModalWrapper');
-      const viewportHeight = window.innerHeight;
-      const guiModalWrapperHeight = guiModalWrapper?.offsetHeight;
-
-      if (guiModalWrapperHeight) {
-        setLogWrapperHeight(calculateLogWrapperHeight(guiModalWrapperHeight, viewportHeight));
-        onSetWrapperHeight?.();
-      }
-    };
-
-    const handleResize = () => {
-      setWrapperHeight();
-    };
-
-    const onInit = setInterval(() => {
-      setWrapperHeight(() => {
-        clearInterval(onInit);
-      });
-    }, 50);
-
-    window.addEventListener('resize', handleResize);
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, [open]);
 
   const handleClose = () => {
     clearLogs();
@@ -164,7 +131,7 @@ const MobileDrawer = ({ open, onClose, handleRun, isRunning, processing }: Props
             </StyledGuiMobileNotSupportedText>
           </StyledGuiMobileNotSupportedWrapper>
         </StyledGuiMobileWrapper>
-        <StyledLogWrapper height={logWrapperHeight} padding="21px 30px 30px" position="relative">
+        <StyledLogWrapper padding="21px 30px 30px" position="relative" overflow="hidden">
           <Box display="flex" alignItems="center">
             <StyledLogTitle>Log Console</StyledLogTitle>
             <Box marginLeft="auto" color="inherit" onClick={clearLogs}>
@@ -174,7 +141,6 @@ const MobileDrawer = ({ open, onClose, handleRun, isRunning, processing }: Props
           <StyledLog
             id="mobile-log"
             fontSize="10px"
-            height={logWrapperHeight - DESIRABLE_DISTANCE_TO_BOTTOM}
             lineHeight="11.5px"
             fontFamily="Courier"
             padding="15px 7px"
