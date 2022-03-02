@@ -34,6 +34,7 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
   const [activeTemplate, setActiveTemplate] = React.useState<ParsedFeed>();
   const [activeSnippet, setActiveSnippet] = React.useState<Snippet>();
   const [campaingIntegrationRef, setCampaingIntegrationRef] = React.useState<HTMLDivElement | null>(null);
+  const [searchFocused, setSearchFocused] = React.useState<boolean>(false);
   const isMobile = useMediaQuery('max-width: 1100px');
 
   let feedTypeName = isIntegration ? 'Integration' : 'Connector';
@@ -266,6 +267,8 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
     key,
     campaingIntegrationRef,
     setCampaingIntegrationRef,
+    searchFocused,
+    setSearchFocused,
   };
 };
 
