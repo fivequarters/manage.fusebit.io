@@ -43,6 +43,7 @@ import { BUILDING_TEXT, BUILD_COMPLETED_TEXT } from '../FusebitEditor/constants'
 import useProcessing from '../hooks/useProcessing';
 import { EditGuiSampleApp } from './EditGuiSampleApp';
 import { EditorEvents } from '~/enums/editor';
+import { useForkFeedUrl } from '@hooks/useForkFeedUrl';
 
 const StyledEditorContainer = styled.div`
   .fa {
@@ -360,9 +361,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       setErrorBuild('');
     }
   }, [errorBuild, createError, setErrorBuild]);
-
-  const urlParams = new URLSearchParams(window.location.search);
-  const forkEditFeedUrl = urlParams.get('forkEditFeedUrl');
+  const forkEditFeedUrl = useForkFeedUrl();
 
   const pageName = forkEditFeedUrl ? 'Web Editor (Read-Only)' : 'Web Editor';
   const objectLocation = forkEditFeedUrl ? 'Web Editor (Read-Only)' : 'Web Editor';
