@@ -10,7 +10,6 @@ import { InstallList, Install } from '@interfaces/install';
 import { trackEvent } from '@utils/analytics';
 import { storeIntegrationConfig, getIntegrationConfig, resetIntegrationConfig } from '@utils/localStorage';
 import { InnerConnector, Integration } from '@interfaces/integration';
-import { useForkFeedUrl } from '@hooks/useForkFeedUrl';
 
 interface Props {
   integrationData?: ApiResponse<Integration>;
@@ -37,7 +36,6 @@ const useEditor = (
   // Prevent beign called multiple times if user has multiple tabs open
   const hasSessionChanged = useRef(false);
   const tenantId = getTenantId();
-  const isForkEditor = useForkFeedUrl();
 
   const findInstall = useCallback(async () => {
     try {
@@ -67,6 +65,8 @@ const useEditor = (
     const handleChangeStorage = (e: any) => {
       const runFirstTest = async () => {
         hasSessionChanged.current = true;
+        const urlParams = new URLSearchParams(window.location.search);
+        const isForkEditor = urlParams.get('forkEditFeedUrl');
         const objectLocation = isForkEditor ? 'Web Editor (Read-Only)' : 'Web Editor';
         try {
           await commitSession({ id, sessionId: e.newValue });
@@ -116,6 +116,8 @@ const useEditor = (
   };
 
   const handleRun = async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const isForkEditor = urlParams.get('forkEditFeedUrl');
     const objectLocation = isForkEditor ? 'Web Editor (Read-Only)' : 'Web Editor';
     trackEvent('Run Button Clicked', objectLocation);
 
