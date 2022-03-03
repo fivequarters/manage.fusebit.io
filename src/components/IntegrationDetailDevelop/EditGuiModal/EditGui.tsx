@@ -36,6 +36,7 @@ import { useInvalidateIntegration } from '@hooks/useInvalidateIntegration';
 import { CodeOutlined } from '@material-ui/icons';
 import { useError } from '@hooks/useError';
 import { useCopy } from '@hooks/useCopy';
+import { useForkFeedUrl } from '@hooks/useForkFeedUrl';
 import { getIntegrationConfig } from '@utils/localStorage';
 import MobileDrawer from '../MobileDrawer';
 import useEditorEvents from '../FusebitEditor/useEditorEvents';
@@ -43,7 +44,6 @@ import { BUILDING_TEXT, BUILD_COMPLETED_TEXT } from '../FusebitEditor/constants'
 import useProcessing from '../hooks/useProcessing';
 import { EditGuiSampleApp } from './EditGuiSampleApp';
 import { EditorEvents } from '~/enums/editor';
-import { useForkFeedUrl } from '@hooks/useForkFeedUrl';
 
 const StyledEditorContainer = styled.div`
   .fa {
