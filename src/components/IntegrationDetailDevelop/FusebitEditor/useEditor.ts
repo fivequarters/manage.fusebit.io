@@ -65,15 +65,17 @@ const useEditor = (
     const handleChangeStorage = (e: any) => {
       const runFirstTest = async () => {
         hasSessionChanged.current = true;
-
+        const urlParams = new URLSearchParams(window.location.search);
+        const isForkEditor = urlParams.get('forkEditFeedUrl');
+        const objectLocation = isForkEditor ? 'Web Editor (Read-Only)' : 'Web Editor';
         try {
           await commitSession({ id, sessionId: e.newValue });
 
           await testIntegration({ id, tenantId: getTenantId() });
 
-          trackEvent('Run Button Execution', 'Web Editor', { runStatus: 'success' });
+          trackEvent('Run Button Execution', objectLocation, { runStatus: 'success' });
         } catch (error) {
-          trackEvent('Run Button Execution', 'Web Editor', { runStatus: 'failure' });
+          trackEvent('Run Button Execution', objectLocation, { runStatus: 'failure' });
           // eslint-disable-next-line no-console
           console.log(error);
         }
@@ -114,7 +116,10 @@ const useEditor = (
   };
 
   const handleRun = async () => {
-    trackEvent('Run Button Clicked', 'Web Editor');
+    const urlParams = new URLSearchParams(window.location.search);
+    const isForkEditor = urlParams.get('forkEditFeedUrl');
+    const objectLocation = isForkEditor ? 'Web Editor (Read-Only)' : 'Web Editor';
+    trackEvent('Run Button Clicked', objectLocation);
 
     try {
       const url = getIntegrationConfig(id, tenantId).session?.url;
