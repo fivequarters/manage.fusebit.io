@@ -9,6 +9,12 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import useEditorEvents from '../FusebitEditor/useEditorEvents';
 import { EditorEvents } from '~/enums/editor';
 
+const StyledDrawer = styled(Drawer)`
+  .MuiDrawer-paperAnchorBottom {
+    height: 100%;
+  }
+`;
+
 const StyledGuiMobileWrapper = styled.div`
   position: relative;
   display: flex;
@@ -39,6 +45,10 @@ const StyledGuiMobileNotSupportedText = styled.div`
 `;
 
 const StyledLogWrapper = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
   background-color: var(--secondary-color);
   color: var(--black);
 `;
@@ -50,8 +60,10 @@ const StyledLogTitle = styled(Typography)`
 `;
 
 const StyledLog = styled(Box)`
+  position: relative;
   background-color: #ffffff;
   word-wrap: break-word;
+  flex: 1;
 `;
 
 interface Props {
@@ -96,55 +108,52 @@ const MobileDrawer = ({ open, onClose, handleRun, isRunning, processing }: Props
 
   return (
     <>
-      <Drawer anchor="bottom" open={open} onClose={handleClose}>
-        <>
-          <StyledGuiMobileWrapper>
-            <CSC.CloseWrapper onClick={handleClose}>
-              <CloseIcon fontSize="small" />
-            </CSC.CloseWrapper>
-            <Button
-              startIcon={<img src={play} alt="play" height="16" width="16" />}
-              style={{ width: '200px' }}
-              size="large"
-              variant="contained"
-              color="primary"
-              onClick={handleRun}
-              disabled={isRunning || processing}
-            >
-              {buttonText}
-            </Button>
-            <StyledGuiMobileNotSupportedWrapper>
-              <StyledGuiMobileNotSupportedIcon src={info} alt="not supported" height="16" width="16" />
-              <StyledGuiMobileNotSupportedText>
-                Editing is currently only available on desktop mode
-              </StyledGuiMobileNotSupportedText>
-            </StyledGuiMobileNotSupportedWrapper>
-          </StyledGuiMobileWrapper>
-          <StyledLogWrapper padding="21px 30px 0">
-            <Box display="flex" alignItems="center">
-              <StyledLogTitle>Log Console</StyledLogTitle>
-              <Box marginLeft="auto" color="inherit" onClick={clearLogs}>
-                <DeleteIcon color="inherit" style={{ width: '20px' }} />
-              </Box>
+      <StyledDrawer anchor="bottom" open={open} onClose={handleClose} style={{ position: 'relative', height: '100vh' }}>
+        <StyledGuiMobileWrapper id="guiModalWrapper">
+          <CSC.CloseWrapper onClick={handleClose}>
+            <CloseIcon fontSize="small" />
+          </CSC.CloseWrapper>
+          <Button
+            startIcon={<img src={play} alt="play" height="16" width="16" />}
+            style={{ width: '200px' }}
+            size="large"
+            variant="contained"
+            color="primary"
+            onClick={handleRun}
+            disabled={isRunning || processing}
+          >
+            {buttonText}
+          </Button>
+          <StyledGuiMobileNotSupportedWrapper>
+            <StyledGuiMobileNotSupportedIcon src={info} alt="not supported" height="16" width="16" />
+            <StyledGuiMobileNotSupportedText>
+              Editing is currently only available on desktop mode
+            </StyledGuiMobileNotSupportedText>
+          </StyledGuiMobileNotSupportedWrapper>
+        </StyledGuiMobileWrapper>
+        <StyledLogWrapper padding="21px 30px 30px" position="relative" overflow="hidden">
+          <Box display="flex" alignItems="center">
+            <StyledLogTitle>Log Console</StyledLogTitle>
+            <Box marginLeft="auto" color="inherit" onClick={clearLogs}>
+              <DeleteIcon color="inherit" style={{ width: '20px' }} />
             </Box>
-            <StyledLog
-              id="mobile-log"
-              fontSize="10px"
-              lineHeight="11.5px"
-              fontFamily="Courier"
-              height="165px"
-              padding="15px 7px"
-              borderRadius="4px"
-              marginTop="10px"
-              overflow="scroll"
-            >
-              {logs.map((log) => (
-                <p key={log.id}>{log.msg}</p>
-              ))}
-            </StyledLog>
-          </StyledLogWrapper>
-        </>
-      </Drawer>
+          </Box>
+          <StyledLog
+            id="mobile-log"
+            fontSize="10px"
+            lineHeight="11.5px"
+            fontFamily="Courier"
+            padding="15px 7px"
+            borderRadius="4px"
+            marginTop="10px"
+            overflow="scroll"
+          >
+            {logs.map((log) => (
+              <p key={log.id}>{log.msg}</p>
+            ))}
+          </StyledLog>
+        </StyledLogWrapper>
+      </StyledDrawer>
     </>
   );
 };
