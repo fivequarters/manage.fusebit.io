@@ -5,10 +5,12 @@ import styled from 'styled-components';
 import Button from '../Button';
 
 const StyledCard = styled(MUICard)`
+  position: relative;
   width: fit-content;
   max-width: 704px;
   box-shadow: 0px 20px 48px 0px #34487b1a;
   border-radius: 8px;
+  z-index: 2;
   padding: 28px 48px 56px;
 
   @media only screen and (max-width: 510px) {
