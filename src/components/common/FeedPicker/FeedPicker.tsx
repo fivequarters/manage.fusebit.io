@@ -192,6 +192,8 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(
       orderAlpha,
       key,
       setCampaingIntegrationRef,
+      searchFocused,
+      setSearchFocused,
     } = useFeedPicker({
       open,
       isIntegration,
@@ -209,7 +211,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(
     useTrackPage(pageName, objectLocation);
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
-      if (e.key === 'Enter') {
+      if (e.key === 'Enter' && !searchFocused) {
         handleSubmit();
       }
     };
@@ -254,7 +256,13 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(
           )}
           <Box display="flex" flexDirection="column">
             <StyledColumnSearchWrapper>
-              <TextField fullWidth onChange={(e) => debouncedSetSearchFilter(e.target.value)} label="Search" />
+              <TextField
+                onFocus={() => setSearchFocused(true)}
+                onBlur={() => setSearchFocused(false)}
+                fullWidth
+                onChange={(e) => debouncedSetSearchFilter(e.target.value)}
+                label="Search"
+              />
               <StyledColumnSearchIcon src={search} alt={`Search ${feedTypeName}s`} height="24" width="24" />
             </StyledColumnSearchWrapper>
             <Box>
