@@ -85,7 +85,12 @@ const memoize = (originalFunction: TrackEventHandler) => {
 };
 
 // original trackEvent function that gets called to offload events to Segment
-const trackEventHandler: TrackEventHandler = (eventName, objectLocation, extraProperties = {}, cb = () => {}) => {
+export const trackEventHandler: TrackEventHandler = (
+  eventName,
+  objectLocation,
+  extraProperties = {},
+  cb = () => {}
+) => {
   getAnalyticsClient().track(
     eventName,
     {
