@@ -1,9 +1,9 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { ValidationMode } from '@jsonforms/core';
 import debounce from 'lodash.debounce';
 import { useMediaQuery } from '@material-ui/core';
 import { Feed, Snippet, ParsedFeed } from '@interfaces/feed';
-import { trackEvent } from '@utils/analytics';
+import { trackEvent, trackEventHandler } from '@utils/analytics';
 import { sendIntercomMessage } from '@utils/intercom';
 import { Data } from '@interfaces/feedPicker';
 import orderBy from 'lodash.orderby';
@@ -123,15 +123,29 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
     ? queryClient.getQueryState('getIntegrationsFeed')?.status === 'loading'
     : queryClient.getQueryState('getConnectorsFeed')?.status === 'loading';
 
+  const trackSearchInput = useCallback(
+    (searchQuery) => {
+      if (isIntegration) {
+        trackEventHandler('New Integration Search Execution', 'Integrations', {
+          searchQuery,
+        });
+      } else if (isSnippet) {
+        trackEventHandler('Add Snippet Search Execution', 'Add Snippet', {
+          searchQuery,
+        });
+      } else {
+        trackEventHandler('New Connector Search Execution', 'Connectors', {
+          searchQuery,
+        });
+      }
+    },
+    [isIntegration, isSnippet]
+  );
+
   const debouncedSetSearchFilter = debounce((keyword: string) => {
-    if (isIntegration) {
-      trackEvent('New Integration Search Submitted', 'Integrations');
-    } else if (isSnippet) {
-      trackEvent('Add Snippet Search Submitted', 'Add Snippet');
-    } else {
-      trackEvent('New Connector Search Submitted', 'Connectors');
-    }
-    filteredFeed.setSearchFilter(keyword.trim());
+    const search = keyword.trim();
+    trackSearchInput(search);
+    filteredFeed.setSearchFilter(search);
   }, 500);
 
   const handleAdd = () => {
@@ -269,6 +283,7 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
     setCampaingIntegrationRef,
     searchFocused,
     setSearchFocused,
+    trackSearchInput,
   };
 };
 
