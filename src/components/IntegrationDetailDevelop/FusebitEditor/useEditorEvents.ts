@@ -22,11 +22,11 @@ const useEditorEvents = ({ isMounted, events }: Props) => {
         setErrorBuild('');
       },
       [EditorEvents.BuildFinished]: () => {
-        trackEventHandler('Build successful', 'Online editor');
+        trackEventHandler('Build successful', 'Online Editor');
         setIsSaving(false);
       },
       [EditorEvents.BuildError]: (e: { error: { message: string } }) => {
-        trackEventHandler('Build failed', 'Online editor');
+        trackEventHandler('Build failed', 'Online Editor');
         setIsSaving(false);
         setErrorBuild(`There was an error in the build: ${e.error.message}`);
       },
