@@ -14,6 +14,7 @@ export default class FusebitEditor extends React.Component<any> {
       window.fusebit
         .createEditor(this.el, this.props.boundaryId, this.props.functionId, this.props.account, this.props.options)
         .then((editorContext: Context) => {
+          editorContext._server.buildStatusCheckInterval = 200;
           this.editorContext = editorContext;
           window.editor = this.editorContext;
           storeIntegrationConfig(this.props.functionId, {
