@@ -68,6 +68,7 @@ const useEditor = (
         const urlParams = new URLSearchParams(window.location.search);
         const isForkEditor = urlParams.get('forkEditFeedUrl');
         const objectLocation = isForkEditor ? 'Web Editor (Read-Only)' : 'Web Editor';
+        resetIntegrationConfig(id, tenantId);
         try {
           await commitSession({ id, sessionId: e.newValue });
 
@@ -112,7 +113,6 @@ const useEditor = (
   const handleLogin = () => {
     const url = getIntegrationConfig(id, tenantId).session?.url;
     window.open(url);
-    resetIntegrationConfig(id, tenantId);
   };
 
   const handleRun = async () => {
