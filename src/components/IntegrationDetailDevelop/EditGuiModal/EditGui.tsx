@@ -332,7 +332,10 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const { handleRun, handleLogin, isFindingInstall, setNeedsInitialization, setRunPending, isRunning } = useEditor({
     integrationData,
     onReadyToLogin: () =>
-      !missingIdentities || missingIdentities.length > 0 ? setLoginFlowModalOpen(true) : handleLogin(),
+      (!missingIdentities || missingIdentities.length > 0) &&
+      integrationData?.data.data.components?.[0]?.entityType === 'connector'
+        ? setLoginFlowModalOpen(true)
+        : handleLogin(),
     onMissingIdentities: setMissingIdentities,
   });
   const [dirtyState, setDirtyState] = useState(false);
