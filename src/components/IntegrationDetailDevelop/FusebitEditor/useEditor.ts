@@ -123,8 +123,9 @@ const useEditor = (
 
     try {
       const url = getIntegrationConfig(id, tenantId).session?.url;
+      const hasConnectors = integrationData?.data.data.components?.[0]?.entityType === 'connector';
 
-      if (url) {
+      if (url && hasConnectors) {
         if (onReadyToLogin) {
           onReadyToLogin();
         } else {
