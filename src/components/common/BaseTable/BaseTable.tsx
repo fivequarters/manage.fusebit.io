@@ -15,17 +15,16 @@ const StyledWrapper = styled.div`
 `;
 
 const StyledDeleteWrapper = styled.div<{ active: boolean }>`
-  display: ${(props) => (props.active ? 'flex' : 'none')};
+  display: flex;
   align-items: center;
-  opacity: ${(props) => (props.active ? 1 : 0)};
   font-size: 18px;
   line-height: 22px;
-  font-weight: 400;
+  font-weight: 600;
   padding: 0 18px;
   min-height: 57px;
   width: 100%;
-  color: ${(props) => (props.active ? 'var(--primary-color)' : 'var(--black)')};
-  background-color: ${(props) => props.active && 'rgba(248, 52, 32, .1)'};
+  color: ${(props) => (props.active ? 'var(--black)' : 'var(--black)')};
+  background-color: ${(props) => props.active && 'var(--secondary-color)'};
   margin-bottom: 12px;
   transition: all 0.25s linear;
 `;
@@ -174,17 +173,19 @@ const BaseTable: React.FC<BaseTableProps> = ({
       )}
 
       <StyledDeleteWrapper active={selected.length > 0}>
-        {selected.length > 0 && (
+        {selected.length > 0 ? (
           <>
-            {selected.length} selected
+            Selected: {selected.length}
             <StyledDeleteIconWrapper>
               <Tooltip title="Delete">
                 <IconButton onClick={onDeleteAll}>
-                  <DeleteIcon />
+                  <DeleteIcon style={{ color: '#333333' }} />
                 </IconButton>
               </Tooltip>
             </StyledDeleteIconWrapper>
           </>
+        ) : (
+          <>{`${entityName?.charAt(0).toUpperCase()}${entityName?.slice(1)}s`}</>
         )}
       </StyledDeleteWrapper>
       {loading ? (
