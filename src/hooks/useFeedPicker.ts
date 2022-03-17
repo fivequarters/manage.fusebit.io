@@ -190,7 +190,9 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
   const handlePlanUpsell = () => {
     if (rawActiveTemplate) {
       if (isIntegration) {
-        trackEventMemoized('New Integration Enable Button Clicked', 'Integrations', { integration: rawActiveTemplate.id });
+        trackEventMemoized('New Integration Enable Button Clicked', 'Integrations', {
+          integration: rawActiveTemplate.id,
+        });
       } else {
         trackEventMemoized('New Connector Enable Button Clicked', 'Connectors', { connector: rawActiveTemplate.id });
       }

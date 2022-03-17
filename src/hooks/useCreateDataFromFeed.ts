@@ -75,7 +75,9 @@ export const useCreateDataFromFeed = () => {
       const commonTags = getCommonTags(activeFeed, 'connector');
 
       if (!skipTracking) {
-        trackEventMemoized('New Connector Create Button Clicked', 'Connectors', { connector: commonTags['fusebit.feedId'] });
+        trackEventMemoized('New Connector Create Button Clicked', 'Connectors', {
+          connector: commonTags['fusebit.feedId'],
+        });
       }
 
       const res = await createFromFeed(parsedFeed, commonTags);

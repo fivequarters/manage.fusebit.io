@@ -46,7 +46,9 @@ const FeedItemDescription = ({ description, templateId, isIntegration, isSnippet
         let parent = event.target.parentElement;
         while (parent !== null) {
           if (parent.attributes.getNamedItem('data-segment')?.value === 'track') {
-            trackEventMemoized(`New ${itemName} Docs Learn More Link Clicked`, `${itemName}s`, { [itemName]: templateId });
+            trackEventMemoized(`New ${itemName} Docs Learn More Link Clicked`, `${itemName}s`, {
+              [itemName]: templateId,
+            });
           }
           parent = parent.parentElement;
         }

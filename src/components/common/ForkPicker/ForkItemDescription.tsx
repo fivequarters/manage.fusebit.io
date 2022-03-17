@@ -40,7 +40,9 @@ const ForkItemDescription = ({ description, templateId }: Props) => {
         let parent = event.target.parentElement;
         while (parent !== null) {
           if (parent.attributes.getNamedItem('data-segment')?.value === 'track') {
-            trackEventMemoized(`Fork Integration Docs Learn More Link Clicked`, `Integrations`, { Integration: templateId });
+            trackEventMemoized(`Fork Integration Docs Learn More Link Clicked`, `Integrations`, {
+              Integration: templateId,
+            });
           }
           parent = parent.parentElement;
         }
