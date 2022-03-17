@@ -64,7 +64,7 @@ export const useCreateDataFromFeed = () => {
       return res.find((r) => r.data.entityType === 'integration')?.data;
     } catch (e) {
       trackEvent('Integration Creation Failed', 'Integrations', {
-       {integration: commonTags['fusebit.feedId'],}
+        integration: commonTags['fusebit.feedId'],
       });
 
       createError(e);
