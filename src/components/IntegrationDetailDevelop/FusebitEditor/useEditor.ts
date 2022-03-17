@@ -7,7 +7,7 @@ import { useAccountIntegrationTestIntegration } from '@hooks/api/v2/account/inte
 import { useAxios, ApiResponse } from '@hooks/useAxios';
 import { useAuthContext } from '@hooks/useAuthContext';
 import { InstallList, Install } from '@interfaces/install';
-import { trackEvent } from '@utils/analytics';
+import { trackEventMemoized } from '@utils/analytics';
 import { storeIntegrationConfig, getIntegrationConfig, resetIntegrationConfig } from '@utils/localStorage';
 import { InnerConnector, Integration } from '@interfaces/integration';
 
@@ -73,9 +73,9 @@ const useEditor = (
 
           await testIntegration({ id, tenantId: getTenantId() });
 
-          trackEvent('Run Button Execution', objectLocation, { runStatus: 'success' });
+          trackEventMemoized('Run Button Execution', objectLocation, { runStatus: 'success' });
         } catch (error) {
-          trackEvent('Run Button Execution', objectLocation, { runStatus: 'failure' });
+          trackEventMemoized('Run Button Execution', objectLocation, { runStatus: 'failure' });
           // eslint-disable-next-line no-console
           console.log(error);
         }
@@ -119,7 +119,7 @@ const useEditor = (
     const urlParams = new URLSearchParams(window.location.search);
     const isForkEditor = urlParams.get('forkEditFeedUrl');
     const objectLocation = isForkEditor ? 'Web Editor (Read-Only)' : 'Web Editor';
-    trackEvent('Run Button Clicked', objectLocation);
+    trackEventMemoized('Run Button Clicked', objectLocation);
 
     try {
       const url = getIntegrationConfig(id, tenantId).session?.url;
@@ -141,7 +141,7 @@ const useEditor = (
   };
 
   const handleEdit = async () => {
-    trackEvent('Develop Edit Web Button Clicked', 'Integration');
+    trackEventMemoized('Develop Edit Web Button Clicked', 'Integration');
     try {
       const install = await findInstall();
 

@@ -15,7 +15,7 @@ import question from '@assets/question.svg';
 import logo from '@assets/logo.svg';
 import ConfigureRunnerModal from '@components/IntegrationDetailDevelop/ConfigureRunnerModal';
 import AddSnippetToIntegrationModal from '@components/IntegrationDetailDevelop/AddSnippetToIntegrationModal';
-import { trackEvent } from '@utils/analytics';
+import { trackEventMemoized } from '@utils/analytics';
 import ConfirmationPrompt from '@components/common/ConfirmationPrompt';
 import { useTrackPage } from '@hooks/useTrackPage';
 import FusebitEditor from '@components/IntegrationDetailDevelop/FusebitEditor';
@@ -369,7 +369,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const additionalProperties = forkEditFeedUrl ? { Integration: integrationId, domain: 'API' } : undefined;
   useTrackPage(pageName, objectLocation, additionalProperties);
   if (forkEditFeedUrl) {
-    trackEvent('Share Redirect Execution', 'Share Function', additionalProperties);
+    trackEventMemoized('Share Redirect Execution', 'Share Function', additionalProperties);
   }
   useTitle(`${id} Editor`);
   const { processing } = useProcessing({
@@ -437,7 +437,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   }, [isMounted, isLoading, createLoader, removeLoader]);
 
   const handleFork = () => {
-    trackEvent(
+    trackEventMemoized(
       'Fork Button Clicked',
       'Web Editor (Read-Only)',
       {
@@ -466,7 +466,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
 
   const handleSave = async () => {
     const context = window.editor;
-    trackEvent('Save Button Clicked', 'Web Editor');
+    trackEventMemoized('Save Button Clicked', 'Web Editor');
     await context?._server.saveFunction(context);
     await invalidateIntegration();
     setDirtyState(false);
@@ -474,7 +474,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   };
 
   const handleAddSnippet = async () => {
-    trackEvent('Snippets Button Clicked', 'Web Editor');
+    trackEventMemoized('Snippets Button Clicked', 'Web Editor');
     setAddSnippetModalOpen(true);
   };
 
@@ -485,7 +485,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     snippet?: Snippet
   ) => {
     if (window.editor && feed && snippet) {
-      trackEvent('Add Button Clicked', 'Add Snippet', {
+      trackEventMemoized('Add Button Clicked', 'Add Snippet', {
         snippet: `${feed.id}-${snippet.id}`,
       });
 
@@ -702,7 +702,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
                     target="_blank"
                     href="https://developer.fusebit.io/docs/developing-locally"
                     onClick={() => {
-                      trackEvent('Docs Developing Locally Link Clicked', 'Web Editor', {
+                      trackEventMemoized('Docs Developing Locally Link Clicked', 'Web Editor', {
                         Integration: integrationData?.data?.tags['fusebit.feedId'],
                       });
                     }}

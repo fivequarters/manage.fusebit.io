@@ -1,5 +1,5 @@
 import { Integration } from '@interfaces/integration';
-import { trackEvent } from '@utils/analytics';
+import { trackEventMemoized } from '@utils/analytics';
 import styled from 'styled-components';
 
 export const StyledLink = styled.a`
@@ -53,7 +53,7 @@ const FooterLinks = ({ links, integration }: Props) => {
           rel="noopener_noreferrer"
           href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
           onClick={() =>
-            trackEvent('Docs Connect Fusebit Link Clicked', 'Integration', {
+            trackEventMemoized('Docs Connect Fusebit Link Clicked', 'Integration', {
               Integration: integration?.tags['fusebit.feedId'],
             })
           }
@@ -66,7 +66,7 @@ const FooterLinks = ({ links, integration }: Props) => {
         <StyledLink
           target="_blank"
           onClick={() =>
-            trackEvent('Docs Getting Started Link Clicked', 'Integration', {
+            trackEventMemoized('Docs Getting Started Link Clicked', 'Integration', {
               Integration: integration?.tags['fusebit.feedId'],
             })
           }
@@ -82,7 +82,7 @@ const FooterLinks = ({ links, integration }: Props) => {
           target="_blank"
           rel="noopener_noreferrer"
           onClick={() =>
-            trackEvent('Docs Programming Model Link Clicked', 'Integration', {
+            trackEventMemoized('Docs Programming Model Link Clicked', 'Integration', {
               Integration: integration?.tags['fusebit.feedId'],
             })
           }

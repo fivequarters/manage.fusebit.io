@@ -10,7 +10,7 @@ import CodeBlock from '@components/common/CodeBlock';
 import ConfirmationPrompt from '@components/common/ConfirmationPrompt';
 import InformationalBanner from '@components/common/InformationalBanner';
 import Tag from '@components/common/Tag';
-import { trackEvent } from '@utils/analytics';
+import { trackEventMemoized } from '@utils/analytics';
 import { useAccountConnectorsGetOne } from '@hooks/api/v2/account/connector/useGetOne';
 import { Connector } from '@interfaces/connector';
 import { useAuthContext } from '@hooks/useAuthContext';
@@ -49,7 +49,7 @@ const IdentitiesTable = () => {
       ),
       collapsableContent: <CodeBlock code={identity} />,
       collapsableContentOpened: () => {
-        trackEvent('Identities Expand Identity Clicked', 'Connector');
+        trackEventMemoized('Identities Expand Identity Clicked', 'Connector');
       },
     };
   });
@@ -62,7 +62,7 @@ const IdentitiesTable = () => {
   });
 
   const handleDelete = () => {
-    trackEvent('Identities Delete Identity Clicked', 'Connector');
+    trackEventMemoized('Identities Delete Identity Clicked', 'Connector');
     setDeleteOpen(false);
     handleRowDelete('Identity');
   };
@@ -77,7 +77,7 @@ const IdentitiesTable = () => {
           rel="noreferrer"
           href="https://developer.fusebit.io/docs/fusebit-system-architecture#installation-lifecycle"
           onClick={() => {
-            trackEvent('Identities Docs Learn More Link Clicked', 'Connector', {
+            trackEventMemoized('Identities Docs Learn More Link Clicked', 'Connector', {
               Connector: connector?.tags['fusebit.feedId'],
             });
           }}

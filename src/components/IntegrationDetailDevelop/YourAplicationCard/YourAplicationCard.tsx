@@ -6,7 +6,7 @@ import { useLoader } from '@hooks/useLoader';
 import { useModal } from '@hooks/useModal';
 import useUpdateLineConnectors from '@hooks/useUpdateLineConnectors';
 import { BackendClient } from '@interfaces/backendClient';
-import { trackEvent } from '@utils/analytics';
+import { trackEventMemoized } from '@utils/analytics';
 import Button from '@components/common/Button/Button';
 import LineConnector from '@components/common/LineConnector';
 import BackendItem from '@components/IntegrationDetailDevelop/BackendItem';
@@ -36,7 +36,7 @@ const YourAplication: React.FC<Props> = ({ className }) => {
   const updateLines = useUpdateLineConnectors();
 
   const handleConnect = async () => {
-    trackEvent('Develop Connect Button Clicked', 'Integration');
+    trackEventMemoized('Develop Connect Button Clicked', 'Integration');
     createLoader();
     const newBackend = await mutateAsync();
     removeLoader();
@@ -45,7 +45,7 @@ const YourAplication: React.FC<Props> = ({ className }) => {
   };
 
   const openSampleApp = () => {
-    trackEvent('Sample App Clicked', 'My Application', {
+    trackEventMemoized('Sample App Clicked', 'My Application', {
       Integration: integrationData?.data?.tags['fusebit.feedId'],
     });
 

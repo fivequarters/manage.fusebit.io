@@ -1,5 +1,5 @@
 import { LogData, LogEntry, LogEntryError } from '@interfaces/logs';
-import { trackEventHandler } from '@utils/analytics';
+import { trackEventUnmemoized } from '@utils/analytics';
 import { useEffect, useState } from 'react';
 import { EditorEvents } from '../../../enums/editor';
 import { logWithTime } from './utils';
@@ -22,11 +22,11 @@ const useEditorEvents = ({ isMounted, events }: Props) => {
         setErrorBuild('');
       },
       [EditorEvents.BuildFinished]: () => {
-        trackEventHandler('Build successful', 'Online Editor');
+        trackEventUnmemoized('Build successful', 'Online Editor');
         setIsSaving(false);
       },
       [EditorEvents.BuildError]: (e: { error: { message: string } }) => {
-        trackEventHandler('Build failed', 'Online Editor');
+        trackEventUnmemoized('Build failed', 'Online Editor');
         setIsSaving(false);
         setErrorBuild(`There was an error in the build: ${e.error.message}`);
       },

@@ -3,7 +3,7 @@ import { ValidationMode } from '@jsonforms/core';
 import debounce from 'lodash.debounce';
 import { useMediaQuery } from '@material-ui/core';
 import { Feed, Snippet, ParsedFeed } from '@interfaces/feed';
-import { trackEvent, trackEventHandler } from '@utils/analytics';
+import { trackEventMemoized, trackEventUnmemoized } from '@utils/analytics';
 import { sendIntercomMessage } from '@utils/intercom';
 import { Data } from '@interfaces/feedPicker';
 import orderBy from 'lodash.orderby';
@@ -88,7 +88,7 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
           setData(_data);
           if (!key && !isSnippet) {
             setImmediate(() => {
-              trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
+              trackEventMemoized(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
                 [feedTypeName.toLowerCase()]: template.id,
                 [`${feedTypeName.toLowerCase()}Default`]: true,
               });
@@ -99,7 +99,7 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
           setRawActiveSnippet(templateToActivate.snippets[0]);
           // TODO replace snippet mustache
           setActiveSnippet(templateToActivate.snippets[0]);
-          trackEvent(`New Snippet Selected`, `Add Snippet`, {
+          trackEventMemoized(`New Snippet Selected`, `Add Snippet`, {
             snippet: `${templateToActivate.id}-${templateToActivate.snippets[0].id}`,
             snippetDefault: true,
           });
@@ -125,15 +125,15 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
 
   const trackSearchInput = (searchQuery: string) => {
     if (isIntegration) {
-      trackEventHandler('New Integration Search Execution', 'Integrations', {
+      trackEventUnmemoized('New Integration Search Execution', 'Integrations', {
         searchQuery,
       });
     } else if (isSnippet) {
-      trackEventHandler('Add Snippet Search Execution', 'Add Snippet', {
+      trackEventUnmemoized('Add Snippet Search Execution', 'Add Snippet', {
         searchQuery,
       });
     } else {
-      trackEventHandler('New Connector Search Execution', 'Connectors', {
+      trackEventUnmemoized('New Connector Search Execution', 'Connectors', {
         searchQuery,
       });
     }
@@ -167,12 +167,12 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
     setRawActiveTemplate(template);
     if (snippet) {
       setRawActiveSnippet(snippet);
-      trackEvent(`New Snippet Selected`, `Add Snippet`, {
+      trackEventMemoized(`New Snippet Selected`, `Add Snippet`, {
         snippet: `${template.id}-${snippet.id}`,
         snippetDefault: false,
       });
     } else {
-      trackEvent(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
+      trackEventMemoized(`New ${feedTypeName} Selected`, `${feedTypeName}s`, {
         [feedTypeName.toLowerCase()]: template.id,
         [`${feedTypeName.toLowerCase()}Default`]: false,
       });
@@ -190,9 +190,9 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
   const handlePlanUpsell = () => {
     if (rawActiveTemplate) {
       if (isIntegration) {
-        trackEvent('New Integration Enable Button Clicked', 'Integrations', { integration: rawActiveTemplate.id });
+        trackEventMemoized('New Integration Enable Button Clicked', 'Integrations', { integration: rawActiveTemplate.id });
       } else {
-        trackEvent('New Connector Enable Button Clicked', 'Connectors', { connector: rawActiveTemplate.id });
+        trackEventMemoized('New Connector Enable Button Clicked', 'Connectors', { connector: rawActiveTemplate.id });
       }
       window.Intercom('showNewMessage', `I'm interested in enabling ${rawActiveTemplate.name}`);
       sendIntercomMessage();
@@ -202,16 +202,16 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
 
   const handleFilterChange = (filter: string) => {
     if (isIntegration) {
-      trackEvent('New Integration Catalog Clicked', 'Integrations', { tag: filter });
+      trackEventMemoized('New Integration Catalog Clicked', 'Integrations', { tag: filter });
     } else {
-      trackEvent('New Connector Catalog Clicked', 'Connectors', { tag: filter });
+      trackEventMemoized('New Connector Catalog Clicked', 'Connectors', { tag: filter });
     }
     filteredFeed.setActiveFilter(filter);
   };
 
   const handleJsonFormsChange = ({ errors: _errors, data: _data }: { errors: any; data: any }) => {
     if (_data?.ui?.toggle && activeTemplate) {
-      trackEvent('New Integration Customize Clicked', 'Integrations', {
+      trackEventMemoized('New Integration Customize Clicked', 'Integrations', {
         integration: activeTemplate.id,
       });
     }

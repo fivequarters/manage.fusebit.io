@@ -1,7 +1,7 @@
 import { useQueryClient } from 'react-query';
 import { Entity, Feed, ParsedFeed } from '@interfaces/feed';
 import { Data } from '@interfaces/feedPicker';
-import { trackEvent } from '@utils/analytics';
+import { trackEventMemoized } from '@utils/analytics';
 import { Integration } from '@interfaces/integration';
 import { ApiResponse } from './useAxios';
 import { useError } from './useError';
@@ -35,7 +35,7 @@ export const useCreateDataFromFeed = () => {
       const commonTags = getCommonTags(activeFeed, 'integration');
 
       if (!skipTracking) {
-        trackEvent('New Fork Create Button Clicked', 'Integrations', {
+        trackEventMemoized('New Fork Create Button Clicked', 'Integrations', {
           integration: commonTags['fusebit.feedId'],
         });
       }
@@ -55,7 +55,7 @@ export const useCreateDataFromFeed = () => {
       const commonTags = getCommonTags(activeFeed, 'integration');
 
       if (!skipTracking) {
-        trackEvent('New Integration Create Button Clicked', 'Integrations', {
+        trackEventMemoized('New Integration Create Button Clicked', 'Integrations', {
           integration: commonTags['fusebit.feedId'],
         });
       }
@@ -75,7 +75,7 @@ export const useCreateDataFromFeed = () => {
       const commonTags = getCommonTags(activeFeed, 'connector');
 
       if (!skipTracking) {
-        trackEvent('New Connector Create Button Clicked', 'Connectors', { connector: commonTags['fusebit.feedId'] });
+        trackEventMemoized('New Connector Create Button Clicked', 'Connectors', { connector: commonTags['fusebit.feedId'] });
       }
 
       const res = await createFromFeed(parsedFeed, commonTags);

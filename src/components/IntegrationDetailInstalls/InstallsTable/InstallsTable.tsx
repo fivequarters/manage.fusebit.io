@@ -14,7 +14,7 @@ import Tag from '@components/common/Tag';
 import ConfirmationPrompt from '@components/common/ConfirmationPrompt';
 import InformationalBanner from '@components/common/InformationalBanner';
 import { getConnectorsFromInstall } from '@utils/utils';
-import { trackEvent } from '@utils/analytics';
+import { trackEventMemoized } from '@utils/analytics';
 import AssociatedIdentities from './AssociatedIdentities';
 
 const InstallsTable = () => {
@@ -45,7 +45,7 @@ const InstallsTable = () => {
       ),
       collapsableContent: <CodeBlock code={install} />,
       collapsableContentOpened: () => {
-        trackEvent('Installs Expand Tenant Clicked', 'Integration');
+        trackEventMemoized('Installs Expand Tenant Clicked', 'Integration');
       },
     };
   });
@@ -65,7 +65,7 @@ const InstallsTable = () => {
   ];
 
   const handleDelete = () => {
-    trackEvent('Installs Delete Tenant Clicked', 'Integration');
+    trackEventMemoized('Installs Delete Tenant Clicked', 'Integration');
     setDeleteOpen(false);
     handleRowDelete('Install');
   };
@@ -79,7 +79,7 @@ const InstallsTable = () => {
           rel="noreferrer"
           href="https://developer.fusebit.io/docs/fusebit-system-architecture#installation-lifecycle"
           onClick={() => {
-            trackEvent('Installs Docs Learn More Link Clicked', 'Integration', {
+            trackEventMemoized('Installs Docs Learn More Link Clicked', 'Integration', {
               Integration: integration?.tags['fusebit.feedId'],
             });
           }}

@@ -7,7 +7,7 @@ import { Integration } from '@interfaces/integration';
 import styled from 'styled-components';
 import disclaimer from '@assets/disclaimer.svg';
 import warning from '@assets/black-warning.svg';
-import { trackEvent } from '@utils/analytics';
+import { trackEventMemoized } from '@utils/analytics';
 import FooterActions from './FooterActions';
 import useConnect, { Props as UseConnectProps } from './useConnect';
 
@@ -193,7 +193,7 @@ const Connect: React.FC<Props> = ({
   })();
 
   const enterEditMode = () => {
-    trackEvent('Backend Edit Name Button Clicked', 'My Application', {
+    trackEventMemoized('Backend Edit Name Button Clicked', 'My Application', {
       Integration: integration?.tags['fusebit.feedId'],
     });
     setEditMode(true);
