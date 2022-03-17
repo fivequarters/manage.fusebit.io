@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { ValidationMode } from '@jsonforms/core';
 import debounce from 'lodash.debounce';
 import { useMediaQuery } from '@material-ui/core';
@@ -123,24 +123,21 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
     ? queryClient.getQueryState('getIntegrationsFeed')?.status === 'loading'
     : queryClient.getQueryState('getConnectorsFeed')?.status === 'loading';
 
-  const trackSearchInput = useCallback(
-    (searchQuery) => {
-      if (isIntegration) {
-        trackEventHandler('New Integration Search Execution', 'Integrations', {
-          searchQuery,
-        });
-      } else if (isSnippet) {
-        trackEventHandler('Add Snippet Search Execution', 'Add Snippet', {
-          searchQuery,
-        });
-      } else {
-        trackEventHandler('New Connector Search Execution', 'Connectors', {
-          searchQuery,
-        });
-      }
-    },
-    [isIntegration, isSnippet]
-  );
+  const trackSearchInput = (searchQuery: string) => {
+    if (isIntegration) {
+      trackEventHandler('New Integration Search Execution', 'Integrations', {
+        searchQuery,
+      });
+    } else if (isSnippet) {
+      trackEventHandler('Add Snippet Search Execution', 'Add Snippet', {
+        searchQuery,
+      });
+    } else {
+      trackEventHandler('New Connector Search Execution', 'Connectors', {
+        searchQuery,
+      });
+    }
+  };
 
   const debouncedSetSearchFilter = debounce((keyword: string) => {
     const search = keyword.trim();
