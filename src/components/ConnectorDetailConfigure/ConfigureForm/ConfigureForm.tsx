@@ -13,7 +13,7 @@ import { useAuthContext } from '@hooks/useAuthContext';
 import { Connector, ConnectorConfig } from '@interfaces/connector';
 import { useEntityApi } from '@hooks/useEntityApi';
 import { useGetFeedById } from '@hooks/useGetFeedById';
-import { trackEvent } from '@utils/analytics';
+import { trackEventMemoized } from '@utils/analytics';
 import InformationalBanner from '@components/common/InformationalBanner';
 import BaseJsonForm from '@components/common/BaseJsonForm';
 import * as CSC from '@components/globalStyle';
@@ -101,7 +101,7 @@ const ConfigureForm: React.FC = () => {
     if (errors.length > 0) {
       setValidationMode('ValidateAndShow');
     } else {
-      trackEvent('Configure Save Button Clicked', 'Connector');
+      trackEventMemoized('Configure Save Button Clicked', 'Connector');
       await updateEntity(connectorData, data);
       queryClient.invalidateQueries([
         ACCOUNT_CONNECTORS_GET_ONE_CONFIG,
@@ -131,7 +131,7 @@ const ConfigureForm: React.FC = () => {
                   rel="noreferrer"
                   href={configureAppDocUrl}
                   onClick={() => {
-                    trackEvent('Docs In This Guide Link Clicked', 'Connector', {
+                    trackEventMemoized('Docs In This Guide Link Clicked', 'Connector', {
                       Connector: connectorData?.data.tags['fusebit.feedId'],
                     });
                   }}
@@ -161,7 +161,7 @@ const ConfigureForm: React.FC = () => {
                 }
 
                 if (data && data.mode?.useProduction !== newData.mode?.useProduction && newData.mode?.useProduction) {
-                  trackEvent('Enable Production Credentials Clicked', 'Connector', {
+                  trackEventMemoized('Enable Production Credentials Clicked', 'Connector', {
                     Connector: connectorData?.data.tags['fusebit.feedId'],
                     State: 'On',
                   });
@@ -170,7 +170,7 @@ const ConfigureForm: React.FC = () => {
                   data.mode?.useProduction !== newData.mode?.useProduction &&
                   newData.mode?.useProduction === false
                 ) {
-                  trackEvent('Enable Production Credentials Clicked', 'Connector', {
+                  trackEventMemoized('Enable Production Credentials Clicked', 'Connector', {
                     Connector: connectorData?.data.tags['fusebit.feedId'],
                     State: 'Off',
                   });

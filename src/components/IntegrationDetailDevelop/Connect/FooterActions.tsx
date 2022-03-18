@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Button } from '@material-ui/core';
-import { trackEvent } from '@utils/analytics';
+import { trackEventMemoized } from '@utils/analytics';
 import { Integration } from '@interfaces/integration';
 import { StyledTimeIcon, StyledTimeDescription } from './mixins';
 
@@ -31,7 +31,7 @@ const FooterActions: React.FC<IProps> = ({ buttonsCrashing, integration }) => {
             color="primary"
             size={getButtonSize}
             onClick={() => {
-              trackEvent('Backend Docs Follow Guide Button Clicked', 'My Application', {
+              trackEventMemoized('Backend Docs Follow Guide Button Clicked', 'My Application', {
                 Integration: integration?.tags['fusebit.feedId'],
               });
             }}

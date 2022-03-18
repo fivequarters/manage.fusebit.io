@@ -7,7 +7,7 @@ import DeleteIntegrationModal from '@components/IntegrationsOverview/DeleteInteg
 import { useModal } from '@hooks/useModal';
 import { BaseTableRow } from '@components/common/BaseTable/types';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
-import { trackEvent } from '@utils/analytics';
+import { trackEventMemoized } from '@utils/analytics';
 import { useAuthContext } from '@hooks/useAuthContext';
 import { useAccountIntegrationsGetAll } from '@hooks/api/v2/account/integration/useGetAll';
 import useQueryParam from '@hooks/useQueryParam';
@@ -60,7 +60,7 @@ const IntegrationsTable = () => {
   const handleClickRow = (row: BaseTableRow) => history.push(getRedirectLink(`/integration/${row.id}/develop`));
 
   const handleNewIntegration = () => {
-    trackEvent('New Integration Button Clicked', 'Integrations', {});
+    trackEventMemoized('New Integration Button Clicked', 'Integrations', {});
     toggleNewModal();
   };
 

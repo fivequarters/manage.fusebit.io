@@ -19,7 +19,7 @@ import { CARD_OVERLAPPING_MEDIA_QUERY } from '@components/IntegrationDetailDevel
 import { INTEGRATION_CARD_ID } from '@components/IntegrationDetailDevelop/IntegrationCard/IntegrationCard';
 import arrowIcon from '@assets/arrow-right-black.svg';
 import useUpdateLineConnectors from '@hooks/useUpdateLineConnectors';
-import { trackEvent } from '@utils/analytics';
+import { trackEventMemoized } from '@utils/analytics';
 
 interface Props {
   processing: boolean;
@@ -93,12 +93,12 @@ const ConnectorsCard: React.FC<Props> = ({ className, processing }) => {
   }, [connectors, updateLines]);
 
   const handleAddNewConnector = () => {
-    trackEvent('Develop Add New Button Clicked', 'Integration');
+    trackEventMemoized('Develop Add New Button Clicked', 'Integration');
     setConnectorModalOpen(true);
   };
 
   const handleLinkExistingConnector = () => {
-    trackEvent('Develop Link Existing Clicked', 'Integration');
+    trackEventMemoized('Develop Link Existing Clicked', 'Integration');
     setLinkExistingModalOpen(true);
   };
 

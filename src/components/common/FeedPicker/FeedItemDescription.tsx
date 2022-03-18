@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import ReactMarkdown from 'react-markdown';
-import { trackEvent } from '@utils/analytics';
+import { trackEventMemoized } from '@utils/analytics';
 
 export const StyledConnectorDescription = styled(ReactMarkdown)`
   font-size: 14px;
@@ -46,7 +46,9 @@ const FeedItemDescription = ({ description, templateId, isIntegration, isSnippet
         let parent = event.target.parentElement;
         while (parent !== null) {
           if (parent.attributes.getNamedItem('data-segment')?.value === 'track') {
-            trackEvent(`New ${itemName} Docs Learn More Link Clicked`, `${itemName}s`, { [itemName]: templateId });
+            trackEventMemoized(`New ${itemName} Docs Learn More Link Clicked`, `${itemName}s`, {
+              [itemName]: templateId,
+            });
           }
           parent = parent.parentElement;
         }

@@ -5,7 +5,7 @@ import { usePagination } from '@hooks/usePagination';
 import { useModal } from '@hooks/useModal';
 import { BaseTableRow } from '@components/common/BaseTable/types';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
-import { trackEvent } from '@utils/analytics';
+import { trackEventMemoized } from '@utils/analytics';
 import { useAuthContext } from '@hooks/useAuthContext';
 import { Account } from '@interfaces/account';
 import { useAccountUserGetAll } from '@hooks/api/v1/account/user/useGetAll';
@@ -45,7 +45,7 @@ const UsersTable = () => {
   const handleClickRow = (row: BaseTableRow) => history.push(getRedirectLink(`/authentication/${row.id}/overview`));
 
   const handleNewIntegration = () => {
-    trackEvent('New User Button Clicked', 'Users');
+    trackEventMemoized('New User Button Clicked', 'Users');
     toggleNewModal();
   };
 

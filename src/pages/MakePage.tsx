@@ -1,7 +1,7 @@
 import { FC, ReactElement } from 'react';
 import { Box, Container, Button } from '@material-ui/core';
 import { useTrackUnauthenticatedPage } from '@hooks/useTrackPage';
-import { trackEvent } from '@utils/analytics';
+import { trackEventMemoized } from '@utils/analytics';
 import Layout from '@components/common/Layout';
 import useTitle from '@hooks/useTitle';
 import { useHistory, Link, useParams } from 'react-router-dom';
@@ -17,7 +17,7 @@ const MakePage: FC<{}> = (): ReactElement => {
   const { error, snippets, connectors } = useSnippets();
 
   const handleGo = () => {
-    trackEvent('Go Button Clicked', 'Make Snippet', { snippets: snippetsParam });
+    trackEventMemoized('Go Button Clicked', 'Make Snippet', { snippets: snippetsParam });
     history.push(`/make-go/${snippetsParam}`);
   };
 

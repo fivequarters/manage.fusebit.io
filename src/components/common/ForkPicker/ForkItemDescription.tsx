@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import ReactMarkdown from 'react-markdown';
-import { trackEvent } from '@utils/analytics';
+import { trackEventMemoized } from '@utils/analytics';
 
 export const StyledConnectorDescription = styled(ReactMarkdown)`
   font-size: 14px;
@@ -40,7 +40,9 @@ const ForkItemDescription = ({ description, templateId }: Props) => {
         let parent = event.target.parentElement;
         while (parent !== null) {
           if (parent.attributes.getNamedItem('data-segment')?.value === 'track') {
-            trackEvent(`Fork Integration Docs Learn More Link Clicked`, `Integrations`, { Integration: templateId });
+            trackEventMemoized(`Fork Integration Docs Learn More Link Clicked`, `Integrations`, {
+              Integration: templateId,
+            });
           }
           parent = parent.parentElement;
         }

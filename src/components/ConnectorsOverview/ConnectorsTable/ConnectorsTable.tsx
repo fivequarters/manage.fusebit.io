@@ -5,7 +5,7 @@ import { usePagination } from '@hooks/usePagination';
 import { useModal } from '@hooks/useModal';
 import { BaseTableRow } from '@components/common/BaseTable/types';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
-import { trackEvent } from '@utils/analytics';
+import { trackEventMemoized } from '@utils/analytics';
 import { useAuthContext } from '@hooks/useAuthContext';
 import { useAccountConnectorsGetAll } from '@hooks/api/v2/account/connector/useGetAll';
 import { Connector } from '@interfaces/connector';
@@ -51,7 +51,7 @@ const ConnectorsTable = () => {
   const handleClickRow = (row: BaseTableRow) => history.push(getRedirectLink(`/connector/${row.id}/configure`));
 
   const handleNewIntegration = () => {
-    trackEvent('New Connector Button Clicked', 'Connectors', {});
+    trackEventMemoized('New Connector Button Clicked', 'Connectors', {});
     toggleNewModal();
   };
 

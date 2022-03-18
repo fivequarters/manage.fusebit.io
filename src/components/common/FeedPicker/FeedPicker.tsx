@@ -194,6 +194,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(
       setCampaingIntegrationRef,
       searchFocused,
       setSearchFocused,
+      trackSearchInput,
     } = useFeedPicker({
       open,
       isIntegration,
@@ -260,6 +261,11 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(
                 onFocus={() => setSearchFocused(true)}
                 onBlur={() => setSearchFocused(false)}
                 fullWidth
+                onKeyUp={(e) => {
+                  if (e.key === 'Enter') {
+                    trackSearchInput((e.target as HTMLInputElement).value);
+                  }
+                }}
                 onChange={(e) => debouncedSetSearchFilter(e.target.value)}
                 label="Search"
               />

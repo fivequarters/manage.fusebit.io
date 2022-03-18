@@ -71,7 +71,7 @@ export const silentAuthInProgress = (): boolean => {
   return urlSearchParams.get('silentAuth') === 'true';
 };
 
-// utility to memoize the original trackEvent function to avoid noise
+// utility to memoize the original trackEventMemoized function to avoid noise
 const memoize = (originalFunction: TrackEventHandler) => {
   let lastParamsUsed: any[];
   const memoizedFunction: TrackEventHandler = (...args) => {
@@ -84,8 +84,13 @@ const memoize = (originalFunction: TrackEventHandler) => {
   return memoizedFunction;
 };
 
-// original trackEvent function that gets called to offload events to Segment
-const trackEventHandler: TrackEventHandler = (eventName, objectLocation, extraProperties = {}, cb = () => {}) => {
+// original trackEventMemoized function that gets called to offload events to Segment
+export const trackEventUnmemoized: TrackEventHandler = (
+  eventName,
+  objectLocation,
+  extraProperties = {},
+  cb = () => {}
+) => {
   getAnalyticsClient().track(
     eventName,
     {
@@ -114,8 +119,8 @@ const trackAnonymouseEventHandler: TrackEventHandler = (
   );
 };
 
-// trackEvent is memoized because React re-rendering process makes it get called multiple times for the same event
-export const trackEvent = memoize(trackEventHandler);
+// trackEventMemoized is memoized because React re-rendering process makes it get called multiple times for the same event
+export const trackEventMemoized = memoize(trackEventUnmemoized);
 export const trackAnonymouseEvent = memoize(trackAnonymouseEventHandler);
 
 export const trackAuthEvent = (
@@ -153,5 +158,5 @@ export const trackAuthEvent = (
     ...fusebitProfile,
     ...user,
   } as Object);
-  trackEvent('Log In Execution', 'Authentication', extraSegmentEventProps, cb);
+  trackEventMemoized('Log In Execution', 'Authentication', extraSegmentEventProps, cb);
 };

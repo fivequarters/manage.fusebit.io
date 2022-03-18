@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import useSampleApp from '@hooks/useSampleApp';
 import { useGetIntegrationFromCache } from '@hooks/useGetIntegrationFromCache';
-import { trackEvent } from '@utils/analytics';
+import { trackEventMemoized } from '@utils/analytics';
 import NoSampleAppModal from '../NoSampleAppModal';
 
 const StyledSampleApp = styled.a`
@@ -21,7 +21,7 @@ export const EditGuiSampleApp = () => {
 
   const handleClick = () => {
     if (url) {
-      trackEvent('Sample App Clicked', 'Web Editor', {
+      trackEventMemoized('Sample App Clicked', 'Web Editor', {
         Integration: integrationData?.data?.tags['fusebit.feedId'],
       });
       window.open(url, '_blank', 'noreferrer');
