@@ -49,10 +49,9 @@ export const useCreateDataFromFeed = () => {
   };
 
   const createIntegrationAndConnector = async (activeFeed: Feed, data: Data, skipTracking?: boolean) => {
+    const commonTags = getCommonTags(activeFeed, 'integration');
     try {
       const { feed: parsedFeed } = await replaceMustache(data, activeFeed);
-
-      const commonTags = getCommonTags(activeFeed, 'integration');
 
       if (!skipTracking) {
         trackEvent('New Integration Create Button Clicked', 'Integrations', {
@@ -64,6 +63,10 @@ export const useCreateDataFromFeed = () => {
 
       return res.find((r) => r.data.entityType === 'integration')?.data;
     } catch (e) {
+      trackEvent('Integration Creation Failed', 'Integrations', {
+        integration: commonTags['fusebit.feedId'],
+      });
+
       createError(e);
     }
   };
