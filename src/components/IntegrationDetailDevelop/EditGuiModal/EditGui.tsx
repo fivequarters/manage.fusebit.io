@@ -1,6 +1,6 @@
 import { Snippet, Feed, ConnectorEntity, EntityComponent } from '@interfaces/feed';
 import { InnerConnector, IntegrationData } from '@interfaces/integration';
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, ReactElement } from 'react';
 import { Box, Button, ButtonGroup, IconButton, useMediaQuery, useTheme } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Props, SaveStatus } from '@interfaces/edit';
@@ -37,6 +37,7 @@ import { CodeOutlined } from '@material-ui/icons';
 import { useError } from '@hooks/useError';
 import { useCopy } from '@hooks/useCopy';
 import { getIntegrationConfig } from '@utils/localStorage';
+import { jsxToNode } from '@utils/utils';
 import MobileDrawer from '../MobileDrawer';
 import useEditorEvents from '../FusebitEditor/useEditorEvents';
 import { BUILDING_TEXT, BUILD_COMPLETED_TEXT } from '../FusebitEditor/constants';
@@ -424,6 +425,15 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       lastItem.parentNode?.insertBefore(addNew, lastItem.nextSibling);
     };
 
+    const appendJsxToNav = (elements: { id: string; jsx: ReactElement }[]) => {
+      const nav = document.querySelector('.fusebit-nav');
+      elements.forEach((element) => {
+        if (!document.getElementById(element.id)) {
+          nav?.appendChild(jsxToNode(element.jsx));
+        }
+      });
+    };
+
     if (isMounted && !isLoading) {
       removeLoader();
       const items = document.getElementsByClassName('fusebit-nav-file');
@@ -431,6 +441,13 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       if (!document.getElementById('addNewItem')) {
         createAddNewItemElement(lastItem);
       }
+
+      const div = (
+        <div id="config">
+          <h1>Config</h1>
+        </div>
+      );
+      appendJsxToNav([{ id: 'config', jsx: div }]);
     } else {
       createLoader();
     }
