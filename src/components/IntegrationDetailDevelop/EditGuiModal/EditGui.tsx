@@ -1,6 +1,7 @@
 import { Snippet, Feed, ConnectorEntity, EntityComponent } from '@interfaces/feed';
 import { InnerConnector, IntegrationData } from '@interfaces/integration';
 import React, { useState, useEffect, useMemo, ReactElement } from 'react';
+import ReactDOM from 'react-dom';
 import { Box, Button, ButtonGroup, IconButton, useMediaQuery, useTheme } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Props, SaveStatus } from '@interfaces/edit';
@@ -37,12 +38,12 @@ import { CodeOutlined } from '@material-ui/icons';
 import { useError } from '@hooks/useError';
 import { useCopy } from '@hooks/useCopy';
 import { getIntegrationConfig } from '@utils/localStorage';
-import { jsxToNode } from '@utils/utils';
 import MobileDrawer from '../MobileDrawer';
 import useEditorEvents from '../FusebitEditor/useEditorEvents';
 import { BUILDING_TEXT, BUILD_COMPLETED_TEXT } from '../FusebitEditor/constants';
 import useProcessing from '../hooks/useProcessing';
 import { EditGuiSampleApp } from './EditGuiSampleApp';
+import Tree from './Tree';
 import { EditorEvents } from '~/enums/editor';
 
 const StyledEditorContainer = styled.div`
@@ -429,7 +430,10 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       const nav = document.querySelector('.fusebit-nav');
       elements.forEach((element) => {
         if (!document.getElementById(element.id)) {
-          nav?.appendChild(jsxToNode(element.jsx));
+          const div = document.createElement('div');
+          div.setAttribute('id', element.id);
+          nav?.appendChild(div);
+          ReactDOM.render(<div>{element.jsx}</div>, document.getElementById(element.id));
         }
       });
     };
@@ -443,9 +447,14 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       }
 
       const div = (
-        <div id="config">
-          <h1>Config</h1>
-        </div>
+        <Tree name="Config" defaultOpen>
+          <Tree name="page 1" />
+          <Tree name="page 2" />
+          <Tree name="more children">
+            <Tree name="asd" />
+            <Tree name="asasdad" />
+          </Tree>
+        </Tree>
       );
       appendJsxToNav([{ id: 'config', jsx: div }]);
     } else {
@@ -793,7 +802,9 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
             }}
           />
           {isMounted && !matchesMobile && (
-            <StyledFusebitEditorLogo src={logo} alt="fusebit logo" height="20" width="80" />
+            <>
+              <StyledFusebitEditorLogo src={logo} alt="fusebit logo" height="20" width="80" />
+            </>
           )}
           {isMounted && matchesMobile && (
             <MobileDrawer

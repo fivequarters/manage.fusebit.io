@@ -1,6 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
 import _startCase from 'lodash.startcase';
-import { renderToStaticMarkup } from 'react-dom/server';
 import { Entity, EntityComponent, Feed } from '@interfaces/feed';
 import { FinalConnector } from '@interfaces/integrationDetailDevelop';
 import { Install } from '@interfaces/install';
@@ -113,10 +112,3 @@ export const createAxiosClient: (token?: string, skipXUserAgent?: boolean) => Ax
 
 export const urlOrSvgToImage = (img = '') =>
   img.match('^<svg') ? `data:image/svg+xml;utf8,${encodeURIComponent(img)}` : img;
-
-export const jsxToNode = (jsx: React.ReactElement) => {
-  const output = document.createElement('div');
-  const staticElement = renderToStaticMarkup(jsx);
-  output.innerHTML = staticElement;
-  return output;
-};
