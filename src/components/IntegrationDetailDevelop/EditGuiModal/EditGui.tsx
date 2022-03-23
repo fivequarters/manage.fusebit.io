@@ -447,7 +447,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       }
 
       const div = (
-        <Tree name="Config" defaultOpen>
+        <Tree name="Config">
           <Tree name="page 1" />
           <Tree name="page 2" />
           <Tree name="more children">

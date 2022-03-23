@@ -27,18 +27,12 @@ const Frame = styled.div`
 export const Title = styled.h3`
   position: relative;
   vertical-align: middle;
-  z-index: 10000;
-
-  &:hover {
-    color: 'green' !important;
-  }
 `;
 
 export const Content = animated(styled.div`
   will-change: transform, opacity, height;
   margin-left: 6px;
   padding: 0px 0px 0px 14px;
-  border-left: 1px dashed rgba(255, 255, 255, 0.4);
   overflow: hidden;
 `);
 
