@@ -201,9 +201,7 @@ const MakeGoPage: FC<{}> = (): ReactElement => {
             items={[
               {
                 text: 'Fusebit',
-                onClick: () => {
-                  window.location.href = process.env.REACT_APP_MKT_SITE_BASE_URL || '';
-                },
+                href: process.env.REACT_APP_MKT_SITE_BASE_URL || '',
               },
             ]}
           />

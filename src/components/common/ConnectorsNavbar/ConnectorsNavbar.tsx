@@ -1,4 +1,3 @@
-import { useHistory } from 'react-router-dom';
 import EntitiesMenu from '../EntitiesMenu/EntitiesMenu';
 import NavbarBreadcrumb from '../NavbarBreadcrumb/NavbarBreadcrumb';
 import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
@@ -6,12 +5,11 @@ import useEntityBreadcrumb from '../../../hooks/useEntityBreadcrumb';
 import Navbar from '../Navbar';
 
 const ConnectorsNavbar: React.FC = () => {
-  const history = useHistory();
   const { getRedirectLink } = useGetRedirectLink();
 
   const { anchorEl, breadcrumbItems, handleCloseDrawer, handleCloseMenu, openDrawer, isActive } = useEntityBreadcrumb({
     initialText: 'Connectors',
-    onClickInitialText: () => history.push(getRedirectLink('/connectors/overview')),
+    href: getRedirectLink('/connectors/overview'),
   });
 
   return (

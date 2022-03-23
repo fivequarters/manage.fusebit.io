@@ -5,10 +5,11 @@ import useAnchor from './useAnchor';
 
 interface Props {
   initialText: string;
-  onClickInitialText: () => void;
+  href?: string;
+  onClickInitialText?: () => void;
 }
 
-const useEntityBreadcrumb = ({ initialText, onClickInitialText }: Props) => {
+const useEntityBreadcrumb = ({ initialText, onClickInitialText, href }: Props) => {
   const { handleClickAnchor, anchorEl, handleCloseMenu } = useAnchor();
   const [openDrawer, setOpenDrawer] = useState(false);
   const isMobile = useMediaQuery('(max-width: 880px)');
@@ -26,10 +27,11 @@ const useEntityBreadcrumb = ({ initialText, onClickInitialText }: Props) => {
             } else {
               handleClickAnchor(event);
             }
-          } else {
-            onClickInitialText();
+          } else if (!href) {
+            onClickInitialText?.();
           }
         },
+        href,
       },
     ];
 
@@ -39,11 +41,12 @@ const useEntityBreadcrumb = ({ initialText, onClickInitialText }: Props) => {
         onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
           handleClickAnchor(event);
         },
+        href: undefined,
       });
     }
 
     return items;
-  }, [id, handleClickAnchor, initialText, onClickInitialText, isMobile]);
+  }, [id, handleClickAnchor, initialText, onClickInitialText, isMobile, href]);
 
   const handleCloseDrawer = () => {
     setOpenDrawer(false);

@@ -1,5 +1,4 @@
 import React, { FC, ReactElement } from 'react';
-import { useHistory } from 'react-router-dom';
 import Layout from '@components/common/Layout';
 import Navbar from '@components/common/Navbar';
 import { useTrackPage } from '@hooks/useTrackPage';
@@ -13,7 +12,6 @@ import useTitle from '@hooks/useTitle';
 const AuthenticationDetailPage: FC<{}> = (): ReactElement => {
   useTrackPage('Team User Details', 'Team');
   useTitle('Account');
-  const history = useHistory();
   const { getRedirectLink } = useGetRedirectLink();
   const { userData } = useAuthContext();
 
@@ -25,7 +23,7 @@ const AuthenticationDetailPage: FC<{}> = (): ReactElement => {
           items={[
             {
               text: 'Team',
-              onClick: () => history.push(getRedirectLink(`/authentication/${userData.userId}/overview`)),
+              href: getRedirectLink(`/authentication/${userData.userId}/overview`),
             },
           ]}
         />

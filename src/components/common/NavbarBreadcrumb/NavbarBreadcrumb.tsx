@@ -1,5 +1,6 @@
 import { Breadcrumbs, Button, Box } from '@material-ui/core';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import arrow from '../../../assets/right-arrow-white.svg';
 import arrowDown from '../../../assets/down-arrow-white.svg';
 
@@ -31,7 +32,8 @@ const StyledArrowContainer = styled(Box)<{ $active?: boolean }>`
 interface Props {
   items: {
     text: string;
-    onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, isLastItem: boolean) => void;
+    onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, isLastItem: boolean) => void;
+    href?: string;
     active?: boolean;
   }[];
   lastItemAction?: boolean;
@@ -44,8 +46,17 @@ const NavbarBreadcrumb: React.FC<Props> = ({ items, lastItemAction = true, isArr
       <Breadcrumbs separator={<img src={arrow} alt="arrow" />} aria-label="breadcrumb">
         {items.map((item, index) => {
           const isLastItem = index === items.length - 1;
+
+          if (item.href) {
+            return (
+              <Link to={item.href}>
+                <StyledText active={item.active}>{item.text}</StyledText>
+              </Link>
+            );
+          }
+
           return (
-            <StyledButton key={item.text} onClick={(e) => item.onClick(e, isLastItem)}>
+            <StyledButton key={item.text} onClick={(e) => item.onClick?.(e, isLastItem)}>
               <StyledText active={lastItemAction ? isLastItem : item.active}>{item.text}</StyledText>
               {isLastItem && lastItemAction && (
                 <StyledArrowContainer ml="8px" $active={isArrowActive}>
