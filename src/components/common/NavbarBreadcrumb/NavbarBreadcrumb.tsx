@@ -1,4 +1,4 @@
-import { Breadcrumbs, Button, Box } from '@material-ui/core';
+import { Breadcrumbs, Button, Box, useMediaQuery } from '@material-ui/core';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import arrow from '../../../assets/right-arrow-white.svg';
@@ -41,13 +41,15 @@ interface Props {
 }
 
 const NavbarBreadcrumb: React.FC<Props> = ({ items, lastItemAction = true, isArrowActive }) => {
+  const isMobile = useMediaQuery('(max-width: 880px)');
+
   return (
     <>
       <Breadcrumbs separator={<img src={arrow} alt="arrow" />} aria-label="breadcrumb">
         {items.map((item, index) => {
           const isLastItem = index === items.length - 1;
 
-          if (item.href) {
+          if (item.href && !isMobile) {
             return (
               <Link to={item.href}>
                 <StyledText active={item.active}>{item.text}</StyledText>
