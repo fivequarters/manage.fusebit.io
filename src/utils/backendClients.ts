@@ -12,7 +12,7 @@ export async function createSampleAppClientUrl(
 
   const configuration = {
     ...enabledIntegrations,
-    FUSEBIT_INTEGRATION_URL: `${REACT_APP_FUSEBIT_DEPLOYMENT}/v2/account/${accountId}/subscription/${subscriptionId}/integration`,
+    FUSEBIT_BASE_URL: `${REACT_APP_FUSEBIT_DEPLOYMENT}/v2/account/${accountId}/subscription/${subscriptionId}`,
     FUSEBIT_JWT: token,
   };
 
