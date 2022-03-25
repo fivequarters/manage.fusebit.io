@@ -6,7 +6,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import useTitle from '@hooks/useTitle';
-import { useHistory } from 'react-router-dom';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 import Navbar from '@components/common/Navbar';
 import Layout from '@components/common/Layout';
@@ -74,7 +73,6 @@ const StyledIconButton = styled(IconButton)<{ $expanded: boolean }>`
 
 const FatalError: React.FC<FallbackProps> = ({ error }) => {
   useTitle('Fatal Error');
-  const history = useHistory();
   const { getRedirectLink } = useGetRedirectLink();
   const [expanded, setExpanded] = React.useState(false);
 
@@ -90,7 +88,7 @@ const FatalError: React.FC<FallbackProps> = ({ error }) => {
           items={[
             {
               text: 'Integrations',
-              onClick: () => history.push(getRedirectLink('/integrations/overview')),
+              href: getRedirectLink('/integrations/overview'),
             },
           ]}
         />
