@@ -77,7 +77,7 @@ const StyledEditorContainer = styled.div`
 
   .fusebit-theme-light.fusebit-shell {
     position: relative;
-    padding: 0 48px;
+    padding: 0 25px;
     padding-bottom: 60px;
     height: calc(100vh - 96px);
     background-color: #eff5ff;
@@ -120,7 +120,7 @@ const StyledEditorContainer = styled.div`
 
     .fusebit-nav {
       &-container {
-        padding: 16px;
+        padding: 25px;
         background-color: rgba(255, 255, 255, 0.5);
         border-radius: 4px;
         width: 180px;
@@ -213,7 +213,7 @@ const StyledCloseHeader = styled.div`
   width: 100%;
   height: 96px;
   z-index: 10;
-  padding: 32px 48px;
+  padding: 32px 25px;
   background-color: #eff5ff;
 
   h3 {
