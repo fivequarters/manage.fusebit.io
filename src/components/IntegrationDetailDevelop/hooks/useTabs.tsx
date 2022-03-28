@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import styled from 'styled-components';
+import Tab from '../EditGuiModal/Tab';
 
 const StyledTabsWrapper = styled.div`
   position: absolute;
@@ -16,10 +17,10 @@ const useTabs = () => {
 
   const tabsElement = useMemo(() => {
     const tabsJsxArray = tabs.map((tab) => {
-      return <StyledTabsWrapper key={tab}>{tab}</StyledTabsWrapper>;
+      return <Tab key={tab}>{tab}</Tab>;
     });
 
-    return <div>{tabsJsxArray}</div>;
+    return <StyledTabsWrapper>{tabsJsxArray}</StyledTabsWrapper>;
   }, [tabs]);
 
   const addTab = (newTab: string) => {
@@ -30,9 +31,19 @@ const useTabs = () => {
     }
   };
 
+  const changeActiveTab = (newActiveTab: string) => {
+    window.editor.selectFile(newActiveTab);
+  };
+
+  const getActiveTab = () => {
+    return window.editor.selectedFileName;
+  };
+
   return {
     addTab,
     tabsElement,
+    changeActiveTab,
+    getActiveTab,
   };
 };
 
