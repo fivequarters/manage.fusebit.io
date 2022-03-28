@@ -120,10 +120,10 @@ const StyledEditorContainer = styled.div`
 
     .fusebit-nav {
       &-container {
-        padding: 32px;
+        padding: 16px;
         background-color: rgba(255, 255, 255, 0.5);
         border-radius: 4px;
-        width: 253px;
+        width: 180px;
       }
 
       &-splitter {
