@@ -107,7 +107,7 @@ const StyledEditorContainer = styled.div`
 
     .fusebit-editor-container {
       position: relative;
-      padding-top: 64px;
+      padding-top: 40px;
       background-color: #ffffff;
       border-radius: 4px;
     }
