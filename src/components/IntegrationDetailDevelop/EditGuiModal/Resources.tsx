@@ -1,38 +1,101 @@
 import books from '@assets/library-books.svg';
 import code from '@assets/code.svg';
-import styled from 'styled-components';
+import add from '@assets/add.svg';
+import styled, { css } from 'styled-components';
 import React, { useEffect, useState } from 'react';
 import { Box } from '@material-ui/core';
 import { Integration } from '@interfaces/integration';
-import { Feed } from '@interfaces/feed';
+import { Feed, Snippet } from '@interfaces/feed';
+import { urlOrSvgToImage } from '@utils/utils';
 import Tree from './Tree';
 
-const StyledLink = styled.a`
+const textStyles = css`
   font-family: 'Poppins';
   font-size: 14px;
   line-height: 20px;
+  font-weight: inherit;
+`;
+
+const StyledLink = styled.a`
+  ${textStyles}
   text-decoration: underline;
   color: var(--black);
   width: fit-content;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+`;
+
+const StyledSnippetWrapper = styled(Box)`
+  padding: 8px;
+  border-radius: 4px;
+  transition: all 0.25s linear;
+
+  &:hover {
+    background-color: var(--secondary-color);
+    cursor: pointer;
+
+    & > div {
+      font-weight: 600;
+    }
+  }
+`;
+
+const StyledText = styled.div`
+  ${textStyles}
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: all 0.1s linear;
+`;
+
+const StyledIcon = styled.img`
+  height: 15px;
+  width: 15px;
+  object-fit: contain;
+  margin-right: 10px;
 `;
 
 interface Props {
   integrationsFeed: Feed[] | undefined;
+  connectorsFeed: Feed[] | undefined;
   integrationData: Integration | undefined;
 }
 
-const Resources: React.FC<Props> = ({ integrationsFeed, integrationData }) => {
+export interface ProcessedSnippet extends Snippet {
+  icon: string;
+}
+
+const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrationData }) => {
   const [integrationGuideUrl, setIntegrationGuideUrl] = useState('');
+  const [snippets, setSnippets] = useState<ProcessedSnippet[]>([]);
 
   useEffect(() => {
-    if (integrationsFeed && integrationData) {
+    if (integrationsFeed && integrationData && connectorsFeed) {
       const integrationFeed = integrationsFeed.find(
         (integration) => integration.id === integrationData.tags['fusebit.feedId']
       );
-      setIntegrationGuideUrl(integrationFeed?.resources.configureAppDocUrl || '');
+
+      const unprocessedSnippets = integrationData.data.components.map((component) => {
+        const matchingConnectorFeed = connectorsFeed.find((item) => {
+          return item?.configuration?.components?.some(
+            (feedComponent) => feedComponent.provider === component.provider
+          );
+        });
+
+        return matchingConnectorFeed?.snippets?.map((snippet) => {
+          const snippetWithIcon = {
+            ...snippet,
+            icon: matchingConnectorFeed.smallIcon,
+          };
+
+          return snippetWithIcon;
+        });
+      });
+
+      const processedSnippets: ProcessedSnippet[] = Array.prototype.concat.apply([], [...unprocessedSnippets]);
+      setSnippets(processedSnippets);
+      setIntegrationGuideUrl(integrationFeed?.resources?.configureAppDocUrl || '');
     }
-  }, [integrationData, integrationsFeed]);
+  }, [integrationData, integrationsFeed, connectorsFeed]);
 
   return (
     <div>
@@ -47,14 +110,26 @@ const Resources: React.FC<Props> = ({ integrationsFeed, integrationData }) => {
           >
             Fusebit SDK
           </StyledLink>
-          <StyledLink href={integrationGuideUrl} target="_blank" rel="noreferrer">
-            Integration Guide
-          </StyledLink>
+          {integrationGuideUrl && (
+            <StyledLink href={integrationGuideUrl} target="_blank" rel="noreferrer">
+              Integration Guide
+            </StyledLink>
+          )}
         </Box>
       </Tree>
       <Tree name="Snippets" icon={code} enableDropdownArrow>
-        <Tree name="page 1" />
-        <Tree name="page 2" />
+        {snippets.map((snippet) => {
+          return (
+            <StyledSnippetWrapper display="flex" alignItems="center" mb="6px" key={snippet.id}>
+              <StyledIcon src={urlOrSvgToImage(snippet.icon)} />
+              <StyledText>{snippet.name}</StyledText>
+            </StyledSnippetWrapper>
+          );
+        })}
+        <StyledSnippetWrapper display="flex" alignItems="center" mb="6px">
+          <StyledIcon src={add} />
+          <StyledText>See All Snippets</StyledText>
+        </StyledSnippetWrapper>
       </Tree>
     </div>
   );

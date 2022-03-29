@@ -321,7 +321,7 @@ const addNewIcon = `
 
 const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationId, isLoading }, ref) => {
   const { id } = useParams<{ id: string }>();
-  const connectorFeed = useGetConnectorsFeed();
+  const connectorsFeed = useGetConnectorsFeed();
   const integrationsFeed = useGetIntegrationsFeed();
   const { userData, getTenantId } = useAuthContext();
   const [isMounted, setIsMounted] = useState(false);
@@ -452,13 +452,19 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       appendJsxToNav([
         {
           id: 'resources',
-          jsx: <Resources integrationsFeed={integrationsFeed.data} integrationData={integrationData?.data} />,
+          jsx: (
+            <Resources
+              integrationsFeed={integrationsFeed.data}
+              connectorsFeed={connectorsFeed.data}
+              integrationData={integrationData?.data}
+            />
+          ),
         },
       ]);
     } else {
       createLoader();
     }
-  }, [isMounted, isLoading, createLoader, removeLoader, integrationsFeed, integrationData]);
+  }, [isMounted, isLoading, createLoader, removeLoader, integrationsFeed, connectorsFeed, integrationData]);
 
   const handleFork = () => {
     trackEventMemoized(
@@ -580,11 +586,11 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const assumeHasConnectors = !isMounted || !!window.editor?.specification.data.components.length;
 
   let missingConnectorNames: string[] = [];
-  if (connectorFeed.data && integrationData) {
+  if (connectorsFeed.data && integrationData) {
     const connectors =
       missingIdentities || integrationData.data.data.components.filter((c) => c.entityType === 'connector');
     missingConnectorNames = connectors
-      .map((c) => connectorFeed.data.find((c1) => c1.configuration.components?.[0].provider === c.provider)?.name)
+      .map((c) => connectorsFeed.data.find((c1) => c1.configuration.components?.[0].provider === c.provider)?.name)
       .filter((name) => !!name) as string[];
   }
 
