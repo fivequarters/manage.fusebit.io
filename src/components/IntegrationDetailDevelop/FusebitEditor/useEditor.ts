@@ -82,6 +82,8 @@ const useEditor = (
       };
 
       if (e.key === LOCALSTORAGE_SESSION_KEY && !hasSessionChanged.current) {
+        resetIntegrationConfig(id, tenantId);
+
         runFirstTest();
       }
     };
@@ -112,7 +114,6 @@ const useEditor = (
   const handleLogin = () => {
     const url = getIntegrationConfig(id, tenantId).session?.url;
     window.open(url);
-    resetIntegrationConfig(id, tenantId);
   };
 
   const handleRun = async () => {

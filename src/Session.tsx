@@ -6,7 +6,11 @@ interface Props {
 
 function Session({ session }: Props) {
   useEffect(() => {
-    localStorage.setItem('session', session);
+    const error = new URLSearchParams(window.location.search).get('error');
+
+    if (!error) {
+      localStorage.setItem('session', session);
+    }
 
     window.close();
   }, [session]);
