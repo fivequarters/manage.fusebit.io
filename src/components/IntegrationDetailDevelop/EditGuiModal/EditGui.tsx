@@ -42,7 +42,6 @@ import MobileDrawer from '../MobileDrawer';
 import useEditorEvents from '../FusebitEditor/useEditorEvents';
 import { BUILDING_TEXT, BUILD_COMPLETED_TEXT } from '../FusebitEditor/constants';
 import useProcessing from '../hooks/useProcessing';
-import useTabs from '../hooks/useTabs';
 import { EditGuiSampleApp } from './EditGuiSampleApp';
 import Tree from './Tree';
 import { EditorEvents } from '~/enums/editor';
@@ -358,8 +357,6 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     events: [EditorEvents.BuildStarted, EditorEvents.BuildFinished, EditorEvents.BuildError],
   });
 
-  const { addTab, tabsElement } = useTabs();
-
   useEffect(() => {
     if (errorBuild) {
       createError({ message: 'The build failed' });
@@ -444,20 +441,10 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
 
     if (isMounted && !isLoading) {
       removeLoader();
-      addTab(window.editor.selectedFileName);
       const items = document.getElementsByClassName('fusebit-nav-file');
-      const editor = document.querySelector('.fusebit-editor-container');
       const lastItem = items?.[items.length - 1];
       if (!document.getElementById('addNewItem')) {
         createAddNewItemElement(lastItem);
-      }
-
-      if (editor) {
-        document.getElementById('tabs')?.remove();
-        const div = document.createElement('div');
-        div.setAttribute('id', 'tabs');
-        editor.appendChild(div);
-        ReactDOM.render(tabsElement, document.getElementById('tabs'));
       }
 
       const div = (
@@ -474,7 +461,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     } else {
       createLoader();
     }
-  }, [isMounted, isLoading, createLoader, removeLoader, addTab, tabsElement]);
+  }, [isMounted, isLoading, createLoader, removeLoader]);
 
   const handleFork = () => {
     trackEventMemoized(
