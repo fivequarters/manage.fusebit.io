@@ -50,7 +50,7 @@ const StyledIcon = styled.img`
 `;
 
 const DropdownIcon = styled.img<{ active: boolean }>`
-  transform: ${(props) => (props.active ? 'rotate(180deg)' : 'rotate(0)')};
+  transform: ${(props) => (props.active ? 'rotate(0)' : 'rotate(180deg)')};
   margin-left: auto;
   transition: all 0.25s linear;
 `;

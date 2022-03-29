@@ -37,6 +37,7 @@ import { useInvalidateIntegration } from '@hooks/useInvalidateIntegration';
 import { CodeOutlined } from '@material-ui/icons';
 import { useError } from '@hooks/useError';
 import { useCopy } from '@hooks/useCopy';
+import { useGetIntegrationsFeed } from '@hooks/useGetIntegrationsFeed';
 import { getIntegrationConfig } from '@utils/localStorage';
 import MobileDrawer from '../MobileDrawer';
 import useEditorEvents from '../FusebitEditor/useEditorEvents';
@@ -321,6 +322,7 @@ const addNewIcon = `
 const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationId, isLoading }, ref) => {
   const { id } = useParams<{ id: string }>();
   const connectorFeed = useGetConnectorsFeed();
+  const integrationsFeed = useGetIntegrationsFeed();
   const { userData, getTenantId } = useAuthContext();
   const [isMounted, setIsMounted] = useState(false);
   const [configureRunnerActive, setConfigureRunnerActive] = useState(false);
@@ -447,11 +449,16 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
         createAddNewItemElement(lastItem);
       }
 
-      appendJsxToNav([{ id: 'resources', jsx: <Resources /> }]);
+      appendJsxToNav([
+        {
+          id: 'resources',
+          jsx: <Resources integrationsFeed={integrationsFeed.data} integrationData={integrationData?.data} />,
+        },
+      ]);
     } else {
       createLoader();
     }
-  }, [isMounted, isLoading, createLoader, removeLoader]);
+  }, [isMounted, isLoading, createLoader, removeLoader, integrationsFeed, integrationData]);
 
   const handleFork = () => {
     trackEventMemoized(
