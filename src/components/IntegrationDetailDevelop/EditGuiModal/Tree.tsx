@@ -1,7 +1,9 @@
+import { Box } from '@material-ui/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { animated, useSpring } from 'react-spring';
 import useMeasure from 'react-use-measure';
 import styled from 'styled-components';
+import arrow from '@assets/arrow-up-editor.svg';
 
 function usePrevious<T>(value: T) {
   const ref = useRef<T>();
@@ -24,24 +26,43 @@ const Frame = styled.div`
   fill: #24292e;
 `;
 
-export const Title = styled.h3`
-  position: relative;
-  vertical-align: middle;
+const TitleWrapper = styled(Box)<{ enableCursorPointer: boolean }>`
+  cursor: ${(props) => props.enableCursorPointer && 'pointer'};
 `;
 
-export const Content = animated(styled.div`
+const Title = styled.div`
+  font-family: 'Poppins';
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--black);
+  cursor: pointer;
+`;
+
+const Content = animated(styled.div`
   will-change: transform, opacity, height;
-  margin-left: 6px;
-  padding: 0px 0px 0px 14px;
   overflow: hidden;
+  margin-top: 16px;
 `);
+
+const StyledIcon = styled.img`
+  margin-right: 10px;
+`;
+
+const DropdownIcon = styled.img<{ active: boolean }>`
+  transform: ${(props) => (props.active ? 'rotate(180deg)' : 'rotate(0)')};
+  margin-left: auto;
+  transition: all 0.25s linear;
+`;
 
 const Tree = React.memo<
   React.HTMLAttributes<HTMLDivElement> & {
     defaultOpen?: boolean;
     name: string | JSX.Element;
+    icon?: string;
+    enableDropdownArrow?: boolean;
   }
->(({ children, name, style, defaultOpen = false }) => {
+>(({ children, name, icon, enableDropdownArrow, style, defaultOpen = false }) => {
   const [isOpen, setOpen] = useState(defaultOpen);
   const previous = usePrevious(isOpen);
   const [ref, { height: viewHeight }] = useMeasure();
@@ -56,9 +77,16 @@ const Tree = React.memo<
 
   return (
     <Frame>
-      <Title style={style} onClick={() => setOpen(!isOpen)}>
-        {name}
-      </Title>
+      <TitleWrapper
+        display="flex"
+        alignItems="center"
+        enableCursorPointer={!!enableDropdownArrow}
+        onClick={() => setOpen(!isOpen)}
+      >
+        {icon && <StyledIcon src={icon} alt="icon" />}
+        <Title style={style}>{name}</Title>
+        {enableDropdownArrow && <DropdownIcon src={arrow} alt="dropdown arrow" active={isOpen} />}
+      </TitleWrapper>
       <Content
         style={{
           opacity,

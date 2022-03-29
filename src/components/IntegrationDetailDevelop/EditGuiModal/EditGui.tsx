@@ -43,7 +43,7 @@ import useEditorEvents from '../FusebitEditor/useEditorEvents';
 import { BUILDING_TEXT, BUILD_COMPLETED_TEXT } from '../FusebitEditor/constants';
 import useProcessing from '../hooks/useProcessing';
 import { EditGuiSampleApp } from './EditGuiSampleApp';
-import Tree from './Tree';
+import Resources from './Resources';
 import { EditorEvents } from '~/enums/editor';
 
 const StyledEditorContainer = styled.div`
@@ -162,7 +162,7 @@ const StyledEditorContainer = styled.div`
       }
 
       &-icon {
-        margin-right: 18px;
+        margin-right: 10px;
 
         > svg {
           width: 16px;
@@ -416,7 +416,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       };
 
       const p = document.createElement('p');
-      p.setAttribute('style', 'margin: 0; margin-left: 32px;');
+      p.setAttribute('style', 'margin: 0; margin-left: 25px;');
       p.innerText = 'New File';
       addNew.appendChild(p);
 
@@ -447,17 +447,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
         createAddNewItemElement(lastItem);
       }
 
-      const div = (
-        <Tree name="Config">
-          <Tree name="page 1" />
-          <Tree name="page 2" />
-          <Tree name="more children">
-            <Tree name="asd" />
-            <Tree name="asasdad" />
-          </Tree>
-        </Tree>
-      );
-      appendJsxToNav([{ id: 'config', jsx: div }]);
+      appendJsxToNav([{ id: 'resources', jsx: <Resources /> }]);
     } else {
       createLoader();
     }
