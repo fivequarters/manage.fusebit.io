@@ -470,7 +470,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       appendJsxToNav([
         {
           id: 'tools',
-          jsx: <Tools />,
+          jsx: <Tools integrationData={integrationData?.data} />,
         },
         {
           id: 'resources',
