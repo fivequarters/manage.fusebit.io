@@ -67,6 +67,7 @@ export interface ProcessedSnippet extends Snippet {
 const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrationData }) => {
   const [integrationGuideUrl, setIntegrationGuideUrl] = useState('');
   const [snippets, setSnippets] = useState<ProcessedSnippet[]>([]);
+  const [SdkDocs, setSdkDocs] = useState<{ url?: string; name?: string }[]>([]);
 
   useEffect(() => {
     if (integrationsFeed && integrationData && connectorsFeed) {
@@ -74,11 +75,20 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
         (integration) => integration.id === integrationData.tags['fusebit.feedId']
       );
 
+      // The following code loops trough the connectors connected to this integration
+      // and sets the snippets and the SDK docs for each of the connectors
       const unprocessedSnippets = integrationData.data.components.map((component) => {
         const matchingConnectorFeed = connectorsFeed.find((item) => {
           return item?.configuration?.components?.some(
             (feedComponent) => feedComponent.provider === component.provider
           );
+        });
+
+        setSdkDocs((prev) => {
+          return [
+            ...prev,
+            { url: matchingConnectorFeed?.resources.connectorSDKDocUrl, name: matchingConnectorFeed?.name },
+          ];
         });
 
         return matchingConnectorFeed?.snippets?.map((snippet) => {
@@ -95,7 +105,7 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
       setSnippets(processedSnippets);
       setIntegrationGuideUrl(integrationFeed?.resources?.configureAppDocUrl || '');
     }
-  }, [integrationData, integrationsFeed, connectorsFeed]);
+  }, [integrationData, integrationsFeed, connectorsFeed, setSdkDocs]);
 
   return (
     <div>
@@ -103,6 +113,13 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
       <div className="fusebit-nav-category">Resources</div>
       <Tree name="Documentation" icon={books} enableDropdownArrow>
         <Box display="flex" flexDirection="column">
+          {SdkDocs.map((connector) => {
+            return (
+              <StyledLink key={connector?.name} href={connector?.url} target="_blank" rel="noreferrer">
+                {connector?.name} SDK
+              </StyledLink>
+            );
+          })}
           <StyledLink
             href="https://developer.fusebit.io/reference/fusebit-int-framework-integration"
             target="_blank"

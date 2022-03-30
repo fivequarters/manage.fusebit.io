@@ -56,6 +56,7 @@ export interface Feed {
   };
   resources: {
     configureAppDocUrl?: string;
+    connectorSDKDocUrl?: string;
     sampleConfig?: {
       isEnabled?: boolean;
       isGetEnabled?: boolean;
