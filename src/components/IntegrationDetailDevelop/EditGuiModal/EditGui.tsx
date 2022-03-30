@@ -12,7 +12,6 @@ import { useGetIntegrationFromCache } from '@hooks/useGetIntegrationFromCache';
 import useSnippets from '@hooks/useSnippets';
 import settings from '@assets/settings.svg';
 import settingsPrimary from '@assets/settings-primary.svg';
-import question from '@assets/question.svg';
 import logo from '@assets/logo.svg';
 import ConfigureRunnerModal from '@components/IntegrationDetailDevelop/ConfigureRunnerModal';
 import AddSnippetToIntegrationModal from '@components/IntegrationDetailDevelop/AddSnippetToIntegrationModal';
@@ -38,12 +37,12 @@ import { CodeOutlined } from '@material-ui/icons';
 import { useError } from '@hooks/useError';
 import { useCopy } from '@hooks/useCopy';
 import { useGetIntegrationsFeed } from '@hooks/useGetIntegrationsFeed';
+import useSampleApp from '@hooks/useSampleApp';
 import { getIntegrationConfig } from '@utils/localStorage';
 import MobileDrawer from '../MobileDrawer';
 import useEditorEvents from '../FusebitEditor/useEditorEvents';
 import { BUILDING_TEXT, BUILD_COMPLETED_TEXT } from '../FusebitEditor/constants';
 import useProcessing from '../hooks/useProcessing';
-import { EditGuiSampleApp } from './EditGuiSampleApp';
 import Resources from './Resources';
 import Tools from './Tools';
 import { EditorEvents } from '~/enums/editor';
@@ -242,37 +241,11 @@ const StyledCloseHeader = styled.div`
   }
 `;
 
-const StyledActionsHelpWrapper = styled.div`
-  position: absolute;
-  right: 94px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-`;
-
 const StyledForkAndEditWrapper = styled.div`
   position: absolute;
   right: 48px;
   top: 50%;
   transform: translateY(-50%);
-`;
-
-const StyledActionsHelpLink = styled.a`
-  font-size: 14px;
-  line-height: 20px;
-  color: var(--black);
-  text-decoration: underline;
-  margin-right: 10px;
-`;
-
-const StyledActionsHelpImage = styled.img`
-  height: 16px;
-  width: 16px;
-
-  &:hover {
-    cursor: pointer;
-  }
 `;
 
 const StyledFusebitEditorContainer = styled(Box)`
@@ -363,6 +336,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const { createError } = useError();
   const tenantId = getTenantId();
   const { handleCopy } = useCopy();
+  const { url: sampleAppUrl } = useSampleApp();
 
   const { isSaving, errorBuild, setErrorBuild } = useEditorEvents({
     isMounted,
@@ -470,7 +444,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       appendJsxToNav([
         {
           id: 'tools',
-          jsx: <Tools integrationData={integrationData?.data} />,
+          jsx: <Tools integrationData={integrationData?.data} sampleAppUrl={sampleAppUrl} />,
         },
         {
           id: 'resources',
@@ -486,7 +460,16 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     } else {
       createLoader();
     }
-  }, [isMounted, isLoading, createLoader, removeLoader, integrationsFeed, connectorsFeed, integrationData]);
+  }, [
+    isMounted,
+    isLoading,
+    createLoader,
+    removeLoader,
+    integrationsFeed,
+    connectorsFeed,
+    integrationData,
+    sampleAppUrl,
+  ]);
 
   const handleFork = () => {
     trackEventMemoized(
@@ -748,21 +731,6 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
                   Snippets
                 </Button>
                 <StyledTitle>{integrationId}</StyledTitle>
-                <StyledActionsHelpWrapper>
-                  <EditGuiSampleApp />
-                  <StyledActionsHelpLink
-                    target="_blank"
-                    href="https://developer.fusebit.io/docs/developing-locally"
-                    onClick={() => {
-                      trackEventMemoized('Docs Developing Locally Link Clicked', 'Web Editor', {
-                        Integration: integrationData?.data?.tags['fusebit.feedId'],
-                      });
-                    }}
-                  >
-                    Edit locally
-                  </StyledActionsHelpLink>
-                  <StyledActionsHelpImage src={question} alt="question" height="16" width="16" />
-                </StyledActionsHelpWrapper>
                 <StyledCloseWrapper onClick={handleClose}>
                   <CloseIcon fontSize="small" />
                 </StyledCloseWrapper>
