@@ -136,6 +136,8 @@ const StyledEditorContainer = styled.div`
       }
 
       &-category {
+        display: flex;
+        align-items: center;
         font-family: 'Poppins';
         font-size: 16px;
         line-height: 18px;

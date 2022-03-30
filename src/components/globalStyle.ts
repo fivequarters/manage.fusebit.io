@@ -233,6 +233,7 @@ export const editorNavTextStyles = css`
   font-size: 14px;
   line-height: 20px;
   font-weight: inherit;
+  color: var(--black);
 `;
 
 export const StyleEditorNavLink = styled.a`

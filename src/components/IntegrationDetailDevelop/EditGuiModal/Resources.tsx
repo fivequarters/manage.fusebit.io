@@ -26,7 +26,7 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
   const [SdkDocs, setSdkDocs] = useState<{ url?: string; name?: string }[]>([]);
 
   useEffect(() => {
-    if (integrationsFeed && integrationData && connectorsFeed) {
+    if (integrationsFeed && integrationData && connectorsFeed && SdkDocs.length === 0) {
       const integrationFeed = integrationsFeed.find(
         (integration) => integration.id === integrationData.tags['fusebit.feedId']
       );
@@ -62,7 +62,7 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
       setSnippets(processedSnippets);
       setIntegrationGuideUrl(integrationFeed?.resources?.configureAppDocUrl || '');
     }
-  }, [integrationData, integrationsFeed, connectorsFeed, setSdkDocs]);
+  }, [integrationData, integrationsFeed, connectorsFeed, setSdkDocs, SdkDocs]);
 
   return (
     <CustomNavBase title="Resources">
