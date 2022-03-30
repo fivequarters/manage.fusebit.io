@@ -8,6 +8,7 @@ import { Integration } from '@interfaces/integration';
 import { Feed, Snippet } from '@interfaces/feed';
 import { urlOrSvgToImage } from '@utils/utils';
 import Tree from './Tree';
+import CustomNavBase from './CustomNavBase';
 
 const textStyles = css`
   font-family: 'Poppins';
@@ -76,8 +77,8 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
       );
 
       // The following code loops trough the connectors connected to this integration
-      // returns an array that contains an array of snippet objects for each connector
-      // and sets the SDK docs for each connector
+      // returns an array that contains an array of snippet objects and sets the SDK
+      // docs for each connector
       const unprocessedSnippets = integrationData.data.components.map((component) => {
         const matchingConnectorFeed = connectorsFeed.find((item) => {
           return item?.configuration?.components?.some(
@@ -109,9 +110,7 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
   }, [integrationData, integrationsFeed, connectorsFeed, setSdkDocs]);
 
   return (
-    <div>
-      <div>&nbsp;</div>
-      <div className="fusebit-nav-category">Resources</div>
+    <CustomNavBase title="Resources">
       <Tree name="Documentation" icon={books} enableDropdownArrow>
         <Box display="flex" flexDirection="column">
           {SdkDocs.map((connector) => {
@@ -149,7 +148,7 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
           <StyledText>See All Snippets</StyledText>
         </StyledSnippetWrapper>
       </Tree>
-    </div>
+    </CustomNavBase>
   );
 };
 

@@ -45,6 +45,7 @@ import { BUILDING_TEXT, BUILD_COMPLETED_TEXT } from '../FusebitEditor/constants'
 import useProcessing from '../hooks/useProcessing';
 import { EditGuiSampleApp } from './EditGuiSampleApp';
 import Resources from './Resources';
+import Tools from './Tools';
 import { EditorEvents } from '~/enums/editor';
 
 const StyledEditorContainer = styled.div`
@@ -467,6 +468,10 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       }
 
       appendJsxToNav([
+        {
+          id: 'tools',
+          jsx: <Tools />,
+        },
         {
           id: 'resources',
           jsx: (
