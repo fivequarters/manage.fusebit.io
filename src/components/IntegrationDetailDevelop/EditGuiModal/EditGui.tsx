@@ -152,13 +152,20 @@ const StyledEditorContainer = styled.div`
         font-size: 14px;
         line-height: 20px;
         color: var(--black);
-        margin-bottom: 12px;
-        padding: 0;
-        transition: all 0.1s linear;
+        margin-bottom: 6px;
+        padding: 8px;
+        border-radius: 4px;
+        transition: all 0.25s linear, font-weight 0.1s linear;
 
         &:hover {
+          background: var(--secondary-color);
+          font-weight: 600;
+        }
+      }
+
+      &-new-file {
+        &:hover {
           background: none;
-          font-weight: 700;
         }
       }
 
@@ -178,8 +185,8 @@ const StyledEditorContainer = styled.div`
       }
 
       &-item-selected {
-        background: none;
-        font-weight: 700;
+        background: var(--secondary-color);
+        font-weight: 600;
       }
     }
 
@@ -301,13 +308,15 @@ const addNewStyles = `
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;
+  padding: 8px;
   color: #333333;
   cursor: pointer;
+  transition: all 0.25s linear, font-weight 0.1s linear;
 `;
 
 const addNewIcon = `
     position: absolute;
-    left: 0;
+    left: 8px;
     top: 50%;
     transform: translateY(-50%);
     height: 16px;
@@ -403,6 +412,14 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       const addNew = document.createElement('div');
       addNew.setAttribute('id', 'addNewItem');
       addNew.setAttribute('style', addNewStyles);
+      addNew.onmouseenter = () => {
+        addNew.style.background = 'rgba(215, 229, 255, 0.4)';
+        addNew.style.fontWeight = '600';
+      };
+      addNew.onmouseleave = () => {
+        addNew.style.background = 'none';
+        addNew.style.fontWeight = '500';
+      };
       addNew.onclick = (e) => {
         e.stopPropagation();
         const el = document.querySelector('.fusebit-code-action-add-btn');
