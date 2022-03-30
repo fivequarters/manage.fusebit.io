@@ -76,7 +76,8 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
       );
 
       // The following code loops trough the connectors connected to this integration
-      // and sets the snippets and the SDK docs for each of the connectors
+      // returns an array that contains an array of snippet objects for each connector
+      // and sets the SDK docs for each connector
       const unprocessedSnippets = integrationData.data.components.map((component) => {
         const matchingConnectorFeed = connectorsFeed.find((item) => {
           return item?.configuration?.components?.some(
