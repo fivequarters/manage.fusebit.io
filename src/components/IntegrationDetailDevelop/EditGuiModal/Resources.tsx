@@ -1,59 +1,14 @@
 import books from '@assets/library-books.svg';
 import code from '@assets/code.svg';
 import add from '@assets/add.svg';
-import styled, { css } from 'styled-components';
 import React, { useEffect, useState } from 'react';
 import { Box } from '@material-ui/core';
 import { Integration } from '@interfaces/integration';
 import { Feed, Snippet } from '@interfaces/feed';
-import { urlOrSvgToImage } from '@utils/utils';
+import * as SC from '@components/globalStyle';
 import Tree from './Tree';
 import CustomNavBase from './CustomNavBase';
-
-const textStyles = css`
-  font-family: 'Poppins';
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: inherit;
-`;
-
-const StyledLink = styled.a`
-  ${textStyles}
-  text-decoration: underline;
-  color: var(--black);
-  width: fit-content;
-  margin-bottom: 12px;
-`;
-
-const StyledSnippetWrapper = styled(Box)`
-  padding: 8px;
-  border-radius: 4px;
-  transition: all 0.25s linear;
-
-  &:hover {
-    background-color: var(--secondary-color);
-    cursor: pointer;
-
-    & > div {
-      font-weight: 600;
-    }
-  }
-`;
-
-const StyledText = styled.div`
-  ${textStyles}
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  transition: all 0.1s linear;
-`;
-
-const StyledIcon = styled.img`
-  height: 15px;
-  width: 15px;
-  object-fit: contain;
-  margin-right: 10px;
-`;
+import CustomNavItem from './CustomNavItem';
 
 interface Props {
   integrationsFeed: Feed[] | undefined;
@@ -115,38 +70,30 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
         <Box display="flex" flexDirection="column">
           {SdkDocs.map((connector) => {
             return (
-              <StyledLink key={connector?.name} href={connector?.url} target="_blank" rel="noreferrer">
+              <SC.StyleEditorNavLink key={connector?.name} href={connector?.url} target="_blank" rel="noreferrer">
                 {connector?.name} SDK
-              </StyledLink>
+              </SC.StyleEditorNavLink>
             );
           })}
-          <StyledLink
+          <SC.StyleEditorNavLink
             href="https://developer.fusebit.io/reference/fusebit-int-framework-integration"
             target="_blank"
             rel="noreferrer"
           >
             Fusebit SDK
-          </StyledLink>
+          </SC.StyleEditorNavLink>
           {integrationGuideUrl && (
-            <StyledLink href={integrationGuideUrl} target="_blank" rel="noreferrer">
+            <SC.StyleEditorNavLink href={integrationGuideUrl} target="_blank" rel="noreferrer">
               Integration Guide
-            </StyledLink>
+            </SC.StyleEditorNavLink>
           )}
         </Box>
       </Tree>
       <Tree name="Snippets" icon={code} enableDropdownArrow>
-        {snippets.map((snippet) => {
-          return (
-            <StyledSnippetWrapper display="flex" alignItems="center" mb="6px" key={snippet.id}>
-              <StyledIcon src={urlOrSvgToImage(snippet.icon)} />
-              <StyledText>{snippet.name}</StyledText>
-            </StyledSnippetWrapper>
-          );
-        })}
-        <StyledSnippetWrapper display="flex" alignItems="center" mb="6px">
-          <StyledIcon src={add} />
-          <StyledText>See All Snippets</StyledText>
-        </StyledSnippetWrapper>
+        {snippets.map((snippet) => (
+          <CustomNavItem key={snippet.id} icon={snippet.icon} name={snippet.name} />
+        ))}
+        <CustomNavItem icon={add} name="See All Snippets" />
       </Tree>
     </CustomNavBase>
   );

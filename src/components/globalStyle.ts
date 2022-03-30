@@ -227,3 +227,18 @@ export const StyledListItem = styled.li`
     margin-bottom: 24px;
   }
 `;
+
+export const editorNavTextStyles = css`
+  font-family: 'Poppins';
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: inherit;
+`;
+
+export const StyleEditorNavLink = styled.a`
+  ${editorNavTextStyles}
+  text-decoration: underline;
+  color: var(--black);
+  width: fit-content;
+  margin-bottom: 12px;
+`;
