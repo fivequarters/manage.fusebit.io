@@ -15,7 +15,7 @@ import question from '@assets/question.svg';
 import logo from '@assets/logo.svg';
 import ConfigureRunnerModal from '@components/IntegrationDetailDevelop/ConfigureRunnerModal';
 import AddSnippetToIntegrationModal from '@components/IntegrationDetailDevelop/AddSnippetToIntegrationModal';
-import { trackEventMemoized } from '@utils/analytics';
+import { trackEventMemoized, trackEventUnmemoized } from '@utils/analytics';
 import ConfirmationPrompt from '@components/common/ConfirmationPrompt';
 import { useTrackPage } from '@hooks/useTrackPage';
 import FusebitEditor from '@components/IntegrationDetailDevelop/FusebitEditor';
@@ -453,7 +453,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     if (dirtyState) {
       const context = window.editor;
       const status: SaveStatus = await context?._server.saveFunction(context);
-      trackEventMemoized('Save Button Clicked', 'Web Editor', {
+      trackEventUnmemoized('Save Button Clicked', 'Web Editor', {
         engagementType: 'Run Save',
       });
       if (status.status === 'completed') {
@@ -469,7 +469,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
 
   const handleSave = async () => {
     const context = window.editor;
-    trackEventMemoized('Save Button Clicked', 'Web Editor', {
+    trackEventUnmemoized('Save Button Clicked', 'Web Editor', {
       engagementType: 'Button Save',
     });
     await context?._server.saveFunction(context);
@@ -553,7 +553,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
     if ((navigator.userAgent.match('Mac') ? e.metaKey : e.ctrlKey) && e.key === 's' && dirtyState) {
       e.preventDefault();
-      trackEventMemoized('Save Button Clicked', 'Web Editor', {
+      trackEventUnmemoized('Save Button Clicked', 'Web Editor', {
         engagementType: 'Keyboard Save',
       });
     }
