@@ -230,7 +230,7 @@ const StyledCloseHeader = styled.div`
   width: 100%;
   height: ${HEADER_HEIGHT};
   z-index: 10;
-  padding: 32px 48px;
+  padding: 32px 20px;
   background-color: #eff5ff;
 
   h3 {
