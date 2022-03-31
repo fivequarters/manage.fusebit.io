@@ -1,7 +1,6 @@
 import books from '@assets/library-books.svg';
 import code from '@assets/code.svg';
 import add from '@assets/add.svg';
-import docsDefaultIcon from '@assets/docs-default.svg';
 import fusebitMarkIcon from '@assets/fusebit-mark.svg';
 import React, { useEffect, useState } from 'react';
 import { Box } from '@material-ui/core';
@@ -17,14 +16,20 @@ interface Props {
   integrationData: Integration | undefined;
 }
 
-export interface ProcessedSnippet extends Snippet {
+interface ProcessedSnippet extends Snippet {
   icon: string;
+}
+
+interface SdkDoc {
+  url?: string;
+  name?: string;
+  icon?: string;
 }
 
 const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrationData }) => {
   const [integrationGuideUrl, setIntegrationGuideUrl] = useState('');
   const [snippets, setSnippets] = useState<ProcessedSnippet[]>([]);
-  const [SdkDocs, setSdkDocs] = useState<{ url?: string; name?: string; icon?: string }[]>([]);
+  const [SdkDocs, setSdkDocs] = useState<SdkDoc[]>([]);
 
   useEffect(() => {
     if (integrationsFeed && integrationData && connectorsFeed && SdkDocs.length === 0) {
@@ -69,6 +74,19 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
     }
   }, [integrationData, integrationsFeed, connectorsFeed, setSdkDocs, SdkDocs]);
 
+  const compare = (a: SdkDoc, b: SdkDoc) => {
+    if (a.name && b.name) {
+      if (a.name < b.name) {
+        return -1;
+      }
+      if (a.name > b.name) {
+        return 1;
+      }
+    }
+
+    return 0;
+  };
+
   return (
     <CustomNavBase
       title="Resources"
@@ -76,18 +94,15 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
     >
       <Tree name="Documentation" icon={books} enableDropdownArrow>
         <Box display="flex" flexDirection="column">
-          {SdkDocs.map((connector) => {
-            return (
-              <CustomNavItem
-                key={connector?.name}
-                icon={connector.icon || ''}
-                name={connector.name || ''}
-                onClick={() => {
-                  window.open(connector.url, '_blank', 'noopener');
-                }}
-              />
-            );
-          })}
+          {integrationGuideUrl && (
+            <CustomNavItem
+              icon={fusebitMarkIcon}
+              name="Integration Guide"
+              onClick={() => {
+                window.open(integrationGuideUrl, '_blank', 'noopener');
+              }}
+            />
+          )}
           <CustomNavItem
             icon={fusebitMarkIcon}
             name="Fusebit SDK"
@@ -99,15 +114,18 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
               );
             }}
           />
-          {integrationGuideUrl && (
-            <CustomNavItem
-              icon={docsDefaultIcon}
-              name="Integration Guide"
-              onClick={() => {
-                window.open(integrationGuideUrl, '_blank', 'noopener');
-              }}
-            />
-          )}
+          {SdkDocs.sort((a, b) => compare(a, b)).map((connector) => {
+            return (
+              <CustomNavItem
+                key={connector?.name}
+                icon={connector.icon || ''}
+                name={connector.name || ''}
+                onClick={() => {
+                  window.open(connector.url, '_blank', 'noopener');
+                }}
+              />
+            );
+          })}
         </Box>
       </Tree>
       <Tree name="Snippets" icon={code} enableDropdownArrow>
