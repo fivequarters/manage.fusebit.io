@@ -452,7 +452,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
             return category.innerHTML.toLowerCase().includes(element.id.toLowerCase());
           });
           if (matchingCategory) {
-            matchingCategory?.appendChild(div);
+            matchingCategory.appendChild(div);
             ReactDOM.render(element.jsx, document.getElementById(element.id));
           }
         }

@@ -14,7 +14,7 @@ export const BASE_CATEGORY_TOOLTIPS = [
     id: 'settings',
     jsx: (
       <NavCategoryTooltip
-        title="Code"
+        title="Settings"
         description="Configuration logic, such as CRON scheduling, for your Integration."
       />
     ),
