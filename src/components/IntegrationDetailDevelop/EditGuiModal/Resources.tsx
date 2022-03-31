@@ -70,7 +70,10 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
   }, [integrationData, integrationsFeed, connectorsFeed, setSdkDocs, SdkDocs]);
 
   return (
-    <CustomNavBase title="Resources">
+    <CustomNavBase
+      title="Resources"
+      tooltipDescription="Resources to help you build your Fusebit Integration with target systems, more easily."
+    >
       <Tree name="Documentation" icon={books} enableDropdownArrow>
         <Box display="flex" flexDirection="column">
           {SdkDocs.map((connector) => {

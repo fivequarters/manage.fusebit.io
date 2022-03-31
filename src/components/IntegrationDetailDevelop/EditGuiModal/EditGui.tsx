@@ -45,6 +45,7 @@ import { BUILDING_TEXT, BUILD_COMPLETED_TEXT } from '../FusebitEditor/constants'
 import useProcessing from '../hooks/useProcessing';
 import Resources from './Resources';
 import Tools from './Tools';
+import { BASE_CATEGORY_TOOLTIPS } from './constants';
 import { EditorEvents } from '~/enums/editor';
 
 const StyledEditorContainer = styled.div`
@@ -423,14 +424,37 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       lastItem.parentNode?.insertBefore(addNew, lastItem.nextSibling);
     };
 
-    const appendJsxToNav = (elements: { id: string; jsx: ReactElement }[]) => {
+    const appendCustomCategories = (elements: { id: string; jsx: ReactElement }[]) => {
       const nav = document.querySelector('.fusebit-nav');
       elements.forEach((element) => {
         if (!document.getElementById(element.id)) {
           const div = document.createElement('div');
           div.setAttribute('id', element.id);
           nav?.appendChild(div);
-          ReactDOM.render(<div>{element.jsx}</div>, document.getElementById(element.id));
+          ReactDOM.render(element.jsx, document.getElementById(element.id));
+        }
+      });
+    };
+
+    const appendBaseCategoryTooltips = (
+      elements: {
+        id: string;
+        jsx: ReactElement;
+      }[]
+    ) => {
+      const categories = document.querySelectorAll('.fusebit-nav-category');
+      elements.forEach((element) => {
+        if (!document.getElementById(element.id)) {
+          const div = document.createElement('div');
+          div.setAttribute('id', element.id);
+          div.style.display = 'flex';
+          const matchingCategory = [...categories].find((category) => {
+            return category.innerHTML.toLowerCase().includes(element.id.toLowerCase());
+          });
+          if (matchingCategory) {
+            matchingCategory?.appendChild(div);
+            ReactDOM.render(element.jsx, document.getElementById(element.id));
+          }
         }
       });
     };
@@ -443,7 +467,8 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
         createAddNewItemElement(lastItem);
       }
 
-      appendJsxToNav([
+      appendBaseCategoryTooltips(BASE_CATEGORY_TOOLTIPS);
+      appendCustomCategories([
         {
           id: 'tools',
           jsx: <Tools integrationData={integrationData?.data} sampleAppUrl={sampleAppUrl} />,

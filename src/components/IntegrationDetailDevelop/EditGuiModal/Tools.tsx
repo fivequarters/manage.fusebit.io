@@ -35,7 +35,10 @@ const Tools: React.FC<Props> = ({ integrationData, sampleAppUrl }) => {
   };
 
   return (
-    <CustomNavBase title="Tools">
+    <CustomNavBase
+      title="Tools"
+      tooltipDescription="Tools to help you deploy your Fusebit Integration into your own app, much faster."
+    >
       <CustomNavItem icon={console} name="Edit Locally (CLI)" onClick={handleEditLocallyClick} />
       <CustomNavItem icon={play} name="Sample App" onClick={handleSampleAppClick} />
       <NoSampleAppModal open={noSampleAppOpen} onClose={() => setNoSampleAppOpen(false)} />

@@ -27,6 +27,7 @@ const CustomTooltip = withStyles(() => ({
     padding: '12px 16px',
     boxShadow: '0px 12px 32px rgba(52, 72, 123, 0.32)',
     borderRadius: '4px',
+    width: '220px',
   },
 }))(Tooltip);
 
