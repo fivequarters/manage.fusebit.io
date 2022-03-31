@@ -1,11 +1,12 @@
 import books from '@assets/library-books.svg';
 import code from '@assets/code.svg';
 import add from '@assets/add.svg';
+import docsDefaultIcon from '@assets/docs-default.svg';
+import fusebitMarkIcon from '@assets/fusebit-mark.svg';
 import React, { useEffect, useState } from 'react';
 import { Box } from '@material-ui/core';
 import { Integration } from '@interfaces/integration';
 import { Feed, Snippet } from '@interfaces/feed';
-import * as SC from '@components/globalStyle';
 import Tree from './Tree';
 import CustomNavBase from './CustomNavBase';
 import CustomNavItem from './CustomNavItem';
@@ -23,7 +24,7 @@ export interface ProcessedSnippet extends Snippet {
 const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrationData }) => {
   const [integrationGuideUrl, setIntegrationGuideUrl] = useState('');
   const [snippets, setSnippets] = useState<ProcessedSnippet[]>([]);
-  const [SdkDocs, setSdkDocs] = useState<{ url?: string; name?: string }[]>([]);
+  const [SdkDocs, setSdkDocs] = useState<{ url?: string; name?: string; icon?: string }[]>([]);
 
   useEffect(() => {
     if (integrationsFeed && integrationData && connectorsFeed && SdkDocs.length === 0) {
@@ -44,7 +45,11 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
         setSdkDocs((prev) => {
           return [
             ...prev,
-            { url: matchingConnectorFeed?.resources.connectorSDKDocUrl, name: matchingConnectorFeed?.name },
+            {
+              url: matchingConnectorFeed?.resources.connectorSDKDocUrl,
+              name: matchingConnectorFeed?.name,
+              icon: matchingConnectorFeed?.smallIcon,
+            },
           ];
         });
 
@@ -70,22 +75,35 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
         <Box display="flex" flexDirection="column">
           {SdkDocs.map((connector) => {
             return (
-              <SC.StyleEditorNavLink key={connector?.name} href={connector?.url} target="_blank" rel="noreferrer">
-                {connector?.name} SDK
-              </SC.StyleEditorNavLink>
+              <CustomNavItem
+                key={connector?.name}
+                icon={connector.icon || ''}
+                name={connector.name || ''}
+                onClick={() => {
+                  window.open(connector.url, '_blank', 'noopener');
+                }}
+              />
             );
           })}
-          <SC.StyleEditorNavLink
-            href="https://developer.fusebit.io/reference/fusebit-int-framework-integration"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Fusebit SDK
-          </SC.StyleEditorNavLink>
+          <CustomNavItem
+            icon={fusebitMarkIcon}
+            name="Fusebit SDK"
+            onClick={() => {
+              window.open(
+                'https://developer.fusebit.io/reference/fusebit-int-framework-integration',
+                '_blank',
+                'noopener'
+              );
+            }}
+          />
           {integrationGuideUrl && (
-            <SC.StyleEditorNavLink href={integrationGuideUrl} target="_blank" rel="noreferrer">
-              Integration Guide
-            </SC.StyleEditorNavLink>
+            <CustomNavItem
+              icon={docsDefaultIcon}
+              name="Integration Guide"
+              onClick={() => {
+                window.open(integrationGuideUrl, '_blank', 'noopener');
+              }}
+            />
           )}
         </Box>
       </Tree>

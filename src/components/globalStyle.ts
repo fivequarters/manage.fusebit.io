@@ -235,11 +235,3 @@ export const editorNavTextStyles = css`
   font-weight: inherit;
   color: var(--black);
 `;
-
-export const StyleEditorNavLink = styled.a`
-  ${editorNavTextStyles}
-  text-decoration: underline;
-  color: var(--black);
-  width: fit-content;
-  margin-bottom: 12px;
-`;
