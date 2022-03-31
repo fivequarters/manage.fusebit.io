@@ -1,5 +1,7 @@
 import NavCategoryTooltip from './NavCategoryTooltip';
 
+export const HEADER_HEIGHT = '80px';
+
 export const BASE_CATEGORY_TOOLTIPS = [
   {
     id: 'code',

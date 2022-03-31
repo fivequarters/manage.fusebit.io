@@ -12,7 +12,6 @@ import { useGetIntegrationFromCache } from '@hooks/useGetIntegrationFromCache';
 import useSnippets from '@hooks/useSnippets';
 import settings from '@assets/settings.svg';
 import settingsPrimary from '@assets/settings-primary.svg';
-import logo from '@assets/logo.svg';
 import ConfigureRunnerModal from '@components/IntegrationDetailDevelop/ConfigureRunnerModal';
 import AddSnippetToIntegrationModal from '@components/IntegrationDetailDevelop/AddSnippetToIntegrationModal';
 import { trackEventMemoized } from '@utils/analytics';
@@ -45,10 +44,14 @@ import { BUILDING_TEXT, BUILD_COMPLETED_TEXT } from '../FusebitEditor/constants'
 import useProcessing from '../hooks/useProcessing';
 import Resources from './Resources';
 import Tools from './Tools';
-import { BASE_CATEGORY_TOOLTIPS } from './constants';
+import { BASE_CATEGORY_TOOLTIPS, HEADER_HEIGHT } from './constants';
 import { EditorEvents } from '~/enums/editor';
 
 const StyledEditorContainer = styled.div`
+  .monaco-editor {
+    background-color: #ffffff;
+  }
+
   .fa {
     background-size: cover;
     background-repeat: no-repeat;
@@ -81,9 +84,9 @@ const StyledEditorContainer = styled.div`
 
   .fusebit-theme-light.fusebit-shell {
     position: relative;
-    padding: 0 48px;
-    padding-bottom: 60px;
-    height: calc(100vh - 96px);
+    padding: 0 20px;
+    padding-bottom: 20px;
+    height: calc(100vh - ${HEADER_HEIGHT});
     background-color: #eff5ff;
   }
 
@@ -102,13 +105,13 @@ const StyledEditorContainer = styled.div`
 
       &-container {
         height: 100vh;
-        transform: translateY(-96px);
+        transform: translateY(${HEADER_HEIGHT});
       }
     }
 
     .fusebit-editor-container {
       position: relative;
-      padding-top: 40px;
+      padding-top: 20px;
       background-color: #ffffff;
       border-radius: 4px;
     }
@@ -125,8 +128,8 @@ const StyledEditorContainer = styled.div`
 
     .fusebit-nav {
       &-container {
-        padding: 32px;
-        background-color: rgba(255, 255, 255, 0.5);
+        padding: 20px;
+        background-color: #f7faff;
         border-radius: 4px;
         width: 253px;
       }
@@ -225,7 +228,7 @@ const StyledCloseHeader = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  height: 96px;
+  height: ${HEADER_HEIGHT};
   z-index: 10;
   padding: 32px 48px;
   background-color: #eff5ff;
@@ -255,16 +258,11 @@ const StyledFusebitEditorContainer = styled(Box)`
   position: relative;
 `;
 
-const StyledFusebitEditorLogo = styled.img`
-  position: absolute;
-  bottom: 24px;
-  right: 48px;
-  height: 20px;
-  width: 80px;
-  object-fit: contain;
-`;
-
 const StyledTitle = styled.h3`
+  font-size: 16px;
+  line-height: 18px;
+  font-family: 'Poppins';
+  color: var(--black);
   max-width: 600px;
   overflow: hidden;
   white-space: nowrap;
@@ -757,7 +755,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
                 >
                   Snippets
                 </Button>
-                <StyledTitle>{integrationId}</StyledTitle>
+                <StyledTitle>Edit {integrationId}</StyledTitle>
                 <StyledCloseWrapper onClick={handleClose}>
                   <CloseIcon fontSize="small" />
                 </StyledCloseWrapper>
@@ -822,11 +820,6 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
               setIsMounted(true);
             }}
           />
-          {isMounted && !matchesMobile && (
-            <>
-              <StyledFusebitEditorLogo src={logo} alt="fusebit logo" height="20" width="80" />
-            </>
-          )}
           {isMounted && matchesMobile && (
             <MobileDrawer
               processing={processing}
