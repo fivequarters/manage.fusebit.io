@@ -26,14 +26,14 @@ const useSnippetsModal = ({
   isSaving,
   isMounted,
 }: Props) => {
-  const [addSnippetModalOpen, setAddSnippetModalOpen] = useState(false);
+  const [snippetsModalOpen, setSnippetsModalOpen] = useState(false);
 
-  const handleAddSnippet = async () => {
+  const onSnippetsModalOpen = async () => {
     trackEventUnmemoized('Snippets Button Clicked', 'Web Editor');
-    setAddSnippetModalOpen(true);
+    setSnippetsModalOpen(true);
   };
 
-  const handleAddSnippetClose = (
+  const onSnippetsModalClose = (
     newConnector?: ConnectorEntity,
     existingConnector?: InnerConnector,
     feed?: Feed,
@@ -93,13 +93,13 @@ const useSnippetsModal = ({
       }
       addSnippetCode();
     }
-    setAddSnippetModalOpen(false);
+    setSnippetsModalOpen(false);
   };
 
   return {
-    addSnippetModalOpen,
-    handleAddSnippet,
-    handleAddSnippetClose,
+    snippetsModalOpen,
+    onSnippetsModalOpen,
+    onSnippetsModalClose,
     disabled: isSaving || !isMounted,
   };
 };

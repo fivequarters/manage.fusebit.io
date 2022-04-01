@@ -339,7 +339,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     events: [EditorEvents.BuildStarted, EditorEvents.BuildFinished, EditorEvents.BuildError],
   });
 
-  const { addSnippetModalOpen, disabled: snippetsDisabled, handleAddSnippet, handleAddSnippetClose } = useSnippetsModal(
+  const { snippetsModalOpen, disabled: snippetsDisabled, onSnippetsModalOpen, onSnippetsModalClose } = useSnippetsModal(
     {
       formatSnippet,
       getProviderVersion,
@@ -638,8 +638,8 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       />
       <ConfigureRunnerModal open={configureRunnerActive} setOpen={setConfigureRunnerActive} />
       <AddSnippetToIntegrationModal
-        open={addSnippetModalOpen}
-        onClose={handleAddSnippetClose}
+        open={snippetsModalOpen}
+        onClose={onSnippetsModalClose}
         integrationData={integrationData}
       />
       <StyledEditorContainer ref={ref}>
@@ -685,7 +685,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
                 <Button
                   style={{ marginRight: '16px' }}
                   startIcon={<CodeOutlined />}
-                  onClick={handleAddSnippet}
+                  onClick={onSnippetsModalOpen}
                   size="small"
                   variant={assumeHasConnectors ? 'outlined' : 'contained'}
                   color="primary"
