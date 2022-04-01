@@ -38,6 +38,7 @@ const AddSnippetToIntegrationModal = ({ open, onClose, integrationData }: Props)
       if (!existingConnector) {
         createLoader();
         newConnector = (await createConnector(feed, data)) as ConnectorEntity;
+        console.log('new connector:', newConnector);
       }
       onCloseCalled = true;
       onClose(newConnector, existingConnector, feed, snippet);

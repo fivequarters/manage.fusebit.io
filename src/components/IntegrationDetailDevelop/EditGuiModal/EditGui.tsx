@@ -1,5 +1,4 @@
-import { Snippet, Feed, ConnectorEntity, EntityComponent } from '@interfaces/feed';
-import { InnerConnector, IntegrationData } from '@interfaces/integration';
+import { InnerConnector } from '@interfaces/integration';
 import React, { useState, useEffect, useMemo, ReactElement } from 'react';
 import ReactDOM from 'react-dom';
 import { Box, Button, ButtonGroup, IconButton, useMediaQuery, useTheme } from '@material-ui/core';
@@ -42,16 +41,13 @@ import MobileDrawer from '../MobileDrawer';
 import useEditorEvents from '../FusebitEditor/useEditorEvents';
 import { BUILDING_TEXT, BUILD_COMPLETED_TEXT } from '../FusebitEditor/constants';
 import useProcessing from '../hooks/useProcessing';
+import useSnippetsModal from './useSnippetsModal';
 import Resources from './Resources';
 import Tools from './Tools';
 import { BASE_CATEGORY_TOOLTIPS, HEADER_HEIGHT } from './constants';
 import { EditorEvents } from '~/enums/editor';
 
 const StyledEditorContainer = styled.div`
-  .monaco-editor {
-    background-color: #ffffff;
-  }
-
   .fa {
     background-size: cover;
     background-repeat: no-repeat;
@@ -105,7 +101,7 @@ const StyledEditorContainer = styled.div`
 
       &-container {
         height: 100vh;
-        transform: translateY(${HEADER_HEIGHT});
+        transform: translateY(${-HEADER_HEIGHT.split('px')[0]}px);
       }
     }
 
@@ -315,7 +311,6 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const [loginFlowModalOpen, setLoginFlowModalOpen] = useState(false);
   const theme = useTheme();
   const matchesMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const [addSnippetModalOpen, setAddSnippetModalOpen] = useState(false);
   const [missingIdentities, setMissingIdentities] = useState<InnerConnector[] | undefined>(undefined);
   const integrationData = useGetIntegrationFromCache();
   const { handleRun, handleLogin, isFindingInstall, setNeedsInitialization, setRunPending, isRunning } = useEditor({
@@ -343,6 +338,17 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     isMounted,
     events: [EditorEvents.BuildStarted, EditorEvents.BuildFinished, EditorEvents.BuildError],
   });
+
+  const { addSnippetModalOpen, disabled: snippetsDisabled, handleAddSnippet, handleAddSnippetClose } = useSnippetsModal(
+    {
+      formatSnippet,
+      getProviderVersion,
+      integrationId,
+      isMounted,
+      isSaving,
+      setDirtyState,
+    }
+  );
 
   useEffect(() => {
     if (errorBuild) {
@@ -533,74 +539,6 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     setNeedsInitialization(true);
   };
 
-  const handleAddSnippet = async () => {
-    trackEventMemoized('Snippets Button Clicked', 'Web Editor');
-    setAddSnippetModalOpen(true);
-  };
-
-  const handleAddSnippetClose = (
-    newConnector?: ConnectorEntity,
-    existingConnector?: InnerConnector,
-    feed?: Feed,
-    snippet?: Snippet
-  ) => {
-    if (window.editor && feed && snippet) {
-      trackEventMemoized('Add Button Clicked', 'Add Snippet', {
-        snippet: `${feed.id}-${snippet.id}`,
-      });
-
-      const addConnectorToConfig = (connector: ConnectorEntity) => {
-        const connectorTemplate = (feed.configuration.components as EntityComponent[])[0];
-        // Add newly created connector to integration's configuration
-        const configuration = JSON.parse(window.editor.getConfigurationSettings()) as IntegrationData;
-        configuration.components.push({
-          ...connectorTemplate,
-          name: connector.id,
-          entityId: connector.id,
-        });
-        window.editor.setSettingsConfiguration(JSON.stringify(configuration));
-
-        // Add provider dependency to package.json of the integration
-        const providerVersion = getProviderVersion(feed);
-        window.editor.selectFile('package.json');
-        const content = JSON.parse(window.editor.getSelectedFileContent());
-        content.dependencies[connectorTemplate.provider] = providerVersion;
-        window.editor.setSelectedFileContent(JSON.stringify(content, null, 2));
-      };
-
-      const addSnippetCode = () => {
-        // Add snippets at the end of integration.js
-        window.editor.selectFile('integration.js');
-        const newContent = formatSnippet(
-          feed,
-          snippet,
-          integrationId,
-          newConnector?.id || (existingConnector?.entityId as string),
-          newConnector?.id || (existingConnector?.name as string)
-        );
-        const content = window.editor.getSelectedFileContent();
-        window.editor.setSelectedFileContent(content + newContent);
-
-        // Make sure the editor reloads the updated integration.js
-        window.editor.selectedFileName = '';
-        window.editor.selectFile('integration.js');
-
-        // Scroll to the beginning of the snippet within integration.js in the editor
-        const lineCountInNewContent = (newContent.match(/\n/g) || []).length;
-        window.editor._monaco.revealLineNearTop(
-          window.editor._monaco.getModel().getLineCount() - lineCountInNewContent
-        );
-        setDirtyState(true);
-      };
-
-      if (newConnector) {
-        addConnectorToConfig(newConnector);
-      }
-      addSnippetCode();
-    }
-    setAddSnippetModalOpen(false);
-  };
-
   const handleKeyUp = () => {
     setDirtyState(window.editor?.dirtyState);
   };
@@ -699,12 +637,12 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
         hideCancelButton
       />
       <ConfigureRunnerModal open={configureRunnerActive} setOpen={setConfigureRunnerActive} />
+      <AddSnippetToIntegrationModal
+        open={addSnippetModalOpen}
+        onClose={handleAddSnippetClose}
+        integrationData={integrationData}
+      />
       <StyledEditorContainer ref={ref}>
-        <AddSnippetToIntegrationModal
-          open={addSnippetModalOpen}
-          onClose={handleAddSnippetClose}
-          integrationData={integrationData}
-        />
         {isMounted && !matchesMobile && (
           <StyledCloseHeader>
             {!forkEditFeedUrl && (
@@ -751,7 +689,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
                   size="small"
                   variant={assumeHasConnectors ? 'outlined' : 'contained'}
                   color="primary"
-                  disabled={isSaving || !isMounted}
+                  disabled={snippetsDisabled}
                 >
                   Snippets
                 </Button>

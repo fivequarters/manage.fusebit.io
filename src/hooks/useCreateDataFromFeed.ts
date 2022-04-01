@@ -74,7 +74,7 @@ export const useCreateDataFromFeed = () => {
   const createConnector = async (activeFeed: Feed, data: Data, skipTracking?: boolean) => {
     try {
       const { feed: parsedFeed } = await replaceMustache(data, activeFeed);
-
+      console.log('mustache:', parsedFeed);
       const commonTags = getCommonTags(activeFeed, 'connector');
 
       if (!skipTracking) {
