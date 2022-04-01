@@ -110,7 +110,7 @@ export const useReplaceMustache = () => {
           });
         }
         feed.description = Mustache.render(feed.description, { global }, {}, customTags);
-        console.log('mustacheParsedFeed:', parsedFeed);
+
         return { feed: parsedFeed, data };
       } finally {
         Mustache.escape = oldMustacheEscape;

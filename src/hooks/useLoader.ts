@@ -67,7 +67,6 @@ export const useLoader = () => {
                     },
                   },
                 };
-                console.log('waiting:', errPayload);
 
                 if (response.data.state === OperationState.active) {
                   if (response.data.operationState.status === OperationStatus.success) {
