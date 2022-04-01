@@ -31,7 +31,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import PlayArrowOutlined from '@material-ui/icons/PlayArrowOutlined';
 import SaveOutlined from '@material-ui/icons/SaveOutlined';
 import { useInvalidateIntegration } from '@hooks/useInvalidateIntegration';
-import { CodeOutlined } from '@material-ui/icons';
 import { useError } from '@hooks/useError';
 import { useCopy } from '@hooks/useCopy';
 import { useGetIntegrationsFeed } from '@hooks/useGetIntegrationsFeed';
@@ -339,16 +338,12 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     events: [EditorEvents.BuildStarted, EditorEvents.BuildFinished, EditorEvents.BuildError],
   });
 
-  const { snippetsModalOpen, disabled: snippetsDisabled, onSnippetsModalOpen, onSnippetsModalClose } = useSnippetsModal(
-    {
-      formatSnippet,
-      getProviderVersion,
-      integrationId,
-      isMounted,
-      isSaving,
-      setDirtyState,
-    }
-  );
+  const { snippetsModalOpen, onSnippetsModalOpen, onSnippetsModalClose } = useSnippetsModal({
+    formatSnippet,
+    getProviderVersion,
+    integrationId,
+    setDirtyState,
+  });
 
   useEffect(() => {
     if (errorBuild) {
@@ -484,6 +479,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
               integrationsFeed={integrationsFeed.data}
               connectorsFeed={connectorsFeed.data}
               integrationData={integrationData?.data}
+              onSnippetsModalOpen={onSnippetsModalOpen}
             />
           ),
         },
@@ -500,6 +496,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     connectorsFeed,
     integrationData,
     sampleAppUrl,
+    onSnippetsModalOpen,
   ]);
 
   const handleFork = () => {
@@ -682,17 +679,6 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
                     )}
                   </Button>
                 </ButtonGroup>
-                <Button
-                  style={{ marginRight: '16px' }}
-                  startIcon={<CodeOutlined />}
-                  onClick={onSnippetsModalOpen}
-                  size="small"
-                  variant={assumeHasConnectors ? 'outlined' : 'contained'}
-                  color="primary"
-                  disabled={snippetsDisabled}
-                >
-                  Snippets
-                </Button>
                 <StyledTitle>Edit {integrationId}</StyledTitle>
                 <StyledCloseWrapper onClick={handleClose}>
                   <CloseIcon fontSize="small" />

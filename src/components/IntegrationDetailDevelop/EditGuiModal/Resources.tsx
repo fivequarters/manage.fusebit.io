@@ -14,10 +14,12 @@ interface Props {
   integrationsFeed: Feed[] | undefined;
   connectorsFeed: Feed[] | undefined;
   integrationData: Integration | undefined;
+  onSnippetsModalOpen: () => void;
 }
 
 interface ProcessedSnippet extends Snippet {
   icon: string;
+  connectorName: string;
 }
 
 interface SdkDoc {
@@ -26,7 +28,7 @@ interface SdkDoc {
   icon?: string;
 }
 
-const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrationData }) => {
+const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrationData, onSnippetsModalOpen }) => {
   const [integrationGuideUrl, setIntegrationGuideUrl] = useState('');
   const [snippets, setSnippets] = useState<ProcessedSnippet[]>([]);
   const [SdkDocs, setSdkDocs] = useState<SdkDoc[]>([]);
@@ -62,6 +64,7 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
           const snippetWithIcon = {
             ...snippet,
             icon: matchingConnectorFeed.smallIcon,
+            connectorName: matchingConnectorFeed.name,
           };
 
           return snippetWithIcon;
@@ -85,6 +88,16 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
     }
 
     return 0;
+  };
+
+  const handleSnippetClick = (snippet?: ProcessedSnippet) => {
+    if (snippet) {
+      window.location.hash = `${snippet.name}`;
+    } else {
+      window.location.hash = 'all';
+    }
+
+    onSnippetsModalOpen();
   };
 
   return (
@@ -130,9 +143,14 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
       </Tree>
       <Tree name="Snippets" icon={code} enableDropdownArrow>
         {snippets.map((snippet) => (
-          <CustomNavItem key={snippet.id} icon={snippet.icon} name={snippet.name} />
+          <CustomNavItem
+            key={snippet.id}
+            icon={snippet.icon}
+            name={snippet.name}
+            onClick={() => handleSnippetClick(snippet)}
+          />
         ))}
-        <CustomNavItem icon={add} name="See All Snippets" />
+        <CustomNavItem icon={add} name="See All Snippets" onClick={() => handleSnippetClick(undefined)} />
       </Tree>
     </CustomNavBase>
   );

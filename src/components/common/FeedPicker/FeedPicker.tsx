@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { Box, Button, TextField } from '@material-ui/core';
 import { Props } from '@interfaces/feedPicker';
@@ -218,6 +218,14 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(
     };
 
     const needsConnector = hasConnectorDependency && rawActiveTemplate && !hasConnectorDependency(rawActiveTemplate);
+    const defaultSearchVal = useMemo(() => {
+      const hash = decodeURI(window.location.hash)?.replace('#', '');
+      if (hash !== 'all') {
+        return hash;
+      }
+
+      return '';
+    }, []);
 
     return (
       <StyledCard onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)} ref={ref} tabIndex={-1}>
@@ -266,6 +274,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(
                     trackSearchInput((e.target as HTMLInputElement).value);
                   }
                 }}
+                defaultValue={defaultSearchVal}
                 onChange={(e) => debouncedSetSearchFilter(e.target.value)}
                 label="Search"
               />

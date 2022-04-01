@@ -14,18 +14,9 @@ interface Props {
   ) => string;
   integrationId: string;
   setDirtyState: (state: boolean) => void;
-  isSaving: boolean;
-  isMounted: boolean;
 }
 
-const useSnippetsModal = ({
-  getProviderVersion,
-  formatSnippet,
-  integrationId,
-  setDirtyState,
-  isSaving,
-  isMounted,
-}: Props) => {
+const useSnippetsModal = ({ getProviderVersion, formatSnippet, integrationId, setDirtyState }: Props) => {
   const [snippetsModalOpen, setSnippetsModalOpen] = useState(false);
 
   const onSnippetsModalOpen = async () => {
@@ -100,7 +91,6 @@ const useSnippetsModal = ({
     snippetsModalOpen,
     onSnippetsModalOpen,
     onSnippetsModalClose,
-    disabled: isSaving || !isMounted,
   };
 };
 

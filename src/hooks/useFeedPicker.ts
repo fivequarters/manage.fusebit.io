@@ -57,6 +57,7 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
   }, [isIntegration, queryClient, isFork, integrationsFeedQueryKey]);
 
   const key = query.get('key');
+  const filteredFeed = useFilterFeed({ feed, filterSnippets: isSnippet });
 
   useEffect(() => {
     if (feed.length > 0 && open) {
@@ -96,11 +97,17 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
           }
         });
         if (isSnippet && templateToActivate.snippets && templateToActivate.snippets.length > 0) {
-          setRawActiveSnippet(templateToActivate.snippets[0]);
+          const search = decodeURI(window.location.hash)?.replace('#', '');
+          let defaultSelectedSnippet: Snippet | undefined = templateToActivate.snippets[0];
+          if (search !== 'all') {
+            filteredFeed.setSearchFilter(search);
+            defaultSelectedSnippet = templateToActivate.snippets.find((snippet) => snippet.name === search);
+          }
+          setRawActiveSnippet(defaultSelectedSnippet);
           // TODO replace snippet mustache
-          setActiveSnippet(templateToActivate.snippets[0]);
+          setActiveSnippet(defaultSelectedSnippet);
           trackEventMemoized(`New Snippet Selected`, `Add Snippet`, {
-            snippet: `${templateToActivate.id}-${templateToActivate.snippets[0].id}`,
+            snippet: `${templateToActivate.id}-${defaultSelectedSnippet?.id}`,
             snippetDefault: true,
           });
         }
@@ -116,8 +123,6 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
       });
     }
   }, [campaingIntegrationRef]);
-
-  const filteredFeed = useFilterFeed({ feed, filterSnippets: isSnippet });
 
   const isLoading = isIntegration
     ? queryClient.getQueryState('getIntegrationsFeed')?.status === 'loading'
