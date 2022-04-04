@@ -20,6 +20,7 @@ interface Props {
 interface ProcessedSnippet extends Snippet {
   icon: string;
   connectorName: string;
+  feedId: string;
 }
 
 interface SdkDoc {
@@ -61,13 +62,14 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
         });
 
         return matchingConnectorFeed?.snippets?.map((snippet) => {
-          const snippetWithIcon = {
+          const completeSnippet = {
             ...snippet,
             icon: matchingConnectorFeed.smallIcon,
             connectorName: matchingConnectorFeed.name,
+            feedId: matchingConnectorFeed.id,
           };
 
-          return snippetWithIcon;
+          return completeSnippet;
         });
       });
 
@@ -92,9 +94,9 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
 
   const handleSnippetClick = (snippet?: ProcessedSnippet) => {
     if (snippet) {
-      window.location.hash = `${snippet.name}`;
+      window.location.hash = `${snippet.feedId}&${snippet.name}`;
     } else {
-      window.location.hash = 'all';
+      window.location.hash = '&all';
     }
 
     onSnippetsModalOpen();

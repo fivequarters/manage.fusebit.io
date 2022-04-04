@@ -5,7 +5,7 @@ import { Props } from '@interfaces/feedPicker';
 import search from '@assets/search.svg';
 import Loader from '@components/common/Loader';
 import { useTrackPage } from '@hooks/useTrackPage';
-import { urlOrSvgToImage } from '@utils/utils';
+import { getSnippetDataFromHash, urlOrSvgToImage } from '@utils/utils';
 import BaseJsonForm from '@components/common/BaseJsonForm';
 import { DefaultFilters } from '@hooks/useFilterFeed';
 import useFeedPicker from '@hooks/useFeedPicker';
@@ -218,10 +218,11 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(
     };
 
     const needsConnector = hasConnectorDependency && rawActiveTemplate && !hasConnectorDependency(rawActiveTemplate);
+
     const defaultSearchVal = useMemo(() => {
-      const hash = decodeURI(window.location.hash)?.replace('#', '');
-      if (hash !== 'all') {
-        return hash;
+      const { snippetName } = getSnippetDataFromHash();
+      if (snippetName !== 'all') {
+        return snippetName;
       }
 
       return '';

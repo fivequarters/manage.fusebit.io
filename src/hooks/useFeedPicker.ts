@@ -5,6 +5,7 @@ import { useMediaQuery } from '@material-ui/core';
 import { Feed, Snippet, ParsedFeed } from '@interfaces/feed';
 import { trackEventMemoized, trackEventUnmemoized } from '@utils/analytics';
 import { sendIntercomMessage } from '@utils/intercom';
+import { getSnippetDataFromHash } from '@utils/utils';
 import { Data } from '@interfaces/feedPicker';
 import orderBy from 'lodash.orderby';
 import { useQueryClient } from 'react-query';
@@ -63,10 +64,33 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
     if (feed.length > 0 && open) {
       let templateToActivate: Feed | undefined;
       if (isSnippet) {
-        // find first connector with snippets
-        const result = feed.find((f) => f.snippets && f.snippets.length > 0);
-        if (result) {
+        // Find first connector that matches our search
+        const { snippetFeedId, snippetName } = getSnippetDataFromHash();
+        const result = feed.find((f) => f.id === snippetFeedId);
+        let defaultSelectedSnippet: Snippet | undefined = result?.snippets?.[0];
+        if (snippetName !== 'all') {
+          filteredFeed.setSearchFilter(snippetName);
+          defaultSelectedSnippet = result?.snippets?.find((snippet) => snippet.name === snippetName);
+        }
+
+        if (result && defaultSelectedSnippet) {
           templateToActivate = result;
+          setRawActiveSnippet(defaultSelectedSnippet);
+          setActiveSnippet(defaultSelectedSnippet);
+          trackEventMemoized(`New Snippet Selected`, `Add Snippet`, {
+            snippet: `${templateToActivate.id}-${defaultSelectedSnippet?.id}`,
+            snippetDefault: true,
+          });
+        } else {
+          // Find first connector with snippets
+          templateToActivate = feed.find((f) => f.snippets && f.snippets.length > 0);
+          defaultSelectedSnippet = templateToActivate?.snippets?.[0];
+          setRawActiveSnippet(defaultSelectedSnippet);
+          setActiveSnippet(defaultSelectedSnippet);
+          trackEventMemoized(`New Snippet Selected`, `Add Snippet`, {
+            snippet: `${templateToActivate?.id}-${defaultSelectedSnippet?.id}`,
+            snippetDefault: true,
+          });
         }
       } else if (key) {
         [templateToActivate] = feed;
@@ -96,21 +120,6 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
             });
           }
         });
-        if (isSnippet && templateToActivate.snippets && templateToActivate.snippets.length > 0) {
-          const search = decodeURI(window.location.hash)?.replace('#', '');
-          let defaultSelectedSnippet: Snippet | undefined = templateToActivate.snippets[0];
-          if (search !== 'all') {
-            filteredFeed.setSearchFilter(search);
-            defaultSelectedSnippet = templateToActivate.snippets.find((snippet) => snippet.name === search);
-          }
-          setRawActiveSnippet(defaultSelectedSnippet);
-          // TODO replace snippet mustache
-          setActiveSnippet(defaultSelectedSnippet);
-          trackEventMemoized(`New Snippet Selected`, `Add Snippet`, {
-            snippet: `${templateToActivate.id}-${defaultSelectedSnippet?.id}`,
-            snippetDefault: true,
-          });
-        }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
