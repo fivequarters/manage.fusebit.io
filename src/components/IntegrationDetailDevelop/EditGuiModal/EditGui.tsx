@@ -39,8 +39,7 @@ import useEditorEvents from '../FusebitEditor/useEditorEvents';
 import { BUILDING_TEXT, BUILD_COMPLETED_TEXT } from '../FusebitEditor/constants';
 import useProcessing from '../hooks/useProcessing';
 import useSnippetsModal from './useSnippetsModal';
-import Resources from './Resources';
-import Tools from './Tools';
+import SidebarOptions from './SidebarOptions';
 import { BASE_CATEGORY_TOOLTIPS, HEADER_HEIGHT } from './constants';
 import { EditorEvents } from '~/enums/editor';
 
@@ -419,18 +418,6 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       lastItem.parentNode?.insertBefore(addNew, lastItem.nextSibling);
     };
 
-    const appendCustomCategories = (elements: { id: string; jsx: ReactElement }[]) => {
-      const nav = document.querySelector('.fusebit-nav');
-      elements.forEach((element) => {
-        if (!document.getElementById(element.id)) {
-          const div = document.createElement('div');
-          div.setAttribute('id', element.id);
-          nav?.appendChild(div);
-          ReactDOM.render(element.jsx, document.getElementById(element.id));
-        }
-      });
-    };
-
     const appendBaseCategoryTooltips = (
       elements: {
         id: string;
@@ -462,24 +449,23 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
         createAddNewItemElement(lastItem);
       }
 
-      appendBaseCategoryTooltips(BASE_CATEGORY_TOOLTIPS);
-      appendCustomCategories([
-        {
-          id: 'tools',
-          jsx: <Tools integrationData={integrationData?.data} sampleAppUrl={sampleAppUrl} />,
-        },
-        {
-          id: 'resources',
-          jsx: (
-            <Resources
-              integrationsFeed={integrationsFeed.data}
-              connectorsFeed={connectorsFeed.data}
-              integrationData={integrationData?.data}
-              onSnippetsModalOpen={onSnippetsModalOpen}
-            />
-          ),
-        },
-      ]);
+      if (!document.getElementById('sidebar-options')) {
+        appendBaseCategoryTooltips(BASE_CATEGORY_TOOLTIPS);
+        const nav = document.querySelector('.fusebit-nav');
+        const div = document.createElement('div');
+        div.setAttribute('id', 'sidebar-options');
+        nav?.appendChild(div);
+        ReactDOM.render(
+          <SidebarOptions
+            integrationData={integrationData?.data}
+            sampleAppUrl={sampleAppUrl}
+            integrationsFeed={integrationsFeed.data}
+            connectorsFeed={connectorsFeed.data}
+            onSnippetsModalOpen={onSnippetsModalOpen}
+          />,
+          document.getElementById('sidebar-options')
+        );
+      }
     } else {
       createLoader();
     }
