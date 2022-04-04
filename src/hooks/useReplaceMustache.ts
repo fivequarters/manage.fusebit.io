@@ -26,6 +26,9 @@ const checkIfEntitiesAreValid = (parsedFeed: Feed) => {
   }
 };
 
+const makeEntityId = (entity: any, feedId: string, commonRandom: number): string =>
+  `${feedId}-${entity.entityType}-${commonRandom}`;
+
 export const useReplaceMustache = () => {
   const { userData } = useAuthContext();
 
@@ -77,6 +80,8 @@ export const useReplaceMustache = () => {
         // No really good reason to delete this besides it making it difficult to console.log the globals.
         delete global.consts.feed.configuration;
 
+        const commonRandom = Math.floor(Math.random() * 1000);
+
         if (feed.configuration?.entities) {
           // Populate the global entities first, so that the id is always available and always consistent
           Object.entries(feed.configuration.entities).forEach(([name, entity]) => {
@@ -85,9 +90,7 @@ export const useReplaceMustache = () => {
             }
             const getId = () => {
               if (!data[name].id) {
-                data[name].id = `${
-                  entity.entityType === 'integration' ? 'my-integration' : 'my-connector'
-                }-${Math.floor(Math.random() * 1000)}`;
+                data[name].id = makeEntityId(entity, feed.id, commonRandom);
               }
               return data[name].id;
             };
