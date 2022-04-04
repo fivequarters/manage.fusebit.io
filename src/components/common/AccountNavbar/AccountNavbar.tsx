@@ -1,9 +1,8 @@
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import NavbarBreadcrumb from '../NavbarBreadcrumb/NavbarBreadcrumb';
 import Navbar from '../Navbar';
 
 const AccountNavbar: React.FC = () => {
-  const history = useHistory();
   const { accountId } = useParams<{ accountId: string }>();
 
   return (
@@ -13,7 +12,7 @@ const AccountNavbar: React.FC = () => {
         items={[
           {
             text: 'Account',
-            onClick: () => history.push(`/account/${accountId}/settings`),
+            href: `/account/${accountId}/settings`,
           },
         ]}
       />

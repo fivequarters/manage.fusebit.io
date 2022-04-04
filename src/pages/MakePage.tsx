@@ -30,7 +30,7 @@ const MakePage: FC<{}> = (): ReactElement => {
             items={[
               {
                 text: 'Fusebit',
-                onClick: () => history.push('/'),
+                href: '/',
               },
             ]}
           />
