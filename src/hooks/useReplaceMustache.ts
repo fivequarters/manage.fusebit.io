@@ -27,7 +27,7 @@ const checkIfEntitiesAreValid = (parsedFeed: Feed) => {
 };
 
 const makeEntityId = (entity: any, feedId: string, commonRandom: number): string =>
-  `${feedId}-${entity.entityType}-${commonRandom}-${Math.floor(Math.random() * 1000)}`;
+  `${feedId}-${entity.entityType}-${commonRandom}`;
 
 export const useReplaceMustache = () => {
   const { userData } = useAuthContext();
