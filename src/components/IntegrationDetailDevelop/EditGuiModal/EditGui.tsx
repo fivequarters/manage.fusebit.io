@@ -39,8 +39,9 @@ import useEditorEvents from '../FusebitEditor/useEditorEvents';
 import { BUILDING_TEXT, BUILD_COMPLETED_TEXT } from '../FusebitEditor/constants';
 import useProcessing from '../hooks/useProcessing';
 import useSnippetsModal from './useSnippetsModal';
+import NavCategoryTooltip from './NavCategoryTooltip';
 import SidebarOptions from './SidebarOptions';
-import { BASE_CATEGORY_TOOLTIPS, HEADER_HEIGHT } from './constants';
+import { HEADER_HEIGHT } from './constants';
 import { EditorEvents } from '~/enums/editor';
 
 const StyledEditorContainer = styled.div`
@@ -418,39 +419,54 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       lastItem.parentNode?.insertBefore(addNew, lastItem.nextSibling);
     };
 
-    const appendBaseCategoryTooltips = (
-      elements: {
+    const appendCategoryTooltip = (
+      category: Element | null,
+      element: {
         id: string;
         jsx: ReactElement;
-      }[]
+      }
     ) => {
-      const categories = document.querySelectorAll('.fusebit-nav-category');
-      elements.forEach((element) => {
-        if (!document.getElementById(element.id)) {
-          const div = document.createElement('div');
-          div.setAttribute('id', element.id);
-          div.style.display = 'flex';
-          const matchingCategory = [...categories].find((category) => {
-            return category.innerHTML.toLowerCase().includes(element.id.toLowerCase());
-          });
-          if (matchingCategory) {
-            matchingCategory.appendChild(div);
-            ReactDOM.render(element.jsx, document.getElementById(element.id));
-          }
-        }
-      });
+      if (category && !document.getElementById(element.id)) {
+        const div = document.createElement('div');
+        div.setAttribute('id', element.id);
+        div.style.display = 'flex';
+        category.appendChild(div);
+        ReactDOM.render(element.jsx, document.getElementById(element.id));
+      }
     };
 
     if (isMounted && !isLoading) {
       removeLoader();
       const items = document.getElementsByClassName('fusebit-nav-file');
       const lastItem = items?.[items.length - 1];
+      const codeCategory = document.querySelectorAll('.fusebit-nav-category')?.[0];
+      const settingsCategory = document.querySelectorAll('.fusebit-nav-category')?.[1];
+
       if (!document.getElementById('addNewItem')) {
         createAddNewItemElement(lastItem);
       }
 
+      appendCategoryTooltip(codeCategory, {
+        id: 'code',
+        jsx: (
+          <NavCategoryTooltip
+            title="Code"
+            description="All the files needed to run your Fusebit Integration as a microservice on our platform."
+          />
+        ),
+      });
+
+      appendCategoryTooltip(settingsCategory, {
+        id: 'settings',
+        jsx: (
+          <NavCategoryTooltip
+            title="Settings"
+            description="Configuration logic, such as CRON scheduling, for your Integration."
+          />
+        ),
+      });
+
       if (!document.getElementById('sidebar-options')) {
-        appendBaseCategoryTooltips(BASE_CATEGORY_TOOLTIPS);
         const nav = document.querySelector('.fusebit-nav');
         const div = document.createElement('div');
         div.setAttribute('id', 'sidebar-options');
