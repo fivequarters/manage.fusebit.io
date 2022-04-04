@@ -10,22 +10,22 @@ import { InstallList, Install } from '@interfaces/install';
 import { trackEventMemoized } from '@utils/analytics';
 import { storeIntegrationConfig, getIntegrationConfig, resetIntegrationConfig } from '@utils/localStorage';
 import { InnerConnector, Integration } from '@interfaces/integration';
+import { useTrackPage } from '@hooks/useTrackPage';
+import { useGetConnectorsFeed } from '@hooks/useGetConnectorsFeed';
 
 interface Props {
   integrationData?: ApiResponse<Integration>;
   enableListener?: boolean;
   onReadyToRun?: () => void;
-  onReadyToLogin?: () => void;
-  onMissingIdentities?: (connectors?: InnerConnector[]) => void;
+  isMounted: boolean;
 }
 
 const LOCALSTORAGE_SESSION_KEY = 'session';
 
-const useEditor = (
-  { integrationData, enableListener = true, onReadyToRun, onReadyToLogin, onMissingIdentities } = {} as Props
-) => {
+const useEditor = ({ integrationData, enableListener = true, onReadyToRun, isMounted } = {} as Props) => {
   const { id } = useParams<{ id: string }>();
   const { userData, getTenantId } = useAuthContext();
+  const connectorsFeed = useGetConnectorsFeed();
   const { axios } = useAxios({ ignoreInterceptors: true });
   const { mutateAsync: createSesssion, isLoading: isCreatingSession } = useAccountIntegrationCreateSession();
   const { mutateAsync: testIntegration, isLoading: isTesting } = useAccountIntegrationTestIntegration(id);
@@ -33,9 +33,22 @@ const useEditor = (
   const [isFindingInstall, setIsFindingInstall] = useState(false);
   const [needsInitialization, setNeedsInitialization] = useState(true);
   const [runPending, setRunPending] = useState(false);
+  const [missingIdentities, setMissingIdentities] = useState<InnerConnector[] | undefined>(undefined);
+  const [loginFlowModalOpen, setLoginFlowModalOpen] = useState(false);
   // Prevent beign called multiple times if user has multiple tabs open
   const hasSessionChanged = useRef(false);
   const tenantId = getTenantId();
+  const urlParams = new URLSearchParams(window.location.search);
+  const forkEditFeedUrl = urlParams.get('forkEditFeedUrl');
+
+  const pageName = forkEditFeedUrl ? 'Web Editor (Read-Only)' : 'Web Editor';
+  const objectLocation = forkEditFeedUrl ? 'Web Editor (Read-Only)' : 'Web Editor';
+  const additionalProperties = forkEditFeedUrl ? { Integration: id, domain: 'API' } : undefined;
+  useTrackPage(pageName, objectLocation, additionalProperties);
+
+  if (forkEditFeedUrl) {
+    trackEventMemoized('Share Redirect Execution', 'Share Function', additionalProperties);
+  }
 
   const findInstall = useCallback(async () => {
     try {
@@ -65,9 +78,6 @@ const useEditor = (
     const handleChangeStorage = (e: any) => {
       const runFirstTest = async () => {
         hasSessionChanged.current = true;
-        const urlParams = new URLSearchParams(window.location.search);
-        const isForkEditor = urlParams.get('forkEditFeedUrl');
-        const objectLocation = isForkEditor ? 'Web Editor (Read-Only)' : 'Web Editor';
         try {
           await commitSession({ id, sessionId: e.newValue });
 
@@ -116,9 +126,6 @@ const useEditor = (
   };
 
   const handleRun = async () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const isForkEditor = urlParams.get('forkEditFeedUrl');
-    const objectLocation = isForkEditor ? 'Web Editor (Read-Only)' : 'Web Editor';
     trackEventMemoized('Run Button Clicked', objectLocation);
 
     try {
@@ -126,8 +133,8 @@ const useEditor = (
       const hasConnectors = integrationData?.data.data.components?.[0]?.entityType === 'connector';
 
       if (url && hasConnectors) {
-        if (onReadyToLogin) {
-          onReadyToLogin();
+        if (!missingIdentities || missingIdentities.length > 0) {
+          setLoginFlowModalOpen(true);
         } else {
           handleLogin();
         }
@@ -154,7 +161,7 @@ const useEditor = (
         );
       }
 
-      onMissingIdentities?.(install ? connectorsWithoutIdentity : undefined);
+      setMissingIdentities(install ? connectorsWithoutIdentity : undefined);
 
       const ready = () => {
         if (runPending) {
@@ -188,6 +195,30 @@ const useEditor = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [needsInitialization, integrationData]);
 
+  const handleFork = () => {
+    trackEventMemoized(
+      'Fork Button Clicked',
+      'Web Editor (Read-Only)',
+      {
+        Integration: id,
+      },
+      () => {
+        window.location.href = `/?forkFeedUrl=${forkEditFeedUrl}`;
+      }
+    );
+  };
+
+  const assumeHasConnectors = !isMounted || !!window.editor?.specification.data.components.length;
+
+  let missingConnectorNames: string[] = [];
+  if (connectorsFeed.data && integrationData) {
+    const connectors =
+      missingIdentities || integrationData.data.data.components.filter((c) => c.entityType === 'connector');
+    missingConnectorNames = connectors
+      .map((c) => connectorsFeed.data.find((c1) => c1.configuration.components?.[0].provider === c.provider)?.name)
+      .filter((name) => !!name) as string[];
+  }
+
   return {
     handleRun,
     handleNoInstallFound: handleMissingOrIncompleteInstall,
@@ -206,6 +237,13 @@ const useEditor = (
     },
     runPending,
     setRunPending,
+    handleFork,
+    forkEditFeedUrl,
+    assumeHasConnectors,
+    missingConnectorNames,
+    missingIdentities,
+    loginFlowModalOpen,
+    setLoginFlowModalOpen,
   };
 };
 
