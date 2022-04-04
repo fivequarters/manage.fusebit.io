@@ -26,8 +26,8 @@ const checkIfEntitiesAreValid = (parsedFeed: Feed) => {
   }
 };
 
-const makeEntityId = (feedId: string, commonRandom: number): string =>
-  `${feedId}-${commonRandom}-${Math.floor(Math.random() * 1000)}`;
+const makeEntityId = (entity: any, feedId: string, commonRandom: number): string =>
+  `${entity.entityType === 'connector' ? 'c' : 'i'}-${feedId}-${commonRandom}-${Math.floor(Math.random() * 1000)}`;
 
 export const useReplaceMustache = () => {
   const { userData } = useAuthContext();
@@ -84,13 +84,13 @@ export const useReplaceMustache = () => {
 
         if (feed.configuration?.entities) {
           // Populate the global entities first, so that the id is always available and always consistent
-          Object.keys(feed.configuration.entities).forEach((name) => {
+          Object.entries(feed.configuration.entities).forEach(([name, entity]) => {
             if (!data[name]) {
               data[name] = {};
             }
             const getId = () => {
               if (!data[name].id) {
-                data[name].id = makeEntityId(feed.id, commonRandom);
+                data[name].id = makeEntityId(entity, feed.id, commonRandom);
               }
               return data[name].id;
             };
