@@ -84,7 +84,7 @@ export const useReplaceMustache = () => {
 
         if (feed.configuration?.entities) {
           // Populate the global entities first, so that the id is always available and always consistent
-          Object.entries(feed.configuration.entities).forEach(([name, entity]) => {
+          Object.keys(feed.configuration.entities).forEach((name) => {
             if (!data[name]) {
               data[name] = {};
             }
