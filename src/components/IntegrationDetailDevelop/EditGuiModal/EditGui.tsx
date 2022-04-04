@@ -1,4 +1,3 @@
-import { InnerConnector } from '@interfaces/integration';
 import React, { useState, useEffect, useMemo, ReactElement } from 'react';
 import ReactDOM from 'react-dom';
 import { Box, Button, ButtonGroup, IconButton, useMediaQuery, useTheme } from '@material-ui/core';
@@ -15,7 +14,6 @@ import ConfigureRunnerModal from '@components/IntegrationDetailDevelop/Configure
 import AddSnippetToIntegrationModal from '@components/IntegrationDetailDevelop/AddSnippetToIntegrationModal';
 import { trackEventMemoized } from '@utils/analytics';
 import ConfirmationPrompt from '@components/common/ConfirmationPrompt';
-import { useTrackPage } from '@hooks/useTrackPage';
 import FusebitEditor from '@components/IntegrationDetailDevelop/FusebitEditor';
 import useEditor from '@components/IntegrationDetailDevelop/FusebitEditor/useEditor';
 import { useParams } from 'react-router-dom';
@@ -307,16 +305,25 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const [configureRunnerActive, setConfigureRunnerActive] = useState(false);
   const [unsavedWarning, setUnsavedWarning] = useState(false);
   const { createLoader, removeLoader } = useLoader();
-  const [loginFlowModalOpen, setLoginFlowModalOpen] = useState(false);
   const theme = useTheme();
   const matchesMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const [missingIdentities, setMissingIdentities] = useState<InnerConnector[] | undefined>(undefined);
   const integrationData = useGetIntegrationFromCache();
-  const { handleRun, handleLogin, isFindingInstall, setNeedsInitialization, setRunPending, isRunning } = useEditor({
+  const {
+    handleRun,
+    handleLogin,
+    isFindingInstall,
+    setNeedsInitialization,
+    setRunPending,
+    isRunning,
+    handleFork,
+    forkEditFeedUrl,
+    assumeHasConnectors,
+    missingConnectorNames,
+    loginFlowModalOpen,
+    setLoginFlowModalOpen,
+  } = useEditor({
     integrationData,
-    onReadyToLogin: () =>
-      !missingIdentities || missingIdentities.length > 0 ? setLoginFlowModalOpen(true) : handleLogin(),
-    onMissingIdentities: setMissingIdentities,
+    isMounted,
   });
   const [dirtyState, setDirtyState] = useState(false);
   const [enableGrafanaLogs] = useState<boolean>(() => {
@@ -325,7 +332,6 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     localStorage.setItem('enableGrafanaLogs', `${!!result}`);
     return result;
   });
-
   const { invalidateIntegration } = useInvalidateIntegration();
   const { formatSnippet, getProviderVersion } = useSnippets();
   const { createError } = useError();
@@ -352,16 +358,6 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     }
   }, [errorBuild, createError, setErrorBuild]);
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const forkEditFeedUrl = urlParams.get('forkEditFeedUrl');
-
-  const pageName = forkEditFeedUrl ? 'Web Editor (Read-Only)' : 'Web Editor';
-  const objectLocation = forkEditFeedUrl ? 'Web Editor (Read-Only)' : 'Web Editor';
-  const additionalProperties = forkEditFeedUrl ? { Integration: integrationId, domain: 'API' } : undefined;
-  useTrackPage(pageName, objectLocation, additionalProperties);
-  if (forkEditFeedUrl) {
-    trackEventMemoized('Share Redirect Execution', 'Share Function', additionalProperties);
-  }
   useTitle(`${id} Editor`);
   const { processing } = useProcessing({
     onProcessingStarted: () => {
@@ -499,19 +495,6 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     onSnippetsModalOpen,
   ]);
 
-  const handleFork = () => {
-    trackEventMemoized(
-      'Fork Button Clicked',
-      'Web Editor (Read-Only)',
-      {
-        Integration: integrationId,
-      },
-      () => {
-        window.location.href = `/?forkFeedUrl=${forkEditFeedUrl}`;
-      }
-    );
-  };
-
   const handleSaveAndRun = async () => {
     if (dirtyState) {
       const context = window.editor;
@@ -548,45 +531,34 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     }
   };
 
-  const assumeHasConnectors = !isMounted || !!window.editor?.specification.data.components.length;
+  const loginFlowModalDescription = useMemo(() => {
+    return (
+      <>
+        Before running the integration, you need to authorize access to{' '}
+        {missingConnectorNames.length > 0
+          ? missingConnectorNames.map((connectorName, index) => {
+              const isLastConnector = missingConnectorNames.length - 1 === index;
+              const isPenultimateConnector = missingConnectorNames.length - 2 === index;
 
-  let missingConnectorNames: string[] = [];
-  if (connectorsFeed.data && integrationData) {
-    const connectors =
-      missingIdentities || integrationData.data.data.components.filter((c) => c.entityType === 'connector');
-    missingConnectorNames = connectors
-      .map((c) => connectorsFeed.data.find((c1) => c1.configuration.components?.[0].provider === c.provider)?.name)
-      .filter((name) => !!name) as string[];
-  }
+              if (!isLastConnector) {
+                return (
+                  <>
+                    <strong>{connectorName}</strong>
+                    {!isPenultimateConnector ? ', ' : ' '}
+                  </>
+                );
+              }
 
-  const loginFlowModalDescription = (
-    <>
-      Before running the integration, you need to authorize access to{' '}
-      {missingConnectorNames.length === 0 && 'the target systems. '}
-      {missingConnectorNames.length === 1 && (
-        <>
-          <strong>{missingConnectorNames[0]}</strong>.{' '}
-        </>
-      )}
-      {missingConnectorNames.length === 2 && (
-        <>
-          <strong>{missingConnectorNames[0]}</strong> and <strong>{missingConnectorNames[1]}</strong>.{' '}
-        </>
-      )}
-      {missingConnectorNames.length > 2 &&
-        missingConnectorNames.map((n, i) =>
-          i < missingConnectorNames.length - 1 ? (
-            <>
-              <strong>{n}</strong>,{' '}
-            </>
-          ) : (
-            <>
-              and <strong>{n}</strong>.{' '}
-            </>
-          )
-        )}
-    </>
-  );
+              return (
+                <>
+                  and <strong>{connectorName}</strong>.{' '}
+                </>
+              );
+            })
+          : 'the target systems. '}
+      </>
+    );
+  }, [missingConnectorNames]);
 
   const buttonText = useMemo(() => {
     if (processing) {

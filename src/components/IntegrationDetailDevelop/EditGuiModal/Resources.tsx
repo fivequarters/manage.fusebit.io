@@ -72,8 +72,7 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
           return completeSnippet;
         });
       });
-
-      const processedSnippets: ProcessedSnippet[] = Array.prototype.concat.apply([], [...unprocessedSnippets]);
+      const processedSnippets = unprocessedSnippets.flat() as ProcessedSnippet[];
       setSnippets(processedSnippets);
       setIntegrationGuideUrl(integrationFeed?.resources?.configureAppDocUrl || '');
     }
