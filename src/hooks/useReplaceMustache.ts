@@ -83,6 +83,11 @@ export const useReplaceMustache = () => {
         const commonRandom = Math.floor(Math.random() * 1000);
 
         if (feed.configuration?.entities) {
+          const entityCount: Record<string, number> = {
+            connector: 0,
+            integration: 0,
+          };
+
           // Populate the global entities first, so that the id is always available and always consistent
           Object.entries(feed.configuration.entities).forEach(([name, entity]) => {
             if (!data[name]) {
@@ -91,6 +96,10 @@ export const useReplaceMustache = () => {
             const getId = () => {
               if (!data[name].id) {
                 data[name].id = makeEntityId(entity, feed.id, commonRandom);
+                entityCount[entity.entityType] += 1;
+                if (entityCount[entity.entityType] > 1) {
+                  data[name].id += `-${entityCount[entity.entityType]}`;
+                }
               }
               return data[name].id;
             };
