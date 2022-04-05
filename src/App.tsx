@@ -1,13 +1,30 @@
+import { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { createMuiTheme, responsiveFontSizes, ThemeProvider } from '@material-ui/core/styles';
 import CookieConsent from 'react-cookie-consent';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import DashboardRoutes from '@components/DashboardRoutes';
+import { GA_MEASUREMENT_ID } from '@utils/constants';
 import { ContextProvider } from '@hooks/useAuthContext';
 import useFeeds from '@hooks/useFeeds';
 import { lightTheme } from './theme/appTheme';
 
 const App = () => {
   useFeeds();
+  const history = useHistory();
+
+  useEffect(() => {
+    const unlisten = history.listen((location) => {
+      gtag('event', 'page_view', {
+        page_title: document.title,
+        page_location: document.title.split(' | ')?.[0],
+        page_path: location.pathname,
+        send_to: GA_MEASUREMENT_ID,
+      });
+    });
+
+    return () => unlisten();
+  }, [history]);
 
   return (
     <ContextProvider>

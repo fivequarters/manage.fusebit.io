@@ -10,3 +10,5 @@ export const STATIC_TENANT_ID = 'user-1';
 export const PRODUCTION_HOST = 'manage.fusebit.io';
 
 export const INTEGRATION_PROCESSING_SUFFIX = '-pending-processing';
+
+export const GA_MEASUREMENT_ID = 'AW-10822603500';
