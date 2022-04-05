@@ -1,15 +1,11 @@
 import EntitiesMenu from '../EntitiesMenu/EntitiesMenu';
 import Navbar from '../Navbar';
 import NavbarBreadcrumb from '../NavbarBreadcrumb';
-import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
 import useEntityBreadcrumb from '../../../hooks/useEntityBreadcrumb';
 
 const IntegrationsNavbar: React.FC = () => {
-  const { getRedirectLink } = useGetRedirectLink();
-
   const { anchorEl, breadcrumbItems, handleCloseDrawer, handleCloseMenu, openDrawer, isActive } = useEntityBreadcrumb({
     initialText: 'Integrations',
-    href: getRedirectLink('/integrations/overview'),
   });
 
   return (
