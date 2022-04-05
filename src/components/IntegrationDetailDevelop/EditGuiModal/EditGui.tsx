@@ -12,7 +12,7 @@ import settings from '@assets/settings.svg';
 import settingsPrimary from '@assets/settings-primary.svg';
 import ConfigureRunnerModal from '@components/IntegrationDetailDevelop/ConfigureRunnerModal';
 import AddSnippetToIntegrationModal from '@components/IntegrationDetailDevelop/AddSnippetToIntegrationModal';
-import { trackEventMemoized } from '@utils/analytics';
+import { trackEventMemoized, trackEventUnmemoized } from '@utils/analytics';
 import ConfirmationPrompt from '@components/common/ConfirmationPrompt';
 import FusebitEditor from '@components/IntegrationDetailDevelop/FusebitEditor';
 import useEditor from '@components/IntegrationDetailDevelop/FusebitEditor/useEditor';
@@ -466,6 +466,21 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
         ),
       });
 
+      // Default categories event tracking
+      const fileItems = document.querySelectorAll('.fusebit-nav-file');
+      fileItems?.forEach((item) => {
+        if (item.getAttribute('data-event-click') !== 'true') {
+          const fileName = item.querySelector('span')?.innerText;
+          item.addEventListener('click', () => {
+            trackEventUnmemoized('Code Menu Item Clicked', 'Web Editor', {
+              clickedOn: fileName,
+            });
+          });
+          item.setAttribute('data-event-click', 'true');
+        }
+      });
+
+      // Add new sidebar options
       if (!document.getElementById('sidebar-options')) {
         const nav = document.querySelector('.fusebit-nav');
         const div = document.createElement('div');
