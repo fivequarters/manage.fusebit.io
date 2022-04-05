@@ -12,7 +12,7 @@ import settings from '@assets/settings.svg';
 import settingsPrimary from '@assets/settings-primary.svg';
 import ConfigureRunnerModal from '@components/IntegrationDetailDevelop/ConfigureRunnerModal';
 import AddSnippetToIntegrationModal from '@components/IntegrationDetailDevelop/AddSnippetToIntegrationModal';
-import { trackEventMemoized, trackEventUnmemoized } from '@utils/analytics';
+import { trackEventUnmemoized } from '@utils/analytics';
 import ConfirmationPrompt from '@components/common/ConfirmationPrompt';
 import FusebitEditor from '@components/IntegrationDetailDevelop/FusebitEditor';
 import useEditor from '@components/IntegrationDetailDevelop/FusebitEditor/useEditor';
@@ -539,7 +539,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
 
   const handleSave = async () => {
     const context = window.editor;
-    trackEventMemoized('Save Button Clicked', 'Web Editor');
+    trackEventUnmemoized('Save Button Clicked', 'Web Editor');
     await context?._server.saveFunction(context);
     await invalidateIntegration();
     setDirtyState(false);

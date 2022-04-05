@@ -94,14 +94,18 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
 
   const handleSnippetClick = (snippet?: ProcessedSnippet) => {
     if (snippet) {
+      trackEventUnmemoized('Snippets Menu Item Clicked', 'Web Editor', {
+        clickedOn: `${snippet?.connectorName} - ${snippet?.name}`,
+      });
+
       window.location.hash = `${snippet.feedId}&${snippet.name}`;
     } else {
+      trackEventUnmemoized('Snippets Menu Item Clicked', 'Web Editor', {
+        clickedOn: `See All`,
+      });
+
       window.location.hash = '&all';
     }
-
-    trackEventUnmemoized('Snippets Menu Item Clicked', 'Web Editor', {
-      clickedOn: `${snippet?.connectorName} - ${snippet?.name}`,
-    });
 
     onSnippetsModalOpen();
   };

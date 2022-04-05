@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { trackEventUnmemoized } from '@utils/analytics';
 import { ConnectorEntity, EntityComponent, Feed, Snippet } from '@interfaces/feed';
 import { InnerConnector, IntegrationData } from '@interfaces/integration';
 
@@ -30,10 +29,6 @@ const useSnippetsModal = ({ getProviderVersion, formatSnippet, integrationId, se
     snippet?: Snippet
   ) => {
     if (window.editor && feed && snippet) {
-      trackEventUnmemoized('Add Button Clicked', 'Add Snippet', {
-        snippet: `${feed.id}-${snippet.id}`,
-      });
-
       const addConnectorToConfig = (connector: ConnectorEntity) => {
         const connectorTemplate = (feed.configuration.components as EntityComponent[])[0];
         // Add newly created connector to integration's configuration

@@ -7,7 +7,7 @@ import { useAccountIntegrationTestIntegration } from '@hooks/api/v2/account/inte
 import { useAxios, ApiResponse } from '@hooks/useAxios';
 import { useAuthContext } from '@hooks/useAuthContext';
 import { InstallList, Install } from '@interfaces/install';
-import { trackEventMemoized } from '@utils/analytics';
+import { trackEventMemoized, trackEventUnmemoized } from '@utils/analytics';
 import { storeIntegrationConfig, getIntegrationConfig, resetIntegrationConfig } from '@utils/localStorage';
 import { InnerConnector, Integration } from '@interfaces/integration';
 import { useTrackPage } from '@hooks/useTrackPage';
@@ -83,9 +83,9 @@ const useEditor = ({ integrationData, enableListener = true, onReadyToRun, isMou
 
           await testIntegration({ id, tenantId: getTenantId() });
 
-          trackEventMemoized('Run Button Execution', objectLocation, { runStatus: 'success' });
+          trackEventUnmemoized('Run Button Execution', objectLocation, { runStatus: 'success' });
         } catch (error) {
-          trackEventMemoized('Run Button Execution', objectLocation, { runStatus: 'failure' });
+          trackEventUnmemoized('Run Button Execution', objectLocation, { runStatus: 'failure' });
           // eslint-disable-next-line no-console
           console.log(error);
         }
@@ -126,7 +126,7 @@ const useEditor = ({ integrationData, enableListener = true, onReadyToRun, isMou
   };
 
   const handleRun = async () => {
-    trackEventMemoized('Run Button Clicked', objectLocation);
+    trackEventUnmemoized('Run Button Clicked', objectLocation);
 
     try {
       const url = getIntegrationConfig(id, tenantId).session?.url;
@@ -149,7 +149,7 @@ const useEditor = ({ integrationData, enableListener = true, onReadyToRun, isMou
   };
 
   const handleEdit = async () => {
-    trackEventMemoized('Develop Edit Web Button Clicked', 'Integration');
+    trackEventUnmemoized('Develop Edit Web Button Clicked', 'Integration');
     try {
       const install = await findInstall();
 
