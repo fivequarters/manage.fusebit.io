@@ -20,7 +20,6 @@ const useSnippetsModal = ({ getProviderVersion, formatSnippet, integrationId, se
   const [snippetsModalOpen, setSnippetsModalOpen] = useState(false);
 
   const onSnippetsModalOpen = async () => {
-    trackEventUnmemoized('Snippets Button Clicked', 'Web Editor');
     setSnippetsModalOpen(true);
   };
 

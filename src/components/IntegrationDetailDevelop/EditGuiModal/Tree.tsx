@@ -61,8 +61,9 @@ const Tree = React.memo<
     name: string | JSX.Element;
     icon?: string;
     enableDropdownArrow?: boolean;
+    onClick?: (isOpen: boolean) => void;
   }
->(({ children, name, icon, enableDropdownArrow, style, defaultOpen = false }) => {
+>(({ children, name, icon, enableDropdownArrow, onClick, style, defaultOpen = false }) => {
   const [isOpen, setOpen] = useState(defaultOpen);
   const previous = usePrevious(isOpen);
   const [ref, { height: viewHeight }] = useMeasure();
@@ -76,7 +77,7 @@ const Tree = React.memo<
   });
 
   return (
-    <Frame>
+    <Frame onClick={() => onClick?.(isOpen)}>
       <TitleWrapper
         display="flex"
         alignItems="center"

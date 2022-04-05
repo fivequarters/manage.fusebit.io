@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { Box } from '@material-ui/core';
 import { Integration } from '@interfaces/integration';
 import { Feed, Snippet } from '@interfaces/feed';
+import { trackEventUnmemoized } from '@utils/analytics';
 import Tree from './Tree';
 import CustomNavBase from './CustomNavBase';
 import CustomNavItem from './CustomNavItem';
@@ -98,6 +99,10 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
       window.location.hash = '&all';
     }
 
+    trackEventUnmemoized('Snippets Menu Item Clicked', 'Web Editor', {
+      clickedOn: `${snippet?.connectorName} - ${snippet?.name}`,
+    });
+
     onSnippetsModalOpen();
   };
 
@@ -106,13 +111,27 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
       title="Resources"
       tooltipDescription="Resources to help you build your Fusebit Integration with target systems, more easily."
     >
-      <Tree name="Documentation" icon={books} enableDropdownArrow>
+      <Tree
+        name="Documentation"
+        icon={books}
+        enableDropdownArrow
+        onClick={(isOpen) => {
+          if (!isOpen) {
+            // Tree is getting expanded
+            trackEventUnmemoized('Documentation Menu Item Expanded', 'Web Editor');
+          }
+        }}
+      >
         <Box display="flex" flexDirection="column">
           {integrationGuideUrl && (
             <CustomNavItem
               icon={fusebitMarkIcon}
               name="Integration Guide"
               onClick={() => {
+                trackEventUnmemoized('Documentation Menu Item Clicked', 'Web Editor', {
+                  clickedOn: integrationGuideUrl,
+                });
+
                 window.open(integrationGuideUrl, '_blank', 'noopener');
               }}
             />
@@ -121,6 +140,10 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
             icon={fusebitMarkIcon}
             name="Fusebit SDK"
             onClick={() => {
+              trackEventUnmemoized('Documentation Menu Item Clicked', 'Web Editor', {
+                clickedOn: 'https://developer.fusebit.io/reference/fusebit-int-framework-integration',
+              });
+
               window.open(
                 'https://developer.fusebit.io/reference/fusebit-int-framework-integration',
                 '_blank',
@@ -135,6 +158,10 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
                 icon={connector.icon || ''}
                 name={connector.name || ''}
                 onClick={() => {
+                  trackEventUnmemoized('Documentation Menu Item Clicked', 'Web Editor', {
+                    clickedOn: connector?.url,
+                  });
+
                   window.open(connector.url, '_blank', 'noopener');
                 }}
               />
@@ -142,7 +169,17 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
           })}
         </Box>
       </Tree>
-      <Tree name="Snippets" icon={code} enableDropdownArrow>
+      <Tree
+        name="Snippets"
+        icon={code}
+        enableDropdownArrow
+        onClick={(isOpen) => {
+          if (!isOpen) {
+            // Tree is getting expanded
+            trackEventUnmemoized('Snippets Menu Item Expanded', 'Web Editor');
+          }
+        }}
+      >
         {snippets.map((snippet) => (
           <CustomNavItem
             key={snippet.id}
