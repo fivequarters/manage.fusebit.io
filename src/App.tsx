@@ -15,12 +15,14 @@ const App = () => {
 
   useEffect(() => {
     const unlisten = history.listen((location) => {
-      gtag('event', 'page_view', {
-        page_title: document.title,
-        page_location: document.title.split(' | ')?.[0],
-        page_path: location.pathname,
-        send_to: GA_MEASUREMENT_ID,
-      });
+      if (location.pathname !== '/' && document.title) {
+        gtag('event', 'page_view', {
+          page_title: document.title,
+          page_location: document.title.split(' | ')?.[0],
+          page_path: location.pathname,
+          send_to: GA_MEASUREMENT_ID,
+        });
+      }
     });
 
     return () => unlisten();
