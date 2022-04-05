@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import question from '@assets/question.svg';
 import { Box } from '@material-ui/core';
 import * as SC from '@components/globalStyle';
+import { trackEventUnmemoized } from '@utils/analytics';
 
 const StyledIcon = styled.img`
   height: 16px;
@@ -36,7 +37,30 @@ interface Props {
   description: string;
 }
 
+let timeout: NodeJS.Timeout;
+let timerRunning = false;
+
 const NavCategoryTooltip: React.FC<Props> = ({ title, description }) => {
+  const trackView = () => {
+    timeout = setTimeout(() => {
+      trackEventUnmemoized('Tooltips Viewed', 'Web Editor', {
+        ToolTipsItem: title,
+      });
+    }, 1000);
+  };
+
+  const onMouseEnter = () => {
+    if (!timerRunning) {
+      timerRunning = true;
+      trackView();
+    }
+  };
+
+  const onMouseLeave = () => {
+    clearTimeout(timeout);
+    timerRunning = false;
+  };
+
   return (
     <CustomTooltip
       title={
@@ -47,7 +71,7 @@ const NavCategoryTooltip: React.FC<Props> = ({ title, description }) => {
       }
       placement="right"
     >
-      <StyledIcon src={question} alt="info" />
+      <StyledIcon src={question} alt="info" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} />
     </CustomTooltip>
   );
 };
