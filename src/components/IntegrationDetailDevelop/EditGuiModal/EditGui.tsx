@@ -480,6 +480,16 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
         }
       });
 
+      const configurationItem = document.querySelector('[data-type=configurationSettings]');
+      if (configurationItem?.getAttribute('data-event-click') !== 'true') {
+        configurationItem?.addEventListener('click', () => {
+          trackEventUnmemoized('Settings Menu Item Clicked', 'Web Editor', {
+            clickedOn: 'Settings',
+          });
+        });
+        configurationItem?.setAttribute('data-event-click', 'true');
+      }
+
       // Add new sidebar options
       if (!document.getElementById('sidebar-options')) {
         const nav = document.querySelector('.fusebit-nav');
