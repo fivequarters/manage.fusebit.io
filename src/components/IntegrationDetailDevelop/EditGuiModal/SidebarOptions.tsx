@@ -21,7 +21,7 @@ const SidebarOptions: React.FC<Props> = ({
 }) => {
   return (
     <>
-      <Tools integrationData={integrationData} sampleAppUrl={sampleAppUrl} />
+      <Tools sampleAppUrl={sampleAppUrl} />
       <Resources
         integrationsFeed={integrationsFeed}
         connectorsFeed={connectorsFeed}

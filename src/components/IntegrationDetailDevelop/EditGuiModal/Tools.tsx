@@ -1,33 +1,32 @@
 import React, { useState } from 'react';
 import console from '@assets/console.svg';
-import { trackEventMemoized } from '@utils/analytics';
-import { Integration } from '@interfaces/integration';
+import { trackEventUnmemoized } from '@utils/analytics';
 import play from '@assets/play-black.svg';
 import NoSampleAppModal from '../NoSampleAppModal';
 import CustomNavBase from './CustomNavBase';
 import CustomNavItem from './CustomNavItem';
 
 interface Props {
-  integrationData: Integration | undefined;
   sampleAppUrl: string | undefined;
 }
 
-const Tools: React.FC<Props> = ({ integrationData, sampleAppUrl }) => {
+const Tools: React.FC<Props> = ({ sampleAppUrl }) => {
   const [noSampleAppOpen, setNoSampleAppOpen] = useState(false);
 
   const handleEditLocallyClick = () => {
-    trackEventMemoized('Docs Developing Locally Link Clicked', 'Web Editor', {
-      Integration: integrationData?.tags['fusebit.feedId'],
+    trackEventUnmemoized('Tools Menu Item Clicked', 'Web Editor', {
+      clickedOn: 'Run Locally',
     });
 
     window.open('https://developer.fusebit.io/docs/developing-locally', '_blank', 'noreferrer');
   };
 
   const handleSampleAppClick = () => {
+    trackEventUnmemoized('Tools Menu Item Clicked', 'Web Editor', {
+      clickedOn: 'Sample App',
+    });
+
     if (sampleAppUrl) {
-      trackEventMemoized('Sample App Clicked', 'Web Editor', {
-        Integration: integrationData?.tags['fusebit.feedId'],
-      });
       window.open(sampleAppUrl, '_blank', 'noreferrer');
     } else {
       setNoSampleAppOpen(true);
