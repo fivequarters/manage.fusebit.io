@@ -2,6 +2,7 @@ import { createMuiTheme, responsiveFontSizes, ThemeProvider } from '@material-ui
 import CookieConsent from 'react-cookie-consent';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import DashboardRoutes from '@components/DashboardRoutes';
+import Onboarding from '@components/Onboarding/Onboarding';
 import { ContextProvider } from '@hooks/useAuthContext';
 import useFeeds from '@hooks/useFeeds';
 import { lightTheme } from './theme/appTheme';
@@ -30,6 +31,7 @@ const App = () => {
         >
           <p style={{ color: '#333333', fontWeight: 500 }}>This website uses cookies to enhance the user experience.</p>
         </CookieConsent>
+        <Onboarding />
         <DashboardRoutes />
       </ThemeProvider>
     </ContextProvider>

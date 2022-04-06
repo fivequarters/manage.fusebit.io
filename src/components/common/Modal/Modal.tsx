@@ -24,11 +24,12 @@ export const StyledContent = styled(DialogContent)<{ hasPadding?: boolean }>`
 `;
 
 interface Props extends DialogProps {
-  onClose: () => void;
   open: boolean;
   children: React.ReactNode;
   disableActions?: boolean;
+  disableClose?: boolean;
   title?: string;
+  onClose?: () => void;
   onAccept?: () => void;
   hasCancel?: boolean;
   cancelButtonText?: string;
@@ -45,15 +46,19 @@ const Modal: React.FC<Props> = ({
   acceptButtonText,
   children,
   disableActions,
+  disableClose,
   ...props
 }) => {
   return (
     <Dialog onClose={onClose} open={open} {...props} disableEnforceFocus>
       {title && <StyledTitle>{title}</StyledTitle>}
       <StyledContent hasPadding={disableActions}>
-        <CSC.CloseWrapper aria-label="close" onClick={onClose}>
-          <CloseIcon />
-        </CSC.CloseWrapper>
+        {!disableClose && (
+          <CSC.CloseWrapper aria-label="close" onClick={onClose}>
+            <CloseIcon />
+          </CSC.CloseWrapper>
+        )}
+
         {children}
       </StyledContent>
       {!disableActions && (
