@@ -6,20 +6,21 @@ import styled from 'styled-components';
 import { useQuery } from '@hooks/useQuery';
 import Video from '@components/common/Video';
 import { trackEventMemoized } from '@utils/analytics';
+import { useSpring, animated, config } from 'react-spring';
 
 const StyledTitle = styled.h2`
-  font-size: 24px;
-  line-height: 26px;
+  font-size: 32px;
+  line-height: 34px;
   color: var(--black);
-  margin-bottom: 14px;
+  margin-top: 10px;
+  margin-bottom: 16px;
 `;
 
 const StyledDescription = styled.p`
-  font-size: 16px;
-  line-height: 22px;
+  font-size: 20px;
+  line-height: 26px;
   color: var(--black);
   margin-bottom: 24px;
-  max-width: 720px;
 
   strong {
     color: var(--primary-color);
@@ -41,7 +42,7 @@ const Onboarding: React.FC = () => {
 
   useEffect(() => {
     const utmContent = query.get('utm_content');
-    if (utmContent === 'new-vid') {
+    if (utmContent === 'new-vid' && !videoCompleted) {
       setOpen(true);
       trackEventMemoized('Product Video Modal Viewed', objectLocation);
       window.onbeforeunload = () => {
@@ -50,7 +51,7 @@ const Onboarding: React.FC = () => {
         return 'You have not finished the video. Are you sure you wanna leave?';
       };
     }
-  }, [query]);
+  }, [query, videoCompleted]);
 
   const onPlay = () => {
     trackEventMemoized('Product Video Played', objectLocation);
@@ -59,33 +60,57 @@ const Onboarding: React.FC = () => {
   const onEnded = () => {
     trackEventMemoized('Product Video Completed', objectLocation);
     setVideoCompleted(true);
+    setTimeout(() => {
+      setOpen(false);
+    }, 3000);
   };
+
+  const videoStyle = useSpring({
+    opacity: !videoCompleted ? 1 : 0,
+    config: config.gentle,
+  });
+
+  const successStyle = useSpring({
+    opacity: videoCompleted ? 1 : 0,
+    y: videoCompleted ? 0 : 40,
+    config: config.slow,
+    delay: 800,
+  });
 
   return (
     <Modal fullScreen disableActions disableClose open={open} closeAfterTransition BackdropComponent={Backdrop}>
       <Container maxWidth="lg">
-        {!videoCompleted ? (
-          <>
-            <StyledTitle>Almost Done!</StyledTitle>
-            <StyledDescription>
-              Now that you are signed up to Fusebit, let's get you ready to{' '}
-              <strong>start building a code-first integration in minutes.</strong> Watch the demo below on a few key
-              developer concepts.
-            </StyledDescription>
-            <StyledVideoWrapper>
-              <Video
-                onPlay={onPlay}
-                onEnded={onEnded}
-                src={video}
-                tracks={[{ src: 'captions_en.vtt', kind: 'captions', srcLang: 'en', label: 'english_captions' }]}
-              />
-            </StyledVideoWrapper>
-          </>
-        ) : (
+        <animated.div
+          style={{
+            ...videoStyle,
+            display: videoStyle.opacity.to((opacity) => (opacity === 0 ? 'none' : 'block')),
+          }}
+        >
+          <StyledTitle>Welcome to Fusebit!</StyledTitle>
+          <StyledDescription>
+            Now that you are signed up to Fusebit, let's get you ready to{' '}
+            <strong>start building a code-first integration in minutes.</strong> Watch the video below to learn key
+            concepts
+          </StyledDescription>
+          <StyledVideoWrapper>
+            <Video
+              onPlay={onPlay}
+              onEnded={onEnded}
+              src={video}
+              tracks={[{ src: 'captions_en.vtt', kind: 'captions', srcLang: 'en', label: 'english_captions' }]}
+            />
+          </StyledVideoWrapper>
+        </animated.div>
+        <animated.div
+          style={{
+            ...successStyle,
+            display: videoStyle.opacity.to((opacity) => (opacity === 0 ? 'block' : 'none')),
+          }}
+        >
           <Box display="flex" justifyContent="center" alignItems="center" height="90vh">
             <StyledDescription>Let's get going on building your first integration</StyledDescription>
           </Box>
-        )}
+        </animated.div>
       </Container>
     </Modal>
   );
