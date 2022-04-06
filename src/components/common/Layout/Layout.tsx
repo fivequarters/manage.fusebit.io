@@ -3,6 +3,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { CssBaseline } from '@material-ui/core';
 import GlobalStyle from '@components/globalStyle';
 import { useAuthContext } from '@hooks/useAuthContext';
+import Onboarding from '@components/Onboarding';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -42,7 +43,10 @@ const Layout: FC<Props> = ({ children }) => {
     <div className={classes.root}>
       <CssBaseline />
       <GlobalStyle />
-      <main>{children}</main>
+      <main>
+        <Onboarding />
+        {children}
+      </main>
     </div>
   );
 };

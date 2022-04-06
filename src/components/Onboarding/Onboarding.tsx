@@ -1,8 +1,9 @@
 import Modal from '@components/common/Modal';
 import video from '@assets/demo-video.mp4';
 import { Backdrop, Container } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useQuery } from '@hooks/useQuery';
 
 const StyledTitle = styled.h2`
   font-size: 24px;
@@ -32,7 +33,15 @@ const StyledVideo = styled.video`
 `;
 
 const Onboarding: React.FC = () => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
+  const query = useQuery();
+
+  useEffect(() => {
+    const utmContent = query.get('utm_content');
+    if (utmContent === 'new-vid') {
+      setOpen(true);
+    }
+  }, [query]);
 
   return (
     <Modal fullScreen disableActions disableClose open={open} closeAfterTransition BackdropComponent={Backdrop}>
@@ -45,9 +54,7 @@ const Onboarding: React.FC = () => {
         </StyledDescription>
         <StyledVideo src={video} controls width="100%" height="100%">
           <track src="captions_en.vtt" kind="captions" srcLang="en" label="english_captions" />
-          <p>
-            Tu navegador no soporta HTML5 video. Aquí está el <a href="rabbit320.webm">enlace del video</a>.
-          </p>
+          <p>Your browser does not support HTML5 video.</p>
         </StyledVideo>
       </Container>
     </Modal>
