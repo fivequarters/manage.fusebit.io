@@ -51,11 +51,11 @@ const Onboarding: React.FC = () => {
     }
   }, [query]);
 
-  const handlePlay = () => {
+  const onPlay = () => {
     trackEventMemoized('Product Video Played', objectLocation);
   };
 
-  const handleEnded = () => {
+  const onEnded = () => {
     trackEventMemoized('Product Video Completed', objectLocation);
   };
 
@@ -70,8 +70,8 @@ const Onboarding: React.FC = () => {
         </StyledDescription>
         <StyledVideoWrapper>
           <Video
-            onPlay={handlePlay}
-            onEnded={handleEnded}
+            onPlay={onPlay}
+            onEnded={onEnded}
             src={video}
             tracks={[{ src: 'captions_en.vtt', kind: 'captions', srcLang: 'en', label: 'english_captions' }]}
           />
