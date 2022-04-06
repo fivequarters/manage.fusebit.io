@@ -4,6 +4,7 @@ import { Backdrop, Container } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useQuery } from '@hooks/useQuery';
+import Video from '@components/common/Video';
 
 const StyledTitle = styled.h2`
   font-size: 24px;
@@ -25,11 +26,10 @@ const StyledDescription = styled.p`
   }
 `;
 
-const StyledVideo = styled.video`
+const StyledVideoWrapper = styled.div`
+  position: relative;
   width: 100%;
   height: 524px;
-  object-fit: cover;
-  border-radius: 8px;
 `;
 
 const Onboarding: React.FC = () => {
@@ -52,10 +52,12 @@ const Onboarding: React.FC = () => {
           <strong>start building a code-first integration in minutes.</strong> Watch the demo below on a few key
           developer concepts.
         </StyledDescription>
-        <StyledVideo src={video} controls width="100%" height="100%">
-          <track src="captions_en.vtt" kind="captions" srcLang="en" label="english_captions" />
-          <p>Your browser does not support HTML5 video.</p>
-        </StyledVideo>
+        <StyledVideoWrapper>
+          <Video
+            src={video}
+            tracks={[{ src: 'captions_en.vtt', kind: 'captions', srcLang: 'en', label: 'english_captions' }]}
+          />
+        </StyledVideoWrapper>
       </Container>
     </Modal>
   );
