@@ -1,6 +1,6 @@
 import Modal from '@components/common/Modal';
 import video from '@assets/demo-video.mp4';
-import { Backdrop, Container } from '@material-ui/core';
+import { Backdrop, Box, Container } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useQuery } from '@hooks/useQuery';
@@ -35,6 +35,7 @@ const StyledVideoWrapper = styled.div`
 
 const Onboarding: React.FC = () => {
   const [open, setOpen] = useState(false);
+  const [videoCompleted, setVideoCompleted] = useState(false);
   const query = useQuery();
   const objectLocation = 'Onboarding Video';
 
@@ -57,25 +58,34 @@ const Onboarding: React.FC = () => {
 
   const onEnded = () => {
     trackEventMemoized('Product Video Completed', objectLocation);
+    setVideoCompleted(true);
   };
 
   return (
     <Modal fullScreen disableActions disableClose open={open} closeAfterTransition BackdropComponent={Backdrop}>
       <Container maxWidth="lg">
-        <StyledTitle>Almost Done!</StyledTitle>
-        <StyledDescription>
-          Now that you are signed up to Fusebit, let's get you ready to{' '}
-          <strong>start building a code-first integration in minutes.</strong> Watch the demo below on a few key
-          developer concepts.
-        </StyledDescription>
-        <StyledVideoWrapper>
-          <Video
-            onPlay={onPlay}
-            onEnded={onEnded}
-            src={video}
-            tracks={[{ src: 'captions_en.vtt', kind: 'captions', srcLang: 'en', label: 'english_captions' }]}
-          />
-        </StyledVideoWrapper>
+        {!videoCompleted ? (
+          <>
+            <StyledTitle>Almost Done!</StyledTitle>
+            <StyledDescription>
+              Now that you are signed up to Fusebit, let's get you ready to{' '}
+              <strong>start building a code-first integration in minutes.</strong> Watch the demo below on a few key
+              developer concepts.
+            </StyledDescription>
+            <StyledVideoWrapper>
+              <Video
+                onPlay={onPlay}
+                onEnded={onEnded}
+                src={video}
+                tracks={[{ src: 'captions_en.vtt', kind: 'captions', srcLang: 'en', label: 'english_captions' }]}
+              />
+            </StyledVideoWrapper>
+          </>
+        ) : (
+          <Box display="flex" justifyContent="center" alignItems="center" height="90vh">
+            <StyledDescription>Let's get going on building your first integration</StyledDescription>
+          </Box>
+        )}
       </Container>
     </Modal>
   );
