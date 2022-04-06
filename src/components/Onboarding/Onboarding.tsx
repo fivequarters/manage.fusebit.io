@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useQuery } from '@hooks/useQuery';
 import Video from '@components/common/Video';
+import { trackEventMemoized } from '@utils/analytics';
 
 const StyledTitle = styled.h2`
   font-size: 24px;
@@ -35,13 +36,23 @@ const StyledVideoWrapper = styled.div`
 const Onboarding: React.FC = () => {
   const [open, setOpen] = useState(false);
   const query = useQuery();
+  const objectLocation = 'Onboarding Video';
 
   useEffect(() => {
     const utmContent = query.get('utm_content');
     if (utmContent === 'new-vid') {
       setOpen(true);
+      trackEventMemoized('Product Video Modal Viewed', objectLocation);
     }
   }, [query]);
+
+  const handlePlay = () => {
+    trackEventMemoized('Product Video Played', objectLocation);
+  };
+
+  const handleEnded = () => {
+    trackEventMemoized('Product Video Completed', objectLocation);
+  };
 
   return (
     <Modal fullScreen disableActions disableClose open={open} closeAfterTransition BackdropComponent={Backdrop}>
@@ -54,6 +65,8 @@ const Onboarding: React.FC = () => {
         </StyledDescription>
         <StyledVideoWrapper>
           <Video
+            onPlay={handlePlay}
+            onEnded={handleEnded}
             src={video}
             tracks={[{ src: 'captions_en.vtt', kind: 'captions', srcLang: 'en', label: 'english_captions' }]}
           />
