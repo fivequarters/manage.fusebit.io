@@ -43,6 +43,11 @@ const Onboarding: React.FC = () => {
     if (utmContent === 'new-vid') {
       setOpen(true);
       trackEventMemoized('Product Video Modal Viewed', objectLocation);
+      window.onbeforeunload = () => {
+        // The message below is not gonna be showed, as browsers no longer support
+        // custom messages on beforeUnload: https://developer.chrome.com/blog/chrome-51-deprecations/#remove_custom_messages_in_onbeforeunload_dialogs
+        return 'You have not finished the video. Are you sure you wanna leave?';
+      };
     }
   }, [query]);
 
