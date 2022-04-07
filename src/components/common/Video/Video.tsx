@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import play from '@assets/video-play.svg';
 import volume from '@assets/video-volume.svg';
@@ -96,6 +96,16 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
       videoRef.current.requestFullscreen();
     }
   };
+
+  useEffect(() => {
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') {
+        handlePlayState();
+      }
+    });
+
+    return window.removeEventListener('keydown', () => {});
+  }, []);
 
   return (
     <StyledWrapper>
