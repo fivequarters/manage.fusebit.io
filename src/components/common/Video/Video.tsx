@@ -123,7 +123,7 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
   }, []);
 
   const handleFullscreen = () => {
-    videoRef.current?.requestFullscreen();
+    videoRef.current?.requestFullscreen?.();
   };
 
   const formatTime = (seconds: any) => {
@@ -136,7 +136,7 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
 
   const handleTimeUpdate = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
     const updatedTime = formatTime(e.currentTarget.currentTime);
-    const updatedProgress = Math.round(e.currentTarget.currentTime * 100) / e.currentTarget.duration;
+    const updatedProgress = (e.currentTarget.currentTime * 100) / e.currentTarget.duration;
     setCurrentTime(updatedTime);
     setProgress(updatedProgress);
   };
