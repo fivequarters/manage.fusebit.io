@@ -1,11 +1,8 @@
-import React, { useState, useEffect, useMemo, ReactElement } from 'react';
-import ReactDOM from 'react-dom';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Box, Button, ButtonGroup, IconButton, useMediaQuery, useTheme } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Props, SaveStatus } from '@interfaces/edit';
 import { useAuthContext } from '@hooks/useAuthContext';
-import { useLoader } from '@hooks/useLoader';
-import { useGetConnectorsFeed } from '@hooks/useGetConnectorsFeed';
 import { useGetIntegrationFromCache } from '@hooks/useGetIntegrationFromCache';
 import useSnippets from '@hooks/useSnippets';
 import settings from '@assets/settings.svg';
@@ -23,7 +20,6 @@ import file from '@assets/file.svg';
 import cogs from '@assets/cogs.svg';
 import clock from '@assets/clock.svg';
 import playEditor from '@assets/play-editor.svg';
-import add from '@assets/add.svg';
 import { ReactComponent as ForkOutline } from '@assets/fork.svg';
 import CloseIcon from '@material-ui/icons/Close';
 import PlayArrowOutlined from '@material-ui/icons/PlayArrowOutlined';
@@ -31,7 +27,6 @@ import SaveOutlined from '@material-ui/icons/SaveOutlined';
 import { useInvalidateIntegration } from '@hooks/useInvalidateIntegration';
 import { useError } from '@hooks/useError';
 import { useCopy } from '@hooks/useCopy';
-import { useGetIntegrationsFeed } from '@hooks/useGetIntegrationsFeed';
 import useSampleApp from '@hooks/useSampleApp';
 import { getIntegrationConfig } from '@utils/localStorage';
 import MobileDrawer from '../MobileDrawer';
@@ -39,9 +34,11 @@ import useEditorEvents from '../FusebitEditor/useEditorEvents';
 import { BUILDING_TEXT, BUILD_COMPLETED_TEXT } from '../FusebitEditor/constants';
 import useProcessing from '../hooks/useProcessing';
 import useSnippetsModal from './useSnippetsModal';
-import NavCategoryTooltip from './NavCategoryTooltip';
-import SidebarOptions from './SidebarOptions';
 import { HEADER_HEIGHT } from './constants';
+import useEditorLoader from './useEditorLoader';
+import useCreateNewFile from './useCreateNewFile';
+import useEditorAnalytics from './useEditorAnalytics';
+import useCustomSidebar from './useCustomSidebar';
 import { EditorEvents } from '~/enums/editor';
 
 const StyledEditorContainer = styled.div`
@@ -270,39 +267,12 @@ const StyledTitle = styled.h3`
   }
 `;
 
-const addNewStyles = `
-  position: relative;
-  font-family: 'Poppins';
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 20px;
-  padding: 8px;
-  color: #333333;
-  cursor: pointer;
-  transition: all 0.25s linear, font-weight 0.1s linear;
-`;
-
-const addNewIcon = `
-    position: absolute;
-    left: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    height: 16px;
-    width: 16px;
-    background-image: url(${add});
-    background-size: contain;
-    background-repeat: no-repeat;
-`;
-
 const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationId, isLoading }, ref) => {
   const { id } = useParams<{ id: string }>();
-  const connectorsFeed = useGetConnectorsFeed();
-  const integrationsFeed = useGetIntegrationsFeed();
   const { userData, getTenantId } = useAuthContext();
   const [isMounted, setIsMounted] = useState(false);
   const [configureRunnerActive, setConfigureRunnerActive] = useState(false);
   const [unsavedWarning, setUnsavedWarning] = useState(false);
-  const { createLoader, removeLoader } = useLoader();
   const theme = useTheme();
   const matchesMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const integrationData = useGetIntegrationFromCache();
@@ -378,147 +348,12 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     },
   });
 
-  useEffect(() => {
-    const createAddNewItemElement = (lastItem: Element) => {
-      const addNew = document.createElement('div');
-      addNew.setAttribute('id', 'addNewItem');
-      addNew.setAttribute('style', addNewStyles);
-      addNew.onmouseenter = () => {
-        addNew.style.background = 'rgba(215, 229, 255, 0.4)';
-        addNew.style.fontWeight = '600';
-      };
-      addNew.onmouseleave = () => {
-        addNew.style.background = 'none';
-        addNew.style.fontWeight = '500';
-      };
-      addNew.onclick = (e) => {
-        e.stopPropagation();
-        const el = document.querySelector('.fusebit-code-action-add-btn');
-        if (el instanceof HTMLElement) {
-          el?.click();
-          document.getElementById('addNewItem')?.remove();
-          const input = document.querySelector('.fusebit-nav-new-file');
+  const isEditorRunning = useMemo(() => isMounted && !isLoading, [isLoading, isMounted]);
 
-          if (input) {
-            createAddNewItemElement(input);
-          }
-        }
-      };
-
-      const p = document.createElement('p');
-      p.setAttribute('style', 'margin: 0; margin-left: 25px;');
-      p.innerText = 'New File';
-      addNew.appendChild(p);
-
-      const icon = document.createElement('div');
-      icon.setAttribute('style', addNewIcon);
-      addNew.appendChild(icon);
-
-      lastItem.parentNode?.insertBefore(addNew, lastItem.nextSibling);
-    };
-
-    const appendCategoryTooltip = (
-      category: Element | null,
-      element: {
-        id: string;
-        jsx: ReactElement;
-      }
-    ) => {
-      if (category && !document.getElementById(element.id)) {
-        const div = document.createElement('div');
-        div.setAttribute('id', element.id);
-        div.style.display = 'flex';
-        category.appendChild(div);
-        ReactDOM.render(element.jsx, document.getElementById(element.id));
-      }
-    };
-
-    if (isMounted && !isLoading) {
-      removeLoader();
-      const items = document.getElementsByClassName('fusebit-nav-file');
-      const lastItem = items?.[items.length - 1];
-      const codeCategory = document.querySelectorAll('.fusebit-nav-category')?.[0];
-      const settingsCategory = document.querySelectorAll('.fusebit-nav-category')?.[1];
-
-      if (!document.getElementById('addNewItem')) {
-        createAddNewItemElement(lastItem);
-      }
-
-      appendCategoryTooltip(codeCategory, {
-        id: 'code',
-        jsx: (
-          <NavCategoryTooltip
-            title="Code"
-            description="All the files needed to run your Fusebit Integration as a microservice on our platform."
-          />
-        ),
-      });
-
-      appendCategoryTooltip(settingsCategory, {
-        id: 'settings',
-        jsx: (
-          <NavCategoryTooltip
-            title="Settings"
-            description="Configuration logic, such as CRON scheduling, for your Integration."
-          />
-        ),
-      });
-
-      // Default categories event tracking
-      const fileItems = document.querySelectorAll('.fusebit-nav-file');
-      fileItems?.forEach((item) => {
-        if (item.getAttribute('data-event-click') !== 'true') {
-          const fileName = item.querySelector('span')?.innerText;
-          item.addEventListener('click', () => {
-            trackEventUnmemoized('Code Menu Item Clicked', 'Web Editor', {
-              clickedOn: fileName,
-            });
-          });
-          item.setAttribute('data-event-click', 'true');
-        }
-      });
-
-      const configurationItem = document.querySelector('[data-type=configurationSettings]');
-      if (configurationItem?.getAttribute('data-event-click') !== 'true') {
-        configurationItem?.addEventListener('click', () => {
-          trackEventUnmemoized('Settings Menu Item Clicked', 'Web Editor', {
-            clickedOn: 'Settings',
-          });
-        });
-        configurationItem?.setAttribute('data-event-click', 'true');
-      }
-
-      // Add new sidebar options
-      if (!document.getElementById('sidebar-options')) {
-        const nav = document.querySelector('.fusebit-nav');
-        const div = document.createElement('div');
-        div.setAttribute('id', 'sidebar-options');
-        nav?.appendChild(div);
-        ReactDOM.render(
-          <SidebarOptions
-            integrationData={integrationData?.data}
-            sampleAppUrl={sampleAppUrl}
-            integrationsFeed={integrationsFeed.data}
-            connectorsFeed={connectorsFeed.data}
-            onSnippetsModalOpen={onSnippetsModalOpen}
-          />,
-          document.getElementById('sidebar-options')
-        );
-      }
-    } else {
-      createLoader();
-    }
-  }, [
-    isMounted,
-    isLoading,
-    createLoader,
-    removeLoader,
-    integrationsFeed,
-    connectorsFeed,
-    integrationData,
-    sampleAppUrl,
-    onSnippetsModalOpen,
-  ]);
+  useEditorLoader({ isEditorRunning });
+  useCreateNewFile({ isEditorRunning });
+  useEditorAnalytics({ isEditorRunning });
+  useCustomSidebar({ isEditorRunning, onSnippetsModalOpen, sampleAppUrl });
 
   const handleSaveAndRun = async () => {
     if (dirtyState) {
