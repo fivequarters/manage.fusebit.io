@@ -40,7 +40,7 @@ const IntegrationCard: React.FC<Props> = ({ className }) => {
   const { id } = useParams<{ id: string }>();
   const integrationData = useGetIntegrationFromCache();
 
-  const onEditClick = () => {
+  const handleClick = () => {
     gtag('event', 'click', {
       event_category: 'Integration Detail',
       event_label: 'Edit Button Clicked',
@@ -69,7 +69,7 @@ const IntegrationCard: React.FC<Props> = ({ className }) => {
           </Box>
         </StyledContent>
         <StyledActions>
-          <Button onClick={onEditClick} style={{ width: '200px' }} variant="contained" color="primary">
+          <Button onClick={handleClick} style={{ width: '200px' }} variant="contained" color="primary">
             <>Edit</>
           </Button>
         </StyledActions>
