@@ -294,8 +294,6 @@ const addNewIcon = `
     background-repeat: no-repeat;
 `;
 
-// TODO: Implement useEditorEvents to listen dirty state events
-
 const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationId, isLoading }, ref) => {
   const { id } = useParams<{ id: string }>();
   const connectorsFeed = useGetConnectorsFeed();
