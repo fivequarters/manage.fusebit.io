@@ -5,6 +5,7 @@ import volume from '@assets/video-volume.svg';
 import fullscreen from '@assets/video-fullscreen.svg';
 import { Box, Slider } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 const StyledWrapper = styled.div`
   position: relative;
@@ -87,6 +88,7 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
   const [volumeLevel, setVolume] = React.useState<number | number[]>(60);
   const [currentTime, setCurrentTime] = React.useState('00:00');
   const [duration, setDuration] = React.useState('00:00');
+  const [progress, setProgress] = React.useState(0);
 
   const handleVolumeChange = (event: React.ChangeEvent<{}>, newVolume: number | number[]) => {
     setVolume(newVolume);
@@ -122,7 +124,9 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
 
   const handleTimeUpdate = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
     const updatedTime = formatTime(e.currentTarget.currentTime);
+    const updatedProgress = Math.round(e.currentTarget.currentTime * 100) / e.currentTarget.duration;
     setCurrentTime(updatedTime);
+    setProgress(updatedProgress);
   };
 
   const handleOnCanPlay = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
@@ -156,6 +160,9 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
         <p>Your browser does not support HTML5 video.</p>
       </StyledVideo>
       <StyledControlsWrapper>
+        <Box mb="5px">
+          <LinearProgress color="primary" variant="buffer" value={progress} />
+        </Box>
         <Box display="flex" alignItems="center">
           <IconButton color="secondary" onClick={handlePlayState}>
             <StyledIcon src={play} alt="play" />
