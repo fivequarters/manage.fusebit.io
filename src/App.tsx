@@ -4,7 +4,6 @@ import { createMuiTheme, responsiveFontSizes, ThemeProvider } from '@material-ui
 import CookieConsent from 'react-cookie-consent';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import DashboardRoutes from '@components/DashboardRoutes';
-import { GA_MEASUREMENT_ID } from '@utils/constants';
 import { ContextProvider } from '@hooks/useAuthContext';
 import useFeeds from '@hooks/useFeeds';
 import { lightTheme } from './theme/appTheme';
@@ -20,7 +19,6 @@ const App = () => {
           page_title: document.title,
           page_location: document.title.split(' | ')?.[0],
           page_path: location.pathname,
-          send_to: GA_MEASUREMENT_ID,
         });
       }
     });
