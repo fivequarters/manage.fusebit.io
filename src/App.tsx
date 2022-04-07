@@ -4,10 +4,12 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import DashboardRoutes from '@components/DashboardRoutes';
 import { ContextProvider } from '@hooks/useAuthContext';
 import useFeeds from '@hooks/useFeeds';
+import useGtag from '@hooks/useGtag';
 import { lightTheme } from './theme/appTheme';
 
 const App = () => {
   useFeeds();
+  useGtag();
 
   return (
     <ContextProvider>

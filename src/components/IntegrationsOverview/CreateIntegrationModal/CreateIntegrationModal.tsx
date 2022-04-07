@@ -23,6 +23,12 @@ const CreateIntegrationModal = ({ open, onClose }: Props) => {
   const handleCreate = async (feed: Feed, data: Data) => {
     try {
       createLoader();
+
+      gtag('event', 'click', {
+        event_category: 'Integrations Dialog',
+        event_label: 'New Integration Dialog Button Clicked',
+      });
+
       const integration = await createIntegrationAndConnector(feed, data);
 
       history.push(getRedirectLink(`/integration/${integration?.id || ''}/develop`));

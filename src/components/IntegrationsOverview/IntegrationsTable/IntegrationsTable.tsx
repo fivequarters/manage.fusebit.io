@@ -61,6 +61,10 @@ const IntegrationsTable = () => {
 
   const handleNewIntegration = () => {
     trackEventMemoized('New Integration Button Clicked', 'Integrations', {});
+    gtag('event', 'click', {
+      event_category: 'Integrations',
+      event_label: 'New Integration Button Clicked',
+    });
     toggleNewModal();
   };
 

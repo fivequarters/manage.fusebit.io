@@ -2,4 +2,5 @@
 
 interface Window {
   editor?: Context;
+  dataLayer: { [key]: string }[];
 }
