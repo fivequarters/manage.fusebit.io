@@ -307,7 +307,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     events: [EditorEvents.BuildStarted, EditorEvents.BuildFinished, EditorEvents.BuildError],
   });
 
-  const { snippetsModalOpen, onSnippetsModalOpen, onSnippetsModalClose } = useSnippetsModal({
+  const { snippetsModal, onSnippetsModalOpen, onSnippetsModalClose } = useSnippetsModal({
     formatSnippet,
     getProviderVersion,
     integrationId,
@@ -510,9 +510,10 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       />
       <ConfigureRunnerModal open={configureRunnerActive} setOpen={setConfigureRunnerActive} />
       <AddSnippetToIntegrationModal
-        open={snippetsModalOpen}
+        open={snippetsModal.isOpen}
         onClose={onSnippetsModalClose}
         integrationData={integrationData}
+        defaultSnippet={snippetsModal.snippet}
       />
       <StyledEditorContainer ref={ref}>
         {isMounted && !matchesMobile && (

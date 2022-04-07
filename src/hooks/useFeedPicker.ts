@@ -1,11 +1,10 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { ValidationMode } from '@jsonforms/core';
 import debounce from 'lodash.debounce';
 import { useMediaQuery } from '@material-ui/core';
-import { Feed, Snippet, ParsedFeed } from '@interfaces/feed';
+import { Feed, Snippet, ParsedFeed, ParsedSnippet } from '@interfaces/feed';
 import { trackEventMemoized, trackEventUnmemoized } from '@utils/analytics';
 import { sendIntercomMessage } from '@utils/intercom';
-import { getSnippetDataFromHash } from '@utils/utils';
 import { Data } from '@interfaces/feedPicker';
 import orderBy from 'lodash.orderby';
 import { useQueryClient } from 'react-query';
@@ -21,9 +20,10 @@ interface Props {
   onSubmit: (feed: Feed, data: Data, snippet?: Snippet) => void;
   onClose?: () => void;
   open: boolean;
+  defaultSnippet?: ParsedSnippet;
 }
 
-const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFork }: Props) => {
+const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFork, defaultSnippet }: Props) => {
   const query = useQuery();
   const { integrationsFeedQueryKey } = useFeedQuery();
   const [rawActiveTemplate, setRawActiveTemplate] = React.useState<Feed>();
@@ -64,33 +64,15 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
     if (feed.length > 0 && open) {
       let templateToActivate: Feed | undefined;
       if (isSnippet) {
-        // Find first connector that matches our search
-        const { snippetFeedId, snippetName } = getSnippetDataFromHash();
-        const result = feed.find((f) => f.id === snippetFeedId);
-        let defaultSelectedSnippet: Snippet | undefined = result?.snippets?.[0];
-        if (snippetName !== 'all') {
-          filteredFeed.setSearchFilter(snippetName);
-          defaultSelectedSnippet = result?.snippets?.find((snippet) => snippet.name === snippetName);
+        const result = feed.find((f) => f.id === defaultSnippet?.feedId);
+
+        if (defaultSnippet) {
+          filteredFeed.setSearchFilter(defaultSnippet.name);
         }
 
-        if (result && defaultSelectedSnippet) {
+        // find first connector with snippets
+        if (result) {
           templateToActivate = result;
-          setRawActiveSnippet(defaultSelectedSnippet);
-          setActiveSnippet(defaultSelectedSnippet);
-          trackEventMemoized(`New Snippet Selected`, `Add Snippet`, {
-            snippet: `${templateToActivate.id}-${defaultSelectedSnippet?.id}`,
-            snippetDefault: true,
-          });
-        } else {
-          // Find first connector with snippets
-          templateToActivate = feed.find((f) => f.snippets && f.snippets.length > 0);
-          defaultSelectedSnippet = templateToActivate?.snippets?.[0];
-          setRawActiveSnippet(defaultSelectedSnippet);
-          setActiveSnippet(defaultSelectedSnippet);
-          trackEventMemoized(`New Snippet Selected`, `Add Snippet`, {
-            snippet: `${templateToActivate?.id}-${defaultSelectedSnippet?.id}`,
-            snippetDefault: true,
-          });
         }
       } else if (key) {
         [templateToActivate] = feed;
@@ -120,10 +102,25 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
             });
           }
         });
+        if (isSnippet && templateToActivate.snippets && templateToActivate.snippets.length > 0) {
+          const defaultRawSnippet = templateToActivate.snippets[0];
+          const newRawSnippet = defaultSnippet?.name
+            ? templateToActivate.snippets.find((s) => s.name === defaultSnippet?.name)
+            : defaultRawSnippet;
+
+          const newSnippet = newRawSnippet || defaultRawSnippet;
+          setRawActiveSnippet(newSnippet);
+          // TODO replace snippet mustache
+          setActiveSnippet(newSnippet);
+          trackEventMemoized(`New Snippet Selected`, `Add Snippet`, {
+            snippet: `${templateToActivate.id}-${newSnippet.id}`,
+            snippetDefault: true,
+          });
+        }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isIntegration, isSnippet, open, feed]);
+  }, [isIntegration, isSnippet, open, feed, defaultSnippet]);
 
   useEffect(() => {
     if (campaingIntegrationRef) {
@@ -137,27 +134,33 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
     ? queryClient.getQueryState('getIntegrationsFeed')?.status === 'loading'
     : queryClient.getQueryState('getConnectorsFeed')?.status === 'loading';
 
-  const trackSearchInput = (searchQuery: string) => {
-    if (isIntegration) {
-      trackEventUnmemoized('New Integration Search Execution', 'Integrations', {
-        searchQuery,
-      });
-    } else if (isSnippet) {
-      trackEventUnmemoized('Add Snippet Search Execution', 'Add Snippet', {
-        searchQuery,
-      });
-    } else {
-      trackEventUnmemoized('New Connector Search Execution', 'Connectors', {
-        searchQuery,
-      });
-    }
-  };
+  const trackSearchInput = useCallback(
+    (searchQuery: string) => {
+      if (isIntegration) {
+        trackEventUnmemoized('New Integration Search Execution', 'Integrations', {
+          searchQuery,
+        });
+      } else if (isSnippet) {
+        trackEventUnmemoized('Add Snippet Search Execution', 'Add Snippet', {
+          searchQuery,
+        });
+      } else {
+        trackEventUnmemoized('New Connector Search Execution', 'Connectors', {
+          searchQuery,
+        });
+      }
+    },
+    [isIntegration, isSnippet]
+  );
 
-  const debouncedSetSearchFilter = debounce((keyword: string) => {
-    const search = keyword.trim();
-    trackSearchInput(search);
-    filteredFeed.setSearchFilter(search);
-  }, 500);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedSetSearchFilter = useCallback(debounce(trackSearchInput, 500), [trackSearchInput]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { value } = e.currentTarget;
+    filteredFeed.setSearchFilter(value);
+    debouncedSetSearchFilter(value.trim());
+  };
 
   const handleAdd = () => {
     if (errors.length > 0) {
@@ -279,7 +282,6 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
     handleFilterChange,
     handlePlanUpsell,
     handleAdd,
-    debouncedSetSearchFilter,
     activeTemplate,
     setActiveTemplate,
     activeSnippet,
@@ -297,6 +299,7 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
     searchFocused,
     setSearchFocused,
     trackSearchInput,
+    handleInputChange,
   };
 };
 

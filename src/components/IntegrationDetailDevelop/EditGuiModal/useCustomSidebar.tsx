@@ -1,6 +1,7 @@
 import { useGetConnectorsFeed } from '@hooks/useGetConnectorsFeed';
 import { useGetIntegrationFromCache } from '@hooks/useGetIntegrationFromCache';
 import { useGetIntegrationsFeed } from '@hooks/useGetIntegrationsFeed';
+import { ParsedSnippet } from '@interfaces/feed';
 import { ReactElement, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import NavCategoryTooltip from './NavCategoryTooltip';
@@ -25,7 +26,7 @@ const appendCategoryTooltip = (
 type Props = {
   isEditorRunning: boolean;
   sampleAppUrl: string;
-  onSnippetsModalOpen: () => Promise<void>;
+  onSnippetsModalOpen: (snippet?: ParsedSnippet) => Promise<void>;
 };
 
 const useCustomSidebar = ({ isEditorRunning, sampleAppUrl, onSnippetsModalOpen }: Props) => {

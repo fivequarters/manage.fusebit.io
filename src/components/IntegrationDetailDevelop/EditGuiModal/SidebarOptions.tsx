@@ -1,4 +1,4 @@
-import { Feed } from '@interfaces/feed';
+import { Feed, ParsedSnippet } from '@interfaces/feed';
 import { Integration } from '@interfaces/integration';
 import React from 'react';
 import Resources from './Resources';
@@ -9,7 +9,7 @@ interface Props {
   sampleAppUrl: string | undefined;
   integrationsFeed: Feed[] | undefined;
   connectorsFeed: Feed[] | undefined;
-  onSnippetsModalOpen: () => void;
+  onSnippetsModalOpen: (snippet?: ParsedSnippet) => void;
 }
 
 const SidebarOptions: React.FC<Props> = ({

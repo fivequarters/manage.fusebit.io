@@ -41,6 +41,12 @@ export interface Snippet {
   code: string;
 }
 
+export interface ParsedSnippet extends Snippet {
+  icon: string;
+  connectorName: string;
+  feedId: string;
+}
+
 export interface Feed {
   id: string;
   name: string;

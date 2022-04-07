@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ConnectorEntity, EntityComponent, Feed, Snippet } from '@interfaces/feed';
+import { ConnectorEntity, EntityComponent, Feed, ParsedSnippet, Snippet } from '@interfaces/feed';
 import { InnerConnector, IntegrationData } from '@interfaces/integration';
 
 interface Props {
@@ -16,10 +16,16 @@ interface Props {
 }
 
 const useSnippetsModal = ({ getProviderVersion, formatSnippet, integrationId, setDirtyState }: Props) => {
-  const [snippetsModalOpen, setSnippetsModalOpen] = useState(false);
+  const [snippetsModal, setSnippetsModal] = useState({
+    isOpen: false,
+    snippet: undefined as ParsedSnippet | undefined,
+  });
 
-  const onSnippetsModalOpen = async () => {
-    setSnippetsModalOpen(true);
+  const onSnippetsModalOpen = async (snippet?: ParsedSnippet) => {
+    setSnippetsModal({
+      isOpen: true,
+      snippet,
+    });
   };
 
   const onSnippetsModalClose = (
@@ -78,11 +84,14 @@ const useSnippetsModal = ({ getProviderVersion, formatSnippet, integrationId, se
       }
       addSnippetCode();
     }
-    setSnippetsModalOpen(false);
+    setSnippetsModal({
+      isOpen: false,
+      snippet: undefined,
+    });
   };
 
   return {
-    snippetsModalOpen,
+    snippetsModal,
     onSnippetsModalOpen,
     onSnippetsModalClose,
   };

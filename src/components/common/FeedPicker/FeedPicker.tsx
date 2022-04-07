@@ -1,11 +1,11 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Box, Button, TextField } from '@material-ui/core';
 import { Props } from '@interfaces/feedPicker';
 import search from '@assets/search.svg';
 import Loader from '@components/common/Loader';
 import { useTrackPage } from '@hooks/useTrackPage';
-import { getSnippetDataFromHash, urlOrSvgToImage } from '@utils/utils';
+import { urlOrSvgToImage } from '@utils/utils';
 import BaseJsonForm from '@components/common/BaseJsonForm';
 import { DefaultFilters } from '@hooks/useFilterFeed';
 import useFeedPicker from '@hooks/useFeedPicker';
@@ -169,7 +169,7 @@ const StyledGeneralInfoWrapper = styled.div`
 `;
 
 const FeedPicker = React.forwardRef<HTMLDivElement, Props>(
-  ({ open, onClose, onSubmit, isIntegration, isSnippet, hasConnectorDependency }, ref) => {
+  ({ open, onClose, onSubmit, isIntegration, isSnippet, hasConnectorDependency, defaultSnippet }, ref) => {
     const {
       rawActiveTemplate,
       getFullTemplateId,
@@ -180,7 +180,6 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(
       data,
       handleSubmit,
       handleFilterChange,
-      debouncedSetSearchFilter,
       activeTemplate,
       activeSnippet,
       handleTemplateChange,
@@ -195,12 +194,15 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(
       searchFocused,
       setSearchFocused,
       trackSearchInput,
+      searchFilter,
+      handleInputChange,
     } = useFeedPicker({
       open,
       isIntegration,
       isSnippet,
       onSubmit,
       onClose,
+      defaultSnippet,
     });
 
     let pageName = `${feedTypeName} New Modal`;
@@ -218,15 +220,6 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(
     };
 
     const needsConnector = hasConnectorDependency && rawActiveTemplate && !hasConnectorDependency(rawActiveTemplate);
-
-    const defaultSearchVal = useMemo(() => {
-      const { snippetName } = getSnippetDataFromHash();
-      if (snippetName !== 'all') {
-        return snippetName;
-      }
-
-      return '';
-    }, []);
 
     return (
       <StyledCard onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)} ref={ref} tabIndex={-1}>
@@ -275,8 +268,8 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(
                     trackSearchInput((e.target as HTMLInputElement).value);
                   }
                 }}
-                defaultValue={defaultSearchVal}
-                onChange={(e) => debouncedSetSearchFilter(e.target.value)}
+                value={searchFilter}
+                onChange={handleInputChange}
                 label="Search"
               />
               <StyledColumnSearchIcon src={search} alt={`Search ${feedTypeName}s`} height="24" width="24" />

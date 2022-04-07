@@ -5,7 +5,7 @@ import fusebitMarkIcon from '@assets/fusebit-mark.svg';
 import React, { useMemo } from 'react';
 import { Box } from '@material-ui/core';
 import { Integration } from '@interfaces/integration';
-import { Feed, Snippet } from '@interfaces/feed';
+import { Feed, ParsedSnippet } from '@interfaces/feed';
 import { trackEventUnmemoized } from '@utils/analytics';
 import { getConnectorFeedByComponent, getFeedByIntegration } from '@utils/entities';
 import Tree from './Tree';
@@ -16,13 +16,7 @@ interface Props {
   integrationsFeed: Feed[] | undefined;
   connectorsFeed: Feed[] | undefined;
   integrationData: Integration | undefined;
-  onSnippetsModalOpen: () => void;
-}
-
-interface ParsedSnippet extends Snippet {
-  icon: string;
-  connectorName: string;
-  feedId: string;
+  onSnippetsModalOpen: (snippet?: ParsedSnippet) => void;
 }
 
 interface SDKDoc {
@@ -72,17 +66,13 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
       trackEventUnmemoized('Snippets Menu Item Clicked', 'Web Editor', {
         clickedOn: `${snippet?.connectorName} - ${snippet?.name}`,
       });
-
-      window.location.hash = `${snippet.feedId}&${snippet.name}`;
     } else {
       trackEventUnmemoized('Snippets Menu Item Clicked', 'Web Editor', {
         clickedOn: `See All`,
       });
-
-      window.location.hash = '&all';
     }
 
-    onSnippetsModalOpen();
+    onSnippetsModalOpen(snippet);
   };
 
   return (
@@ -165,7 +155,7 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
             onClick={() => handleSnippetClick(snippet)}
           />
         ))}
-        <CustomNavItem icon={add} name="See All Snippets" onClick={() => handleSnippetClick(undefined)} />
+        <CustomNavItem icon={add} name="See All Snippets" onClick={() => handleSnippetClick()} />
       </Tree>
     </CustomNavBase>
   );
