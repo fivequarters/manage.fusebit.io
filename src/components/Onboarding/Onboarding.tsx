@@ -1,6 +1,6 @@
 import Modal from '@components/common/Modal';
 import video from '@assets/demo-video.mp4';
-import { Backdrop, Box, Container } from '@material-ui/core';
+import { Backdrop, Box } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useQuery } from '@hooks/useQuery';
@@ -80,39 +80,37 @@ const Onboarding: React.FC = () => {
 
   return (
     <Modal disableActions disableClose open={open} closeAfterTransition BackdropComponent={Backdrop}>
-      <Container maxWidth="lg">
-        <animated.div
-          style={{
-            ...videoStyle,
-            display: videoStyle.opacity.to((opacity) => (opacity === 0 ? 'none' : 'block')),
-          }}
-        >
-          <StyledTitle>Welcome to Fusebit!</StyledTitle>
-          <StyledDescription>
-            Now that you are signed up to Fusebit, let's get you ready to{' '}
-            <strong>start building a code-first integration in minutes.</strong> Watch the video below to learn key
-            concepts
-          </StyledDescription>
-          <StyledVideoWrapper>
-            <Video
-              onPlay={onPlay}
-              onEnded={onEnded}
-              src={video}
-              tracks={[{ src: 'captions_en.vtt', kind: 'captions', srcLang: 'en', label: 'english_captions' }]}
-            />
-          </StyledVideoWrapper>
-        </animated.div>
-        <animated.div
-          style={{
-            ...successStyle,
-            display: videoStyle.opacity.to((opacity) => (opacity === 0 ? 'block' : 'none')),
-          }}
-        >
-          <Box display="flex" justifyContent="center" alignItems="center" height="90vh">
-            <StyledDescription>Let's get going on building your first integration</StyledDescription>
-          </Box>
-        </animated.div>
-      </Container>
+      <animated.div
+        style={{
+          ...videoStyle,
+          display: videoStyle.opacity.to((opacity) => (opacity === 0 ? 'none' : 'block')),
+        }}
+      >
+        <StyledTitle>Welcome to Fusebit!</StyledTitle>
+        <StyledDescription>
+          Now that you are signed up to Fusebit, let's get you ready to{' '}
+          <strong>start building a code-first integration in minutes.</strong> Watch the video below to learn key
+          concepts
+        </StyledDescription>
+        <StyledVideoWrapper>
+          <Video
+            onPlay={onPlay}
+            onEnded={onEnded}
+            src={video}
+            tracks={[{ src: 'captions_en.vtt', kind: 'captions', srcLang: 'en', label: 'english_captions' }]}
+          />
+        </StyledVideoWrapper>
+      </animated.div>
+      <animated.div
+        style={{
+          ...successStyle,
+          display: videoStyle.opacity.to((opacity) => (opacity === 0 ? 'block' : 'none')),
+        }}
+      >
+        <Box display="flex" justifyContent="center" alignItems="center" height="90vh">
+          <StyledDescription>Let's get going on building your first integration</StyledDescription>
+        </Box>
+      </animated.div>
     </Modal>
   );
 };

@@ -18,6 +18,22 @@ const StyledVideo = styled.video`
   height: 100%;
   object-fit: cover;
   border-radius: 8px;
+
+  ::-webkit-media-controls {
+    display: none !important;
+  }
+
+  video::-webkit-media-controls {
+    display: none !important;
+  }
+
+  video::-webkit-media-controls-enclosure {
+    display: none !important;
+  }
+
+  .custom-video-controls {
+    z-index: 2147483647;
+  }
 `;
 
 const StyledControlsWrapper = styled.div`
@@ -75,6 +91,12 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
     }
   };
 
+  const handleFullscreen = () => {
+    if (videoRef.current) {
+      videoRef.current.requestFullscreen();
+    }
+  };
+
   return (
     <StyledWrapper>
       <StyledVideo ref={videoRef} src={src} {...props}>
@@ -98,7 +120,7 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
               aria-labelledby="volume"
             />
           </StyledVolumeWrapper>
-          <IconButton color="secondary" style={{ margin: '0 0 0 auto' }}>
+          <IconButton onClick={handleFullscreen} color="secondary" style={{ margin: '0 0 0 auto' }}>
             <StyledIcon src={fullscreen} alt="fullscreen" />
           </IconButton>
         </Box>
