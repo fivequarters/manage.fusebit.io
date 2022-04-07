@@ -64,6 +64,19 @@ const StyledSlider = styled(Slider)`
   margin-left: 14px;
 `;
 
+const StyledTimeWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 16px;
+  color: white;
+`;
+
+const StyledTime = styled.div`
+  font-size: 12px;
+  line-height: 16px;
+  color: white;
+`;
+
 interface Props extends React.VideoHTMLAttributes<HTMLVideoElement> {
   src: string;
   tracks: React.TrackHTMLAttributes<HTMLTrackElement>[];
@@ -72,6 +85,8 @@ interface Props extends React.VideoHTMLAttributes<HTMLVideoElement> {
 const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [volumeLevel, setVolume] = React.useState<number | number[]>(60);
+  const [currentTime, setCurrentTime] = React.useState('00:00');
+  const [duration, setDuration] = React.useState('00:00');
 
   const handleVolumeChange = (event: React.ChangeEvent<{}>, newVolume: number | number[]) => {
     setVolume(newVolume);
@@ -97,6 +112,23 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
     }
   };
 
+  const formatTime = (seconds: any) => {
+    let minutes: any = Math.floor(seconds / 60);
+    minutes = minutes >= 10 ? minutes : `0${minutes}`;
+    seconds = Math.floor(seconds % 60);
+    seconds = seconds >= 10 ? seconds : `0${seconds}`;
+    return `${minutes}:${seconds}`;
+  };
+
+  const handleTimeUpdate = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
+    const updatedTime = formatTime(e.currentTarget.currentTime);
+    setCurrentTime(updatedTime);
+  };
+
+  const handleOnCanPlay = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
+    setDuration(formatTime(e.currentTarget.duration));
+  };
+
   useEffect(() => {
     window.addEventListener('keydown', (e) => {
       if (e.code === 'Space') {
@@ -109,7 +141,14 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
 
   return (
     <StyledWrapper>
-      <StyledVideo ref={videoRef} src={src} {...props}>
+      <StyledVideo
+        onCanPlay={handleOnCanPlay}
+        id="video"
+        onTimeUpdate={handleTimeUpdate}
+        ref={videoRef}
+        src={src}
+        {...props}
+      >
         {tracks.map((track) => (
           <track key={track.src} {...track} />
         ))}
@@ -130,6 +169,11 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
               aria-labelledby="volume"
             />
           </StyledVolumeWrapper>
+          <StyledTimeWrapper>
+            <StyledTime>
+              {currentTime} / {duration}
+            </StyledTime>
+          </StyledTimeWrapper>
           <IconButton onClick={handleFullscreen} color="secondary" style={{ margin: '0 0 0 auto' }}>
             <StyledIcon src={fullscreen} alt="fullscreen" />
           </IconButton>
