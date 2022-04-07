@@ -49,14 +49,14 @@ const NavCategoryTooltip: React.FC<Props> = ({ title, description }) => {
     }, 1000);
   };
 
-  const onMouseEnter = () => {
+  const handleMouseEnter = () => {
     if (!timerRunning) {
       timerRunning = true;
       trackView();
     }
   };
 
-  const onMouseLeave = () => {
+  const handleMouseLeave = () => {
     clearTimeout(timeout);
     timerRunning = false;
   };
@@ -71,7 +71,7 @@ const NavCategoryTooltip: React.FC<Props> = ({ title, description }) => {
       }
       placement="right"
     >
-      <StyledIcon src={question} alt="info" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} />
+      <StyledIcon src={question} alt="info" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} />
     </CustomTooltip>
   );
 };
