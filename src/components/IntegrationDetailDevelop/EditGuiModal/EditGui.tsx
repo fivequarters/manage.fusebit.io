@@ -9,7 +9,7 @@ import settings from '@assets/settings.svg';
 import settingsPrimary from '@assets/settings-primary.svg';
 import ConfigureRunnerModal from '@components/IntegrationDetailDevelop/ConfigureRunnerModal';
 import AddSnippetToIntegrationModal from '@components/IntegrationDetailDevelop/AddSnippetToIntegrationModal';
-import { trackEventUnmemoized } from '@utils/analytics';
+import { trackEventMemoized, trackEventUnmemoized } from '@utils/analytics';
 import ConfirmationPrompt from '@components/common/ConfirmationPrompt';
 import FusebitEditor from '@components/IntegrationDetailDevelop/FusebitEditor';
 import useEditor from '@components/IntegrationDetailDevelop/FusebitEditor/useEditor';
@@ -29,6 +29,9 @@ import { useError } from '@hooks/useError';
 import { useCopy } from '@hooks/useCopy';
 import useSampleApp from '@hooks/useSampleApp';
 import { getIntegrationConfig } from '@utils/localStorage';
+import { useTrackPage } from '@hooks/useTrackPage';
+import { useGetConnectorsFeed } from '@hooks/useGetConnectorsFeed';
+import { InnerConnector } from '@interfaces/integration';
 import MobileDrawer from '../MobileDrawer';
 import useEditorEvents from '../FusebitEditor/useEditorEvents';
 import { BUILDING_TEXT, BUILD_COMPLETED_TEXT } from '../FusebitEditor/constants';
@@ -269,29 +272,21 @@ const StyledTitle = styled.h3`
 
 const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationId, isLoading }, ref) => {
   const { id } = useParams<{ id: string }>();
+  const connectorFeed = useGetConnectorsFeed();
   const { userData, getTenantId } = useAuthContext();
   const [isMounted, setIsMounted] = useState(false);
   const [configureRunnerActive, setConfigureRunnerActive] = useState(false);
   const [unsavedWarning, setUnsavedWarning] = useState(false);
+  const [loginFlowModalOpen, setLoginFlowModalOpen] = useState(false);
   const theme = useTheme();
   const matchesMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [missingIdentities, setMissingIdentities] = useState<InnerConnector[] | undefined>(undefined);
   const integrationData = useGetIntegrationFromCache();
-  const {
-    handleRun,
-    handleLogin,
-    isFindingInstall,
-    setNeedsInitialization,
-    setRunPending,
-    isRunning,
-    handleFork,
-    forkEditFeedUrl,
-    assumeHasConnectors,
-    missingConnectorNames,
-    loginFlowModalOpen,
-    setLoginFlowModalOpen,
-  } = useEditor({
+  const { handleRun, handleLogin, isFindingInstall, setNeedsInitialization, setRunPending, isRunning } = useEditor({
     integrationData,
-    isMounted,
+    onReadyToLogin: () =>
+      !missingIdentities || missingIdentities.length > 0 ? setLoginFlowModalOpen(true) : handleLogin(),
+    onMissingIdentities: setMissingIdentities,
   });
   const [dirtyState, setDirtyState] = useState(false);
   const [enableGrafanaLogs] = useState<boolean>(() => {
@@ -326,6 +321,17 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     }
   }, [errorBuild, createError, setErrorBuild]);
 
+  const urlParams = new URLSearchParams(window.location.search);
+  const forkEditFeedUrl = urlParams.get('forkEditFeedUrl');
+
+  const pageName = forkEditFeedUrl ? 'Web Editor (Read-Only)' : 'Web Editor';
+  const objectLocation = forkEditFeedUrl ? 'Web Editor (Read-Only)' : 'Web Editor';
+  const additionalProperties = forkEditFeedUrl ? { Integration: integrationId, domain: 'API' } : undefined;
+  useTrackPage(pageName, objectLocation, additionalProperties);
+  if (forkEditFeedUrl) {
+    trackEventMemoized('Share Redirect Execution', 'Share Function', additionalProperties);
+  }
+
   useTitle(`${id} Editor`);
   const { processing } = useProcessing({
     onProcessingStarted: () => {
@@ -348,6 +354,18 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     },
   });
 
+  const handleFork = () => {
+    trackEventMemoized(
+      'Fork Button Clicked',
+      'Web Editor (Read-Only)',
+      {
+        Integration: integrationId,
+      },
+      () => {
+        window.location.href = `/?forkFeedUrl=${forkEditFeedUrl}`;
+      }
+    );
+  };
   const isEditorRunning = useMemo(() => isMounted && !isLoading, [isLoading, isMounted]);
 
   useEditorLoader({ isEditorRunning });
@@ -405,34 +423,45 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     }
   };
 
-  const loginFlowModalDescription = useMemo(() => {
-    return (
-      <>
-        Before running the integration, you need to authorize access to{' '}
-        {missingConnectorNames.length > 0
-          ? missingConnectorNames.map((connectorName, index) => {
-              const isLastConnector = missingConnectorNames.length - 1 === index;
-              const isPenultimateConnector = missingConnectorNames.length - 2 === index;
+  const assumeHasConnectors = !isMounted || !!window.editor?.specification.data.components.length;
 
-              if (!isLastConnector) {
-                return (
-                  <>
-                    <strong>{connectorName}</strong>
-                    {!isPenultimateConnector ? ', ' : ' '}
-                  </>
-                );
-              }
+  let missingConnectorNames: string[] = [];
+  if (connectorFeed.data && integrationData) {
+    const connectors =
+      missingIdentities || integrationData.data.data.components.filter((c) => c.entityType === 'connector');
+    missingConnectorNames = connectors
+      .map((c) => connectorFeed.data.find((c1) => c1.configuration.components?.[0].provider === c.provider)?.name)
+      .filter((name) => !!name) as string[];
+  }
 
-              return (
-                <>
-                  and <strong>{connectorName}</strong>.{' '}
-                </>
-              );
-            })
-          : 'the target systems. '}
-      </>
-    );
-  }, [missingConnectorNames]);
+  const loginFlowModalDescription = (
+    <>
+      Before running the integration, you need to authorize access to{' '}
+      {missingConnectorNames.length === 0 && 'the target systems. '}
+      {missingConnectorNames.length === 1 && (
+        <>
+          <strong>{missingConnectorNames[0]}</strong>.{' '}
+        </>
+      )}
+      {missingConnectorNames.length === 2 && (
+        <>
+          <strong>{missingConnectorNames[0]}</strong> and <strong>{missingConnectorNames[1]}</strong>.{' '}
+        </>
+      )}
+      {missingConnectorNames.length > 2 &&
+        missingConnectorNames.map((n, i) =>
+          i < missingConnectorNames.length - 1 ? (
+            <>
+              <strong>{n}</strong>,{' '}
+            </>
+          ) : (
+            <>
+              and <strong>{n}</strong>.{' '}
+            </>
+          )
+        )}
+    </>
+  );
 
   const buttonText = useMemo(() => {
     if (processing) {
