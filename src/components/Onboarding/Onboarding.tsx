@@ -9,16 +9,17 @@ import { trackEventMemoized } from '@utils/analytics';
 import { useSpring, animated, config } from 'react-spring';
 
 const StyledTitle = styled.h2`
-  font-size: 32px;
-  line-height: 34px;
+  font-size: 28px;
+  line-height: 24px;
   color: var(--black);
   margin-top: 10px;
   margin-bottom: 16px;
 `;
 
 const StyledDescription = styled.p`
-  font-size: 20px;
-  line-height: 26px;
+  font-size: 18px;
+  line-height: 24px;
+  max-width: 1050px;
   color: var(--black);
   margin-bottom: 24px;
 
@@ -31,7 +32,7 @@ const StyledDescription = styled.p`
 const StyledVideoWrapper = styled.div`
   position: relative;
   width: 100%;
-  height: 524px;
+  height: 450px;
 `;
 
 const Onboarding: React.FC = () => {
@@ -78,7 +79,7 @@ const Onboarding: React.FC = () => {
   });
 
   return (
-    <Modal fullScreen disableActions disableClose open={open} closeAfterTransition BackdropComponent={Backdrop}>
+    <Modal disableActions disableClose open={open} closeAfterTransition BackdropComponent={Backdrop}>
       <Container maxWidth="lg">
         <animated.div
           style={{
