@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import play from '@assets/video-play.svg';
 import volume from '@assets/video-volume.svg';
@@ -11,6 +11,20 @@ const StyledWrapper = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
+`;
+
+const StyledShadow = styled.div<{ isVideoPaused: boolean }>`
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  backdrop-filter: blur(12px);
+  border-radius: 8px;
+  padding: 12px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.5));
+  opacity: ${(props) => (props.isVideoPaused ? 1 : 0)};
+  transition: all 0.25s linear;
 `;
 
 const StyledVideo = styled.video`
@@ -89,6 +103,7 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
   const [currentTime, setCurrentTime] = React.useState('00:00');
   const [duration, setDuration] = React.useState('00:00');
   const [progress, setProgress] = React.useState(0);
+  const [isPlaying, setIsPlaying] = React.useState(false);
 
   const handleVolumeChange = (event: React.ChangeEvent<{}>, newVolume: number | number[]) => {
     setVolume(newVolume);
@@ -97,21 +112,18 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
     }
   };
 
-  const handlePlayState = () => {
-    if (videoRef.current) {
-      const isStopped = videoRef.current.paused;
-      if (isStopped) {
-        videoRef.current.play();
-      } else {
-        videoRef.current.pause();
-      }
+  const handlePlayState = useCallback(() => {
+    if (videoRef.current?.paused) {
+      videoRef.current?.play();
+      setIsPlaying(true);
+    } else {
+      videoRef.current?.pause();
+      setIsPlaying(false);
     }
-  };
+  }, []);
 
   const handleFullscreen = () => {
-    if (videoRef.current) {
-      videoRef.current.requestFullscreen();
-    }
+    videoRef.current?.requestFullscreen();
   };
 
   const formatTime = (seconds: any) => {
@@ -134,14 +146,14 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
   };
 
   useEffect(() => {
-    window.addEventListener('keydown', (e) => {
+    window.addEventListener('keyup', (e) => {
       if (e.code === 'Space') {
         handlePlayState();
       }
     });
 
-    return window.removeEventListener('keydown', () => {});
-  }, []);
+    return window.removeEventListener('keyup', () => {});
+  }, [handlePlayState]);
 
   return (
     <StyledWrapper>
@@ -159,6 +171,7 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
         {children}
         <p>Your browser does not support HTML5 video.</p>
       </StyledVideo>
+      <StyledShadow isVideoPaused={!isPlaying} />
       <StyledControlsWrapper>
         <Box mb="5px">
           <LinearProgress color="primary" variant="buffer" value={progress} />
