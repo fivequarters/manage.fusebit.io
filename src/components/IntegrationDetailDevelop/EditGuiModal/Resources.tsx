@@ -2,11 +2,12 @@ import books from '@assets/library-books.svg';
 import code from '@assets/code.svg';
 import add from '@assets/add.svg';
 import fusebitMarkIcon from '@assets/fusebit-mark.svg';
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Box } from '@material-ui/core';
 import { Integration } from '@interfaces/integration';
 import { Feed, Snippet } from '@interfaces/feed';
 import { trackEventUnmemoized } from '@utils/analytics';
+import { getConnectorFeedByComponent, getFeedByIntegration } from '@utils/entities';
 import Tree from './Tree';
 import CustomNavBase from './CustomNavBase';
 import CustomNavItem from './CustomNavItem';
@@ -18,81 +19,55 @@ interface Props {
   onSnippetsModalOpen: () => void;
 }
 
-interface ProcessedSnippet extends Snippet {
+interface ParsedSnippet extends Snippet {
   icon: string;
   connectorName: string;
   feedId: string;
 }
 
-interface SdkDoc {
+interface SDKDoc {
   url?: string;
   name?: string;
   icon?: string;
 }
 
+const orderByName = (a: SDKDoc, b: SDKDoc) => ((a?.name || '') > (b?.name || '') ? 1 : -1);
+
 const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrationData, onSnippetsModalOpen }) => {
-  const [integrationGuideUrl, setIntegrationGuideUrl] = useState('');
-  const [snippets, setSnippets] = useState<ProcessedSnippet[]>([]);
-  const [SdkDocs, setSdkDocs] = useState<SdkDoc[]>([]);
+  const integrationFeed = getFeedByIntegration(integrationsFeed, integrationData);
+  const integrationGuideUrl = integrationFeed?.resources?.configureAppDocUrl || '';
 
-  useEffect(() => {
-    if (integrationsFeed && integrationData && connectorsFeed && SdkDocs.length === 0) {
-      const integrationFeed = integrationsFeed.find(
-        (integration) => integration.id === integrationData.tags['fusebit.feedId']
-      );
+  const { docs, snippets } = useMemo(() => {
+    return (integrationData?.data?.components || []).reduce(
+      (acc, component) => {
+        const connectorFeed = getConnectorFeedByComponent(connectorsFeed, component);
 
-      // The following code loops trough the connectors connected to this integration
-      // returns an array that contains an array of snippet objects and sets the SDK
-      // docs for each connector
-      const unprocessedSnippets = integrationData.data.components.map((component) => {
-        const matchingConnectorFeed = connectorsFeed.find((item) => {
-          return item?.configuration?.components?.some(
-            (feedComponent) => feedComponent.provider === component.provider
-          );
-        });
+        acc.docs = [
+          ...acc.docs,
+          {
+            url: connectorFeed?.resources.connectorSDKDocUrl,
+            name: connectorFeed?.name,
+            icon: connectorFeed?.smallIcon,
+          },
+        ];
 
-        setSdkDocs((prev) => {
-          return [
-            ...prev,
-            {
-              url: matchingConnectorFeed?.resources.connectorSDKDocUrl,
-              name: matchingConnectorFeed?.name,
-              icon: matchingConnectorFeed?.smallIcon,
-            },
-          ];
-        });
-
-        return matchingConnectorFeed?.snippets?.map((snippet) => {
-          const completeSnippet = {
+        acc.snippets = [
+          ...acc.snippets,
+          ...(connectorFeed?.snippets?.map((snippet) => ({
             ...snippet,
-            icon: matchingConnectorFeed.smallIcon,
-            connectorName: matchingConnectorFeed.name,
-            feedId: matchingConnectorFeed.id,
-          };
+            icon: connectorFeed.smallIcon,
+            connectorName: connectorFeed.name,
+            feedId: connectorFeed.id,
+          })) || []),
+        ];
 
-          return completeSnippet;
-        });
-      });
-      const processedSnippets = unprocessedSnippets.flat() as ProcessedSnippet[];
-      setSnippets(processedSnippets);
-      setIntegrationGuideUrl(integrationFeed?.resources?.configureAppDocUrl || '');
-    }
-  }, [integrationData, integrationsFeed, connectorsFeed, setSdkDocs, SdkDocs]);
+        return acc;
+      },
+      { docs: [] as SDKDoc[], snippets: [] as ParsedSnippet[] }
+    );
+  }, [connectorsFeed, integrationData]);
 
-  const compare = (a: SdkDoc, b: SdkDoc) => {
-    if (a.name && b.name) {
-      if (a.name < b.name) {
-        return -1;
-      }
-      if (a.name > b.name) {
-        return 1;
-      }
-    }
-
-    return 0;
-  };
-
-  const handleSnippetClick = (snippet?: ProcessedSnippet) => {
+  const handleSnippetClick = (snippet?: ParsedSnippet) => {
     if (snippet) {
       trackEventUnmemoized('Snippets Menu Item Clicked', 'Web Editor', {
         clickedOn: `${snippet?.connectorName} - ${snippet?.name}`,
@@ -121,7 +96,6 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
         enableDropdownArrow
         onClick={(isOpen) => {
           if (!isOpen) {
-            // Tree is getting expanded
             trackEventUnmemoized('Documentation Menu Item Expanded', 'Web Editor');
           }
         }}
@@ -155,7 +129,7 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
               );
             }}
           />
-          {SdkDocs.sort((a, b) => compare(a, b)).map((connector) => {
+          {[...docs].sort(orderByName).map((connector) => {
             return (
               <CustomNavItem
                 key={connector?.name}
@@ -179,7 +153,6 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
         enableDropdownArrow
         onClick={(isOpen) => {
           if (!isOpen) {
-            // Tree is getting expanded
             trackEventUnmemoized('Snippets Menu Item Expanded', 'Web Editor');
           }
         }}
