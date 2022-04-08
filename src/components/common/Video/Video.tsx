@@ -166,7 +166,7 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
       return replay;
     }
 
-    if (!isPlaying) {
+    if (isPlaying) {
       return pause;
     }
 
