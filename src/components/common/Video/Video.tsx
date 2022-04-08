@@ -147,15 +147,22 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
     setDuration(formatTime(e.currentTarget.duration));
   };
 
-  useEffect(() => {
-    window.addEventListener('keyup', (e) => {
-      if (e.code === 'Space') {
+  const handleKeyUp = useCallback(
+    (e: KeyboardEvent | React.KeyboardEvent<HTMLDivElement>) => {
+      if (e.key === ' ') {
         handlePlayState();
       }
+    },
+    [handlePlayState]
+  );
+
+  useEffect(() => {
+    window.addEventListener('keyup', (e) => {
+      handleKeyUp(e);
     });
 
     return window.removeEventListener('keyup', () => {});
-  }, [handlePlayState]);
+  }, [handleKeyUp]);
 
   return (
     <StyledWrapper>
@@ -182,15 +189,15 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
           </Box>
         )}
       </StyledShadow>
-      <StyledControlsWrapper>
+      <StyledControlsWrapper onKeyUp={handleKeyUp}>
         <Box mb="5px">
-          <LinearProgress color="primary" variant="buffer" value={progress} />
+          <LinearProgress color="primary" variant="determinate" value={progress} />
         </Box>
         <Box display="flex" alignItems="center">
           <IconButton color="secondary" onClick={handlePlayState}>
             <StyledIcon height="14px" width="14px" src={isPlaying ? pause : play} alt="play" />
           </IconButton>
-          <StyledVolumeWrapper>
+          <StyledVolumeWrapper onKeyUp={handleKeyUp}>
             <StyledIcon src={volume} alt="volume" />
             <StyledSlider
               color="secondary"
