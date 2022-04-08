@@ -374,6 +374,11 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   useCustomSidebar({ isEditorRunning, onSnippetsModalOpen, sampleAppUrl });
 
   const handleSaveAndRun = async () => {
+    gtag('event', 'click', {
+      event_category: 'Web Editor',
+      event_label: 'Run Button Clicked',
+    });
+
     if (dirtyState) {
       const context = window.editor;
       const status: SaveStatus = await context?._server.saveFunction(context);
