@@ -157,6 +157,10 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
       if (e.key === ' ') {
         handlePlayState();
       }
+
+      if (e.key === 'f') {
+        handleFullscreen?.();
+      }
     },
     [handlePlayState]
   );
@@ -204,7 +208,7 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
       </StyledVideo>
       <StyledShadow onClick={handlePlayState} isVideoPaused={!isPlaying}>
         {!isPlaying && (
-          <Box position="absolute" top="45%" left="50%" style={{ transform: 'translate(-50%, -50%)' }}>
+          <Box position="absolute" top="50%" left="50%" style={{ transform: 'translate(-50%, -50%)' }}>
             <IconButton color="secondary">
               <StyledIcon height="96px" width="96px" src={isVideoFinished ? replayOutlined : playOutlined} alt="play" />
             </IconButton>
