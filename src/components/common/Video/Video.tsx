@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import play from '@assets/video-play.svg';
+import playOutlined from '@assets/video-play-outlined.svg';
 import pause from '@assets/video-pause.svg';
 import volume from '@assets/video-volume.svg';
 import fullscreen from '@assets/video-fullscreen.svg';
@@ -172,7 +173,15 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
         {children}
         <p>Your browser does not support HTML5 video.</p>
       </StyledVideo>
-      <StyledShadow isVideoPaused={!isPlaying} />
+      <StyledShadow onClick={handlePlayState} isVideoPaused={!isPlaying}>
+        {!isPlaying && (
+          <Box position="absolute" top="45%" left="50%" style={{ transform: 'translate(-50%, -50%)' }}>
+            <IconButton color="secondary">
+              <StyledIcon height="96px" width="96px" src={playOutlined} alt="play" />
+            </IconButton>
+          </Box>
+        )}
+      </StyledShadow>
       <StyledControlsWrapper>
         <Box mb="5px">
           <LinearProgress color="primary" variant="buffer" value={progress} />
