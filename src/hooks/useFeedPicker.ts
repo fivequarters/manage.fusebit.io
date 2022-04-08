@@ -62,18 +62,16 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
 
   useEffect(() => {
     if (feed.length > 0 && open) {
-      let templateToActivate: Feed | undefined;
+      let templateToActivate: Feed;
       if (isSnippet) {
-        const result = feed.find((f) => f.id === defaultSnippet?.feedId);
+        const selectedConnectorFeed = feed.find((f) => f.id === defaultSnippet?.feedId);
+        const firtsConnectorFeedWithSnippets = feed.find((f) => f.snippets && f.snippets.length > 0) as Feed;
 
         if (defaultSnippet) {
           filteredFeed.setSearchFilter(`${defaultSnippet.connectorName} ${defaultSnippet.name}`);
         }
 
-        // find first connector with snippets
-        if (result) {
-          templateToActivate = result;
-        }
+        templateToActivate = selectedConnectorFeed || firtsConnectorFeedWithSnippets;
       } else if (key) {
         [templateToActivate] = feed;
         for (let i = 0; i < feed.length; i++) {
