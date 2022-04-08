@@ -124,7 +124,7 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
               <CustomNavItem
                 key={connector?.name}
                 icon={connector.icon || ''}
-                name={connector.name || ''}
+                name={`${connector.name} SDK` || ''}
                 onClick={() => {
                   trackEventUnmemoized('Documentation Menu Item Clicked', 'Web Editor', {
                     clickedOn: connector?.url,
