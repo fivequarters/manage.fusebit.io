@@ -67,7 +67,7 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
         const result = feed.find((f) => f.id === defaultSnippet?.feedId);
 
         if (defaultSnippet) {
-          filteredFeed.setSearchFilter(defaultSnippet.name);
+          filteredFeed.setSearchFilter(`${defaultSnippet.connectorName} ${defaultSnippet.name}`);
         }
 
         // find first connector with snippets
