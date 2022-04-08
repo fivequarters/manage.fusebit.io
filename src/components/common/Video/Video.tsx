@@ -1,7 +1,9 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import styled from 'styled-components';
 import play from '@assets/video-play.svg';
 import playOutlined from '@assets/video-play-outlined.svg';
+import replay from '@assets/video-replay.svg';
+import replayOutlined from '@assets/video-replay-outlined.svg';
 import pause from '@assets/video-pause.svg';
 import volume from '@assets/video-volume.svg';
 import fullscreen from '@assets/video-fullscreen.svg';
@@ -106,6 +108,7 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
   const [duration, setDuration] = React.useState('00:00');
   const [progress, setProgress] = React.useState(0);
   const [isPlaying, setIsPlaying] = React.useState(false);
+  const [isVideoFinished, setIsVideoFinished] = React.useState(false);
 
   const handleVolumeChange = (event: React.ChangeEvent<{}>, newVolume: number | number[]) => {
     setVolume(newVolume);
@@ -122,6 +125,8 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
       videoRef.current?.pause();
       setIsPlaying(false);
     }
+
+    setIsVideoFinished(false);
   }, []);
 
   const handleFullscreen = () => {
@@ -156,6 +161,18 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
     [handlePlayState]
   );
 
+  const playStateIcon = useMemo(() => {
+    if (isVideoFinished) {
+      return replay;
+    }
+
+    if (!isPlaying) {
+      return pause;
+    }
+
+    return play;
+  }, [isPlaying, isVideoFinished]);
+
   useEffect(() => {
     window.addEventListener('keyup', (e) => {
       handleKeyUp(e);
@@ -173,6 +190,11 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
         ref={videoRef}
         src={src}
         {...props}
+        onEnded={(e) => {
+          setIsPlaying(false);
+          setIsVideoFinished(true);
+          props.onEnded?.(e);
+        }}
       >
         {tracks.map((track) => (
           <track key={track.src} {...track} />
@@ -184,7 +206,7 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
         {!isPlaying && (
           <Box position="absolute" top="45%" left="50%" style={{ transform: 'translate(-50%, -50%)' }}>
             <IconButton color="secondary">
-              <StyledIcon height="96px" width="96px" src={playOutlined} alt="play" />
+              <StyledIcon height="96px" width="96px" src={isVideoFinished ? replayOutlined : playOutlined} alt="play" />
             </IconButton>
           </Box>
         )}
@@ -195,7 +217,7 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
         </Box>
         <Box display="flex" alignItems="center">
           <IconButton color="secondary" onClick={handlePlayState}>
-            <StyledIcon height="14px" width="14px" src={isPlaying ? pause : play} alt="play" />
+            <StyledIcon src={playStateIcon} alt="play" />
           </IconButton>
           <StyledVolumeWrapper onKeyUp={handleKeyUp}>
             <StyledIcon src={volume} alt="volume" />

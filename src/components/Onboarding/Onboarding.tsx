@@ -1,12 +1,11 @@
 import Modal from '@components/common/Modal';
-import video from '@assets/demo-video.mp4';
-import { Backdrop, Box } from '@material-ui/core';
+import video from '@assets/placeholder-video.mp4';
+import { Backdrop } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useQuery } from '@hooks/useQuery';
 import Video from '@components/common/Video';
 import { trackEventMemoized } from '@utils/analytics';
-import { useSpring, animated, config } from 'react-spring';
 
 const StyledTitle = styled.h2`
   font-size: 28px;
@@ -61,31 +60,11 @@ const Onboarding: React.FC = () => {
   const onEnded = () => {
     trackEventMemoized('Product Video Completed', objectLocation);
     setVideoCompleted(true);
-    setTimeout(() => {
-      setOpen(false);
-    }, 3000);
   };
-
-  const videoStyle = useSpring({
-    opacity: !videoCompleted ? 1 : 0,
-    config: config.gentle,
-  });
-
-  const successStyle = useSpring({
-    opacity: videoCompleted ? 1 : 0,
-    y: videoCompleted ? 0 : 40,
-    config: config.slow,
-    delay: 800,
-  });
 
   return (
     <Modal disableActions disableClose open={open} closeAfterTransition BackdropComponent={Backdrop}>
-      <animated.div
-        style={{
-          ...videoStyle,
-          display: videoStyle.opacity.to((opacity) => (opacity === 0 ? 'none' : 'block')),
-        }}
-      >
+      <div>
         <StyledTitle>Welcome to Fusebit!</StyledTitle>
         <StyledDescription>
           Now that you are signed up to Fusebit, let's get you ready to{' '}
@@ -100,17 +79,7 @@ const Onboarding: React.FC = () => {
             tracks={[{ src: 'captions_en.vtt', kind: 'captions', srcLang: 'en', label: 'english_captions' }]}
           />
         </StyledVideoWrapper>
-      </animated.div>
-      <animated.div
-        style={{
-          ...successStyle,
-          display: videoStyle.opacity.to((opacity) => (opacity === 0 ? 'block' : 'none')),
-        }}
-      >
-        <Box display="flex" justifyContent="center" alignItems="center" height="90vh">
-          <StyledDescription>Let's get going on building your first integration</StyledDescription>
-        </Box>
-      </animated.div>
+      </div>
     </Modal>
   );
 };
