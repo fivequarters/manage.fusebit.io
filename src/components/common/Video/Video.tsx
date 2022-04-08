@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import play from '@assets/video-play.svg';
+import pause from '@assets/video-pause.svg';
 import volume from '@assets/video-volume.svg';
 import fullscreen from '@assets/video-fullscreen.svg';
 import { Box, Slider } from '@material-ui/core';
@@ -61,9 +62,9 @@ const StyledControlsWrapper = styled.div`
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(0, 0, 0, 1));
 `;
 
-const StyledIcon = styled.img`
-  height: 24px;
-  width: 24px;
+const StyledIcon = styled.img<{ height?: string; width?: string }>`
+  height: ${(props) => (props.height ? props.height : '24px')};
+  width: ${(props) => (props.width ? props.width : '24px')};
   object-fit: contain;
 `;
 
@@ -178,7 +179,7 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
         </Box>
         <Box display="flex" alignItems="center">
           <IconButton color="secondary" onClick={handlePlayState}>
-            <StyledIcon src={play} alt="play" />
+            <StyledIcon height="14px" width="14px" src={isPlaying ? pause : play} alt="play" />
           </IconButton>
           <StyledVolumeWrapper>
             <StyledIcon src={volume} alt="volume" />
