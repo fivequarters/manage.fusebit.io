@@ -40,6 +40,15 @@ const IntegrationCard: React.FC<Props> = ({ className }) => {
   const { id } = useParams<{ id: string }>();
   const integrationData = useGetIntegrationFromCache();
 
+  const handleClick = () => {
+    gtag('event', 'click', {
+      event_category: 'Integration Detail',
+      event_label: 'Edit Button Clicked',
+    });
+
+    history.push('edit');
+  };
+
   return (
     <>
       <StyledCard id={INTEGRATION_CARD_ID} className={className}>
@@ -60,7 +69,7 @@ const IntegrationCard: React.FC<Props> = ({ className }) => {
           </Box>
         </StyledContent>
         <StyledActions>
-          <Button onClick={() => history.push('edit')} style={{ width: '200px' }} variant="contained" color="primary">
+          <Button onClick={handleClick} style={{ width: '200px' }} variant="contained" color="primary">
             <>Edit</>
           </Button>
         </StyledActions>
