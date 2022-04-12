@@ -34,6 +34,10 @@ const StyledVideoWrapper = styled.div`
   height: 450px;
 `;
 
+enum UTM_CONTENT {
+  NEW_VID = 'new-vid',
+}
+
 const Onboarding: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [videoCompleted, setVideoCompleted] = useState(false);
@@ -42,7 +46,7 @@ const Onboarding: React.FC = () => {
 
   useEffect(() => {
     const utmContent = query.get('utm_content');
-    if (utmContent === 'new-vid' && !videoCompleted) {
+    if (utmContent === UTM_CONTENT.NEW_VID && !videoCompleted) {
       setOpen(true);
       trackEventMemoized('Product Video Modal Viewed', objectLocation);
       window.onbeforeunload = () => {
