@@ -49,13 +49,21 @@ const Onboarding: React.FC = () => {
     if (utmContent === UTM_CONTENT.NEW_VID && !videoCompleted) {
       setOpen(true);
       trackEventMemoized('Product Video Modal Viewed', objectLocation);
-      window.onbeforeunload = () => {
-        // The message below is not gonna be showed, as browsers no longer support
-        // custom messages on beforeUnload: https://developer.chrome.com/blog/chrome-51-deprecations/#remove_custom_messages_in_onbeforeunload_dialogs
-        return 'You have not finished the video. Are you sure you wanna leave?';
-      };
     }
   }, [query, videoCompleted]);
+
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      // Cancel the event
+      e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
+      // Chrome requires returnValue to be set
+      e.returnValue = '';
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, []);
 
   const onPlay = () => {
     trackEventMemoized('Product Video Played', objectLocation);
