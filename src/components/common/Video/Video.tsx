@@ -80,12 +80,20 @@ const StyledVolumeWrapper = styled.div`
   display: flex;
   align-items: center;
   margin-left: 12px;
+
+  @media only screen and (max-width: 500px) {
+    margin-left: 0;
+  }
 `;
 
 const StyledSlider = styled(Slider)`
   width: 70px;
   color: white;
   margin-left: 14px;
+
+  @media only screen and (max-width: 500px) {
+    margin-left: 4px;
+  }
 `;
 
 const StyledTimeWrapper = styled.div`
@@ -93,12 +101,21 @@ const StyledTimeWrapper = styled.div`
   align-items: center;
   margin-left: 16px;
   color: white;
+
+  @media only screen and (max-width: 500px) {
+    margin-left: 8px;
+  }
 `;
 
 const StyledTime = styled.div`
   font-size: 12px;
   line-height: 16px;
   color: white;
+
+  @media only screen and (max-width: 500px) {
+    font-size: 10px;
+    line-height: 14px;
+  }
 `;
 
 type VideoEvent = KeyboardEvent | (React.KeyboardEvent<HTMLDivElement> & { code?: string });

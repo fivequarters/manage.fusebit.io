@@ -1,11 +1,18 @@
 import Modal from '@components/common/Modal';
 import video from '@assets/placeholder-video.mp4';
-import { Backdrop } from '@material-ui/core';
+import { Backdrop, useMediaQuery } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useQuery } from '@hooks/useQuery';
 import Video from '@components/common/Video';
 import { trackEventMemoized } from '@utils/analytics';
+
+const StyledWrapper = styled.div`
+  @media only screen and (max-width: 500px) {
+    position: relative;
+    height: 75%;
+  }
+`;
 
 const StyledTitle = styled.h2`
   font-size: 28px;
@@ -32,6 +39,11 @@ const StyledVideoWrapper = styled.div`
   position: relative;
   width: 100%;
   height: 450px;
+
+  @media only screen and (max-width: 500px) {
+    height: 100%;
+    padding-bottom: 20px;
+  }
 `;
 
 enum UTM_CONTENT {
@@ -43,6 +55,7 @@ const Onboarding: React.FC = () => {
   const [videoCompleted, setVideoCompleted] = useState(false);
   const query = useQuery();
   const objectLocation = 'Onboarding Video';
+  const isMobile = useMediaQuery('(max-width: 500px)');
 
   useEffect(() => {
     const utmContent = query.get('utm_content');
@@ -75,8 +88,15 @@ const Onboarding: React.FC = () => {
   };
 
   return (
-    <Modal disableActions disableClose open={open} closeAfterTransition BackdropComponent={Backdrop}>
-      <div>
+    <Modal
+      fullScreen={isMobile}
+      disableActions
+      disableClose
+      open={open}
+      closeAfterTransition
+      BackdropComponent={Backdrop}
+    >
+      <StyledWrapper>
         <StyledTitle>Welcome to Fusebit!</StyledTitle>
         <StyledDescription>
           Now that you are signed up to Fusebit, let's get you ready to{' '}
@@ -91,7 +111,7 @@ const Onboarding: React.FC = () => {
             tracks={[{ src: 'captions_en.vtt', kind: 'captions', srcLang: 'en', label: 'english_captions' }]}
           />
         </StyledVideoWrapper>
-      </div>
+      </StyledWrapper>
     </Modal>
   );
 };
