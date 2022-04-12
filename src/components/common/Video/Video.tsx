@@ -225,9 +225,6 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
         ))}
         {children}
         <p>Your browser does not support HTML5 video.</p>
-        <div className="video-controls hidden" id="video-controls">
-          asd
-        </div>
       </StyledVideo>
       <StyledShadow onClick={handlePlayState} isVideoPaused={!isPlaying}>
         {!isPlaying && (
