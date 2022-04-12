@@ -10,6 +10,7 @@ import fullscreen from '@assets/video-fullscreen.svg';
 import { Box, Slider } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import { formatTime } from '@utils/utils';
 
 const StyledWrapper = styled.div`
   position: relative;
@@ -37,6 +38,10 @@ const StyledVideo = styled.video`
   height: 100%;
   object-fit: cover;
   border-radius: 8px;
+
+  :fullscreen {
+    object-fit: contain;
+  }
 
   ::-webkit-media-controls {
     display: none !important;
@@ -96,6 +101,8 @@ const StyledTime = styled.div`
   color: white;
 `;
 
+type VideoEvent = KeyboardEvent | (React.KeyboardEvent<HTMLDivElement> & { code?: string });
+
 interface Props extends React.VideoHTMLAttributes<HTMLVideoElement> {
   src: string;
   tracks: React.TrackHTMLAttributes<HTMLTrackElement>[];
@@ -108,7 +115,6 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
   const [duration, setDuration] = React.useState('00:00');
   const [progress, setProgress] = React.useState(0);
   const [isPlaying, setIsPlaying] = React.useState(false);
-  const [isVideoFinished, setIsVideoFinished] = React.useState(false);
 
   const handleVolumeChange = (event: React.ChangeEvent<{}>, newVolume: number | number[]) => {
     setVolume(newVolume);
@@ -125,20 +131,14 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
       videoRef.current?.pause();
       setIsPlaying(false);
     }
-
-    setIsVideoFinished(false);
   }, []);
 
   const handleFullscreen = () => {
-    videoRef.current?.requestFullscreen?.();
-  };
-
-  const formatTime = (seconds: any) => {
-    let minutes: any = Math.floor(seconds / 60);
-    minutes = minutes >= 10 ? minutes : `0${minutes}`;
-    seconds = Math.floor(seconds % 60);
-    seconds = seconds >= 10 ? seconds : `0${seconds}`;
-    return `${minutes}:${seconds}`;
+    if (!document.fullscreenElement && document.fullscreenEnabled) {
+      videoRef.current?.requestFullscreen();
+    } else {
+      document.exitFullscreen?.();
+    }
   };
 
   const handleTimeUpdate = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
@@ -153,8 +153,8 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
   };
 
   const handleKeyUp = useCallback(
-    (e: KeyboardEvent | React.KeyboardEvent<HTMLDivElement>) => {
-      if (e.key === ' ') {
+    (e: VideoEvent) => {
+      if (e.key === ' ' || e?.code === 'Space' || e.keyCode === 32) {
         handlePlayState();
       }
 
@@ -164,6 +164,10 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
     },
     [handlePlayState]
   );
+
+  const isVideoFinished = useMemo(() => {
+    return progress === 100;
+  }, [progress]);
 
   const playStateIcon = useMemo(() => {
     if (isVideoFinished) {
@@ -196,7 +200,6 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
         {...props}
         onEnded={(e) => {
           setIsPlaying(false);
-          setIsVideoFinished(true);
           props.onEnded?.(e);
         }}
       >
@@ -205,6 +208,9 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
         ))}
         {children}
         <p>Your browser does not support HTML5 video.</p>
+        <div className="video-controls hidden" id="video-controls">
+          asd
+        </div>
       </StyledVideo>
       <StyledShadow onClick={handlePlayState} isVideoPaused={!isPlaying}>
         {!isPlaying && (
