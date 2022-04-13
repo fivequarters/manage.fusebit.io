@@ -126,6 +126,7 @@ const Onboarding: React.FC = () => {
       open={open}
       closeAfterTransition
       BackdropComponent={Backdrop}
+      style={{ zIndex: 1500 }}
     >
       <StyledWrapper>
         <StyledTitle>Welcome to Fusebit!</StyledTitle>
