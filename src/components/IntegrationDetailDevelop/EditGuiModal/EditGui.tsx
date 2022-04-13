@@ -425,10 +425,11 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     };
 
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      // Cancel the event
-      e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
-      // Chrome requires returnValue to be set
       if (dirtyState) {
+        // Cancel the event
+        e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
+        // Chrome requires returnValue to be set
+
         e.returnValue = '';
       }
     };
