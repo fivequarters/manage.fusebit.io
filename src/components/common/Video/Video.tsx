@@ -24,7 +24,6 @@ const StyledShadow = styled.div<{ isVideoPaused: boolean }>`
   top: 0;
   height: 100%;
   width: 100%;
-  backdrop-filter: blur(12px);
   border-radius: 8px;
   padding: 12px;
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.5));
@@ -36,12 +35,8 @@ const StyledVideo = styled.video`
   position: relative;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: fill;
   border-radius: 8px;
-
-  :fullscreen {
-    object-fit: contain;
-  }
 
   ::-webkit-media-controls {
     display: none !important;
