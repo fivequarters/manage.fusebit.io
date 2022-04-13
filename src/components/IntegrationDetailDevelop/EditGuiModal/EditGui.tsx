@@ -424,8 +424,18 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       lastItem.parentNode?.insertBefore(addNew, lastItem.nextSibling);
     };
 
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      // Cancel the event
+      e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
+      // Chrome requires returnValue to be set
+      if (dirtyState) {
+        e.returnValue = '';
+      }
+    };
+
     if (isMounted && !isLoading) {
       removeLoader();
+      window.addEventListener('beforeunload', handleBeforeUnload);
       const items = document.getElementsByClassName('fusebit-nav-file');
       const lastItem = items?.[items.length - 1];
       if (!document.getElementById('addNewItem')) {
@@ -434,7 +444,9 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     } else {
       createLoader();
     }
-  }, [isMounted, isLoading, createLoader, removeLoader]);
+
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [isMounted, isLoading, createLoader, removeLoader, dirtyState]);
 
   const handleFork = () => {
     trackEventMemoized(
