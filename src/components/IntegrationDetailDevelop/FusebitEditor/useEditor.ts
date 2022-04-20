@@ -22,7 +22,7 @@ interface Props {
 const LOCALSTORAGE_SESSION_KEY = 'session';
 
 const useEditor = (
-  { integrationData, enableListener = true, onReadyToRun, onReadyToLogin, onMissingIdentities } = {} as Props
+  { integrationData, enableListener = true, onReadyToRun, onMissingIdentities, onReadyToLogin } = {} as Props
 ) => {
   const { id } = useParams<{ id: string }>();
   const { userData, getTenantId } = useAuthContext();

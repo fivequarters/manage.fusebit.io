@@ -1,4 +1,4 @@
-import { Feed, Snippet, ConnectorEntity } from '@interfaces/feed';
+import { Feed, Snippet, ConnectorEntity, ParsedSnippet } from '@interfaces/feed';
 import { Data } from '@interfaces/feedPicker';
 import { useCreateDataFromFeed } from '@hooks/useCreateDataFromFeed';
 import FeedPickerModal from '@components/common/FeedPickerModal';
@@ -12,9 +12,10 @@ interface Props {
   open: boolean;
   onClose: (newConnector?: ConnectorEntity, existingConnector?: InnerConnector, feed?: Feed, snippet?: Snippet) => void;
   integrationData?: ApiResponse<Integration>;
+  defaultSnippet?: ParsedSnippet;
 }
 
-const AddSnippetToIntegrationModal = ({ open, onClose, integrationData }: Props) => {
+const AddSnippetToIntegrationModal = ({ open, onClose, integrationData, defaultSnippet }: Props) => {
   const { createConnector } = useCreateDataFromFeed();
   const { createLoader, removeLoader } = useLoader();
   // const isMobile = useMediaQuery('(max-width:880px)');
@@ -70,6 +71,7 @@ const AddSnippetToIntegrationModal = ({ open, onClose, integrationData }: Props)
         open={open}
         isIntegration={false}
         isSnippet={true}
+        defaultSnippet={defaultSnippet}
       />
       {/* )} */}
     </>

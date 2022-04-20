@@ -1,5 +1,5 @@
 import FeedPicker from '@components/common/FeedPicker';
-import { Feed, Snippet } from '@interfaces/feed';
+import { Feed, ParsedSnippet, Snippet } from '@interfaces/feed';
 import { Data } from '@interfaces/feedPicker';
 import Modal from '@components/common/Modal';
 import { useQueryClient } from 'react-query';
@@ -11,9 +11,18 @@ interface Props {
   isIntegration: boolean;
   isSnippet?: boolean;
   hasConnectorDependency?: (feed: Feed) => boolean;
+  defaultSnippet?: ParsedSnippet;
 }
 
-const FeedPickerModal = ({ open, onClose, onSubmit, isIntegration, isSnippet, hasConnectorDependency }: Props) => {
+const FeedPickerModal = ({
+  open,
+  onClose,
+  onSubmit,
+  isIntegration,
+  isSnippet,
+  hasConnectorDependency,
+  defaultSnippet,
+}: Props) => {
   const queryClient = useQueryClient();
 
   const handleClose = () => {
@@ -31,6 +40,7 @@ const FeedPickerModal = ({ open, onClose, onSubmit, isIntegration, isSnippet, ha
         onSubmit={onSubmit}
         open={open}
         onClose={handleClose}
+        defaultSnippet={defaultSnippet}
       />
     </Modal>
   );

@@ -4,6 +4,13 @@ import styled from 'styled-components';
 import CloseIcon from '@material-ui/icons/Close';
 import * as CSC from '@components/globalStyle';
 
+const StyledDialog = styled(Dialog)`
+  .MuiDialog-paperScrollPaper {
+    max-width: 100%;
+    max-height: 100%;
+  }
+`;
+
 const StyledTitle = styled(DialogTitle)`
   padding-top: 64px;
 
@@ -48,7 +55,7 @@ const Modal: React.FC<Props> = ({
   ...props
 }) => {
   return (
-    <Dialog onClose={onClose} open={open} {...props} disableEnforceFocus>
+    <StyledDialog onClose={onClose} open={open} {...props} disableEnforceFocus>
       {title && <StyledTitle>{title}</StyledTitle>}
       <StyledContent hasPadding={disableActions}>
         <CSC.CloseWrapper aria-label="close" onClick={onClose}>
@@ -70,7 +77,7 @@ const Modal: React.FC<Props> = ({
           </Box>
         </DialogActions>
       )}
-    </Dialog>
+    </StyledDialog>
   );
 };
 
