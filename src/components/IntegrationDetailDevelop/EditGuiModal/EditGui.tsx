@@ -1,23 +1,16 @@
-import { Snippet, Feed, ConnectorEntity, EntityComponent } from '@interfaces/feed';
-import { InnerConnector, IntegrationData } from '@interfaces/integration';
 import React, { useState, useEffect, useMemo } from 'react';
 import { Box, Button, ButtonGroup, IconButton, useMediaQuery, useTheme } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Props, SaveStatus } from '@interfaces/edit';
 import { useAuthContext } from '@hooks/useAuthContext';
-import { useLoader } from '@hooks/useLoader';
-import { useGetConnectorsFeed } from '@hooks/useGetConnectorsFeed';
 import { useGetIntegrationFromCache } from '@hooks/useGetIntegrationFromCache';
 import useSnippets from '@hooks/useSnippets';
 import settings from '@assets/settings.svg';
 import settingsPrimary from '@assets/settings-primary.svg';
-import question from '@assets/question.svg';
-import logo from '@assets/logo.svg';
 import ConfigureRunnerModal from '@components/IntegrationDetailDevelop/ConfigureRunnerModal';
 import AddSnippetToIntegrationModal from '@components/IntegrationDetailDevelop/AddSnippetToIntegrationModal';
 import { trackEventMemoized, trackEventUnmemoized } from '@utils/analytics';
 import ConfirmationPrompt from '@components/common/ConfirmationPrompt';
-import { useTrackPage } from '@hooks/useTrackPage';
 import FusebitEditor from '@components/IntegrationDetailDevelop/FusebitEditor';
 import useEditor from '@components/IntegrationDetailDevelop/FusebitEditor/useEditor';
 import { useParams } from 'react-router-dom';
@@ -27,21 +20,28 @@ import file from '@assets/file.svg';
 import cogs from '@assets/cogs.svg';
 import clock from '@assets/clock.svg';
 import playEditor from '@assets/play-editor.svg';
-import add from '@assets/add.svg';
 import { ReactComponent as ForkOutline } from '@assets/fork.svg';
 import CloseIcon from '@material-ui/icons/Close';
 import PlayArrowOutlined from '@material-ui/icons/PlayArrowOutlined';
 import SaveOutlined from '@material-ui/icons/SaveOutlined';
 import { useInvalidateIntegration } from '@hooks/useInvalidateIntegration';
-import { CodeOutlined } from '@material-ui/icons';
 import { useError } from '@hooks/useError';
 import { useCopy } from '@hooks/useCopy';
+import useSampleApp from '@hooks/useSampleApp';
 import { getIntegrationConfig } from '@utils/localStorage';
+import { useTrackPage } from '@hooks/useTrackPage';
+import { useGetConnectorsFeed } from '@hooks/useGetConnectorsFeed';
+import { InnerConnector } from '@interfaces/integration';
 import MobileDrawer from '../MobileDrawer';
 import useEditorEvents from '../FusebitEditor/useEditorEvents';
 import { BUILDING_TEXT, BUILD_COMPLETED_TEXT } from '../FusebitEditor/constants';
 import useProcessing from '../hooks/useProcessing';
-import { EditGuiSampleApp } from './EditGuiSampleApp';
+import useSnippetsModal from './useSnippetsModal';
+import { HEADER_HEIGHT } from './constants';
+import useEditorLoader from './useEditorLoader';
+import useCreateNewFile from './useCreateNewFile';
+import useEditorAnalytics from './useEditorAnalytics';
+import useCustomSidebar from './useCustomSidebar';
 import { EditorEvents } from '~/enums/editor';
 
 const StyledEditorContainer = styled.div`
@@ -77,9 +77,9 @@ const StyledEditorContainer = styled.div`
 
   .fusebit-theme-light.fusebit-shell {
     position: relative;
-    padding: 0 48px;
-    padding-bottom: 60px;
-    height: calc(100vh - 96px);
+    padding: 0 20px;
+    padding-bottom: 20px;
+    height: calc(100vh - ${HEADER_HEIGHT});
     background-color: #eff5ff;
   }
 
@@ -98,11 +98,12 @@ const StyledEditorContainer = styled.div`
 
       &-container {
         height: 100vh;
-        transform: translateY(-96px);
+        transform: translateY(${-HEADER_HEIGHT.split('px')[0]}px);
       }
     }
 
     .fusebit-editor-container {
+      position: relative;
       padding-top: 20px;
       background-color: #ffffff;
       border-radius: 4px;
@@ -120,8 +121,8 @@ const StyledEditorContainer = styled.div`
 
     .fusebit-nav {
       &-container {
-        padding: 32px;
-        background-color: rgba(255, 255, 255, 0.5);
+        padding: 20px;
+        background-color: #f7faff;
         border-radius: 4px;
         width: 253px;
       }
@@ -132,6 +133,8 @@ const StyledEditorContainer = styled.div`
       }
 
       &-category {
+        display: flex;
+        align-items: center;
         font-family: 'Poppins';
         font-size: 16px;
         line-height: 18px;
@@ -148,18 +151,25 @@ const StyledEditorContainer = styled.div`
         font-size: 14px;
         line-height: 20px;
         color: var(--black);
-        margin-bottom: 12px;
-        padding: 0;
-        transition: all 0.1s linear;
+        margin-bottom: 6px;
+        padding: 8px;
+        border-radius: 4px;
+        transition: all 0.25s linear, font-weight 0.1s linear;
 
         &:hover {
+          background: var(--secondary-color);
+          font-weight: 600;
+        }
+      }
+
+      &-new-file {
+        &:hover {
           background: none;
-          font-weight: 700;
         }
       }
 
       &-icon {
-        margin-right: 18px;
+        margin-right: 10px;
 
         > svg {
           width: 16px;
@@ -174,8 +184,8 @@ const StyledEditorContainer = styled.div`
       }
 
       &-item-selected {
-        background: none;
-        font-weight: 700;
+        background: var(--secondary-color);
+        font-weight: 600;
       }
     }
 
@@ -211,9 +221,9 @@ const StyledCloseHeader = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  height: 96px;
+  height: ${HEADER_HEIGHT};
   z-index: 10;
-  padding: 32px 48px;
+  padding: 32px 20px;
   background-color: #eff5ff;
 
   h3 {
@@ -230,15 +240,6 @@ const StyledCloseHeader = styled.div`
   }
 `;
 
-const StyledActionsHelpWrapper = styled.div`
-  position: absolute;
-  right: 94px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-`;
-
 const StyledForkAndEditWrapper = styled.div`
   position: absolute;
   right: 48px;
@@ -246,37 +247,15 @@ const StyledForkAndEditWrapper = styled.div`
   transform: translateY(-50%);
 `;
 
-const StyledActionsHelpLink = styled.a`
-  font-size: 14px;
-  line-height: 20px;
-  color: var(--black);
-  text-decoration: underline;
-  margin-right: 10px;
-`;
-
-const StyledActionsHelpImage = styled.img`
-  height: 16px;
-  width: 16px;
-
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
 const StyledFusebitEditorContainer = styled(Box)`
   position: relative;
 `;
 
-const StyledFusebitEditorLogo = styled.img`
-  position: absolute;
-  bottom: 24px;
-  right: 48px;
-  height: 20px;
-  width: 80px;
-  object-fit: contain;
-`;
-
 const StyledTitle = styled.h3`
+  font-size: 16px;
+  line-height: 18px;
+  font-family: 'Poppins';
+  color: var(--black);
   max-width: 600px;
   overflow: hidden;
   white-space: nowrap;
@@ -291,30 +270,6 @@ const StyledTitle = styled.h3`
   }
 `;
 
-const addNewStyles = `
-  position: relative;
-  font-family: 'Poppins';
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 20px;
-  color: #333333;
-  cursor: pointer;
-`;
-
-const addNewIcon = `
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    height: 16px;
-    width: 16px;
-    background-image: url(${add});
-    background-size: contain;
-    background-repeat: no-repeat;
-`;
-
-// TODO: Implement useEditorEvents to listen dirty state events
-
 const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationId, isLoading }, ref) => {
   const { id } = useParams<{ id: string }>();
   const connectorFeed = useGetConnectorsFeed();
@@ -322,11 +277,9 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const [isMounted, setIsMounted] = useState(false);
   const [configureRunnerActive, setConfigureRunnerActive] = useState(false);
   const [unsavedWarning, setUnsavedWarning] = useState(false);
-  const { createLoader, removeLoader } = useLoader();
   const [loginFlowModalOpen, setLoginFlowModalOpen] = useState(false);
   const theme = useTheme();
   const matchesMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const [addSnippetModalOpen, setAddSnippetModalOpen] = useState(false);
   const [missingIdentities, setMissingIdentities] = useState<InnerConnector[] | undefined>(undefined);
   const integrationData = useGetIntegrationFromCache();
   const { handleRun, handleLogin, isFindingInstall, setNeedsInitialization, setRunPending, isRunning } = useEditor({
@@ -342,16 +295,23 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     localStorage.setItem('enableGrafanaLogs', `${!!result}`);
     return result;
   });
-
   const { invalidateIntegration } = useInvalidateIntegration();
   const { formatSnippet, getProviderVersion } = useSnippets();
   const { createError } = useError();
   const tenantId = getTenantId();
   const { handleCopy } = useCopy();
+  const { url: sampleAppUrl } = useSampleApp();
 
   const { isSaving, errorBuild, setErrorBuild } = useEditorEvents({
     isMounted,
     events: [EditorEvents.BuildStarted, EditorEvents.BuildFinished, EditorEvents.BuildError],
+  });
+
+  const { snippetsModal, onSnippetsModalOpen, onSnippetsModalClose } = useSnippetsModal({
+    formatSnippet,
+    getProviderVersion,
+    integrationId,
+    setDirtyState,
   });
 
   useEffect(() => {
@@ -371,6 +331,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   if (forkEditFeedUrl) {
     trackEventMemoized('Share Redirect Execution', 'Share Function', additionalProperties);
   }
+
   useTitle(`${id} Editor`);
   const { processing } = useProcessing({
     onProcessingStarted: () => {
@@ -393,49 +354,6 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     },
   });
 
-  useEffect(() => {
-    const createAddNewItemElement = (lastItem: Element) => {
-      const addNew = document.createElement('div');
-      addNew.setAttribute('id', 'addNewItem');
-      addNew.setAttribute('style', addNewStyles);
-      addNew.onclick = (e) => {
-        e.stopPropagation();
-        const el = document.querySelector('.fusebit-code-action-add-btn');
-        if (el instanceof HTMLElement) {
-          el?.click();
-          document.getElementById('addNewItem')?.remove();
-          const input = document.querySelector('.fusebit-nav-new-file');
-
-          if (input) {
-            createAddNewItemElement(input);
-          }
-        }
-      };
-
-      const p = document.createElement('p');
-      p.setAttribute('style', 'margin: 0; margin-left: 32px;');
-      p.innerText = 'New File';
-      addNew.appendChild(p);
-
-      const icon = document.createElement('div');
-      icon.setAttribute('style', addNewIcon);
-      addNew.appendChild(icon);
-
-      lastItem.parentNode?.insertBefore(addNew, lastItem.nextSibling);
-    };
-
-    if (isMounted && !isLoading) {
-      removeLoader();
-      const items = document.getElementsByClassName('fusebit-nav-file');
-      const lastItem = items?.[items.length - 1];
-      if (!document.getElementById('addNewItem')) {
-        createAddNewItemElement(lastItem);
-      }
-    } else {
-      createLoader();
-    }
-  }, [isMounted, isLoading, createLoader, removeLoader]);
-
   const handleFork = () => {
     trackEventMemoized(
       'Fork Button Clicked',
@@ -448,6 +366,12 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       }
     );
   };
+  const isEditorRunning = useMemo(() => isMounted && !isLoading, [isLoading, isMounted]);
+
+  useEditorLoader({ isEditorRunning });
+  useCreateNewFile({ isEditorRunning });
+  useEditorAnalytics({ isEditorRunning });
+  useCustomSidebar({ isEditorRunning, onSnippetsModalOpen, sampleAppUrl });
 
   const handleSaveAndRun = async () => {
     gtag('event', 'click', {
@@ -481,74 +405,6 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     await invalidateIntegration();
     setDirtyState(false);
     setNeedsInitialization(true);
-  };
-
-  const handleAddSnippet = async () => {
-    trackEventMemoized('Snippets Button Clicked', 'Web Editor');
-    setAddSnippetModalOpen(true);
-  };
-
-  const handleAddSnippetClose = (
-    newConnector?: ConnectorEntity,
-    existingConnector?: InnerConnector,
-    feed?: Feed,
-    snippet?: Snippet
-  ) => {
-    if (window.editor && feed && snippet) {
-      trackEventMemoized('Add Button Clicked', 'Add Snippet', {
-        snippet: `${feed.id}-${snippet.id}`,
-      });
-
-      const addConnectorToConfig = (connector: ConnectorEntity) => {
-        const connectorTemplate = (feed.configuration.components as EntityComponent[])[0];
-        // Add newly created connector to integration's configuration
-        const configuration = JSON.parse(window.editor.getConfigurationSettings()) as IntegrationData;
-        configuration.components.push({
-          ...connectorTemplate,
-          name: connector.id,
-          entityId: connector.id,
-        });
-        window.editor.setSettingsConfiguration(JSON.stringify(configuration));
-
-        // Add provider dependency to package.json of the integration
-        const providerVersion = getProviderVersion(feed);
-        window.editor.selectFile('package.json');
-        const content = JSON.parse(window.editor.getSelectedFileContent());
-        content.dependencies[connectorTemplate.provider] = providerVersion;
-        window.editor.setSelectedFileContent(JSON.stringify(content, null, 2));
-      };
-
-      const addSnippetCode = () => {
-        // Add snippets at the end of integration.js
-        window.editor.selectFile('integration.js');
-        const newContent = formatSnippet(
-          feed,
-          snippet,
-          integrationId,
-          newConnector?.id || (existingConnector?.entityId as string),
-          newConnector?.id || (existingConnector?.name as string)
-        );
-        const content = window.editor.getSelectedFileContent();
-        window.editor.setSelectedFileContent(content + newContent);
-
-        // Make sure the editor reloads the updated integration.js
-        window.editor.selectedFileName = '';
-        window.editor.selectFile('integration.js');
-
-        // Scroll to the beginning of the snippet within integration.js in the editor
-        const lineCountInNewContent = (newContent.match(/\n/g) || []).length;
-        window.editor._monaco.revealLineNearTop(
-          window.editor._monaco.getModel().getLineCount() - lineCountInNewContent
-        );
-        setDirtyState(true);
-      };
-
-      if (newConnector) {
-        addConnectorToConfig(newConnector);
-      }
-      addSnippetCode();
-    }
-    setAddSnippetModalOpen(false);
   };
 
   const handleKeyUp = () => {
@@ -658,12 +514,13 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
         hideCancelButton
       />
       <ConfigureRunnerModal open={configureRunnerActive} setOpen={setConfigureRunnerActive} />
+      <AddSnippetToIntegrationModal
+        open={snippetsModal.isOpen}
+        onClose={onSnippetsModalClose}
+        integrationData={integrationData}
+        defaultSnippet={snippetsModal.snippet}
+      />
       <StyledEditorContainer ref={ref}>
-        <AddSnippetToIntegrationModal
-          open={addSnippetModalOpen}
-          onClose={handleAddSnippetClose}
-          integrationData={integrationData}
-        />
         {isMounted && !matchesMobile && (
           <StyledCloseHeader>
             {!forkEditFeedUrl && (
@@ -703,33 +560,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
                     )}
                   </Button>
                 </ButtonGroup>
-                <Button
-                  style={{ marginRight: '16px' }}
-                  startIcon={<CodeOutlined />}
-                  onClick={handleAddSnippet}
-                  size="small"
-                  variant={assumeHasConnectors ? 'outlined' : 'contained'}
-                  color="primary"
-                  disabled={isSaving || !isMounted}
-                >
-                  Snippets
-                </Button>
-                <StyledTitle>{integrationId}</StyledTitle>
-                <StyledActionsHelpWrapper>
-                  <EditGuiSampleApp />
-                  <StyledActionsHelpLink
-                    target="_blank"
-                    href="https://developer.fusebit.io/docs/developing-locally"
-                    onClick={() => {
-                      trackEventMemoized('Docs Developing Locally Link Clicked', 'Web Editor', {
-                        Integration: integrationData?.data?.tags['fusebit.feedId'],
-                      });
-                    }}
-                  >
-                    Edit locally
-                  </StyledActionsHelpLink>
-                  <StyledActionsHelpImage src={question} alt="question" height="16" width="16" />
-                </StyledActionsHelpWrapper>
+                <StyledTitle>Edit {integrationId}</StyledTitle>
                 <StyledCloseWrapper onClick={handleClose}>
                   <CloseIcon fontSize="small" />
                 </StyledCloseWrapper>
@@ -795,9 +626,6 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
               setIsMounted(true);
             }}
           />
-          {isMounted && !matchesMobile && (
-            <StyledFusebitEditorLogo src={logo} alt="fusebit logo" height="20" width="80" />
-          )}
           {isMounted && matchesMobile && (
             <MobileDrawer
               processing={processing}

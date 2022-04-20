@@ -1,4 +1,4 @@
-import { Feed, Snippet } from './feed';
+import { Feed, ParsedSnippet, Snippet } from './feed';
 
 export interface Props {
   open: boolean;
@@ -8,6 +8,7 @@ export interface Props {
   isSnippet?: boolean;
   isFork?: boolean;
   hasConnectorDependency?: (feed: Feed) => boolean;
+  defaultSnippet?: ParsedSnippet;
 }
 
 export interface Data {
