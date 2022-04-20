@@ -7,9 +7,9 @@ import { useAccountIntegrationTestIntegration } from '@hooks/api/v2/account/inte
 import { useAxios, ApiResponse } from '@hooks/useAxios';
 import { useAuthContext } from '@hooks/useAuthContext';
 import { InstallList, Install } from '@interfaces/install';
-import { trackEventMemoized } from '@utils/analytics';
 import { storeIntegrationConfig, getIntegrationConfig, resetIntegrationConfig } from '@utils/localStorage';
 import { InnerConnector, Integration } from '@interfaces/integration';
+import { trackEventMemoized } from '@utils/analytics';
 
 interface Props {
   integrationData?: ApiResponse<Integration>;
@@ -22,7 +22,7 @@ interface Props {
 const LOCALSTORAGE_SESSION_KEY = 'session';
 
 const useEditor = (
-  { integrationData, enableListener = true, onReadyToRun, onReadyToLogin, onMissingIdentities } = {} as Props
+  { integrationData, enableListener = true, onReadyToRun, onMissingIdentities, onReadyToLogin } = {} as Props
 ) => {
   const { id } = useParams<{ id: string }>();
   const { userData, getTenantId } = useAuthContext();
