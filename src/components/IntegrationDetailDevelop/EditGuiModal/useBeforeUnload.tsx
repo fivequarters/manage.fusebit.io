@@ -2,11 +2,10 @@ import { useEffect } from 'react';
 
 type Props = {
   isEditorRunning: boolean;
-  isDirty: boolean;
 };
 
-const handleBeforeUnload = (e: BeforeUnloadEvent, isDirty: boolean) => {
-  if (isDirty) {
+const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+  if (window.editor?.dirtyState) {
     // Cancel the event
     e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
     // Chrome requires returnValue to be set
@@ -15,14 +14,14 @@ const handleBeforeUnload = (e: BeforeUnloadEvent, isDirty: boolean) => {
   }
 };
 
-const useBeforeUnload = ({ isEditorRunning, isDirty }: Props) => {
+const useBeforeUnload = ({ isEditorRunning }: Props) => {
   useEffect(() => {
     if (isEditorRunning) {
-      window.addEventListener('beforeunload', (e) => handleBeforeUnload(e, isDirty));
+      window.addEventListener('beforeunload', handleBeforeUnload);
     }
 
-    return () => window.removeEventListener('beforeunload', (e) => handleBeforeUnload(e, isDirty));
-  }, [isEditorRunning, isDirty]);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [isEditorRunning]);
 };
 
 export default useBeforeUnload;

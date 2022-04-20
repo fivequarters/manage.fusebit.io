@@ -373,7 +373,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   useCreateNewFile({ isEditorRunning });
   useEditorAnalytics({ isEditorRunning });
   useCustomSidebar({ isEditorRunning, onSnippetsModalOpen, sampleAppUrl });
-  useBeforeUnload({ isEditorRunning, isDirty: dirtyState });
+  useBeforeUnload({ isEditorRunning });
 
   const handleSaveAndRun = async () => {
     gtag('event', 'click', {
