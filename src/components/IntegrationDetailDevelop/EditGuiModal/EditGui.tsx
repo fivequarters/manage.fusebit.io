@@ -42,6 +42,7 @@ import useEditorLoader from './useEditorLoader';
 import useCreateNewFile from './useCreateNewFile';
 import useEditorAnalytics from './useEditorAnalytics';
 import useCustomSidebar from './useCustomSidebar';
+import useBeforeUnload from './useBeforeUnload';
 import { EditorEvents } from '~/enums/editor';
 
 const StyledEditorContainer = styled.div`
@@ -372,6 +373,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   useCreateNewFile({ isEditorRunning });
   useEditorAnalytics({ isEditorRunning });
   useCustomSidebar({ isEditorRunning, onSnippetsModalOpen, sampleAppUrl });
+  useBeforeUnload({ isEditorRunning });
 
   const handleSaveAndRun = async () => {
     gtag('event', 'click', {
