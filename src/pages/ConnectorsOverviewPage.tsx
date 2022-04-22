@@ -12,7 +12,7 @@ const ConnectorsOverviewPage: FC<{}> = (): ReactElement => {
 
   return (
     <Layout>
-      <ConnectorsNavbar />
+      <ConnectorsNavbar dropdownOnly />
       <TabComponent tabNames={['Overview']} tabObjects={[<ConnectorsTable key="connectorsTable" />]} />
     </Layout>
   );
