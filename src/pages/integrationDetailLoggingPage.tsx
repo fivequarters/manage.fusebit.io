@@ -19,12 +19,12 @@ const IntegrationDetailLoggingPage: FC<{}> = (): ReactElement => {
     <Layout>
       <IntegrationsNavbar />
       <TabComponent
-        tabNames={['Develop', 'Installs', 'Health', 'Logging', 'Reliability']}
+        tabNames={['Develop', 'Installs', 'Logging (Beta)', 'Health', 'Reliability']}
         tabObjects={[
           getRedirectLink(`/integration/${id}/develop`),
           getRedirectLink(`/integration/${id}/installs`),
-          getRedirectLink(`/integration/${id}/health-monitoring`),
           <Logging key="logging" />,
+          getRedirectLink(`/integration/${id}/health-monitoring`),
           getRedirectLink(`/integration/${id}/reliability`),
         ]}
       />

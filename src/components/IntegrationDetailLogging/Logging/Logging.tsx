@@ -12,7 +12,7 @@ const Logging = () => {
   const isMobile = useMediaQuery('(max-width: 880px)');
 
   const handleIntercomPost = () => {
-    trackEventMemoized('Talk to Sales Button Clicked', 'Logging', { integration: id });
+    trackEventMemoized('Talk to Sales Button Clicked', 'Logging (Beta)', { integration: id });
     window.Intercom?.('showNewMessage', 'I would like to enable the "Logging" feature for my account.');
     sendIntercomMessage();
   };
