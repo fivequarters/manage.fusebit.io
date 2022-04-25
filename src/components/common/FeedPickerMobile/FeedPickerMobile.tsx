@@ -36,7 +36,6 @@ const FeedPickerMobile: React.FC<Props> = ({ isIntegration, onSubmit, open, onCl
     data,
     handleSubmit,
     handleFilterChange,
-    debouncedSetSearchFilter,
     activeTemplate,
     handleTemplateChange,
     handleJsonFormsChange,
@@ -48,6 +47,7 @@ const FeedPickerMobile: React.FC<Props> = ({ isIntegration, onSubmit, open, onCl
     setActiveFilter,
     feedTypeName,
     orderAlpha,
+    handleInputChange,
   } = useFeedPicker({
     open,
     isIntegration,
@@ -121,7 +121,7 @@ const FeedPickerMobile: React.FC<Props> = ({ isIntegration, onSubmit, open, onCl
   const steps = [
     <ItemList key="1" items={filters} activeItem={activeFilter} />,
     <FeedPickerMobileChoose
-      onChange={(e) => debouncedSetSearchFilter(e.target.value)}
+      onChange={handleInputChange}
       key={activeTemplate?.id}
       items={entities}
       activeItem={activeTemplate?.id}
