@@ -34,6 +34,7 @@ interface Props extends DialogProps {
   hasCancel?: boolean;
   cancelButtonText?: string;
   acceptButtonText?: string;
+  removePadding?: boolean;
 }
 
 const Modal: React.FC<Props> = ({
@@ -47,12 +48,13 @@ const Modal: React.FC<Props> = ({
   children,
   disableActions,
   disableClose,
+  removePadding,
   ...props
 }) => {
   return (
     <Dialog onClose={onClose} open={open} {...props} disableEnforceFocus>
       {title && <StyledTitle>{title}</StyledTitle>}
-      <StyledContent hasPadding={disableActions}>
+      <StyledContent hasPadding={disableActions && !removePadding}>
         {!disableClose && (
           <CSC.CloseWrapper aria-label="close" onClick={onClose}>
             <CloseIcon />

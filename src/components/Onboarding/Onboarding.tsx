@@ -8,7 +8,7 @@ import Video from '@components/common/Video';
 import { trackEventMemoized } from '@utils/analytics';
 
 const StyledWrapper = styled.div`
-  @media only screen and (max-width: 500px) {
+  @media only screen and (max-width: 550px) {
     position: relative;
     height: 75%;
   }
@@ -36,7 +36,7 @@ const StyledDescription = styled.p`
 `;
 
 const StyledCtaWrapper = styled(Box)`
-  @media only screen and (max-width: 500px) {
+  @media only screen and (max-width: 550px) {
     padding-bottom: 30px;
   }
 `;
@@ -54,7 +54,7 @@ const StyledCtaText = styled.h3`
     line-height: 20px;
   }
 
-  @media only screen and (max-width: 500px) {
+  @media only screen and (max-width: 550px) {
     font-size: 16px;
     line-height: 18px;
     max-width: calc(100% - 140px);
@@ -66,7 +66,7 @@ const StyledVideoWrapper = styled.div`
   width: 100%;
   height: 420px;
 
-  @media only screen and (max-width: 500px) {
+  @media only screen and (max-width: 550px) {
     height: 100%;
   }
 `;
@@ -80,7 +80,7 @@ const Onboarding: React.FC = () => {
   const [videoCompleted, setVideoCompleted] = useState(false);
   const query = useQuery();
   const objectLocation = 'Onboarding Video';
-  const isMobile = useMediaQuery('(max-width: 500px)');
+  const isMobile = useMediaQuery('(max-width: 550px)');
 
   useEffect(() => {
     const utmContent = query.get('utm_content');
@@ -123,6 +123,7 @@ const Onboarding: React.FC = () => {
       closeAfterTransition
       BackdropComponent={Backdrop}
       style={{ zIndex: 1500 }}
+      removePadding={isMobile}
     >
       <StyledWrapper>
         <StyledTitle>Welcome to Fusebit!</StyledTitle>

@@ -38,6 +38,14 @@ const StyledVideo = styled.video`
   object-fit: fill;
   border-radius: 8px;
 
+  @media only screen and (max-width: 550px) {
+    object-fit: cover;
+  }
+
+  :fullscreen {
+    object-fit: contain;
+  }
+
   ::-webkit-media-controls {
     display: none !important;
   }
@@ -76,7 +84,7 @@ const StyledVolumeWrapper = styled.div`
   align-items: center;
   margin-left: 12px;
 
-  @media only screen and (max-width: 500px) {
+  @media only screen and (max-width: 550px) {
     margin-left: 0;
   }
 `;
@@ -86,7 +94,7 @@ const StyledSlider = styled(Slider)`
   color: white;
   margin-left: 14px;
 
-  @media only screen and (max-width: 500px) {
+  @media only screen and (max-width: 550px) {
     margin-left: 4px;
   }
 `;
@@ -97,7 +105,7 @@ const StyledTimeWrapper = styled.div`
   margin-left: 16px;
   color: white;
 
-  @media only screen and (max-width: 500px) {
+  @media only screen and (max-width: 550px) {
     margin-left: 8px;
   }
 `;
@@ -107,7 +115,7 @@ const StyledTime = styled.div`
   line-height: 16px;
   color: white;
 
-  @media only screen and (max-width: 500px) {
+  @media only screen and (max-width: 550px) {
     font-size: 10px;
     line-height: 14px;
   }
