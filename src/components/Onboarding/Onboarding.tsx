@@ -35,11 +35,7 @@ const StyledDescription = styled.p`
   }
 `;
 
-const StyledCtaWrapper = styled(Box)<{ active: boolean }>`
-  visibility: ${(props) => (props.active ? 'visible' : 'hidden')};
-  opacity: ${(props) => (props.active ? 1 : 0)};
-  transition: all 0.25s linear;
-
+const StyledCtaWrapper = styled(Box)`
   @media only screen and (max-width: 500px) {
     padding-bottom: 30px;
   }
@@ -143,9 +139,10 @@ const Onboarding: React.FC = () => {
             tracks={[{ src: 'captions_en.vtt', kind: 'captions', srcLang: 'en', label: 'english_captions' }]}
           />
         </StyledVideoWrapper>
-        <StyledCtaWrapper active={videoCompleted} display="flex" alignItems="center" mt="24px">
+        <StyledCtaWrapper display="flex" alignItems="center" mt="24px">
           <StyledCtaText>Let’s get going on building your first integration</StyledCtaText>
           <Button
+            disabled={!videoCompleted}
             onClick={() => setOpen(false)}
             size={isMobile ? 'medium' : 'large'}
             color="primary"
