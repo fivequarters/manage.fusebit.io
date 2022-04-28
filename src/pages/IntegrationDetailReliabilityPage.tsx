@@ -24,8 +24,8 @@ const IntegrationDetailReliabilityPage: FC<{}> = (): ReactElement => {
         tabObjects={[
           getRedirectLink(`/integration/${id}/develop`),
           getRedirectLink(`/integration/${id}/installs`),
-          getRedirectLink(`/integration/${id}/health-monitoring`),
           getRedirectLink(`/integration/${id}/logging`),
+          getRedirectLink(`/integration/${id}/health-monitoring`),
           <Reliability key="reliability" />,
         ]}
       />
