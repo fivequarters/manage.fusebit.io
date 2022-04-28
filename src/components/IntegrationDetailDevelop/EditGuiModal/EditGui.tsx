@@ -121,6 +121,8 @@ const StyledEditorContainer = styled.div`
     }
 
     .fusebit-nav {
+      padding-right: 20px;
+
       &-container {
         padding: 20px;
         background-color: #f7faff;
