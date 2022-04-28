@@ -9,8 +9,7 @@ const Logging = () => {
   return (
     <Box display="flex" alignItems="center" justifyContent="center" pb="140px" position="relative">
       <iframe
-        title="iframe"
-        id="iframe"
+        title="logging"
         src={`${process.env.REACT_APP_FUSEBIT_DEPLOYMENT}/v2/grafana/bootstrap/d-solo/logging/basic?panelId=2&kiosk=&refresh=1s&fusebitAuthorization=${userData.token}&fusebitAccountId=${userData.accountId}&var-accountId=${userData.accountId}&var-subscriptionId=${userData.subscriptionId}&var-boundaryId=integration&var-functionId=${id}`}
         width="100%"
         height="350"

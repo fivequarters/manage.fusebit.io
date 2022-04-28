@@ -10,3 +10,5 @@ export const STATIC_TENANT_ID = 'user-1';
 export const PRODUCTION_HOST = 'manage.fusebit.io';
 
 export const INTEGRATION_PROCESSING_SUFFIX = '-pending-processing';
+
+export const INTEGRATION_DETAIL_TABNAMES = ['Develop', 'Installs', 'Logging (Beta)', 'Health', 'Reliability'];

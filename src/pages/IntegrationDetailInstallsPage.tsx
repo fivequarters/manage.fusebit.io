@@ -7,6 +7,7 @@ import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 import InstallsTable from '@components/IntegrationDetailInstalls/InstallsTable';
 import IntegrationsNavbar from '@components/common/IntegrationsNavbar';
 import useTitle from '@hooks/useTitle';
+import { INTEGRATION_DETAIL_TABNAMES } from '@utils/constants';
 
 const IntegrationDetailInstallsPage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
@@ -19,7 +20,7 @@ const IntegrationDetailInstallsPage: FC<{}> = (): ReactElement => {
     <Layout>
       <IntegrationsNavbar />
       <TabComponent
-        tabNames={['Develop', 'Installs', 'Logging (Beta)', 'Health', 'Reliability']}
+        tabNames={INTEGRATION_DETAIL_TABNAMES}
         tabObjects={[
           getRedirectLink(`/integration/${id}/develop`),
           <InstallsTable key="installs" />,
