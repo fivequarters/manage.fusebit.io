@@ -64,8 +64,10 @@ export const useEntityApi = (preventLoader?: boolean) => {
 
     if (entity.entityType === 'connector') {
       newEntity = await createConnector.mutateAsync(obj);
+      newEntity.data.entityType = 'connector';
     } else {
       newEntity = await createIntegration.mutateAsync(obj);
+      newEntity.data.entityType = 'integration';
       localStorage.setItem(`${entity.id}${INTEGRATION_PROCESSING_SUFFIX}`, 'true');
     }
 
