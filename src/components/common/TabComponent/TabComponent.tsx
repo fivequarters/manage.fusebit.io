@@ -101,11 +101,10 @@ const TabComponent: React.FC<Props> = ({ tabNames, tabObjects }) => {
   }, [tabObjects]);
 
   const handleChange = (event: any, newValue: number) => {
-    if (newValue !== activeTab) {
-      const link = tabObjects[newValue];
-      if (typeof link === 'string') {
-        history.push(link);
-      }
+    const link = tabObjects[newValue];
+
+    if (newValue !== activeTab && typeof link === 'string') {
+      history.push(link);
     }
   };
 
