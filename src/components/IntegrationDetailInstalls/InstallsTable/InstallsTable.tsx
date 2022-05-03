@@ -34,12 +34,15 @@ const InstallsTable = () => {
 
   const rows = (installs?.data?.items || []).map((install) => {
     const connectorIds = getConnectorsFromInstall(install);
+    // dateAdded comes in this format: 2022-04-26 20:17:31.855011
+    // we parse it to be like this: 2022-04-26T20:17:31.855011
+    const dateAdded = install.dateAdded.split(' ').join('T');
 
     return {
       id: install.id,
       installID: install.id,
       tenantID: <Tag>{install.tags['fusebit.tenantId']}</Tag>,
-      dateCreated: format(new Date(install.dateAdded), 'MM/dd/yyyy'),
+      dateCreated: format(new Date(dateAdded), 'MM/dd/yyyy'),
       associatedIdentities: (
         <AssociatedIdentities tenantId={install.tags['fusebit.tenantId']} connectorIds={connectorIds} />
       ),
