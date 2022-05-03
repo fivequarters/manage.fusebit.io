@@ -36,7 +36,7 @@ const InstallsTable = () => {
     const connectorIds = getConnectorsFromInstall(install);
     // dateAdded comes in this format: 2022-04-26 20:17:31.855011
     // we parse it to be like this: 2022-04-26T20:17:31.855011
-    const dateAdded = install.dateAdded.split(' ').join('T');
+    const dateAdded = install.dateAdded.replaceAll(' ', 'T');
 
     return {
       id: install.id,
