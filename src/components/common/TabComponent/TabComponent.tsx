@@ -102,8 +102,10 @@ const TabComponent: React.FC<Props> = ({ tabNames, tabObjects }) => {
 
   const handleChange = (event: any, newValue: number) => {
     if (newValue !== activeTab) {
-      history.push(tabObjects[newValue]);
-      // window.location.href = tabObjects[newValue];
+      const link = tabObjects[newValue];
+      if (typeof link === 'string') {
+        history.push(link);
+      }
     }
   };
 
@@ -124,7 +126,7 @@ const TabComponent: React.FC<Props> = ({ tabNames, tabObjects }) => {
         >
           {tabNames.map((name, index) => (
             <Tab
-              key={name}
+              key={JSON.stringify(name)}
               label={<StyledTabLabel active={activeTab === index}>{name}</StyledTabLabel>}
               {...a11yProps(index)}
             />
@@ -145,7 +147,7 @@ const TabComponent: React.FC<Props> = ({ tabNames, tabObjects }) => {
           >
             {tabNames.map((name, index) => (
               <Tab
-                key={name}
+                key={JSON.stringify(name)}
                 label={<StyledTabLabel active={activeTab === index}>{name}</StyledTabLabel>}
                 {...a11yProps(index)}
               />
