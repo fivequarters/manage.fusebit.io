@@ -37,12 +37,15 @@ const IdentitiesTable = () => {
 
   const rows = (identities?.data?.items || []).map((identity) => {
     const connectorId = identity.tags['fusebit.parentEntityId'];
+    // dateAdded comes in this format: 2022-04-26 20:17:31.855011
+    // we parse it to be like this: 2022-04-26T20:17:31.855011
+    const dateAdded = identity.dateAdded.replace(' ', 'T');
 
     return {
       id: identity.id,
       identityId: identity.id,
       tenantId: <Tag>{identity.tags['fusebit.tenantId']}</Tag>,
-      dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
+      dateCreated: format(new Date(dateAdded), 'MM/dd/yyyy'),
       associatedInstalls: <AssociatedInstalls tenantId={identity.tags['fusebit.tenantId']} connectorId={connectorId} />,
       associatedIntegrations: (
         <AssociatedIntegrations tenantId={identity.tags['fusebit.tenantId']} connectorId={connectorId} />
