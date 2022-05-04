@@ -35,6 +35,7 @@ const Tools: React.FC<Props> = ({ sampleAppUrl }) => {
 
   return (
     <CustomNavBase
+      id="tools"
       title="Tools"
       tooltipDescription="Tools to help you deploy your Fusebit Integration into your own app, much faster."
     >

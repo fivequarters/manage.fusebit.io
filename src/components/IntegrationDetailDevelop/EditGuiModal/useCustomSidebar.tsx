@@ -14,12 +14,14 @@ const appendCategoryTooltip = (
     jsx: ReactElement;
   }
 ) => {
-  if (category && !document.getElementById(element.id)) {
+  const tooltipId = `${element.id}-tooltip`;
+  if (category && !document.getElementById(tooltipId)) {
+    category.id = element.id;
     const div = document.createElement('div');
-    div.setAttribute('id', element.id);
+    div.setAttribute('id', tooltipId);
     div.style.display = 'flex';
     category.appendChild(div);
-    ReactDOM.render(element.jsx, document.getElementById(element.id));
+    ReactDOM.render(element.jsx, document.getElementById(tooltipId));
   }
 };
 
