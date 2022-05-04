@@ -530,6 +530,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
             {!forkEditFeedUrl && (
               <>
                 <Button
+                  id="save"
                   style={{ marginRight: '16px' }}
                   startIcon={<SaveOutlined />}
                   onClick={handleSave}
@@ -542,6 +543,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
                 </Button>
                 <ButtonGroup variant={assumeHasConnectors ? 'contained' : 'outlined'} style={{ marginRight: '16px' }}>
                   <Button
+                    id="run"
                     startIcon={<PlayArrowOutlined />}
                     size="small"
                     variant={assumeHasConnectors ? 'contained' : 'outlined'}
