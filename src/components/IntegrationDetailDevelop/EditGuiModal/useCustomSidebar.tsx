@@ -25,6 +25,14 @@ const appendCategoryTooltip = (
   }
 };
 
+const addNavItemId = (navFile: HTMLElement | null) => {
+  const id = navFile?.innerText.toLowerCase();
+
+  if (navFile && id && !document.getElementById(id)) {
+    navFile.id = id;
+  }
+};
+
 type Props = {
   isEditorRunning: boolean;
   sampleAppUrl: string;
@@ -40,6 +48,7 @@ const useCustomSidebar = ({ isEditorRunning, sampleAppUrl, onSnippetsModalOpen }
     if (isEditorRunning) {
       const codeCategory = document.querySelectorAll('.fusebit-nav-category')?.[0];
       const settingsCategory = document.querySelectorAll('.fusebit-nav-category')?.[1];
+      const navItems = document.querySelectorAll('.fusebit-nav-item') as NodeListOf<HTMLElement>;
 
       appendCategoryTooltip(codeCategory, {
         id: 'code',
@@ -59,6 +68,10 @@ const useCustomSidebar = ({ isEditorRunning, sampleAppUrl, onSnippetsModalOpen }
             description="Configuration logic, such as CRON scheduling, for your Integration."
           />
         ),
+      });
+
+      navItems.forEach((file) => {
+        addNavItemId(file);
       });
 
       if (!document.getElementById('sidebar-options')) {

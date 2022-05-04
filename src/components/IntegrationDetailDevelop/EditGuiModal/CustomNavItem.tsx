@@ -35,14 +35,15 @@ const StyledWrapper = styled(Box)`
 `;
 
 interface Props {
+  id?: string;
   icon: string;
   name: string;
   onClick?: () => void;
 }
 
-const CustomNavItem: React.FC<Props> = ({ icon, name, onClick }) => {
+const CustomNavItem: React.FC<Props> = ({ id, icon, name, onClick }) => {
   return (
-    <StyledWrapper display="flex" alignItems="center" mb="6px" onClick={onClick}>
+    <StyledWrapper id={id} display="flex" alignItems="center" mb="6px" onClick={onClick}>
       <StyledEditorNavIcon src={urlOrSvgToImage(icon)} />
       <StyledEditorNavText>{name}</StyledEditorNavText>
     </StyledWrapper>
