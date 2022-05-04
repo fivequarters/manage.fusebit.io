@@ -16,16 +16,17 @@ export const PRODUCTION_HOST = 'manage.fusebit.io';
 export const INTEGRATION_PROCESSING_SUFFIX = '-pending-processing';
 
 const StyledBeta = styled.div`
-  font-size: 10px;
+  font-size: 9px;
   line-height: 14px;
   font-weight: 500;
   color: var(--black);
   text-align: center;
-  padding: 2px 6px;
+  padding: 0 4px;
   background-color: var(--yellow);
   box-shadow: 0px 8px 8px rgba(52, 72, 123, 0.1);
   border-radius: 4px;
-  margin-left: 6px;
+  margin-left: 4px;
+  transform: translateY(-6px);
 `;
 
 export const INTEGRATION_DETAIL_TABNAMES: Tab[] = [
