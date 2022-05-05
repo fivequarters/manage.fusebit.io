@@ -10,7 +10,9 @@ import { trackEventMemoized } from '@utils/analytics';
 const StyledWrapper = styled.div`
   @media only screen and (max-width: 550px) {
     position: relative;
-    height: 75%;
+    height: calc(100vh - 40px);
+    display: flex;
+    flex-direction: column;
   }
 `;
 
@@ -67,7 +69,7 @@ const StyledVideoWrapper = styled.div`
   height: 420px;
 
   @media only screen and (max-width: 550px) {
-    height: 100%;
+    margin: auto 0;
   }
 `;
 
@@ -134,6 +136,7 @@ const Onboarding: React.FC = () => {
         </StyledDescription>
         <StyledVideoWrapper>
           <Video
+            enableFullscreenOnPlay={isMobile}
             onPlay={onPlay}
             onEnded={onEnded}
             src={video}

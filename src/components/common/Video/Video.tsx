@@ -35,12 +35,9 @@ const StyledVideo = styled.video`
   position: relative;
   width: 100%;
   height: 100%;
-  object-fit: fill;
+  object-fit: contain;
   border-radius: 8px;
-
-  @media only screen and (max-width: 550px) {
-    object-fit: cover;
-  }
+  background-color: black;
 
   :fullscreen {
     object-fit: contain;
@@ -126,9 +123,10 @@ type VideoEvent = KeyboardEvent | (React.KeyboardEvent<HTMLDivElement> & { code?
 interface Props extends React.VideoHTMLAttributes<HTMLVideoElement> {
   src: string;
   tracks: React.TrackHTMLAttributes<HTMLTrackElement>[];
+  enableFullscreenOnPlay?: boolean;
 }
 
-const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
+const Video: React.FC<Props> = ({ src, tracks, enableFullscreenOnPlay, children, ...props }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [volumeLevel, setVolume] = React.useState<number | number[]>(60);
   const [currentTime, setCurrentTime] = React.useState('00:00');
@@ -143,23 +141,26 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
     }
   };
 
-  const handlePlayState = useCallback(() => {
-    if (videoRef.current?.paused) {
-      videoRef.current?.play();
-      setIsPlaying(true);
-    } else {
-      videoRef.current?.pause();
-      setIsPlaying(false);
-    }
-  }, []);
-
-  const handleFullscreen = () => {
+  const handleFullscreen = useCallback(() => {
     if (!document.fullscreenElement && document.fullscreenEnabled) {
       videoRef.current?.requestFullscreen();
     } else {
       document.exitFullscreen?.();
     }
-  };
+  }, []);
+
+  const handlePlayState = useCallback(() => {
+    if (videoRef.current?.paused) {
+      videoRef.current?.play();
+      setIsPlaying(true);
+      if (enableFullscreenOnPlay) {
+        handleFullscreen();
+      }
+    } else {
+      videoRef.current?.pause();
+      setIsPlaying(false);
+    }
+  }, [handleFullscreen, enableFullscreenOnPlay]);
 
   const handleTimeUpdate = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
     const updatedTime = formatTime(e.currentTarget.currentTime);
@@ -182,7 +183,7 @@ const Video: React.FC<Props> = ({ src, tracks, children, ...props }) => {
         handleFullscreen?.();
       }
     },
-    [handlePlayState]
+    [handlePlayState, handleFullscreen]
   );
 
   const isVideoFinished = useMemo(() => {
