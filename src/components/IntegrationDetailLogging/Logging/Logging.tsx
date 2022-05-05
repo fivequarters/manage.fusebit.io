@@ -18,7 +18,7 @@ const Logging = () => {
     <Box display="flex" alignItems="center" justifyContent="center" height="450px" pb="40px" position="relative">
       <StyledLogs
         title="logging"
-        src={`${process.env.REACT_APP_FUSEBIT_DEPLOYMENT}/v2/grafana/explore/?kiosk=tv&refresh=1s&fusebitAuthorization=${userData.token}&fusebitAccountId=${userData.accountId}&var-accountId=${userData.accountId}&var-subscriptionId=${userData.subscriptionId}&var-boundaryId=integration&var-functionId=${id}`}
+        src={`${process.env.REACT_APP_FUSEBIT_DEPLOYMENT}/v2/grafana/explore/?kiosk=tv&theme=light&refresh=1s&fusebitAuthorization=${userData.token}&fusebitAccountId=${userData.accountId}&var-accountId=${userData.accountId}&var-subscriptionId=${userData.subscriptionId}&var-boundaryId=integration&var-functionId=${id}`}
         width="100%"
         height="100%"
         frameBorder="0"
