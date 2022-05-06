@@ -3,11 +3,11 @@ import { Box, Button } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { trackEventMemoized } from '@utils/analytics';
 import styled from 'styled-components';
+import IframeResizer from 'iframe-resizer-react';
 import { useEffect } from 'react';
 
-const StyledLogs = styled.iframe`
+const StyledLogs = styled(IframeResizer)`
   position: relative;
-  height: 100%;
   border-radius: 8px;
   box-shadow: 0px 1px 30px -1px rgb(52 72 123 / 10%);
 `;
@@ -43,8 +43,7 @@ const Logging = () => {
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
-      height="450px"
-      pb="40px"
+      pb="60px"
       position="relative"
     >
       <Button
@@ -57,11 +56,11 @@ const Logging = () => {
         Explore
       </Button>
       <StyledLogs
+        log
         id="logging"
         title="logging"
         src={`${process.env.REACT_APP_FUSEBIT_DEPLOYMENT}/v2/grafana/bootstrap/d-solo/logging/basic?panelId=2?kiosk&theme=light&refresh=1s&fusebitAuthorization=${userData.token}&fusebitAccountId=${userData.accountId}&var-accountId=${userData.accountId}&var-subscriptionId=${userData.subscriptionId}&var-boundaryId=integration&var-functionId=${id}&from=${FROM}`}
-        width="100%"
-        height="100%"
+        style={{ width: '1px', minWidth: '100%', minHeight: '350px' }}
         frameBorder="0"
       />
     </Box>
