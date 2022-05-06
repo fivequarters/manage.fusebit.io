@@ -21,7 +21,7 @@ const Logging = () => {
   const [height, setHeight] = useState(DEFAULT_HEIGHT);
 
   useEffect(() => {
-    const handleMessage = (e: MessageEvent<any>) => {
+    const handleMessage = (e: MessageEvent) => {
       // new height in px
       const newHeightMessage = e.data;
       if (typeof newHeightMessage === 'string') {
