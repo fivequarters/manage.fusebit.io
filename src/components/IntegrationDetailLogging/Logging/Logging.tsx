@@ -56,7 +56,7 @@ const Logging = () => {
         Explore
       </Button>
       <StyledLogs
-        log
+        heightCalculationMethod="bodyScroll"
         id="logging"
         title="logging"
         src={`${process.env.REACT_APP_FUSEBIT_DEPLOYMENT}/v2/grafana/bootstrap/d-solo/logging/basic?panelId=2?kiosk&theme=light&refresh=1s&fusebitAuthorization=${userData.token}&fusebitAccountId=${userData.accountId}&var-accountId=${userData.accountId}&var-subscriptionId=${userData.subscriptionId}&var-boundaryId=integration&var-functionId=${id}&from=${FROM}`}
