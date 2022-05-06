@@ -1,6 +1,7 @@
 import { useAuthContext } from '@hooks/useAuthContext';
 import { Box, Button } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
+import { trackEventMemoized } from '@utils/analytics';
 import styled from 'styled-components';
 
 const StyledLogs = styled.iframe`
@@ -19,6 +20,7 @@ const Logging = () => {
   const { id } = useParams<{ id: string }>();
 
   const handleExplore = () => {
+    trackEventMemoized('Explore Button Clicked', 'Logging');
     window.open(`${process.env.REACT_APP_FUSEBIT_DEPLOYMENT}/v2/grafana?theme=light`, '_blank');
   };
 
