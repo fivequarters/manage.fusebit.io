@@ -3,6 +3,7 @@ import { Box, Button } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { trackEventMemoized } from '@utils/analytics';
 import styled from 'styled-components';
+import { useEffect } from 'react';
 
 const StyledLogs = styled.iframe`
   position: relative;
@@ -18,6 +19,18 @@ const FROM = Date.now() - WEEK_IN_MS;
 const Logging = () => {
   const { userData } = useAuthContext();
   const { id } = useParams<{ id: string }>();
+
+  useEffect(() => {
+    const handleBlur = () => {
+      if (document.activeElement === document.getElementById('logging')) {
+        trackEventMemoized('Grafana Iframe Clicked', 'Logging');
+      }
+    };
+
+    window.addEventListener('blur', handleBlur);
+
+    return () => window.removeEventListener('blur', handleBlur);
+  }, []);
 
   const handleExplore = () => {
     trackEventMemoized('Explore Button Clicked', 'Logging');
@@ -44,6 +57,7 @@ const Logging = () => {
         Explore
       </Button>
       <StyledLogs
+        id="logging"
         title="logging"
         src={`${process.env.REACT_APP_FUSEBIT_DEPLOYMENT}/v2/grafana/bootstrap/d-solo/logging/basic?panelId=2?kiosk=tv&theme=light&refresh=1s&fusebitAuthorization=${userData.token}&fusebitAccountId=${userData.accountId}&var-accountId=${userData.accountId}&var-subscriptionId=${userData.subscriptionId}&var-boundaryId=integration&var-functionId=${id}&from=${FROM}}`}
         width="100%"
