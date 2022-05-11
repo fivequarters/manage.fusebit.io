@@ -63,7 +63,8 @@ const AuthCallbackPage: FC<{}> = (): ReactElement => {
 
       if (error || !token) {
         if (error && error !== 'login_required') {
-          const err = `Callback URL called without token or with an unknown error ${location}`;
+          const err =
+            'This initialization token is no longer valid.  Please request a new url from an authorized Fusebit User.';
           handleError(err);
         }
         signIn();
