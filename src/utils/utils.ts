@@ -97,11 +97,15 @@ export const createAxiosClient: (token?: string, skipXUserAgent?: boolean) => Ax
   token,
   skipXUserAgent
 ) => {
-  const instance = axios.create({
-    headers: {
-      authorization: `Bearer ${token}`,
-    },
-  });
+  const instance = axios.create(
+    token
+      ? {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        }
+      : {}
+  );
 
   if (!skipXUserAgent) {
     instance.defaults.headers['X-User-Agent'] = X_USER_AGENT;

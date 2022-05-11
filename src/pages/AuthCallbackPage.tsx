@@ -4,7 +4,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
 import { getAnalyticsClient, trackAuthEvent } from '@utils/analytics';
 import { createAxiosClient } from '@utils/utils';
-import { Auth0Token } from '@interfaces/auth0Token';
+import { Auth0Token, FusebitProfileEx } from '@interfaces/auth0Token';
 import { AuthStatus, signIn, useAuthContext } from '@hooks/useAuthContext';
 import useFirstTimeVisitor from '@hooks/useFirstTimeVisitor';
 import { Auth0Profile } from '@interfaces/auth0Profile';
@@ -40,6 +40,16 @@ const getAuth0ProfileAndCompany = async (auth0Token: string, accountId: string) 
   };
 };
 
+const redeemInitToken = async (accessToken: string, fusebitProfileEx: FusebitProfileEx, initToken: string) => {
+  const skipXUserAgent = true;
+  const client = createAxiosClient(undefined, skipXUserAgent);
+  const { data } = await client.post(`${fusebitProfileEx.fusebitProvisionUrl}/init`, {
+    initToken,
+    accessToken,
+  });
+  return data;
+};
+
 const AuthCallbackPage: FC<{}> = (): ReactElement => {
   const location = useLocation();
   const history = useHistory();
@@ -64,6 +74,18 @@ const AuthCallbackPage: FC<{}> = (): ReactElement => {
       const decoded = jwt_decode<Auth0Token>(token);
       const fusebitProfile = decoded['https://fusebit.io/profile'];
       const isSignUpEvent = decoded['https://fusebit.io/new-user'] === true;
+
+      const initToken = window.localStorage.getItem('fusebitInitToken');
+      if (initToken) {
+        // This is completion of the invitation transaction. Call the provisioning function to
+        // redeem the init token, then redirect back to the home page to re-authenticate and
+        // get a new access token with an updated Fusebit profile.
+        window.localStorage.removeItem('fusebitInitToken');
+        redeemInitToken(token, fusebitProfile, initToken).then(() => {
+          window.location.href = '/';
+        });
+        return;
+      }
 
       getAuth0ProfileAndCompany(token, fusebitProfile?.accountId || '').then(({ auth0Profile, company }) => {
         const normalizedData = {
