@@ -19,6 +19,7 @@ export interface BaseTableProps {
     id: string;
     value: string;
   }[];
+  newButtonText?: string;
   entityName?: string;
   onSelectRow: (e: any, id: string) => void;
   isSelected: (id: string) => boolean;

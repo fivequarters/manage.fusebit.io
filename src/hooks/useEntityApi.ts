@@ -81,9 +81,15 @@ export const useEntityApi = (preventLoader?: boolean) => {
   const _createUser = async (data: Account) => {
     try {
       createLoader();
-      const response = await createUser.mutateAsync({ ...data, accountId: userData.accountId });
+      const response = await createUser.mutateAsync({
+        ...data,
+        accountId: userData.accountId,
+        access: {
+          allow: [{ action: '*', resource: `/account/${userData.accountId}/` }],
+        },
+      });
       if (response.data.id) {
-        const token = await _createToken(response.data.id);
+        const token = await _createToken(response.data.id, 'oauth');
         return token;
       }
     } catch (e) {
