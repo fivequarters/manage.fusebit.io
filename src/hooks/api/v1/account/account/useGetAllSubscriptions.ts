@@ -11,7 +11,7 @@ export const useAccountGetAllSubscriptions = <T>(params: Params) => {
   const { enabled, ...queryParams } = params;
 
   return useQuery(
-    ['accountUserGetAllSubscriptions'],
+    ['accountGetAllSubscriptions'],
     () => axios<T>(`/v1/account/${queryParams.accountId}/subscription`, 'get', params),
     {
       enabled: !!enabled,

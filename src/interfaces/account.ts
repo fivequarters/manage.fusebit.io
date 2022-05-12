@@ -17,6 +17,7 @@ export interface AccountSubscriptions {
 
 export interface AccountList {
   subscriptions: AccountSubscription[];
+  company?: string;
   accountId?: string;
   subscriptionId?: string;
   userId?: string;

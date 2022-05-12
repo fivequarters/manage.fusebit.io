@@ -12,6 +12,7 @@ import { useAccountUserGetOne } from '@hooks/api/v1/account/user/useGetOne';
 import { useAxios } from '@hooks/useAxios';
 import { Account, AccountList, AccountSubscriptions } from '@interfaces/account';
 import { getAllSubscriptions } from '@hooks/api/v1/account/account/useGetAllSubscriptions';
+import { getOne } from '@hooks/api/v1/account/account/useGetOne';
 
 const StyledUserDropdownInfo = styled.div`
   display: flex;
@@ -131,7 +132,7 @@ const MainUserInfo = () => {
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
   const { axios } = useAxios();
-  const { data: accountData } = useAccountUserGetOne<Account>({
+  const { data: currentUser } = useAccountUserGetOne<Account>({
     enabled: userData.token,
     userId: userData.userId,
     accountId: userData.accountId,
@@ -141,15 +142,21 @@ const MainUserInfo = () => {
     if (userData.token && !accounts) {
       const decoded = jwt_decode<Auth0Token>(userData.token || '');
       const fusebitProfile = decoded['https://fusebit.io/profile'];
-      const subscriptions = fusebitProfile?.accounts?.map((acc) => {
-        return getAllSubscriptions<AccountSubscriptions>(axios, acc);
+      const promises = fusebitProfile?.accounts?.map((acc) => {
+        return {
+          subscriptionsPromise: getAllSubscriptions<AccountSubscriptions>(axios, acc),
+          accountPromise: getOne<Account>(axios, acc),
+        };
       });
       const fullAccounts: AccountList[] = [];
-      Promise.all(subscriptions || []).then((data) => {
-        data.forEach((account, i) => {
+      Promise.all(promises || []).then((res) => {
+        res.forEach(async (account, i) => {
+          const accountData = await account.accountPromise;
+          const subscriptionsData = await account.subscriptionsPromise;
           const acc: AccountList = {
             ...fusebitProfile?.accounts?.[i],
-            subscriptions: account.data.items,
+            subscriptions: subscriptionsData.data.items,
+            company: accountData.data.displayName,
           };
           fullAccounts.push(acc);
         });
@@ -175,10 +182,6 @@ const MainUserInfo = () => {
       ...userData,
       ...acc,
     });
-
-    // authUser(userData.token || '', acc, () => {
-    //   removeLoader();
-    // });
   };
 
   return (
@@ -187,9 +190,9 @@ const MainUserInfo = () => {
         <StyledUserDropdownInfoImage src={userData.picture || accountImg} alt="user" height="38" width="38" />
         <StyledUserDropdownPersonalInfo>
           <StyledUserDropdownInfoName>
-            {accountData?.data.firstName} {accountData?.data.lastName}
+            {currentUser?.data.firstName} {currentUser?.data.lastName}
           </StyledUserDropdownInfoName>
-          <StyledUserDropdownInfoEmail>{accountData?.data.primaryEmail}</StyledUserDropdownInfoEmail>
+          <StyledUserDropdownInfoEmail>{currentUser?.data.primaryEmail}</StyledUserDropdownInfoEmail>
         </StyledUserDropdownPersonalInfo>
       </StyledUserDropdownInfo>
       <StyledUserDropdownStatus onClick={handleClick}>
@@ -212,10 +215,10 @@ const MainUserInfo = () => {
         onClose={handleClose}
       >
         <StyledAccountsWrapper>
-          {accounts?.map((acc, i) => {
+          {accounts?.map((acc) => {
             return (
               <div key={acc.userId}>
-                <div>Account {i}</div>
+                <div>{acc.company}</div>
                 {acc.subscriptions.map((sub) => {
                   return (
                     <StyledAccWrapper
