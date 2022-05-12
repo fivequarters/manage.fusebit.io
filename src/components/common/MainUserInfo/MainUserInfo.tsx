@@ -4,11 +4,14 @@ import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import jwt_decode from 'jwt-decode';
-import { useLoader } from '@hooks/useLoader';
 import accountImg from '@assets/account.svg';
 import rightArrow from '@assets/arrow-right-black.svg';
 import { useAuthContext } from '@hooks/useAuthContext';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
+import { useAccountUserGetOne } from '@hooks/api/v1/account/user/useGetOne';
+import { useAxios } from '@hooks/useAxios';
+import { Account, AccountList, AccountSubscriptions } from '@interfaces/account';
+import { getAllSubscriptions } from '@hooks/api/v1/account/account/useGetAllSubscriptions';
 
 const StyledUserDropdownInfo = styled.div`
   display: flex;
@@ -94,7 +97,7 @@ const StyledUserDropdownStatusArrow = styled.img`
   height: 12px;
   width: 12px;
   object-fit: contain;
-  margin-left: auto;
+  margin-left: 24px;
 `;
 
 const StyledMenu = styled(Menu)`
@@ -110,6 +113,7 @@ const StyledAccountsWrapper = styled.div`
 
 const StyledAccWrapper = styled.div<{ active: boolean }>`
   margin: 8px 0;
+  border-radius: 4px;
   padding: 10px;
   background: ${(props) => props.active && 'var(--secondary-color)'};
   transition: all 0.25s linear;
@@ -122,19 +126,37 @@ const StyledAccWrapper = styled.div<{ active: boolean }>`
 
 const MainUserInfo = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [accounts, setAccount] = useState<FusebitProfile[]>();
-  const { userData, authUser } = useAuthContext();
+  const [accounts, setAccounts] = useState<AccountList[]>();
+  const { userData, setUserData } = useAuthContext();
   const { getRedirectLink } = useGetRedirectLink();
-  const { createLoader, removeLoader } = useLoader();
   const history = useHistory();
+  const { axios } = useAxios();
+  const { data: accountData } = useAccountUserGetOne<Account>({
+    enabled: userData.token,
+    userId: userData.userId,
+    accountId: userData.accountId,
+  });
 
   useEffect(() => {
-    if (userData.token) {
+    if (userData.token && !accounts) {
       const decoded = jwt_decode<Auth0Token>(userData.token || '');
       const fusebitProfile = decoded['https://fusebit.io/profile'];
-      setAccount(fusebitProfile.accounts);
+      const subscriptions = fusebitProfile?.accounts?.map((acc) => {
+        return getAllSubscriptions<AccountSubscriptions>(axios, acc);
+      });
+      const fullAccounts: AccountList[] = [];
+      Promise.all(subscriptions || []).then((data) => {
+        data.forEach((account, i) => {
+          const acc: AccountList = {
+            ...fusebitProfile?.accounts?.[i],
+            subscriptions: account.data.items,
+          };
+          fullAccounts.push(acc);
+        });
+      });
+      setAccounts(fullAccounts);
     }
-  }, [userData]);
+  }, [userData, axios, accounts]);
 
   const handleOnClickEmail = () => {
     history.push(getRedirectLink(`/authentication/${userData.userId}/overview`));
@@ -149,10 +171,14 @@ const MainUserInfo = () => {
   };
 
   const handleAccountSwitch = (acc: FusebitProfile) => {
-    createLoader();
-    authUser(userData.token || '', acc, () => {
-      removeLoader();
+    setUserData({
+      ...userData,
+      ...acc,
     });
+
+    // authUser(userData.token || '', acc, () => {
+    //   removeLoader();
+    // });
   };
 
   return (
@@ -161,9 +187,9 @@ const MainUserInfo = () => {
         <StyledUserDropdownInfoImage src={userData.picture || accountImg} alt="user" height="38" width="38" />
         <StyledUserDropdownPersonalInfo>
           <StyledUserDropdownInfoName>
-            {userData.firstName} {userData.lastName}
+            {accountData?.data.firstName} {accountData?.data.lastName}
           </StyledUserDropdownInfoName>
-          <StyledUserDropdownInfoEmail>{userData.primaryEmail}</StyledUserDropdownInfoEmail>
+          <StyledUserDropdownInfoEmail>{accountData?.data.primaryEmail}</StyledUserDropdownInfoEmail>
         </StyledUserDropdownPersonalInfo>
       </StyledUserDropdownInfo>
       <StyledUserDropdownStatus onClick={handleClick}>
@@ -188,15 +214,20 @@ const MainUserInfo = () => {
         <StyledAccountsWrapper>
           {accounts?.map((acc, i) => {
             return (
-              <StyledAccWrapper
-                onClick={() => handleAccountSwitch(acc)}
-                key={acc.userId}
-                active={userData.accountId === acc.accountId && userData.subscriptionId === acc.subscriptionId}
-              >
+              <div key={acc.userId}>
                 <div>Account {i}</div>
-                <div>{acc.accountId}</div>
-                <div>{acc.subscriptionId}</div>
-              </StyledAccWrapper>
+                {acc.subscriptions.map((sub) => {
+                  return (
+                    <StyledAccWrapper
+                      onClick={() => handleAccountSwitch({ ...acc, subscriptionId: sub.id })}
+                      key={sub.id}
+                      active={userData.subscriptionId === sub.id}
+                    >
+                      {sub.displayName} ({sub.id})
+                    </StyledAccWrapper>
+                  );
+                })}
+              </div>
             );
           })}
         </StyledAccountsWrapper>
