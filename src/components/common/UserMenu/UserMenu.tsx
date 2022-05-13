@@ -68,7 +68,7 @@ const UserMenu = () => {
           <Box m="24px 0">
             <CompanyTitle />
           </Box>
-          <MainUserInfo />
+          <MainUserInfo onAccountSwitch={handleCloseMenu} />
           <UserMenuLinks />
           <Box textAlign="right" mt="24px">
             <Button

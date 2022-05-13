@@ -126,7 +126,11 @@ const StyledAccWrapper = styled.div<{ active: boolean }>`
   }
 `;
 
-const MainUserInfo = () => {
+interface Props {
+  onAccountSwitch: () => void;
+}
+
+const MainUserInfo = ({ onAccountSwitch }: Props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [accounts, setAccounts] = useState<AccountListItem[]>();
   const { userData, setUserData } = useAuthContext();
@@ -191,6 +195,8 @@ const MainUserInfo = () => {
       ...acc,
     });
     localStorage.setItem('activeAccount', JSON.stringify(acc));
+    setAnchorEl(null);
+    onAccountSwitch();
   };
 
   return (

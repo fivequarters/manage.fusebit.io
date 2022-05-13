@@ -21,7 +21,7 @@ const UserDrawerMobile: React.FC<Props> = ({ open, onClose }: Props) => {
     <Drawer anchor="right" open={open} onClose={onClose}>
       <StyledContent>
         <CompanyTitle />
-        <MainUserInfo />
+        <MainUserInfo onAccountSwitch={onClose} />
         <UserMenuLinks showAll />
         <Box textAlign="right" mt="104px">
           <Button
