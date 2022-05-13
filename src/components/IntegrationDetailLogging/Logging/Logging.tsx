@@ -3,7 +3,7 @@ import { Box, Button } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { trackEventMemoized } from '@utils/analytics';
 import styled from 'styled-components';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 const StyledLogs = styled.iframe`
   position: relative;
@@ -18,7 +18,6 @@ const DEFAULT_HEIGHT = 350;
 const Logging = () => {
   const { userData } = useAuthContext();
   const { id } = useParams<{ id: string }>();
-  const [height, setHeight] = useState(DEFAULT_HEIGHT);
 
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
@@ -26,7 +25,11 @@ const Logging = () => {
       const newHeightMessage = e.data;
       if (typeof newHeightMessage === 'string') {
         const newHeight = Number(newHeightMessage?.replace('px', ''));
-        setHeight(newHeight > DEFAULT_HEIGHT ? newHeight : DEFAULT_HEIGHT);
+        const height = newHeight > DEFAULT_HEIGHT ? newHeightMessage : `${DEFAULT_HEIGHT}px`;
+        const iframe = document.getElementById('logging');
+        if (iframe) {
+          iframe.style.height = height;
+        }
       }
     };
 
@@ -72,7 +75,7 @@ const Logging = () => {
         id="logging"
         title="logging"
         src={`${process.env.REACT_APP_FUSEBIT_DEPLOYMENT}/v2/grafana/bootstrap/d-solo/logging/basic?panelId=2?kiosk&theme=light&refresh=1s&fusebitAuthorization=${userData.token}&fusebitAccountId=${userData.accountId}&var-accountId=${userData.accountId}&var-subscriptionId=${userData.subscriptionId}&var-boundaryId=integration&var-functionId=${id}&from=${FROM}`}
-        height={height}
+        height={DEFAULT_HEIGHT}
         width="100%"
         frameBorder="0"
       />
