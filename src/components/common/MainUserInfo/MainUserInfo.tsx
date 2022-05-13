@@ -153,6 +153,7 @@ const MainUserInfo = () => {
       const fullAccounts: AccountList[] = [];
       Promise.all(profilePromises || []).then((res) => {
         res.forEach(async (account, i) => {
+          // checks if the user still has acces to the account in case he was recently deleted
           const isValid = await account.isValid;
           if (isValid.success) {
             const accountData = await account.accountPromise;
