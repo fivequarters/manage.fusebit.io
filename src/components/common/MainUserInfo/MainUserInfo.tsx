@@ -13,6 +13,7 @@ import { useAxios } from '@hooks/useAxios';
 import { Account, AccountList, AccountSubscriptions } from '@interfaces/account';
 import { getAllSubscriptions } from '@hooks/api/v1/account/account/useGetAllSubscriptions';
 import { getOne } from '@hooks/api/v1/account/account/useGetOne';
+import { getMe } from '@hooks/api/v1/account/account/useGetMe';
 
 const StyledUserDropdownInfo = styled.div`
   display: flex;
@@ -142,25 +143,30 @@ const MainUserInfo = () => {
     if (userData.token && !accounts) {
       const decoded = jwt_decode<Auth0Token>(userData.token || '');
       const fusebitProfile = decoded['https://fusebit.io/profile'];
-      const promises = fusebitProfile?.accounts?.map((acc) => {
+      const profilePromises = fusebitProfile?.accounts?.map((acc) => {
         return {
           subscriptionsPromise: getAllSubscriptions<AccountSubscriptions>(axios, acc),
           accountPromise: getOne<Account>(axios, acc),
+          isValid: getMe(axios, acc),
         };
       });
       const fullAccounts: AccountList[] = [];
-      Promise.all(promises || []).then((res) => {
+      Promise.all(profilePromises || []).then((res) => {
         res.forEach(async (account, i) => {
-          const accountData = await account.accountPromise;
-          const subscriptionsData = await account.subscriptionsPromise;
-          const acc: AccountList = {
-            ...fusebitProfile?.accounts?.[i],
-            subscriptions: subscriptionsData.data.items,
-            company: accountData.data.displayName,
-          };
-          fullAccounts.push(acc);
+          const isValid = await account.isValid;
+          if (isValid.success) {
+            const accountData = await account.accountPromise;
+            const subscriptionsData = await account.subscriptionsPromise;
+            const acc: AccountList = {
+              ...fusebitProfile?.accounts?.[i],
+              subscriptions: subscriptionsData.data.items,
+              company: accountData.data.displayName,
+            };
+            fullAccounts.push(acc);
+          }
         });
       });
+
       setAccounts(fullAccounts);
     }
   }, [userData, axios, accounts]);
