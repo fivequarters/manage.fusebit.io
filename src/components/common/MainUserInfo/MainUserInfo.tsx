@@ -114,11 +114,10 @@ const StyledAccountsWrapper = styled.div`
   padding: 10px 15px;
 `;
 
-const StyledSubscriptionWrapper = styled.div<{ active: boolean }>`
+const StyledSubscriptionWrapper = styled.div`
   margin: 8px 0;
   border-radius: 4px;
   padding: 10px;
-  background: ${(props) => props.active && 'var(--secondary-color)'};
   transition: all 0.25s linear;
 
   &:hover {
@@ -279,7 +278,6 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
                     <StyledSubscriptionWrapper
                       onClick={() => handleAccountSwitch({ ...acc, subscriptionId: sub.id })}
                       key={sub.id}
-                      active={userData.subscriptionId === sub.id}
                     >
                       {sub.displayName} ({sub.id})
                     </StyledSubscriptionWrapper>
