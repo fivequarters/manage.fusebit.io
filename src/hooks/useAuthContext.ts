@@ -6,10 +6,11 @@ import { STATIC_TENANT_ID } from '@utils/constants';
 import { Auth0Profile } from '@interfaces/auth0Profile';
 import { Company } from '@interfaces/company';
 import { createAxiosClient } from '@utils/utils';
-import { Auth0Token, FusebitProfile, FusebitProfileEx } from '@interfaces/auth0Token';
+import { Auth0Token, FusebitProfileEx } from '@interfaces/auth0Token';
 import jwt_decode from 'jwt-decode';
 import { useHistory } from 'react-router-dom';
-import useFirstTimeVisitor from './useFirstTimeVisitor';
+import useFirstTimeVisitor from '@hooks/useFirstTimeVisitor';
+import { AccountListItem } from '@interfaces/account';
 
 const {
   REACT_APP_AUTH0_DOMAIN,
@@ -133,9 +134,15 @@ const _useAuthContext = () => {
     history.push(`/logged-out?error=${error}`);
   };
 
-  const authUser = (token: string, profile?: FusebitProfile, onAuthFinished?: () => void) => {
+  const authUser = (token: string) => {
+    const activeAccountStringified = localStorage.getItem('activeAccount');
     const decoded = jwt_decode<Auth0Token>(token);
-    const fusebitProfile = profile || decoded['https://fusebit.io/profile'];
+    let fusebitProfile = decoded['https://fusebit.io/profile'];
+    const defaultAccount = fusebitProfile.accounts?.[fusebitProfile.accounts.length - 1];
+    fusebitProfile = {
+      ...fusebitProfile,
+      ...defaultAccount,
+    };
     const isSignUpEvent = decoded['https://fusebit.io/new-user'] === true;
     const initToken = window.localStorage.getItem('fusebitInitToken');
 
@@ -154,6 +161,23 @@ const _useAuthContext = () => {
       return;
     }
 
+    if (activeAccountStringified) {
+      const activeAccountParsed: AccountListItem = JSON.parse(activeAccountStringified);
+      const fusebitAxiosClient = createAxiosClient(token);
+      const isValid = fusebitAxiosClient.get(
+        `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${activeAccountParsed.accountId}/me`
+      );
+      Promise.resolve(isValid).then((res) => {
+        if (res.status === 200) {
+          // checks if the user still has acces to the account in case he was recently deleted
+          fusebitProfile = {
+            ...fusebitProfile,
+            ...activeAccountParsed,
+          };
+        }
+      });
+    }
+
     getAuth0ProfileAndCompany(token, fusebitProfile?.accountId || '')
       .then(({ auth0Profile, company }) => {
         const normalizedData = {
@@ -169,7 +193,7 @@ const _useAuthContext = () => {
           fusebitProfile.userId = REACT_APP_FUSEBIT_USER_ID;
         }
 
-        setUserData({ token, ...fusebitProfile, ...auth0Profile, ...company, ...normalizedData });
+        setUserData({ token, ...company, ...normalizedData, ...auth0Profile, ...fusebitProfile });
         setAuthStatus(AuthStatus.AUTHENTICATED);
 
         const navigatePostAuth = () => {
@@ -191,9 +215,6 @@ const _useAuthContext = () => {
       })
       .catch((err) => {
         handleAuthError(err);
-      })
-      .finally(() => {
-        onAuthFinished?.();
       });
   };
 

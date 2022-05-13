@@ -15,9 +15,10 @@ export interface AccountSubscriptions {
   items: AccountSubscription[];
 }
 
-export interface AccountList {
+export interface AccountListItem {
   subscriptions: AccountSubscription[];
   company?: string;
+  displayName?: string;
   accountId?: string;
   subscriptionId?: string;
   userId?: string;

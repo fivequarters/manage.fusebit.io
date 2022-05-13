@@ -1,4 +1,4 @@
-import { Auth0Token, FusebitProfile } from '@interfaces/auth0Token';
+import { Auth0Token } from '@interfaces/auth0Token';
 import { Menu } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -10,7 +10,7 @@ import { useAuthContext } from '@hooks/useAuthContext';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 import { useAccountUserGetOne } from '@hooks/api/v1/account/user/useGetOne';
 import { useAxios } from '@hooks/useAxios';
-import { Account, AccountList, AccountSubscriptions } from '@interfaces/account';
+import { Account, AccountListItem, AccountSubscriptions } from '@interfaces/account';
 import { getAllSubscriptions } from '@hooks/api/v1/account/account/useGetAllSubscriptions';
 import { getOne } from '@hooks/api/v1/account/account/useGetOne';
 import { getMe } from '@hooks/api/v1/account/account/useGetMe';
@@ -128,7 +128,7 @@ const StyledAccWrapper = styled.div<{ active: boolean }>`
 
 const MainUserInfo = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [accounts, setAccounts] = useState<AccountList[]>();
+  const [accounts, setAccounts] = useState<AccountListItem[]>();
   const { userData, setUserData } = useAuthContext();
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
@@ -150,7 +150,7 @@ const MainUserInfo = () => {
           isValid: getMe(axios, acc),
         };
       });
-      const fullAccounts: AccountList[] = [];
+      const fullAccounts: AccountListItem[] = [];
       Promise.all(profilePromises || []).then((res) => {
         res.forEach(async (account, i) => {
           // checks if the user still has acces to the account in case he was recently deleted
@@ -158,10 +158,11 @@ const MainUserInfo = () => {
           if (isValid.success) {
             const accountData = await account.accountPromise;
             const subscriptionsData = await account.subscriptionsPromise;
-            const acc: AccountList = {
+            const acc: AccountListItem = {
               ...fusebitProfile?.accounts?.[i],
               subscriptions: subscriptionsData.data.items,
               company: accountData.data.displayName,
+              displayName: accountData.data.displayName,
             };
             fullAccounts.push(acc);
           }
@@ -184,11 +185,12 @@ const MainUserInfo = () => {
     setAnchorEl(null);
   };
 
-  const handleAccountSwitch = (acc: FusebitProfile) => {
+  const handleAccountSwitch = (acc: AccountListItem) => {
     setUserData({
       ...userData,
       ...acc,
     });
+    localStorage.setItem('activeAccount', JSON.stringify(acc));
   };
 
   return (
