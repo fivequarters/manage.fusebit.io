@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { useAuthContext, signOut } from '../../../hooks/useAuthContext';
 import accountImg from '../../../assets/account.svg';
 import useAnchor from '../../../hooks/useAnchor';
-import CompanyTitle from '../CompanyTitle/CompanyTitle';
 import MainUserInfo from '../MainUserInfo/MainUserInfo';
 import UserMenuLinks from '../UserMenuLinks';
 
@@ -66,9 +65,8 @@ const UserMenu = () => {
       >
         <StyledUserDropdown>
           <Box m="24px 0">
-            <CompanyTitle />
+            <MainUserInfo onAccountSwitch={handleCloseMenu} />
           </Box>
-          <MainUserInfo onAccountSwitch={handleCloseMenu} />
           <UserMenuLinks />
           <Box textAlign="right" mt="24px">
             <Button

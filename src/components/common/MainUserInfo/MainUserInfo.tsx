@@ -1,6 +1,6 @@
 import { Auth0Token } from '@interfaces/auth0Token';
-import { Menu } from '@material-ui/core';
-import { useEffect, useState } from 'react';
+import { Box, Menu } from '@material-ui/core';
+import { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import jwt_decode from 'jwt-decode';
@@ -14,6 +14,7 @@ import { Account, AccountListItem, AccountSubscriptions } from '@interfaces/acco
 import { getAllSubscriptions } from '@hooks/api/v1/account/account/useGetAllSubscriptions';
 import { getOne } from '@hooks/api/v1/account/account/useGetOne';
 import { getMe } from '@hooks/api/v1/account/account/useGetMe';
+import CompanyTitle from '../CompanyTitle';
 
 const StyledUserDropdownInfo = styled.div`
   display: flex;
@@ -113,7 +114,7 @@ const StyledAccountsWrapper = styled.div`
   padding: 10px 15px;
 `;
 
-const StyledAccWrapper = styled.div<{ active: boolean }>`
+const StyledSubscriptionWrapper = styled.div<{ active: boolean }>`
   margin: 8px 0;
   border-radius: 4px;
   padding: 10px;
@@ -126,6 +127,22 @@ const StyledAccWrapper = styled.div<{ active: boolean }>`
   }
 `;
 
+const StyledSubscriptionName = styled.h5`
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 500;
+  color: var(--primary-color);
+  text-transform: uppercase;
+  max-width: 238px;
+  margin: 0;
+`;
+
+const StyledAccWrapper = styled.div`
+  &:not(:last-child) {
+    margin-bottom: 16px;
+  }
+`;
+
 interface Props {
   onAccountSwitch: () => void;
 }
@@ -133,6 +150,7 @@ interface Props {
 const MainUserInfo = ({ onAccountSwitch }: Props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [accounts, setAccounts] = useState<AccountListItem[]>();
+  const [activeSubscriptionName, setActiveSubscriptionName] = useState('');
   const { userData, setUserData } = useAuthContext();
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
@@ -142,6 +160,16 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
     userId: userData.userId,
     accountId: userData.accountId,
   });
+
+  const findAndSetSubscriptionName = useCallback(
+    (acc: AccountListItem) => {
+      const activeSubscription = acc.subscriptions.find((sub) => userData.subscriptionId === sub.id);
+      if (activeSubscription) {
+        setActiveSubscriptionName(activeSubscription?.displayName || '');
+      }
+    },
+    [userData]
+  );
 
   useEffect(() => {
     if (userData.token && !accounts) {
@@ -155,27 +183,36 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
         };
       });
       const fullAccounts: AccountListItem[] = [];
-      Promise.all(profilePromises || []).then((res) => {
-        res.forEach(async (account, i) => {
-          // checks if the user still has acces to the account in case he was recently deleted
-          const isValid = await account.isValid;
-          if (isValid.success) {
-            const accountData = await account.accountPromise;
-            const subscriptionsData = await account.subscriptionsPromise;
-            const acc: AccountListItem = {
-              ...fusebitProfile?.accounts?.[i],
-              subscriptions: subscriptionsData.data.items,
-              company: accountData.data.displayName,
-              displayName: accountData.data.displayName,
-            };
-            fullAccounts.push(acc);
-          }
+      Promise.all(profilePromises || [])
+        .then((res) => {
+          res.forEach(async (account, i) => {
+            // checks if the user still has acces to the account in case he was recently deleted
+            const isValid = await account.isValid;
+            if (isValid.success) {
+              const accountData = await account.accountPromise;
+              const subscriptionsData = await account.subscriptionsPromise;
+              const acc: AccountListItem = {
+                ...fusebitProfile?.accounts?.[i],
+                subscriptions: subscriptionsData.data.items,
+                company: accountData.data.displayName,
+                displayName: accountData.data.displayName,
+              };
+              findAndSetSubscriptionName(acc);
+              fullAccounts.push(acc);
+            }
+          });
+        })
+        .then(() => {
+          setAccounts(fullAccounts);
         });
-      });
-
-      setAccounts(fullAccounts);
     }
-  }, [userData, axios, accounts]);
+  }, [userData, axios, accounts, findAndSetSubscriptionName]);
+
+  useEffect(() => {
+    accounts?.forEach((acc) => {
+      findAndSetSubscriptionName(acc);
+    });
+  }, [accounts, userData, findAndSetSubscriptionName]);
 
   const handleOnClickEmail = () => {
     history.push(getRedirectLink(`/authentication/${userData.userId}/overview`));
@@ -210,9 +247,12 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
           <StyledUserDropdownInfoEmail>{currentUser?.data.primaryEmail}</StyledUserDropdownInfoEmail>
         </StyledUserDropdownPersonalInfo>
       </StyledUserDropdownInfo>
+      <Box mb="12px">
+        <CompanyTitle />
+      </Box>
       <StyledUserDropdownStatus onClick={handleClick}>
         <div>
-          <StyledUserDropdownStatusTitle>{process.env.REACT_APP_DEPLOYMENT_KEY}</StyledUserDropdownStatusTitle>
+          <StyledUserDropdownStatusTitle>{activeSubscriptionName}</StyledUserDropdownStatusTitle>
           <StyledUserDropdownStatusId>{userData.subscriptionId}</StyledUserDropdownStatusId>
         </div>
         <StyledUserDropdownStatusArrow src={rightArrow} alt="right arrow" height="12" width="12" />
@@ -232,20 +272,20 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
         <StyledAccountsWrapper>
           {accounts?.map((acc) => {
             return (
-              <div key={acc.userId}>
-                <div>{acc.company}</div>
+              <StyledAccWrapper key={acc.userId}>
+                <StyledSubscriptionName>{acc.company}</StyledSubscriptionName>
                 {acc.subscriptions.map((sub) => {
                   return (
-                    <StyledAccWrapper
+                    <StyledSubscriptionWrapper
                       onClick={() => handleAccountSwitch({ ...acc, subscriptionId: sub.id })}
                       key={sub.id}
                       active={userData.subscriptionId === sub.id}
                     >
                       {sub.displayName} ({sub.id})
-                    </StyledAccWrapper>
+                    </StyledSubscriptionWrapper>
                   );
                 })}
-              </div>
+              </StyledAccWrapper>
             );
           })}
         </StyledAccountsWrapper>
