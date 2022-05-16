@@ -11,6 +11,7 @@ import jwt_decode from 'jwt-decode';
 import { useHistory } from 'react-router-dom';
 import useFirstTimeVisitor from '@hooks/useFirstTimeVisitor';
 import { AccountListItem, AccountSubscriptions } from '@interfaces/account';
+import { AxiosInstance } from 'axios';
 
 const {
   REACT_APP_AUTH0_DOMAIN,
@@ -130,6 +131,14 @@ const _useAuthContext = () => {
     return data;
   };
 
+  const getDefaultSubscriptionData = async (accountId: string, fusebitAxiosClient: AxiosInstance) => {
+    const subscriptions = await fusebitAxiosClient.get<AccountSubscriptions>(
+      `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/subscription`
+    );
+    const defaultSubscription = subscriptions.data.items?.[0];
+    return { subscriptionId: defaultSubscription.id, subscriptionName: defaultSubscription.displayName };
+  };
+
   const getDecodedToken = (token: string) => {
     const decoded = jwt_decode<Auth0Token>(token);
     const fusebitProfile = decoded['https://fusebit.io/profile'];
@@ -179,16 +188,21 @@ const _useAuthContext = () => {
           ...fusebitProfile,
           ...activeAccountParsed,
         };
+      } else {
+        const defaultSubscription = await getDefaultSubscriptionData(
+          fusebitProfile.accountId || '',
+          fusebitAxiosClient
+        );
+        fusebitProfile = {
+          ...fusebitProfile,
+          ...defaultSubscription,
+        };
       }
     } else {
-      const subscriptions = await fusebitAxiosClient.get<AccountSubscriptions>(
-        `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${fusebitProfile.accountId}/subscription`
-      );
-      const defaultSubscription = subscriptions.data.items?.[0];
+      const defaultSubscription = await getDefaultSubscriptionData(fusebitProfile.accountId || '', fusebitAxiosClient);
       fusebitProfile = {
         ...fusebitProfile,
-        subscriptionId: defaultSubscription.id,
-        subscriptionName: defaultSubscription.displayName,
+        ...defaultSubscription,
       };
     }
 
