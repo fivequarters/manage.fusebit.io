@@ -6,10 +6,10 @@ export const getOne = <T>(axiosInstance: FusebitAxios, params: Params, queryPara
   return axiosInstance<T>(`/v1/account/${params.accountId}`, 'get', params, {}, queryParams);
 };
 
-export const useAccountGetOne = <T>(params: Params) => {
+export const useAccountGetOne = <T>() => {
   const { axios } = useAxios();
 
-  return useMutation(() => getOne<T>(axios, params), {
+  return useMutation((params: Params) => getOne<T>(axios, params), {
     onMutate: () => () => {},
     onError: (_, __, rollback) => rollback?.(),
     onSettled: () => {},

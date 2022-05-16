@@ -1,5 +1,5 @@
 import { Box, Menu } from '@material-ui/core';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import accountImg from '@assets/account.svg';
@@ -7,11 +7,8 @@ import rightArrow from '@assets/arrow-right-black.svg';
 import { useAuthContext } from '@hooks/useAuthContext';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 import { useAccountUserGetOne } from '@hooks/api/v1/account/user/useGetOne';
-import { useAxios } from '@hooks/useAxios';
-import { Account, AccountListItem, AccountSubscriptions } from '@interfaces/account';
-import { getAllSubscriptions } from '@hooks/api/v1/account/account/useGetAllSubscriptions';
-import { getOne } from '@hooks/api/v1/account/account/useGetOne';
-import { getMe } from '@hooks/api/v1/account/account/useGetMe';
+import { Account, AccountListItem } from '@interfaces/account';
+import { useAccountGetAllAccounts } from '@hooks/api/v1/account/account/useGetAllAccounts';
 import CompanyTitle from '../CompanyTitle';
 
 const StyledUserDropdownInfo = styled.div`
@@ -146,51 +143,15 @@ interface Props {
 
 const MainUserInfo = ({ onAccountSwitch }: Props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [accounts, setAccounts] = useState<AccountListItem[]>();
-  const { userData, setUserData, getDecodedToken } = useAuthContext();
+  const { userData, setUserData } = useAuthContext();
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
-  const { axios } = useAxios();
   const { data: currentUser } = useAccountUserGetOne<Account>({
     enabled: userData.token,
     userId: userData.userId,
     accountId: userData.accountId,
   });
-
-  useEffect(() => {
-    if (userData.token && !accounts) {
-      const { fusebitProfile } = getDecodedToken(userData.token);
-      const profilePromises = fusebitProfile?.accounts?.map((acc) => {
-        return {
-          subscriptionsPromise: getAllSubscriptions<AccountSubscriptions>(axios, acc),
-          accountPromise: getOne<Account>(axios, acc),
-          isValid: getMe(axios, acc),
-        };
-      });
-      const fullAccounts: AccountListItem[] = [];
-      Promise.all(profilePromises || [])
-        .then((res) => {
-          res.forEach(async (account, i) => {
-            // checks if the user still has acces to the account in case he was recently deleted
-            const isValid = await account.isValid;
-            if (isValid.success) {
-              const accountData = await account.accountPromise;
-              const subscriptionsData = await account.subscriptionsPromise;
-              const acc: AccountListItem = {
-                ...fusebitProfile?.accounts?.[i],
-                subscriptions: subscriptionsData.data.items,
-                company: accountData.data.displayName,
-                displayName: accountData.data.displayName,
-              };
-              fullAccounts.push(acc);
-            }
-          });
-        })
-        .then(() => {
-          setAccounts(fullAccounts);
-        });
-    }
-  }, [userData, axios, accounts, getDecodedToken]);
+  const { data: accounts } = useAccountGetAllAccounts();
 
   const handleOnClickEmail = () => {
     history.push(getRedirectLink(`/authentication/${userData.userId}/overview`));

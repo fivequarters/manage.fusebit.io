@@ -6,10 +6,10 @@ export const getAllSubscriptions = <T>(axiosInstance: FusebitAxios, params: Para
   return axiosInstance<T>(`/v1/account/${params.accountId}/subscription`, 'get', params, {}, queryParams);
 };
 
-export const useAccountGetAllSubscriptions = <T>(params: Params) => {
+export const useAccountGetAllSubscriptions = <T>() => {
   const { axios } = useAxios();
 
-  return useMutation(() => getAllSubscriptions<T>(axios, params), {
+  return useMutation((params: Params) => getAllSubscriptions<T>(axios, params), {
     onMutate: () => () => {},
     onError: (_, __, rollback) => rollback?.(),
     onSettled: () => {},
