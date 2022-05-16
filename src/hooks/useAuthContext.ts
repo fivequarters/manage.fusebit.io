@@ -130,20 +130,26 @@ const _useAuthContext = () => {
     return data;
   };
 
+  const getDecodedToken = (token: string) => {
+    const decoded = jwt_decode<Auth0Token>(token);
+    const fusebitProfile = decoded['https://fusebit.io/profile'];
+    const isSignUpEvent = decoded['https://fusebit.io/new-user'] === true;
+    const issuedByAuth0 = decoded.iss.startsWith(process.env.REACT_APP_AUTH0_DOMAIN as string);
+    return { fusebitProfile, isSignUpEvent, issuedByAuth0 };
+  };
+
   const handleAuthError = (error: any) => {
     history.push(`/logged-out?error=${error}`);
   };
 
   const authUser = (token: string) => {
+    const { fusebitProfile: profile, isSignUpEvent, issuedByAuth0 } = getDecodedToken(token);
     const activeAccountStringified = localStorage.getItem('activeAccount');
-    const decoded = jwt_decode<Auth0Token>(token);
-    let fusebitProfile = decoded['https://fusebit.io/profile'];
-    const defaultAccount = fusebitProfile.accounts?.[fusebitProfile.accounts.length - 1];
-    fusebitProfile = {
-      ...fusebitProfile,
+    const defaultAccount = profile.accounts?.[profile.accounts.length - 1];
+    let fusebitProfile = {
+      ...profile,
       ...defaultAccount,
     };
-    const isSignUpEvent = decoded['https://fusebit.io/new-user'] === true;
     const initToken = window.localStorage.getItem('fusebitInitToken');
 
     if (initToken) {
@@ -209,7 +215,6 @@ const _useAuthContext = () => {
         };
 
         const user: User = { email: fusebitProfile?.email, ...auth0Profile, ...company };
-        const issuedByAuth0 = decoded.iss.startsWith(process.env.REACT_APP_AUTH0_DOMAIN as string);
         getAnalyticsClient(user, issuedByAuth0);
         trackAuthEvent(user, fusebitProfile, isSignUpEvent, navigatePostAuth);
       })
@@ -226,6 +231,7 @@ const _useAuthContext = () => {
     setAuthStatus,
     getTenantId,
     getAuth0ProfileAndCompany,
+    getDecodedToken,
     redeemInitToken,
     handleAuthError,
     authUser,

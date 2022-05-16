@@ -1,9 +1,7 @@
-import { Auth0Token } from '@interfaces/auth0Token';
 import { Box, Menu } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import jwt_decode from 'jwt-decode';
 import accountImg from '@assets/account.svg';
 import rightArrow from '@assets/arrow-right-black.svg';
 import { useAuthContext } from '@hooks/useAuthContext';
@@ -149,7 +147,7 @@ interface Props {
 const MainUserInfo = ({ onAccountSwitch }: Props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [accounts, setAccounts] = useState<AccountListItem[]>();
-  const { userData, setUserData } = useAuthContext();
+  const { userData, setUserData, getDecodedToken } = useAuthContext();
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
   const { axios } = useAxios();
@@ -161,8 +159,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
 
   useEffect(() => {
     if (userData.token && !accounts) {
-      const decoded = jwt_decode<Auth0Token>(userData.token || '');
-      const fusebitProfile = decoded['https://fusebit.io/profile'];
+      const { fusebitProfile } = getDecodedToken(userData.token);
       const profilePromises = fusebitProfile?.accounts?.map((acc) => {
         return {
           subscriptionsPromise: getAllSubscriptions<AccountSubscriptions>(axios, acc),
@@ -193,7 +190,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
           setAccounts(fullAccounts);
         });
     }
-  }, [userData, axios, accounts]);
+  }, [userData, axios, accounts, getDecodedToken]);
 
   const handleOnClickEmail = () => {
     history.push(getRedirectLink(`/authentication/${userData.userId}/overview`));
