@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useMutation } from 'react-query';
 import { Params } from '@interfaces/api';
 import { FusebitAxios, useAxios } from '@hooks/useAxios';
 
@@ -8,13 +8,10 @@ export const getAllSubscriptions = <T>(axiosInstance: FusebitAxios, params: Para
 
 export const useAccountGetAllSubscriptions = <T>(params: Params) => {
   const { axios } = useAxios();
-  const { enabled, ...queryParams } = params;
 
-  return useQuery(
-    ['accountGetAllSubscriptions'],
-    () => axios<T>(`/v1/account/${queryParams.accountId}/subscription`, 'get', params),
-    {
-      enabled: !!enabled,
-    }
-  );
+  return useMutation(() => getAllSubscriptions<T>(axios, params), {
+    onMutate: () => () => {},
+    onError: (_, __, rollback) => rollback?.(),
+    onSettled: () => {},
+  });
 };
