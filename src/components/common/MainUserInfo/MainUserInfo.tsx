@@ -2,6 +2,7 @@ import { Box, Menu } from '@material-ui/core';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import * as CSC from '@components/globalStyle';
 import accountImg from '@assets/account.svg';
 import rightArrow from '@assets/arrow-right-black.svg';
 import { useAuthContext } from '@hooks/useAuthContext';
@@ -151,7 +152,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
     userId: userData.userId,
     accountId: userData.accountId,
   });
-  const { data: accounts } = useAccountGetAllAccounts();
+  const { data: accounts, isLoading } = useAccountGetAllAccounts();
 
   const handleOnClickEmail = () => {
     history.push(getRedirectLink(`/authentication/${userData.userId}/overview`));
@@ -209,25 +210,29 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
         onClose={handleClose}
       >
         <StyledAccountsWrapper>
-          {accounts?.map((acc) => {
-            return (
-              <StyledAccWrapper key={acc.userId}>
-                <StyledSubscriptionName>{acc.company}</StyledSubscriptionName>
-                {acc.subscriptions.map((sub) => {
-                  return (
-                    <StyledSubscriptionWrapper
-                      onClick={() =>
-                        handleAccountSwitch({ ...acc, subscriptionId: sub.id, subscriptionName: sub.displayName })
-                      }
-                      key={sub.id}
-                    >
-                      {sub.displayName} ({sub.id})
-                    </StyledSubscriptionWrapper>
-                  );
-                })}
-              </StyledAccWrapper>
-            );
-          })}
+          {isLoading ? (
+            <CSC.Spinner />
+          ) : (
+            accounts?.map((acc) => {
+              return (
+                <StyledAccWrapper key={acc.userId}>
+                  <StyledSubscriptionName>{acc.company}</StyledSubscriptionName>
+                  {acc.subscriptions.map((sub) => {
+                    return (
+                      <StyledSubscriptionWrapper
+                        onClick={() =>
+                          handleAccountSwitch({ ...acc, subscriptionId: sub.id, subscriptionName: sub.displayName })
+                        }
+                        key={sub.id}
+                      >
+                        {sub.displayName} ({sub.id})
+                      </StyledSubscriptionWrapper>
+                    );
+                  })}
+                </StyledAccWrapper>
+              );
+            })
+          )}
         </StyledAccountsWrapper>
       </StyledMenu>
     </>
