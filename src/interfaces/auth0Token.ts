@@ -3,6 +3,7 @@ export interface FusebitProfile {
   subscriptionId?: string;
   userId?: string;
   email?: string;
+  subscriptionName?: string;
 }
 
 export interface FusebitProfileEx extends FusebitProfile {

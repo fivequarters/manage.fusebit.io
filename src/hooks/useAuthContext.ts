@@ -10,7 +10,7 @@ import { Auth0Token, FusebitProfileEx } from '@interfaces/auth0Token';
 import jwt_decode from 'jwt-decode';
 import { useHistory } from 'react-router-dom';
 import useFirstTimeVisitor from '@hooks/useFirstTimeVisitor';
-import { AccountListItem } from '@interfaces/account';
+import { AccountListItem, AccountSubscriptions } from '@interfaces/account';
 
 const {
   REACT_APP_AUTH0_DOMAIN,
@@ -142,7 +142,7 @@ const _useAuthContext = () => {
     history.push(`/logged-out?error=${error}`);
   };
 
-  const authUser = (token: string) => {
+  const authUser = async (token: string) => {
     const { fusebitProfile: profile, isSignUpEvent, issuedByAuth0 } = getDecodedToken(token);
     const activeAccountStringified = localStorage.getItem('activeAccount');
     const defaultAccount = profile.accounts?.[profile.accounts.length - 1];
@@ -151,6 +151,7 @@ const _useAuthContext = () => {
       ...defaultAccount,
     };
     const initToken = window.localStorage.getItem('fusebitInitToken');
+    const fusebitAxiosClient = createAxiosClient(token);
 
     if (initToken) {
       // This is completion of the invitation transaction. Call the provisioning function to
@@ -169,19 +170,26 @@ const _useAuthContext = () => {
 
     if (activeAccountStringified) {
       const activeAccountParsed: AccountListItem = JSON.parse(activeAccountStringified);
-      const fusebitAxiosClient = createAxiosClient(token);
-      const isValid = fusebitAxiosClient.get(
+      const isValid = await fusebitAxiosClient.get(
         `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${activeAccountParsed.accountId}/me`
       );
-      Promise.resolve(isValid).then((res) => {
-        if (res.status === 200) {
-          // checks if the user still has acces to the account in case he was recently deleted
-          fusebitProfile = {
-            ...fusebitProfile,
-            ...activeAccountParsed,
-          };
-        }
-      });
+      if (isValid.status === 200) {
+        // checks if the user still has acces to the account in case he was recently deleted
+        fusebitProfile = {
+          ...fusebitProfile,
+          ...activeAccountParsed,
+        };
+      }
+    } else {
+      const subscriptions = await fusebitAxiosClient.get<AccountSubscriptions>(
+        `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${fusebitProfile.accountId}/subscription`
+      );
+      const defaultSubscription = subscriptions.data.items?.[0];
+      fusebitProfile = {
+        ...fusebitProfile,
+        subscriptionId: defaultSubscription.id,
+        subscriptionName: defaultSubscription.displayName,
+      };
     }
 
     getAuth0ProfileAndCompany(token, fusebitProfile?.accountId || '')
