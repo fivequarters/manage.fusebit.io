@@ -9,14 +9,7 @@ export const getMe = <T>(axiosInstance: FusebitAxios, params: Params, queryParam
 export const useAccountGetMe = <T>() => {
   const { axios } = useAxios();
 
-  return useMutation(
-    (params: Params) => {
-      return getMe<T>(axios, params);
-    },
-    {
-      onMutate: () => () => {},
-      onError: (_, __, rollback) => rollback?.(),
-      onSettled: () => {},
-    }
-  );
+  return useMutation((params: Params) => {
+    return getMe<T>(axios, params);
+  });
 };

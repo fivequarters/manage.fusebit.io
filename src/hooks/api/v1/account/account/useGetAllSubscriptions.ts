@@ -9,9 +9,5 @@ export const getAllSubscriptions = <T>(axiosInstance: FusebitAxios, params: Para
 export const useAccountGetAllSubscriptions = <T>() => {
   const { axios } = useAxios();
 
-  return useMutation((params: Params) => getAllSubscriptions<T>(axios, params), {
-    onMutate: () => () => {},
-    onError: (_, __, rollback) => rollback?.(),
-    onSettled: () => {},
-  });
+  return useMutation((params: Params) => getAllSubscriptions<T>(axios, params));
 };

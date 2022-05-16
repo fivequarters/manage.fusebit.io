@@ -9,9 +9,5 @@ export const getOne = <T>(axiosInstance: FusebitAxios, params: Params, queryPara
 export const useAccountGetOne = <T>() => {
   const { axios } = useAxios();
 
-  return useMutation((params: Params) => getOne<T>(axios, params), {
-    onMutate: () => () => {},
-    onError: (_, __, rollback) => rollback?.(),
-    onSettled: () => {},
-  });
+  return useMutation((params: Params) => getOne<T>(axios, params));
 };
