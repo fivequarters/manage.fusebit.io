@@ -1,6 +1,6 @@
 import { Auth0Token } from '@interfaces/auth0Token';
 import { Box, Menu } from '@material-ui/core';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import jwt_decode from 'jwt-decode';
@@ -149,7 +149,6 @@ interface Props {
 const MainUserInfo = ({ onAccountSwitch }: Props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [accounts, setAccounts] = useState<AccountListItem[]>();
-  const [activeSubscriptionName, setActiveSubscriptionName] = useState('');
   const { userData, setUserData } = useAuthContext();
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
@@ -159,16 +158,6 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
     userId: userData.userId,
     accountId: userData.accountId,
   });
-
-  const findAndSetSubscriptionName = useCallback(
-    (acc: AccountListItem) => {
-      const activeSubscription = acc.subscriptions.find((sub) => userData.subscriptionId === sub.id);
-      if (activeSubscription) {
-        setActiveSubscriptionName(activeSubscription?.displayName || '');
-      }
-    },
-    [userData]
-  );
 
   useEffect(() => {
     if (userData.token && !accounts) {
@@ -196,7 +185,6 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
                 company: accountData.data.displayName,
                 displayName: accountData.data.displayName,
               };
-              findAndSetSubscriptionName(acc);
               fullAccounts.push(acc);
             }
           });
@@ -205,13 +193,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
           setAccounts(fullAccounts);
         });
     }
-  }, [userData, axios, accounts, findAndSetSubscriptionName]);
-
-  useEffect(() => {
-    accounts?.forEach((acc) => {
-      findAndSetSubscriptionName(acc);
-    });
-  }, [accounts, userData, findAndSetSubscriptionName]);
+  }, [userData, axios, accounts]);
 
   const handleOnClickEmail = () => {
     history.push(getRedirectLink(`/authentication/${userData.userId}/overview`));
@@ -251,7 +233,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
       </Box>
       <StyledUserDropdownStatus onClick={handleClick}>
         <div>
-          <StyledUserDropdownStatusTitle>{activeSubscriptionName}</StyledUserDropdownStatusTitle>
+          <StyledUserDropdownStatusTitle>{userData.subscriptionName}</StyledUserDropdownStatusTitle>
           <StyledUserDropdownStatusId>{userData.subscriptionId}</StyledUserDropdownStatusId>
         </div>
         <StyledUserDropdownStatusArrow src={rightArrow} alt="right arrow" height="12" width="12" />
@@ -276,7 +258,9 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
                 {acc.subscriptions.map((sub) => {
                   return (
                     <StyledSubscriptionWrapper
-                      onClick={() => handleAccountSwitch({ ...acc, subscriptionId: sub.id })}
+                      onClick={() =>
+                        handleAccountSwitch({ ...acc, subscriptionId: sub.id, subscriptionName: sub.displayName })
+                      }
                       key={sub.id}
                     >
                       {sub.displayName} ({sub.id})
