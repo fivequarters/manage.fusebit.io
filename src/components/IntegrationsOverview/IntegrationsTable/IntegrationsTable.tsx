@@ -16,6 +16,7 @@ import useFirstTimeVisitor from '@hooks/useFirstTimeVisitor';
 import CreateIntegrationModal from '@components/IntegrationsOverview/CreateIntegrationModal';
 import ForkIntegrationModal from '@components/IntegrationsOverview/ForkIntegrationModal';
 import { useFeedQuery } from '@hooks/useFeedQuery';
+import IntegrationsSearchBar from '../IntegrationsSearchBar';
 import GetInstalls from './GetInstalls';
 import GetIntegrationIcons from './GetIntegrationIcons';
 
