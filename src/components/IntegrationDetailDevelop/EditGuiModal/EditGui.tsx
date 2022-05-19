@@ -45,7 +45,7 @@ import useCustomSidebar from './useCustomSidebar';
 import useBeforeUnload from './useBeforeUnload';
 import { EditorEvents } from '~/enums/editor';
 
-const StyledEditorContainer = styled.div`
+const StyledEditorContainer = styled.div<{ isGrafanaEnabled?: boolean }>`
   .fa {
     background-size: cover;
     background-repeat: no-repeat;
@@ -202,6 +202,7 @@ const StyledEditorContainer = styled.div`
         font-family: courier;
         background-color: #ffffff;
         border-radius: 4px;
+        padding: ${(props) => props.isGrafanaEnabled && 0};
       }
     }
   }
@@ -524,12 +525,13 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
         integrationData={integrationData}
         defaultSnippet={snippetsModal.snippet}
       />
-      <StyledEditorContainer ref={ref}>
+      <StyledEditorContainer ref={ref} isGrafanaEnabled={enableGrafanaLogs}>
         {isMounted && !matchesMobile && (
           <StyledCloseHeader>
             {!forkEditFeedUrl && (
               <>
                 <Button
+                  id="save"
                   style={{ marginRight: '16px' }}
                   startIcon={<SaveOutlined />}
                   onClick={handleSave}
@@ -542,6 +544,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
                 </Button>
                 <ButtonGroup variant={assumeHasConnectors ? 'contained' : 'outlined'} style={{ marginRight: '16px' }}>
                   <Button
+                    id="run"
                     startIcon={<PlayArrowOutlined />}
                     size="small"
                     variant={assumeHasConnectors ? 'contained' : 'outlined'}

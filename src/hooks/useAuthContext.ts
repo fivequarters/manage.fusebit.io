@@ -50,6 +50,14 @@ const signIn = (silent?: boolean): void => {
   const requestedPath = (urlSearchParams.get('requestedPath') || window.location.pathname).replace(/ /g, '+');
   const connection = urlSearchParams.get('fusebitConnection');
 
+  // If this is an invitation URL, store the init token in local storage and redirect to authenticate
+  // without provisioning a new Fusebit account. Init token will be redeemed in the auth callback.
+  const init = (window.location.hash || '').match(/^#init=(.+)$/);
+  const initToken = (init && init[1]) || undefined;
+  if (initToken) {
+    window.localStorage.setItem('fusebitInitToken', initToken);
+  }
+
   const authLink = [
     REACT_APP_AUTH0_DOMAIN,
     '/authorize?response_type=token',
@@ -60,7 +68,8 @@ const signIn = (silent?: boolean): void => {
     `%26requestedPath=${requestedPath === '/callback' ? `/` : encodeURIComponent(requestedPath)}`,
     '&scope=openid profile email',
     `&screen_hint=${localStorage.getItem('screenHint')}`,
-    silent && !connection ? '&prompt=none' : '',
+    silent && !connection && !initToken ? '&prompt=none' : '',
+    initToken ? '&noprovision' : '',
   ].join('');
 
   window.location.href = authLink;
