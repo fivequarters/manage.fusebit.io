@@ -47,7 +47,7 @@ const ConnectorsTable = () => {
     lastModified: format(new Date(row.dateModified), 'MM/dd/yyyy'),
     credentialType: <GetCredentialTypes id={row.id} />,
     icon: <GetConnectorIcons handler={row.data.handler} />,
-    // inUseBy: <GetRelatedIntegrations name={row.id} />,
+    inUseBy: <GetRelatedIntegrations name={row.id} />,
   }));
 
   const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
