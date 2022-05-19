@@ -148,49 +148,56 @@ const _useAuthContext = () => {
   };
 
   const handleAuthError = (error: any) => {
-    history.push(`/logged-out?error=${error}`);
+    history.push(`/logged-out?error=${error.message || error}`);
   };
 
   const authUser = async (token: string) => {
-    const { fusebitProfile: profile, isSignUpEvent, issuedByAuth0 } = getDecodedToken(token);
-    const activeAccountStringified = localStorage.getItem('activeAccount');
-    const defaultAccount = profile.accounts?.[profile.accounts.length - 1];
-    let fusebitProfile = {
-      ...profile,
-      ...defaultAccount,
-    };
-    const initToken = window.localStorage.getItem('fusebitInitToken');
-    const fusebitAxiosClient = createAxiosClient(token);
+    try {
+      const { fusebitProfile: profile, isSignUpEvent, issuedByAuth0 } = getDecodedToken(token);
+      let fusebitProfile = profile;
+      const activeAccountStringified = localStorage.getItem('activeAccount');
+      const initToken = window.localStorage.getItem('fusebitInitToken');
+      const fusebitAxiosClient = createAxiosClient(token);
 
-    if (initToken) {
-      // This is completion of the invitation transaction. Call the provisioning function to
-      // redeem the init token, then redirect back to the home page to re-authenticate and
-      // get a new access token with an updated Fusebit profile.
-      window.localStorage.removeItem('fusebitInitToken');
-      redeemInitToken(token, fusebitProfile, initToken)
-        .then(() => {
-          history.push('/');
-        })
-        .catch((err) => {
-          handleAuthError(err);
-        });
-      return;
-    }
+      if (initToken) {
+        // This is completion of the invitation transaction. Call the provisioning function to
+        // redeem the init token, then redirect back to the home page to re-authenticate and
+        // get a new access token with an updated Fusebit profile.
+        window.localStorage.removeItem('fusebitInitToken');
+        redeemInitToken(token, fusebitProfile, initToken)
+          .then(() => {
+            history.push('/');
+          })
+          .catch((err) => {
+            handleAuthError(err);
+          });
+        return;
+      }
 
-    if (activeAccountStringified) {
-      try {
-        const activeAccountParsed: AccountListItem = JSON.parse(activeAccountStringified);
-        const isValid = await fusebitAxiosClient.get(
-          `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${activeAccountParsed.accountId}/me`
-        );
-        if (isValid.status === 200) {
-          // checks if the user still has acces to the account in case he was recently deleted
+      if (activeAccountStringified) {
+        try {
+          const activeAccountParsed: AccountListItem = JSON.parse(activeAccountStringified);
+          const isValid = await fusebitAxiosClient.get(
+            `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${activeAccountParsed.accountId}/me`
+          );
+          if (isValid.status === 200) {
+            // checks if the user still has acces to the account in case he was recently deleted
+            fusebitProfile = {
+              ...fusebitProfile,
+              ...activeAccountParsed,
+            };
+          }
+        } catch (e) {
+          const defaultSubscription = await getDefaultSubscriptionData(
+            fusebitProfile.accountId || '',
+            fusebitAxiosClient
+          );
           fusebitProfile = {
             ...fusebitProfile,
-            ...activeAccountParsed,
+            ...defaultSubscription,
           };
         }
-      } catch (e) {
+      } else {
         const defaultSubscription = await getDefaultSubscriptionData(
           fusebitProfile.accountId || '',
           fusebitAxiosClient
@@ -200,51 +207,47 @@ const _useAuthContext = () => {
           ...defaultSubscription,
         };
       }
-    } else {
-      const defaultSubscription = await getDefaultSubscriptionData(fusebitProfile.accountId || '', fusebitAxiosClient);
-      fusebitProfile = {
-        ...fusebitProfile,
-        ...defaultSubscription,
-      };
+
+      getAuth0ProfileAndCompany(token, fusebitProfile?.accountId || '')
+        .then(({ auth0Profile, company }) => {
+          const normalizedData = {
+            firstName: auth0Profile?.given_name || '',
+            lastName: auth0Profile?.family_name || '',
+            company: company?.displayName || '',
+          };
+
+          // for local testing: https://docs.google.com/document/d/1dkI4UdRgaD840HWc-sGi6_qz4JY8AHts97MD-1O4SpY/edit#heading=h.gtoda0wgke4n
+          if (REACT_APP_FUSEBIT_ACCOUNT_ID && REACT_APP_FUSEBIT_SUBSCRIPTION_ID && REACT_APP_FUSEBIT_USER_ID) {
+            fusebitProfile.accountId = REACT_APP_FUSEBIT_ACCOUNT_ID;
+            fusebitProfile.subscriptionId = REACT_APP_FUSEBIT_SUBSCRIPTION_ID;
+            fusebitProfile.userId = REACT_APP_FUSEBIT_USER_ID;
+          }
+
+          setUserData({ token, ...company, ...normalizedData, ...auth0Profile, ...fusebitProfile });
+          setAuthStatus(AuthStatus.AUTHENTICATED);
+
+          const navigatePostAuth = () => {
+            const urlSearchParams = new URLSearchParams(window.location.search);
+            const requestedPath = (urlSearchParams.get('requestedPath') || '/').replace(/ /g, '+');
+            const requestedSearch = localStorage.getItem('requestedSearch') || '';
+            const requestedHash = localStorage.getItem('requestedHash') || '';
+
+            setFirstTimeVisitor(true);
+            localStorage.removeItem('requestedSearch');
+            localStorage.removeItem('requestedHash');
+            history.push(requestedPath + requestedSearch + requestedHash);
+          };
+
+          const user: User = { email: fusebitProfile?.email, ...auth0Profile, ...company };
+          getAnalyticsClient(user, issuedByAuth0);
+          trackAuthEvent(user, fusebitProfile, isSignUpEvent, navigatePostAuth);
+        })
+        .catch((err) => {
+          handleAuthError(err);
+        });
+    } catch (err) {
+      handleAuthError(err);
     }
-
-    getAuth0ProfileAndCompany(token, fusebitProfile?.accountId || '')
-      .then(({ auth0Profile, company }) => {
-        const normalizedData = {
-          firstName: auth0Profile?.given_name || '',
-          lastName: auth0Profile?.family_name || '',
-          company: company?.displayName || '',
-        };
-
-        // for local testing: https://docs.google.com/document/d/1dkI4UdRgaD840HWc-sGi6_qz4JY8AHts97MD-1O4SpY/edit#heading=h.gtoda0wgke4n
-        if (REACT_APP_FUSEBIT_ACCOUNT_ID && REACT_APP_FUSEBIT_SUBSCRIPTION_ID && REACT_APP_FUSEBIT_USER_ID) {
-          fusebitProfile.accountId = REACT_APP_FUSEBIT_ACCOUNT_ID;
-          fusebitProfile.subscriptionId = REACT_APP_FUSEBIT_SUBSCRIPTION_ID;
-          fusebitProfile.userId = REACT_APP_FUSEBIT_USER_ID;
-        }
-
-        setUserData({ token, ...company, ...normalizedData, ...auth0Profile, ...fusebitProfile });
-        setAuthStatus(AuthStatus.AUTHENTICATED);
-
-        const navigatePostAuth = () => {
-          const urlSearchParams = new URLSearchParams(window.location.search);
-          const requestedPath = (urlSearchParams.get('requestedPath') || '/').replace(/ /g, '+');
-          const requestedSearch = localStorage.getItem('requestedSearch') || '';
-          const requestedHash = localStorage.getItem('requestedHash') || '';
-
-          setFirstTimeVisitor(true);
-          localStorage.removeItem('requestedSearch');
-          localStorage.removeItem('requestedHash');
-          history.push(requestedPath + requestedSearch + requestedHash);
-        };
-
-        const user: User = { email: fusebitProfile?.email, ...auth0Profile, ...company };
-        getAnalyticsClient(user, issuedByAuth0);
-        trackAuthEvent(user, fusebitProfile, isSignUpEvent, navigatePostAuth);
-      })
-      .catch((err) => {
-        handleAuthError(err);
-      });
   };
 
   return {
