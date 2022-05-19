@@ -31,9 +31,12 @@ const GetRelatedIntegrations: React.FC<Props> = ({ name }) => {
     <>
       {matchedIntegrations?.map((integration) => {
         return (
-          <Button key="" onClick={onClick}>
-            {integration.id}
-          </Button>
+          <>
+            <Button key="" onClick={onClick} variant="outlined">
+              {integration.id}
+            </Button>
+            <br />
+          </>
         );
       })}
     </>

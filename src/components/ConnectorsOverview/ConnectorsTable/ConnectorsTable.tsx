@@ -83,11 +83,11 @@ const ConnectorsTable = () => {
         headers={[
           { id: 'icon', value: '' },
           { id: 'name', value: 'Name' },
-          { id: 'type', value: 'Type' },
-          { id: 'identities', value: 'Identities' },
+          // { id: 'type', value: 'Type' },
           { id: 'createdAt', value: 'Created At', sorted: true },
           { id: 'lastModified', value: 'Last Modified', sorted: true },
-          { id: 'credentialType', value: 'Credential Type' },
+          { id: 'credentialType', value: 'In Production' },
+          { id: 'identities', value: 'Identities' },
           { id: 'inUseBy', value: 'In Use By' },
         ]}
         loading={isLoading}
