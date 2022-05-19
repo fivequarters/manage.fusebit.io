@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import * as CSC from '@components/globalStyle';
 import accountImg from '@assets/account.svg';
 import rightArrow from '@assets/arrow-right-black.svg';
+import check from '@assets/check.svg';
 import { useAuthContext } from '@hooks/useAuthContext';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 import { useAccountUserGetOne } from '@hooks/api/v1/account/user/useGetOne';
@@ -56,8 +57,9 @@ const StyledUserDropdownStatus = styled.span`
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 16px 24px;
+  padding: 12px;
   border-radius: 4px;
+  border: 1px solid #dae8ff;
   background-color: var(--secondary-color);
   text-decoration: none;
   margin-bottom: 24px;
@@ -71,18 +73,18 @@ const StyledUserDropdownStatus = styled.span`
   }
 `;
 
-const StyledUserDropdownStatusTitle = styled.div`
-  font-size: 14px;
-  line-height: 16px;
-  font-weight: 500;
-  color: var(--black);
-  margin-bottom: 8px;
-`;
-
 const StyledUserDropdownStatusId = styled.div`
   font-size: 14px;
   line-height: 16px;
   color: var(--black);
+  max-width: 176px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  strong {
+    font-weight: 500;
+  }
 
   @media only screen and (max-width: 880px) {
     width: 155px;
@@ -96,7 +98,7 @@ const StyledUserDropdownStatusArrow = styled.img`
   height: 12px;
   width: 12px;
   object-fit: contain;
-  margin-left: 24px;
+  margin-left: 12px;
 `;
 
 const StyledMenu = styled(Menu)`
@@ -110,11 +112,18 @@ const StyledAccountsWrapper = styled.div`
   padding: 10px 15px;
 `;
 
-const StyledSubscriptionWrapper = styled.div`
+const StyledSubscriptionWrapper = styled.div<{ active?: boolean }>`
+  display: flex;
+  align-items: center;
   margin: 8px 0;
   border-radius: 4px;
   padding: 10px;
   transition: all 0.25s linear;
+
+  span {
+    margin-right: 6px;
+    font-weight: ${(props) => (props.active ? 500 : 400)};
+  }
 
   &:hover {
     cursor: pointer;
@@ -122,20 +131,15 @@ const StyledSubscriptionWrapper = styled.div`
   }
 `;
 
-const StyledSubscriptionName = styled.h5`
-  font-size: 14px;
-  line-height: 16px;
-  font-weight: 500;
-  color: var(--primary-color);
-  text-transform: uppercase;
-  max-width: 238px;
-  margin: 0;
+const StyledAccountSeparator = styled.div`
+  width: calc(100% - 8px);
+  height: 2px;
+  background: var(--secondary-color);
+  margin: 4px 0 20px auto;
 `;
 
-const StyledAccWrapper = styled.div`
-  &:not(:last-child) {
-    margin-bottom: 16px;
-  }
+const StyledCheck = styled.img`
+  margin-left: 12px;
 `;
 
 interface Props {
@@ -153,6 +157,10 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
     accountId: userData.accountId,
   });
   const { data: accounts, isLoading } = useAccountGetAllAccounts();
+
+  const replaceDash = (val: string) => {
+    return val.replace('-', ' - ');
+  };
 
   const handleOnClickEmail = () => {
     history.push(getRedirectLink(`/authentication/${userData.userId}/overview`));
@@ -191,10 +199,9 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
         <CompanyTitle />
       </Box>
       <StyledUserDropdownStatus onClick={handleClick}>
-        <div>
-          <StyledUserDropdownStatusTitle>{userData.subscriptionName}</StyledUserDropdownStatusTitle>
-          <StyledUserDropdownStatusId>{userData.subscriptionId}</StyledUserDropdownStatusId>
-        </div>
+        <StyledUserDropdownStatusId>
+          <strong>{userData.subscriptionName}</strong> - {replaceDash(userData?.subscriptionId || '')}
+        </StyledUserDropdownStatusId>
         <StyledUserDropdownStatusArrow src={rightArrow} alt="right arrow" height="12" width="12" />
       </StyledUserDropdownStatus>
       <StyledMenu
@@ -213,23 +220,31 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
           {isLoading ? (
             <CSC.Spinner />
           ) : (
-            accounts?.map((acc) => {
+            accounts?.map((acc, i, arr) => {
               return (
-                <StyledAccWrapper key={acc.userId}>
-                  <StyledSubscriptionName>{acc.company}</StyledSubscriptionName>
-                  {acc.subscriptions.map((sub) => {
-                    return (
-                      <StyledSubscriptionWrapper
-                        onClick={() =>
-                          handleAccountSwitch({ ...acc, subscriptionId: sub.id, subscriptionName: sub.displayName })
-                        }
-                        key={sub.id}
-                      >
-                        {sub.displayName} ({sub.id})
-                      </StyledSubscriptionWrapper>
-                    );
-                  })}
-                </StyledAccWrapper>
+                <Box key={acc.userId} display="flex" flexDirection="column">
+                  <div>
+                    <CompanyTitle>
+                      <Box ml="8px">{acc.company}</Box>
+                    </CompanyTitle>
+                    {acc.subscriptions.map((sub) => {
+                      const isActive = sub.id === userData.subscriptionId;
+                      return (
+                        <StyledSubscriptionWrapper
+                          active={isActive}
+                          onClick={() =>
+                            handleAccountSwitch({ ...acc, subscriptionId: sub.id, subscriptionName: sub.displayName })
+                          }
+                          key={sub.id}
+                        >
+                          <span>{sub.displayName}</span> - {replaceDash(sub.id)}
+                          {isActive && <StyledCheck alt="checked" src={check} height="16" width="16" />}
+                        </StyledSubscriptionWrapper>
+                      );
+                    })}
+                  </div>
+                  {i < arr.length - 1 && <StyledAccountSeparator />}
+                </Box>
               );
             })
           )}
