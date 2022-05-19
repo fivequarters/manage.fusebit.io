@@ -178,17 +178,19 @@ const _useAuthContext = () => {
     }
 
     if (activeAccountStringified) {
-      const activeAccountParsed: AccountListItem = JSON.parse(activeAccountStringified);
-      const isValid = await fusebitAxiosClient.get(
-        `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${activeAccountParsed.accountId}/me`
-      );
-      if (isValid.status === 200) {
-        // checks if the user still has acces to the account in case he was recently deleted
-        fusebitProfile = {
-          ...fusebitProfile,
-          ...activeAccountParsed,
-        };
-      } else {
+      try {
+        const activeAccountParsed: AccountListItem = JSON.parse(activeAccountStringified);
+        const isValid = await fusebitAxiosClient.get(
+          `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${activeAccountParsed.accountId}/me`
+        );
+        if (isValid.status === 200) {
+          // checks if the user still has acces to the account in case he was recently deleted
+          fusebitProfile = {
+            ...fusebitProfile,
+            ...activeAccountParsed,
+          };
+        }
+      } catch (e) {
         const defaultSubscription = await getDefaultSubscriptionData(
           fusebitProfile.accountId || '',
           fusebitAxiosClient
