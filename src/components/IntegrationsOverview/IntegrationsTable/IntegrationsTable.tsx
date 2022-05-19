@@ -92,9 +92,9 @@ const IntegrationsTable = () => {
         entityName="integration"
         headers={[
           { id: 'name', value: 'Name' },
-          { id: 'installs', value: 'Installs' },
           { id: 'createdAt', value: 'Created At', sorted: true },
           { id: 'lastModified', value: 'Last Modified', sorted: true },
+          { id: 'installs', value: 'Installs' },
           { id: 'connectors', value: 'Connectors' },
         ]}
         loading={isLoading}
