@@ -18,6 +18,7 @@ export interface BaseTableProps {
   headers: {
     id: string;
     value: string;
+    sorted?: boolean;
   }[];
   newButtonText?: string;
   entityName?: string;

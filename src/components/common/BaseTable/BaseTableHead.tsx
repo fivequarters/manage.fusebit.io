@@ -1,5 +1,5 @@
 import React from 'react';
-import { TableCell, TableHead, TableRow, Checkbox } from '@material-ui/core';
+import { TableCell, TableHead, TableRow, Checkbox, TableSortLabel } from '@material-ui/core';
 import { BaseTableProps } from './types';
 
 const BaseTableHead = ({
@@ -24,7 +24,7 @@ const BaseTableHead = ({
         </TableCell>
         {headers.map((header) => (
           <TableCell style={{ whiteSpace: 'nowrap' }} key={header.id} align="left">
-            {header.value}
+            {header.sorted ? <TableSortLabel>{header.value}</TableSortLabel> : header.value}
           </TableCell>
         ))}
       </TableRow>

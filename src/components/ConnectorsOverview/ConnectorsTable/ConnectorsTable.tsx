@@ -1,4 +1,5 @@
 import { useHistory } from 'react-router-dom';
+import { format } from 'date-fns';
 import BaseTable from '@components/common/BaseTable/BaseTable';
 import { useEntityTable } from '@hooks/useEntityTable';
 import { usePagination } from '@hooks/usePagination';
@@ -10,9 +11,12 @@ import { useAuthContext } from '@hooks/useAuthContext';
 import { useAccountConnectorsGetAll } from '@hooks/api/v2/account/connector/useGetAll';
 import { Connector } from '@interfaces/connector';
 import useQueryParam from '@hooks/useQueryParam';
+import { useGetConnectorsFeed } from '@hooks/useGetConnectorsFeed';
+import { urlOrSvgToImage } from '@utils/utils';
 import DeleteConnectorModal from '../DeleteConnectorModal';
 import CreateConnectorModal from '../CreateConnectorModal';
 import GetIdentities from './GetIdentities';
+import GetCredentialTypes from './GetCredentialTypes';
 
 const ConnectorsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -34,11 +38,25 @@ const ConnectorsTable = () => {
     param: 'key',
   });
 
+  const connectorFeed = useGetConnectorsFeed();
+
   const rows = (connectors?.data?.items || []).map((row) => ({
     id: row.id,
     name: row.id,
     type: row.tags['fusebit.service'],
     identities: <GetIdentities id={row.id} />,
+    createdAt: format(new Date(row.dateAdded), 'MM/dd/yyyy'),
+    lastModified: format(new Date(row.dateModified), 'MM/dd/yyyy'),
+    credentialType: <GetCredentialTypes id={row.id} />,
+    icon: (
+      <img
+        src={urlOrSvgToImage(
+          connectorFeed.data?.filter((conn) => JSON.stringify(conn).includes(row.data.handler))[0].smallIcon
+        )}
+        width={40}
+        alt=""
+      />
+    ),
   }));
 
   const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
@@ -74,7 +92,11 @@ const ConnectorsTable = () => {
         headers={[
           { id: 'name', value: 'Name' },
           { id: 'type', value: 'Type' },
+          { id: 'icon', value: '' },
           { id: 'identities', value: 'Identities' },
+          { id: 'createdAt', value: 'Created At', sorted: true },
+          { id: 'lastModified', value: 'Last Modified', sorted: true },
+          { id: 'credentialType', value: 'Credential Type' },
         ]}
         loading={isLoading}
         onClickNew={handleNewIntegration}

@@ -1,4 +1,5 @@
 import { useHistory } from 'react-router-dom';
+import { format } from 'date-fns';
 import BaseTable from '@components/common/BaseTable/BaseTable';
 import { useEntityTable } from '@hooks/useEntityTable';
 import { usePagination } from '@hooks/usePagination';
@@ -15,6 +16,9 @@ import useFirstTimeVisitor from '@hooks/useFirstTimeVisitor';
 import CreateIntegrationModal from '@components/IntegrationsOverview/CreateIntegrationModal';
 import ForkIntegrationModal from '@components/IntegrationsOverview/ForkIntegrationModal';
 import { useFeedQuery } from '@hooks/useFeedQuery';
+import { useGetConnectorsFeed } from '@hooks/useGetConnectorsFeed';
+import { EntityComponent } from '@interfaces/feed';
+import { urlOrSvgToImage } from '@utils/utils';
 import GetInstalls from './GetInstalls';
 
 const IntegrationsTable = () => {
@@ -44,10 +48,25 @@ const IntegrationsTable = () => {
     param: 'key',
   });
 
+  const connectorFeed = useGetConnectorsFeed();
+
   const rows = (integrations?.data?.items || []).map((row) => ({
     id: row.id,
     name: row.id,
     installs: <GetInstalls id={row.id} />,
+    lastModified: format(new Date(row.dateAdded), 'MM/dd/yyyy'),
+    createdAt: format(new Date(row.dateModified), 'MM/dd/yyyy'),
+    connectors: row.data.components
+      .map((item) => (item.entityType === 'connector' ? item.provider : ''))
+      .filter((item) => item.length > 0)
+      .map((item) => {
+        return connectorFeed.data?.filter(
+          (conn) => (conn.configuration.components as EntityComponent[])[0].provider === item
+        )[0].smallIcon as string;
+      })
+      .map((item) => {
+        return <img src={urlOrSvgToImage(item)} key="" width={30} alt="" />;
+      }),
   }));
 
   const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
@@ -88,6 +107,9 @@ const IntegrationsTable = () => {
         headers={[
           { id: 'name', value: 'Name' },
           { id: 'installs', value: 'Installs' },
+          { id: 'createdAt', value: 'Created At', sorted: true },
+          { id: 'lastModified', value: 'Last Modified', sorted: true },
+          { id: 'connectors', value: 'Connectors' },
         ]}
         loading={isLoading}
         onClickNew={handleNewIntegration}
