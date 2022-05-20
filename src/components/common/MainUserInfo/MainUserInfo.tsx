@@ -1,17 +1,18 @@
-import { Box, Menu } from '@material-ui/core';
+import { Box, Menu, useMediaQuery } from '@material-ui/core';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import * as CSC from '@components/globalStyle';
 import accountImg from '@assets/account.svg';
 import rightArrow from '@assets/arrow-right-black.svg';
-import check from '@assets/check.svg';
 import { useAuthContext } from '@hooks/useAuthContext';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 import { useAccountUserGetOne } from '@hooks/api/v1/account/user/useGetOne';
 import { Account, AccountListItem } from '@interfaces/account';
 import { useAccountGetAllAccounts } from '@hooks/api/v1/account/account/useGetAllAccounts';
-import CompanyTitle from '../CompanyTitle';
+import CompanyTitle from '@components/common/CompanyTitle';
+import MainUserAccounts from '@components/common/MainUserInfo/MainUserAccounts';
+import { replaceDash } from '@utils/utils';
 
 const StyledUserDropdownInfo = styled.div`
   display: flex;
@@ -112,36 +113,6 @@ const StyledAccountsWrapper = styled.div`
   padding: 10px 15px;
 `;
 
-const StyledSubscriptionWrapper = styled.div<{ active?: boolean }>`
-  display: flex;
-  align-items: center;
-  margin: 8px 0;
-  border-radius: 4px;
-  padding: 10px;
-  transition: all 0.25s linear;
-
-  span {
-    margin-right: 6px;
-    font-weight: ${(props) => (props.active ? 500 : 400)};
-  }
-
-  &:hover {
-    cursor: pointer;
-    background: var(--secondary-color);
-  }
-`;
-
-const StyledAccountSeparator = styled.div`
-  width: calc(100% - 8px);
-  height: 2px;
-  background: var(--secondary-color);
-  margin: 4px 0 20px auto;
-`;
-
-const StyledCheck = styled.img`
-  margin-left: 12px;
-`;
-
 interface Props {
   onAccountSwitch: () => void;
 }
@@ -157,10 +128,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
     accountId: userData.accountId,
   });
   const { data: accounts, isLoading } = useAccountGetAllAccounts();
-
-  const replaceDash = (val: string) => {
-    return val.replace('-', ' - ');
-  };
+  const isMobile = useMediaQuery('(max-width: 880px)');
 
   const handleOnClickEmail = () => {
     history.push(getRedirectLink(`/authentication/${userData.userId}/overview`));
@@ -195,61 +163,41 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
           <StyledUserDropdownInfoEmail>{currentUser?.data.primaryEmail}</StyledUserDropdownInfoEmail>
         </StyledUserDropdownPersonalInfo>
       </StyledUserDropdownInfo>
-      <Box mb="12px">
-        <CompanyTitle />
-      </Box>
-      <StyledUserDropdownStatus onClick={handleClick}>
-        <StyledUserDropdownStatusId>
-          <strong>{userData.subscriptionName}</strong> - {replaceDash(userData?.subscriptionId || '')}
-        </StyledUserDropdownStatusId>
-        <StyledUserDropdownStatusArrow src={rightArrow} alt="right arrow" height="12" width="12" />
-      </StyledUserDropdownStatus>
-      <StyledMenu
-        PaperProps={{
-          style: {
-            transform: anchorEl ? 'translateX(calc(-100% - 50px))' : '',
-          },
-        }}
-        id="accounts"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        <StyledAccountsWrapper>
-          {isLoading ? (
-            <CSC.Spinner />
-          ) : (
-            accounts?.map((acc, i, arr) => {
-              return (
-                <Box key={acc.userId} display="flex" flexDirection="column">
-                  <div>
-                    <CompanyTitle>
-                      <Box ml="8px">{acc.company}</Box>
-                    </CompanyTitle>
-                    {acc.subscriptions.map((sub) => {
-                      const isActive = sub.id === userData.subscriptionId;
-                      return (
-                        <StyledSubscriptionWrapper
-                          active={isActive}
-                          onClick={() =>
-                            handleAccountSwitch({ ...acc, subscriptionId: sub.id, subscriptionName: sub.displayName })
-                          }
-                          key={sub.id}
-                        >
-                          <span>{sub.displayName}</span> - {replaceDash(sub.id)}
-                          {isActive && <StyledCheck alt="checked" src={check} height="16" width="16" />}
-                        </StyledSubscriptionWrapper>
-                      );
-                    })}
-                  </div>
-                  {i < arr.length - 1 && <StyledAccountSeparator />}
-                </Box>
-              );
-            })
-          )}
-        </StyledAccountsWrapper>
-      </StyledMenu>
+      {isMobile ? (
+        <MainUserAccounts isMobile accounts={accounts || []} onAccountSwitch={handleAccountSwitch} />
+      ) : (
+        <>
+          <Box mb="12px">
+            <CompanyTitle />
+          </Box>
+          <StyledUserDropdownStatus onClick={handleClick}>
+            <StyledUserDropdownStatusId>
+              <strong>{userData.subscriptionName}</strong> - {replaceDash(userData?.subscriptionId || '')}
+            </StyledUserDropdownStatusId>
+            <StyledUserDropdownStatusArrow src={rightArrow} alt="right arrow" height="12" width="12" />
+          </StyledUserDropdownStatus>
+          <StyledMenu
+            PaperProps={{
+              style: {
+                transform: anchorEl ? 'translateX(calc(-100% - 50px))' : '',
+              },
+            }}
+            id="accounts"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <StyledAccountsWrapper>
+              {isLoading ? (
+                <CSC.Spinner />
+              ) : (
+                <MainUserAccounts accounts={accounts || []} onAccountSwitch={handleAccountSwitch} />
+              )}
+            </StyledAccountsWrapper>
+          </StyledMenu>
+        </>
+      )}
     </>
   );
 };
