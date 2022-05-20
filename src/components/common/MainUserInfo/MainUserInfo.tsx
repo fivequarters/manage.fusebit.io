@@ -2,14 +2,12 @@ import { Box, Menu, useMediaQuery } from '@material-ui/core';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import * as CSC from '@components/globalStyle';
 import accountImg from '@assets/account.svg';
 import rightArrow from '@assets/arrow-right-black.svg';
 import { useAuthContext } from '@hooks/useAuthContext';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 import { useAccountUserGetOne } from '@hooks/api/v1/account/user/useGetOne';
 import { Account, AccountListItem } from '@interfaces/account';
-import { useAccountGetAllAccounts } from '@hooks/api/v1/account/account/useGetAllAccounts';
 import CompanyTitle from '@components/common/CompanyTitle';
 import MainUserAccounts from '@components/common/MainUserInfo/MainUserAccounts';
 import { replaceDash } from '@utils/utils';
@@ -127,7 +125,6 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
     userId: userData.userId,
     accountId: userData.accountId,
   });
-  const { data: accounts, isLoading } = useAccountGetAllAccounts();
   const isMobile = useMediaQuery('(max-width: 880px)');
 
   const handleOnClickEmail = () => {
@@ -164,7 +161,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
         </StyledUserDropdownPersonalInfo>
       </StyledUserDropdownInfo>
       {isMobile ? (
-        <MainUserAccounts isMobile accounts={accounts || []} onAccountSwitch={handleAccountSwitch} />
+        <MainUserAccounts isMobile onAccountSwitch={handleAccountSwitch} />
       ) : (
         <>
           <Box mb="12px">
@@ -189,11 +186,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
             onClose={handleClose}
           >
             <StyledAccountsWrapper>
-              {isLoading ? (
-                <CSC.Spinner />
-              ) : (
-                <MainUserAccounts accounts={accounts || []} onAccountSwitch={handleAccountSwitch} />
-              )}
+              <MainUserAccounts onAccountSwitch={handleAccountSwitch} />
             </StyledAccountsWrapper>
           </StyledMenu>
         </>

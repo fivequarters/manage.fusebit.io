@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import check from '@assets/check.svg';
 import CompanyTitle from '@components/common/CompanyTitle';
 import { replaceDash } from '@utils/utils';
+import { useAccountGetAllAccounts } from '@hooks/api/v1/account/account/useGetAllAccounts';
+import * as CSC from '@components/globalStyle';
 
 const StyledSubscriptionWrapper = styled.div<{ active?: boolean }>`
   display: flex;
@@ -29,6 +31,16 @@ const StyledSubscriptionWrapper = styled.div<{ active?: boolean }>`
   }
 `;
 
+const StyledSubscription = styled.div`
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+
+  @media only screen and (max-width: 350px) {
+    max-width: 220px;
+  }
+`;
+
 const StyledAccountSeparator = styled.div`
   width: calc(100% - 8px);
   height: 2px;
@@ -45,45 +57,51 @@ const StyledCheck = styled.img`
 `;
 
 interface Props {
-  accounts: AccountListItem[];
   onAccountSwitch: (acc: AccountListItem) => void;
   isMobile?: boolean;
 }
 
-const MainUserAccounts = ({ accounts, onAccountSwitch, isMobile }: Props) => {
+const MainUserAccounts = ({ onAccountSwitch, isMobile }: Props) => {
   const { userData } = useAuthContext();
+  const { data: accounts, isLoading } = useAccountGetAllAccounts();
 
   return (
     <Box mb={isMobile && '24px'}>
-      {accounts?.map((acc, i, arr) => (
-        <Box key={acc.userId} display="flex" flexDirection="column">
-          <div>
-            <CompanyTitle>
-              <Box ml={!isMobile && '8px'}>{acc.company}</Box>
-            </CompanyTitle>
-            {acc.subscriptions.map((sub) => {
-              const isActive = sub.id === userData.subscriptionId;
-              return (
-                <StyledSubscriptionWrapper
-                  active={isActive}
-                  onClick={() =>
-                    onAccountSwitch({
-                      ...acc,
-                      subscriptionId: sub.id,
-                      subscriptionName: sub.displayName,
-                    })
-                  }
-                  key={sub.id}
-                >
-                  <span>{sub.displayName}</span> - {replaceDash(sub.id)}
-                  {isActive && <StyledCheck alt="checked" src={check} height="16" width="16" />}
-                </StyledSubscriptionWrapper>
-              );
-            })}
-          </div>
-          {i < arr.length - 1 && <StyledAccountSeparator />}
-        </Box>
-      ))}
+      {isLoading ? (
+        <CSC.Spinner />
+      ) : (
+        accounts?.map((acc, i, arr) => (
+          <Box key={acc.userId} display="flex" flexDirection="column">
+            <div>
+              <CompanyTitle>
+                <Box ml={!isMobile && '8px'}>{acc.company}</Box>
+              </CompanyTitle>
+              {acc.subscriptions.map((sub) => {
+                const isActive = sub.id === userData.subscriptionId;
+                return (
+                  <StyledSubscriptionWrapper
+                    active={isActive}
+                    onClick={() =>
+                      onAccountSwitch({
+                        ...acc,
+                        subscriptionId: sub.id,
+                        subscriptionName: sub.displayName,
+                      })
+                    }
+                    key={sub.id}
+                  >
+                    <StyledSubscription>
+                      <span>{sub.displayName}</span> - {replaceDash(sub.id)}
+                    </StyledSubscription>
+                    {isActive && <StyledCheck alt="checked" src={check} height="16" width="16" />}
+                  </StyledSubscriptionWrapper>
+                );
+              })}
+            </div>
+            {i < arr.length - 1 && <StyledAccountSeparator />}
+          </Box>
+        ))
+      )}
     </Box>
   );
 };
