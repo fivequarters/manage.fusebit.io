@@ -62,6 +62,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
   headers,
   onDeleteAll,
   onClickNew,
+  newButtonText,
   entityName,
   onSelectRow,
   isSelected,
@@ -168,7 +169,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
             </Button>
           ))}
           <Button onClick={onClickNew} startIcon={<AddIcon />} variant="outlined" color="primary" size="large">
-            New {entityName}
+            {newButtonText || `New ${entityName}`}
           </Button>
         </StyledButtonsContainer>
       )}

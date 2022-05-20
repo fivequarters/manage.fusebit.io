@@ -2,9 +2,10 @@ import React from 'react';
 import { Button } from '@material-ui/core';
 import fusebit from '@assets/fusebit-logo.svg';
 import warning from '@assets/warning-red.svg';
-import { signIn } from '@hooks/useAuthContext';
 import styled from 'styled-components';
 import background from '@assets/background-small.jpg';
+import { useQuery } from '@hooks/useQuery';
+import { useHistory } from 'react-router-dom';
 
 const StyledWrapper = styled.div`
   display: flex;
@@ -27,7 +28,7 @@ const StyledFusebit = styled.img`
   height: 37px;
   object-fit: contain;
   margin-top: 62px;
-  margin-bottom: 140px;
+  margin-bottom: 102px;
 
   @media only screen and (max-width: 500px) {
     width: 125px;
@@ -59,18 +60,20 @@ const StyledTitle = styled.h1`
 const StyledDescription = styled.p`
   font-size: 16px;
   line-height: 22px;
-  margin-bottom: 68px;
   color: var(--black);
   text-align: center;
 
   @media only screen and (max-width: 500px) {
     font-size: 14px;
     line-height: 20px;
-    margin-bottom: 64px;
   }
 `;
 
 const LoggedOutError: React.FC = () => {
+  const history = useHistory();
+  const query = useQuery();
+  const error = query.get('error');
+
   return (
     <StyledWrapper>
       <StyledBackground />
@@ -80,7 +83,14 @@ const LoggedOutError: React.FC = () => {
       <StyledDescription>
         We have encountered an error, which requires that you log in to your account again.
       </StyledDescription>
-      <Button onClick={() => signIn()} style={{ width: '200px' }} variant="contained" color="primary" size="large">
+      {error && <StyledDescription>{error}</StyledDescription>}
+      <Button
+        onClick={() => history.push('/')}
+        style={{ width: '200px', marginTop: '40px' }}
+        variant="contained"
+        color="primary"
+        size="large"
+      >
         Log In
       </Button>
     </StyledWrapper>
