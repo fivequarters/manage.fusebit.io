@@ -1,4 +1,4 @@
-import { Box, Menu, useMediaQuery } from '@material-ui/core';
+import { Box, useMediaQuery } from '@material-ui/core';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
@@ -11,6 +11,7 @@ import { Account, AccountListItem } from '@interfaces/account';
 import CompanyTitle from '@components/common/CompanyTitle';
 import MainUserAccounts from '@components/common/MainUserInfo/MainUserAccounts';
 import { replaceDash } from '@utils/utils';
+import * as CSC from '@components/globalStyle';
 
 const StyledUserDropdownInfo = styled.div`
   display: flex;
@@ -100,12 +101,6 @@ const StyledUserDropdownStatusArrow = styled.img`
   margin-left: 12px;
 `;
 
-const StyledMenu = styled(Menu)`
-  .MuiPaper-root {
-    transform: translateX(calc(-100%) - 20px) !important;
-  }
-`;
-
 const StyledAccountsWrapper = styled.div`
   position: relative;
   padding: 10px 15px;
@@ -173,7 +168,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
             </StyledUserDropdownStatusId>
             <StyledUserDropdownStatusArrow src={rightArrow} alt="right arrow" height="12" width="12" />
           </StyledUserDropdownStatus>
-          <StyledMenu
+          <CSC.StyledMenu
             PaperProps={{
               style: {
                 transform: anchorEl ? 'translateX(calc(-100% - 50px))' : '',
@@ -188,7 +183,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
             <StyledAccountsWrapper>
               <MainUserAccounts onAccountSwitch={handleAccountSwitch} />
             </StyledAccountsWrapper>
-          </StyledMenu>
+          </CSC.StyledMenu>
         </>
       )}
     </>
