@@ -116,3 +116,7 @@ export const createAxiosClient: (token?: string, skipXUserAgent?: boolean) => Ax
 
 export const urlOrSvgToImage = (img = '') =>
   img.match('^<svg') ? `data:image/svg+xml;utf8,${encodeURIComponent(img)}` : img;
+
+export const replaceDash = (val: string) => {
+  return val.replace('-', ' - ');
+};
