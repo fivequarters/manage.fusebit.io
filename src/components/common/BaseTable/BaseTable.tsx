@@ -1,15 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import {
-  Table,
-  TableBody,
-  Button,
-  IconButton,
-  Tooltip,
-  useMediaQuery,
-  TablePagination,
-  Box,
-  Checkbox,
-} from '@material-ui/core';
+import { Table, TableBody, Button, IconButton, Tooltip, useMediaQuery, TablePagination, Box } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { ROWS_PER_PAGE_OPTIONS } from '@hooks/usePagination';
@@ -106,10 +96,10 @@ const BaseTable: React.FC<BaseTableProps> = ({
   const isAllSelected = isAllChecked || (rows.length > 0 && selected.length === rows.length);
 
   const deleteText = useMemo(() => {
-    const textSuffix = `${entityName}${selected.length > 1 ? 's are selected' : ' is selelected'}`;
+    const textSuffix = `${entityName}${selected.length > 1 ? 's are selected' : ' is selected'}`;
 
     if (isAllSelected) {
-      return `All ${textSuffix}`;
+      return `All ${selected.length} ${textSuffix}`;
     }
 
     return `${selected.length} ${textSuffix}`;
@@ -191,7 +181,6 @@ const BaseTable: React.FC<BaseTableProps> = ({
         >
           {isSelecting ? (
             <>
-              <Checkbox color="primary" checked={isAllSelected} onChange={onSelectAll} style={{ marginLeft: '8px' }} />
               <StyledDeleteText>
                 {deleteText}
                 {!isMobile && !isAllSelected && (
