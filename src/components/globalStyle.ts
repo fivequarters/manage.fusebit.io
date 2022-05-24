@@ -1,12 +1,13 @@
 import styled, { createGlobalStyle, css, keyframes } from 'styled-components';
 import spinner from '@assets/spinner.svg';
 import copy from '@assets/copy.svg';
-import { IconButton } from '@material-ui/core';
+import { IconButton, Menu } from '@material-ui/core';
 
 export default createGlobalStyle`
    :root {
         --primary-color: #F83420;
         --secondary-color: rgba(215, 229, 255, 0.4);
+        --shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
         --black: #333333;
         --grey: #959595;
         --yellow: #FFC940;
@@ -234,4 +235,10 @@ export const editorNavTextStyles = css`
   line-height: 20px;
   font-weight: inherit;
   color: var(--black);
+`;
+
+export const StyledMenu = styled(Menu)`
+  .MuiPaper-root {
+    box-shadow: var(--shadow);
+  }
 `;
