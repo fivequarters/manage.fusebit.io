@@ -185,7 +185,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
                 {deleteText}
                 {!isMobile && !isAllSelected && (
                   <strong onClick={() => onSelectAll(undefined, true)}>
-                    Select all {rows.length} {entityName}s
+                    Select all {rows.filter((row) => !row.hideCheckbox).length} {entityName}s
                   </strong>
                 )}
               </StyledDeleteText>
