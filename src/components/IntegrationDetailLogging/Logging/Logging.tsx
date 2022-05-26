@@ -50,7 +50,10 @@ const Logging = () => {
 
   const handleExplore = () => {
     trackEventMemoized('Explore Button Clicked', 'Logging');
-    window.open(`${process.env.REACT_APP_FUSEBIT_DEPLOYMENT}/v2/grafana?theme=fusebit`, '_blank');
+    window.open(
+      `${process.env.REACT_APP_FUSEBIT_DEPLOYMENT}/v2/grafana/d/logging/basic?theme=fusebit&fusebitAuthorization=${userData.token}&fusebitAccountId=${userData.accountId}&var-accountId=${userData.accountId}&var-subscriptionId=${userData.subscriptionId}&var-boundaryId=integration&var-functionId=${id}`,
+      '_blank'
+    );
   };
 
   return (
