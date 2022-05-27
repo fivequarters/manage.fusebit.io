@@ -640,6 +640,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
               onClose={handleClose}
               handleRun={handleRun}
               isRunning={isRunning}
+              isGrafanaEnabled={enableGrafanaLogs}
             />
           )}
         </StyledFusebitEditorContainer>
