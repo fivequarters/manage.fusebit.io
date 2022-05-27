@@ -306,9 +306,16 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const { handleCopy } = useCopy();
   const { url: sampleAppUrl } = useSampleApp();
 
-  const { isSaving, errorBuild, setErrorBuild } = useEditorEvents({
+  const { logs, clearLogs, isSaving, errorBuild, setErrorBuild } = useEditorEvents({
     isMounted,
-    events: [EditorEvents.BuildStarted, EditorEvents.BuildFinished, EditorEvents.BuildError],
+    events: [
+      EditorEvents.BuildStarted,
+      EditorEvents.BuildFinished,
+      EditorEvents.BuildError,
+      EditorEvents.LogsEntry,
+      EditorEvents.LogsAttached,
+      EditorEvents.RunnerFinished,
+    ],
   });
 
   const { snippetsModal, onSnippetsModalOpen, onSnippetsModalClose } = useSnippetsModal({
@@ -635,6 +642,8 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
           />
           {isMounted && matchesMobile && (
             <MobileDrawer
+              logs={logs}
+              clearLogs={clearLogs}
               processing={processing}
               open={isMounted}
               onClose={handleClose}

@@ -6,10 +6,7 @@ import play from '@assets/play.svg';
 import info from '@assets/info.svg';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { useAuthContext } from '@hooks/useAuthContext';
-import { useParams } from 'react-router-dom';
-import useEditorEvents from '../FusebitEditor/useEditorEvents';
-import { EditorEvents } from '~/enums/editor';
+import GrafanaLogs from '@components/common/GrafanaLogs';
 
 const StyledDrawer = styled(Drawer)`
   .MuiDrawer-paperAnchorBottom {
@@ -68,12 +65,6 @@ const StyledLog = styled(Box)`
   flex: 1;
 `;
 
-const StyledLogs = styled.iframe`
-  position: relative;
-  border-radius: 8px;
-  box-shadow: 0px 1px 30px -1px rgb(52 72 123 / 10%);
-`;
-
 interface Props {
   open: boolean;
   onClose: () => void;
@@ -81,20 +72,23 @@ interface Props {
   isRunning: boolean;
   isGrafanaEnabled: boolean;
   processing: boolean;
+  logs: {
+    msg: string;
+    id: number;
+  }[];
+  clearLogs: () => void;
 }
 
-const DEFAULT_HEIGHT = 350;
-const WEEK_IN_MS = 7 * 24 * 60 * 60 * 1000;
-const FROM = Date.now() - WEEK_IN_MS;
-
-const MobileDrawer = ({ open, onClose, handleRun, isRunning, isGrafanaEnabled, processing }: Props) => {
-  const { logs, clearLogs } = useEditorEvents({
-    isMounted: open,
-    events: [EditorEvents.LogsEntry, EditorEvents.LogsAttached, EditorEvents.RunnerFinished],
-  });
-  const { userData } = useAuthContext();
-  const { id } = useParams<{ id: string }>();
-
+const MobileDrawer = ({
+  open,
+  onClose,
+  handleRun,
+  isRunning,
+  isGrafanaEnabled,
+  processing,
+  logs,
+  clearLogs,
+}: Props) => {
   useEffect(() => {
     if (logs.length > 0) {
       const mobileLog = document.getElementById('mobile-log');
@@ -105,7 +99,6 @@ const MobileDrawer = ({ open, onClose, handleRun, isRunning, isGrafanaEnabled, p
   }, [logs]);
 
   const handleClose = () => {
-    clearLogs();
     onClose();
   };
 
@@ -156,14 +149,7 @@ const MobileDrawer = ({ open, onClose, handleRun, isRunning, isGrafanaEnabled, p
             )}
           </Box>
           {isGrafanaEnabled ? (
-            <StyledLogs
-              id="logging"
-              title="logging"
-              src={`${process.env.REACT_APP_FUSEBIT_DEPLOYMENT}/v2/grafana/bootstrap/d-solo/logging/basic?panelId=2?kiosk&theme=fusebit&refresh=1s&fusebitAuthorization=${userData.token}&fusebitAccountId=${userData.accountId}&var-accountId=${userData.accountId}&var-subscriptionId=${userData.subscriptionId}&var-boundaryId=integration&var-functionId=${id}&from=${FROM}`}
-              height={DEFAULT_HEIGHT}
-              width="100%"
-              frameBorder="0"
-            />
+            <GrafanaLogs />
           ) : (
             <StyledLog
               id="mobile-log"
