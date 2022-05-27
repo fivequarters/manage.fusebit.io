@@ -122,7 +122,7 @@ type VideoEvent = KeyboardEvent | (React.KeyboardEvent<HTMLDivElement> & { code?
 
 interface Props extends React.VideoHTMLAttributes<HTMLVideoElement> {
   src: string;
-  tracks: React.TrackHTMLAttributes<HTMLTrackElement>[];
+  tracks?: React.TrackHTMLAttributes<HTMLTrackElement>[];
   enableFullscreenOnPlay?: boolean;
 }
 
@@ -224,7 +224,7 @@ const Video: React.FC<Props> = ({ src, tracks, enableFullscreenOnPlay, children,
           props.onEnded?.(e);
         }}
       >
-        {tracks.map((track) => (
+        {tracks?.map((track) => (
           <track key={track.src} {...track} />
         ))}
         {children}

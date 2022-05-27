@@ -62,8 +62,11 @@ export const useAccountIntegrationTestIntegration = (integrationId: string) => {
       onSuccess: (res) => {
         const data = res.data ? ` \n${JSON.stringify(res.data, null, ' ')}` : '';
 
+        const traceIdSpanId = res.fullResponse.headers['fusebit-trace-id']?.split('.');
         window.editor?.serverLogsEntry(
           JSON.stringify({
+            traceId: traceIdSpanId && traceIdSpanId[0],
+            spanId: traceIdSpanId && traceIdSpanId[1],
             msg: `Received response status ${res?.fullResponse.status}${data}`,
             level: 30,
           })

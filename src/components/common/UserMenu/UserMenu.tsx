@@ -1,13 +1,13 @@
-import { Button, Menu, Box } from '@material-ui/core';
+import { Button, Box } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import styled from 'styled-components';
-import { useAuthContext, signOut } from '../../../hooks/useAuthContext';
-import accountImg from '../../../assets/account.svg';
-import useAnchor from '../../../hooks/useAnchor';
-import CompanyTitle from '../CompanyTitle/CompanyTitle';
-import MainUserInfo from '../MainUserInfo/MainUserInfo';
-import UserMenuLinks from '../UserMenuLinks';
+import * as CSC from '@components/globalStyle';
+import { useAuthContext, signOut } from '@hooks/useAuthContext';
+import accountImg from '@assets/account.svg';
+import useAnchor from '@hooks/useAnchor';
+import MainUserInfo from '@components/common/MainUserInfo/MainUserInfo';
+import UserMenuLinks from '@components/common/UserMenuLinks';
 
 const StyledButton = styled(Button)<{ active: boolean }>`
   color: white;
@@ -50,7 +50,7 @@ const UserMenu = () => {
       >
         {process.env.REACT_APP_DEPLOYMENT_KEY}
       </StyledButton>
-      <Menu
+      <CSC.StyledMenu
         PaperProps={{
           style: {
             marginTop: '17px',
@@ -66,9 +66,8 @@ const UserMenu = () => {
       >
         <StyledUserDropdown>
           <Box m="24px 0">
-            <CompanyTitle />
+            <MainUserInfo onAccountSwitch={handleCloseMenu} />
           </Box>
-          <MainUserInfo />
           <UserMenuLinks />
           <Box textAlign="right" mt="24px">
             <Button
@@ -82,7 +81,7 @@ const UserMenu = () => {
             </Button>
           </Box>
         </StyledUserDropdown>
-      </Menu>
+      </CSC.StyledMenu>
     </>
   );
 };

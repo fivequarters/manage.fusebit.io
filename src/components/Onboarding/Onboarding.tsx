@@ -1,5 +1,5 @@
 import Modal from '@components/common/Modal';
-import video from '@assets/placeholder-video.mp4';
+import video from '@assets/onboarding.mp4';
 import { Backdrop, Box, Button, useMediaQuery } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -135,13 +135,7 @@ const Onboarding: React.FC = () => {
           concepts
         </StyledDescription>
         <StyledVideoWrapper>
-          <Video
-            enableFullscreenOnPlay={isMobile}
-            onPlay={onPlay}
-            onEnded={onEnded}
-            src={video}
-            tracks={[{ src: 'captions_en.vtt', kind: 'captions', srcLang: 'en', label: 'english_captions' }]}
-          />
+          <Video enableFullscreenOnPlay={isMobile} onPlay={onPlay} onEnded={onEnded} src={video} />
         </StyledVideoWrapper>
         <StyledCtaWrapper display="flex" alignItems="center" mt="24px">
           <StyledCtaText>Let’s get going on building your first integration</StyledCtaText>

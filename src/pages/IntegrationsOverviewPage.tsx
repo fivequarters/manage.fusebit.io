@@ -12,7 +12,7 @@ const IntegrationsOverviewPage: FC<{}> = (): ReactElement => {
 
   return (
     <Layout>
-      <IntegrationsNavbar />
+      <IntegrationsNavbar dropdownOnly />
       <TabComponent tabNames={['Overview']} tabObjects={[<IntegrationsTable key="integrationsTable" />]} />
     </Layout>
   );
