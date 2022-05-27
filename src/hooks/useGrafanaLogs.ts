@@ -44,7 +44,7 @@ const useGrafanaLogs = ({ iframeId, defaultHeight, integrationId, from, onBlur }
   }, [iframeId, onBlur, defaultHeight]);
 
   return {
-    url: `${process.env.REACT_APP_FUSEBIT_DEPLOYMENT}/v2/grafana/bootstrap/d-solo/logging/basic?panelId=2?kiosk&theme=fusebit&refresh=1s&fusebitAuthorization=${userData.token}&fusebitAccountId=${userData.accountId}&var-accountId=${userData.accountId}&var-subscriptionId=${userData.subscriptionId}&var-boundaryId=integration&var-functionId=${integrationId}&from=${from}`,
+    url: `${process.env.REACT_APP_FUSEBIT_DEPLOYMENT}/v2/grafana/bootstrap/d-solo/logging/basic?panelId=2?kiosk&theme=fusebit&disablePanelTitle=true&refresh=1s&fusebitAuthorization=${userData.token}&fusebitAccountId=${userData.accountId}&var-accountId=${userData.accountId}&var-subscriptionId=${userData.subscriptionId}&var-boundaryId=integration&var-functionId=${integrationId}&from=${from}`,
   };
 };
 
