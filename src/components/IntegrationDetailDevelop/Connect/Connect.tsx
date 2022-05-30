@@ -3,9 +3,9 @@ import { Box, Button, Input, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import * as CSC from '@components/globalStyle';
 import CopyLine from '@components/common/CopyLine';
+import SecurityDisclaimer from '@components/common/SecurityDisclaimer';
 import { Integration } from '@interfaces/integration';
 import styled from 'styled-components';
-import disclaimer from '@assets/disclaimer.svg';
 import warning from '@assets/black-warning.svg';
 import { trackEventMemoized } from '@utils/analytics';
 import FooterActions from './FooterActions';
@@ -58,27 +58,6 @@ const StyledSubtitle = styled.h3<{ margin?: string }>`
   color: var(--black);
   margin-bottom: 16px;
   margin: ${(props) => props.margin && props.margin};
-`;
-
-const StyledDisclaimer = styled.p`
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 400;
-  color: var(--black);
-  margin-left: 14px;
-
-  strong {
-    font-weight: 500;
-    line-height: 16px;
-  }
-`;
-
-const StyledDisclaimerIcon = styled.div`
-  min-height: 20px;
-  min-width: 20px;
-  background-image: url(${disclaimer});
-  background-size: contain;
-  background-repeat: no-repeat;
 `;
 
 const StyledCopySuccess = styled.p<{ copy: boolean }>`
@@ -284,12 +263,9 @@ const Connect: React.FC<Props> = ({
         </StyledWarningWrapper>
       ) : (
         !disableCopy && (
-          <Box display="flex" alignItems="center">
-            <StyledDisclaimerIcon />
-            <StyledDisclaimer>
-              For security reasons, <strong>this is the last time you will see this key.</strong>
-            </StyledDisclaimer>
-          </Box>
+          <SecurityDisclaimer>
+            For security reasons, <strong>this is the last time you will see this key.</strong>
+          </SecurityDisclaimer>
         )
       )}
 
