@@ -10,7 +10,6 @@ import { useAccountUserGetOne } from '@hooks/api/v1/account/user/useGetOne';
 import { Account, AccountListItem } from '@interfaces/account';
 import CompanyTitle from '@components/common/CompanyTitle';
 import MainUserAccounts from '@components/common/MainUserInfo/MainUserAccounts';
-import { replaceDash } from '@utils/utils';
 import * as CSC from '@components/globalStyle';
 
 const StyledUserDropdownInfo = styled.div`
@@ -121,6 +120,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
     accountId: userData.accountId,
   });
   const isMobile = useMediaQuery('(max-width: 880px)');
+  const isOnMultipleAccounts = userData.accounts && userData?.accounts?.length > 1;
 
   const handleOnClickEmail = () => {
     history.push(getRedirectLink(`/authentication/${userData.userId}/overview`));
@@ -164,7 +164,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
           </Box>
           <StyledUserDropdownStatus onClick={handleClick}>
             <StyledUserDropdownStatusId>
-              <strong>{userData.subscriptionName}</strong> - {replaceDash(userData?.subscriptionId || '')}
+              <strong>{userData.subscriptionName}</strong> - {userData?.subscriptionId}
             </StyledUserDropdownStatusId>
             <StyledUserDropdownStatusArrow src={rightArrow} alt="right arrow" height="12" width="12" />
           </StyledUserDropdownStatus>
@@ -177,7 +177,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
             id="accounts"
             anchorEl={anchorEl}
             keepMounted
-            open={Boolean(anchorEl)}
+            open={Boolean(anchorEl) && Boolean(isOnMultipleAccounts)}
             onClose={handleClose}
           >
             <StyledAccountsWrapper>

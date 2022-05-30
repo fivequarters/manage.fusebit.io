@@ -125,7 +125,3 @@ export const formatTime = (seconds: number) => {
   newSeconds = newSeconds.toString().padStart(2, '0');
   return `${minutes}:${newSeconds}`;
 };
-
-export const replaceDash = (val: string) => {
-  return val.replace('-', ' - ');
-};
