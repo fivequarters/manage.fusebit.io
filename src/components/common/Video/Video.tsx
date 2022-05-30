@@ -7,7 +7,7 @@ import replayOutlined from '@assets/video-replay-outlined.svg';
 import pause from '@assets/video-pause.svg';
 import volume from '@assets/video-volume.svg';
 import fullscreen from '@assets/video-fullscreen.svg';
-import { Box, Slider } from '@material-ui/core';
+import { Box, Slider, useMediaQuery } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { formatTime } from '@utils/utils';
@@ -133,6 +133,7 @@ const Video: React.FC<Props> = ({ src, tracks, enableFullscreenOnPlay, children,
   const [duration, setDuration] = React.useState('00:00');
   const [progress, setProgress] = React.useState(0);
   const [isPlaying, setIsPlaying] = React.useState(false);
+  const isMobile = useMediaQuery('(max-width: 550px)');
 
   const handleVolumeChange = (event: React.ChangeEvent<{}>, newVolume: number | number[]) => {
     setVolume(newVolume);
@@ -232,9 +233,19 @@ const Video: React.FC<Props> = ({ src, tracks, enableFullscreenOnPlay, children,
       </StyledVideo>
       <StyledShadow onClick={handlePlayState} isVideoPaused={!isPlaying}>
         {!isPlaying && (
-          <Box position="absolute" top="50%" left="50%" style={{ transform: 'translate(-50%, -50%)' }}>
+          <Box
+            position="absolute"
+            top={isMobile ? '35%' : '50%'}
+            left="50%"
+            style={{ transform: 'translate(-50%, -50%)' }}
+          >
             <IconButton color="secondary">
-              <StyledIcon height="96px" width="96px" src={isVideoFinished ? replayOutlined : playOutlined} alt="play" />
+              <StyledIcon
+                height={isMobile ? '48px' : '96px'}
+                width={isMobile ? '48px' : '96px'}
+                src={isVideoFinished ? replayOutlined : playOutlined}
+                alt="play"
+              />
             </IconButton>
           </Box>
         )}

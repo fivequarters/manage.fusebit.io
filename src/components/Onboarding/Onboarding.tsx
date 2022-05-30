@@ -13,6 +13,7 @@ const StyledWrapper = styled.div`
     height: calc(100vh - 40px);
     display: flex;
     flex-direction: column;
+    justify-content: center;
   }
 `;
 
@@ -73,7 +74,8 @@ const StyledVideoWrapper = styled.div`
   }
 
   @media only screen and (max-width: 550px) {
-    margin: 0 auto;
+    margin: 16px auto;
+    height: auto;
   }
 `;
 
