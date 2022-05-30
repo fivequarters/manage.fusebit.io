@@ -90,7 +90,7 @@ const useEditor = (
         const err = localStorage.getItem(LOCALSTORAGE_SESSION_ERROR_KEY);
         window.editor?.serverLogsEntry(
           JSON.stringify({
-            msg: err,
+            msg: `Authorization failed with error: ${err}`,
             level: 30,
           })
         );
