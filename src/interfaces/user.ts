@@ -1,8 +1,8 @@
 import { Auth0Profile } from './auth0Profile';
-import { FusebitProfile } from './auth0Token';
+import { FusebitProfileEx } from './auth0Token';
 import { Company } from './company';
 
-export interface User extends Auth0Profile, Company, FusebitProfile {
+export interface User extends Auth0Profile, Company, FusebitProfileEx {
   firstName?: string;
   lastName?: string;
   subscriptionName?: string;

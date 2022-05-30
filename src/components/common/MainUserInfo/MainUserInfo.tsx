@@ -120,6 +120,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
     accountId: userData.accountId,
   });
   const isMobile = useMediaQuery('(max-width: 880px)');
+  const isOnMultipleAccounts = userData.accounts && userData?.accounts?.length > 1;
 
   const handleOnClickEmail = () => {
     history.push(getRedirectLink(`/authentication/${userData.userId}/overview`));
@@ -176,7 +177,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
             id="accounts"
             anchorEl={anchorEl}
             keepMounted
-            open={Boolean(anchorEl)}
+            open={Boolean(anchorEl) && Boolean(isOnMultipleAccounts)}
             onClose={handleClose}
           >
             <StyledAccountsWrapper>
