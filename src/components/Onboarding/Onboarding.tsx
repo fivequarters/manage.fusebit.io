@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import { useQuery } from '@hooks/useQuery';
 import Video from '@components/common/Video';
 import { trackEventMemoized } from '@utils/analytics';
-import { INVITED_TO_FUSEBIT_KEY } from '@utils/constants';
 import { useAuthContext } from '@hooks/useAuthContext';
+import useIsInvitedToFusebit from '@hooks/useIsInvitedToFusebit';
 
 const StyledWrapper = styled.div`
   @media only screen and (max-width: 550px) {
@@ -81,7 +81,7 @@ const StyledVideoWrapper = styled.div`
   }
 `;
 
-enum UTM_CONTENT {
+export enum UTM_CONTENT {
   NEW_VID = 'new-vid',
 }
 
@@ -92,7 +92,7 @@ const Onboarding: React.FC = () => {
   const query = useQuery();
   const objectLocation = 'Onboarding Video';
   const isMobile = useMediaQuery('(max-width: 550px)');
-  const isInvitedToFusebit = localStorage.getItem(INVITED_TO_FUSEBIT_KEY);
+  const { isInvitedToFusebit, removeIsInvitedToFusebitKey } = useIsInvitedToFusebit();
 
   useEffect(() => {
     const utmContent = query.get('utm_content');
@@ -124,11 +124,11 @@ const Onboarding: React.FC = () => {
     trackEventMemoized('Product Video Completed', objectLocation);
     setVideoCompleted(true);
     localStorage.setItem(UTM_CONTENT.NEW_VID, 'completed');
+    removeIsInvitedToFusebitKey();
   };
 
   const handleGetStartedClick = () => {
     setOpen(false);
-    localStorage.removeItem(INVITED_TO_FUSEBIT_KEY);
   };
 
   return (

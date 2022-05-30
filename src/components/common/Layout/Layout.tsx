@@ -4,6 +4,7 @@ import { CssBaseline } from '@material-ui/core';
 import GlobalStyle from '@components/globalStyle';
 import { useAuthContext } from '@hooks/useAuthContext';
 import Onboarding from '@components/Onboarding';
+import InvitedToFusebitModal from '../InvitedToFusebitModal/InvitedToFusebitModal';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -45,6 +46,7 @@ const Layout: FC<Props> = ({ children }) => {
       <GlobalStyle />
       <main>
         <Onboarding />
+        <InvitedToFusebitModal />
         {children}
       </main>
     </div>
