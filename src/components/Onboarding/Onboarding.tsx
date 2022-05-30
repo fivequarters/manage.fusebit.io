@@ -27,7 +27,7 @@ const StyledTitle = styled.h2`
 const StyledDescription = styled.p`
   font-size: 18px;
   line-height: 24px;
-  max-width: 1050px;
+  max-width: 745px;
   color: var(--black);
   margin-bottom: 24px;
 
@@ -68,8 +68,12 @@ const StyledVideoWrapper = styled.div`
   width: 100%;
   height: 420px;
 
+  @media only screen and (max-width: 880px) {
+    height: 100%;
+  }
+
   @media only screen and (max-width: 550px) {
-    margin: auto 0;
+    margin: 0 auto;
   }
 `;
 
