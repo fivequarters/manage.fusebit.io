@@ -6,6 +6,8 @@ import styled from 'styled-components';
 import { useQuery } from '@hooks/useQuery';
 import Video from '@components/common/Video';
 import { trackEventMemoized } from '@utils/analytics';
+import { INVITED_TO_FUSEBIT_KEY } from '@utils/constants';
+import { useAuthContext } from '@hooks/useAuthContext';
 
 const StyledWrapper = styled.div`
   @media only screen and (max-width: 550px) {
@@ -84,11 +86,13 @@ enum UTM_CONTENT {
 }
 
 const Onboarding: React.FC = () => {
+  const { userData } = useAuthContext();
   const [open, setOpen] = useState(false);
   const [videoCompleted, setVideoCompleted] = useState(false);
   const query = useQuery();
   const objectLocation = 'Onboarding Video';
   const isMobile = useMediaQuery('(max-width: 550px)');
+  const isInvitedToFusebit = localStorage.getItem(INVITED_TO_FUSEBIT_KEY);
 
   useEffect(() => {
     const utmContent = query.get('utm_content');
@@ -122,6 +126,11 @@ const Onboarding: React.FC = () => {
     localStorage.setItem(UTM_CONTENT.NEW_VID, 'completed');
   };
 
+  const handleGetStartedClick = () => {
+    setOpen(false);
+    localStorage.removeItem(INVITED_TO_FUSEBIT_KEY);
+  };
+
   return (
     <Modal
       fullScreen={isMobile}
@@ -136,9 +145,17 @@ const Onboarding: React.FC = () => {
       <StyledWrapper>
         <StyledTitle>Welcome to Fusebit!</StyledTitle>
         <StyledDescription>
-          Now that you are signed up to Fusebit, let's get you ready to{' '}
-          <strong>start building a code-first integration in minutes.</strong> Watch the video below to learn key
-          concepts
+          {isInvitedToFusebit ? (
+            <>
+              You've been added to <strong>{userData.company}</strong>. Watch the video below to learn key concepts.
+            </>
+          ) : (
+            <>
+              Now that you are signed up to Fusebit, let's get you ready to{' '}
+              <strong>start building a code-first integration in minutes.</strong> Watch the video below to learn key
+              concepts
+            </>
+          )}
         </StyledDescription>
         <StyledVideoWrapper>
           <Video enableFullscreenOnPlay={isMobile} onPlay={onPlay} onEnded={onEnded} src={video} />
@@ -147,7 +164,7 @@ const Onboarding: React.FC = () => {
           <StyledCtaText>Let’s get going on building your first integration</StyledCtaText>
           <Button
             disabled={!videoCompleted}
-            onClick={() => setOpen(false)}
+            onClick={handleGetStartedClick}
             size={isMobile ? 'medium' : 'large'}
             color="primary"
             variant="contained"
