@@ -88,7 +88,7 @@ const LoggedOutError: React.FC = () => {
     <StyledWrapper>
       <StyledBackground />
       <StyledFusebit src={fusebit} alt="fusebit" height="37px" width="144px" />
-      <StyledWarning src={warning} alt="warning" height="40" width="40" />
+      {!isInvalidInviteToken && <StyledWarning src={warning} alt="warning" height="40" width="40" />}
       <StyledTitle>{isInvalidInviteToken ? 'Your invite link has expired' : 'Logged out'}</StyledTitle>
       <StyledDescription>
         {isInvalidInviteToken
@@ -106,15 +106,17 @@ const LoggedOutError: React.FC = () => {
       ) : (
         error && <StyledDescription>{error}</StyledDescription>
       )}
-      <Button
-        onClick={() => history.push('/')}
-        style={{ width: '200px', marginTop: '40px' }}
-        variant="contained"
-        color="primary"
-        size="large"
-      >
-        Log In
-      </Button>
+      {!isInvalidInviteToken && (
+        <Button
+          onClick={() => history.push('/')}
+          style={{ width: '200px', marginTop: '40px' }}
+          variant="contained"
+          color="primary"
+          size="large"
+        >
+          Log In
+        </Button>
+      )}
     </StyledWrapper>
   );
 };
