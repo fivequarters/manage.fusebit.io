@@ -12,6 +12,8 @@ const StyledWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  max-width: 850px;
+  margin: 0 auto;
   padding: 0 24px;
 `;
 
@@ -49,6 +51,7 @@ const StyledTitle = styled.h1`
   line-height: 58px;
   font-weight: 600;
   margin-bottom: 32px;
+  text-align: center;
   color: var(--black);
 
   @media only screen and (max-width: 500px) {
@@ -63,6 +66,12 @@ const StyledDescription = styled.p`
   color: var(--black);
   text-align: center;
 
+  span {
+    font-weight: 600;
+    color: var(--primary-color);
+    cursor: pointer;
+  }
+
   @media only screen and (max-width: 500px) {
     font-size: 14px;
     line-height: 20px;
@@ -73,17 +82,30 @@ const LoggedOutError: React.FC = () => {
   const history = useHistory();
   const query = useQuery();
   const error = query.get('error');
+  const isInvalidInviteToken = query.get('invalidInviteToken') === 'true';
 
   return (
     <StyledWrapper>
       <StyledBackground />
       <StyledFusebit src={fusebit} alt="fusebit" height="37px" width="144px" />
       <StyledWarning src={warning} alt="warning" height="40" width="40" />
-      <StyledTitle>Logged out</StyledTitle>
+      <StyledTitle>{isInvalidInviteToken ? 'Your invite link has expired' : 'Logged out'}</StyledTitle>
       <StyledDescription>
-        We have encountered an error, which requires that you log in to your account again.
+        {isInvalidInviteToken
+          ? 'To keep your account safe, invite links expire after 8 hours and can only be used once. To get a new invite link, please reach out to your teammate.'
+          : ' We have encountered an error, which requires that you log in to your account again.'}
       </StyledDescription>
-      {error && <StyledDescription>{error}</StyledDescription>}
+      {}
+      {isInvalidInviteToken ? (
+        <>
+          <StyledDescription>
+            Want to create an individual account instead? <span onClick={() => history.push('/')}>Log in Now</span>
+          </StyledDescription>
+          <StyledDescription>(Don't worry, you can still join a team with the same account)</StyledDescription>
+        </>
+      ) : (
+        error && <StyledDescription>{error}</StyledDescription>
+      )}
       <Button
         onClick={() => history.push('/')}
         style={{ width: '200px', marginTop: '40px' }}
