@@ -148,7 +148,7 @@ const _useAuthContext = () => {
   };
 
   const handleAuthError = (error: any, invalidInviteToken?: boolean) => {
-    history.push(`/logged-out?error=${error.message || error}${invalidInviteToken && '&invalidInviteToken=true'}`);
+    history.push(`/logged-out?error=${error.message || error}&invalidInviteToken=${!!invalidInviteToken}`);
   };
 
   const authUser = async (token: string) => {
