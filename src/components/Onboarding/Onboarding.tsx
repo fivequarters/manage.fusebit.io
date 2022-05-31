@@ -136,9 +136,9 @@ const Onboarding: React.FC = () => {
       <StyledWrapper>
         <StyledTitle>Welcome to Fusebit!</StyledTitle>
         <StyledDescription>
-          Now that you are signed up to Fusebit, let's get you ready to{' '}
+          Now that you are signed up, let's get you ready to{' '}
           <strong>start building a code-first integration in minutes.</strong> Watch the video below to learn key
-          concepts
+          concepts.
         </StyledDescription>
         <StyledVideoWrapper>
           <Video enableFullscreenOnPlay={isMobile} onPlay={onPlay} onEnded={onEnded} src={video} />
@@ -157,7 +157,7 @@ const Onboarding: React.FC = () => {
               marginLeft: 'auto',
             }}
           >
-            Get Started
+            Continue
           </Button>
         </StyledCtaWrapper>
       </StyledWrapper>
