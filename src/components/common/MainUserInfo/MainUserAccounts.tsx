@@ -90,7 +90,7 @@ const MainUserAccounts = ({ onAccountSwitch, isMobile }: Props) => {
                     key={sub.id}
                   >
                     <StyledSubscription>
-                      <span>{sub.displayName}</span> - {sub.id}
+                      <span>{sub.displayName}</span> ({sub.id})
                     </StyledSubscription>
                     {isActive && <StyledCheck alt="checked" src={check} height="16" width="16" />}
                   </StyledSubscriptionWrapper>
