@@ -5,6 +5,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import SecurityDisclaimer from '@components/common/SecurityDisclaimer';
 import CopyLine from '@components/common/CopyLine';
+import { trackEventMemoized } from '@utils/analytics';
 import * as CSC from '../../globalStyle';
 
 const StyledWrapper = styled.div`
@@ -57,7 +58,14 @@ const InviteUserForm = React.forwardRef<HTMLDivElement, Props>(({ createUser }, 
         </CSC.ModalDescription>
       </Box>
       <StyledLineTitle>Invite Link</StyledLineTitle>
-      <CopyLine text={invitationUrl} disableMargin copyPosition={{ top: '-47px' }}>
+      <CopyLine
+        text={invitationUrl}
+        disableMargin
+        copyPosition={{ top: '-47px' }}
+        onCopy={() => {
+          trackEventMemoized('Copy Invite Link Clicked', 'Team');
+        }}
+      >
         <p>{invitationUrl}</p>
       </CopyLine>
       <SecurityDisclaimer>For security reasons, this link will expire in eight hours.</SecurityDisclaimer>

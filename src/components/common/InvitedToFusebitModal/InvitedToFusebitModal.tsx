@@ -3,6 +3,7 @@ import useIsInvitedToFusebit from '@hooks/useIsInvitedToFusebit';
 import React, { useEffect, useState } from 'react';
 import { useQuery } from '@hooks/useQuery';
 import styled from 'styled-components';
+import { trackEventMemoized } from '@utils/analytics';
 import { UTM_CONTENT } from '@components/Onboarding/Onboarding';
 import Modal from '../Modal';
 
@@ -22,7 +23,11 @@ const InvitedToFusebitModal = () => {
   const isNewVidOnboarding = query.get('utm_content') === UTM_CONTENT.NEW_VID;
   const [open, setOpen] = useState(!!isInvitedToFusebit && !isNewVidOnboarding);
 
-  useEffect(() => {});
+  useEffect(() => {
+    if (open) {
+      trackEventMemoized('Join Team Modal Viewed', 'Integrations');
+    }
+  }, [open]);
 
   const closeModal = () => {
     setOpen(false);
