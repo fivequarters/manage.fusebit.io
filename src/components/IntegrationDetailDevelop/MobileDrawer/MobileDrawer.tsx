@@ -6,8 +6,7 @@ import play from '@assets/play.svg';
 import info from '@assets/info.svg';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
-import useEditorEvents from '../FusebitEditor/useEditorEvents';
-import { EditorEvents } from '~/enums/editor';
+import GrafanaLogs from '@components/common/GrafanaLogs';
 
 const StyledDrawer = styled(Drawer)`
   .MuiDrawer-paperAnchorBottom {
@@ -71,15 +70,25 @@ interface Props {
   onClose: () => void;
   handleRun: () => void;
   isRunning: boolean;
+  isGrafanaEnabled: boolean;
   processing: boolean;
+  logs: {
+    msg: string;
+    id: number;
+  }[];
+  clearLogs: () => void;
 }
 
-const MobileDrawer = ({ open, onClose, handleRun, isRunning, processing }: Props) => {
-  const { logs, clearLogs } = useEditorEvents({
-    isMounted: open,
-    events: [EditorEvents.LogsEntry, EditorEvents.LogsAttached, EditorEvents.RunnerFinished],
-  });
-
+const MobileDrawer = ({
+  open,
+  onClose,
+  handleRun,
+  isRunning,
+  isGrafanaEnabled,
+  processing,
+  logs,
+  clearLogs,
+}: Props) => {
   useEffect(() => {
     if (logs.length > 0) {
       const mobileLog = document.getElementById('mobile-log');
@@ -90,7 +99,6 @@ const MobileDrawer = ({ open, onClose, handleRun, isRunning, processing }: Props
   }, [logs]);
 
   const handleClose = () => {
-    clearLogs();
     onClose();
   };
 
@@ -132,26 +140,31 @@ const MobileDrawer = ({ open, onClose, handleRun, isRunning, processing }: Props
           </StyledGuiMobileNotSupportedWrapper>
         </StyledGuiMobileWrapper>
         <StyledLogWrapper padding="21px 30px 30px" position="relative" overflow="hidden">
-          <Box display="flex" alignItems="center">
+          <Box display="flex" alignItems="center" mb="10px">
             <StyledLogTitle>Log Console</StyledLogTitle>
-            <Box marginLeft="auto" color="inherit" onClick={clearLogs}>
-              <DeleteIcon color="inherit" style={{ width: '20px' }} />
-            </Box>
+            {!isGrafanaEnabled && (
+              <Box marginLeft="auto" color="inherit" onClick={clearLogs}>
+                <DeleteIcon color="inherit" style={{ width: '20px' }} />
+              </Box>
+            )}
           </Box>
-          <StyledLog
-            id="mobile-log"
-            fontSize="10px"
-            lineHeight="11.5px"
-            fontFamily="Courier"
-            padding="15px 7px"
-            borderRadius="4px"
-            marginTop="10px"
-            overflow="scroll"
-          >
-            {logs.map((log) => (
-              <p key={log.id}>{log.msg}</p>
-            ))}
-          </StyledLog>
+          {isGrafanaEnabled ? (
+            <GrafanaLogs />
+          ) : (
+            <StyledLog
+              id="mobile-log"
+              fontSize="10px"
+              lineHeight="11.5px"
+              fontFamily="Courier"
+              padding="15px 7px"
+              borderRadius="4px"
+              overflow="scroll"
+            >
+              {logs.map((log) => (
+                <p key={log.id}>{log.msg}</p>
+              ))}
+            </StyledLog>
+          )}
         </StyledLogWrapper>
       </StyledDrawer>
     </>
