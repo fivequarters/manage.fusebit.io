@@ -155,7 +155,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
   return (
     <StyledWrapper>
       {onClickNew && (
-        <StyledButtonsContainer display="flex" mt="56px" mb="36px" justifyContent="flex-end" {...actionsContainerProps}>
+        <StyledButtonsContainer display="flex" mb="36px" justifyContent="flex-end" {...actionsContainerProps}>
           {(headerButtons || [])?.map((button) => (
             <Button
               key={button.text}
