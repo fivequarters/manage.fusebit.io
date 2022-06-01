@@ -2,9 +2,12 @@ import { Box, Button } from '@material-ui/core';
 import { trackEventMemoized } from '@utils/analytics';
 import GrafanaLogs from '@components/common/GrafanaLogs';
 import useGrafanaLogs from '@hooks/useGrafanaLogs';
+import { useParams } from 'react-router-dom';
 
 const Logging = () => {
-  const { url } = useGrafanaLogs({
+  const { id } = useParams<{ id: string }>();
+  const { exploreUrl } = useGrafanaLogs({
+    integrationId: id,
     onBlur: () => {
       trackEventMemoized('Grafana Iframe Clicked', 'Logging');
     },
@@ -12,7 +15,7 @@ const Logging = () => {
 
   const handleExplore = () => {
     trackEventMemoized('Explore Button Clicked', 'Logging');
-    window.open(url, '_blank');
+    window.open(exploreUrl, '_blank');
   };
 
   return (
