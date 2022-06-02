@@ -1,4 +1,6 @@
+export type Tab = string | React.ReactElement;
+
 export interface Props {
-  tabNames: string[];
-  tabObjects: any[];
+  tabNames: Tab[];
+  tabObjects: Tab[];
 }
