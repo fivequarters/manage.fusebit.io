@@ -104,19 +104,13 @@ const _useAuthContext = () => {
 
   const getTenantId = () => userData.userId || STATIC_TENANT_ID;
 
-  const getAuth0ProfileAndCompany = async (auth0Token: string, fallbackToken: string, accountId: string) => {
+  const getAuth0ProfileAndCompany = async (auth0Token: string, accountId: string) => {
     let auth0Profile = {} as Auth0Profile;
     let company = {} as Company;
     const skipXUserAgent = true;
     const auth0AxiosClient = createAxiosClient(auth0Token, skipXUserAgent);
-    const auth0FallbackAxiosClient = createAxiosClient(fallbackToken, skipXUserAgent);
-    try {
-      const { data: userInfo } = await auth0AxiosClient.get(`${REACT_APP_AUTH0_DOMAIN}/userinfo`);
-      auth0Profile = userInfo;
-    } catch {
-      const { data: userInfo } = await auth0FallbackAxiosClient.get(`${REACT_APP_AUTH0_DOMAIN}/userinfo`);
-      auth0Profile = userInfo;
-    }
+    const { data: userInfo } = await auth0AxiosClient.get(`${REACT_APP_AUTH0_DOMAIN}/userinfo`);
+    auth0Profile = userInfo;
     const fusebitAxiosClient = createAxiosClient(auth0Token);
     const { data: account } = await fusebitAxiosClient.get(`${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}`);
     company = account;
@@ -214,7 +208,7 @@ const _useAuthContext = () => {
         };
       }
 
-      getAuth0ProfileAndCompany(token, userData.token || '', fusebitProfile?.accountId || '')
+      getAuth0ProfileAndCompany(token, fusebitProfile?.accountId || '')
         .then(({ auth0Profile, company }) => {
           const normalizedData = {
             firstName: auth0Profile?.given_name || '',
@@ -237,6 +231,7 @@ const _useAuthContext = () => {
             const requestedPath = (urlSearchParams.get('requestedPath') || '/').replace(/ /g, '+');
             const requestedSearch = localStorage.getItem('requestedSearch') || '';
             const requestedHash = localStorage.getItem('requestedHash') || '';
+            sessionStorage.removeItem('activeAccountLoginAttempt');
 
             setFirstTimeVisitor(true);
             localStorage.removeItem('requestedSearch');
@@ -252,7 +247,15 @@ const _useAuthContext = () => {
           handleAuthError(err);
         });
     } catch (err) {
-      handleAuthError(err);
+      const activeAccount = localStorage.getItem('activeAccount');
+      const isSecondAttempt = sessionStorage.getItem('activeAccountLoginAttempt');
+      if (activeAccount && !isSecondAttempt) {
+        sessionStorage.setItem('activeAccountLoginAttempt', 'true');
+        checkAuthStatus();
+      } else {
+        sessionStorage.removeItem('activeAccountLoginAttempt');
+        handleAuthError(err);
+      }
     }
   };
 
