@@ -223,7 +223,15 @@ const _useAuthContext = () => {
             fusebitProfile.userId = REACT_APP_FUSEBIT_USER_ID;
           }
 
-          setUserData({ token, ...company, ...normalizedData, ...auth0Profile, ...fusebitProfile });
+          const newUserData = {
+            token,
+            ...company,
+            ...normalizedData,
+            ...auth0Profile,
+            ...fusebitProfile,
+          };
+          setUserData(newUserData);
+          localStorage.setItem('activeAccount', JSON.stringify(newUserData));
           setAuthStatus(AuthStatus.AUTHENTICATED);
 
           const navigatePostAuth = () => {
