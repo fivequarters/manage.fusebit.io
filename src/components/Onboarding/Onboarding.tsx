@@ -146,9 +146,7 @@ const Onboarding: React.FC = () => {
         <StyledTitle>Welcome to Fusebit!</StyledTitle>
         <StyledDescription>
           {isInvitedToFusebit ? (
-            <>
-              You've been added to <strong>{userData.company}</strong>. Watch the video below to learn key concepts.
-            </>
+            <>You've been added to {userData.company}. Watch the video below to learn key concepts.</>
           ) : (
             <>
               Now that you are signed up to Fusebit, let's get you ready to{' '}

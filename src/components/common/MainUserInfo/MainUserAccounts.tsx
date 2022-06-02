@@ -73,7 +73,9 @@ const MainUserAccounts = ({ onAccountSwitch, isMobile }: Props) => {
           <Box key={acc.userId} display="flex" flexDirection="column">
             <div>
               <CompanyTitle>
-                <Box ml={!isMobile && '8px'}>{acc.company}</Box>
+                <Box ml={!isMobile && '8px'} style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  {acc.company}
+                </Box>
               </CompanyTitle>
               {acc.subscriptions.map((sub) => {
                 const isActive = sub.id === userData.subscriptionId;

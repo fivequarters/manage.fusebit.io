@@ -45,7 +45,7 @@ const UsersTable = () => {
   const handleClickRow = (row: BaseTableRow) => history.push(getRedirectLink(`/authentication/${row.id}/overview`));
 
   const handleInviteUser = () => {
-    trackEventMemoized('Invite User Button Clicked', 'Team');
+    trackEventMemoized('Invite Team Member Button Clicked', 'Team');
     toggleInviteModal();
   };
 
@@ -75,7 +75,7 @@ const UsersTable = () => {
           { id: 'userId', value: 'User-ID' },
         ]}
         loading={isLoading}
-        newButtonText="Invite user"
+        newButtonText="Invite Team Member"
         onClickNew={handleInviteUser}
         onDeleteAll={toggleDeleteModal}
         onSelectAll={handleSelectAllCheck}
