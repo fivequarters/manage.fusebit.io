@@ -20,6 +20,7 @@ interface Props {
 }
 
 const LOCALSTORAGE_SESSION_KEY = 'session';
+const LOCALSTORAGE_SESSION_ERROR_KEY = 'sessionError';
 
 const useEditor = (
   { integrationData, enableListener = true, onReadyToRun, onMissingIdentities, onReadyToLogin } = {} as Props
@@ -85,6 +86,15 @@ const useEditor = (
         resetIntegrationConfig(id, tenantId);
 
         runFirstTest();
+      } else if (e.key === LOCALSTORAGE_SESSION_ERROR_KEY) {
+        const err = localStorage.getItem(LOCALSTORAGE_SESSION_ERROR_KEY);
+        window.editor?.serverLogsEntry(
+          JSON.stringify({
+            msg: `Authorization failed with error: ${err}`,
+            level: 30,
+          })
+        );
+        localStorage.removeItem(LOCALSTORAGE_SESSION_ERROR_KEY);
       }
     };
 
