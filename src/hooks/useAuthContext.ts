@@ -114,8 +114,8 @@ const _useAuthContext = () => {
       auth0Profile = userInfo;
     } catch {
       auth0Profile = {
-        given_name: '',
-        family_name: '',
+        given_name: 'Firstname',
+        family_name: 'LastName',
       };
     }
     const fusebitAxiosClient = createAxiosClient(auth0Token);
