@@ -51,7 +51,7 @@ const InviteUserForm = React.forwardRef<HTMLDivElement, Props>(({ createUser }, 
 
   return (
     <StyledWrapper ref={ref}>
-      <Box maxWidth="400px" margin="0 auto">
+      <Box maxWidth="600px" margin="48px auto 0">
         <CSC.ModalTitle margin="32px 0">Invite Team Member to {userData.company}</CSC.ModalTitle>
         <CSC.ModalDescription textAlign="center">
           Securely share the following link with your Team Member.
