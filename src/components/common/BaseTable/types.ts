@@ -12,7 +12,7 @@ export interface BaseTableProps {
   selected: string[];
   loading: boolean;
   rows: BaseTableRow[];
-  onSelectAll: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSelectAll: (e?: React.ChangeEvent<HTMLInputElement>, alwaysSelectAll?: boolean) => void;
   onDeleteAll: () => void;
   onClickNew?: () => void;
   headers: {
