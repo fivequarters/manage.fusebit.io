@@ -143,10 +143,17 @@ const Onboarding: React.FC = () => {
       removePadding={isMobile}
     >
       <StyledWrapper>
-        <StyledTitle>Welcome to Fusebit!</StyledTitle>
+        <StyledTitle>Welcome Aboard!</StyledTitle>
         <StyledDescription>
           {isInvitedToFusebit ? (
-            <>You've been added to {userData.company}. Watch the video below to learn key concepts.</>
+            <>
+              You've been added to {userData.company}.
+              <p>
+                Now that you are signed up to Fusebit, let's get you ready to{' '}
+                <strong>start building a code-first integration in minutes.</strong> Watch the video below to learn key
+                concepts
+              </p>
+            </>
           ) : (
             <>
               Now that you are signed up to Fusebit, let's get you ready to{' '}
