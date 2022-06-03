@@ -158,8 +158,9 @@ const _useAuthContext = () => {
     const decoded = jwt_decode<Auth0Token>(token);
     const fusebitProfile = decoded['https://fusebit.io/profile'];
     const isSignUpEvent = decoded['https://fusebit.io/new-user'] === true;
+    const isSupportingTool = !!decoded['https://fusebit.io/permissions'];
     const issuedByAuth0 = decoded.iss.startsWith(process.env.REACT_APP_AUTH0_DOMAIN as string);
-    return { fusebitProfile, isSignUpEvent, issuedByAuth0 };
+    return { fusebitProfile, isSignUpEvent, issuedByAuth0, isSupportingTool };
   };
 
   const handleAuthError = (error: any) => {
@@ -168,7 +169,7 @@ const _useAuthContext = () => {
 
   const authUser = async (token: string) => {
     try {
-      const { fusebitProfile: profile, isSignUpEvent, issuedByAuth0 } = getDecodedToken(token);
+      const { fusebitProfile: profile, isSignUpEvent, issuedByAuth0, isSupportingTool } = getDecodedToken(token);
       let fusebitProfile = profile;
       const activeAccountStringified = localStorage.getItem('activeAccount');
       const initToken = window.localStorage.getItem('fusebitInitToken');
@@ -189,7 +190,7 @@ const _useAuthContext = () => {
         return;
       }
 
-      if (activeAccountStringified) {
+      if (activeAccountStringified && !isSupportingTool) {
         try {
           const activeAccountParsed: AccountListItem = JSON.parse(activeAccountStringified);
           const isValid = await fusebitAxiosClient.get(
@@ -212,7 +213,7 @@ const _useAuthContext = () => {
             ...defaultSubscription,
           };
         }
-      } else {
+      } else if (!isSupportingTool) {
         const defaultSubscription = await getDefaultSubscriptionData(
           fusebitProfile.accountId || '',
           fusebitAxiosClient

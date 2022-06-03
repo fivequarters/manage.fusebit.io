@@ -16,4 +16,5 @@ export interface Auth0Token {
   sub: string;
   'https://fusebit.io/profile': FusebitProfileEx;
   'https://fusebit.io/new-user'?: boolean;
+  'https://fusebit.io/permissions'?: { action: string; resource: string }[];
 }
