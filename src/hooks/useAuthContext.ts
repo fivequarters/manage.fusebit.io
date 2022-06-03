@@ -109,8 +109,15 @@ const _useAuthContext = () => {
     let company = {} as Company;
     const skipXUserAgent = true;
     const auth0AxiosClient = createAxiosClient(auth0Token, skipXUserAgent);
-    const { data: userInfo } = await auth0AxiosClient.get(`${REACT_APP_AUTH0_DOMAIN}/userinfo`);
-    auth0Profile = userInfo;
+    try {
+      const { data: userInfo } = await auth0AxiosClient.get(`${REACT_APP_AUTH0_DOMAIN}/userinfo`);
+      auth0Profile = userInfo;
+    } catch {
+      auth0Profile = {
+        given_name: '',
+        family_name: '',
+      };
+    }
     const fusebitAxiosClient = createAxiosClient(auth0Token);
     const { data: account } = await fusebitAxiosClient.get(`${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}`);
     company = account;
