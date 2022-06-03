@@ -127,10 +127,6 @@ const Onboarding: React.FC = () => {
     removeIsInvitedToFusebitKey();
   };
 
-  const handleGetStartedClick = () => {
-    setOpen(false);
-  };
-
   return (
     <Modal
       fullScreen={isMobile}
@@ -149,16 +145,16 @@ const Onboarding: React.FC = () => {
             <>
               You've been added to {userData.company}.
               <p>
-                Now that you are signed up to Fusebit, let's get you ready to{' '}
+                Now that you are signed up, let's get you ready to{' '}
                 <strong>start building a code-first integration in minutes.</strong> Watch the video below to learn key
-                concepts
+                concepts.
               </p>
             </>
           ) : (
             <>
-              Now that you are signed up to Fusebit, let's get you ready to{' '}
+              Now that you are signed up, let's get you ready to{' '}
               <strong>start building a code-first integration in minutes.</strong> Watch the video below to learn key
-              concepts
+              concepts.
             </>
           )}
         </StyledDescription>
@@ -169,7 +165,7 @@ const Onboarding: React.FC = () => {
           <StyledCtaText>Let’s get going on building your first integration</StyledCtaText>
           <Button
             disabled={!videoCompleted}
-            onClick={handleGetStartedClick}
+            onClick={() => setOpen(false)}
             size={isMobile ? 'medium' : 'large'}
             color="primary"
             variant="contained"
@@ -179,7 +175,7 @@ const Onboarding: React.FC = () => {
               marginLeft: 'auto',
             }}
           >
-            Get Started
+            Continue
           </Button>
         </StyledCtaWrapper>
       </StyledWrapper>
