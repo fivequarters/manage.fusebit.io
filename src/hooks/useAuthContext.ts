@@ -114,7 +114,7 @@ const _useAuthContext = () => {
       auth0Profile = userInfo;
     } catch {
       auth0Profile = {
-        given_name: 'Firstname',
+        given_name: 'Name',
         family_name: 'LastName',
       };
     }
