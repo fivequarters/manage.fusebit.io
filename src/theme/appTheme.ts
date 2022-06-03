@@ -43,6 +43,14 @@ export const lightTheme: Theme = createMuiTheme({
         maxHeight: '100%',
       },
     },
+    MuiLinearProgress: {
+      buffer: {
+        backgroundColor: '#F83420',
+      },
+      colorPrimary: {
+        backgroundColor: '#ECECEC',
+      },
+    },
   },
   props: {
     MuiCheckbox: {
