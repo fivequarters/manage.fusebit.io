@@ -9,10 +9,6 @@ const StyledLineInstructionWrapper = styled.div<{ disableCursorPointer?: boolean
 
   &:hover {
     cursor: ${(props) => (props.disableCursorPointer ? 'default' : 'pointer')};
-
-    & > div {
-      opacity: 1;
-    }
   }
 
   @media only screen and (max-width: 870px) {
@@ -55,7 +51,6 @@ const StyledLineInstruction = styled.div<{
 `;
 
 const StyledLineInstructionFade = styled.div<{
-  change: boolean;
   onlyMobileVisible?: boolean;
   warning?: boolean;
   disabled?: boolean;
@@ -65,7 +60,7 @@ const StyledLineInstructionFade = styled.div<{
   right: 0;
   top: 0;
   height: 50px;
-  width: ${(props) => (props.change && !props.disabled ? '300px' : '60px')};
+  width: ${(props) => (!props.disabled ? '300px' : '60px')};
   background-image: linear-gradient(to left, #eff5ff 10%, rgba(255, 255, 255, 0) 100%);
   border-radius: 4px;
   z-index: 1;
@@ -106,12 +101,7 @@ const StyledLineInstructionCopy = styled.div<{ disabled?: boolean }>`
   font-weight: 500;
   color: var(--primary-color);
   z-index: 2;
-  opacity: 0;
   transition: all 0.25s linear;
-
-  @media only screen and (max-width: 1250px) {
-    opacity: 1;
-  }
 `;
 
 const StyledCopySuccess = styled.p<{ copy: boolean; bottom?: string; top?: string; left?: string; right?: string }>`
@@ -155,7 +145,6 @@ const CopyLine: React.FC<Props> = ({
   disableCopy,
   disableMargin,
 }) => {
-  const [fadeChange, setFadeChange] = React.useState(false);
   const { handleCopy, copiedLine } = useCopy();
 
   const handleClick = () => {
@@ -169,8 +158,6 @@ const CopyLine: React.FC<Props> = ({
 
   return (
     <StyledLineInstructionWrapper
-      onMouseLeave={() => setFadeChange(false)}
-      onMouseEnter={() => setFadeChange(true)}
       onClick={handleClick}
       disableCursorPointer={disableCopy}
       disableMargin={disableMargin}
@@ -178,7 +165,7 @@ const CopyLine: React.FC<Props> = ({
       <StyledLineInstructionCopy disabled={disableCopy}>
         <img src={copyIcon} alt="copy" height="16" width="16" />
       </StyledLineInstructionCopy>
-      <StyledLineInstructionFade disabled={disableCopy} warning={warning} change={fadeChange} />
+      <StyledLineInstructionFade disabled={disableCopy} warning={warning} />
       <StyledLineInstruction warning={warning} horizontalScrollbar={horizontalScrollbar}>
         {children}
       </StyledLineInstruction>
