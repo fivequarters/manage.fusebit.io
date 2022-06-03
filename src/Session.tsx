@@ -10,6 +10,8 @@ function Session({ session }: Props) {
 
     if (!error) {
       localStorage.setItem('session', session);
+    } else {
+      localStorage.setItem('sessionError', error);
     }
 
     window.close();
