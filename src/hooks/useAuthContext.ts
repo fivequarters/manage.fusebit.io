@@ -109,18 +109,26 @@ const _useAuthContext = () => {
     let company = {} as Company;
     const skipXUserAgent = true;
     const auth0AxiosClient = createAxiosClient(auth0Token, skipXUserAgent);
+    const fusebitAxiosClient = createAxiosClient(auth0Token);
     try {
       const { data: userInfo } = await auth0AxiosClient.get(`${REACT_APP_AUTH0_DOMAIN}/userinfo`);
       auth0Profile = userInfo;
+      const { data: account } = await fusebitAxiosClient.get(`${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}`);
+      company = account;
     } catch {
+      const decoded = jwt_decode<Auth0Token>(auth0Token);
+      const fusebitProfile = decoded['https://fusebit.io/profile'];
       auth0Profile = {
         given_name: 'Name',
         family_name: 'LastName',
+        sub: decoded.sub,
+      };
+      company = {
+        displayName: fusebitProfile.email,
+        id: fusebitProfile.accountId,
+        primaryEmail: fusebitProfile.email,
       };
     }
-    const fusebitAxiosClient = createAxiosClient(auth0Token);
-    const { data: account } = await fusebitAxiosClient.get(`${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}`);
-    company = account;
 
     return {
       auth0Profile,
