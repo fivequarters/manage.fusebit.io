@@ -50,6 +50,13 @@ const StyledUserDropdownInfoEmail = styled.div`
   line-height: 16px;
   color: var(--black);
   margin-bottom: auto;
+  max-width: 172px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  @media only screen and (max-width: 880px) {
+    max-width: 226px;
+  }
 `;
 
 const StyledUserDropdownStatus = styled.span`
