@@ -9,6 +9,9 @@ interface Props {
   onBlur?: () => void;
 }
 
+const WEEK_IN_MS = 7 * 24 * 60 * 60 * 1000;
+const DEFAULT_FROM = Date.now() - WEEK_IN_MS;
+
 const useGrafanaLogs = ({ iframeId, defaultHeight, integrationId, from, onBlur }: Props) => {
   const { userData } = useAuthContext();
 
@@ -44,8 +47,20 @@ const useGrafanaLogs = ({ iframeId, defaultHeight, integrationId, from, onBlur }
   }, [iframeId, onBlur, defaultHeight]);
 
   return {
-    url: `${process.env.REACT_APP_FUSEBIT_DEPLOYMENT}/v2/grafana/bootstrap/d-solo/logging/basic?panelId=2?kiosk&theme=fusebit&disablePanelTitle=true&refresh=1s&fusebitAuthorization=${userData.token}&fusebitAccountId=${userData.accountId}&var-accountId=${userData.accountId}&var-subscriptionId=${userData.subscriptionId}&var-boundaryId=integration&var-functionId=${integrationId}&from=${from}`,
-    exploreUrl: `${process.env.REACT_APP_FUSEBIT_DEPLOYMENT}/v2/grafana/d/logging/basic?theme=fusebit&fusebitAuthorization=${userData.token}&fusebitAccountId=${userData.accountId}&var-accountId=${userData.accountId}&var-subscriptionId=${userData.subscriptionId}&var-boundaryId=integration&var-functionId=${integrationId}`,
+    url: `${
+      process.env.REACT_APP_FUSEBIT_DEPLOYMENT
+    }/v2/grafana/bootstrap/d-solo/logging/basic?panelId=2?kiosk&theme=fusebit&disablePanelTitle=true&refresh=1s&fusebitAuthorization=${
+      userData.token
+    }&fusebitAccountId=${userData.accountId}&var-accountId=${userData.accountId}&var-subscriptionId=${
+      userData.subscriptionId
+    }&var-boundaryId=integration&var-functionId=${integrationId}&from=${from || DEFAULT_FROM}`,
+    exploreUrl: `${
+      process.env.REACT_APP_FUSEBIT_DEPLOYMENT
+    }/v2/grafana/d/logging/basic?theme=fusebit&fusebitAuthorization=${userData.token}&fusebitAccountId=${
+      userData.accountId
+    }&var-accountId=${userData.accountId}&var-subscriptionId=${
+      userData.subscriptionId
+    }&var-boundaryId=integration&var-functionId=${integrationId}&from=${from || DEFAULT_FROM}`,
   };
 };
 

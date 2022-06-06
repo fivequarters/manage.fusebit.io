@@ -10,8 +10,6 @@ const StyledLogs = styled.iframe`
 
 const DEFAULT_IFRAME_ID = 'logging';
 const DEFAULT_HEIGHT = 350;
-const WEEK_IN_MS = 7 * 24 * 60 * 60 * 1000;
-const DEFAULT_FROM = Date.now() - WEEK_IN_MS;
 
 interface Props {
   iframeId?: string;
@@ -27,7 +25,7 @@ const GrafanaLogs = ({ from, height, iframeId, integrationId }: Props) => {
     iframeId: ID,
     integrationId: integrationId || DEFAULT_INTEGRATION_ID,
     defaultHeight: height || DEFAULT_HEIGHT,
-    from: from || DEFAULT_FROM,
+    from,
   });
 
   return <StyledLogs id={ID} title={ID} src={url} height="100%" width="100%" frameBorder="0" />;
