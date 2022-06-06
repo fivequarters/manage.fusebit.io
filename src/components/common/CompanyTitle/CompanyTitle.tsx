@@ -8,7 +8,7 @@ const StyledUserDropdownCompany = styled.h5`
   font-weight: 600;
   color: var(--primary-color);
   text-transform: uppercase;
-  max-width: 238px;
+  max-width: 290px;
   margin: 0;
 `;
 

@@ -6,6 +6,8 @@ import styled from 'styled-components';
 import { useQuery } from '@hooks/useQuery';
 import Video from '@components/common/Video';
 import { trackEventMemoized } from '@utils/analytics';
+import { useAuthContext } from '@hooks/useAuthContext';
+import useIsInvitedToFusebit from '@hooks/useIsInvitedToFusebit';
 
 const StyledWrapper = styled.div`
   @media only screen and (max-width: 550px) {
@@ -79,16 +81,18 @@ const StyledVideoWrapper = styled.div`
   }
 `;
 
-enum UTM_CONTENT {
+export enum UTM_CONTENT {
   NEW_VID = 'new-vid',
 }
 
 const Onboarding: React.FC = () => {
+  const { userData } = useAuthContext();
   const [open, setOpen] = useState(false);
   const [videoCompleted, setVideoCompleted] = useState(false);
   const query = useQuery();
   const objectLocation = 'Onboarding Video';
   const isMobile = useMediaQuery('(max-width: 550px)');
+  const { isInvitedToFusebit, removeIsInvitedToFusebitKey } = useIsInvitedToFusebit();
 
   useEffect(() => {
     const utmContent = query.get('utm_content');
@@ -120,6 +124,7 @@ const Onboarding: React.FC = () => {
     trackEventMemoized('Product Video Completed', objectLocation);
     setVideoCompleted(true);
     localStorage.setItem(UTM_CONTENT.NEW_VID, 'completed');
+    removeIsInvitedToFusebitKey();
   };
 
   return (
@@ -134,11 +139,24 @@ const Onboarding: React.FC = () => {
       removePadding={isMobile}
     >
       <StyledWrapper>
-        <StyledTitle>Welcome to Fusebit!</StyledTitle>
+        <StyledTitle>Welcome Aboard!</StyledTitle>
         <StyledDescription>
-          Now that you are signed up, let's get you ready to{' '}
-          <strong>start building a code-first integration in minutes.</strong> Watch the video below to learn key
-          concepts.
+          {isInvitedToFusebit ? (
+            <>
+              You've been added to {userData.company}.
+              <p>
+                Now that you are signed up, let's get you ready to{' '}
+                <strong>start building a code-first integration in minutes.</strong> Watch the video below to learn key
+                concepts.
+              </p>
+            </>
+          ) : (
+            <>
+              Now that you are signed up, let's get you ready to{' '}
+              <strong>start building a code-first integration in minutes.</strong> Watch the video below to learn key
+              concepts.
+            </>
+          )}
         </StyledDescription>
         <StyledVideoWrapper>
           <Video enableFullscreenOnPlay={isMobile} onPlay={onPlay} onEnded={onEnded} src={video} />

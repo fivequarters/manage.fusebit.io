@@ -4,7 +4,6 @@ import { Box } from '@material-ui/core';
 import styled from 'styled-components';
 import check from '@assets/check.svg';
 import CompanyTitle from '@components/common/CompanyTitle';
-import { replaceDash } from '@utils/utils';
 import { useAccountGetAllAccounts } from '@hooks/api/v1/account/account/useGetAllAccounts';
 import * as CSC from '@components/globalStyle';
 
@@ -74,7 +73,9 @@ const MainUserAccounts = ({ onAccountSwitch, isMobile }: Props) => {
           <Box key={acc.userId} display="flex" flexDirection="column">
             <div>
               <CompanyTitle>
-                <Box ml={!isMobile && '8px'}>{acc.company}</Box>
+                <Box ml={!isMobile && '8px'} style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  {acc.company}
+                </Box>
               </CompanyTitle>
               {acc.subscriptions.map((sub) => {
                 const isActive = sub.id === userData.subscriptionId;
@@ -91,7 +92,7 @@ const MainUserAccounts = ({ onAccountSwitch, isMobile }: Props) => {
                     key={sub.id}
                   >
                     <StyledSubscription>
-                      <span>{sub.displayName}</span> - {replaceDash(sub.id)}
+                      <span>{sub.displayName}</span> ({sub.id})
                     </StyledSubscription>
                     {isActive && <StyledCheck alt="checked" src={check} height="16" width="16" />}
                   </StyledSubscriptionWrapper>

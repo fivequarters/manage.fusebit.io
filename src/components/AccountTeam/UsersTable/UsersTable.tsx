@@ -45,7 +45,7 @@ const UsersTable = () => {
   const handleClickRow = (row: BaseTableRow) => history.push(getRedirectLink(`/authentication/${row.id}/overview`));
 
   const handleInviteUser = () => {
-    trackEventMemoized('Invite User Button Clicked', 'Users');
+    trackEventMemoized('Invite Team Member Button Clicked', 'Team');
     toggleInviteModal();
   };
 
@@ -53,7 +53,10 @@ const UsersTable = () => {
     <>
       <InviteUserModal onClose={toggleInviteModal} open={inviteModalOpen} />
       <DeleteUserModal
-        onConfirm={() => handleRowDelete('Account')}
+        onConfirm={() => {
+          handleRowDelete('Account');
+          trackEventMemoized('Remove Member Clicked', 'Team');
+        }}
         setOpen={setDeleteModal}
         open={deleteModalOpen}
         selected={selected}
@@ -73,7 +76,7 @@ const UsersTable = () => {
           { id: 'userId', value: 'User-ID' },
         ]}
         loading={isLoading}
-        newButtonText="Invite user"
+        newButtonText="Invite Team Member"
         onClickNew={handleInviteUser}
         onDeleteAll={toggleDeleteModal}
         onSelectAll={handleSelectAllCheck}

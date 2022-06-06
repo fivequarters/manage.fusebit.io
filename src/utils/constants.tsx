@@ -15,6 +15,8 @@ export const PRODUCTION_HOST = 'manage.fusebit.io';
 
 export const INTEGRATION_PROCESSING_SUFFIX = '-pending-processing';
 
+export const INVITED_TO_FUSEBIT_KEY = 'invitedToFusebitAccount';
+
 const StyledBeta = styled.div`
   font-size: 9px;
   line-height: 14px;
