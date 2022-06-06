@@ -44,6 +44,7 @@ import useCreateNewFile from './useCreateNewFile';
 import useEditorAnalytics from './useEditorAnalytics';
 import useCustomSidebar from './useCustomSidebar';
 import useBeforeUnload from './useBeforeUnload';
+import useEditorParams from './useEditorParams';
 import { EditorEvents } from '~/enums/editor';
 
 const StyledEditorContainer = styled.div<{ isGrafanaEnabled?: boolean; isResizing: boolean }>`
@@ -302,12 +303,6 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   });
   const [dirtyState, setDirtyState] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
-  const [enableGrafanaLogs] = useState<boolean>(() => {
-    const result =
-      window.location.search.includes('enableGrafanaLogs') || localStorage.getItem('enableGrafanaLogs') === 'true';
-    localStorage.setItem('enableGrafanaLogs', `${!!result}`);
-    return result;
-  });
   const { invalidateIntegration } = useInvalidateIntegration();
   const { formatSnippet, getProviderVersion } = useSnippets();
   const { createError } = useError();
@@ -409,6 +404,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   useEditorAnalytics({ isEditorRunning });
   useCustomSidebar({ isEditorRunning, onSnippetsModalOpen, sampleAppUrl });
   useBeforeUnload({ isEditorRunning });
+  const { enableGrafanaLogs } = useEditorParams();
 
   const handleSaveAndRun = async () => {
     gtag('event', 'click', {
