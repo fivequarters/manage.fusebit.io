@@ -71,7 +71,7 @@ const ConnectorsTable = () => {
         page={page}
         rowsPerPage={rowsPerPage}
         entityName="connector"
-        entityPluralName="connectors"
+        entityNamePlural="connectors"
         headers={[
           { id: 'name', value: 'Name' },
           { id: 'type', value: 'Type' },

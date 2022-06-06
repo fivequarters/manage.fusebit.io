@@ -99,7 +99,7 @@ const InstallsTable = () => {
       />
       <BaseTable
         entityName="install"
-        entityPluralName="installs"
+        entityNamePlural="installs"
         emptyTableText="Your installs list is empty"
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}

@@ -95,7 +95,7 @@ const IdentitiesTable = () => {
       />
       <BaseTable
         entityName="identity"
-        entityPluralName="identities"
+        entityNamePlural="identities"
         emptyTableText="Your identities list is empty"
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}

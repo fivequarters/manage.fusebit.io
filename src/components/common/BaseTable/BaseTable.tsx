@@ -66,7 +66,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
   onClickNew,
   newButtonText,
   entityName,
-  entityPluralName,
+  entityNamePlural,
   onSelectRow,
   isSelected,
   rowsPerPage,
@@ -96,17 +96,17 @@ const BaseTable: React.FC<BaseTableProps> = ({
 
   const isAllSelected = isAllChecked || (rows.length > 0 && selected.length === rows.length);
 
-  const selectedEntityName = selected.length > 1 ? entityPluralName : entityName;
+  const pluralOrSingularEntityName = selected.length > 1 ? entityNamePlural : entityName;
 
   const deleteText = useMemo(() => {
-    const textSuffix = `${selectedEntityName}${selected.length > 1 ? ' are selected' : ' is selected'}`;
+    const textSuffix = `${pluralOrSingularEntityName}${selected.length > 1 ? ' are selected' : ' is selected'}`;
 
     if (isAllSelected) {
       return `All ${selected.length} ${textSuffix}`;
     }
 
     return `${selected.length} ${textSuffix}`;
-  }, [selected, isAllSelected, selectedEntityName]);
+  }, [selected, isAllSelected, pluralOrSingularEntityName]);
 
   const renderContent = () => {
     const hasDataToShow = rows.length > 0;
@@ -187,7 +187,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
               {deleteText}
               {!isMobile && !isAllSelected && (
                 <strong onClick={() => onSelectAll(undefined, true)}>
-                  Select all {rows.filter((row) => !row.hideCheckbox).length} {entityPluralName}
+                  Select all {rows.filter((row) => !row.hideCheckbox).length} {entityNamePlural}
                 </strong>
               )}
             </StyledDeleteText>
