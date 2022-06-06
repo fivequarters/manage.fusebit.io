@@ -163,8 +163,8 @@ const _useAuthContext = () => {
     return { fusebitProfile, isSignUpEvent, issuedByAuth0, isSupportingTool };
   };
 
-  const handleAuthError = (error: any) => {
-    history.push(`/logged-out?error=${error.message || error}`);
+  const handleAuthError = (error: any, invalidInviteToken?: boolean) => {
+    history.push(`/logged-out?error=${error.message || error}&invalidInviteToken=${!!invalidInviteToken}`);
   };
 
   const authUser = async (token: string) => {
@@ -185,7 +185,7 @@ const _useAuthContext = () => {
             history.push('/');
           })
           .catch((err) => {
-            handleAuthError(err);
+            handleAuthError(err, true);
           });
         return;
       }
