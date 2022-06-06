@@ -66,6 +66,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
   onClickNew,
   newButtonText,
   entityName,
+  entityNamePlural,
   onSelectRow,
   isSelected,
   rowsPerPage,
@@ -95,15 +96,17 @@ const BaseTable: React.FC<BaseTableProps> = ({
 
   const isAllSelected = isAllChecked || (rows.length > 0 && selected.length === rows.length);
 
+  const pluralOrSingularEntityName = selected.length > 1 ? entityNamePlural : entityName;
+
   const deleteText = useMemo(() => {
-    const textSuffix = `${entityName}${selected.length > 1 ? 's are selected' : ' is selected'}`;
+    const textSuffix = `${pluralOrSingularEntityName}${selected.length > 1 ? ' are selected' : ' is selected'}`;
 
     if (isAllSelected) {
       return `All ${selected.length} ${textSuffix}`;
     }
 
     return `${selected.length} ${textSuffix}`;
-  }, [selected, isAllSelected, entityName]);
+  }, [selected, isAllSelected, pluralOrSingularEntityName]);
 
   const renderContent = () => {
     const hasDataToShow = rows.length > 0;
@@ -170,34 +173,34 @@ const BaseTable: React.FC<BaseTableProps> = ({
 
   return (
     <StyledWrapper>
-      {onClickNew && (
-        <StyledButtonsContainer
-          deleting={isSelecting}
-          display="flex"
-          mt="56px"
-          mb="36px"
-          justifyContent="flex-end"
-          {...actionsContainerProps}
-        >
-          {isSelecting ? (
-            <>
-              <StyledDeleteText>
-                {deleteText}
-                {!isMobile && !isAllSelected && (
-                  <strong onClick={() => onSelectAll(undefined, true)}>
-                    Select all {rows.filter((row) => !row.hideCheckbox).length} {entityName}s
-                  </strong>
-                )}
-              </StyledDeleteText>
-              <StyledDeleteIconWrapper>
-                <Tooltip title="Delete">
-                  <IconButton onClick={onDeleteAll}>
-                    <DeleteIcon style={{ color: '#333333' }} />
-                  </IconButton>
-                </Tooltip>
-              </StyledDeleteIconWrapper>
-            </>
-          ) : (
+      <StyledButtonsContainer
+        deleting={isSelecting}
+        display="flex"
+        mt="56px"
+        mb="36px"
+        justifyContent="flex-end"
+        {...actionsContainerProps}
+      >
+        {isSelecting ? (
+          <>
+            <StyledDeleteText>
+              {deleteText}
+              {!isMobile && !isAllSelected && (
+                <strong onClick={() => onSelectAll(undefined, true)}>
+                  Select all {rows.filter((row) => !row.hideCheckbox).length} {entityNamePlural}
+                </strong>
+              )}
+            </StyledDeleteText>
+            <StyledDeleteIconWrapper>
+              <Tooltip title="Delete">
+                <IconButton onClick={onDeleteAll}>
+                  <DeleteIcon style={{ color: '#333333' }} />
+                </IconButton>
+              </Tooltip>
+            </StyledDeleteIconWrapper>
+          </>
+        ) : (
+          onClickNew && (
             <>
               {(headerButtons || [])?.map((button) => (
                 <Button
@@ -215,9 +218,10 @@ const BaseTable: React.FC<BaseTableProps> = ({
                 {newButtonText || `New ${entityName}`}
               </Button>
             </>
-          )}
-        </StyledButtonsContainer>
-      )}
+          )
+        )}
+      </StyledButtonsContainer>
+
       {loading ? (
         <CSC.LoaderContainer>
           <CSC.Spinner />

@@ -98,6 +98,8 @@ const InstallsTable = () => {
         } in their account.`}
       />
       <BaseTable
+        entityName="install"
+        entityNamePlural="installs"
         emptyTableText="Your installs list is empty"
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}

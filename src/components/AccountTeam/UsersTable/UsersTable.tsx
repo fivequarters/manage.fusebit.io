@@ -66,6 +66,7 @@ const UsersTable = () => {
         page={page}
         rowsPerPage={rowsPerPage}
         entityName="user"
+        entityNamePlural="users"
         headers={[
           { id: 'name', value: 'Name' },
           { id: 'email', value: 'Email' },
