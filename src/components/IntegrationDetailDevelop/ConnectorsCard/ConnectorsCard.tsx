@@ -65,17 +65,23 @@ const ConnectorsCard: React.FC<Props> = ({ className, processing }) => {
   const integrationData = useGetIntegrationFromCache();
 
   const installedConnectors = useMemo(() => {
-    return (integrationData?.data.data.components || []).map((integrationConnector) => {
-      const existingConnector = connectors?.data.items.find((c) => c.id === integrationConnector.entityId);
+    return (integrationData?.data.data.components || [])
+      .map((component) => {
+        const matchingConnector = connectors?.data.items.find((c) => c.id === component.entityId);
+        const connectorWithComponentData = {
+          ...component,
+          ...matchingConnector,
+        };
 
-      return (
-        existingConnector || {
-          ...integrationConnector,
-          missing: true,
-          id: integrationConnector.entityId,
-        }
-      );
-    });
+        return (
+          connectorWithComponentData || {
+            ...component,
+            missing: true,
+            id: component.entityId,
+          }
+        );
+      })
+      .filter((c) => c.entityType === 'connector');
   }, [connectors, integrationData]);
 
   const isLinkExistingDisabled = useMemo(

@@ -109,11 +109,26 @@ const _useAuthContext = () => {
     let company = {} as Company;
     const skipXUserAgent = true;
     const auth0AxiosClient = createAxiosClient(auth0Token, skipXUserAgent);
-    const { data: userInfo } = await auth0AxiosClient.get(`${REACT_APP_AUTH0_DOMAIN}/userinfo`);
-    auth0Profile = userInfo;
     const fusebitAxiosClient = createAxiosClient(auth0Token);
-    const { data: account } = await fusebitAxiosClient.get(`${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}`);
-    company = account;
+    try {
+      const { data: userInfo } = await auth0AxiosClient.get(`${REACT_APP_AUTH0_DOMAIN}/userinfo`);
+      auth0Profile = userInfo;
+      const { data: account } = await fusebitAxiosClient.get(`${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}`);
+      company = account;
+    } catch {
+      const decoded = jwt_decode<Auth0Token>(auth0Token);
+      const fusebitProfile = decoded['https://fusebit.io/profile'];
+      auth0Profile = {
+        given_name: 'Name',
+        family_name: 'LastName',
+        sub: decoded.sub,
+      };
+      company = {
+        displayName: fusebitProfile.email,
+        id: fusebitProfile.accountId,
+        primaryEmail: fusebitProfile.email,
+      };
+    }
 
     return {
       auth0Profile,
@@ -143,17 +158,18 @@ const _useAuthContext = () => {
     const decoded = jwt_decode<Auth0Token>(token);
     const fusebitProfile = decoded['https://fusebit.io/profile'];
     const isSignUpEvent = decoded['https://fusebit.io/new-user'] === true;
+    const isSupportingTool = !!decoded['https://fusebit.io/permissions'];
     const issuedByAuth0 = decoded.iss.startsWith(process.env.REACT_APP_AUTH0_DOMAIN as string);
-    return { fusebitProfile, isSignUpEvent, issuedByAuth0 };
+    return { fusebitProfile, isSignUpEvent, issuedByAuth0, isSupportingTool };
   };
 
-  const handleAuthError = (error: any) => {
-    history.push(`/logged-out?error=${error.message || error}`);
+  const handleAuthError = (error: any, invalidInviteToken?: boolean) => {
+    history.push(`/logged-out?error=${error.message || error}&invalidInviteToken=${!!invalidInviteToken}`);
   };
 
   const authUser = async (token: string) => {
     try {
-      const { fusebitProfile: profile, isSignUpEvent, issuedByAuth0 } = getDecodedToken(token);
+      const { fusebitProfile: profile, isSignUpEvent, issuedByAuth0, isSupportingTool } = getDecodedToken(token);
       let fusebitProfile = profile;
       const activeAccountStringified = localStorage.getItem('activeAccount');
       const initToken = window.localStorage.getItem('fusebitInitToken');
@@ -170,12 +186,12 @@ const _useAuthContext = () => {
             history.push('/');
           })
           .catch((err) => {
-            handleAuthError(err);
+            handleAuthError(err, true);
           });
         return;
       }
 
-      if (activeAccountStringified) {
+      if (activeAccountStringified && !isSupportingTool) {
         try {
           const activeAccountParsed: AccountListItem = JSON.parse(activeAccountStringified);
           const isValid = await fusebitAxiosClient.get(
@@ -198,7 +214,7 @@ const _useAuthContext = () => {
             ...defaultSubscription,
           };
         }
-      } else {
+      } else if (!isSupportingTool) {
         const defaultSubscription = await getDefaultSubscriptionData(
           fusebitProfile.accountId || '',
           fusebitAxiosClient

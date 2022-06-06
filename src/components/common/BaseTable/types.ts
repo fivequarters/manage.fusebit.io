@@ -12,7 +12,7 @@ export interface BaseTableProps {
   selected: string[];
   loading: boolean;
   rows: BaseTableRow[];
-  onSelectAll: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSelectAll: (e?: React.ChangeEvent<HTMLInputElement>, alwaysSelectAll?: boolean) => void;
   onDeleteAll: () => void;
   onClickNew?: () => void;
   headers: {
@@ -20,7 +20,8 @@ export interface BaseTableProps {
     value: string;
   }[];
   newButtonText?: string;
-  entityName?: string;
+  entityName: string;
+  entityNamePlural: string;
   onSelectRow: (e: any, id: string) => void;
   isSelected: (id: string) => boolean;
   rowsPerPage: any;
