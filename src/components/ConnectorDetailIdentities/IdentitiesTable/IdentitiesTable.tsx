@@ -94,6 +94,8 @@ const IdentitiesTable = () => {
         description="Your tenants will have to re-authenticate themselves in their account"
       />
       <BaseTable
+        entityName="identity"
+        entityPluralName="identities"
         emptyTableText="Your identities list is empty"
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}

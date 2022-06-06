@@ -20,7 +20,8 @@ export interface BaseTableProps {
     value: string;
   }[];
   newButtonText?: string;
-  entityName?: string;
+  entityName: string;
+  entityPluralName: string;
   onSelectRow: (e: any, id: string) => void;
   isSelected: (id: string) => boolean;
   rowsPerPage: any;
