@@ -8,8 +8,14 @@ const StyledUserDropdownCompany = styled.h5`
   font-weight: 600;
   color: var(--primary-color);
   text-transform: uppercase;
-  max-width: 290px;
+  max-width: 226px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   margin: 0;
+
+  @media only screen and (max-width: 880px) {
+    width: 290px;
+  }
 `;
 
 interface Props {
