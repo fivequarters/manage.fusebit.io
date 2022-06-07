@@ -19,14 +19,7 @@ const Logging = () => {
   };
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      pb="60px"
-      position="relative"
-    >
+    <Box display="flex" flexDirection="column" minHeight="calc(100vh - 260px)" pb="60px" position="relative">
       <Button
         onClick={handleExplore}
         variant="outlined"
