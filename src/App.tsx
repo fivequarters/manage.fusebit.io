@@ -27,6 +27,7 @@ const App = () => {
             backgroundColor: 'white',
             color: '#F83420',
             fontSize: '13px',
+            zIndex: '9999',
           }}
           expires={150}
         >
