@@ -403,7 +403,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   useCreateNewFile({ isEditorRunning });
   useEditorAnalytics({ isEditorRunning });
   useCustomSidebar({ isEditorRunning, onSnippetsModalOpen, sampleAppUrl });
-  useBeforeUnload({ isEditorRunning });
+  useBeforeUnload({ isEditorRunning, isSaving });
   const { enableGrafanaLogs } = useEditorParams();
 
   const handleSaveAndRun = async () => {
@@ -434,10 +434,12 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     trackEventUnmemoized('Save Button Clicked', 'Web Editor', {
       engagementType: 'Button Save',
     });
-    await context?._server.saveFunction(context);
-    await invalidateIntegration();
-    setDirtyState(false);
-    setNeedsInitialization(true);
+    const status: SaveStatus = await context?._server.saveFunction(context);
+    if (status.status === 'completed') {
+      await invalidateIntegration();
+      setDirtyState(false);
+      setNeedsInitialization(true);
+    }
   };
 
   const handleKeyUp = () => {
