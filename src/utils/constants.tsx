@@ -17,6 +17,8 @@ export const INTEGRATION_PROCESSING_SUFFIX = '-pending-processing';
 
 export const INVITED_TO_FUSEBIT_KEY = 'invitedToFusebitAccount';
 
+export const IS_EDITOR_SAVING_KEY = 'isEditorSaving';
+
 const StyledBeta = styled.div`
   font-size: 9px;
   line-height: 14px;

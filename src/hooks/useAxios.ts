@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { X_USER_AGENT } from '@utils/constants';
+import { IS_EDITOR_SAVING_KEY, X_USER_AGENT } from '@utils/constants';
 import { signIn, useAuthContext } from './useAuthContext';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
@@ -23,9 +23,12 @@ axios.interceptors.response.use(
   (response) => response,
   (error) => {
     const statusCode = Number(error?.response?.status);
-    if (statusCode === 403) {
-      const silent = true;
-      signIn(silent);
+    if (statusCode === 403 && !window.editor?.dirtyState) {
+      const isEditorSaving = localStorage.getItem(IS_EDITOR_SAVING_KEY) === 'true';
+      if (!isEditorSaving) {
+        const silent = true;
+        signIn(silent);
+      }
     } else if (statusCode === 404) {
       // TODO add "not found message/error"
       window.location.href = '/';

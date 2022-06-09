@@ -1,27 +1,41 @@
-import { useEffect } from 'react';
+import { IS_EDITOR_SAVING_KEY } from '@utils/constants';
+import { useCallback, useEffect, useRef } from 'react';
 
 type Props = {
   isEditorRunning: boolean;
+  isSaving: boolean;
 };
 
-const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-  if (window.editor?.dirtyState) {
-    // Cancel the event
-    e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
-    // Chrome requires returnValue to be set
+const useBeforeUnload = ({ isEditorRunning, isSaving }: Props) => {
+  const cancelPrompt = useRef(false);
 
-    e.returnValue = '';
-  }
-};
+  const handleBeforeUnload = useCallback(
+    (e: BeforeUnloadEvent) => {
+      if ((window.editor?.dirtyState && !cancelPrompt.current) || isSaving) {
+        // Cancel the event
+        e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
+        // Chrome requires returnValue to be set
 
-const useBeforeUnload = ({ isEditorRunning }: Props) => {
+        e.returnValue = '';
+      }
+    },
+    [isSaving]
+  );
+
   useEffect(() => {
     if (isEditorRunning) {
       window.addEventListener('beforeunload', handleBeforeUnload);
     }
 
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, [isEditorRunning]);
+  }, [isEditorRunning, handleBeforeUnload]);
+
+  useEffect(() => {
+    cancelPrompt.current = isSaving;
+    localStorage.setItem(IS_EDITOR_SAVING_KEY, `${isSaving}`);
+
+    return () => localStorage.removeItem(IS_EDITOR_SAVING_KEY);
+  }, [isSaving]);
 };
 
 export default useBeforeUnload;
