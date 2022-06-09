@@ -20,6 +20,9 @@ export const lightTheme: Theme = createMuiTheme({
       },
     },
     MuiDrawer: {
+      root: {
+        zIndex: 10,
+      },
       paperAnchorBottom: {
         borderRadius: '8px 8px 0 0',
       },
