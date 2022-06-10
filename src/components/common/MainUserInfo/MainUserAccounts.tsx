@@ -4,7 +4,6 @@ import { Box } from '@material-ui/core';
 import styled from 'styled-components';
 import check from '@assets/check.svg';
 import CompanyTitle from '@components/common/CompanyTitle';
-import { useAccountGetAllAccounts } from '@hooks/api/v1/account/account/useGetAllAccounts';
 import * as CSC from '@components/globalStyle';
 
 const StyledSubscriptionWrapper = styled.div<{ active?: boolean }>`
@@ -56,13 +55,14 @@ const StyledCheck = styled.img`
 `;
 
 interface Props {
+  accounts: AccountListItem[] | undefined;
+  isLoading: boolean;
   onAccountSwitch: (acc: AccountListItem) => void;
   isMobile?: boolean;
 }
 
-const MainUserAccounts = ({ onAccountSwitch, isMobile }: Props) => {
+const MainUserAccounts = ({ accounts, isLoading, onAccountSwitch, isMobile }: Props) => {
   const { userData } = useAuthContext();
-  const { data: accounts, isLoading } = useAccountGetAllAccounts();
 
   return (
     <Box mb={isMobile && '24px'}>

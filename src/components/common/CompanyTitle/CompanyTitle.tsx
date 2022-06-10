@@ -10,6 +10,7 @@ const StyledUserDropdownCompany = styled.h5`
   text-transform: uppercase;
   max-width: 226px;
   overflow: hidden;
+  white-space: nowrap;
   text-overflow: ellipsis;
   margin: 0;
 
