@@ -18,7 +18,9 @@ export interface BaseTableProps {
   headers: {
     id: string;
     value: string;
-    sorted?: boolean;
+    sort?: {
+      sortFunc: Function;
+    };
   }[];
   newButtonText?: string;
   entityName?: string;
@@ -41,4 +43,8 @@ export interface BaseTableProps {
   }[];
   hideCheckAll?: boolean;
   actionsContainerProps?: BoxProps;
+  order?: string;
+  orderBy?: string;
+  setOrder?: any;
+  setOrderBy?: any;
 }

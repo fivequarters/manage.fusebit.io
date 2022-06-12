@@ -3,7 +3,6 @@ import * as CSC from '@components/globalStyle';
 import { useAuthContext } from '@hooks/useAuthContext';
 import { Connector } from '@interfaces/connector';
 import { useAccountConnectorsGetOne } from '@hooks/api/v2/account/connector/useGetOne';
-import { Chip } from '@material-ui/core';
 
 interface Props {
   id: string;
@@ -23,10 +22,10 @@ const GetCredentialTypes: React.FC<Props> = ({ id }) => {
   }
 
   if ((config.data.data.data.configuration as any).mode.useProduction) {
-    return <Chip label="True" variant="outlined" />;
+    return <>Production</>;
   }
 
-  return <Chip label="False" />;
+  return <>Demo</>;
 };
 
 export default GetCredentialTypes;

@@ -3,6 +3,7 @@ import { EntityComponent } from '@interfaces/feed';
 import { useGetConnectorsFeed } from '@hooks/useGetConnectorsFeed';
 import { urlOrSvgToImage } from '@utils/utils';
 import { InnerConnector } from '@interfaces/integration';
+import { Avatar, Chip } from '@material-ui/core';
 
 interface Props {
   components: InnerConnector[];
@@ -16,17 +17,22 @@ const GetIntegrationIcons: React.FC<Props> = ({ components }) => {
   return (
     <>
       {applicableComponents
-        .slice(0, 3)
         .map((item) => {
           return connectorFeed.data?.filter(
             (conn) => (conn.configuration.components as EntityComponent[])[0].provider === item
           )[0].smallIcon as string;
         })
-        .map((item) => {
-          return <img src={urlOrSvgToImage(item)} key="" alt="" width={30} />;
+        .map((item, idx) => {
+          return (
+            <Chip
+              avatar={
+                <Avatar style={{ backgroundColor: 'white', border: '3px solid white' }} src={urlOrSvgToImage(item)} />
+              }
+              label={applicableComponents[idx]}
+              key={applicableComponents[idx]}
+            />
+          );
         })}
-
-      {applicableComponents.length > 0 ? <>...</> : <></>}
     </>
   );
 };

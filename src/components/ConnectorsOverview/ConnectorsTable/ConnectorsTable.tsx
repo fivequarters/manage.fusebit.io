@@ -40,13 +40,17 @@ const ConnectorsTable = () => {
 
   const rows = (connectors?.data?.items || []).map((row) => ({
     id: row.id,
-    name: row.id,
+    name: (
+      <>
+        <GetConnectorIcons handler={row.data.handler} name={row.id} />
+        <>{row.id}</>
+      </>
+    ),
     type: row.tags['fusebit.service'],
     identities: <GetIdentities id={row.id} />,
     createdAt: format(new Date(row.dateAdded), 'MM/dd/yyyy'),
     lastModified: format(new Date(row.dateModified), 'MM/dd/yyyy'),
     credentialType: <GetCredentialTypes id={row.id} />,
-    icon: <GetConnectorIcons handler={row.data.handler} />,
     inUseBy: <GetRelatedIntegrations name={row.id} />,
   }));
 
@@ -81,14 +85,14 @@ const ConnectorsTable = () => {
         rowsPerPage={rowsPerPage}
         entityName="connector"
         headers={[
-          { id: 'icon', value: '' },
-          { id: 'name', value: 'Name' },
+          // { id: 'icon', value: '' },
+          { id: 'name', value: 'Name', sort: { sortFunc: () => {} } },
           // { id: 'type', value: 'Type' },
-          { id: 'createdAt', value: 'Created At', sorted: true },
-          { id: 'lastModified', value: 'Last Modified', sorted: true },
-          { id: 'credentialType', value: 'In Production' },
+          { id: 'createdAt', value: 'Created At', sort: { sortFunc: () => {} } },
+          { id: 'lastModified', value: 'Last Modified', sort: { sortFunc: () => {} } },
+          { id: 'credentialType', value: 'Configuration' },
           { id: 'identities', value: 'Identities' },
-          { id: 'inUseBy', value: 'In Use By' },
+          { id: 'inUseBy', value: 'Associated Integrations' },
         ]}
         loading={isLoading}
         onClickNew={handleNewIntegration}

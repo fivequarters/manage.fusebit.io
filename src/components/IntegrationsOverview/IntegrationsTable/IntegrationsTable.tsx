@@ -45,7 +45,6 @@ const IntegrationsTable = () => {
     },
     param: 'key',
   });
-
   const rows = (integrations?.data?.items || []).map((row) => ({
     id: row.id,
     name: row.id,
@@ -91,11 +90,23 @@ const IntegrationsTable = () => {
         rowsPerPage={rowsPerPage}
         entityName="integration"
         headers={[
-          { id: 'name', value: 'Name' },
-          { id: 'createdAt', value: 'Created At', sorted: true },
-          { id: 'lastModified', value: 'Last Modified', sorted: true },
+          {
+            id: 'name',
+            value: 'Name',
+            sort: {
+              sortFunc: () => {},
+            },
+          },
+          {
+            id: 'createdAt',
+            value: 'Created Date',
+            sort: {
+              sortFunc: () => {},
+            },
+          },
+          { id: 'lastModified', value: 'Last Modified', sort: { sortFunc: () => {} } },
           { id: 'installs', value: 'Installs' },
-          { id: 'connectors', value: 'Connectors' },
+          { id: 'connectors', value: 'Associated Connectors' },
         ]}
         loading={isLoading}
         onClickNew={handleNewIntegration}

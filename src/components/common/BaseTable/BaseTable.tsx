@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Table, TableBody, Button, IconButton, Tooltip, useMediaQuery, TablePagination, Box } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -80,10 +80,35 @@ const BaseTable: React.FC<BaseTableProps> = ({
   hideCheckAll,
   actionsContainerProps,
 }) => {
-  const computedRowsPerPage = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const [orderBy, setOrderBy] = React.useState('');
+  const [order, setOrder] = React.useState('asc');
+  const computedRowsPerPage = rows
+    .sort((a, b) => {
+      if (order === 'asc') {
+        if (a.id > b.id) {
+          return 1;
+        }
+        if (a.id < b.id) {
+          return -1;
+        }
+        return 0;
+      }
+      if (order === 'desc') {
+        if (a.id < b.id) {
+          return 1;
+        }
+        if (a.id > b.id) {
+          return -1;
+        }
+        return 0;
+      }
+
+      return 0;
+    })
+    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   const isMobile = useMediaQuery('(max-width: 880px)');
   const mobileArrowColumns = headers.slice(1);
-  const [mobileColumnIndex, setMobileColumnIndex] = useState(0);
+  const [mobileColumnIndex, setMobileColumnIndex] = React.useState(0);
 
   const handleNextCellSelect = () => setMobileColumnIndex(mobileColumnIndex + 1);
 
@@ -120,6 +145,10 @@ const BaseTable: React.FC<BaseTableProps> = ({
               selected={selected}
               isAllChecked={isAllChecked}
               hideCheckAll={hideCheckAll}
+              order={order}
+              orderBy={orderBy}
+              setOrder={setOrder}
+              setOrderBy={setOrderBy}
             />
           )}
           <TableBody>
