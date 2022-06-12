@@ -49,7 +49,9 @@ const IntegrationsTable = () => {
     id: row.id,
     name: row.id,
     installs: <GetInstalls id={row.id} />,
+    sortableLastModified: new Date(row.dateModified),
     lastModified: format(new Date(row.dateAdded), 'MM/dd/yyyy'),
+    sortableCreatedAt: new Date(row.dateAdded),
     createdAt: format(new Date(row.dateModified), 'MM/dd/yyyy'),
     connectors: <GetIntegrationIcons components={row.data.components} />,
   }));
@@ -94,17 +96,17 @@ const IntegrationsTable = () => {
             id: 'name',
             value: 'Name',
             sort: {
-              sortFunc: () => {},
+              sortVal: 'name',
             },
           },
           {
             id: 'createdAt',
             value: 'Created Date',
             sort: {
-              sortFunc: () => {},
+              sortVal: 'sortableCreatedAt',
             },
           },
-          { id: 'lastModified', value: 'Last Modified', sort: { sortFunc: () => {} } },
+          { id: 'lastModified', value: 'Last Modified', sort: { sortVal: 'sortableLastModified' } },
           { id: 'installs', value: 'Installs' },
           { id: 'connectors', value: 'Associated Connectors' },
         ]}

@@ -84,20 +84,23 @@ const BaseTable: React.FC<BaseTableProps> = ({
   const [order, setOrder] = React.useState('asc');
   const computedRowsPerPage = rows
     .sort((a, b) => {
-      if (order === 'asc') {
-        if (a.id > b.id) {
+      const left = a[orderBy] as any;
+      const right = b[orderBy] as any;
+
+      if (order === 'desc') {
+        if (left > right) {
           return 1;
         }
-        if (a.id < b.id) {
+        if (left < right) {
           return -1;
         }
         return 0;
       }
-      if (order === 'desc') {
-        if (a.id < b.id) {
+      if (order === 'asc') {
+        if (left < right) {
           return 1;
         }
-        if (a.id > b.id) {
+        if (left > right) {
           return -1;
         }
         return 0;

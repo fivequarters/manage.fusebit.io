@@ -40,20 +40,17 @@ const ConnectorsTable = () => {
 
   const rows = (connectors?.data?.items || []).map((row) => ({
     id: row.id,
-    name: (
-      <>
-        <GetConnectorIcons handler={row.data.handler} name={row.id} />
-        <>{row.id}</>
-      </>
-    ),
+    name: row.id,
+    icon: <GetConnectorIcons handler={row.data.handler} name={row.id} />,
     type: row.tags['fusebit.service'],
     identities: <GetIdentities id={row.id} />,
     createdAt: format(new Date(row.dateAdded), 'MM/dd/yyyy'),
+    sortableCreatedAt: new Date(row.dateAdded),
     lastModified: format(new Date(row.dateModified), 'MM/dd/yyyy'),
+    sortableLastModified: new Date(row.dateModified),
     credentialType: <GetCredentialTypes id={row.id} />,
     inUseBy: <GetRelatedIntegrations name={row.id} />,
   }));
-
   const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
     page,
     setPage,
@@ -85,13 +82,12 @@ const ConnectorsTable = () => {
         rowsPerPage={rowsPerPage}
         entityName="connector"
         headers={[
-          // { id: 'icon', value: '' },
-          { id: 'name', value: 'Name', sort: { sortFunc: () => {} } },
-          // { id: 'type', value: 'Type' },
-          { id: 'createdAt', value: 'Created At', sort: { sortFunc: () => {} } },
-          { id: 'lastModified', value: 'Last Modified', sort: { sortFunc: () => {} } },
+          { id: 'icon', value: '' },
+          { id: 'name', value: 'Name', sort: { sortVal: 'name' } },
+          { id: 'createdAt', value: 'Created At', sort: { sortVal: 'sortableCreatedAt' } },
+          { id: 'lastModified', value: 'Last Modified', sort: { sortVal: 'sortableLastModified' } },
           { id: 'credentialType', value: 'Configuration' },
-          { id: 'identities', value: 'Identities' },
+          { id: 'identities', value: 'Identities', sort: { sortVal: 'sortableIdentities' } },
           { id: 'inUseBy', value: 'Associated Integrations' },
         ]}
         loading={isLoading}

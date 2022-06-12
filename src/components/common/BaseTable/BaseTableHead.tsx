@@ -46,9 +46,9 @@ const BaseTableHead = ({
           <TableCell style={{ whiteSpace: 'nowrap' }} key={header.id} align="left">
             {header.sort ? (
               <TableSortLabel
-                active={orderBy === header.id}
-                direction={(orderBy === header.id ? order : 'asc') as 'asc' | 'desc'}
-                onClick={() => handleSortRequest(header.id)}
+                active={orderBy === (header.sort?.sortVal as string)}
+                direction={(orderBy === (header.sort?.sortVal as string) ? order : 'asc') as 'asc' | 'desc'}
+                onClick={() => handleSortRequest(header.sort?.sortVal as string)}
               >
                 {header.value}
               </TableSortLabel>

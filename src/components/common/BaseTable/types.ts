@@ -19,7 +19,7 @@ export interface BaseTableProps {
     id: string;
     value: string;
     sort?: {
-      sortFunc: Function;
+      sortVal: string;
     };
   }[];
   newButtonText?: string;
