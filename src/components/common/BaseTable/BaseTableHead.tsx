@@ -29,7 +29,6 @@ const BaseTableHead = ({
     const isAsc = orderBy === cellId && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(cellId);
-    console.log(order, orderBy);
   };
   return (
     <TableHead>
