@@ -10,6 +10,7 @@ import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 import Diagram from '@components/IntegrationDetailDevelop/Diagram';
 import IntegrationsNavbar from '@components/common/IntegrationsNavbar';
 import useTitle from '@hooks/useTitle';
+import { INTEGRATION_DETAIL_TABNAMES } from '@utils/constants';
 
 const IntegrationDetailDevelopPage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
@@ -32,12 +33,12 @@ const IntegrationDetailDevelopPage: FC<{}> = (): ReactElement => {
     <Layout>
       <IntegrationsNavbar />
       <TabComponent
-        tabNames={['Develop', 'Installs', 'Health', 'Logging', 'Reliability']}
+        tabNames={INTEGRATION_DETAIL_TABNAMES}
         tabObjects={[
           <Diagram key="diagram" isLoading={isLoading} integration={integration} />,
           getRedirectLink(`/integration/${id}/installs`),
-          getRedirectLink(`/integration/${id}/health-monitoring`),
           getRedirectLink(`/integration/${id}/logging`),
+          getRedirectLink(`/integration/${id}/health-monitoring`),
           getRedirectLink(`/integration/${id}/reliability`),
         ]}
       />

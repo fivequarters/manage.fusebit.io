@@ -1,7 +1,8 @@
 import { Box, Button, Drawer } from '@material-ui/core';
 import styled from 'styled-components';
-import { signOut } from '../../../hooks/useAuthContext';
-import CompanyTitle from '../CompanyTitle';
+import * as CSC from '@components/globalStyle';
+import { signOut } from '@hooks/useAuthContext';
+import CloseIcon from '@material-ui/icons/Close';
 import MainUserInfo from '../MainUserInfo/MainUserInfo';
 import UserMenuLinks from '../UserMenuLinks';
 
@@ -20,8 +21,10 @@ const UserDrawerMobile: React.FC<Props> = ({ open, onClose }: Props) => {
   return (
     <Drawer anchor="right" open={open} onClose={onClose}>
       <StyledContent>
-        <CompanyTitle />
-        <MainUserInfo />
+        <CSC.CloseWrapper aria-label="close" onClick={onClose}>
+          <CloseIcon />
+        </CSC.CloseWrapper>
+        <MainUserInfo onAccountSwitch={onClose} />
         <UserMenuLinks showAll />
         <Box textAlign="right" mt="104px">
           <Button

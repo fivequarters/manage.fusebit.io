@@ -32,6 +32,7 @@ import { getIntegrationConfig } from '@utils/localStorage';
 import { useTrackPage } from '@hooks/useTrackPage';
 import { useGetConnectorsFeed } from '@hooks/useGetConnectorsFeed';
 import { InnerConnector } from '@interfaces/integration';
+import useLongPress from '@hooks/useLongPress';
 import MobileDrawer from '../MobileDrawer';
 import useEditorEvents from '../FusebitEditor/useEditorEvents';
 import { BUILDING_TEXT, BUILD_COMPLETED_TEXT } from '../FusebitEditor/constants';
@@ -43,9 +44,10 @@ import useCreateNewFile from './useCreateNewFile';
 import useEditorAnalytics from './useEditorAnalytics';
 import useCustomSidebar from './useCustomSidebar';
 import useBeforeUnload from './useBeforeUnload';
+import useEditorParams from './useEditorParams';
 import { EditorEvents } from '~/enums/editor';
 
-const StyledEditorContainer = styled.div<{ isGrafanaEnabled?: boolean }>`
+const StyledEditorContainer = styled.div<{ isGrafanaEnabled?: boolean; isResizing: boolean }>`
   .fa {
     background-size: cover;
     background-repeat: no-repeat;
@@ -203,6 +205,13 @@ const StyledEditorContainer = styled.div<{ isGrafanaEnabled?: boolean }>`
         background-color: #ffffff;
         border-radius: 4px;
         padding: ${(props) => props.isGrafanaEnabled && 0};
+        z-index: 1;
+
+        .fusebit-logs-inner-container {
+          iframe {
+            z-index: ${(props) => (props.isResizing ? -1 : 2)};
+          }
+        }
       }
     }
   }
@@ -293,22 +302,40 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     onMissingIdentities: setMissingIdentities,
   });
   const [dirtyState, setDirtyState] = useState(false);
-  const [enableGrafanaLogs] = useState<boolean>(() => {
-    const result =
-      window.location.search.includes('enableGrafanaLogs') || localStorage.getItem('enableGrafanaLogs') === 'true';
-    localStorage.setItem('enableGrafanaLogs', `${!!result}`);
-    return result;
-  });
+  const [isResizing, setIsResizing] = useState(false);
   const { invalidateIntegration } = useInvalidateIntegration();
   const { formatSnippet, getProviderVersion } = useSnippets();
   const { createError } = useError();
   const tenantId = getTenantId();
   const { handleCopy } = useCopy();
   const { url: sampleAppUrl } = useSampleApp();
+  const bindLongPress = useLongPress({
+    onPressStart: () => {
+      setIsResizing(true);
+    },
+    onPressEnd: () => {
+      setIsResizing(false);
+    },
+    triggerCondition: (e) => {
+      const element = e.target as HTMLDivElement;
+      const hoveredElementClass = element.className;
+      const isSplitter =
+        hoveredElementClass === 'fusebit-nav-splitter' || hoveredElementClass === 'fusebit-logs-splitter';
+      return isSplitter;
+    },
+    disableOnMouseLeave: true,
+  });
 
-  const { isSaving, errorBuild, setErrorBuild } = useEditorEvents({
+  const { logs, clearLogs, isSaving, errorBuild, setErrorBuild } = useEditorEvents({
     isMounted,
-    events: [EditorEvents.BuildStarted, EditorEvents.BuildFinished, EditorEvents.BuildError],
+    events: [
+      EditorEvents.BuildStarted,
+      EditorEvents.BuildFinished,
+      EditorEvents.BuildError,
+      EditorEvents.LogsEntry,
+      EditorEvents.LogsAttached,
+      EditorEvents.RunnerFinished,
+    ],
   });
 
   const { snippetsModal, onSnippetsModalOpen, onSnippetsModalClose } = useSnippetsModal({
@@ -376,7 +403,8 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   useCreateNewFile({ isEditorRunning });
   useEditorAnalytics({ isEditorRunning });
   useCustomSidebar({ isEditorRunning, onSnippetsModalOpen, sampleAppUrl });
-  useBeforeUnload({ isEditorRunning });
+  useBeforeUnload({ isEditorRunning, isSaving });
+  const { enableGrafanaLogs } = useEditorParams();
 
   const handleSaveAndRun = async () => {
     gtag('event', 'click', {
@@ -406,10 +434,12 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     trackEventUnmemoized('Save Button Clicked', 'Web Editor', {
       engagementType: 'Button Save',
     });
-    await context?._server.saveFunction(context);
-    await invalidateIntegration();
-    setDirtyState(false);
-    setNeedsInitialization(true);
+    const status: SaveStatus = await context?._server.saveFunction(context);
+    if (status.status === 'completed') {
+      await invalidateIntegration();
+      setDirtyState(false);
+      setNeedsInitialization(true);
+    }
   };
 
   const handleKeyUp = () => {
@@ -525,7 +555,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
         integrationData={integrationData}
         defaultSnippet={snippetsModal.snippet}
       />
-      <StyledEditorContainer ref={ref} isGrafanaEnabled={enableGrafanaLogs}>
+      <StyledEditorContainer ref={ref} isGrafanaEnabled={enableGrafanaLogs} isResizing={isResizing} {...bindLongPress}>
         {isMounted && !matchesMobile && (
           <StyledCloseHeader>
             {!forkEditFeedUrl && (
@@ -635,11 +665,14 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
           />
           {isMounted && matchesMobile && (
             <MobileDrawer
+              logs={logs}
+              clearLogs={clearLogs}
               processing={processing}
               open={isMounted}
               onClose={handleClose}
               handleRun={handleRun}
               isRunning={isRunning}
+              isGrafanaEnabled={enableGrafanaLogs}
             />
           )}
         </StyledFusebitEditorContainer>

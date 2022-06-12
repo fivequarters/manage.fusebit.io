@@ -1,24 +1,41 @@
-import CopyLine from '@components/common/CopyLine';
+import { useAuthContext } from '@hooks/useAuthContext';
 import { Props } from '@interfaces/newUser';
-import { Button } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import SecurityDisclaimer from '@components/common/SecurityDisclaimer';
+import CopyLine from '@components/common/CopyLine';
+import { trackEventMemoized } from '@utils/analytics';
 import * as CSC from '../../globalStyle';
 
-const StyledFormInputWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 48px;
-  justify-content: center;
+const StyledWrapper = styled.div`
+  width: 560px;
+  padding-bottom: 24px;
+
+  @media only screen and (max-width: 730px) {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 `;
 
-const InviteUserForm = React.forwardRef<HTMLDivElement, Props>(({ onClose, createUser }, ref) => {
+const StyledLineTitle = styled.h3`
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 600;
+  color: var(--black);
+  margin-bottom: 12px;
+`;
+
+const InviteUserForm = React.forwardRef<HTMLDivElement, Props>(({ createUser }, ref) => {
   const [userCreating, setUserCreating] = React.useState(false);
   const [token, setToken] = React.useState('');
+  const { userData } = useAuthContext();
 
   useEffect(() => {
-    if (!userCreating) {
+    if (!userCreating && !token) {
       setUserCreating(true);
       (async () => {
         const _token = await createUser({
@@ -33,30 +50,26 @@ const InviteUserForm = React.forwardRef<HTMLDivElement, Props>(({ onClose, creat
   const invitationUrl = token ? `${window.location.protocol}//${window.location.host}/#init=${token}` : '';
 
   return (
-    <div ref={ref}>
-      <>
-        <CSC.ModalTitle margin="48px 0">Invite New User</CSC.ModalTitle>
-        <CSC.ModalDescription>
-          Securely share the following invitation URL with the user. The invitation expires in eight hours.
+    <StyledWrapper ref={ref}>
+      <Box maxWidth="600px" margin="48px auto 0">
+        <CSC.ModalTitle margin="32px 0">Invite Team Member to {userData.company}</CSC.ModalTitle>
+        <CSC.ModalDescription textAlign="center">
+          Securely share the following link with your Team Member.
         </CSC.ModalDescription>
-        <div style={{ maxWidth: 800 }}>
-          <CopyLine text={invitationUrl}>{invitationUrl}</CopyLine>
-        </div>
-        <StyledFormInputWrapper>
-          <Button
-            onClick={() => onClose()}
-            style={{ width: '200px' }}
-            fullWidth={false}
-            size="large"
-            color="primary"
-            variant="contained"
-            disabled={!token}
-          >
-            {(!!token && 'Done') || 'Inviting...'}
-          </Button>
-        </StyledFormInputWrapper>
-      </>
-    </div>
+      </Box>
+      <StyledLineTitle>Invite Link</StyledLineTitle>
+      <CopyLine
+        text={invitationUrl}
+        disableMargin
+        copyPosition={{ top: '-47px' }}
+        onCopy={() => {
+          trackEventMemoized('Copy Invite Link Clicked', 'Team');
+        }}
+      >
+        <p>{invitationUrl}</p>
+      </CopyLine>
+      <SecurityDisclaimer>For security reasons, this link will expire in eight hours.</SecurityDisclaimer>
+    </StyledWrapper>
   );
 });
 

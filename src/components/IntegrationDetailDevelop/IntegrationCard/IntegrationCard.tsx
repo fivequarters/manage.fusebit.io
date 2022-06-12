@@ -62,6 +62,7 @@ const IntegrationCard: React.FC<Props> = ({ className }) => {
               style={{
                 fontWeight: 600,
                 fontSize: 20,
+                textAlign: 'center',
               }}
             >
               {integrationData?.data.id || id}

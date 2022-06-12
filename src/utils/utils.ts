@@ -116,3 +116,12 @@ export const createAxiosClient: (token?: string, skipXUserAgent?: boolean) => Ax
 
 export const urlOrSvgToImage = (img = '') =>
   img.match('^<svg') ? `data:image/svg+xml;utf8,${encodeURIComponent(img)}` : img;
+
+export const formatTime = (seconds: number) => {
+  let newSeconds: string | number;
+  let minutes: string | number = Math.floor(seconds / 60);
+  minutes = minutes.toString().padStart(2, '0');
+  newSeconds = Math.floor(seconds % 60);
+  newSeconds = newSeconds.toString().padStart(2, '0');
+  return `${minutes}:${newSeconds}`;
+};

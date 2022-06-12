@@ -10,7 +10,7 @@ const StyledContent = styled.div`
   background-color: white;
   padding: 0 76px;
   box-shadow: 0px 1px 30px -1px rgba(52, 72, 123, 0.1);
-  margin-bottom: 72px;
+  margin-bottom: 36px;
 
   @media only screen and (max-width: 880px) {
     padding: 0;
@@ -26,7 +26,7 @@ const StyledContentMobile = styled.div`
   background-color: white;
   padding: 0;
   box-shadow: 0px 1px 30px -1px rgba(52, 72, 123, 0.1);
-  margin-bottom: 72px;
+  margin-bottom: 36px;
 
   @media only screen and (max-width: 880px) {
     display: block;
@@ -101,9 +101,10 @@ const TabComponent: React.FC<Props> = ({ tabNames, tabObjects }) => {
   }, [tabObjects]);
 
   const handleChange = (event: any, newValue: number) => {
-    if (newValue !== activeTab) {
-      history.push(tabObjects[newValue]);
-      // window.location.href = tabObjects[newValue];
+    const link = tabObjects[newValue];
+
+    if (newValue !== activeTab && typeof link === 'string') {
+      history.push(link);
     }
   };
 
@@ -124,7 +125,7 @@ const TabComponent: React.FC<Props> = ({ tabNames, tabObjects }) => {
         >
           {tabNames.map((name, index) => (
             <Tab
-              key={name}
+              key={JSON.stringify(name)}
               label={<StyledTabLabel active={activeTab === index}>{name}</StyledTabLabel>}
               {...a11yProps(index)}
             />
@@ -145,7 +146,7 @@ const TabComponent: React.FC<Props> = ({ tabNames, tabObjects }) => {
           >
             {tabNames.map((name, index) => (
               <Tab
-                key={name}
+                key={JSON.stringify(name)}
                 label={<StyledTabLabel active={activeTab === index}>{name}</StyledTabLabel>}
                 {...a11yProps(index)}
               />

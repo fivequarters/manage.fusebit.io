@@ -91,6 +91,7 @@ const IntegrationsTable = () => {
         page={page}
         rowsPerPage={rowsPerPage}
         entityName="integration"
+        entityNamePlural="integrations"
         headers={[
           {
             id: 'name',

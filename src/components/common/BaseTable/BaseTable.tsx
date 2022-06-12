@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { Table, TableBody, Button, IconButton, Tooltip, useMediaQuery, TablePagination, Box } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -14,24 +14,24 @@ const StyledWrapper = styled.div`
   padding-bottom: 80px;
 `;
 
-const StyledDeleteWrapper = styled.div<{ active: boolean }>`
-  display: ${(props) => (props.active ? 'flex' : 'none')};
-  align-items: center;
-  opacity: ${(props) => (props.active ? 1 : 0)};
-  font-size: 18px;
-  line-height: 22px;
-  font-weight: 400;
-  padding: 0 18px;
-  min-height: 57px;
-  width: 100%;
-  color: ${(props) => (props.active ? 'var(--primary-color)' : 'var(--black)')};
-  background-color: ${(props) => props.active && 'rgba(248, 52, 32, .1)'};
-  margin-bottom: 12px;
-  transition: all 0.25s linear;
-`;
-
 const StyledDeleteIconWrapper = styled.div`
   margin-left: auto;
+`;
+
+const StyledDeleteText = styled.div`
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--black);
+  margin-left: 16px;
+
+  & > strong {
+    margin-left: 8px;
+    color: var(--primary-color);
+    cursor: pointer;
+  }
 `;
 
 const StyledNoData = styled.div`
@@ -46,8 +46,10 @@ const StyledTableContainer = styled.div`
   width: 100%;
 `;
 
-const StyledButtonsContainer = styled(Box)`
-  margin-left: -20px;
+const StyledButtonsContainer = styled(Box)<{ deleting?: boolean }>`
+  height: 50px;
+  background-color: ${(props) => (props.deleting ? 'var(--secondary-color)' : 'rgba(255,255,255,0)')};
+  transition: all 0.25s linear;
 
   & > button {
     margin-left: 20px;
@@ -64,6 +66,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
   onClickNew,
   newButtonText,
   entityName,
+  entityNamePlural,
   onSelectRow,
   isSelected,
   rowsPerPage,
@@ -116,6 +119,22 @@ const BaseTable: React.FC<BaseTableProps> = ({
   const handleNextCellSelect = () => setMobileColumnIndex(mobileColumnIndex + 1);
 
   const handlePreviousCellSelect = () => setMobileColumnIndex(mobileColumnIndex - 1);
+
+  const isSelecting = selected.length > 0;
+
+  const isAllSelected = isAllChecked || (rows.length > 0 && selected.length === rows.length);
+
+  const pluralOrSingularEntityName = selected.length > 1 ? entityNamePlural : entityName;
+
+  const deleteText = useMemo(() => {
+    const textSuffix = `${pluralOrSingularEntityName}${selected.length > 1 ? ' are selected' : ' is selected'}`;
+
+    if (isAllSelected) {
+      return `All ${selected.length} ${textSuffix}`;
+    }
+
+    return `${selected.length} ${textSuffix}`;
+  }, [selected, isAllSelected, pluralOrSingularEntityName]);
 
   const renderContent = () => {
     const hasDataToShow = rows.length > 0;
@@ -186,40 +205,55 @@ const BaseTable: React.FC<BaseTableProps> = ({
 
   return (
     <StyledWrapper>
-      {onClickNew && (
-        <StyledButtonsContainer display="flex" mt="56px" mb="36px" justifyContent="flex-end" {...actionsContainerProps}>
-          {(headerButtons || [])?.map((button) => (
-            <Button
-              key={button.text}
-              onClick={onClickNew}
-              variant="outlined"
-              color="primary"
-              size="large"
-              {...button.props}
-            >
-              {button.text}
-            </Button>
-          ))}
-          <Button onClick={onClickNew} startIcon={<AddIcon />} variant="outlined" color="primary" size="large">
-            {newButtonText || `New ${entityName}`}
-          </Button>
-        </StyledButtonsContainer>
-      )}
-
-      <StyledDeleteWrapper active={selected.length > 0}>
-        {selected.length > 0 && (
+      <StyledButtonsContainer
+        deleting={isSelecting}
+        display="flex"
+        mt="56px"
+        mb="36px"
+        justifyContent="flex-end"
+        {...actionsContainerProps}
+      >
+        {isSelecting ? (
           <>
-            {selected.length} selected
+            <StyledDeleteText>
+              {deleteText}
+              {!isMobile && !isAllSelected && (
+                <strong onClick={() => onSelectAll(undefined, true)}>
+                  Select all {rows.filter((row) => !row.hideCheckbox).length} {entityNamePlural}
+                </strong>
+              )}
+            </StyledDeleteText>
             <StyledDeleteIconWrapper>
               <Tooltip title="Delete">
                 <IconButton onClick={onDeleteAll}>
-                  <DeleteIcon />
+                  <DeleteIcon style={{ color: '#333333' }} />
                 </IconButton>
               </Tooltip>
             </StyledDeleteIconWrapper>
           </>
+        ) : (
+          onClickNew && (
+            <>
+              {(headerButtons || [])?.map((button) => (
+                <Button
+                  key={button.text}
+                  onClick={onClickNew}
+                  variant="outlined"
+                  color="primary"
+                  size="large"
+                  {...button.props}
+                >
+                  {button.text}
+                </Button>
+              ))}
+              <Button onClick={onClickNew} startIcon={<AddIcon />} variant="outlined" color="primary" size="large">
+                {newButtonText || `New ${entityName}`}
+              </Button>
+            </>
+          )
         )}
-      </StyledDeleteWrapper>
+      </StyledButtonsContainer>
+
       {loading ? (
         <CSC.LoaderContainer>
           <CSC.Spinner />
