@@ -54,6 +54,9 @@ const IntegrationsTable = () => {
     sortableCreatedAt: new Date(row.dateAdded),
     createdAt: format(new Date(row.dateModified), 'MM/dd/yyyy'),
     connectors: <GetIntegrationIcons components={row.data.components} />,
+    connectorNames: row.data.components
+      .filter((component) => component.entityType === 'connector')
+      .map((component) => component.provider.split('/')[1].split('-')[0]),
   }));
 
   const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
@@ -72,6 +75,14 @@ const IntegrationsTable = () => {
       event_label: 'New Integration Button Clicked',
     });
     toggleNewModal();
+  };
+
+  const handleFilterFunc = (item: any, query: string) => {
+    if (item.id.includes(query)) {
+      return true;
+    }
+
+    return item.connectorNames.some((connName: string) => connName.includes(query));
   };
 
   return (
@@ -120,6 +131,8 @@ const IntegrationsTable = () => {
         isSelected={isSelected}
         selected={selected}
         onClickRow={handleClickRow}
+        searchBarLabel="Integrations"
+        searchFilterFunc={handleFilterFunc}
       />
     </>
   );

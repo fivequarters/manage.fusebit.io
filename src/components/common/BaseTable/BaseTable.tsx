@@ -1,5 +1,15 @@
 import React, { useMemo } from 'react';
-import { Table, TableBody, Button, IconButton, Tooltip, useMediaQuery, TablePagination, Box } from '@material-ui/core';
+import {
+  Table,
+  TableBody,
+  Button,
+  IconButton,
+  Tooltip,
+  useMediaQuery,
+  TablePagination,
+  Box,
+  TextField,
+} from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { ROWS_PER_PAGE_OPTIONS } from '@hooks/usePagination';
@@ -82,10 +92,23 @@ const BaseTable: React.FC<BaseTableProps> = ({
   headerButtons,
   hideCheckAll,
   actionsContainerProps,
+  searchBarLabel,
+  searchFilterFunc,
 }) => {
   const [orderBy, setOrderBy] = React.useState('');
   const [order, setOrder] = React.useState('asc');
+  const [inputText, setInputText] = React.useState('');
+  const inputHandler = (e: any) => {
+    const lowerCase = e.target.value.toLowerCase();
+    setInputText(lowerCase);
+  };
   const computedRowsPerPage = rows
+    .filter((item: any) => {
+      if (searchFilterFunc) {
+        return searchFilterFunc(item, inputText);
+      }
+      return true;
+    })
     .sort((a, b) => {
       const left = a[orderBy] as any;
       const right = b[orderBy] as any;
@@ -145,6 +168,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
 
     return (
       <StyledTableContainer>
+        {searchBarLabel ? <TextField onChange={inputHandler} label={searchBarLabel} fullWidth /> : <></>}
         <Table size="small" aria-label="Overview Table">
           {isMobile ? (
             <MobileBaseTableHeader

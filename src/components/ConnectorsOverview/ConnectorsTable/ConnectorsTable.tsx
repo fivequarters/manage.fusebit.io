@@ -65,6 +65,10 @@ const ConnectorsTable = () => {
     toggleNewModal();
   };
 
+  const searchFilterFunc = (item: any, query: string) => {
+    return item.id.includes(query);
+  };
+
   return (
     <>
       <CreateConnectorModal onClose={toggleNewModal} open={newModalOpen} />
@@ -100,6 +104,8 @@ const ConnectorsTable = () => {
         isSelected={isSelected}
         selected={selected}
         onClickRow={handleClickRow}
+        searchBarLabel="Connectors"
+        searchFilterFunc={searchFilterFunc}
       />
     </>
   );

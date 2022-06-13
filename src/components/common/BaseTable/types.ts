@@ -48,4 +48,6 @@ export interface BaseTableProps {
   orderBy?: string;
   setOrder?: any;
   setOrderBy?: any;
+  searchBarLabel?: string;
+  searchFilterFunc?: (item: any, query: string) => boolean;
 }
