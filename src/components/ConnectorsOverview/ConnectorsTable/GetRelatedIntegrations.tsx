@@ -2,7 +2,7 @@ import React from 'react';
 import { useAccountIntegrationsGetAll } from '@hooks/api/v2/account/integration/useGetAll';
 import { Integration } from '@interfaces/integration';
 import { useAuthContext } from '@hooks/useAuthContext';
-import { Button } from '@material-ui/core';
+import { Chip } from '@material-ui/core';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 
 interface Props {
@@ -30,14 +30,7 @@ const GetRelatedIntegrations: React.FC<Props> = ({ name }) => {
   return (
     <>
       {matchedIntegrations?.map((integration) => {
-        return (
-          <>
-            <Button key="" onClick={onClick} variant="outlined">
-              {integration.id}
-            </Button>
-            <br />
-          </>
-        );
+        return <Chip key={integration.id} onClick={onClick} variant="outlined" label={integration.id} />;
       })}
     </>
   );
