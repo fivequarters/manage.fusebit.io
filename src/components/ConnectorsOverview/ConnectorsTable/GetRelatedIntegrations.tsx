@@ -30,7 +30,15 @@ const GetRelatedIntegrations: React.FC<Props> = ({ name }) => {
   return (
     <>
       {matchedIntegrations?.map((integration) => {
-        return <Chip key={integration.id} onClick={onClick} variant="outlined" label={integration.id} />;
+        return (
+          <Chip
+            key={integration.id}
+            onClick={onClick}
+            variant="outlined"
+            label={integration.id}
+            style={{ background: '#fff' }}
+          />
+        );
       })}
     </>
   );
