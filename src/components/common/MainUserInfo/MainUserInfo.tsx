@@ -11,6 +11,7 @@ import { Account, AccountListItem } from '@interfaces/account';
 import CompanyTitle from '@components/common/CompanyTitle';
 import MainUserAccounts from '@components/common/MainUserInfo/MainUserAccounts';
 import * as CSC from '@components/globalStyle';
+import { useAccountGetAllAccounts } from '@hooks/api/v1/account/account/useGetAllAccounts';
 
 const StyledUserDropdownInfo = styled.div`
   display: flex;
@@ -126,6 +127,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
     userId: userData.userId,
     accountId: userData.accountId,
   });
+  const { data: accounts, isLoading } = useAccountGetAllAccounts();
   const isMobile = useMediaQuery('(max-width: 880px)');
   const isOnMultipleAccounts = userData.accounts && userData?.accounts?.length > 1;
 
@@ -163,7 +165,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
         </StyledUserDropdownPersonalInfo>
       </StyledUserDropdownInfo>
       {isMobile ? (
-        <MainUserAccounts isMobile onAccountSwitch={handleAccountSwitch} />
+        <MainUserAccounts accounts={accounts} isLoading={isLoading} isMobile onAccountSwitch={handleAccountSwitch} />
       ) : (
         <>
           <Box mb="12px">
@@ -178,19 +180,18 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
             )}
           </StyledUserDropdownStatus>
           <CSC.StyledMenu
-            PaperProps={{
-              style: {
-                transform: anchorEl ? 'translateX(calc(-100% - 50px))' : '',
-              },
-            }}
             id="accounts"
+            aria-labelledby="accounts-dropdown"
             anchorEl={anchorEl}
             keepMounted
             open={Boolean(anchorEl) && Boolean(isOnMultipleAccounts)}
             onClose={handleClose}
+            getContentAnchorEl={null}
+            anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+            transformOrigin={{ vertical: 122, horizontal: isLoading ? 100 : 360 }}
           >
             <StyledAccountsWrapper>
-              <MainUserAccounts onAccountSwitch={handleAccountSwitch} />
+              <MainUserAccounts accounts={accounts} isLoading={isLoading} onAccountSwitch={handleAccountSwitch} />
             </StyledAccountsWrapper>
           </CSC.StyledMenu>
         </>
