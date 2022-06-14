@@ -1,4 +1,5 @@
 import { useHistory } from 'react-router-dom';
+import React from 'react';
 import { format } from 'date-fns';
 import BaseTable from '@components/common/BaseTable/BaseTable';
 import { useEntityTable } from '@hooks/useEntityTable';
@@ -33,6 +34,13 @@ const IntegrationsTable = () => {
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
   });
+
+  const [inputText, setInputText] = React.useState('');
+  const inputHandler = (e: any) => {
+    const lowerCase = e.target.value.toLowerCase();
+    setInputText(lowerCase);
+  };
+
   const { setFirstTimeVisitor } = useFirstTimeVisitor({
     onFirstTimeVisitor: () => setNewModal(true),
     entities: integrations?.data.items,
@@ -45,7 +53,7 @@ const IntegrationsTable = () => {
     },
     param: 'key',
   });
-  const rows = (integrations?.data?.items || []).map((row) => ({
+  let rows = (integrations?.data?.items || []).map((row) => ({
     id: row.id,
     name: row.id,
     installs: <GetInstalls id={row.id} />,
@@ -58,6 +66,16 @@ const IntegrationsTable = () => {
       .filter((component) => component.entityType === 'connector')
       .map((component) => component.provider.split('/')[1].split('-')[0]),
   }));
+
+  const handleFilterFunc = (item: any, query: string) => {
+    if (item.id.includes(query)) {
+      return true;
+    }
+
+    return item.connectorNames.some((connName: string) => connName.includes(query));
+  };
+
+  rows = rows.filter((item: any) => handleFilterFunc(item, inputText));
 
   const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
     page,
@@ -75,14 +93,6 @@ const IntegrationsTable = () => {
       event_label: 'New Integration Button Clicked',
     });
     toggleNewModal();
-  };
-
-  const handleFilterFunc = (item: any, query: string) => {
-    if (item.id.includes(query)) {
-      return true;
-    }
-
-    return item.connectorNames.some((connName: string) => connName.includes(query));
   };
 
   return (
@@ -132,7 +142,8 @@ const IntegrationsTable = () => {
         selected={selected}
         onClickRow={handleClickRow}
         searchBarLabel="Integrations"
-        searchFilterFunc={handleFilterFunc}
+        inputHandler={inputHandler}
+        textVal={inputText}
       />
     </>
   );

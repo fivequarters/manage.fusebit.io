@@ -49,5 +49,6 @@ export interface BaseTableProps {
   setOrder?: any;
   setOrderBy?: any;
   searchBarLabel?: string;
-  searchFilterFunc?: (item: any, query: string) => boolean;
+  inputHandler?: (e: any) => void;
+  textVal?: string;
 }

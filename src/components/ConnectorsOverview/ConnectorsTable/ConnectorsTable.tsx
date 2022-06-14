@@ -1,4 +1,5 @@
 import { useHistory } from 'react-router-dom';
+import React from 'react';
 import { format } from 'date-fns';
 import BaseTable from '@components/common/BaseTable/BaseTable';
 import { useEntityTable } from '@hooks/useEntityTable';
@@ -31,6 +32,11 @@ const ConnectorsTable = () => {
     subscriptionId: userData.subscriptionId,
   });
 
+  const [inputText, setInputText] = React.useState('');
+  const inputHandler = (e: any) => {
+    setInputText(e.target.value);
+  };
+
   useQueryParam({
     onSet: () => {
       setNewModal(true);
@@ -38,7 +44,7 @@ const ConnectorsTable = () => {
     param: 'key',
   });
 
-  const rows = (connectors?.data?.items || []).map((row) => ({
+  let rows = (connectors?.data?.items || []).map((row) => ({
     id: row.id,
     name: row.id,
     icon: <GetConnectorIcons handler={row.data.handler} name={row.id} />,
@@ -51,6 +57,15 @@ const ConnectorsTable = () => {
     credentialType: <GetCredentialTypes id={row.id} />,
     inUseBy: <GetRelatedIntegrations name={row.id} />,
   }));
+
+  const handleFilterFunc = (item: any, query: string) => {
+    if (item.id.includes(query)) {
+      return true;
+    }
+  };
+
+  rows = rows.filter((item: any) => handleFilterFunc(item, inputText));
+
   const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
     page,
     setPage,
@@ -63,10 +78,6 @@ const ConnectorsTable = () => {
   const handleNewIntegration = () => {
     trackEventMemoized('New Connector Button Clicked', 'Connectors', {});
     toggleNewModal();
-  };
-
-  const searchFilterFunc = (item: any, query: string) => {
-    return item.id.includes(query);
   };
 
   return (
@@ -105,7 +116,8 @@ const ConnectorsTable = () => {
         selected={selected}
         onClickRow={handleClickRow}
         searchBarLabel="Connectors"
-        searchFilterFunc={searchFilterFunc}
+        inputHandler={inputHandler}
+        textVal={inputText}
       />
     </>
   );

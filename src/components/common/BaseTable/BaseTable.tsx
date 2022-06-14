@@ -93,22 +93,13 @@ const BaseTable: React.FC<BaseTableProps> = ({
   hideCheckAll,
   actionsContainerProps,
   searchBarLabel,
-  searchFilterFunc,
+  inputHandler,
+  textVal,
 }) => {
   const [orderBy, setOrderBy] = React.useState('');
   const [order, setOrder] = React.useState('asc');
-  const [inputText, setInputText] = React.useState('');
-  const inputHandler = (e: any) => {
-    const lowerCase = e.target.value.toLowerCase();
-    setInputText(lowerCase);
-  };
+
   const computedRowsPerPage = rows
-    .filter((item: any) => {
-      if (searchFilterFunc) {
-        return searchFilterFunc(item, inputText);
-      }
-      return true;
-    })
     .sort((a, b) => {
       const left = a[orderBy] as any;
       const right = b[orderBy] as any;
@@ -168,7 +159,6 @@ const BaseTable: React.FC<BaseTableProps> = ({
 
     return (
       <StyledTableContainer>
-        {searchBarLabel ? <TextField onChange={inputHandler} label={searchBarLabel} fullWidth /> : <></>}
         <Table size="small" aria-label="Overview Table">
           {isMobile ? (
             <MobileBaseTableHeader
@@ -270,6 +260,16 @@ const BaseTable: React.FC<BaseTableProps> = ({
                   {button.text}
                 </Button>
               ))}
+              {searchBarLabel ? (
+                <TextField
+                  onChange={inputHandler}
+                  label={searchBarLabel}
+                  style={{ display: 'inline-flex', width: '250px', justifyContent: '' }}
+                  value={textVal}
+                />
+              ) : (
+                <></>
+              )}
               <Button onClick={onClickNew} startIcon={<AddIcon />} variant="outlined" color="primary" size="large">
                 {newButtonText || `New ${entityName}`}
               </Button>
@@ -277,7 +277,6 @@ const BaseTable: React.FC<BaseTableProps> = ({
           )
         )}
       </StyledButtonsContainer>
-
       {loading ? (
         <CSC.LoaderContainer>
           <CSC.Spinner />
