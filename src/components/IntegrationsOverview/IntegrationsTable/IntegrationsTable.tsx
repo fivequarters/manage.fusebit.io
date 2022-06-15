@@ -36,7 +36,7 @@ const IntegrationsTable = () => {
   });
 
   const [searchField, setSearchField] = React.useState('');
-  const inputHandler = (e: any) => {
+  const searchInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchField(e.target.value);
   };
 
@@ -139,7 +139,7 @@ const IntegrationsTable = () => {
         selected={selected}
         onClickRow={handleClickRow}
         searchBarLabel="Integrations"
-        inputHandler={inputHandler}
+        searchInputHandler={searchInputHandler}
         textVal={searchField}
       />
     </>

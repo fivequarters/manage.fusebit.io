@@ -15,7 +15,7 @@ import useQueryParam from '@hooks/useQueryParam';
 import DeleteConnectorModal from '../DeleteConnectorModal';
 import CreateConnectorModal from '../CreateConnectorModal';
 import GetIdentities from './GetIdentities';
-import GetCredentialTypes from './GetCredentialTypes';
+import GetCredentialType from './GetCredentialType';
 import GetConnectorIcon from './GetConnectorIcon';
 import GetRelatedIntegrations from './GetRelatedIntegrations';
 
@@ -33,7 +33,7 @@ const ConnectorsTable = () => {
   });
 
   const [searchField, setSearchField] = React.useState('');
-  const inputHandler = (e: any) => {
+  const searchInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchField(e.target.value);
   };
 
@@ -55,7 +55,7 @@ const ConnectorsTable = () => {
       sortableCreatedAt: new Date(row.dateAdded),
       lastModified: format(new Date(row.dateModified), 'MM/dd/yyyy'),
       sortableLastModified: new Date(row.dateModified),
-      credentialType: <GetCredentialTypes id={row.id} />,
+      credentialType: <GetCredentialType id={row.id} />,
       inUseBy: <GetRelatedIntegrations name={row.id} />,
     }))
     .filter((item: any) => item.id.includes(searchField));
@@ -110,7 +110,7 @@ const ConnectorsTable = () => {
         selected={selected}
         onClickRow={handleClickRow}
         searchBarLabel="Connectors"
-        inputHandler={inputHandler}
+        searchInputHandler={searchInputHandler}
         textVal={searchField}
       />
     </>

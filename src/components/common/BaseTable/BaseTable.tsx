@@ -93,7 +93,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
   hideCheckAll,
   actionsContainerProps,
   searchBarLabel,
-  inputHandler,
+  searchInputHandler,
   textVal,
 }) => {
   const [orderBy, setOrderBy] = React.useState('name');
@@ -111,7 +111,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
 
   const computedRowsPerPage = rows
     .sort((a, b) => {
-      return order === 'asc' ? compare(a[orderBy], b[orderBy]) : -compare(a[orderBy], b[orderBy]);
+      return order === 'asc' ? compare(a[orderBy], b[orderBy]) : compare(b[orderBy], a[orderBy]);
     })
     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   const isMobile = useMediaQuery('(max-width: 880px)');
@@ -250,7 +250,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
               ))}
               {searchBarLabel ? (
                 <TextField
-                  onChange={inputHandler}
+                  onChange={searchInputHandler}
                   label={searchBarLabel}
                   style={{ display: 'inline-flex', width: '250px' }}
                   value={textVal}

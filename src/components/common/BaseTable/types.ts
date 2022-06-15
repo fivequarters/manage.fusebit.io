@@ -1,3 +1,4 @@
+import React from 'react';
 import { BoxProps, ButtonProps } from '@material-ui/core';
 
 export interface BaseTableRow {
@@ -49,6 +50,6 @@ export interface BaseTableProps {
   setOrder?: any;
   setOrderBy?: any;
   searchBarLabel?: string;
-  inputHandler?: (e: any) => void;
+  searchInputHandler?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   textVal?: string;
 }

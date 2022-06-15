@@ -8,7 +8,7 @@ interface Props {
   id: string;
 }
 
-const GetCredentialTypes: React.FC<Props> = ({ id }) => {
+const GetCredentialType: React.FC<Props> = ({ id }) => {
   const { userData } = useAuthContext();
   const config = useAccountConnectorsGetOne<Connector>({
     accountId: userData.accountId,
@@ -28,4 +28,4 @@ const GetCredentialTypes: React.FC<Props> = ({ id }) => {
   return <>Demo</>;
 };
 
-export default GetCredentialTypes;
+export default GetCredentialType;
