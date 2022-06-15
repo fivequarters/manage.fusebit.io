@@ -96,14 +96,14 @@ const BaseTable: React.FC<BaseTableProps> = ({
   inputHandler,
   textVal,
 }) => {
-  const [orderBy, setOrderBy] = React.useState('');
+  const [orderBy, setOrderBy] = React.useState('name');
   const [order, setOrder] = React.useState('asc');
 
   const compare = (left: any, right: any) => {
-    if (left > right) {
+    if (left < right) {
       return 1;
     }
-    if (left < right) {
+    if (left > right) {
       return -1;
     }
     return 0;
@@ -111,10 +111,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
 
   const computedRowsPerPage = rows
     .sort((a, b) => {
-      if (order !== 'desc' && order !== 'asc') {
-        return 0;
-      }
-      return order === 'desc' ? compare(a[orderBy], b[orderBy]) : -compare(a[orderBy], b[orderBy]);
+      return order === 'asc' ? compare(a[orderBy], b[orderBy]) : -compare(a[orderBy], b[orderBy]);
     })
     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   const isMobile = useMediaQuery('(max-width: 880px)');
