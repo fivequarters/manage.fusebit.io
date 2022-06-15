@@ -1,5 +1,4 @@
-import React from 'react';
-import { TableCell, TableHead, TableRow, Checkbox } from '@material-ui/core';
+import { TableCell, TableHead, TableRow, Checkbox, TableSortLabel } from '@material-ui/core';
 import { BaseTableProps } from './types';
 
 const BaseTableHead = ({
@@ -9,7 +8,28 @@ const BaseTableHead = ({
   headers,
   isAllChecked,
   hideCheckAll,
-}: Pick<BaseTableProps, 'rows' | 'selected' | 'onSelectAll' | 'headers' | 'isAllChecked' | 'hideCheckAll'>) => {
+  order,
+  setOrder,
+  orderBy,
+  setOrderBy,
+}: Pick<
+  BaseTableProps,
+  | 'rows'
+  | 'selected'
+  | 'onSelectAll'
+  | 'headers'
+  | 'isAllChecked'
+  | 'hideCheckAll'
+  | 'order'
+  | 'orderBy'
+  | 'setOrder'
+  | 'setOrderBy'
+>) => {
+  const handleSortRequest = (cellId: string) => {
+    const isAsc = orderBy === cellId && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(cellId);
+  };
   return (
     <TableHead>
       <TableRow>
@@ -24,7 +44,17 @@ const BaseTableHead = ({
         </TableCell>
         {headers.map((header) => (
           <TableCell style={{ whiteSpace: 'nowrap' }} key={header.id} align="left">
-            {header.value}
+            {header.sort ? (
+              <TableSortLabel
+                active={orderBy === (header.sort?.sortVal as string)}
+                direction={(orderBy === (header.sort?.sortVal as string) ? order : 'asc') as 'asc' | 'desc'}
+                onClick={() => handleSortRequest(header.sort?.sortVal as string)}
+              >
+                {header.value}
+              </TableSortLabel>
+            ) : (
+              header.value
+            )}
           </TableCell>
         ))}
       </TableRow>

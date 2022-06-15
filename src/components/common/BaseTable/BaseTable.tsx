@@ -1,5 +1,15 @@
-import React, { useMemo, useState } from 'react';
-import { Table, TableBody, Button, IconButton, Tooltip, useMediaQuery, TablePagination, Box } from '@material-ui/core';
+import React, { useMemo } from 'react';
+import {
+  Table,
+  TableBody,
+  Button,
+  IconButton,
+  Tooltip,
+  useMediaQuery,
+  TablePagination,
+  Box,
+  TextField,
+} from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { ROWS_PER_PAGE_OPTIONS } from '@hooks/usePagination';
@@ -82,11 +92,31 @@ const BaseTable: React.FC<BaseTableProps> = ({
   headerButtons,
   hideCheckAll,
   actionsContainerProps,
+  searchBarLabel,
+  searchInputHandler,
+  textVal,
 }) => {
-  const computedRowsPerPage = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const [orderBy, setOrderBy] = React.useState('name');
+  const [order, setOrder] = React.useState('asc');
+
+  const compare = (left: any, right: any) => {
+    if (left < right) {
+      return 1;
+    }
+    if (left > right) {
+      return -1;
+    }
+    return 0;
+  };
+
+  const computedRowsPerPage = rows
+    .sort((a, b) => {
+      return order === 'asc' ? compare(a[orderBy], b[orderBy]) : compare(b[orderBy], a[orderBy]);
+    })
+    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   const isMobile = useMediaQuery('(max-width: 880px)');
   const mobileArrowColumns = headers.slice(1);
-  const [mobileColumnIndex, setMobileColumnIndex] = useState(0);
+  const [mobileColumnIndex, setMobileColumnIndex] = React.useState(0);
 
   const handleNextCellSelect = () => setMobileColumnIndex(mobileColumnIndex + 1);
 
@@ -139,6 +169,10 @@ const BaseTable: React.FC<BaseTableProps> = ({
               selected={selected}
               isAllChecked={isAllChecked}
               hideCheckAll={hideCheckAll}
+              order={order}
+              orderBy={orderBy}
+              setOrder={setOrder}
+              setOrderBy={setOrderBy}
             />
           )}
           <TableBody>
@@ -214,6 +248,16 @@ const BaseTable: React.FC<BaseTableProps> = ({
                   {button.text}
                 </Button>
               ))}
+              {searchBarLabel ? (
+                <TextField
+                  onChange={searchInputHandler}
+                  label={searchBarLabel}
+                  style={{ display: 'inline-flex', width: '250px' }}
+                  value={textVal}
+                />
+              ) : (
+                <></>
+              )}
               <Button onClick={onClickNew} startIcon={<AddIcon />} variant="outlined" color="primary" size="large">
                 {newButtonText || `New ${entityName}`}
               </Button>
@@ -221,7 +265,6 @@ const BaseTable: React.FC<BaseTableProps> = ({
           )
         )}
       </StyledButtonsContainer>
-
       {loading ? (
         <CSC.LoaderContainer>
           <CSC.Spinner />
