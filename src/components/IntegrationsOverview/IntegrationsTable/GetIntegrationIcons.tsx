@@ -1,5 +1,5 @@
 import React from 'react';
-import { EntityComponent } from '@interfaces/feed';
+import { EntityComponent, Feed } from '@interfaces/feed';
 import { useGetConnectorsFeed } from '@hooks/useGetConnectorsFeed';
 import { urlOrSvgToImage } from '@utils/utils';
 import { InnerConnector } from '@interfaces/integration';
@@ -18,9 +18,13 @@ const GetIntegrationIcons: React.FC<Props> = ({ components }) => {
       {applicableComponents
         .map((item) => item.provider)
         .map((item) => {
-          return connectorFeed.data?.filter(
+          const connectors = connectorFeed.data?.filter(
             (conn) => (conn.configuration.components as EntityComponent[])[0].provider === item
-          )[0].smallIcon;
+          );
+          if (connectors && connectors.length < 1) {
+            return undefined;
+          }
+          return (connectors as Feed[])[0].smallIcon;
         })
         .map((item, idx) => {
           return (
