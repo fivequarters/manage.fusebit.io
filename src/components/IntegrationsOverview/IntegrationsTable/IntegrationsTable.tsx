@@ -52,29 +52,27 @@ const IntegrationsTable = () => {
     },
     param: 'key',
   });
-  let rows = (integrations?.data?.items || []).map((row) => ({
-    id: row.id,
-    name: row.id,
-    installs: <GetInstalls id={row.id} />,
-    sortableLastModified: new Date(row.dateModified),
-    lastModified: format(new Date(row.dateAdded), 'MM/dd/yyyy'),
-    sortableCreatedAt: new Date(row.dateAdded),
-    createdAt: format(new Date(row.dateModified), 'MM/dd/yyyy'),
-    connectors: <GetIntegrationIcons components={row.data.components} />,
-    connectorNames: row.data.components
-      .filter((component) => component.entityType === 'connector')
-      .map((component) => component.provider),
-  }));
+  const rows = (integrations?.data?.items || [])
+    .map((row) => ({
+      id: row.id,
+      name: row.id,
+      installs: <GetInstalls id={row.id} />,
+      sortableLastModified: new Date(row.dateModified),
+      lastModified: format(new Date(row.dateAdded), 'MM/dd/yyyy'),
+      sortableCreatedAt: new Date(row.dateAdded),
+      createdAt: format(new Date(row.dateModified), 'MM/dd/yyyy'),
+      connectors: <GetIntegrationIcons components={row.data.components} />,
+      connectorNames: row.data.components
+        .filter((component) => component.entityType === 'connector')
+        .map((component) => component.provider),
+    }))
+    .filter((item: any) => {
+      if (item.id.includes(searchField)) {
+        return true;
+      }
 
-  const handleFilterFunc = (item: any, query: string) => {
-    if (item.id.includes(query)) {
-      return true;
-    }
-
-    return item.connectorNames.some((connName: string) => connName.includes(query));
-  };
-
-  rows = rows.filter((item: any) => handleFilterFunc(item, searchField));
+      return item.connectorNames.some((connName: string) => connName.includes(searchField));
+    });
 
   const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
     page,

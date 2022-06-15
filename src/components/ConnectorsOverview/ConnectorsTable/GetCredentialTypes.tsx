@@ -21,7 +21,7 @@ const GetCredentialTypes: React.FC<Props> = ({ id }) => {
     return <CSC.Spinner />;
   }
 
-  if ((config.data.data.data.configuration as any).mode.useProduction) {
+  if ((config?.data?.data?.data?.configuration as any).mode?.useProduction) {
     return <>Production</>;
   }
 
