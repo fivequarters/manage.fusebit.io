@@ -18,7 +18,7 @@ const GetRelatedIntegrations: React.FC<Props> = ({ name }) => {
   });
 
   const matchedIntegrations = integrations?.data?.items?.filter(
-    (integration) => integration.data.components.filter((component) => component.entityId === name).length !== 0
+    (integration) => integration.data.components.find((component) => component.entityId === name) !== undefined
   );
 
   const { getRedirectLink } = useGetRedirectLink();

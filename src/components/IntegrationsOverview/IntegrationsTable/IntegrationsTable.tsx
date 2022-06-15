@@ -35,10 +35,9 @@ const IntegrationsTable = () => {
     subscriptionId: userData.subscriptionId,
   });
 
-  const [inputText, setInputText] = React.useState('');
+  const [searchField, setSearchField] = React.useState('');
   const inputHandler = (e: any) => {
-    const lowerCase = e.target.value.toLowerCase();
-    setInputText(lowerCase);
+    setSearchField(e.target.value);
   };
 
   const { setFirstTimeVisitor } = useFirstTimeVisitor({
@@ -64,7 +63,7 @@ const IntegrationsTable = () => {
     connectors: <GetIntegrationIcons components={row.data.components} />,
     connectorNames: row.data.components
       .filter((component) => component.entityType === 'connector')
-      .map((component) => component.provider.split('/')[1].split('-')[0]),
+      .map((component) => component.provider),
   }));
 
   const handleFilterFunc = (item: any, query: string) => {
@@ -75,7 +74,7 @@ const IntegrationsTable = () => {
     return item.connectorNames.some((connName: string) => connName.includes(query));
   };
 
-  rows = rows.filter((item: any) => handleFilterFunc(item, inputText));
+  rows = rows.filter((item: any) => handleFilterFunc(item, searchField));
 
   const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
     page,
@@ -143,7 +142,7 @@ const IntegrationsTable = () => {
         onClickRow={handleClickRow}
         searchBarLabel="Integrations"
         inputHandler={inputHandler}
-        textVal={inputText}
+        textVal={searchField}
       />
     </>
   );

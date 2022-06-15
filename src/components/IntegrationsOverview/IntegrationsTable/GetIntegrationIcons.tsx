@@ -20,7 +20,7 @@ const GetIntegrationIcons: React.FC<Props> = ({ components }) => {
         .map((item) => {
           return connectorFeed.data?.filter(
             (conn) => (conn.configuration.components as EntityComponent[])[0].provider === item
-          )[0].smallIcon as string;
+          )[0].smallIcon;
         })
         .map((item, idx) => {
           return (
@@ -28,7 +28,7 @@ const GetIntegrationIcons: React.FC<Props> = ({ components }) => {
               avatar={
                 <Avatar style={{ backgroundColor: 'white', border: '3px solid white' }} src={urlOrSvgToImage(item)} />
               }
-              label={applicableComponents[idx]}
+              label={applicableComponents[idx].provider}
               key={applicableComponents[idx].entityId}
             />
           );

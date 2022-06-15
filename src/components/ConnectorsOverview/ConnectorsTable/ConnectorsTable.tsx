@@ -16,7 +16,7 @@ import DeleteConnectorModal from '../DeleteConnectorModal';
 import CreateConnectorModal from '../CreateConnectorModal';
 import GetIdentities from './GetIdentities';
 import GetCredentialTypes from './GetCredentialTypes';
-import GetConnectorIcons from './GetConnectorIcons';
+import GetConnectorIcon from './GetConnectorIcon';
 import GetRelatedIntegrations from './GetRelatedIntegrations';
 
 const ConnectorsTable = () => {
@@ -32,9 +32,9 @@ const ConnectorsTable = () => {
     subscriptionId: userData.subscriptionId,
   });
 
-  const [inputText, setInputText] = React.useState('');
+  const [searchField, setSearchField] = React.useState('');
   const inputHandler = (e: any) => {
-    setInputText(e.target.value);
+    setSearchField(e.target.value);
   };
 
   useQueryParam({
@@ -47,7 +47,7 @@ const ConnectorsTable = () => {
   let rows = (connectors?.data?.items || []).map((row) => ({
     id: row.id,
     name: row.id,
-    icon: <GetConnectorIcons handler={row.data.handler} name={row.id} />,
+    icon: <GetConnectorIcon handler={row.data.handler} name={row.id} />,
     type: row.tags['fusebit.service'],
     identities: <GetIdentities id={row.id} />,
     createdAt: format(new Date(row.dateAdded), 'MM/dd/yyyy'),
@@ -64,7 +64,7 @@ const ConnectorsTable = () => {
     }
   };
 
-  rows = rows.filter((item: any) => handleFilterFunc(item, inputText));
+  rows = rows.filter((item: any) => handleFilterFunc(item, searchField));
 
   const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
     page,
@@ -117,7 +117,7 @@ const ConnectorsTable = () => {
         onClickRow={handleClickRow}
         searchBarLabel="Connectors"
         inputHandler={inputHandler}
-        textVal={inputText}
+        textVal={searchField}
       />
     </>
   );
