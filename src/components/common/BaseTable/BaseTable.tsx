@@ -99,31 +99,22 @@ const BaseTable: React.FC<BaseTableProps> = ({
   const [orderBy, setOrderBy] = React.useState('');
   const [order, setOrder] = React.useState('asc');
 
+  const compare = (left: any, right: any) => {
+    if (left > right) {
+      return 1;
+    }
+    if (left < right) {
+      return -1;
+    }
+    return 0;
+  };
+
   const computedRowsPerPage = rows
     .sort((a, b) => {
-      const left = a[orderBy] as any;
-      const right = b[orderBy] as any;
-
-      if (order === 'desc') {
-        if (left > right) {
-          return 1;
-        }
-        if (left < right) {
-          return -1;
-        }
+      if (order !== 'desc' && order !== 'asc') {
         return 0;
       }
-      if (order === 'asc') {
-        if (left < right) {
-          return 1;
-        }
-        if (left > right) {
-          return -1;
-        }
-        return 0;
-      }
-
-      return 0;
+      return order === 'desc' ? compare(a[orderBy], b[orderBy]) : -compare(a[orderBy], b[orderBy]);
     })
     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   const isMobile = useMediaQuery('(max-width: 880px)');
