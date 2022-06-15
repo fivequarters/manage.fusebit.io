@@ -11,12 +11,12 @@ interface Props {
 
 const GetIntegrationIcons: React.FC<Props> = ({ components }) => {
   const connectorFeed = useGetConnectorsFeed();
-  const applicableComponents = components
-    .filter((item) => item.entityType === 'connector')
-    .map((item) => item.provider);
+  const applicableComponents = components.filter((item) => item.entityType === 'connector');
+
   return (
     <>
       {applicableComponents
+        .map((item) => item.provider)
         .map((item) => {
           return connectorFeed.data?.filter(
             (conn) => (conn.configuration.components as EntityComponent[])[0].provider === item
@@ -29,7 +29,7 @@ const GetIntegrationIcons: React.FC<Props> = ({ components }) => {
                 <Avatar style={{ backgroundColor: 'white', border: '3px solid white' }} src={urlOrSvgToImage(item)} />
               }
               label={applicableComponents[idx]}
-              key={applicableComponents[idx]}
+              key={applicableComponents[idx].entityId}
             />
           );
         })}
