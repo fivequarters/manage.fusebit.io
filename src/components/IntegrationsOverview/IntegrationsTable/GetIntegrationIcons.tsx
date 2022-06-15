@@ -32,7 +32,7 @@ const GetIntegrationIcons: React.FC<Props> = ({ components }) => {
               avatar={
                 <Avatar style={{ backgroundColor: 'white', border: '3px solid white' }} src={urlOrSvgToImage(item)} />
               }
-              label={applicableComponents[idx].provider}
+              label={applicableComponents[idx].entityId}
               key={applicableComponents[idx].entityId}
             />
           );

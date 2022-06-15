@@ -9,7 +9,8 @@ interface Props {
 
 const GetConnectorIcon: React.FC<Props> = ({ handler, name }) => {
   const connectorFeed = useGetConnectorsFeed();
-  const icon = connectorFeed.data?.find((conn) => JSON.stringify(conn).includes(handler))?.smallIcon;
+  const icon = connectorFeed.data?.find((conn) => JSON.stringify(conn.configuration.entities).includes(handler))
+    ?.smallIcon;
   if (!icon) {
     return <></>;
   }
