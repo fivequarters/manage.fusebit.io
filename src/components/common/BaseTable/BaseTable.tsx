@@ -252,7 +252,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
                 <TextField
                   onChange={inputHandler}
                   label={searchBarLabel}
-                  style={{ display: 'inline-flex', width: '250px', justifyContent: '' }}
+                  style={{ display: 'inline-flex', width: '250px' }}
                   value={textVal}
                 />
               ) : (
