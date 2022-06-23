@@ -59,7 +59,7 @@ const StyledLinkContainer = styled(Box)`
 
 const openSupportMessage = () => {
   trackEventMemoized('Support Link Clicked', 'Header');
-  window.Intercom('showNewMessage', 'Hi, Fusebit team. I have a question!');
+  window.Intercom('showNewMessage');
 };
 
 interface Props {

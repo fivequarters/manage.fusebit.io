@@ -210,7 +210,7 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
       } else {
         trackEventMemoized('New Connector Enable Button Clicked', 'Connectors', { connector: rawActiveTemplate.id });
       }
-      window.Intercom('showNewMessage', `I'm interested in enabling ${rawActiveTemplate.name}`);
+      window.Intercom('showNewMessage');
     }
     onClose?.();
   };
