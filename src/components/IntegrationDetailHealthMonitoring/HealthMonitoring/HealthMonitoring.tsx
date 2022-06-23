@@ -2,7 +2,6 @@ import Card from '@components/common/Card';
 import { StyledListItem } from '@components/globalStyle';
 import { Box, useMediaQuery } from '@material-ui/core';
 import { trackEventMemoized } from '@utils/analytics';
-import { sendIntercomMessage } from '@utils/intercom';
 import { useParams } from 'react-router-dom';
 import health from '@assets/health.png';
 import BackgroundImage from '@components/common/BackgroundImage/BackgroundImage';
@@ -14,7 +13,6 @@ const HealthMonitoring = () => {
   const handleIntercomPost = () => {
     trackEventMemoized('Talk to Sales Button Clicked', 'Health', { integration: id });
     window.Intercom?.('showNewMessage', 'I would like to enable the "Health" feature for my account.');
-    sendIntercomMessage();
   };
 
   return (
