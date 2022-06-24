@@ -2,12 +2,9 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import { Params } from '@interfaces/api';
 import { useAxios } from '@hooks/useAxios';
 import { useAuthContext } from '@hooks/useAuthContext';
-import { getAllConnectors } from '@hooks/api/v2/account/connector/useGetAll';
-import { getAllIdentities } from '@hooks/api/v2/account/connector/identity/useGetAll';
-import { Connector } from '@interfaces/connector';
+import { getAllIdentities } from '@hooks/api/v2/account/connector/identity/useSearchAll';
 import { Identity, IdentityList } from '@interfaces/identities';
 import { useError } from '@hooks/useError';
-import { entityLoopThrough } from '@hooks/api/v2/utils';
 
 export const ACCOUNT_INTEGRATION_INSTALL_IDENTITIES_GET_ALL = 'accountIntegrationInstallIdentitiesGetAll';
 
@@ -21,40 +18,22 @@ export const useAccountIntegrationInstallIdentitiesGetAll = (
 
   const getAllIdentitiesFromInstalls = async () => {
     try {
-      const userParams = {
-        accountId: userData.accountId,
-        subscriptionId: userData.subscriptionId,
+      const identities = await getAllIdentities<IdentityList>(
+        axios,
+        {
+          accountId: userData.accountId,
+          subscriptionId: userData.subscriptionId,
+        },
+        {
+          tag: `fusebit.tenantId=${tenantId}`,
+        }
+      );
+
+      const isRelated = (i: Identity) => {
+        return i.tags['fusebit.tenantId'] === tenantId && connectorIds.includes(i.tags['fusebit.parentEntityId']);
       };
 
-      const connectors = await entityLoopThrough<Connector>((next) =>
-        getAllConnectors(axios, userParams, {
-          next,
-          count: 1,
-        })
-      );
-
-      const identities = await Promise.all(
-        (connectors || []).map((connector) => {
-          return getAllIdentities<IdentityList>(axios, {
-            ...userParams,
-            id: connector.id,
-          });
-        })
-      );
-
-      return identities
-        .map((res) => {
-          const {
-            data: { items },
-          } = res;
-
-          const isRelated = (i: Identity) =>
-            i.tags['fusebit.tenantId'] === tenantId && connectorIds.includes(i.tags['fusebit.parentEntityId']);
-
-          return items.filter(isRelated);
-        })
-        .filter((arr) => arr.length > 0)
-        .flat();
+      return identities?.data.items.filter(isRelated);
     } catch (error) {
       createError(error);
     }
