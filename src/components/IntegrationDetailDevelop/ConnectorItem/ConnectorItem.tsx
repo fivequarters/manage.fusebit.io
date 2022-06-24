@@ -31,7 +31,13 @@ const ConnectorItem: React.FC<Props> = ({ className, connector, integrationData 
   const { data: connectorFeed, isLoading } = useGetMatchingConnectorFeed({ connector });
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
-  const handleClick = () => history.push(getRedirectLink(`/connector/${connector.id}/configure`));
+  const handleClick = () => {
+    // connectors that only have an entityId, like those who are not yet created
+    // but are added to the components list will not trigger the redirect
+    if (connector.id) {
+      history.push(getRedirectLink(`/connector/${connector.id}/configure`));
+    }
+  };
   const { removeConnectorFromIntegration } = useEntityApi();
   const { createLoader, removeLoader } = useLoader();
   const matchesCardOverlapping = useMediaQuery(CARD_OVERLAPPING_MEDIA_QUERY);
@@ -39,21 +45,20 @@ const ConnectorItem: React.FC<Props> = ({ className, connector, integrationData 
   const handleDelete = async () => {
     try {
       createLoader();
-
       await removeConnectorFromIntegration(connector, integrationData);
     } finally {
       removeLoader();
     }
   };
   const name = useMemo(() => {
-    if (connector.missing && integrationData?.data.id !== connector.id) {
-      return `${connector.id} is not found`;
+    if (connector.missing && integrationData?.data.id !== connector.entityId) {
+      return `${connector.entityId} is not found`;
     }
-    return connector.id;
+    return connector.entityId;
   }, [connector, integrationData]);
 
   const icon = useMemo(() => {
-    if (connector.missing && integrationData?.data.id === connector.id) {
+    if (connector.missing && integrationData?.data.id === connector.entityId) {
       const feedId = integrationData.data.tags['fusebit.feedId'];
       const feed = queryClient.getQueryData<Feed[]>('getIntegrationsFeed');
       const integrationFeed = (feed || []).find((i) => i.id === feedId);
@@ -73,7 +78,7 @@ const ConnectorItem: React.FC<Props> = ({ className, connector, integrationData 
         confirmationButtonText="Remove"
       />
       <ListItem
-        id={connector.id}
+        id={connector.entityId}
         onClick={handleClick}
         className={className}
         icon={isLoading ? <CircularProgress size={20} /> : <img src={icon} alt="connector" height={20} width={20} />}
@@ -81,7 +86,7 @@ const ConnectorItem: React.FC<Props> = ({ className, connector, integrationData 
         onDelete={toggleDeleteConnectorModal}
       />
       {!matchesCardOverlapping && (
-        <LineConnector start={INTEGRATION_CARD_ID} startAnchor="right" end={connector.id} endAnchor="left" />
+        <LineConnector start={INTEGRATION_CARD_ID} startAnchor="right" end={connector.entityId} endAnchor="left" />
       )}
     </>
   );
