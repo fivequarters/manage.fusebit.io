@@ -12,6 +12,7 @@ import CompanyTitle from '@components/common/CompanyTitle';
 import MainUserAccounts from '@components/common/MainUserInfo/MainUserAccounts';
 import * as CSC from '@components/globalStyle';
 import { useAccountGetAllAccounts } from '@hooks/api/v1/account/account/useGetAllAccounts';
+import { ACTIVE_ACCOUNT_KEY } from '@utils/constants';
 
 const StyledUserDropdownInfo = styled.div`
   display: flex;
@@ -148,7 +149,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
       ...userData,
       ...acc,
     });
-    localStorage.setItem('activeAccount', JSON.stringify(acc));
+    localStorage.setItem(ACTIVE_ACCOUNT_KEY, JSON.stringify(acc));
     setAnchorEl(null);
     onAccountSwitch();
   };
