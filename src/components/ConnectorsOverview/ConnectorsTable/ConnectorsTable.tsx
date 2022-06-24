@@ -1,4 +1,6 @@
+import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { format } from 'date-fns';
 import BaseTable from '@components/common/BaseTable/BaseTable';
 import { useEntityTable } from '@hooks/useEntityTable';
 import { usePagination } from '@hooks/usePagination';
@@ -13,6 +15,9 @@ import useQueryParam from '@hooks/useQueryParam';
 import DeleteConnectorModal from '../DeleteConnectorModal';
 import CreateConnectorModal from '../CreateConnectorModal';
 import GetIdentities from './GetIdentities';
+import GetCredentialType from './GetCredentialType';
+import GetConnectorIcon from './GetConnectorIcon';
+import GetRelatedIntegrations from './GetRelatedIntegrations';
 
 const ConnectorsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -27,6 +32,11 @@ const ConnectorsTable = () => {
     subscriptionId: userData.subscriptionId,
   });
 
+  const [searchField, setSearchField] = React.useState('');
+  const searchInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchField(e.target.value);
+  };
+
   useQueryParam({
     onSet: () => {
       setNewModal(true);
@@ -34,12 +44,21 @@ const ConnectorsTable = () => {
     param: 'key',
   });
 
-  const rows = (connectors?.data?.items || []).map((row) => ({
-    id: row.id,
-    name: row.id,
-    type: row.tags['fusebit.service'],
-    identities: <GetIdentities id={row.id} />,
-  }));
+  const rows = (connectors?.data?.items || [])
+    .map((row) => ({
+      id: row.id,
+      name: row.id,
+      icon: <GetConnectorIcon handler={row.data.handler} name={row.id} />,
+      type: row.tags['fusebit.service'],
+      identities: <GetIdentities id={row.id} />,
+      createdAt: format(new Date(row.dateAdded), 'MM/dd/yyyy'),
+      sortableCreatedAt: new Date(row.dateAdded),
+      lastModified: format(new Date(row.dateModified), 'MM/dd/yyyy'),
+      sortableLastModified: new Date(row.dateModified),
+      credentialType: <GetCredentialType id={row.id} />,
+      inUseBy: <GetRelatedIntegrations name={row.id} />,
+    }))
+    .filter((item: any) => item.id.includes(searchField));
 
   const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
     page,
@@ -71,10 +90,15 @@ const ConnectorsTable = () => {
         page={page}
         rowsPerPage={rowsPerPage}
         entityName="connector"
+        entityNamePlural="connectors"
         headers={[
-          { id: 'name', value: 'Name' },
-          { id: 'type', value: 'Type' },
-          { id: 'identities', value: 'Identities' },
+          { id: 'icon', value: '' },
+          { id: 'name', value: 'Name', sort: { sortVal: 'name' } },
+          { id: 'createdAt', value: 'Created At', sort: { sortVal: 'sortableCreatedAt' } },
+          { id: 'lastModified', value: 'Last Modified', sort: { sortVal: 'sortableLastModified' } },
+          { id: 'credentialType', value: 'Configuration' },
+          { id: 'identities', value: 'Identities', sort: { sortVal: 'sortableIdentities' } },
+          { id: 'inUseBy', value: 'Associated Integrations' },
         ]}
         loading={isLoading}
         onClickNew={handleNewIntegration}
@@ -85,6 +109,9 @@ const ConnectorsTable = () => {
         isSelected={isSelected}
         selected={selected}
         onClickRow={handleClickRow}
+        searchBarLabel="Connectors"
+        searchInputHandler={searchInputHandler}
+        textVal={searchField}
       />
     </>
   );

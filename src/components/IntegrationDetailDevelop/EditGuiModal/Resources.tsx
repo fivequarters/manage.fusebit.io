@@ -77,6 +77,7 @@ const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrat
 
   return (
     <CustomNavBase
+      id="resources"
       title="Resources"
       tooltipDescription="Resources to help you build your Fusebit Integration with target systems, more easily."
     >

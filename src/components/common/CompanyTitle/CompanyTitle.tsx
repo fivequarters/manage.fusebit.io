@@ -1,20 +1,32 @@
+import { ReactNode } from 'react';
 import styled from 'styled-components';
 import { useAuthContext } from '../../../hooks/useAuthContext';
 
 const StyledUserDropdownCompany = styled.h5`
   font-size: 14px;
   line-height: 16px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--primary-color);
   text-transform: uppercase;
-  max-width: 238px;
+  max-width: 226px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   margin: 0;
+
+  @media only screen and (max-width: 880px) {
+    width: 290px;
+  }
 `;
 
-const CompanyTitle = () => {
+interface Props {
+  children?: ReactNode;
+}
+
+const CompanyTitle = ({ children }: Props) => {
   const { userData } = useAuthContext();
 
-  return <StyledUserDropdownCompany>{userData.company}</StyledUserDropdownCompany>;
+  return <StyledUserDropdownCompany>{children || userData.company}</StyledUserDropdownCompany>;
 };
 
 export default CompanyTitle;

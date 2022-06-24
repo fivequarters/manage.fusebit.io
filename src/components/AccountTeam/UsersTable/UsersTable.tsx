@@ -10,12 +10,12 @@ import { useAuthContext } from '@hooks/useAuthContext';
 import { Account } from '@interfaces/account';
 import { useAccountUserGetAll } from '@hooks/api/v1/account/user/useGetAll';
 import DeleteUserModal from '../DeleteUserModal';
-import CreateUserModal from '../NewUserModal';
+import InviteUserModal from '../InviteUserModal';
 import NameColumn from './NameColumn';
 
 const UsersTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
-  const [newModalOpen, , toggleNewModal] = useModal();
+  const [inviteModalOpen, , toggleInviteModal] = useModal();
   const [deleteModalOpen, setDeleteModal, toggleDeleteModal] = useModal();
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
@@ -44,16 +44,19 @@ const UsersTable = () => {
 
   const handleClickRow = (row: BaseTableRow) => history.push(getRedirectLink(`/authentication/${row.id}/overview`));
 
-  const handleNewIntegration = () => {
-    trackEventMemoized('New User Button Clicked', 'Users');
-    toggleNewModal();
+  const handleInviteUser = () => {
+    trackEventMemoized('Invite Team Member Button Clicked', 'Team');
+    toggleInviteModal();
   };
 
   return (
     <>
-      <CreateUserModal onClose={toggleNewModal} open={newModalOpen} />
+      <InviteUserModal onClose={toggleInviteModal} open={inviteModalOpen} />
       <DeleteUserModal
-        onConfirm={() => handleRowDelete('Account')}
+        onConfirm={() => {
+          handleRowDelete('Account');
+          trackEventMemoized('Remove Member Clicked', 'Team');
+        }}
         setOpen={setDeleteModal}
         open={deleteModalOpen}
         selected={selected}
@@ -66,13 +69,15 @@ const UsersTable = () => {
         page={page}
         rowsPerPage={rowsPerPage}
         entityName="user"
+        entityNamePlural="users"
         headers={[
           { id: 'name', value: 'Name' },
           { id: 'email', value: 'Email' },
           { id: 'userId', value: 'User-ID' },
         ]}
         loading={isLoading}
-        onClickNew={handleNewIntegration}
+        newButtonText="Invite Team Member"
+        onClickNew={handleInviteUser}
         onDeleteAll={toggleDeleteModal}
         onSelectAll={handleSelectAllCheck}
         rows={rows}

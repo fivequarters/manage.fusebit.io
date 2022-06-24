@@ -15,8 +15,8 @@ export const useEntityTable = ({ page, setPage, rowsPerPage, rows }: Props) => {
   const { massiveDelete } = useEntityApi();
   const { userData } = useAuthContext();
 
-  const handleSelectAllCheck = (event: any) => {
-    if (event.target.checked) {
+  const handleSelectAllCheck = (event?: any, alwaysSelectAll?: boolean) => {
+    if (event?.target?.checked || alwaysSelectAll) {
       const newSelecteds = rows
         .map((row) => {
           if (row.id !== userData.userId) {

@@ -6,9 +6,16 @@ export const useCreateToken = () => {
   const { userData } = useAuthContext();
   const createToken = useAccountUserCreateToken<Operation>();
 
-  const _createToken = async (userId: string) => {
+  const _createToken = async (userId: string, protocol?: 'pki' | 'oauth') => {
     const response = await createToken.mutateAsync({
-      data: { protocol: 'pki', profile: { id: 'default', subscription: userData.subscriptionId } },
+      data: {
+        protocol: protocol || 'pki',
+        profile: {
+          id: 'default',
+          subscription: userData.subscriptionId,
+          oauth: {},
+        },
+      },
       userId,
       accountId: userData.accountId,
     });

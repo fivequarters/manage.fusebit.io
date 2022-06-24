@@ -25,6 +25,8 @@ export interface Integration {
   id: string;
   data: IntegrationData;
   tags: Tags;
+  dateAdded: string;
+  dateModified: string;
 }
 
 export interface Props {

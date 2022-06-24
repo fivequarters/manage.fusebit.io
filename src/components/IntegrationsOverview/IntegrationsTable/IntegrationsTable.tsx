@@ -1,4 +1,6 @@
+import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { format } from 'date-fns';
 import BaseTable from '@components/common/BaseTable/BaseTable';
 import { useEntityTable } from '@hooks/useEntityTable';
 import { usePagination } from '@hooks/usePagination';
@@ -16,6 +18,7 @@ import CreateIntegrationModal from '@components/IntegrationsOverview/CreateInteg
 import ForkIntegrationModal from '@components/IntegrationsOverview/ForkIntegrationModal';
 import { useFeedQuery } from '@hooks/useFeedQuery';
 import GetInstalls from './GetInstalls';
+import GetIntegrationIcons from './GetIntegrationIcons';
 
 const IntegrationsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
@@ -31,6 +34,12 @@ const IntegrationsTable = () => {
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
   });
+
+  const [searchField, setSearchField] = React.useState('');
+  const searchInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchField(e.target.value);
+  };
+
   const { setFirstTimeVisitor } = useFirstTimeVisitor({
     onFirstTimeVisitor: () => setNewModal(true),
     entities: integrations?.data.items,
@@ -43,12 +52,27 @@ const IntegrationsTable = () => {
     },
     param: 'key',
   });
+  const rows = (integrations?.data?.items || [])
+    .map((row) => ({
+      id: row.id,
+      name: row.id,
+      installs: <GetInstalls id={row.id} />,
+      sortableLastModified: new Date(row.dateModified),
+      lastModified: format(new Date(row.dateAdded), 'MM/dd/yyyy'),
+      sortableCreatedAt: new Date(row.dateAdded),
+      createdAt: format(new Date(row.dateModified), 'MM/dd/yyyy'),
+      connectors: <GetIntegrationIcons components={row.data.components} />,
+      connectorNames: row.data.components
+        .filter((component) => component.entityType === 'connector')
+        .map((component) => component.provider),
+    }))
+    .filter((item: any) => {
+      if (item.id.includes(searchField)) {
+        return true;
+      }
 
-  const rows = (integrations?.data?.items || []).map((row) => ({
-    id: row.id,
-    name: row.id,
-    installs: <GetInstalls id={row.id} />,
-  }));
+      return item.connectorNames.some((connName: string) => connName.includes(searchField));
+    });
 
   const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
     page,
@@ -85,9 +109,25 @@ const IntegrationsTable = () => {
         page={page}
         rowsPerPage={rowsPerPage}
         entityName="integration"
+        entityNamePlural="integrations"
         headers={[
-          { id: 'name', value: 'Name' },
+          {
+            id: 'name',
+            value: 'Name',
+            sort: {
+              sortVal: 'name',
+            },
+          },
+          {
+            id: 'createdAt',
+            value: 'Created Date',
+            sort: {
+              sortVal: 'sortableCreatedAt',
+            },
+          },
+          { id: 'lastModified', value: 'Last Modified', sort: { sortVal: 'sortableLastModified' } },
           { id: 'installs', value: 'Installs' },
+          { id: 'connectors', value: 'Associated Connectors' },
         ]}
         loading={isLoading}
         onClickNew={handleNewIntegration}
@@ -98,6 +138,9 @@ const IntegrationsTable = () => {
         isSelected={isSelected}
         selected={selected}
         onClickRow={handleClickRow}
+        searchBarLabel="Integrations"
+        searchInputHandler={searchInputHandler}
+        textVal={searchField}
       />
     </>
   );

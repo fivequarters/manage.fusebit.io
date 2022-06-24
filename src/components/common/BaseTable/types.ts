@@ -1,3 +1,4 @@
+import React from 'react';
 import { BoxProps, ButtonProps } from '@material-ui/core';
 
 export interface BaseTableRow {
@@ -12,14 +13,19 @@ export interface BaseTableProps {
   selected: string[];
   loading: boolean;
   rows: BaseTableRow[];
-  onSelectAll: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSelectAll: (e?: React.ChangeEvent<HTMLInputElement>, alwaysSelectAll?: boolean) => void;
   onDeleteAll: () => void;
   onClickNew?: () => void;
   headers: {
     id: string;
     value: string;
+    sort?: {
+      sortVal: string;
+    };
   }[];
-  entityName?: string;
+  newButtonText?: string;
+  entityName: string;
+  entityNamePlural: string;
   onSelectRow: (e: any, id: string) => void;
   isSelected: (id: string) => boolean;
   rowsPerPage: any;
@@ -39,4 +45,11 @@ export interface BaseTableProps {
   }[];
   hideCheckAll?: boolean;
   actionsContainerProps?: BoxProps;
+  order?: string;
+  orderBy?: string;
+  setOrder?: any;
+  setOrderBy?: any;
+  searchBarLabel?: string;
+  searchInputHandler?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  textVal?: string;
 }
