@@ -11,11 +11,12 @@ interface Option {
 
 interface Props {
   defaultOptions: Option[] | string;
+  onChange?: (value: string) => void;
 }
 
-const MultiSelect = ({ defaultOptions }: Props) => {
+const MultiSelect = ({ defaultOptions, onChange }: Props) => {
   const [options, setOptions] = useState<Option[]>([]);
-  const [values, setValues] = useState<string>();
+  const [value, setValue] = useState<string>();
 
   useEffect(() => {
     if (typeof defaultOptions === 'string') {
@@ -28,6 +29,12 @@ const MultiSelect = ({ defaultOptions }: Props) => {
     }
   }, [defaultOptions]);
 
+  useEffect(() => {
+    if (value && onChange) {
+      onChange(value);
+    }
+  }, [value, onChange]);
+
   return (
     <CreatableSelect
       isMulti
@@ -38,7 +45,7 @@ const MultiSelect = ({ defaultOptions }: Props) => {
             return val.value;
           })
           .join(' ');
-        setValues(singleValueString);
+        setValue(singleValueString);
       }}
       closeMenuOnSelect={false}
       components={animatedComponents}
