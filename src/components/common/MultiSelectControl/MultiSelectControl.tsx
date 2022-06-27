@@ -10,7 +10,13 @@ interface Props {
 }
 
 const MultiSelectControl = ({ data, handleChange, path }: Props) => {
-  return <MultiSelect defaultOptions={data} onChange={(value: string) => handleChange(path, value)} />;
+  return (
+    <MultiSelect
+      placeholder="Bot Token Scopes*"
+      defaultOptions={data}
+      onChange={(value: string) => handleChange(path, value)}
+    />
+  );
 };
 
 export const MultiSelectControlTester: RankedTester = rankWith(3, scopeEndsWith('scope'));
