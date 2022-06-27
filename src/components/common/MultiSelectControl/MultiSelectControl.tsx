@@ -1,4 +1,3 @@
-import React from 'react';
 import { withJsonFormsControlProps } from '@jsonforms/react';
 import { RankedTester, rankWith, scopeEndsWith } from '@jsonforms/core';
 import MultiSelect from '../MultiSelect/MultiSelect';

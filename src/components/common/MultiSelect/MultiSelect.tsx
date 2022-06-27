@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import CreatableSelect from 'react-select/creatable';
 import makeAnimated from 'react-select/animated';
 
@@ -19,6 +19,11 @@ const MultiSelect = ({ defaultOptions, onChange, placeholder }: Props) => {
   const [options, setOptions] = useState<Option[]>();
   const [value, setValue] = useState<Option[]>();
 
+  const initValues = (values: Option[]) => {
+    setOptions(values);
+    setValue(values);
+  };
+
   useEffect(() => {
     if (options) {
       return;
@@ -28,11 +33,9 @@ const MultiSelect = ({ defaultOptions, onChange, placeholder }: Props) => {
       const initialOptions = defaultOptions.split(' ').map((option) => {
         return { value: option, label: option };
       });
-      setOptions(initialOptions);
-      setValue(initialOptions);
+      initValues(initialOptions);
     } else {
-      setOptions(defaultOptions);
-      setValue(defaultOptions);
+      initValues(defaultOptions);
     }
   }, [defaultOptions, options]);
 
