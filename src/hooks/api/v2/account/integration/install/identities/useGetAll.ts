@@ -30,7 +30,7 @@ export const useAccountIntegrationInstallIdentitiesGetAll = (
       );
 
       const isRelated = (i: Identity) => {
-        return i.tags['fusebit.tenantId'] === tenantId && connectorIds.includes(i.tags['fusebit.parentEntityId']);
+        return connectorIds.includes(i.tags['fusebit.parentEntityId']);
       };
 
       return identities?.data.items.filter(isRelated);
