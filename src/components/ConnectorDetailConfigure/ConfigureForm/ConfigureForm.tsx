@@ -18,6 +18,7 @@ import InformationalBanner from '@components/common/InformationalBanner';
 import BaseJsonForm from '@components/common/BaseJsonForm';
 import * as CSC from '@components/globalStyle';
 import { useQueryClient } from 'react-query';
+import MultiSelect from '@components/common/MultiSelect';
 
 const StyledFormWrapper = styled.form`
   display: flex;
@@ -145,6 +146,7 @@ const ConfigureForm: React.FC = () => {
                 By default, Connectors use Fusebit demonstration credentials, which are intended for testing only.
               </InformationalBanner>
             )}
+            <MultiSelect defaultOptions={config.data.data.scope} />
             <BaseJsonForm
               schema={config?.data.schema}
               uischema={config?.data.uischema}
