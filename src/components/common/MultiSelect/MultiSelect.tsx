@@ -46,8 +46,8 @@ const MultiSelect = ({ defaultOptions, onChange }: Props) => {
             return val.value;
           })
           .join(' ');
-        onChange?.(singleValueString);
         setValue(newValues);
+        onChange?.(singleValueString);
       }}
       closeMenuOnSelect={false}
       components={animatedComponents}
