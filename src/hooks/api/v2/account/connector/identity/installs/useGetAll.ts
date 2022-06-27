@@ -5,7 +5,7 @@ import { useAuthContext } from '@hooks/useAuthContext';
 import { Install, InstallList } from '@interfaces/install';
 import { useError } from '@hooks/useError';
 import { getConnectorsFromInstall } from '@utils/utils';
-import { getAllInstalls } from '../../../integration/install/useSearchAll';
+import { getAllAccountInstalls } from '@hooks/api/v2/account/install/useGetAll';
 
 export const ACCOUNT_CONNECTOR_IDENTITY_INSTALLS_GET_ALL = 'accountConnectorIdentityInstallsGetAll';
 
@@ -19,7 +19,7 @@ export const useAccountConnectorIdentityInstallsGetAll = (
 
   const getAllInstallsFromIdentity = async () => {
     try {
-      const installs = await getAllInstalls<InstallList>(
+      const installs = await getAllAccountInstalls<InstallList>(
         axios,
         {
           accountId: userData.accountId,

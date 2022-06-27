@@ -4,9 +4,9 @@ import { FusebitAxios, useAxios } from '@hooks/useAxios';
 import { Install } from '@interfaces/install';
 import { useAuthContext } from '@hooks/useAuthContext';
 
-export const ACCOUNT_INTEGRATIONS_GET_ALL_ACROSS_INTEGRATIONS = 'accountIntegrationInstallGetAllAcrossIntegrations';
+export const GET_ALL_ACCOUNT_INSTALLS = 'getAllAccountIntegrations';
 
-export const getAllInstalls = <T>(axiosInstall: FusebitAxios, params: Params, queryParams?: Params) => {
+export const getAllAccountInstalls = <T>(axiosInstall: FusebitAxios, params: Params, queryParams?: Params) => {
   return axiosInstall<T>(
     `/v2/account/${params.accountId}/subscription/${params.subscriptionId}/install`,
     'get',
@@ -16,7 +16,7 @@ export const getAllInstalls = <T>(axiosInstall: FusebitAxios, params: Params, qu
   );
 };
 
-export const useAccountIntegrationInstallGetAllAcrossIntegrations = <T = { items: Install[] }>() => {
+export const useGetAllAccountInstalls = <T = { items: Install[] }>() => {
   const { axios } = useAxios();
   const { userData } = useAuthContext();
 
@@ -25,7 +25,7 @@ export const useAccountIntegrationInstallGetAllAcrossIntegrations = <T = { items
     accountId: userData.accountId,
   };
 
-  return useQuery([ACCOUNT_INTEGRATIONS_GET_ALL_ACROSS_INTEGRATIONS, params], () => getAllInstalls<T>(axios, params), {
+  return useQuery([GET_ALL_ACCOUNT_INSTALLS, params], () => getAllAccountInstalls<T>(axios, params), {
     enabled: !!userData.token,
   });
 };
