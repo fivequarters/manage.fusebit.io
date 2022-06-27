@@ -8,8 +8,8 @@ interface Props {
   path: string;
 }
 
-const MultiSelectControl = ({ data, handleChange, path }: Props) => (
-  <MultiSelect defaultOptions={data} onChange={(value: string) => handleChange(path, value)} />
-);
+const MultiSelectControl = ({ data, handleChange, path }: Props) => {
+  return <MultiSelect defaultOptions={data} onChange={(value: string) => handleChange(path, value)} />;
+};
 
 export default withJsonFormsControlProps(MultiSelectControl);

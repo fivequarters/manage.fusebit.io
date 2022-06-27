@@ -15,37 +15,39 @@ interface Props {
 }
 
 const MultiSelect = ({ defaultOptions, onChange }: Props) => {
-  const [options, setOptions] = useState<Option[]>([]);
-  const [value, setValue] = useState<string>();
+  const [options, setOptions] = useState<Option[]>();
+  const [value, setValue] = useState<Option[]>();
 
   useEffect(() => {
+    if (options) {
+      return;
+    }
+
     if (typeof defaultOptions === 'string') {
       const initialOptions = defaultOptions.split(' ').map((option) => {
         return { value: option, label: option };
       });
       setOptions(initialOptions);
+      setValue(initialOptions);
     } else {
       setOptions(defaultOptions);
+      setValue(defaultOptions);
     }
-  }, [defaultOptions]);
-
-  useEffect(() => {
-    if (value && onChange) {
-      onChange(value);
-    }
-  }, [value, onChange]);
+  }, [defaultOptions, options]);
 
   return (
     <CreatableSelect
+      value={value}
       isMulti
-      onChange={(newOptions) => {
-        const newValues = newOptions as Option[];
+      onChange={(newSelectedValues) => {
+        const newValues = newSelectedValues as Option[];
         const singleValueString = newValues
           .map((val) => {
             return val.value;
           })
           .join(' ');
-        setValue(singleValueString);
+        onChange?.(singleValueString);
+        setValue(newValues);
       }}
       closeMenuOnSelect={false}
       components={animatedComponents}
