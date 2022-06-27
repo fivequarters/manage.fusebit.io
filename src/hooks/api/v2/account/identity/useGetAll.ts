@@ -4,9 +4,9 @@ import { FusebitAxios, useAxios } from '@hooks/useAxios';
 import { useAuthContext } from '@hooks/useAuthContext';
 import { Identity } from '@interfaces/identities';
 
-export const ACCOUNT_CONNECTORS_GET_ALL_ACROSS_CONNECTORS = 'accountConnectorIdentityGetAllAcrossConnectors';
+export const GET_ALL_ACCOUNT_IDENTITIES = 'GetAllAccountIdentities';
 
-export const getAllIdentities = <T>(axiosInstall: FusebitAxios, params: Params, queryParams?: Params) => {
+export const getAllAccountIdentities = <T>(axiosInstall: FusebitAxios, params: Params, queryParams?: Params) => {
   return axiosInstall<T>(
     `/v2/account/${params.accountId}/subscription/${params.subscriptionId}/identity`,
     'get',
@@ -16,7 +16,7 @@ export const getAllIdentities = <T>(axiosInstall: FusebitAxios, params: Params, 
   );
 };
 
-export const useAccountConnectorIdentityGetAllAcrossConnectors = <T = { items: Identity[] }>() => {
+export const useGetAllAccountIdentities = <T = { items: Identity[] }>() => {
   const { axios } = useAxios();
   const { userData } = useAuthContext();
 
@@ -25,7 +25,7 @@ export const useAccountConnectorIdentityGetAllAcrossConnectors = <T = { items: I
     accountId: userData.accountId,
   };
 
-  return useQuery([ACCOUNT_CONNECTORS_GET_ALL_ACROSS_CONNECTORS, params], () => getAllIdentities<T>(axios, params), {
+  return useQuery([GET_ALL_ACCOUNT_IDENTITIES, params], () => getAllAccountIdentities<T>(axios, params), {
     enabled: !!userData.token,
   });
 };

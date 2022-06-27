@@ -2,9 +2,9 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import { Params } from '@interfaces/api';
 import { useAxios } from '@hooks/useAxios';
 import { useAuthContext } from '@hooks/useAuthContext';
-import { getAllIdentities } from '@hooks/api/v2/account/connector/identity/useSearchAll';
 import { Identity, IdentityList } from '@interfaces/identities';
 import { useError } from '@hooks/useError';
+import { getAllAccountIdentities } from '@hooks/api/v2/account/identity/useGetAll';
 
 export const ACCOUNT_INTEGRATION_INSTALL_IDENTITIES_GET_ALL = 'accountIntegrationInstallIdentitiesGetAll';
 
@@ -18,7 +18,7 @@ export const useAccountIntegrationInstallIdentitiesGetAll = (
 
   const getAllIdentitiesFromInstalls = async () => {
     try {
-      const identities = await getAllIdentities<IdentityList>(
+      const identities = await getAllAccountIdentities<IdentityList>(
         axios,
         {
           accountId: userData.accountId,
