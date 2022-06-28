@@ -1,5 +1,4 @@
 export const configTemporal = {
-  // doble data para replicar la res de la api, no mostrarle esto a benn
   data: {
     data: {
       mode: {
