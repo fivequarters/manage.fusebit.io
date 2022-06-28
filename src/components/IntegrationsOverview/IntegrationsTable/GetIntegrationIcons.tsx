@@ -18,13 +18,10 @@ const GetIntegrationIcons: React.FC<Props> = ({ components }) => {
       {applicableComponents
         .map((item) => item.provider)
         .map((item) => {
-          const connectors = connectorFeed.data?.filter(
+          const connector = connectorFeed.data?.find(
             (conn) => (conn.configuration.components as EntityComponent[])[0].provider === item
           );
-          if (connectors && connectors.length < 1) {
-            return undefined;
-          }
-          return (connectors as Feed[])[0].smallIcon;
+          return connector ? connector.smallIcon : undefined;
         })
         .map((item, idx) => {
           return (
