@@ -1,13 +1,9 @@
 import { useEffect, useState } from 'react';
 import CreatableSelect from 'react-select/creatable';
 import makeAnimated from 'react-select/animated';
+import { Option } from '@interfaces/multiSelect';
 
 const animatedComponents = makeAnimated();
-
-interface Option {
-  value: string;
-  label: string;
-}
 
 interface Props {
   placeholder?: string;
@@ -64,9 +60,13 @@ const MultiSelect = ({ defaultOptions, onChange, placeholder }: Props) => {
           return { ...provided, marginTop };
         },
         menu: () => ({
+          position: 'absolute',
+          top: '45px',
+          width: '100%',
+          left: 0,
           zIndex: 10,
+          background: 'white',
           boxShadow: '0px 20px 48px rgba(52, 72, 123, 0.1)',
-          marginTop: '5px',
           borderRadius: '8px',
         }),
       }}

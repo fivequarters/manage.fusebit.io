@@ -19,6 +19,11 @@ export const lightTheme: Theme = createMuiTheme({
         marginBottom: '20px',
       },
     },
+    MuiCard: {
+      root: {
+        overflow: 'visible',
+      },
+    },
     MuiDrawer: {
       root: {
         zIndex: 10,
@@ -57,6 +62,9 @@ export const lightTheme: Theme = createMuiTheme({
   },
   props: {
     MuiCheckbox: {
+      color: 'primary',
+    },
+    MuiSwitch: {
       color: 'primary',
     },
   },
