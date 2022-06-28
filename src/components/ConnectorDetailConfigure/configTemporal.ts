@@ -157,7 +157,7 @@ export const configTemporal = {
                       scope: '#/properties/clientId',
                     },
                     {
-                      type: 'Control',
+                      type: 'MultiControl',
                       scope: '#/properties/scope',
                     },
                     {

@@ -1,5 +1,5 @@
 import { withJsonFormsControlProps } from '@jsonforms/react';
-import { rankWith, scopeEndsWith, ControlProps, JsonSchema, and, schemaMatches } from '@jsonforms/core';
+import { rankWith, ControlProps, JsonSchema, and, schemaMatches, uiTypeIs } from '@jsonforms/core';
 import { Option } from '@interfaces/multiSelect';
 import MultiSelect from '../MultiSelect/MultiSelect';
 
@@ -26,7 +26,7 @@ const MultiSelectControl = ({ data, handleChange, path, ...props }: ControlProps
 export const MultiSelectControlTester = rankWith(
   3,
   and(
-    scopeEndsWith('scope'),
+    uiTypeIs('MultiControl'),
     schemaMatches(
       (schema) => (schema as JsonSchemaWithCustomProps)?.defaultValues?.length > 0 && schema.type === 'object'
     )
