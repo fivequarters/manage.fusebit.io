@@ -1,14 +1,15 @@
 import { withJsonFormsControlProps } from '@jsonforms/react';
-import { RankedTester, rankWith, scopeEndsWith } from '@jsonforms/core';
+import { RankedTester, rankWith, scopeEndsWith, ControlProps } from '@jsonforms/core';
 import MultiSelect from '../MultiSelect/MultiSelect';
 
-interface Props {
+interface Props extends ControlProps {
   data: any;
   handleChange(path: string, value: string): void;
   path: string;
 }
 
-const MultiSelectControl = ({ data, handleChange, path }: Props) => {
+const MultiSelectControl = ({ data, handleChange, path, ...props }: Props) => {
+  console.log(props);
   return (
     <MultiSelect
       placeholder="Bot Token Scopes*"

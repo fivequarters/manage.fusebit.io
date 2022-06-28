@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Box, Button, useMediaQuery } from '@material-ui/core';
-
 import { ValidationMode } from '@jsonforms/core';
 import { useAccountConnectorsGetOne } from '@hooks/api/v2/account/connector/useGetOne';
 import {
@@ -18,6 +17,7 @@ import InformationalBanner from '@components/common/InformationalBanner';
 import BaseJsonForm from '@components/common/BaseJsonForm';
 import * as CSC from '@components/globalStyle';
 import { useQueryClient } from 'react-query';
+import { configTemporal } from '../configTemporal';
 
 const StyledFormWrapper = styled.form`
   display: flex;
@@ -146,13 +146,13 @@ const ConfigureForm: React.FC = () => {
               </InformationalBanner>
             )}
             <BaseJsonForm
-              schema={config?.data.schema}
-              uischema={config?.data.uischema}
-              data={jsonFormsInputs || config?.data.data}
+              schema={configTemporal?.data.schema}
+              uischema={configTemporal?.data.uischema}
+              data={jsonFormsInputs || configTemporal?.data.data}
               onChange={({ errors: _errors, data: newData }) => {
                 // Clear the clientId and clientSecret when going from non-prod to production.
                 if (
-                  newData.mode?.useProduction !== config?.data.data?.mode?.useProduction &&
+                  newData.mode?.useProduction !== configTemporal?.data.data?.mode?.useProduction &&
                   newData.mode?.useProduction !== data?.mode?.useProduction &&
                   newData.mode?.useProduction
                 ) {
