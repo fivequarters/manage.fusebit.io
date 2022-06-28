@@ -60,11 +60,8 @@ const MultiSelect = ({ defaultOptions, onChange, placeholder }: Props) => {
           return { ...provided, marginTop };
         },
         menu: () => ({
-          position: 'absolute',
-          top: '45px',
-          width: '100%',
-          left: 0,
           zIndex: 10,
+          marginTop: '5px',
           background: 'white',
           boxShadow: '0px 20px 48px rgba(52, 72, 123, 0.1)',
           borderRadius: '8px',
