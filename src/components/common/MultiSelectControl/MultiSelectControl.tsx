@@ -1,24 +1,23 @@
 import { withJsonFormsControlProps } from '@jsonforms/react';
-import { RankedTester, rankWith, scopeEndsWith, ControlProps } from '@jsonforms/core';
+import { rankWith, scopeEndsWith, ControlProps, JsonSchema } from '@jsonforms/core';
+import { Option } from '@interfaces/multiSelect';
 import MultiSelect from '../MultiSelect/MultiSelect';
 
-interface Props extends ControlProps {
-  data: any;
-  handleChange(path: string, value: string): void;
-  path: string;
-}
+type JsonSchemaWithCustomProps = JsonSchema & { defaultValues: Option[]; allowArbitraryScopes: boolean };
 
-const MultiSelectControl = ({ data, handleChange, path, ...props }: Props) => {
-  console.log(props);
+const MultiSelectControl = ({ data, handleChange, path, ...props }: ControlProps) => {
+  const schema = props.schema as JsonSchemaWithCustomProps;
+
   return (
     <MultiSelect
       placeholder="Bot Token Scopes*"
-      defaultOptions={data}
-      onChange={(value: string) => handleChange(path, value)}
+      defaultOptions={schema.defaultValues}
+      allowArbitraryCreation={schema.allowArbitraryScopes}
+      onChange={(values: string[]) => handleChange(path, values)}
     />
   );
 };
 
-export const MultiSelectControlTester: RankedTester = rankWith(3, scopeEndsWith('scope'));
+export const MultiSelectControlTester = rankWith(3, scopeEndsWith('scope'));
 
 export default withJsonFormsControlProps(MultiSelectControl);

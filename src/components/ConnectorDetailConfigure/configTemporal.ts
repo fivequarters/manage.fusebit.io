@@ -5,7 +5,7 @@ export const configTemporal = {
       mode: {
         useProduction: true,
       },
-      scope: 'chat:write users:read channels:read chat:write.public',
+      scope: ['chat:write', 'users:read', 'channels:read', 'chat:write.public'],
       clientId: '',
       clientSecret: '',
       refreshErrorLimit: 100000,
@@ -87,7 +87,7 @@ export const configTemporal = {
             { value: 'channels:read', label: 'channels:read', immutable: false },
             { value: 'chat:write.public', label: 'chat:write.public', immutable: false },
           ],
-          allowArbitraryScopes: true,
+          allowArbitraryScopes: false,
         },
         clientId: {
           title: 'The Client ID from your Slack App',
