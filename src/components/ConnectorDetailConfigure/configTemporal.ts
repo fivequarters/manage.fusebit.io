@@ -80,14 +80,14 @@ export const configTemporal = {
         },
         scope: {
           title: 'Bot Token Scopes',
-          type: 'string',
+          type: 'object',
           defaultValues: [
             { value: 'chat:write', label: 'chat:write', immutable: true },
             { value: 'users:read', label: 'users:read', immutable: false },
             { value: 'channels:read', label: 'channels:read', immutable: false },
             { value: 'chat:write.public', label: 'chat:write.public', immutable: false },
           ],
-          allowArbitraryScopes: false,
+          allowArbitraryScopes: true,
         },
         clientId: {
           title: 'The Client ID from your Slack App',
