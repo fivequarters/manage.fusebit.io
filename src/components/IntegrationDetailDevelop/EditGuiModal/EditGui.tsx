@@ -301,7 +301,6 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       !missingIdentities || missingIdentities.length > 0 ? setLoginFlowModalOpen(true) : handleLogin(),
     onMissingIdentities: setMissingIdentities,
   });
-  const [dirtyState, setDirtyState] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const { invalidateIntegration } = useInvalidateIntegration();
   const { formatSnippet, getProviderVersion } = useSnippets();
@@ -326,7 +325,15 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     disableOnMouseLeave: true,
   });
 
-  const { logs, clearLogs, isSaving, errorBuild, setErrorBuild } = useEditorEvents({
+  const {
+    logs,
+    clearLogs,
+    isSaving,
+    errorBuild,
+    setErrorBuild,
+    editorDirtyState,
+    setEditorDirtyState,
+  } = useEditorEvents({
     isMounted,
     events: [
       EditorEvents.BuildStarted,
@@ -335,6 +342,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       EditorEvents.LogsEntry,
       EditorEvents.LogsAttached,
       EditorEvents.RunnerFinished,
+      EditorEvents.DirtyStateChanged,
     ],
   });
 
@@ -342,13 +350,13 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     formatSnippet,
     getProviderVersion,
     integrationId,
-    setDirtyState,
+    setDirtyState: setEditorDirtyState,
   });
 
   useEffect(() => {
     if (errorBuild) {
-      createError({ message: 'The build failed' });
-      setErrorBuild('');
+      createError(errorBuild?.properties?.isConfig ? { message: errorBuild.message } : { message: 'The build failed' });
+      setErrorBuild(null);
     }
   }, [errorBuild, createError, setErrorBuild]);
 
@@ -412,7 +420,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       event_label: 'Run Button Clicked',
     });
 
-    if (dirtyState) {
+    if (editorDirtyState) {
       const context = window.editor;
       const status: SaveStatus = await context?._server.saveFunction(context);
       trackEventUnmemoized('Save Button Clicked', 'Web Editor', {
@@ -422,7 +430,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
         await invalidateIntegration();
         setRunPending(true);
         setNeedsInitialization(true);
-        setDirtyState(false);
+        setEditorDirtyState(false);
       }
     } else {
       handleRun();
@@ -437,17 +445,17 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     const status: SaveStatus = await context?._server.saveFunction(context);
     if (status.status === 'completed') {
       await invalidateIntegration();
-      setDirtyState(false);
+      setEditorDirtyState(false);
       setNeedsInitialization(true);
     }
   };
 
   const handleKeyUp = () => {
-    setDirtyState(window.editor?.dirtyState);
+    setEditorDirtyState(window.editor?.dirtyState);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
-    if ((navigator.userAgent.match('Mac') ? e.metaKey : e.ctrlKey) && e.key === 's' && dirtyState) {
+    if ((navigator.userAgent.match('Mac') ? e.metaKey : e.ctrlKey) && e.key === 's' && editorDirtyState) {
       e.preventDefault();
       trackEventUnmemoized('Save Button Clicked', 'Web Editor', {
         engagementType: 'Keyboard Save',
@@ -456,7 +464,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   };
 
   const handleClose = () => {
-    if (dirtyState) {
+    if (editorDirtyState) {
       setUnsavedWarning(true);
     } else {
       onClose();
@@ -568,7 +576,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
                   size="small"
                   variant="outlined"
                   color="primary"
-                  disabled={isSaving || !dirtyState || processing}
+                  disabled={!editorDirtyState || isSaving || processing}
                 >
                   Save
                 </Button>
