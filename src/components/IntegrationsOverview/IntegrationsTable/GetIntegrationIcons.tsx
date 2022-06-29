@@ -1,5 +1,5 @@
 import React from 'react';
-import { EntityComponent, Feed } from '@interfaces/feed';
+import { EntityComponent } from '@interfaces/feed';
 import { useGetConnectorsFeed } from '@hooks/useGetConnectorsFeed';
 import { urlOrSvgToImage } from '@utils/utils';
 import { InnerConnector } from '@interfaces/integration';
