@@ -207,10 +207,17 @@ const useFeedPicker = ({ isIntegration, onSubmit, onClose, open, isSnippet, isFo
         trackEventMemoized('New Integration Enable Button Clicked', 'Integrations', {
           integration: rawActiveTemplate.id,
         });
+        window.Intercom?.(
+          'showNewMessage',
+          `I would like to enable the ${rawActiveTemplate.id} integration for my account.`
+        );
       } else {
         trackEventMemoized('New Connector Enable Button Clicked', 'Connectors', { connector: rawActiveTemplate.id });
+        window.Intercom?.(
+          'showNewMessage',
+          `I would like to enable the ${rawActiveTemplate.id} connector for my account.`
+        );
       }
-      window.Intercom('showNewMessage');
     }
     onClose?.();
   };
