@@ -190,7 +190,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
             onClose={handleClose}
             getContentAnchorEl={null}
             anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-            transformOrigin={{ vertical: 122, horizontal: isLoading ? 100 : 360 }}
+            transformOrigin={{ vertical: 122, horizontal: isLoading ? 100 : 395 }}
           >
             <StyledAccountsWrapper>
               <MainUserAccounts accounts={accounts} isLoading={isLoading} onAccountSwitch={handleAccountSwitch} />
