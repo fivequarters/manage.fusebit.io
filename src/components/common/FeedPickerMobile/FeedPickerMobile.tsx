@@ -172,7 +172,7 @@ const FeedPickerMobile: React.FC<Props> = ({ isIntegration, onSubmit, open, onCl
             disabled={step !== steps.length - 1}
             onClick={handleSubmit}
           >
-            {activeTemplate?.outOfPlan ? 'Enable' : 'Create'}
+            {activeTemplate?.outOfPlan ? 'Talk to Sales' : 'Create'}
           </Button>
         </Box>
       </Box>
