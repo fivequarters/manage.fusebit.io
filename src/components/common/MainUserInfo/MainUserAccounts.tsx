@@ -92,7 +92,9 @@ const MainUserAccounts = ({ accounts, isLoading, onAccountSwitch, isMobile }: Pr
                     key={sub.id}
                   >
                     <StyledSubscription>
-                      <span>{sub.displayName}</span> ({sub.id})
+                      {/* Hardcode Production for now, when we have different
+                      display names than Default remove the hardcoded text */}
+                      <span>{'Production' || sub.displayName}</span> ({sub.id})
                     </StyledSubscription>
                     {isActive && <StyledCheck alt="checked" src={check} height="16" width="16" />}
                   </StyledSubscriptionWrapper>
