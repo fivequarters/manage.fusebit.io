@@ -173,7 +173,9 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
           </Box>
           <StyledUserDropdownStatus onClick={handleClick}>
             <StyledUserDropdownStatusId>
-              <strong>{userData.subscriptionName}</strong> ({userData?.subscriptionId})
+              {/* Hardcode Production for now, when we have different
+              display names than Default remove the hardcoded text */}
+              <strong>{'Production' || userData.subscriptionName}</strong> ({userData?.subscriptionId})
             </StyledUserDropdownStatusId>
             {isOnMultipleAccounts && (
               <StyledUserDropdownStatusArrow src={rightArrow} alt="right arrow" height="12" width="12" />
@@ -188,7 +190,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
             onClose={handleClose}
             getContentAnchorEl={null}
             anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-            transformOrigin={{ vertical: 122, horizontal: isLoading ? 100 : 360 }}
+            transformOrigin={{ vertical: 122, horizontal: isLoading ? 100 : 395 }}
           >
             <StyledAccountsWrapper>
               <MainUserAccounts accounts={accounts} isLoading={isLoading} onAccountSwitch={handleAccountSwitch} />
