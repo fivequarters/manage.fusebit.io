@@ -26,10 +26,12 @@ export interface EntityComponent {
 
 export interface ConnectorEntity extends Connector {
   entityType: 'connector';
+  entityId: string;
 }
 
 export interface IntegrationEntity extends Integration {
   entityType: 'integration';
+  entityId: string;
 }
 
 export type Entity = ConnectorEntity | IntegrationEntity;

@@ -92,7 +92,7 @@ const useConnector = () => {
 
       const filteredComponents = newData.data.components.filter((innerConnector: InnerConnector) => {
         let returnConnector = true;
-        if (innerConnector.entityId === connector.id) {
+        if (innerConnector.entityId === connector.entityId) {
           returnConnector = false;
         }
         return returnConnector;

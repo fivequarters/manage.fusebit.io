@@ -1,5 +1,6 @@
 export interface Connector {
   id: string;
+  entityId: string;
   data: {
     configuration: object;
     files: {

@@ -3,6 +3,7 @@ import { InnerConnector } from './integration';
 export interface FinalConnector extends InnerConnector {
   missing?: boolean;
   id: string;
+  entityId: string;
   tokenSignature?: string;
   isApplication?: boolean;
   data?: {
