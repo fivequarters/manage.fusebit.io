@@ -12,7 +12,7 @@ interface Props {
     connectorName: string
   ) => string;
   integrationId: string;
-  setDirtyState: (state: boolean) => void;
+  setDirtyState: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const useSnippetsModal = ({ getProviderVersion, formatSnippet, integrationId, setDirtyState }: Props) => {

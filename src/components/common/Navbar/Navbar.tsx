@@ -8,7 +8,6 @@ import burguer from '@assets/burguer.svg';
 import { useAuthContext } from '@hooks/useAuthContext';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 import { trackEventMemoized } from '@utils/analytics';
-import { sendIntercomMessage } from '@utils/intercom';
 import UserMenu from '../UserMenu/UserMenu';
 import UserDrawerMobile from '../UserDrawerMobile';
 
@@ -60,8 +59,7 @@ const StyledLinkContainer = styled(Box)`
 
 const openSupportMessage = () => {
   trackEventMemoized('Support Link Clicked', 'Header');
-  window.Intercom('showNewMessage', 'Hi, Fusebit team. I have a question!');
-  sendIntercomMessage();
+  window.Intercom('showNewMessage', '');
 };
 
 interface Props {

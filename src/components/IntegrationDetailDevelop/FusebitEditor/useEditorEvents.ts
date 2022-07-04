@@ -11,7 +11,8 @@ interface Props {
 
 const useEditorEvents = ({ isMounted, events }: Props) => {
   const [isSaving, setIsSaving] = useState(false);
-  const [errorBuild, setErrorBuild] = useState('');
+  const [errorBuild, setErrorBuild] = useState<{ message: string; properties?: any } | null>(null);
+  const [editorDirtyState, setEditorDirtyState] = useState(false);
   const [logs, setLogs] = useState<{ msg: string; id: number }[]>([]);
   const clearLogs = () => setLogs([]);
 
@@ -19,16 +20,16 @@ const useEditorEvents = ({ isMounted, events }: Props) => {
     const config = {
       [EditorEvents.BuildStarted]: () => {
         setIsSaving(true);
-        setErrorBuild('');
+        setErrorBuild(null);
       },
       [EditorEvents.BuildFinished]: () => {
         trackEventUnmemoized('Build successful', 'Online Editor');
         setIsSaving(false);
       },
-      [EditorEvents.BuildError]: (e: { error: { message: string } }) => {
+      [EditorEvents.BuildError]: (e: { error: { message: string; properties?: any } }) => {
         trackEventUnmemoized('Build failed', 'Online Editor');
         setIsSaving(false);
-        setErrorBuild(`There was an error in the build: ${e.error.message}`);
+        setErrorBuild(e?.error);
       },
       [EditorEvents.LogsAttached]: () => {
         setLogs((oldLogs) => [...oldLogs, logWithTime('Attached to real-time logs...')]);
@@ -39,6 +40,9 @@ const useEditorEvents = ({ isMounted, events }: Props) => {
       },
       [EditorEvents.RunnerFinished]: (e: LogEntryError) => {
         setLogs((oldLogs) => [...oldLogs, logWithTime(e.error)]);
+      },
+      [EditorEvents.DirtyStateChanged]: (state: { newState: boolean }) => {
+        setEditorDirtyState(state.newState);
       },
     };
 
@@ -55,6 +59,8 @@ const useEditorEvents = ({ isMounted, events }: Props) => {
     logs,
     setLogs,
     clearLogs,
+    editorDirtyState,
+    setEditorDirtyState,
   };
 };
 

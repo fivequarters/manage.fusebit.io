@@ -171,7 +171,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(
                   color="primary"
                   variant="contained"
                 >
-                  {activeTemplate.outOfPlan && 'Enable'}
+                  {activeTemplate.outOfPlan && 'Talk to Sales'}
                   {!activeTemplate.outOfPlan && 'Create'}
                 </Button>
               </>
