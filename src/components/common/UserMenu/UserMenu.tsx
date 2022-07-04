@@ -48,7 +48,7 @@ const UserMenu = () => {
         variant="text"
         color="inherit"
       >
-        Production
+        {process.env.REACT_APP_DEPLOYMENT_KEY}
       </StyledButton>
       <CSC.StyledMenu
         PaperProps={{
