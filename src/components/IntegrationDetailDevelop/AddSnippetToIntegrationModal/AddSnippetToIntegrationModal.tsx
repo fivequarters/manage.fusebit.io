@@ -5,6 +5,7 @@ import FeedPickerModal from '@components/common/FeedPickerModal';
 import { ApiResponse } from '@hooks/useAxios';
 import { Integration, InnerConnector } from '@interfaces/integration';
 import { useLoader } from '@hooks/useLoader';
+import { trackEventMemoized } from '@utils/analytics';
 // import { useMediaQuery } from '@material-ui/core';
 // import FeedPickerMobile from '@components/common/FeedPickerMobile/FeedPickerMobile';
 
@@ -32,6 +33,7 @@ const AddSnippetToIntegrationModal = ({ open, onClose, integrationData, defaultS
   };
 
   const handleCreate = async (feed: Feed, data: Data, snippet?: Snippet) => {
+    trackEventMemoized('Add Button Clicked', 'Add Snippet', { snippet: snippet?.id });
     const existingConnector = getConnectorDependency(feed);
     let onCloseCalled = false;
     try {

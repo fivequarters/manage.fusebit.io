@@ -88,4 +88,8 @@ export enum EditorEvents {
    * Editor's "close" button was clicked. Event data has [[ClosedEvent]] type.
    */
   Closed = 'closed',
+  /**
+   * The value of the configuration state has changed. Event data has [[ConfigStateEvent]] type.
+   */
+  ConfigStateChanged = 'config:changed',
 }
