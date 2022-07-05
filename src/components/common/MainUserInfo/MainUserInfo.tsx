@@ -175,7 +175,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
             <StyledUserDropdownStatusId>
               {/* Hardcode Production for now, when we have different
               display names than Default remove the hardcoded text */}
-              <strong>{process.env.REACT_APP_DEPLOYMENT_KEY || userData.subscriptionName}</strong> (
+              <strong>{userData.subscriptionName !== 'Default' ? userData.subscriptionName : 'Production'}</strong> (
               {userData?.subscriptionId})
             </StyledUserDropdownStatusId>
             {isOnMultipleAccounts && (
