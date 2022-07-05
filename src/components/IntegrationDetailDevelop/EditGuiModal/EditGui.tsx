@@ -333,6 +333,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
     setErrorBuild,
     editorDirtyState,
     setEditorDirtyState,
+    editorErrorConfigState,
   } = useEditorEvents({
     isMounted,
     events: [
@@ -343,6 +344,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
       EditorEvents.LogsAttached,
       EditorEvents.RunnerFinished,
       EditorEvents.DirtyStateChanged,
+      EditorEvents.ConfigStateChanged,
     ],
   });
 
@@ -576,7 +578,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
                   size="small"
                   variant="outlined"
                   color="primary"
-                  disabled={!editorDirtyState || isSaving || processing}
+                  disabled={editorErrorConfigState || !editorDirtyState || isSaving || processing}
                 >
                   Save
                 </Button>

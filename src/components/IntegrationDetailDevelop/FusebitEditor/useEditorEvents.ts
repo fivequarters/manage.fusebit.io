@@ -1,3 +1,4 @@
+import { useError } from '@hooks/useError';
 import { LogData, LogEntry, LogEntryError } from '@interfaces/logs';
 import { trackEventUnmemoized } from '@utils/analytics';
 import { useEffect, useState } from 'react';
@@ -13,6 +14,8 @@ const useEditorEvents = ({ isMounted, events }: Props) => {
   const [isSaving, setIsSaving] = useState(false);
   const [errorBuild, setErrorBuild] = useState<{ message: string; properties?: any } | null>(null);
   const [editorDirtyState, setEditorDirtyState] = useState(false);
+  const [editorErrorConfigState, setEditorErrorConfigState] = useState(false);
+  const { createError } = useError();
   const [logs, setLogs] = useState<{ msg: string; id: number }[]>([]);
   const clearLogs = () => setLogs([]);
 
@@ -44,6 +47,18 @@ const useEditorEvents = ({ isMounted, events }: Props) => {
       [EditorEvents.DirtyStateChanged]: (state: { newState: boolean }) => {
         setEditorDirtyState(state.newState);
       },
+      [EditorEvents.ConfigStateChanged]: (state: {
+        newState: {
+          isValid: boolean;
+          message: string;
+        };
+      }) => {
+        const { isValid, message } = state?.newState || {};
+        if (!isValid) {
+          createError({ message });
+        }
+        setEditorErrorConfigState(!isValid);
+      },
     };
 
     if (isMounted) {
@@ -61,6 +76,7 @@ const useEditorEvents = ({ isMounted, events }: Props) => {
     clearLogs,
     editorDirtyState,
     setEditorDirtyState,
+    editorErrorConfigState,
   };
 };
 
