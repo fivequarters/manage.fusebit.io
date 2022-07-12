@@ -13,6 +13,7 @@ const ConnectorsNavbar: React.FC<Props> = ({ dropdownOnly }) => {
   const { anchorEl, breadcrumbItems, handleCloseDrawer, handleCloseMenu, openDrawer, isActive } = useEntityBreadcrumb({
     initialText: 'Connectors',
     href: !dropdownOnly ? getRedirectLink('/connectors/overview') : undefined,
+    isConnector: true,
   });
 
   return (

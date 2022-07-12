@@ -3,8 +3,9 @@ import { useMediaQuery } from '@material-ui/core';
 import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useAnchor from './useAnchor';
+import { useGetConnectorFromCache } from './useGetConnectorFromCache';
+import { useGetFeedById } from './useGetFeedById';
 import { useGetIntegrationFromCache } from './useGetIntegrationFromCache';
-import { useGetIntegrationsFeed } from './useGetIntegrationsFeed';
 
 interface Props {
   initialText: string;
@@ -14,13 +15,20 @@ interface Props {
 }
 
 const useEntityBreadcrumb = ({ initialText, href, isIntegration, isConnector }: Props) => {
+  const { id } = useParams<{ id: string }>();
   const { handleClickAnchor, anchorEl, handleCloseMenu } = useAnchor();
   const integrationData = useGetIntegrationFromCache();
-  const integrationsFeed = useGetIntegrationsFeed();
+  const connectorData = useGetConnectorFromCache();
+  const { feed: connectorFeedEntry } = useGetFeedById({
+    id: connectorData?.data.tags['fusebit.feedId'],
+    type: connectorData?.data.tags['fusebit.feedType'],
+  });
+  const { feed: integrationFeedEntry } = useGetFeedById({
+    id: integrationData?.data.tags['fusebit.feedId'] || '',
+    type: integrationData?.data.tags['fusebit.feedType'] || 'integration',
+  });
   const [openDrawer, setOpenDrawer] = useState(false);
   const isMobile = useMediaQuery('(max-width: 880px)');
-
-  const { id } = useParams<{ id: string }>();
 
   const breadcrumbItems = useMemo(() => {
     const items: BreadcrumbItem[] = [
@@ -40,14 +48,12 @@ const useEntityBreadcrumb = ({ initialText, href, isIntegration, isConnector }: 
     ];
 
     if (id && !isMobile) {
-      let icon: string | undefined;
+      let icon;
 
       if (isIntegration) {
-        const matchingFeed = integrationsFeed.data?.find(
-          (feed) => feed.id === integrationData?.data.tags['fusebit.feedId']
-        );
-
-        icon = matchingFeed?.smallIcon;
+        icon = integrationFeedEntry?.smallIcon;
+      } else if (isConnector) {
+        icon = connectorFeedEntry?.smallIcon;
       }
 
       items.push({
@@ -61,7 +67,17 @@ const useEntityBreadcrumb = ({ initialText, href, isIntegration, isConnector }: 
     }
 
     return items;
-  }, [id, handleClickAnchor, initialText, isMobile, href, integrationData, integrationsFeed, isIntegration]);
+  }, [
+    id,
+    handleClickAnchor,
+    initialText,
+    isMobile,
+    href,
+    connectorFeedEntry,
+    integrationFeedEntry,
+    isConnector,
+    isIntegration,
+  ]);
 
   const handleCloseDrawer = () => {
     setOpenDrawer(false);
