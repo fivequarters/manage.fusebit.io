@@ -1,4 +1,9 @@
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
+import { useAuthContext } from '@hooks/useAuthContext';
+import { useParams } from 'react-router-dom';
+import { useAccountConnectorsGetOne } from '@hooks/api/v2/account/connector/useGetOne';
+import { Connector } from '@interfaces/connector';
+import { useGetFeedById } from '@hooks/useGetFeedById';
 import EntitiesMenu from '../EntitiesMenu/EntitiesMenu';
 import NavbarBreadcrumb from '../NavbarBreadcrumb/NavbarBreadcrumb';
 import useEntityBreadcrumb from '../../../hooks/useEntityBreadcrumb';
@@ -10,10 +15,25 @@ interface Props {
 
 const ConnectorsNavbar: React.FC<Props> = ({ dropdownOnly }) => {
   const { getRedirectLink } = useGetRedirectLink();
+  const { userData } = useAuthContext();
+  const { id } = useParams<{ id: string }>();
+
+  const { data: connectorData } = useAccountConnectorsGetOne<Connector>({
+    enabled: userData.token && id,
+    id,
+    accountId: userData.accountId,
+    subscriptionId: userData.subscriptionId,
+  });
+
+  const { feed: feedEntity } = useGetFeedById({
+    id: connectorData?.data.tags['fusebit.feedId'],
+    type: connectorData?.data.tags['fusebit.feedType'],
+  });
+
   const { anchorEl, breadcrumbItems, handleCloseDrawer, handleCloseMenu, openDrawer, isActive } = useEntityBreadcrumb({
-    initialText: 'Connectors',
-    href: !dropdownOnly ? getRedirectLink('/connectors/overview') : undefined,
-    isConnector: true,
+    initialText: 'Integrations',
+    href: !dropdownOnly ? getRedirectLink('/integrations/overview') : undefined,
+    entityIcon: feedEntity?.smallIcon || '',
   });
 
   return (
