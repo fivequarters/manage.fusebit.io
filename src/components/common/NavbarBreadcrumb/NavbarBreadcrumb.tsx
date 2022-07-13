@@ -1,6 +1,6 @@
 import { Breadcrumbs, Button, Box } from '@material-ui/core';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { urlOrSvgToImage } from '@utils/utils';
 import arrow from '@assets/right-arrow-white.svg';
 import arrowDown from '@assets/down-arrow-white.svg';
@@ -57,6 +57,8 @@ interface Props {
 }
 
 const NavbarBreadcrumb: React.FC<Props> = ({ items, lastItemAction = true, isArrowActive, isLoadingIcon }) => {
+  const { id } = useParams<{ id: string }>();
+
   return (
     <>
       <Breadcrumbs
@@ -82,7 +84,8 @@ const NavbarBreadcrumb: React.FC<Props> = ({ items, lastItemAction = true, isArr
                   <StyledIcon src={urlOrSvgToImage(item.icon)} alt="icon" />
                 </StyledIconWrapper>
               ) : (
-                isLoadingIcon && (
+                isLoadingIcon &&
+                id && (
                   <Box mr="10px" padding="10px">
                     <CSC.Spinner />
                   </Box>
