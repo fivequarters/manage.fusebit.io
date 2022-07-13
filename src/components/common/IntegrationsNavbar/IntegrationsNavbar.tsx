@@ -18,14 +18,14 @@ const IntegrationsNavbar: React.FC<Props> = ({ dropdownOnly }) => {
   const { userData } = useAuthContext();
   const { id } = useParams<{ id: string }>();
 
-  const { isLoading, data: integrationData } = useAccountIntegrationsGetOne<Integration>({
+  const { isLoading: isLoadingData, data: integrationData } = useAccountIntegrationsGetOne<Integration>({
     enabled: userData.token && id,
     id,
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
   });
 
-  const { feed: feedEntity } = useGetFeedById({
+  const { isLoading: isLoadingFeed, feed: feedEntity } = useGetFeedById({
     id: integrationData?.data.tags['fusebit.feedId'] || '',
     type: integrationData?.data.tags['fusebit.feedType'] || 'integration',
   });
@@ -48,7 +48,11 @@ const IntegrationsNavbar: React.FC<Props> = ({ dropdownOnly }) => {
           open: openDrawer,
         }}
       />
-      <NavbarBreadcrumb isLoadingIcon={isLoading} items={breadcrumbItems} isArrowActive={isActive} />
+      <NavbarBreadcrumb
+        isLoadingIcon={isLoadingData || isLoadingFeed}
+        items={breadcrumbItems}
+        isArrowActive={isActive}
+      />
     </Navbar>
   );
 };

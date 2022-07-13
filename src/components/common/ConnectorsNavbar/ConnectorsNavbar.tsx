@@ -18,21 +18,21 @@ const ConnectorsNavbar: React.FC<Props> = ({ dropdownOnly }) => {
   const { userData } = useAuthContext();
   const { id } = useParams<{ id: string }>();
 
-  const { data: connectorData } = useAccountConnectorsGetOne<Connector>({
+  const { isLoading: isLoadingData, data: connectorData } = useAccountConnectorsGetOne<Connector>({
     enabled: userData.token && id,
     id,
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
   });
 
-  const { feed: feedEntity } = useGetFeedById({
+  const { isLoading: isLoadingFeed, feed: feedEntity } = useGetFeedById({
     id: connectorData?.data.tags['fusebit.feedId'],
     type: connectorData?.data.tags['fusebit.feedType'],
   });
 
   const { anchorEl, breadcrumbItems, handleCloseDrawer, handleCloseMenu, openDrawer, isActive } = useEntityBreadcrumb({
-    initialText: 'Integrations',
-    href: !dropdownOnly ? getRedirectLink('/integrations/overview') : undefined,
+    initialText: 'Connectors',
+    href: !dropdownOnly ? getRedirectLink('/connectors/overview') : undefined,
     entityIcon: feedEntity?.smallIcon || '',
   });
 
@@ -48,7 +48,11 @@ const ConnectorsNavbar: React.FC<Props> = ({ dropdownOnly }) => {
           open: openDrawer,
         }}
       />
-      <NavbarBreadcrumb items={breadcrumbItems} isArrowActive={isActive} />
+      <NavbarBreadcrumb
+        isLoadingIcon={isLoadingData || isLoadingFeed}
+        items={breadcrumbItems}
+        isArrowActive={isActive}
+      />
     </Navbar>
   );
 };
