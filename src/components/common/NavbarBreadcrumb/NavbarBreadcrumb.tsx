@@ -5,6 +5,7 @@ import { urlOrSvgToImage } from '@utils/utils';
 import arrow from '@assets/right-arrow-white.svg';
 import arrowDown from '@assets/down-arrow-white.svg';
 import { BreadcrumbItem } from '@interfaces/entityBreadcrumb';
+import * as CSC from '@components/globalStyle';
 
 const StyledButton = styled(Button)`
   padding: 0;
@@ -52,9 +53,10 @@ interface Props {
   items: BreadcrumbItem[];
   lastItemAction?: boolean;
   isArrowActive?: boolean;
+  isLoadingIcon?: boolean;
 }
 
-const NavbarBreadcrumb: React.FC<Props> = ({ items, lastItemAction = true, isArrowActive }) => {
+const NavbarBreadcrumb: React.FC<Props> = ({ items, lastItemAction = true, isArrowActive, isLoadingIcon }) => {
   return (
     <>
       <Breadcrumbs separator={<img src={arrow} alt="arrow" />} aria-label="breadcrumb" style={{ marginTop: '10px' }}>
@@ -71,10 +73,16 @@ const NavbarBreadcrumb: React.FC<Props> = ({ items, lastItemAction = true, isArr
 
           return (
             <StyledButton key={item.text} onClick={(e) => item.onClick?.(e, isLastItem)}>
-              {item.icon && (
+              {item.icon && !isLoadingIcon ? (
                 <StyledIconWrapper>
                   <StyledIcon src={urlOrSvgToImage(item.icon)} alt="icon" />
                 </StyledIconWrapper>
+              ) : (
+                isLoadingIcon && (
+                  <Box mr="10px">
+                    <CSC.Spinner />
+                  </Box>
+                )
               )}
               <StyledText active={lastItemAction ? isLastItem : item.active}>{item.text}</StyledText>
               {isLastItem && lastItemAction && (

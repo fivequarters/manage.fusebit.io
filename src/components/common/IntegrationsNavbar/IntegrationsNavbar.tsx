@@ -18,7 +18,7 @@ const IntegrationsNavbar: React.FC<Props> = ({ dropdownOnly }) => {
   const { userData } = useAuthContext();
   const { id } = useParams<{ id: string }>();
 
-  const { data: integrationData } = useAccountIntegrationsGetOne<Integration>({
+  const { isLoading, data: integrationData } = useAccountIntegrationsGetOne<Integration>({
     enabled: userData.token && id,
     id,
     accountId: userData.accountId,
@@ -48,7 +48,7 @@ const IntegrationsNavbar: React.FC<Props> = ({ dropdownOnly }) => {
           open: openDrawer,
         }}
       />
-      <NavbarBreadcrumb items={breadcrumbItems} isArrowActive={isActive} />
+      <NavbarBreadcrumb isLoadingIcon={isLoading} items={breadcrumbItems} isArrowActive={isActive} />
     </Navbar>
   );
 };
