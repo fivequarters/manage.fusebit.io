@@ -49,7 +49,7 @@ const ConnectorsNavbar: React.FC<Props> = ({ dropdownOnly }) => {
         }}
       />
       <NavbarBreadcrumb
-        isLoadingIcon={isLoadingData || isLoadingFeed}
+        isLoadingIcon={!!id && (isLoadingData || isLoadingFeed)}
         items={breadcrumbItems}
         isArrowActive={isActive}
       />

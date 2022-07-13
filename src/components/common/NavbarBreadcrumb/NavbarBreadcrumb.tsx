@@ -59,7 +59,11 @@ interface Props {
 const NavbarBreadcrumb: React.FC<Props> = ({ items, lastItemAction = true, isArrowActive, isLoadingIcon }) => {
   return (
     <>
-      <Breadcrumbs separator={<img src={arrow} alt="arrow" />} aria-label="breadcrumb" style={{ marginTop: '10px' }}>
+      <Breadcrumbs
+        separator={<img src={arrow} alt="arrow" />}
+        aria-label="breadcrumb"
+        style={{ marginTop: '10px', height: '40px' }}
+      >
         {items.map((item, index) => {
           const isLastItem = index === items.length - 1;
 
@@ -79,7 +83,7 @@ const NavbarBreadcrumb: React.FC<Props> = ({ items, lastItemAction = true, isArr
                 </StyledIconWrapper>
               ) : (
                 isLoadingIcon && (
-                  <Box mr="10px">
+                  <Box mr="10px" padding="10px">
                     <CSC.Spinner />
                   </Box>
                 )
