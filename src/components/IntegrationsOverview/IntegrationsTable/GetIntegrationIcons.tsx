@@ -4,6 +4,7 @@ import { useGetConnectorsFeed } from '@hooks/useGetConnectorsFeed';
 import { urlOrSvgToImage } from '@utils/utils';
 import { InnerConnector } from '@interfaces/integration';
 import { Avatar, Chip } from '@material-ui/core';
+import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 
 interface Props {
   components: InnerConnector[];
@@ -12,6 +13,12 @@ interface Props {
 const GetIntegrationIcons: React.FC<Props> = ({ components }) => {
   const connectorFeed = useGetConnectorsFeed();
   const applicableComponents = components.filter((item) => item.entityType === 'connector');
+
+  const { getRedirectLink } = useGetRedirectLink();
+
+  const onClick = (connectorName: string) => {
+    window.location.href = getRedirectLink(`/connector/${connectorName}/configure`);
+  };
 
   return (
     <>
@@ -31,6 +38,7 @@ const GetIntegrationIcons: React.FC<Props> = ({ components }) => {
               }
               label={applicableComponents[idx].entityId}
               key={applicableComponents[idx].entityId}
+              onClick={() => onClick(applicableComponents[idx].entityId)}
             />
           );
         })}
