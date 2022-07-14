@@ -34,6 +34,7 @@ const GetRelatedIntegrations: React.FC<Props> = ({ name }) => {
           <Chip
             key={integration.id}
             onClick={() => onClick(integration.id)}
+            style={{ backgroundColor: '#E0E0E0' }}
             variant="outlined"
             label={integration.id}
           />
