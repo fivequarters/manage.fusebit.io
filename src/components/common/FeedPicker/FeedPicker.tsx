@@ -9,6 +9,7 @@ import { urlOrSvgToImage } from '@utils/utils';
 import BaseJsonForm from '@components/common/BaseJsonForm';
 import { DefaultFilters } from '@hooks/useFilterFeed';
 import useFeedPicker from '@hooks/useFeedPicker';
+import MissingEntityCta from '@components/common/MissingEntityCta';
 import FeedItemDescription, { StyledConnectorDescription } from './FeedItemDescription';
 
 const StyledCard = styled.div`
@@ -92,12 +93,6 @@ const StyledColumnBr = styled.div`
   background-color: #959595;
   opacity: 0.3;
   margin: 0 32px;
-
-  @media only screen and (max-width: 1100px) {
-    width: 100%;
-    height: 1px;
-    margin: 32px 0;
-  }
 `;
 
 const StyledColumnSearchWrapper = styled.div`
@@ -166,18 +161,6 @@ const StyledGeneralInfoWrapper = styled.div`
   position: relative;
   height: 350px;
   overflow-y: auto;
-`;
-
-const StyledMissingIntegrations = styled.div`
-  font-size: 14px;
-  line-height: 20px;
-  color: var(--black);
-
-  span {
-    color: var(--black);
-    text-decoration: underline;
-    cursor: pointer;
-  }
 `;
 
 const FeedPicker = React.forwardRef<HTMLDivElement, Props>(
@@ -267,19 +250,7 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(
                     </>
                   )}
                 </StyledColumn>
-                <Box mt="auto" mb="auto">
-                  <StyledMissingIntegrations>
-                    Missing {feedTypeName === 'Integration' ? 'an' : 'a'} {feedTypeName}?
-                  </StyledMissingIntegrations>
-                  <StyledMissingIntegrations
-                    onClick={() => {
-                      onClose();
-                      window?.Intercom?.('showNewMessage', '');
-                    }}
-                  >
-                    <span>Reach out to us!</span>
-                  </StyledMissingIntegrations>
-                </Box>
+                <MissingEntityCta entityName={feedTypeName} onClick={onClose} />
               </Box>
               <StyledColumnBr />
             </>
