@@ -3,10 +3,12 @@ import { Box, Button, CircularProgress, Grid } from '@material-ui/core';
 import { JsonForms } from '@jsonforms/react';
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
 import { ValidationMode } from '@jsonforms/core';
-import { useParams } from 'react-router-dom';
 import * as CSC from '@components/globalStyle';
 import { useAccountUpdateOne } from '@hooks/api/v1/account/account/useUpdateOne';
 import { useAuthContext } from '@hooks/useAuthContext';
+import { AccountListItem } from '@interfaces/account';
+import { useError } from '@hooks/useError';
+import { ACTIVE_ACCOUNT_KEY } from '@utils/constants';
 
 const schema = {
   type: 'object',
@@ -40,7 +42,7 @@ const SettingsForm: React.FC = () => {
   const [errors, setErrors] = useState<object[]>([]);
   const [formValues, setFormValues] = useState({ displayName: userData.company });
   const { mutateAsync: updateAccount, isLoading } = useAccountUpdateOne();
-  const { accountId } = useParams<{ accountId: string }>();
+  const { createError } = useError();
 
   const handleSubmit = async () => {
     if (errors.length > 0) {
@@ -48,12 +50,23 @@ const SettingsForm: React.FC = () => {
 
       return;
     }
-    await updateAccount({
-      accountId,
-      ...formValues,
-    });
-
-    setEditMode(false);
+    try {
+      await updateAccount({
+        accountId: userData.accountId,
+        ...formValues,
+      });
+      let activeAccount: AccountListItem = JSON.parse(localStorage.getItem(ACTIVE_ACCOUNT_KEY) || '');
+      activeAccount = {
+        ...activeAccount,
+        displayName: formValues.displayName,
+        company: formValues.displayName,
+      };
+      localStorage.setItem(ACTIVE_ACCOUNT_KEY, JSON.stringify(activeAccount));
+    } catch (e) {
+      createError({ message: `There was an error: ${e}` });
+    } finally {
+      setEditMode(false);
+    }
   };
 
   const handleCancel = () => {
