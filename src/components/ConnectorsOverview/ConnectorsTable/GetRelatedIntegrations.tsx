@@ -23,8 +23,8 @@ const GetRelatedIntegrations: React.FC<Props> = ({ name }) => {
 
   const { getRedirectLink } = useGetRedirectLink();
 
-  const onClick = () => {
-    window.location.href = getRedirectLink('/integrations/overview');
+  const onClick = (integrationName: string) => {
+    window.location.href = getRedirectLink(`/integration/${integrationName}/develop`);
   };
 
   return (
@@ -33,10 +33,10 @@ const GetRelatedIntegrations: React.FC<Props> = ({ name }) => {
         return (
           <Chip
             key={integration.id}
-            onClick={onClick}
+            onClick={() => onClick(integration.id)}
+            style={{ backgroundColor: '#E0E0E0' }}
             variant="outlined"
             label={integration.id}
-            style={{ background: '#fff' }}
           />
         );
       })}

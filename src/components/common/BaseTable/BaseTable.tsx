@@ -9,8 +9,10 @@ import {
   TablePagination,
   Box,
   TextField,
+  InputAdornment,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import SearchIcon from '@material-ui/icons/Search';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { ROWS_PER_PAGE_OPTIONS } from '@hooks/usePagination';
 import * as CSC from '@components/globalStyle';
@@ -96,7 +98,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
   searchInputHandler,
   textVal,
 }) => {
-  const [orderBy, setOrderBy] = React.useState('name');
+  const [orderBy, setOrderBy] = React.useState('sortableCreatedAt');
   const [order, setOrder] = React.useState('asc');
 
   const compare = (left: any, right: any) => {
@@ -212,7 +214,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
         display="flex"
         mt="56px"
         mb="36px"
-        justifyContent="flex-end"
+        justifyContent="space-between"
         {...actionsContainerProps}
       >
         {isSelecting ? (
@@ -251,9 +253,17 @@ const BaseTable: React.FC<BaseTableProps> = ({
               {searchBarLabel ? (
                 <TextField
                   onChange={searchInputHandler}
-                  label={searchBarLabel}
-                  style={{ display: 'inline-flex', width: '250px' }}
+                  placeholder={searchBarLabel}
+                  variant="outlined"
                   value={textVal}
+                  style={{ width: '50ch' }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="end">
+                        <SearchIcon />
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               ) : (
                 <></>
