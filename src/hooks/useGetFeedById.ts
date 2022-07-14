@@ -1,26 +1,21 @@
 import { useState, useEffect } from 'react';
 import { Feed } from '@interfaces/feed';
-import { integrationsFeed, connectorsFeed } from '../static/feed';
+import { useGetIntegrationsFeed } from './useGetIntegrationsFeed';
+import { useGetConnectorsFeed } from './useGetConnectorsFeed';
 
 export const useGetFeedById = ({ id, type }: { id: string; type: 'integration' | 'connector' }) => {
   const [feed, setFeedEntry] = useState<Feed | undefined>();
-  const [isLoading, setIsLoading] = useState(false);
+  const { data: integrationFeed, isLoading: isLoadingIntegrationFeed } = useGetIntegrationsFeed();
+  const { data: connectorFeed, isLoading: isLoadingConnectorFeed } = useGetConnectorsFeed();
 
   useEffect(() => {
-    setIsLoading(true);
-    const findFeedEntry = (feeds: Feed[]) => setFeedEntry(feeds.find((f: Feed) => f.id === id));
+    const findFeedEntry = (feeds?: Feed[]) => setFeedEntry((feeds || []).find((f: Feed) => f.id === id));
     if (type === 'integration') {
-      integrationsFeed().then((feeds) => {
-        findFeedEntry(feeds);
-        setIsLoading(false);
-      });
+      findFeedEntry(integrationFeed);
     } else if (type === 'connector') {
-      connectorsFeed().then((feeds) => {
-        findFeedEntry(feeds);
-        setIsLoading(false);
-      });
+      findFeedEntry(connectorFeed);
     }
-  }, [id, type]);
+  }, [connectorFeed, id, integrationFeed, type]);
 
-  return { feed, isLoading };
+  return { feed, isLoading: isLoadingIntegrationFeed || isLoadingConnectorFeed };
 };
