@@ -168,6 +168,18 @@ const StyledGeneralInfoWrapper = styled.div`
   overflow-y: auto;
 `;
 
+const StyledMissingIntegrations = styled.div`
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--black);
+
+  span {
+    color: var(--black);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+`;
+
 const FeedPicker = React.forwardRef<HTMLDivElement, Props>(
   ({ open, onClose, onSubmit, isIntegration, isSnippet, hasConnectorDependency, defaultSnippet }, ref) => {
     const {
@@ -227,33 +239,48 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(
         <Box display="flex" flexDirection={isMobile && 'column'}>
           {!isSnippet && (
             <>
-              <StyledColumn>
-                {loading ? (
-                  <Box minWidth="254px">
-                    <Loader />
-                  </Box>
-                ) : (
-                  <>
-                    <StyledColumnItem
-                      onClick={() => handleFilterChange(DefaultFilters.ALL)}
-                      active={activeFilter === DefaultFilters.ALL}
-                      capitalize
-                    >
-                      {DefaultFilters.ALL}
-                    </StyledColumnItem>
-                    {allTags.map((tag) => (
+              <Box display="flex" flexDirection="column">
+                <StyledColumn>
+                  {loading ? (
+                    <Box minWidth="254px">
+                      <Loader />
+                    </Box>
+                  ) : (
+                    <>
                       <StyledColumnItem
-                        active={tag === activeFilter}
-                        key={tag}
-                        onClick={() => handleFilterChange(tag)}
+                        onClick={() => handleFilterChange(DefaultFilters.ALL)}
+                        active={activeFilter === DefaultFilters.ALL}
                         capitalize
                       >
-                        {tag}
+                        {DefaultFilters.ALL}
                       </StyledColumnItem>
-                    ))}
-                  </>
-                )}
-              </StyledColumn>
+                      {allTags.map((tag) => (
+                        <StyledColumnItem
+                          active={tag === activeFilter}
+                          key={tag}
+                          onClick={() => handleFilterChange(tag)}
+                          capitalize
+                        >
+                          {tag}
+                        </StyledColumnItem>
+                      ))}
+                    </>
+                  )}
+                </StyledColumn>
+                <Box mt="auto" mb="auto">
+                  <StyledMissingIntegrations>
+                    Missing {feedTypeName === 'Integration' ? 'an' : 'a'} {feedTypeName}?
+                  </StyledMissingIntegrations>
+                  <StyledMissingIntegrations
+                    onClick={() => {
+                      onClose();
+                      window?.Intercom?.('showNewMessage', '');
+                    }}
+                  >
+                    <span>Reach out to us!</span>
+                  </StyledMissingIntegrations>
+                </Box>
+              </Box>
               <StyledColumnBr />
             </>
           )}
