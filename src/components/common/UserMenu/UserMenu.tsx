@@ -48,7 +48,7 @@ const UserMenu = () => {
         variant="text"
         color="inherit"
       >
-        Production
+        {userData.subscriptionName !== 'Default' ? userData.subscriptionName : 'Production'}
       </StyledButton>
       <CSC.StyledMenu
         PaperProps={{

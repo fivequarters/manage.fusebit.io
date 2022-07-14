@@ -12,6 +12,7 @@ import CompanyTitle from '@components/common/CompanyTitle';
 import MainUserAccounts from '@components/common/MainUserInfo/MainUserAccounts';
 import * as CSC from '@components/globalStyle';
 import { useAccountGetAllAccounts } from '@hooks/api/v1/account/account/useGetAllAccounts';
+import { ACTIVE_ACCOUNT_KEY } from '@utils/constants';
 
 const StyledUserDropdownInfo = styled.div`
   display: flex;
@@ -148,7 +149,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
       ...userData,
       ...acc,
     });
-    localStorage.setItem('activeAccount', JSON.stringify(acc));
+    localStorage.setItem(ACTIVE_ACCOUNT_KEY, JSON.stringify(acc));
     setAnchorEl(null);
     onAccountSwitch();
   };
@@ -175,7 +176,8 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
             <StyledUserDropdownStatusId>
               {/* Hardcode Production for now, when we have different
               display names than Default remove the hardcoded text */}
-              <strong>{'Production' || userData.subscriptionName}</strong> ({userData?.subscriptionId})
+              <strong>{userData.subscriptionName !== 'Default' ? userData.subscriptionName : 'Production'}</strong> (
+              {userData?.subscriptionId})
             </StyledUserDropdownStatusId>
             {isOnMultipleAccounts && (
               <StyledUserDropdownStatusArrow src={rightArrow} alt="right arrow" height="12" width="12" />

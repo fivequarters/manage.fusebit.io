@@ -2,7 +2,7 @@ import { User } from '@interfaces/user';
 import { getAnalyticsClient, trackAuthEvent } from '@utils/analytics';
 import constate from 'constate';
 import { useState } from 'react';
-import { INVITED_TO_FUSEBIT_KEY, STATIC_TENANT_ID } from '@utils/constants';
+import { ACTIVE_ACCOUNT_KEY, INVITED_TO_FUSEBIT_KEY, STATIC_TENANT_ID } from '@utils/constants';
 import { Auth0Profile } from '@interfaces/auth0Profile';
 import { Company } from '@interfaces/company';
 import { createAxiosClient } from '@utils/utils';
@@ -171,7 +171,7 @@ const _useAuthContext = () => {
     try {
       const { fusebitProfile: profile, isSignUpEvent, issuedByAuth0, isSupportingTool } = getDecodedToken(token);
       let fusebitProfile = profile;
-      const activeAccountStringified = localStorage.getItem('activeAccount');
+      const activeAccountStringified = localStorage.getItem(ACTIVE_ACCOUNT_KEY);
       const initToken = window.localStorage.getItem('fusebitInitToken');
       const fusebitAxiosClient = createAxiosClient(token);
 

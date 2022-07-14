@@ -34,7 +34,7 @@ const ConnectorsTable = () => {
 
   const [searchField, setSearchField] = React.useState('');
   const searchInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchField(e.target.value);
+    setSearchField(e.target.value.toLowerCase());
   };
 
   useQueryParam({
@@ -58,7 +58,7 @@ const ConnectorsTable = () => {
       credentialType: <GetCredentialType id={row.id} />,
       inUseBy: <GetRelatedIntegrations name={row.id} />,
     }))
-    .filter((item: any) => item.id.includes(searchField));
+    .filter((item) => item.id.toLowerCase().includes(searchField));
 
   const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
     page,
