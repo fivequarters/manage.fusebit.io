@@ -68,6 +68,14 @@ const StyledButtonsContainer = styled(Box)<{ deleting?: boolean }>`
   }
 `;
 
+const StyledSearchBar = styled(TextField)`
+  width: 316px;
+
+  .MuiOutlinedInput-input {
+    padding: 16px 14px;
+  }
+`;
+
 const BaseTable: React.FC<BaseTableProps> = ({
   selected,
   loading,
@@ -251,14 +259,13 @@ const BaseTable: React.FC<BaseTableProps> = ({
                 </Button>
               ))}
               {searchBarLabel ? (
-                <TextField
+                <StyledSearchBar
                   onChange={searchInputHandler}
                   placeholder={searchBarLabel}
                   variant="outlined"
                   value={textVal}
-                  style={{ width: '50ch' }}
                   InputProps={{
-                    startAdornment: (
+                    endAdornment: (
                       <InputAdornment position="end">
                         <SearchIcon />
                       </InputAdornment>
