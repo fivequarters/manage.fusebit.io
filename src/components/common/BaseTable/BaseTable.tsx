@@ -63,13 +63,26 @@ const StyledButtonsContainer = styled(Box)<{ deleting?: boolean }>`
   background-color: ${(props) => (props.deleting ? 'var(--secondary-color)' : 'rgba(255,255,255,0)')};
   transition: all 0.25s linear;
 
+  @media only screen and (max-width: 600px) {
+    flex-direction: column;
+    margin-bottom: 100px;
+  }
+
   & > button {
     margin-left: 20px;
+
+    @media only screen and (max-width: 600px) {
+      margin-left: 0;
+    }
   }
 `;
 
 const StyledSearchBar = styled(TextField)`
   width: 316px;
+
+  @media only screen and (max-width: 600px) {
+    width: 100%;
+  }
 
   .MuiOutlinedInput-input {
     padding: 16px 14px;
