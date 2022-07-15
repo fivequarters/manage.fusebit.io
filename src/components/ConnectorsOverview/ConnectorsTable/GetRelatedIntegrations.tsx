@@ -39,8 +39,6 @@ const GetRelatedIntegrations: React.FC<Props> = ({ name }) => {
               e.stopPropagation();
               onClick(integration.id);
             }}
-            style={{ backgroundColor: '#E0E0E0' }}
-            variant="outlined"
             label={integration.id}
           />
         );
