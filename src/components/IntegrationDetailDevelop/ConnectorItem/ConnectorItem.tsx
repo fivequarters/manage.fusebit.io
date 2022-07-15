@@ -35,7 +35,10 @@ const ConnectorItem: React.FC<Props> = ({ className, connector, integrationData 
     // connectors that only have an entityId, like those who are not yet created
     // but are added to the components list will not trigger the redirect
     if (connector.id) {
-      history.push(getRedirectLink(`/connector/${connector.id}/configure`));
+      history.push(getRedirectLink(`/connector/${connector.id}/configure`), {
+        from: 'integration-detail-page',
+        url: history.location,
+      });
     }
   };
   const { removeConnectorFromIntegration } = useEntityApi();

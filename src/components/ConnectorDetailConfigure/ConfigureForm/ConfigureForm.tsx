@@ -31,6 +31,8 @@ const StyledFormWrapper = styled.form`
 `;
 
 const StyledFormInputWrapper = styled.div`
+  display: flex;
+  align-items: center;
   margin-top: 24px;
   margin-bottom: 49px;
 
@@ -39,6 +41,15 @@ const StyledFormInputWrapper = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+  }
+`;
+
+const StyledBackButton = styled(Button)`
+  margin-right: 16px;
+
+  @media only screen and (max-width: 880px) {
+    margin-right: 0;
+    margin-bottom: 16px;
   }
 `;
 
@@ -69,8 +80,21 @@ const ConfigureForm: React.FC = () => {
     id: connectorData?.data.tags['fusebit.feedId'],
     type: connectorData?.data.tags['fusebit.feedType'],
   });
+  const [backButtonState, setBackButtonState] = useState<{ enabled: boolean; url: string }>({
+    enabled: false,
+    url: '',
+  });
   const isMobile = useMediaQuery('max-width: 880px');
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (history.location.state) {
+      const { from, url } = history.location.state as { from: string; url: string };
+      if (from === 'integration-detail-page' || from === 'integrations-page') {
+        setBackButtonState({ enabled: true, url });
+      }
+    }
+  }, [history]);
 
   useEffect(() => {
     const unlisten = history.listen((location) => {
@@ -199,6 +223,20 @@ const ConfigureForm: React.FC = () => {
               validationMode={validationMode}
             />
             <StyledFormInputWrapper>
+              {backButtonState.enabled && (
+                <StyledBackButton
+                  onClick={() => history.push(backButtonState.url)}
+                  style={{
+                    width: '200px',
+                  }}
+                  fullWidth={false}
+                  size="large"
+                  color="primary"
+                  variant="outlined"
+                >
+                  Back
+                </StyledBackButton>
+              )}
               <Button
                 onClick={handleSubmit}
                 style={{ width: '200px' }}
