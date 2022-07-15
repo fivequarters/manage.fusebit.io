@@ -1,5 +1,5 @@
 import { Box, useMediaQuery } from '@material-ui/core';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import accountImg from '@assets/account.svg';
@@ -130,7 +130,14 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
   });
   const { data: accounts, isLoading } = useAccountGetAllAccounts();
   const isMobile = useMediaQuery('(max-width: 880px)');
-  const isOnMultipleAccounts = userData.accounts && userData?.accounts?.length > 1;
+
+  const allowSubscriptionSelection = useMemo(() => {
+    if (accounts) {
+      return userData.accounts && (userData?.accounts?.length > 1 || accounts?.[0]?.subscriptions?.length > 1);
+    }
+
+    return isLoading;
+  }, [accounts, userData, isLoading]);
 
   const handleOnClickEmail = () => {
     history.push(getRedirectLink(`/authentication/${userData.userId}/overview`));
@@ -179,7 +186,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
               <strong>{userData.subscriptionName !== 'Default' ? userData.subscriptionName : 'Production'}</strong> (
               {userData?.subscriptionId})
             </StyledUserDropdownStatusId>
-            {isOnMultipleAccounts && (
+            {allowSubscriptionSelection && (
               <StyledUserDropdownStatusArrow src={rightArrow} alt="right arrow" height="12" width="12" />
             )}
           </StyledUserDropdownStatus>
@@ -188,7 +195,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
             aria-labelledby="accounts-dropdown"
             anchorEl={anchorEl}
             keepMounted
-            open={Boolean(anchorEl) && Boolean(isOnMultipleAccounts)}
+            open={Boolean(anchorEl) && Boolean(allowSubscriptionSelection)}
             onClose={handleClose}
             getContentAnchorEl={null}
             anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
