@@ -1,6 +1,6 @@
 import { Box, useMediaQuery } from '@material-ui/core';
 import { useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import accountImg from '@assets/account.svg';
 import rightArrow from '@assets/arrow-right-black.svg';
@@ -120,6 +120,7 @@ interface Props {
 
 const MainUserInfo = ({ onAccountSwitch }: Props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { accountId, subscriptionId } = useParams<{ accountId: string; subscriptionId: string }>();
   const { userData, setUserData } = useAuthContext();
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
@@ -159,6 +160,9 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
     localStorage.setItem(ACTIVE_ACCOUNT_KEY, JSON.stringify(acc));
     setAnchorEl(null);
     onAccountSwitch();
+    const { pathname } = history.location;
+    const newPath = pathname.replace(accountId, acc.accountId || '').replace(subscriptionId, acc.subscriptionId || '');
+    history.push(newPath);
   };
 
   return (
