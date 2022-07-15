@@ -4,12 +4,14 @@ import { Integration } from '@interfaces/integration';
 import { useAuthContext } from '@hooks/useAuthContext';
 import { Chip } from '@material-ui/core';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
+import { useHistory } from 'react-router-dom';
 
 interface Props {
   name: string;
 }
 
 const GetRelatedIntegrations: React.FC<Props> = ({ name }) => {
+  const history = useHistory();
   const { userData } = useAuthContext();
   const { data: integrations } = useAccountIntegrationsGetAll<{ items: Integration[] }>({
     enabled: userData.token,
@@ -23,8 +25,8 @@ const GetRelatedIntegrations: React.FC<Props> = ({ name }) => {
 
   const { getRedirectLink } = useGetRedirectLink();
 
-  const onClick = (integrationName: string) => {
-    window.location.href = getRedirectLink(`/integration/${integrationName}/develop`);
+  const onClick = (integrationId: string) => {
+    history.push(getRedirectLink(`/integration/${integrationId}/develop`));
   };
 
   return (
@@ -33,7 +35,10 @@ const GetRelatedIntegrations: React.FC<Props> = ({ name }) => {
         return (
           <Chip
             key={integration.id}
-            onClick={() => onClick(integration.id)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onClick(integration.id);
+            }}
             style={{ backgroundColor: '#E0E0E0' }}
             variant="outlined"
             label={integration.id}
