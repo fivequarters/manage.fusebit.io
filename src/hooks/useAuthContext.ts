@@ -257,11 +257,11 @@ const _useAuthContext = () => {
 
         localStorage.removeItem(REQUESTED_ACCOUNT_KEY);
       } else if (activeAccountStringified) {
-        // The requested URL does not have an accountId and subscriptionId, and there is an active account store on localStorage
+        // The requested URL does not have an accountId and subscriptionId, and there is an active account stored on localStorage
         const activeAccountParsed: AccountListItem = JSON.parse(activeAccountStringified);
         fusebitProfile = await getFusebitProfile(fusebitProfile, activeAccountParsed, fusebitAxiosClient);
       } else {
-        // The requested URL does not have an accountId and subscriptionId, and there isn't an active account store on localStorage
+        // The requested URL does not have an accountId and subscriptionId, and there isn't an active account stored on localStorage
         fusebitProfile = await getFusebitProfileWithDefaultSubscription(fusebitProfile, fusebitAxiosClient);
       }
 
