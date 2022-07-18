@@ -149,10 +149,10 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
       const accs = document.getElementById(ACCOUNTS_MENU_ID);
       const menu = accs?.querySelector('.MuiList-root');
       const BASE_MENU_WIDTH = 50;
-      const int = setInterval(() => {
+      const interval = setInterval(() => {
         if (typeof menu?.clientWidth === 'number' && menu?.clientWidth > BASE_MENU_WIDTH) {
           setTransformMenuHorizontalOrigin(menu?.clientWidth + BASE_MENU_WIDTH);
-          clearInterval(int);
+          clearInterval(interval);
         }
       }, 0);
     }
