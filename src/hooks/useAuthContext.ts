@@ -214,20 +214,19 @@ const _useAuthContext = () => {
       if (requestedAccount && !isSupportingTool) {
         try {
           const requestedAccountParsed: { accountId: string; subscriptionId: string } = JSON.parse(requestedAccount);
-          const isSubValid = await isSubscriptionValid(
-            requestedAccountParsed.accountId,
-            requestedAccountParsed.subscriptionId,
-            fusebitAxiosClient
+          const requestedAccountFound = fusebitProfile.accounts?.find(
+            (acc) =>
+              acc.accountId === requestedAccountParsed.accountId &&
+              acc.subscriptionId === requestedAccountParsed.subscriptionId
           );
-
-          if (isSubValid) {
+          if (requestedAccountFound) {
             fusebitProfile = {
               ...fusebitProfile,
-              ...requestedAccountParsed,
+              ...requestedAccountFound,
             };
-            console.log('isVal');
+            localStorage.setItem(ACTIVE_ACCOUNT_KEY, JSON.stringify(fusebitProfile));
           } else {
-            console.log('isInval');
+            console.log('not found');
           }
         } catch (err) {
           console.log('error!');
