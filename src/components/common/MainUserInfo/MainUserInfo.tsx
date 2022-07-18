@@ -1,5 +1,5 @@
 import { Box, useMediaQuery } from '@material-ui/core';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import accountImg from '@assets/account.svg';
@@ -114,6 +114,8 @@ const StyledAccountsWrapper = styled.div`
   padding: 10px 15px;
 `;
 
+const ACCOUNTS_MENU_ID = 'accounts';
+
 interface Props {
   onAccountSwitch: () => void;
 }
@@ -130,6 +132,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
   });
   const { data: accounts, isLoading } = useAccountGetAllAccounts();
   const isMobile = useMediaQuery('(max-width: 880px)');
+  const [transformMenuHorizontalOrigin, setTransformMenuHorizontalOrigin] = useState(100);
 
   const allowSubscriptionSelection = useMemo(() => {
     if (accounts) {
@@ -138,6 +141,22 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
 
     return isLoading;
   }, [accounts, userData, isLoading]);
+
+  const isMenuOpen = Boolean(anchorEl) && Boolean(allowSubscriptionSelection);
+
+  useEffect(() => {
+    if (isMenuOpen) {
+      const accs = document.getElementById(ACCOUNTS_MENU_ID);
+      const menu = accs?.querySelector('.MuiList-root');
+      const BASE_MENU_WIDTH = 50;
+      const int = setInterval(() => {
+        if (typeof menu?.clientWidth === 'number' && menu?.clientWidth > BASE_MENU_WIDTH) {
+          setTransformMenuHorizontalOrigin(menu?.clientWidth + BASE_MENU_WIDTH);
+          clearInterval(int);
+        }
+      }, 0);
+    }
+  }, [isMenuOpen]);
 
   const handleOnClickEmail = () => {
     history.push(getRedirectLink(`/authentication/${userData.userId}/overview`));
@@ -191,15 +210,15 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
             )}
           </StyledUserDropdownStatus>
           <CSC.StyledMenu
-            id="accounts"
+            id={ACCOUNTS_MENU_ID}
             aria-labelledby="accounts-dropdown"
             anchorEl={anchorEl}
             keepMounted
-            open={Boolean(anchorEl) && Boolean(allowSubscriptionSelection)}
+            open={isMenuOpen}
             onClose={handleClose}
             getContentAnchorEl={null}
             anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-            transformOrigin={{ vertical: 122, horizontal: isLoading ? 100 : 395 }}
+            transformOrigin={{ vertical: 122, horizontal: transformMenuHorizontalOrigin }}
           >
             <StyledAccountsWrapper>
               <MainUserAccounts accounts={accounts} isLoading={isLoading} onAccountSwitch={handleAccountSwitch} />
