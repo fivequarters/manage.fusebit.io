@@ -4,6 +4,6 @@ export interface Tags {
   'fusebit.tenantId'?: string;
   'fusebit.parentEntityId'?: string;
   'fusebit.feedId'?: string;
-  'fusebit.feedType'?: string;
+  'fusebit.feedType'?: 'integration' | 'connector';
   'fusebit.service'?: string;
 }
