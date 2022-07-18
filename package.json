@@ -3,7 +3,7 @@
   "version": "1.2.0",
   "description": "Fusebit portal",
   "scripts": {
-    "start": "craco start",
+    "start": "CHOKIDAR_USEPOLLING=true craco start",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",

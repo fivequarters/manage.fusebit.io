@@ -12,6 +12,7 @@ import { useHistory } from 'react-router-dom';
 import useFirstTimeVisitor from '@hooks/useFirstTimeVisitor';
 import { AccountListItem, AccountSubscriptions } from '@interfaces/account';
 import { AxiosInstance } from 'axios';
+import { Subscriptions } from '@material-ui/icons';
 
 const {
   REACT_APP_AUTH0_DOMAIN,
@@ -61,6 +62,16 @@ const signIn = (silent?: boolean): void => {
   const urlSearchParams = new URLSearchParams(window.location.search);
   const requestedPath = (urlSearchParams.get('requestedPath') || window.location.pathname).replace(/ /g, '+');
   const connection = urlSearchParams.get('fusebitConnection');
+  const accountId = window.location.pathname.split('/')?.[2];
+  const subscriptionId = window.location.pathname.split('/')?.[4];
+
+  if (accountId && subscriptionId) {
+    const requestedAccount = {
+      accountId,
+      subscriptionId,
+    };
+    localStorage.setItem('requestedAccount', JSON.stringify(requestedAccount));
+  }
 
   // If this is an invitation URL, store the init token in local storage and redirect to authenticate
   // without provisioning a new Fusebit account. Init token will be redeemed in the auth callback.
@@ -77,7 +88,7 @@ const signIn = (silent?: boolean): void => {
     `&client_id=${REACT_APP_AUTH0_CLIENT_ID}`,
     `&audience=${REACT_APP_AUTH0_AUDIENCE || REACT_APP_FUSEBIT_DEPLOYMENT}`,
     `&redirect_uri=${window.location.origin}/callback?silentAuth=${silent ? 'true' : 'false'}`,
-    `%26requestedPath=${requestedPath === '/callback' ? `/` : encodeURIComponent(requestedPath)}`,
+    `&requestedPath=${requestedPath === '/callback' ? `/` : encodeURIComponent(requestedPath)}`,
     '&scope=openid profile email',
     `&screen_hint=${localStorage.getItem('screenHint')}`,
     silent && !connection && !initToken ? '&prompt=none' : '',
@@ -154,6 +165,14 @@ const _useAuthContext = () => {
     return { subscriptionId: defaultSubscription.id, subscriptionName: defaultSubscription.displayName };
   };
 
+  const isSubscriptionValid = async (accountId: string, subscriptionId: string, fusebitAxiosClient: AxiosInstance) => {
+    const subscriptions = await fusebitAxiosClient.get<AccountSubscriptions>(
+      `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/subscription`
+    );
+    const isSubFound = subscriptions.data.items?.find((sub) => sub.id === subscriptionId);
+    return !!isSubFound;
+  };
+
   const getDecodedToken = (token: string) => {
     const decoded = jwt_decode<Auth0Token>(token);
     const fusebitProfile = decoded['https://fusebit.io/profile'];
@@ -171,6 +190,7 @@ const _useAuthContext = () => {
     try {
       const { fusebitProfile: profile, isSignUpEvent, issuedByAuth0, isSupportingTool } = getDecodedToken(token);
       let fusebitProfile = profile;
+      const requestedAccount = localStorage.getItem('requestedAccount');
       const activeAccountStringified = localStorage.getItem(ACTIVE_ACCOUNT_KEY);
       const initToken = window.localStorage.getItem('fusebitInitToken');
       const fusebitAxiosClient = createAxiosClient(token);
@@ -191,7 +211,30 @@ const _useAuthContext = () => {
         return;
       }
 
-      if (activeAccountStringified && !isSupportingTool) {
+      if (requestedAccount && !isSupportingTool) {
+        try {
+          const requestedAccountParsed: { accountId: string; subscriptionId: string } = JSON.parse(requestedAccount);
+          const isSubValid = await isSubscriptionValid(
+            requestedAccountParsed.accountId,
+            requestedAccountParsed.subscriptionId,
+            fusebitAxiosClient
+          );
+
+          if (isSubValid) {
+            fusebitProfile = {
+              ...fusebitProfile,
+              ...requestedAccountParsed,
+            };
+            console.log('isVal');
+          } else {
+            console.log('isInval');
+          }
+        } catch (err) {
+          console.log('error!');
+        }
+
+        localStorage.removeItem('requestedAccount');
+      } else if (activeAccountStringified && !isSupportingTool) {
         try {
           const activeAccountParsed: AccountListItem = JSON.parse(activeAccountStringified);
           const isValid = await fusebitAxiosClient.get(
