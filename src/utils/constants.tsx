@@ -19,6 +19,8 @@ export const INVITED_TO_FUSEBIT_KEY = 'invitedToFusebitAccount';
 
 export const ACTIVE_ACCOUNT_KEY = 'activeAccount';
 
+export const REQUESTED_ACCOUNT_KEY = 'requestedAccount';
+
 export const IS_EDITOR_SAVING_KEY = 'isEditorSaving';
 
 const StyledBeta = styled.div`
