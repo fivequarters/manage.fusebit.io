@@ -12,7 +12,6 @@ import { useHistory } from 'react-router-dom';
 import useFirstTimeVisitor from '@hooks/useFirstTimeVisitor';
 import { AccountListItem, AccountSubscriptions } from '@interfaces/account';
 import { AxiosInstance } from 'axios';
-import { Subscriptions } from '@material-ui/icons';
 
 const {
   REACT_APP_AUTH0_DOMAIN,
@@ -165,14 +164,6 @@ const _useAuthContext = () => {
     return { subscriptionId: defaultSubscription.id, subscriptionName: defaultSubscription.displayName };
   };
 
-  const isSubscriptionValid = async (accountId: string, subscriptionId: string, fusebitAxiosClient: AxiosInstance) => {
-    const subscriptions = await fusebitAxiosClient.get<AccountSubscriptions>(
-      `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/subscription`
-    );
-    const isSubFound = subscriptions.data.items?.find((sub) => sub.id === subscriptionId);
-    return !!isSubFound;
-  };
-
   const getDecodedToken = (token: string) => {
     const decoded = jwt_decode<Auth0Token>(token);
     const fusebitProfile = decoded['https://fusebit.io/profile'];
@@ -212,24 +203,27 @@ const _useAuthContext = () => {
       }
 
       if (requestedAccount && !isSupportingTool) {
-        try {
-          const requestedAccountParsed: { accountId: string; subscriptionId: string } = JSON.parse(requestedAccount);
-          const requestedAccountFound = fusebitProfile.accounts?.find(
-            (acc) =>
-              acc.accountId === requestedAccountParsed.accountId &&
-              acc.subscriptionId === requestedAccountParsed.subscriptionId
+        const requestedAccountParsed: { accountId: string; subscriptionId: string } = JSON.parse(requestedAccount);
+        const requestedAccountFound = fusebitProfile.accounts?.find(
+          (acc) =>
+            acc.accountId === requestedAccountParsed.accountId &&
+            acc.subscriptionId === requestedAccountParsed.subscriptionId
+        );
+        if (requestedAccountFound) {
+          fusebitProfile = {
+            ...fusebitProfile,
+            ...requestedAccountFound,
+          };
+          localStorage.setItem(ACTIVE_ACCOUNT_KEY, JSON.stringify(fusebitProfile));
+        } else {
+          const defaultSubscription = await getDefaultSubscriptionData(
+            fusebitProfile.accountId || '',
+            fusebitAxiosClient
           );
-          if (requestedAccountFound) {
-            fusebitProfile = {
-              ...fusebitProfile,
-              ...requestedAccountFound,
-            };
-            localStorage.setItem(ACTIVE_ACCOUNT_KEY, JSON.stringify(fusebitProfile));
-          } else {
-            console.log('not found');
-          }
-        } catch (err) {
-          console.log('error!');
+          fusebitProfile = {
+            ...fusebitProfile,
+            ...defaultSubscription,
+          };
         }
 
         localStorage.removeItem('requestedAccount');
