@@ -242,6 +242,7 @@ const _useAuthContext = () => {
       if (isSupportingTool) {
         // Do nothing
       } else if (requestedAccount) {
+        // The requested URL has an accountId and subscriptionId
         const requestedAccountParsed: { accountId: string; subscriptionId: string } = JSON.parse(requestedAccount);
         const requestedAccountFound = fusebitProfile.accounts?.find(
           (acc) =>
@@ -256,9 +257,11 @@ const _useAuthContext = () => {
 
         localStorage.removeItem(REQUESTED_ACCOUNT_KEY);
       } else if (activeAccountStringified) {
+        // The requested URL does not have an accountId and subscriptionId, and there is an active account store on localStorage
         const activeAccountParsed: AccountListItem = JSON.parse(activeAccountStringified);
         fusebitProfile = await getFusebitProfile(fusebitProfile, activeAccountParsed, fusebitAxiosClient);
       } else {
+        // The requested URL does not have an accountId and subscriptionId, and there isn't an active account store on localStorage
         fusebitProfile = await getFusebitProfileWithDefaultSubscription(fusebitProfile, fusebitAxiosClient);
       }
 
