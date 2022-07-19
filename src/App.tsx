@@ -1,4 +1,4 @@
-import { createMuiTheme, responsiveFontSizes, ThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme, responsiveFontSizes, ThemeProvider, StylesProvider } from '@material-ui/core/styles';
 import CookieConsent from 'react-cookie-consent';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import DashboardRoutes from '@components/DashboardRoutes';
@@ -15,25 +15,29 @@ const App = () => {
     <ContextProvider>
       {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />}
       <ThemeProvider theme={responsiveFontSizes(createMuiTheme(lightTheme))}>
-        <CookieConsent
-          location="bottom"
-          buttonText="Accept"
-          cookieName="CookieConsent"
-          style={{ background: '#d7e5ff', justifyContent: 'initial' }}
-          contentStyle={{ flex: 'initial' }}
-          buttonStyle={{
-            borderRadius: '4px',
-            border: '1px solid #F83420',
-            backgroundColor: 'white',
-            color: '#F83420',
-            fontSize: '13px',
-            zIndex: 999,
-          }}
-          expires={150}
-        >
-          <p style={{ color: '#333333', fontWeight: 500 }}>This website uses cookies to enhance the user experience.</p>
-        </CookieConsent>
-        <DashboardRoutes />
+        <StylesProvider injectFirst>
+          <CookieConsent
+            location="bottom"
+            buttonText="Accept"
+            cookieName="CookieConsent"
+            style={{ background: '#d7e5ff', justifyContent: 'initial' }}
+            contentStyle={{ flex: 'initial' }}
+            buttonStyle={{
+              borderRadius: '4px',
+              border: '1px solid #F83420',
+              backgroundColor: 'white',
+              color: '#F83420',
+              fontSize: '13px',
+              zIndex: 999,
+            }}
+            expires={150}
+          >
+            <p style={{ color: '#333333', fontWeight: 500 }}>
+              This website uses cookies to enhance the user experience.
+            </p>
+          </CookieConsent>
+          <DashboardRoutes />
+        </StylesProvider>
       </ThemeProvider>
     </ContextProvider>
   );
