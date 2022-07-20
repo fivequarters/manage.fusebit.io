@@ -18,6 +18,7 @@ import InformationalBanner from '@components/common/InformationalBanner';
 import BaseJsonForm from '@components/common/BaseJsonForm';
 import * as CSC from '@components/globalStyle';
 import { useQueryClient } from 'react-query';
+import { FROM_INTEGRATIONS_PAGE, FROM_INTEGRATION_DETAIL_PAGE } from '@utils/constants';
 
 const StyledFormWrapper = styled.form`
   display: flex;
@@ -90,7 +91,7 @@ const ConfigureForm: React.FC = () => {
   useEffect(() => {
     if (history.location.state) {
       const { from, url } = history.location.state as { from: string; url: string };
-      if (from === 'integration-detail-page' || from === 'integrations-page') {
+      if (from === FROM_INTEGRATION_DETAIL_PAGE || from === FROM_INTEGRATIONS_PAGE) {
         setBackButtonState({ enabled: true, url });
       }
     }

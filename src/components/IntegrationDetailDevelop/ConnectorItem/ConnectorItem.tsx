@@ -18,6 +18,7 @@ import notFoundIcon from '@assets/warning-red.svg';
 import { urlOrSvgToImage } from '@utils/utils';
 import { useQueryClient } from 'react-query';
 import { Feed } from '@interfaces/feed';
+import { FROM_INTEGRATION_DETAIL_PAGE } from '@utils/constants';
 
 interface Props {
   className?: string;
@@ -36,7 +37,7 @@ const ConnectorItem: React.FC<Props> = ({ className, connector, integrationData 
     // but are added to the components list will not trigger the redirect
     if (connector.id) {
       history.push(getRedirectLink(`/connector/${connector.id}/configure`), {
-        from: 'integration-detail-page',
+        from: FROM_INTEGRATION_DETAIL_PAGE,
         url: history.location,
       });
     }

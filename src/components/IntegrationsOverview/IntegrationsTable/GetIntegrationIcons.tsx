@@ -6,6 +6,7 @@ import { InnerConnector } from '@interfaces/integration';
 import { Avatar, Chip } from '@material-ui/core';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 import { useHistory } from 'react-router-dom';
+import { FROM_INTEGRATIONS_PAGE } from '@utils/constants';
 
 interface Props {
   components: InnerConnector[];
@@ -20,7 +21,7 @@ const GetIntegrationIcons: React.FC<Props> = ({ components }) => {
 
   const onClick = (connectorId: string) => {
     history.push(getRedirectLink(`/connector/${connectorId}/configure`), {
-      from: 'integrations-page',
+      from: FROM_INTEGRATIONS_PAGE,
       url: history.location,
     });
   };
