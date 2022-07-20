@@ -9,6 +9,7 @@ import { urlOrSvgToImage } from '@utils/utils';
 import BaseJsonForm from '@components/common/BaseJsonForm';
 import { DefaultFilters } from '@hooks/useFilterFeed';
 import useFeedPicker from '@hooks/useFeedPicker';
+import MissingEntityCta from '@components/common/MissingEntityCta';
 import FeedItemDescription, { StyledConnectorDescription } from './FeedItemDescription';
 
 const StyledCard = styled.div`
@@ -92,12 +93,6 @@ const StyledColumnBr = styled.div`
   background-color: #959595;
   opacity: 0.3;
   margin: 0 32px;
-
-  @media only screen and (max-width: 1100px) {
-    width: 100%;
-    height: 1px;
-    margin: 32px 0;
-  }
 `;
 
 const StyledColumnSearchWrapper = styled.div`
@@ -227,33 +222,36 @@ const FeedPicker = React.forwardRef<HTMLDivElement, Props>(
         <Box display="flex" flexDirection={isMobile && 'column'}>
           {!isSnippet && (
             <>
-              <StyledColumn>
-                {loading ? (
-                  <Box minWidth="254px">
-                    <Loader />
-                  </Box>
-                ) : (
-                  <>
-                    <StyledColumnItem
-                      onClick={() => handleFilterChange(DefaultFilters.ALL)}
-                      active={activeFilter === DefaultFilters.ALL}
-                      capitalize
-                    >
-                      {DefaultFilters.ALL}
-                    </StyledColumnItem>
-                    {allTags.map((tag) => (
+              <Box display="flex" flexDirection="column">
+                <StyledColumn>
+                  {loading ? (
+                    <Box minWidth="254px">
+                      <Loader />
+                    </Box>
+                  ) : (
+                    <>
                       <StyledColumnItem
-                        active={tag === activeFilter}
-                        key={tag}
-                        onClick={() => handleFilterChange(tag)}
+                        onClick={() => handleFilterChange(DefaultFilters.ALL)}
+                        active={activeFilter === DefaultFilters.ALL}
                         capitalize
                       >
-                        {tag}
+                        {DefaultFilters.ALL}
                       </StyledColumnItem>
-                    ))}
-                  </>
-                )}
-              </StyledColumn>
+                      {allTags.map((tag) => (
+                        <StyledColumnItem
+                          active={tag === activeFilter}
+                          key={tag}
+                          onClick={() => handleFilterChange(tag)}
+                          capitalize
+                        >
+                          {tag}
+                        </StyledColumnItem>
+                      ))}
+                    </>
+                  )}
+                </StyledColumn>
+                <MissingEntityCta entityName={feedTypeName} onClick={onClose} />
+              </Box>
               <StyledColumnBr />
             </>
           )}
