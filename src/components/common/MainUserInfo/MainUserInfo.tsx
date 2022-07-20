@@ -115,6 +115,7 @@ const StyledAccountsWrapper = styled.div`
 `;
 
 const ACCOUNTS_MENU_ID = 'accounts';
+const BASE_MENU_WIDTH = 50;
 
 interface Props {
   onAccountSwitch: () => void;
@@ -148,7 +149,6 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
     if (isMenuOpen) {
       const accs = document.getElementById(ACCOUNTS_MENU_ID);
       const menu = accs?.querySelector('.MuiList-root');
-      const BASE_MENU_WIDTH = 50;
       const interval = setInterval(() => {
         if (typeof menu?.clientWidth === 'number' && menu?.clientWidth > BASE_MENU_WIDTH) {
           setTransformMenuHorizontalOrigin(menu?.clientWidth + BASE_MENU_WIDTH);
