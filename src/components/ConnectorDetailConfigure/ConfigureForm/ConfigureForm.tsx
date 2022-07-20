@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Box, Button, useMediaQuery } from '@material-ui/core';
@@ -57,25 +57,22 @@ const StyledBackButton = styled(Button)`
 const ConfigureForm: React.FC = () => {
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
-  const [connectorId, setConnectorId] = useState(id);
   const { userData } = useAuthContext();
-  const { data: connectorData, refetch: reloadConnector } = useAccountConnectorsGetOne<Connector>({
+  const { isLoading: isConnectorDataLoading, data: connectorData } = useAccountConnectorsGetOne<Connector>({
     enabled: userData.token,
-    id: connectorId,
+    id,
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
   });
-  const { data: config, refetch: reloadConfig } = useAccountConnectorsGetOneConfig<ConnectorConfig>({
+  const { isLoading: isConnectorConfigLoading, data: config } = useAccountConnectorsGetOneConfig<ConnectorConfig>({
     enabled: userData.token,
-    id: connectorId,
+    id,
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
   });
   const [data, setData] = React.useState<any>();
-  const [jsonFormsInputs, setJsonFormsInputs] = React.useState<any>();
   const [errors, setErrors] = React.useState<object[]>([]);
   const [validationMode, setValidationMode] = React.useState<ValidationMode>('ValidateAndHide');
-  const [loading, setLoading] = React.useState(false);
   const { updateEntity } = useEntityApi();
   const { feed } = useGetFeedById({
     id: connectorData?.data.tags['fusebit.feedId'],
@@ -96,31 +93,6 @@ const ConfigureForm: React.FC = () => {
       }
     }
   }, [history]);
-
-  useEffect(() => {
-    const unlisten = history.listen((location) => {
-      setLoading(true);
-      setConnectorId(location.pathname.split('/')[6]);
-      setJsonFormsInputs(undefined);
-    });
-
-    return () => unlisten();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    const reloadData = async () => {
-      if (userData.subscriptionId) {
-        await reloadConnector();
-        await reloadConfig();
-        setLoading(false);
-      }
-    };
-    reloadData();
-
-    return () => {};
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [connectorId]);
 
   const handleSubmit = async () => {
     if (errors.length > 0) {
@@ -145,7 +117,7 @@ const ConfigureForm: React.FC = () => {
   return (
     <Box display="flex" flexDirection={isMobile && 'column'} alignItems={isMobile && 'center'} mb="100px">
       <Box display="flex" flexDirection="column" position="relative" width="100%">
-        {config?.data && !loading ? (
+        {config?.data && !isConnectorDataLoading && !isConnectorConfigLoading ? (
           <StyledFormWrapper>
             {configureAppDocUrl ? (
               <InformationalBanner>
@@ -173,7 +145,7 @@ const ConfigureForm: React.FC = () => {
             <BaseJsonForm
               schema={config?.data.schema}
               uischema={config?.data.uischema}
-              data={jsonFormsInputs || config?.data.data}
+              data={config?.data.data}
               onChange={({ errors: _errors, data: newData }) => {
                 // Clear the clientId and clientSecret when going from non-prod to production.
                 if (
@@ -218,7 +190,6 @@ const ConfigureForm: React.FC = () => {
                   setErrors(_errors);
                 }
 
-                setJsonFormsInputs(newData);
                 setData(newData);
               }}
               validationMode={validationMode}

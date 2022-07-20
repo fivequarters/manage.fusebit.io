@@ -11,10 +11,10 @@ interface Props {
 const GetCredentialType: React.FC<Props> = ({ id }) => {
   const { userData } = useAuthContext();
   const config = useAccountConnectorsGetOne<Connector>({
-    accountId: userData.accountId,
-    subscriptionId: userData.subscriptionId,
     enabled: userData.token,
     id,
+    accountId: userData.accountId,
+    subscriptionId: userData.subscriptionId,
   });
 
   if (!config.data) {

@@ -1,8 +1,11 @@
 import { Breadcrumbs, Button, Box } from '@material-ui/core';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import arrow from '../../../assets/right-arrow-white.svg';
-import arrowDown from '../../../assets/down-arrow-white.svg';
+import { Link, useParams } from 'react-router-dom';
+import { urlOrSvgToImage } from '@utils/utils';
+import arrow from '@assets/right-arrow-white.svg';
+import arrowDown from '@assets/down-arrow-white.svg';
+import { BreadcrumbItem } from '@interfaces/entityBreadcrumb';
+import * as CSC from '@components/globalStyle';
 
 const StyledButton = styled(Button)`
   padding: 0;
@@ -29,21 +32,40 @@ const StyledArrowContainer = styled(Box)<{ $active?: boolean }>`
 `}
 `;
 
+const StyledIconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
+  margin-right: 10px;
+`;
+
+const StyledIcon = styled.img`
+  height: 24px;
+  width: 24px;
+  object-fit: contain;
+`;
+
 interface Props {
-  items: {
-    text: string;
-    onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, isLastItem: boolean) => void;
-    href?: string;
-    active?: boolean;
-  }[];
+  items: BreadcrumbItem[];
   lastItemAction?: boolean;
   isArrowActive?: boolean;
+  isLoadingIcon?: boolean;
 }
 
-const NavbarBreadcrumb: React.FC<Props> = ({ items, lastItemAction = true, isArrowActive }) => {
+const NavbarBreadcrumb: React.FC<Props> = ({ items, lastItemAction = true, isArrowActive, isLoadingIcon }) => {
+  const { id } = useParams<{ id: string }>();
+
   return (
     <>
-      <Breadcrumbs separator={<img src={arrow} alt="arrow" />} aria-label="breadcrumb">
+      <Breadcrumbs
+        separator={<img src={arrow} alt="arrow" />}
+        aria-label="breadcrumb"
+        style={{ marginTop: '8px', height: '40px' }}
+      >
         {items.map((item, index) => {
           const isLastItem = index === items.length - 1;
 
@@ -57,6 +79,18 @@ const NavbarBreadcrumb: React.FC<Props> = ({ items, lastItemAction = true, isArr
 
           return (
             <StyledButton key={item.text} onClick={(e) => item.onClick?.(e, isLastItem)}>
+              {item.icon && !isLoadingIcon ? (
+                <StyledIconWrapper>
+                  <StyledIcon src={urlOrSvgToImage(item.icon)} alt="icon" />
+                </StyledIconWrapper>
+              ) : (
+                isLoadingIcon &&
+                id && (
+                  <Box mr="10px" padding="10px">
+                    <CSC.Spinner />
+                  </Box>
+                )
+              )}
               <StyledText active={lastItemAction ? isLastItem : item.active}>{item.text}</StyledText>
               {isLastItem && lastItemAction && (
                 <StyledArrowContainer ml="8px" $active={isArrowActive}>
