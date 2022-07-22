@@ -19,7 +19,7 @@ import BaseJsonForm from '@components/common/BaseJsonForm';
 import * as CSC from '@components/globalStyle';
 import { useQueryClient } from 'react-query';
 
-const StyledFormWrapper = styled.form`
+const StyledFormWrapper = styled.form<{ useProduction?: boolean }>`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -27,6 +27,17 @@ const StyledFormWrapper = styled.form`
 
   @media only screen and (max-width: 880px) {
     margin-left: 0;
+  }
+
+  .MuiGrid-container {
+  }
+
+  .MuiFormControlLabel-root {
+    display: flex;
+    flex-direction: row-reverse;
+    width: fit-content;
+    margin-bottom: 48px;
+    margin-left: ${(props) => (props.useProduction ? '-320px' : 0)};
   }
 `;
 
@@ -39,6 +50,27 @@ const StyledFormInputWrapper = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+  }
+`;
+
+const StyledSidebarOption = styled.button<{ selected?: boolean }>`
+  font-family: 'Poppins';
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: ${(props) => (props.selected ? 700 : 400)};
+  border-radius: 4px;
+  color: var(--black);
+  margin-bottom: 16px;
+  width: 100%;
+  outline: rgba(255, 255, 255, 0);
+  border: none;
+  background: ${(props) => (props.selected ? 'var(--secondary-color)' : 'none')};
+  text-align: left;
+  transition: all 0.25s linear;
+
+  &:hover {
+    background: var(--secondary-color);
   }
 `;
 
@@ -89,10 +121,16 @@ const ConfigureForm: React.FC = () => {
   }
 
   return (
-    <Box display="flex" flexDirection={isMobile && 'column'} alignItems={isMobile && 'center'} mb="100px">
+    <Box
+      display="flex"
+      flexDirection={isMobile && 'column'}
+      alignItems={isMobile && 'center'}
+      mb="100px"
+      minHeight="calc(100vh - 350px)"
+    >
       <Box display="flex" flexDirection="column" position="relative" width="100%">
         {config?.data && !isConnectorDataLoading && !isConnectorConfigLoading ? (
-          <StyledFormWrapper>
+          <StyledFormWrapper useProduction={data?.mode?.useProduction}>
             {configureAppDocUrl ? (
               <InformationalBanner>
                 By default, Connectors use Fusebit demonstration credentials, which are intended for testing only. When
@@ -116,70 +154,92 @@ const ConfigureForm: React.FC = () => {
                 By default, Connectors use Fusebit demonstration credentials, which are intended for testing only.
               </InformationalBanner>
             )}
-            <BaseJsonForm
-              schema={config?.data.schema}
-              uischema={config?.data.uischema}
-              data={config?.data.data}
-              onChange={({ errors: _errors, data: newData }) => {
-                // Clear the clientId and clientSecret when going from non-prod to production.
-                if (
-                  newData.mode?.useProduction !== config?.data.data?.mode?.useProduction &&
-                  newData.mode?.useProduction !== data?.mode?.useProduction &&
-                  newData.mode?.useProduction
-                ) {
-                  newData.clientId = '';
-                  newData.clientSecret = '';
-                }
+            <Box display="flex" alignItems="center" position="relative">
+              {data && data?.mode?.useProduction && (
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  padding="24px"
+                  marginTop="auto"
+                  marginRight="48px"
+                  height="calc(100% - 86px)"
+                  minWidth="272px"
+                  maxWidth="272px"
+                  borderRadius="16px"
+                  style={{ boxShadow: '0px 20px 48px rgba(52, 72, 123, 0.1)' }}
+                >
+                  <StyledSidebarOption selected>Fusebit Connector Configuration</StyledSidebarOption>
+                  <StyledSidebarOption>Service Configuration</StyledSidebarOption>
+                  <StyledSidebarOption>Advanced Fusebit Options</StyledSidebarOption>
+                </Box>
+              )}
+              <BaseJsonForm
+                schema={config?.data.schema}
+                uischema={config?.data.uischema}
+                data={config?.data.data}
+                onChange={({ errors: _errors, data: newData }) => {
+                  // Clear the clientId and clientSecret when going from non-prod to production.
+                  if (
+                    newData.mode?.useProduction !== config?.data.data?.mode?.useProduction &&
+                    newData.mode?.useProduction !== data?.mode?.useProduction &&
+                    newData.mode?.useProduction
+                  ) {
+                    newData.clientId = '';
+                    newData.clientSecret = '';
+                  }
 
-                if (data && data.mode?.useProduction !== newData.mode?.useProduction && newData.mode?.useProduction) {
-                  trackEventMemoized('Enable Production Credentials Clicked', 'Connector', {
-                    Connector: connectorData?.data.tags['fusebit.feedId'],
-                    State: 'On',
-                  });
-                } else if (
-                  data &&
-                  data.mode?.useProduction !== newData.mode?.useProduction &&
-                  newData.mode?.useProduction === false
-                ) {
-                  trackEventMemoized('Enable Production Credentials Clicked', 'Connector', {
-                    Connector: connectorData?.data.tags['fusebit.feedId'],
-                    State: 'Off',
-                  });
-                }
+                  if (data && data.mode?.useProduction !== newData.mode?.useProduction && newData.mode?.useProduction) {
+                    trackEventMemoized('Enable Production Credentials Clicked', 'Connector', {
+                      Connector: connectorData?.data.tags['fusebit.feedId'],
+                      State: 'On',
+                    });
+                  } else if (
+                    data &&
+                    data.mode?.useProduction !== newData.mode?.useProduction &&
+                    newData.mode?.useProduction === false
+                  ) {
+                    trackEventMemoized('Enable Production Credentials Clicked', 'Connector', {
+                      Connector: connectorData?.data.tags['fusebit.feedId'],
+                      State: 'Off',
+                    });
+                  }
 
-                if (
-                  !newData.mode?.useProduction &&
-                  !(newData.clientId?.length > 0 && newData.clientSecret?.length > 0)
-                ) {
-                  const random = () => {
-                    const randBuffer = [...window.crypto.getRandomValues(new Uint8Array(32))];
-                    return randBuffer.map((x) => x.toString(16).padStart(2, '0')).join('');
-                  };
-                  newData.clientId = random();
-                  newData.clientSecret = random();
-                  newData.mode = { ...(newData.mode || {}), useProduction: false };
-                }
+                  if (
+                    !newData.mode?.useProduction &&
+                    !(newData.clientId?.length > 0 && newData.clientSecret?.length > 0)
+                  ) {
+                    const random = () => {
+                      const randBuffer = [...window.crypto.getRandomValues(new Uint8Array(32))];
+                      return randBuffer.map((x) => x.toString(16).padStart(2, '0')).join('');
+                    };
+                    newData.clientId = random();
+                    newData.clientSecret = random();
+                    newData.mode = { ...(newData.mode || {}), useProduction: false };
+                  }
 
-                if (_errors) {
-                  setErrors(_errors);
-                }
+                  if (_errors) {
+                    setErrors(_errors);
+                  }
 
-                setData(newData);
-              }}
-              validationMode={validationMode}
-            />
-            <StyledFormInputWrapper>
-              <Button
-                onClick={handleSubmit}
-                style={{ width: '200px' }}
-                fullWidth={false}
-                size="large"
-                color="primary"
-                variant="contained"
-              >
-                Save
-              </Button>
-            </StyledFormInputWrapper>
+                  setData(newData);
+                }}
+                validationMode={validationMode}
+              />
+            </Box>
+            {data && data?.mode?.useProduction && (
+              <StyledFormInputWrapper>
+                <Button
+                  onClick={handleSubmit}
+                  style={{ width: '200px' }}
+                  fullWidth={false}
+                  size="large"
+                  color="primary"
+                  variant="contained"
+                >
+                  Save
+                </Button>
+              </StyledFormInputWrapper>
+            )}
           </StyledFormWrapper>
         ) : (
           <CSC.LoaderContainer>
