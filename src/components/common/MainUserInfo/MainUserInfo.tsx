@@ -121,7 +121,7 @@ interface Props {
 const MainUserInfo = ({ onAccountSwitch }: Props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { accountId, subscriptionId } = useParams<{ accountId: string; subscriptionId: string }>();
-  const { userData, setUserData } = useAuthContext();
+  const { userData, switchAccount } = useAuthContext();
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
   const { data: currentUser } = useAccountUserGetOne<Account>({
@@ -153,16 +153,9 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
   };
 
   const handleAccountSwitch = (acc: AccountListItem) => {
-    setUserData({
-      ...userData,
-      ...acc,
-    });
-    localStorage.setItem(ACTIVE_ACCOUNT_KEY, JSON.stringify(acc));
-    setAnchorEl(null);
-    onAccountSwitch();
-    const { pathname } = history.location;
-    const newPath = pathname.replace(accountId, acc.accountId || '').replace(subscriptionId, acc.subscriptionId || '');
-    history.push(newPath);
+    switchAccount(acc);
+    // setAnchorEl(null);
+    // onAccountSwitch();
   };
 
   return (

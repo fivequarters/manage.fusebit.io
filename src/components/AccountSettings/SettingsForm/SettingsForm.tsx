@@ -55,13 +55,6 @@ const SettingsForm: React.FC = () => {
         accountId: userData.accountId,
         ...formValues,
       });
-      let activeAccount: AccountListItem = JSON.parse(localStorage.getItem(ACTIVE_ACCOUNT_KEY) || '');
-      activeAccount = {
-        ...activeAccount,
-        displayName: formValues.displayName,
-        company: formValues.displayName,
-      };
-      localStorage.setItem(ACTIVE_ACCOUNT_KEY, JSON.stringify(activeAccount));
     } catch (e) {
       createError({ message: `There was an error: ${e}` });
     } finally {

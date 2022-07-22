@@ -8,7 +8,7 @@ import { Company } from '@interfaces/company';
 import { createAxiosClient } from '@utils/utils';
 import { Auth0Token, FusebitProfile, FusebitProfileEx } from '@interfaces/auth0Token';
 import jwt_decode from 'jwt-decode';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import useFirstTimeVisitor from '@hooks/useFirstTimeVisitor';
 import { AccountListItem, AccountSubscriptions } from '@interfaces/account';
 import { AxiosInstance } from 'axios';
@@ -102,6 +102,7 @@ const _useAuthContext = () => {
   const [userData, setUserData] = useState<User>({});
   const { setFirstTimeVisitor } = useFirstTimeVisitor();
   const history = useHistory();
+  const location = useLocation();
 
   const checkAuthStatus = async () => {
     const isUserDataDefined = userData && Object.entries(userData).length > 0;
@@ -201,6 +202,43 @@ const _useAuthContext = () => {
     }
   };
 
+  const populateProfile = async (defaultProfile: FusebitProfileEx, isSupportingTool: boolean, axios: AxiosInstance) => {
+    let fusebitProfile = defaultProfile;
+
+    if (isSupportingTool) {
+      return fusebitProfile;
+    }
+
+    const requestedAccount = localStorage.getItem(REQUESTED_ACCOUNT_KEY);
+    const activeAccount = localStorage.getItem(ACTIVE_ACCOUNT_KEY);
+
+    if (requestedAccount) {
+      const requestedAccountParsed: { accountId: string; subscriptionId: string } = JSON.parse(requestedAccount);
+      const requestedAccountFound = fusebitProfile.accounts?.find(
+        (acc) =>
+          acc.accountId === requestedAccountParsed.accountId &&
+          acc.subscriptionId === requestedAccountParsed.subscriptionId
+      );
+      if (requestedAccountFound) {
+        fusebitProfile = await getFusebitProfile(fusebitProfile, requestedAccountFound, axios);
+      } else {
+        fusebitProfile = await getFusebitProfileWithDefaultSubscription(fusebitProfile, axios);
+      }
+
+      return fusebitProfile;
+    }
+
+    // if (activeAccount) {
+    //   // The requested URL does not have an accountId and subscriptionId, and there is an active account stored on localStorage
+    //   const activeAccountParsed: AccountListItem = JSON.parse(activeAccount);
+    //   fusebitProfile = await getFusebitProfile(fusebitProfile, activeAccountParsed, axios);
+
+    //   return fusebitProfile;
+    // }
+
+    return getFusebitProfileWithDefaultSubscription(fusebitProfile, axios);
+  };
+
   const getDecodedToken = (token: string) => {
     const decoded = jwt_decode<Auth0Token>(token);
     const fusebitProfile = decoded['https://fusebit.io/profile'];
@@ -217,11 +255,9 @@ const _useAuthContext = () => {
   const authUser = async (token: string) => {
     try {
       const { fusebitProfile: profile, isSignUpEvent, issuedByAuth0, isSupportingTool } = getDecodedToken(token);
-      let fusebitProfile = profile;
-      const requestedAccount = localStorage.getItem(REQUESTED_ACCOUNT_KEY);
-      const activeAccountStringified = localStorage.getItem(ACTIVE_ACCOUNT_KEY);
       const initToken = window.localStorage.getItem('fusebitInitToken');
       const fusebitAxiosClient = createAxiosClient(token);
+      const fusebitProfile = await populateProfile(profile, isSupportingTool, fusebitAxiosClient);
 
       if (initToken) {
         // This is completion of the invitation transaction. Call the provisioning function to
@@ -237,32 +273,6 @@ const _useAuthContext = () => {
             handleAuthError(err, true);
           });
         return;
-      }
-
-      if (isSupportingTool) {
-        // Do nothing
-      } else if (requestedAccount) {
-        // The requested URL has an accountId and subscriptionId
-        const requestedAccountParsed: { accountId: string; subscriptionId: string } = JSON.parse(requestedAccount);
-        const requestedAccountFound = fusebitProfile.accounts?.find(
-          (acc) =>
-            acc.accountId === requestedAccountParsed.accountId &&
-            acc.subscriptionId === requestedAccountParsed.subscriptionId
-        );
-        if (requestedAccountFound) {
-          fusebitProfile = await getFusebitProfile(fusebitProfile, requestedAccountFound, fusebitAxiosClient);
-        } else {
-          fusebitProfile = await getFusebitProfileWithDefaultSubscription(fusebitProfile, fusebitAxiosClient);
-        }
-
-        localStorage.removeItem(REQUESTED_ACCOUNT_KEY);
-      } else if (activeAccountStringified) {
-        // The requested URL does not have an accountId and subscriptionId, and there is an active account stored on localStorage
-        const activeAccountParsed: AccountListItem = JSON.parse(activeAccountStringified);
-        fusebitProfile = await getFusebitProfile(fusebitProfile, activeAccountParsed, fusebitAxiosClient);
-      } else {
-        // The requested URL does not have an accountId and subscriptionId, and there isn't an active account stored on localStorage
-        fusebitProfile = await getFusebitProfileWithDefaultSubscription(fusebitProfile, fusebitAxiosClient);
       }
 
       getAuth0ProfileAndCompany(token, fusebitProfile?.accountId || '')
@@ -307,6 +317,36 @@ const _useAuthContext = () => {
     }
   };
 
+  const setActiveAccount = (accountId: string, subscriptionId: string) => {
+    localStorage.setItem(ACTIVE_ACCOUNT_KEY, `${accountId}:${subscriptionId}`);
+  };
+
+  const getActiveAccount = () => {
+    const [accountId, subscriptionId] = localStorage.getItem(ACTIVE_ACCOUNT_KEY)?.split(':') || [];
+
+    return {
+      accountId,
+      subscriptionId,
+    };
+  };
+
+  const getNewLocationAccount = (newAccount: any) => {
+    const { pathname } = location;
+    return pathname
+      .replace(userData?.accountId || '', newAccount.accountId || '')
+      .replace(userData.subscriptionId || '', newAccount.subscriptionId || '');
+  };
+
+  const switchAccount = (newAccount: any) => {
+    setUserData({
+      ...userData,
+      ...newAccount,
+    });
+
+    setActiveAccount(newAccount.accountId, newAccount.subscriptionId);
+    history.push(getNewLocationAccount(newAccount));
+  };
+
   return {
     checkAuthStatus,
     userData,
@@ -319,6 +359,7 @@ const _useAuthContext = () => {
     redeemInitToken,
     handleAuthError,
     authUser,
+    switchAccount,
   };
 };
 
