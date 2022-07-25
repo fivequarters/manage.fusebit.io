@@ -74,9 +74,15 @@ const useEditor = (
 
           await testIntegration({ id, tenantId: getTenantId() });
 
-          trackEventUnmemoized('Run Button Execution', objectLocation, { runStatus: 'success' });
+          trackEventUnmemoized('Run Button Execution', objectLocation, {
+            runStatus: 'success',
+            integration: integrationData?.data.tags['fusebit.feedId'],
+          });
         } catch (error) {
-          trackEventUnmemoized('Run Button Execution', objectLocation, { runStatus: 'failure' });
+          trackEventUnmemoized('Run Button Execution', objectLocation, {
+            runStatus: 'failure',
+            integration: integrationData?.data.tags['fusebit.feedId'],
+          });
           // eslint-disable-next-line no-console
           console.log(error);
         }

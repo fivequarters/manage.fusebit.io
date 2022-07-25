@@ -122,6 +122,8 @@ const FeedPickerMobile: React.FC<Props> = ({ isIntegration, onSubmit, open, onCl
     <ItemList key="1" items={filters} activeItem={activeFilter} />,
     <FeedPickerMobileChoose
       onChange={handleInputChange}
+      onClose={handleClose}
+      feedTypeName={feedTypeName}
       key={activeTemplate?.id}
       items={entities}
       activeItem={activeTemplate?.id}
