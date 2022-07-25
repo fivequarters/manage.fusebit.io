@@ -49,7 +49,6 @@ const setSignInLocalStorageItems = (requestedPath: string, requestedSearch: stri
   // Save the search params for the AuthCallbackPage navigatePostAuth
   if (requestedSearch.indexOf('requestedPath') < 0) {
     localStorage.setItem('requestedSearch', window.location.search);
-    localStorage.setItem('requestedPath', requestedPath);
     if (window.location.hash && window.location.hash !== '#') {
       localStorage.setItem('requestedHash', window.location.hash);
     }
@@ -115,7 +114,7 @@ const signIn = (silent?: boolean): void => {
     `&client_id=${REACT_APP_AUTH0_CLIENT_ID}`,
     `&audience=${REACT_APP_AUTH0_AUDIENCE || REACT_APP_FUSEBIT_DEPLOYMENT}`,
     `&redirect_uri=${window.location.origin}/callback?silentAuth=${silent ? 'true' : 'false'}`,
-    `&requestedPath=${requestedPath === '/callback' ? `/` : encodeURIComponent(requestedPath)}`,
+    `%26requestedPath=${requestedPath === '/callback' ? `/` : encodeURIComponent(requestedPath)}`,
     '&scope=openid profile email',
     `&screen_hint=${localStorage.getItem('screenHint')}`,
     silent && !connection && !initToken ? '&prompt=none' : '',
@@ -360,23 +359,16 @@ const _useAuthContext = () => {
           setAuthStatus(AuthStatus.AUTHENTICATED);
 
           const navigatePostAuth = () => {
-            const requestedPath = localStorage.getItem('requestedPath') || '';
             const requestedSearch = localStorage.getItem('requestedSearch') || '';
             const requestedHash = localStorage.getItem('requestedHash') || '';
 
             setFirstTimeVisitor(true);
-            localStorage.removeItem('requestedPath');
+            const urlSearchParams = new URLSearchParams(window.location.search);
+            const requestedPath = (urlSearchParams.get('requestedPath') || '/').replace(/ /g, '+');
             localStorage.removeItem('requestedSearch');
             localStorage.removeItem('requestedHash');
-            const url = requestedPath + requestedSearch + requestedHash;
-            if (url.indexOf('error') > 0) {
-              // If this happens, it means that the user has logged in after logging out or has logged in for the first time,
-              // and has the login error saved on the url, so we send them to the root page
-              history.push('/');
-            } else {
-              // The user is logged in and requesting this url
-              history.push(requestedPath + requestedSearch + requestedHash);
-            }
+
+            history.push(requestedPath + requestedSearch + requestedHash);
           };
 
           const user: User = { email: fusebitProfile?.email, ...auth0Profile, ...company };
