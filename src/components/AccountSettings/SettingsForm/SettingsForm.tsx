@@ -7,6 +7,8 @@ import * as CSC from '@components/globalStyle';
 import { useAccountUpdateOne } from '@hooks/api/v1/account/account/useUpdateOne';
 import { useAuthContext } from '@hooks/useAuthContext';
 import { useError } from '@hooks/useError';
+import { useQueryClient } from 'react-query';
+import { ACCOUNT_GET_ALL_ACCOUNTS } from '@hooks/api/v1/account/account/useGetAllAccounts';
 
 const schema = {
   type: 'object',
@@ -41,6 +43,7 @@ const SettingsForm: React.FC = () => {
   const [formValues, setFormValues] = useState({ displayName: userData.company });
   const { mutateAsync: updateAccount, isLoading } = useAccountUpdateOne();
   const { createError } = useError();
+  const queryClient = useQueryClient();
 
   const handleSubmit = async () => {
     if (errors.length > 0) {
@@ -53,6 +56,7 @@ const SettingsForm: React.FC = () => {
         accountId: userData.accountId,
         ...formValues,
       });
+      queryClient.removeQueries(ACCOUNT_GET_ALL_ACCOUNTS);
     } catch (e) {
       createError({ message: `There was an error: ${e}` });
     } finally {

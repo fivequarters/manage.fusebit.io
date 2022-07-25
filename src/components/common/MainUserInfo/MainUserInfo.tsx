@@ -131,7 +131,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
   const isMobile = useMediaQuery('(max-width: 880px)');
 
   const allowSubscriptionSelection = useMemo(() => {
-    if (accounts) {
+    if (accounts && !isLoading) {
       return userData.accounts && (userData?.accounts?.length > 1 || accounts?.[0]?.subscriptions?.length > 1);
     }
 
