@@ -49,6 +49,7 @@ const setSignInLocalStorageItems = (requestedPath: string, requestedSearch: stri
   // Save the search params for the AuthCallbackPage navigatePostAuth
   if (requestedSearch.indexOf('requestedPath') < 0) {
     localStorage.setItem('requestedSearch', window.location.search);
+    localStorage.setItem('requestedPath', requestedPath);
     if (window.location.hash && window.location.hash !== '#') {
       localStorage.setItem('requestedHash', window.location.hash);
     }
@@ -68,15 +69,29 @@ const setRequestedAccount = (accountId?: string, subscriptionId?: string) => {
   localStorage.setItem(REQUESTED_ACCOUNT_KEY, `${accountId}:${subscriptionId}`);
 };
 
+const getActiveAccount = () => {
+  const [accountId, subscriptionId, userId] = localStorage.getItem(ACTIVE_ACCOUNT_KEY)?.split(':') || [];
+
+  return {
+    accountId,
+    subscriptionId,
+    userId,
+  };
+};
+
+const setActiveAccount = (accountId: string, subscriptionId: string, userId: string) => {
+  localStorage.setItem(ACTIVE_ACCOUNT_KEY, `${accountId}:${subscriptionId}:${userId}`);
+};
+
 const removeRequestedAccount = () => {
   localStorage.removeItem(REQUESTED_ACCOUNT_KEY);
 };
 
 const signIn = (silent?: boolean): void => {
   const requestedSearch = window.location.search;
-  setSignInLocalStorageItems(window.location.pathname, requestedSearch);
-  const urlSearchParams = new URLSearchParams(window.location.search);
+  const urlSearchParams = new URLSearchParams(requestedSearch);
   const requestedPath = (urlSearchParams.get('requestedPath') || window.location.pathname).replace(/ /g, '+');
+  setSignInLocalStorageItems(requestedPath, requestedSearch);
   const connection = urlSearchParams.get('fusebitConnection');
   const accountId = window.location.pathname.split('/')?.[2];
   const subscriptionId = window.location.pathname.split('/')?.[4];
@@ -209,7 +224,11 @@ const _useAuthContext = () => {
           ...fusebitProfile,
           ...newFusebitProfile,
         };
-        localStorage.setItem(ACTIVE_ACCOUNT_KEY, JSON.stringify(fusebitProfile));
+        setActiveAccount(
+          fusebitProfile.accountId || '',
+          fusebitProfile.subscriptionId || '',
+          fusebitProfile.userId || ''
+        );
         return fusebitProfile;
       }
 
@@ -218,20 +237,6 @@ const _useAuthContext = () => {
       fusebitProfile = await getFusebitProfileWithDefaultSubscription(fusebitProfile, fusebitAxiosClient);
       return fusebitProfile;
     }
-  };
-
-  const getActiveAccount = () => {
-    const [accountId, subscriptionId, userId] = localStorage.getItem(ACTIVE_ACCOUNT_KEY)?.split(':') || [];
-
-    return {
-      accountId,
-      subscriptionId,
-      userId,
-    };
-  };
-
-  const setActiveAccount = (accountId: string, subscriptionId: string, userId: string) => {
-    localStorage.setItem(ACTIVE_ACCOUNT_KEY, `${accountId}:${subscriptionId}:${userId}`);
   };
 
   const getNewLocationAccount = (newAccount: any) => {
@@ -275,7 +280,7 @@ const _useAuthContext = () => {
       return fusebitProfile;
     }
 
-    if (activeAccount) {
+    if (activeAccount.accountId && activeAccount.subscriptionId && activeAccount.userId) {
       fusebitProfile = await getFusebitProfile(fusebitProfile, activeAccount, axios);
       const subscriptions = await getSubscriptions(fusebitProfile.accountId || '', axios);
       const activeSubscriptionData = subscriptions.find((sub) => sub.id === fusebitProfile.subscriptionId);
@@ -346,12 +351,12 @@ const _useAuthContext = () => {
           setAuthStatus(AuthStatus.AUTHENTICATED);
 
           const navigatePostAuth = () => {
-            const urlSearchParams = new URLSearchParams(window.location.search);
-            const requestedPath = (urlSearchParams.get('requestedPath') || '/').replace(/ /g, '+');
+            const requestedPath = localStorage.getItem('requestedPath') || '';
             const requestedSearch = localStorage.getItem('requestedSearch') || '';
             const requestedHash = localStorage.getItem('requestedHash') || '';
 
             setFirstTimeVisitor(true);
+            localStorage.removeItem('requestedPath');
             localStorage.removeItem('requestedSearch');
             localStorage.removeItem('requestedHash');
             history.push(requestedPath + requestedSearch + requestedHash);
