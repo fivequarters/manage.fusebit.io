@@ -10,7 +10,7 @@ import { Auth0Token, FusebitProfile, FusebitProfileEx } from '@interfaces/auth0T
 import jwt_decode from 'jwt-decode';
 import { useHistory, useLocation } from 'react-router-dom';
 import useFirstTimeVisitor from '@hooks/useFirstTimeVisitor';
-import { AccountListItem, AccountSubscriptions } from '@interfaces/account';
+import { AccountSubscriptions } from '@interfaces/account';
 import { AxiosInstance } from 'axios';
 
 const {
@@ -55,6 +55,23 @@ const setSignInLocalStorageItems = (requestedPath: string, requestedSearch: stri
   }
 };
 
+const getRequestedAccount = () => {
+  const [accountId, subscriptionId] = localStorage.getItem(REQUESTED_ACCOUNT_KEY)?.split(':') || [];
+
+  return {
+    accountId,
+    subscriptionId,
+  };
+};
+
+const setRequestedAccount = (accountId?: string, subscriptionId?: string) => {
+  localStorage.setItem(REQUESTED_ACCOUNT_KEY, `${accountId}:${subscriptionId}`);
+};
+
+const removeRequestedAccount = () => {
+  localStorage.removeItem(REQUESTED_ACCOUNT_KEY);
+};
+
 const signIn = (silent?: boolean): void => {
   const requestedSearch = window.location.search;
   setSignInLocalStorageItems(window.location.pathname, requestedSearch);
@@ -65,11 +82,7 @@ const signIn = (silent?: boolean): void => {
   const subscriptionId = window.location.pathname.split('/')?.[4];
 
   if (accountId && subscriptionId) {
-    const requestedAccount = {
-      accountId,
-      subscriptionId,
-    };
-    localStorage.setItem(REQUESTED_ACCOUNT_KEY, JSON.stringify(requestedAccount));
+    setRequestedAccount(accountId, subscriptionId);
   }
 
   // If this is an invitation URL, store the init token in local storage and redirect to authenticate
@@ -157,11 +170,16 @@ const _useAuthContext = () => {
     return data;
   };
 
-  const getDefaultSubscriptionData = async (accountId: string, fusebitAxiosClient: AxiosInstance) => {
+  const getSubscriptions = async (accountId: string, fusebitAxiosClient: AxiosInstance) => {
     const subscriptions = await fusebitAxiosClient.get<AccountSubscriptions>(
       `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/subscription`
     );
-    const defaultSubscription = subscriptions.data.items?.[0];
+    return subscriptions.data.items;
+  };
+
+  const getDefaultSubscriptionData = async (accountId: string, fusebitAxiosClient: AxiosInstance) => {
+    const subscriptions = await getSubscriptions(accountId, fusebitAxiosClient);
+    const defaultSubscription = subscriptions[0];
     return { subscriptionId: defaultSubscription.id, subscriptionName: defaultSubscription.displayName };
   };
 
@@ -202,6 +220,37 @@ const _useAuthContext = () => {
     }
   };
 
+  const getActiveAccount = () => {
+    const [accountId, subscriptionId, userId] = localStorage.getItem(ACTIVE_ACCOUNT_KEY)?.split(':') || [];
+
+    return {
+      accountId,
+      subscriptionId,
+      userId,
+    };
+  };
+
+  const setActiveAccount = (accountId: string, subscriptionId: string, userId: string) => {
+    localStorage.setItem(ACTIVE_ACCOUNT_KEY, `${accountId}:${subscriptionId}:${userId}`);
+  };
+
+  const getNewLocationAccount = (newAccount: any) => {
+    const { pathname } = location;
+    return pathname
+      .replace(userData?.accountId || '', newAccount.accountId || '')
+      .replace(userData.subscriptionId || '', newAccount.subscriptionId || '');
+  };
+
+  const switchAccount = (newAccount: any) => {
+    setUserData({
+      ...userData,
+      ...newAccount,
+    });
+
+    setActiveAccount(newAccount.accountId, newAccount.subscriptionId, newAccount.userId);
+    history.push(getNewLocationAccount(newAccount));
+  };
+
   const populateProfile = async (defaultProfile: FusebitProfileEx, isSupportingTool: boolean, axios: AxiosInstance) => {
     let fusebitProfile = defaultProfile;
 
@@ -209,18 +258,16 @@ const _useAuthContext = () => {
       return fusebitProfile;
     }
 
-    const requestedAccount = localStorage.getItem(REQUESTED_ACCOUNT_KEY);
-    const activeAccount = localStorage.getItem(ACTIVE_ACCOUNT_KEY);
+    const requestedAccount = getRequestedAccount();
+    const activeAccount = getActiveAccount();
 
-    if (requestedAccount) {
-      const requestedAccountParsed: { accountId: string; subscriptionId: string } = JSON.parse(requestedAccount);
+    if (requestedAccount.accountId && requestedAccount.subscriptionId) {
       const requestedAccountFound = fusebitProfile.accounts?.find(
-        (acc) =>
-          acc.accountId === requestedAccountParsed.accountId &&
-          acc.subscriptionId === requestedAccountParsed.subscriptionId
+        (acc) => acc.accountId === requestedAccount.accountId && acc.subscriptionId === requestedAccount.subscriptionId
       );
       if (requestedAccountFound) {
         fusebitProfile = await getFusebitProfile(fusebitProfile, requestedAccountFound, axios);
+        removeRequestedAccount();
       } else {
         fusebitProfile = await getFusebitProfileWithDefaultSubscription(fusebitProfile, axios);
       }
@@ -228,13 +275,17 @@ const _useAuthContext = () => {
       return fusebitProfile;
     }
 
-    // if (activeAccount) {
-    //   // The requested URL does not have an accountId and subscriptionId, and there is an active account stored on localStorage
-    //   const activeAccountParsed: AccountListItem = JSON.parse(activeAccount);
-    //   fusebitProfile = await getFusebitProfile(fusebitProfile, activeAccountParsed, axios);
+    if (activeAccount) {
+      fusebitProfile = await getFusebitProfile(fusebitProfile, activeAccount, axios);
+      const subscriptions = await getSubscriptions(fusebitProfile.accountId || '', axios);
+      const activeSubscriptionData = subscriptions.find((sub) => sub.id === fusebitProfile.subscriptionId);
+      fusebitProfile = {
+        ...fusebitProfile,
+        subscriptionName: activeSubscriptionData?.displayName,
+      };
 
-    //   return fusebitProfile;
-    // }
+      return fusebitProfile;
+    }
 
     return getFusebitProfileWithDefaultSubscription(fusebitProfile, axios);
   };
@@ -257,14 +308,13 @@ const _useAuthContext = () => {
       const { fusebitProfile: profile, isSignUpEvent, issuedByAuth0, isSupportingTool } = getDecodedToken(token);
       const initToken = window.localStorage.getItem('fusebitInitToken');
       const fusebitAxiosClient = createAxiosClient(token);
-      const fusebitProfile = await populateProfile(profile, isSupportingTool, fusebitAxiosClient);
 
       if (initToken) {
         // This is completion of the invitation transaction. Call the provisioning function to
         // redeem the init token, then redirect back to the home page to re-authenticate and
         // get a new access token with an updated Fusebit profile.
         window.localStorage.removeItem('fusebitInitToken');
-        redeemInitToken(token, fusebitProfile, initToken)
+        redeemInitToken(token, profile, initToken)
           .then(() => {
             localStorage.setItem(INVITED_TO_FUSEBIT_KEY, 'true');
             history.push('/');
@@ -274,6 +324,8 @@ const _useAuthContext = () => {
           });
         return;
       }
+
+      const fusebitProfile = await populateProfile(profile, isSupportingTool, fusebitAxiosClient);
 
       getAuth0ProfileAndCompany(token, fusebitProfile?.accountId || '')
         .then(({ auth0Profile, company }) => {
@@ -315,36 +367,6 @@ const _useAuthContext = () => {
     } catch (err) {
       handleAuthError(err);
     }
-  };
-
-  const setActiveAccount = (accountId: string, subscriptionId: string) => {
-    localStorage.setItem(ACTIVE_ACCOUNT_KEY, `${accountId}:${subscriptionId}`);
-  };
-
-  const getActiveAccount = () => {
-    const [accountId, subscriptionId] = localStorage.getItem(ACTIVE_ACCOUNT_KEY)?.split(':') || [];
-
-    return {
-      accountId,
-      subscriptionId,
-    };
-  };
-
-  const getNewLocationAccount = (newAccount: any) => {
-    const { pathname } = location;
-    return pathname
-      .replace(userData?.accountId || '', newAccount.accountId || '')
-      .replace(userData.subscriptionId || '', newAccount.subscriptionId || '');
-  };
-
-  const switchAccount = (newAccount: any) => {
-    setUserData({
-      ...userData,
-      ...newAccount,
-    });
-
-    setActiveAccount(newAccount.accountId, newAccount.subscriptionId);
-    history.push(getNewLocationAccount(newAccount));
   };
 
   return {

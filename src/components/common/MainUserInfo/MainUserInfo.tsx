@@ -1,6 +1,6 @@
 import { Box, useMediaQuery } from '@material-ui/core';
 import { useMemo, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import accountImg from '@assets/account.svg';
 import rightArrow from '@assets/arrow-right-black.svg';
@@ -12,7 +12,6 @@ import CompanyTitle from '@components/common/CompanyTitle';
 import MainUserAccounts from '@components/common/MainUserInfo/MainUserAccounts';
 import * as CSC from '@components/globalStyle';
 import { useAccountGetAllAccounts } from '@hooks/api/v1/account/account/useGetAllAccounts';
-import { ACTIVE_ACCOUNT_KEY } from '@utils/constants';
 
 const StyledUserDropdownInfo = styled.div`
   display: flex;
@@ -120,7 +119,6 @@ interface Props {
 
 const MainUserInfo = ({ onAccountSwitch }: Props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const { accountId, subscriptionId } = useParams<{ accountId: string; subscriptionId: string }>();
   const { userData, switchAccount } = useAuthContext();
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
@@ -154,8 +152,8 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
 
   const handleAccountSwitch = (acc: AccountListItem) => {
     switchAccount(acc);
-    // setAnchorEl(null);
-    // onAccountSwitch();
+    setAnchorEl(null);
+    onAccountSwitch();
   };
 
   return (

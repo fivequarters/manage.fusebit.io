@@ -6,9 +6,7 @@ import { ValidationMode } from '@jsonforms/core';
 import * as CSC from '@components/globalStyle';
 import { useAccountUpdateOne } from '@hooks/api/v1/account/account/useUpdateOne';
 import { useAuthContext } from '@hooks/useAuthContext';
-import { AccountListItem } from '@interfaces/account';
 import { useError } from '@hooks/useError';
-import { ACTIVE_ACCOUNT_KEY } from '@utils/constants';
 
 const schema = {
   type: 'object',
