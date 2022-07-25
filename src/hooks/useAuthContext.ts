@@ -256,6 +256,14 @@ const _useAuthContext = () => {
     history.push(getNewLocationAccount(newAccount));
   };
 
+  const getAccountInProfileAccounts = (fusebitProfile: FusebitProfileEx, account: FusebitProfile) => {
+    const requestedAccountFound = fusebitProfile.accounts?.find(
+      (acc) => acc.accountId === account.accountId && acc.subscriptionId === account.subscriptionId
+    );
+
+    return requestedAccountFound;
+  };
+
   const populateProfile = async (defaultProfile: FusebitProfileEx, isSupportingTool: boolean, axios: AxiosInstance) => {
     let fusebitProfile = defaultProfile;
 
@@ -265,34 +273,35 @@ const _useAuthContext = () => {
 
     const requestedAccount = getRequestedAccount();
     const activeAccount = getActiveAccount();
+    const hasRequestedAccount = requestedAccount.accountId && requestedAccount.subscriptionId;
+    const hasActiveAccount = activeAccount.accountId && activeAccount.subscriptionId && activeAccount.userId;
 
-    if (requestedAccount.accountId && requestedAccount.subscriptionId) {
-      const requestedAccountFound = fusebitProfile.accounts?.find(
-        (acc) => acc.accountId === requestedAccount.accountId && acc.subscriptionId === requestedAccount.subscriptionId
-      );
+    if (hasRequestedAccount) {
+      const requestedAccountFound = getAccountInProfileAccounts(fusebitProfile, requestedAccount);
       if (requestedAccountFound) {
         fusebitProfile = await getFusebitProfile(fusebitProfile, requestedAccountFound, axios);
         removeRequestedAccount();
-      } else {
-        fusebitProfile = await getFusebitProfileWithDefaultSubscription(fusebitProfile, axios);
+
+        return fusebitProfile;
       }
-
-      return fusebitProfile;
     }
 
-    if (activeAccount.accountId && activeAccount.subscriptionId && activeAccount.userId) {
-      fusebitProfile = await getFusebitProfile(fusebitProfile, activeAccount, axios);
-      const subscriptions = await getSubscriptions(fusebitProfile.accountId || '', axios);
-      const activeSubscriptionData = subscriptions.find((sub) => sub.id === fusebitProfile.subscriptionId);
-      fusebitProfile = {
-        ...fusebitProfile,
-        subscriptionName: activeSubscriptionData?.displayName,
-      };
+    if (hasActiveAccount) {
+      const activeAccountFound = getAccountInProfileAccounts(fusebitProfile, activeAccount);
+      if (activeAccountFound) {
+        fusebitProfile = await getFusebitProfile(fusebitProfile, activeAccount, axios);
+        const subscriptions = await getSubscriptions(fusebitProfile.accountId || '', axios);
+        const activeSubscriptionData = subscriptions.find((sub) => sub.id === fusebitProfile.subscriptionId);
+        fusebitProfile = {
+          ...fusebitProfile,
+          subscriptionName: activeSubscriptionData?.displayName,
+        };
 
-      return fusebitProfile;
+        return fusebitProfile;
+      }
     }
 
-    return getFusebitProfileWithDefaultSubscription(fusebitProfile, axios);
+    return await getFusebitProfileWithDefaultSubscription(fusebitProfile, axios);
   };
 
   const getDecodedToken = (token: string) => {
@@ -359,7 +368,15 @@ const _useAuthContext = () => {
             localStorage.removeItem('requestedPath');
             localStorage.removeItem('requestedSearch');
             localStorage.removeItem('requestedHash');
-            history.push(requestedPath + requestedSearch + requestedHash);
+            const url = requestedPath + requestedSearch + requestedHash;
+            if (url.indexOf('error') > 0) {
+              // If this happens, it means that the user has logged in after logging out or has logged in for the first time,
+              // and has the login error saved on the url, so we send them to the root page
+              history.push('/');
+            } else {
+              // The user is logged in and requesting this url
+              history.push(requestedPath + requestedSearch + requestedHash);
+            }
           };
 
           const user: User = { email: fusebitProfile?.email, ...auth0Profile, ...company };
