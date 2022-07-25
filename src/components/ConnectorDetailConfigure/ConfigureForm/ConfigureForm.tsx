@@ -29,15 +29,56 @@ const StyledFormWrapper = styled.form<{ useProduction?: boolean }>`
     margin-left: 0;
   }
 
-  .MuiGrid-container {
-  }
-
   .MuiFormControlLabel-root {
     display: flex;
     flex-direction: row-reverse;
     width: fit-content;
     margin-bottom: 48px;
     margin-left: ${(props) => (props.useProduction ? '-320px' : 0)};
+  }
+
+  .MuiCard-root {
+    padding: 0;
+    box-shadow: none;
+    margin: 0;
+    border-bottom: 1px solid rgba(149, 149, 149, 0.3);
+    border-radius: 0;
+
+    &:not(:first-child) {
+      padding-top: 48px;
+    }
+  }
+
+  .MuiCardHeader-root {
+    padding: 0;
+    padding-bottom: 32px;
+
+    &:first-child {
+      padding-top: 32px;
+    }
+
+    .MuiCardHeader-title {
+      font-size: 20px;
+      line-height: 26px;
+      color: var(--black);
+      font-weight: 600;
+    }
+  }
+
+  .MuiCardContent-root {
+    padding: 0;
+  }
+
+  .MuiFormControl-root {
+    margin-bottom: 48px;
+  }
+
+  .MuiGrid-spacing-xs-2 > .MuiGrid-item {
+    &:nth-child(odd) {
+      padding-right: 48px;
+    }
+
+    padding-bottom: 0;
   }
 `;
 
