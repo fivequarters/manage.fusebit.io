@@ -16,6 +16,8 @@ import { trackEventMemoized } from '@utils/analytics';
 import InformationalBanner from '@components/common/InformationalBanner';
 import BaseJsonForm from '@components/common/BaseJsonForm';
 import * as CSC from '@components/globalStyle';
+import { useError } from '@hooks/useError';
+import { useSuccess } from '@hooks/useSuccess';
 import { useQueryClient } from 'react-query';
 import { data as dummyData } from './dummyData/data';
 import { schema as dummySchema } from './dummyData/schema';
@@ -126,6 +128,8 @@ const StyledContainer = styled(Container)`
 const ConfigureForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { userData } = useAuthContext();
+  const { createError } = useError();
+  const { createSuccess } = useSuccess();
   const { isLoading: isConnectorDataLoading, data: connectorData } = useAccountConnectorsGetOne<Connector>({
     enabled: userData.token,
     id,
@@ -154,11 +158,16 @@ const ConfigureForm: React.FC = () => {
       setValidationMode('ValidateAndShow');
     } else {
       trackEventMemoized('Configure Save Button Clicked', 'Connector');
-      await updateEntity(connectorData, data);
-      queryClient.invalidateQueries([
-        ACCOUNT_CONNECTORS_GET_ONE_CONFIG,
-        { accountId: userData.accountId, id, subscriptionId: userData.subscriptionId },
-      ]);
+      try {
+        await updateEntity(connectorData, data);
+        queryClient.invalidateQueries([
+          ACCOUNT_CONNECTORS_GET_ONE_CONFIG,
+          { accountId: userData.accountId, id, subscriptionId: userData.subscriptionId },
+        ]);
+        createSuccess('Configuration successfully saved.');
+      } catch (e) {
+        createError(e);
+      }
     }
   };
 
