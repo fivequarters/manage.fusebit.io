@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Box, Button, useMediaQuery } from '@material-ui/core';
 import { ValidationMode } from '@jsonforms/core';
 import { useAccountConnectorsGetOne } from '@hooks/api/v2/account/connector/useGetOne';
@@ -21,6 +21,13 @@ import { data as dummyData } from './dummyData/data';
 import { schema as dummySchema } from './dummyData/schema';
 import { uischema as dummyUiSchema } from './dummyData/uischema';
 
+const TitleStyles = css`
+  font-size: 20px;
+  line-height: 26px;
+  color: var(--black);
+  font-weight: 600;
+`;
+
 const StyledFormWrapper = styled.form<{ useProduction?: boolean }>`
   display: flex;
   flex-direction: column;
@@ -32,12 +39,27 @@ const StyledFormWrapper = styled.form<{ useProduction?: boolean }>`
   }
 
   .MuiFormControlLabel-root {
+    padding: 32px 0;
+    display: flex;
+    flex-direction: row-reverse;
+    width: fit-content;
+    margin-left: 0;
+
+    .MuiTypography-root {
+      ${TitleStyles}
+    }
+
     &[id*='useProduction'] {
-      display: flex;
-      flex-direction: row-reverse;
-      width: fit-content;
+      padding: 0;
       margin-bottom: 48px;
-      margin-left: ${(props) => (props.useProduction ? '-320px' : 0)};
+      margin-left: ${(props) => props.useProduction && '-320px'};
+
+      .MuiTypography-root {
+        font-size: 16px;
+        line-height: 22px;
+        color: var(--black);
+        font-weight: 400;
+      }
     }
   }
 
@@ -62,10 +84,7 @@ const StyledFormWrapper = styled.form<{ useProduction?: boolean }>`
     }
 
     .MuiCardHeader-title {
-      font-size: 20px;
-      line-height: 26px;
-      color: var(--black);
-      font-weight: 600;
+      ${TitleStyles}
     }
   }
 
