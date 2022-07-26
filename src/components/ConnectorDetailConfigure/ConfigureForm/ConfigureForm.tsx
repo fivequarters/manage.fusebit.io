@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import styled, { css } from 'styled-components';
-import { Box, Button, useMediaQuery } from '@material-ui/core';
+import { Box, Button, Container, useMediaQuery } from '@material-ui/core';
 import { ValidationMode } from '@jsonforms/core';
 import { useAccountConnectorsGetOne } from '@hooks/api/v2/account/connector/useGetOne';
 import {
@@ -105,17 +105,22 @@ const StyledFormWrapper = styled.form<{ useProduction?: boolean }>`
   }
 `;
 
-const StyledFormInputWrapper = styled.div`
-  margin-top: 24px;
-  margin-bottom: 49px;
-
-  @media only screen and (max-width: 880px) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
+const StyledButtonsWrapper = styled.div`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  padding: 24px 0;
+  height: max-content;
+  background: linear-gradient(360deg, #ffffff 32%, rgba(255, 255, 255, 0) 100%);
 `;
+
+const StyledContainer = styled(Container)`
+  display: flex;
+  padding: 0 32px 0 16px;
+`;
+
+const StyledFadingWrapper = styled(Box)``;
 
 const StyledSidebarOption = styled.button<{ selected?: boolean }>`
   font-family: 'Poppins';
@@ -291,18 +296,22 @@ const ConfigureForm: React.FC = () => {
               />
             </Box>
             {data && data?.mode?.useProduction && (
-              <StyledFormInputWrapper>
-                <Button
-                  onClick={handleSubmit}
-                  style={{ width: '200px' }}
-                  fullWidth={false}
-                  size="large"
-                  color="primary"
-                  variant="contained"
-                >
-                  Save
-                </Button>
-              </StyledFormInputWrapper>
+              <StyledButtonsWrapper>
+                <StyledContainer maxWidth="lg">
+                  <StyledFadingWrapper display="flex" alignItems="center" width="100%">
+                    <Button
+                      onClick={handleSubmit}
+                      style={{ width: '200px', marginLeft: 'auto' }}
+                      fullWidth={false}
+                      size="large"
+                      color="primary"
+                      variant="contained"
+                    >
+                      Save
+                    </Button>
+                  </StyledFadingWrapper>
+                </StyledContainer>
+              </StyledButtonsWrapper>
             )}
           </StyledFormWrapper>
         ) : (
