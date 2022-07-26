@@ -2,7 +2,6 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Box, Button, useMediaQuery } from '@material-ui/core';
-
 import { ValidationMode } from '@jsonforms/core';
 import { useAccountConnectorsGetOne } from '@hooks/api/v2/account/connector/useGetOne';
 import {
@@ -18,6 +17,9 @@ import InformationalBanner from '@components/common/InformationalBanner';
 import BaseJsonForm from '@components/common/BaseJsonForm';
 import * as CSC from '@components/globalStyle';
 import { useQueryClient } from 'react-query';
+import { data as dummyData } from './dummyData/data';
+import { schema as dummySchema } from './dummyData/schema';
+import { uischema as dummyUiSchema } from './dummyData/uischema';
 
 const StyledFormWrapper = styled.form<{ useProduction?: boolean }>`
   display: flex;
@@ -30,11 +32,13 @@ const StyledFormWrapper = styled.form<{ useProduction?: boolean }>`
   }
 
   .MuiFormControlLabel-root {
-    display: flex;
-    flex-direction: row-reverse;
-    width: fit-content;
-    margin-bottom: 48px;
-    margin-left: ${(props) => (props.useProduction ? '-320px' : 0)};
+    &[id*='useProduction'] {
+      display: flex;
+      flex-direction: row-reverse;
+      width: fit-content;
+      margin-bottom: 48px;
+      margin-left: ${(props) => (props.useProduction ? '-320px' : 0)};
+    }
   }
 
   .MuiCard-root {
@@ -215,9 +219,9 @@ const ConfigureForm: React.FC = () => {
                 </Box>
               )}
               <BaseJsonForm
-                schema={config?.data.schema}
-                uischema={config?.data.uischema}
-                data={config?.data.data}
+                schema={dummySchema}
+                uischema={dummyUiSchema}
+                data={dummyData}
                 onChange={({ errors: _errors, data: newData }) => {
                   // Clear the clientId and clientSecret when going from non-prod to production.
                   if (
