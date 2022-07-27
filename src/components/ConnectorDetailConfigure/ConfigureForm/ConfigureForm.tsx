@@ -125,7 +125,11 @@ const StyledButtonsWrapper = styled.div`
   width: 100vw;
   padding: 24px 0;
   height: max-content;
-  background: linear-gradient(360deg, #ffffff 10%, rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(360deg, #ffffff 20%, rgba(255, 255, 255, 0) 100%);
+
+  @media only screen and (max-width: 880px) {
+    background: linear-gradient(360deg, #ffffff 40%, rgba(255, 255, 255, 0) 100%);
+  }
 `;
 
 const StyledContainer = styled(Container)`
@@ -133,15 +137,33 @@ const StyledContainer = styled(Container)`
   padding: 0 32px 0 16px;
   align-items: center;
   width: 100%;
+
+  @media only screen and (max-width: 880px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+`;
+
+const ButtonStyles = css`
+  width: 200px;
+
+  @media only screen and (max-width: 880px) {
+    margin-left: 0;
+    width: 100%;
+    max-width: 200px;
+  }
 `;
 
 const StyledBackButton = styled(Button)`
+  ${ButtonStyles};
   margin-right: 16px;
+  margin-left: auto;
+`;
 
-  @media only screen and (max-width: 880px) {
-    margin-right: 0;
-    margin-bottom: 16px;
-  }
+const StyledSaveButton = styled(Button)<{ backButtonEnabled?: boolean }>`
+  ${ButtonStyles};
+  margin-left: ${(props) => !props.backButtonEnabled && 'auto'};
 `;
 
 const ConfigureForm: React.FC = () => {
@@ -174,7 +196,7 @@ const ConfigureForm: React.FC = () => {
     enabled: false,
     url: '',
   });
-  const isMobile = useMediaQuery('max-width: 880px');
+  const isMobile = useMediaQuery('(max-width: 880px)');
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -307,10 +329,6 @@ const ConfigureForm: React.FC = () => {
                   {backButtonState.enabled && (
                     <StyledBackButton
                       onClick={() => history.push(backButtonState.url)}
-                      style={{
-                        width: '200px',
-                        marginLeft: 'auto',
-                      }}
                       fullWidth={false}
                       size="large"
                       color="primary"
@@ -319,16 +337,16 @@ const ConfigureForm: React.FC = () => {
                       Back
                     </StyledBackButton>
                   )}
-                  <Button
+                  <StyledSaveButton
                     onClick={handleSubmit}
-                    style={{ width: '200px' }}
+                    backButtonEnabled={backButtonState.enabled}
                     fullWidth={false}
                     size="large"
                     color="primary"
                     variant="contained"
                   >
                     Save
-                  </Button>
+                  </StyledSaveButton>
                 </StyledContainer>
               </StyledButtonsWrapper>
             )}
