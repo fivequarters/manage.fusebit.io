@@ -37,11 +37,31 @@ const MultiSelect = ({ defaultOptions, onChange, placeholder, allowArbitraryCrea
       components={animatedComponents}
       options={defaultOptions}
       styles={{
-        control: (provided) => {
-          const marginTop = '11px';
+        control: (base) => ({
+          ...base,
+          marginTop: '11px',
+          border: 'none',
+          borderRadius: '0',
+          borderBottom: '1px solid rgba(0, 0, 0, 0.4)',
+          paddingBottom: '8px',
+          boxShadow: 'none',
+          transition: 'all .2s ease-in-out',
 
-          return { ...provided, marginTop };
-        },
+          '&:hover': {
+            borderBottom: '2px solid #F83420',
+          },
+        }),
+        dropdownIndicator: (base) => ({
+          ...base,
+          color: '#333333',
+        }),
+        indicatorSeparator: () => ({
+          display: 'none',
+        }),
+        valueContainer: (base) => ({
+          ...base,
+          paddingLeft: 0,
+        }),
         menu: () => ({
           zIndex: 10,
           marginTop: '5px',
@@ -51,15 +71,19 @@ const MultiSelect = ({ defaultOptions, onChange, placeholder, allowArbitraryCrea
         }),
         multiValue: (base, state: any) => {
           const option = state.data as Option;
-          return option.immutable ? { ...base, backgroundColor: '#F83420' } : base;
+          return option.immutable
+            ? { ...base, borderRadius: '200px', backgroundColor: '#DEDCDC' }
+            : { ...base, borderRadius: '200px', backgroundColor: 'rgba(215, 229, 255, 0.4)' };
         },
         multiValueLabel: (base, state: any) => {
           const option = state.data as Option;
-          return option.immutable ? { ...base, color: 'white', paddingRight: 6 } : base;
+          return option.immutable ? { ...base, color: '#333333', paddingRight: 6 } : { ...base, color: '#333333' };
         },
         multiValueRemove: (base, state: any) => {
           const option = state.data as Option;
-          return option.immutable ? { ...base, display: 'none' } : base;
+          return option.immutable
+            ? { ...base, display: 'none' }
+            : { ...base, borderRadius: '200px', cursor: 'pointer', transition: 'all .2s ease-in-out' };
         },
       }}
     />
