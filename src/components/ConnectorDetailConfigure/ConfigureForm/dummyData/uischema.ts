@@ -33,7 +33,7 @@ export const uischema = {
                   scope: '#/properties/clientId',
                 },
                 {
-                  type: 'Control',
+                  type: 'MultiControl',
                   scope: '#/properties/scope',
                 },
                 {

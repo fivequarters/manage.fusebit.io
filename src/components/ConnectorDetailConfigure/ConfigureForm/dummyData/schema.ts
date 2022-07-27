@@ -49,8 +49,15 @@ export const schema = {
       type: 'string',
     },
     scope: {
-      title: 'Bot Token Scopes (space separated)',
-      type: 'string',
+      title: 'Bot Token Scopes',
+      type: 'object',
+      defaultValues: [
+        { value: 'chat:write', label: 'chat:write', immutable: true },
+        { value: 'users:read', label: 'users:read', immutable: false },
+        { value: 'channels:read', label: 'channels:read', immutable: false },
+        { value: 'chat:write.public', label: 'chat:write.public', immutable: false },
+      ],
+      allowArbitraryScopes: true,
     },
     clientId: {
       title: 'The Client ID from your Slack App',

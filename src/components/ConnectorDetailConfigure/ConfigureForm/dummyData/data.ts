@@ -5,7 +5,7 @@ export const data = {
   advancedOptions: {
     useAdvancedOptions: false,
   },
-  scope: 'chat:write users:read channels:read chat:write.public',
+  scope: ['chat:write', 'users:read', 'channels:read', 'chat:write.public'],
   clientId: '',
   clientSecret: '',
   refreshErrorLimit: 100000,
