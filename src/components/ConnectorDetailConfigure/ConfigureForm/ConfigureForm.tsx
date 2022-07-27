@@ -20,6 +20,7 @@ import { useError } from '@hooks/useError';
 import { useSuccess } from '@hooks/useSuccess';
 import { FROM_INTEGRATIONS_PAGE, FROM_INTEGRATION_DETAIL_PAGE } from '@utils/constants';
 import { useQueryClient } from 'react-query';
+import { configTemporal } from '../configTemporal';
 import { data as dummyData } from './dummyData/data';
 import { schema as dummySchema } from './dummyData/schema';
 import { uischema as dummyUiSchema } from './dummyData/uischema';
