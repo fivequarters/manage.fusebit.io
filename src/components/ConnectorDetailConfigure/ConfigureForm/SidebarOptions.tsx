@@ -3,6 +3,12 @@ import { Box } from '@material-ui/core';
 import styled from 'styled-components';
 import { ConnectorConfig } from '@interfaces/connector';
 
+const StyledWrapper = styled(Box)`
+  @media only screen and (max-width: 880px) {
+    display: none;
+  }
+`;
+
 const StyledSidebarOption = styled.button<{ selected?: boolean }>`
   font-family: 'Poppins';
   padding: 12px 16px;
@@ -89,7 +95,7 @@ const SidebarOptions = ({ config }: Props) => {
   };
 
   return (
-    <Box
+    <StyledWrapper
       display="flex"
       flexDirection="column"
       padding="24px"
@@ -113,7 +119,7 @@ const SidebarOptions = ({ config }: Props) => {
           {option}
         </StyledSidebarOption>
       ))}
-    </Box>
+    </StyledWrapper>
   );
 };
 

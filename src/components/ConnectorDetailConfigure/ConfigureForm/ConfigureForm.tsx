@@ -57,6 +57,11 @@ const StyledFormWrapper = styled.form<{ useProduction?: boolean }>`
       margin-bottom: 48px;
       margin-left: ${(props) => props.useProduction && '-320px'};
 
+      @media only screen and (max-width: 880px) {
+        margin-left: 0;
+        margin-bottom: 16px;
+      }
+
       .MuiTypography-root {
         font-size: 16px;
         line-height: 22px;
@@ -102,6 +107,10 @@ const StyledFormWrapper = styled.form<{ useProduction?: boolean }>`
   .MuiGrid-spacing-xs-2 > .MuiGrid-item {
     &:nth-child(odd) {
       padding-right: 48px;
+
+      @media only screen and (max-width: 880px) {
+        padding-right: 8px;
+      }
     }
 
     padding-bottom: 0;
@@ -214,7 +223,7 @@ const ConfigureForm: React.FC = () => {
             )}
 
             <Box id="form-wrapper" display="flex" alignItems="center" position="relative">
-              {data && data?.mode?.useProduction && <SidebarOptions config={config.data} />}
+              {!isMobile && data && data?.mode?.useProduction && <SidebarOptions config={config.data} />}
               <BaseJsonForm
                 schema={dummySchema}
                 uischema={dummyUiSchema}
