@@ -104,7 +104,7 @@ const TabComponent: React.FC<Props> = ({ tabNames, tabObjects }) => {
     const link = tabObjects[newValue];
 
     if (newValue !== activeTab && typeof link === 'string') {
-      history.push(link);
+      history.push(link, history.location.state);
     }
   };
 

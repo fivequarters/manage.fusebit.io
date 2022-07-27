@@ -21,6 +21,10 @@ export const ACTIVE_ACCOUNT_KEY = 'activeAccount';
 
 export const IS_EDITOR_SAVING_KEY = 'isEditorSaving';
 
+export const FROM_INTEGRATION_DETAIL_PAGE = 'integration-detail-page';
+
+export const FROM_INTEGRATIONS_PAGE = 'integrations-page';
+
 const StyledBeta = styled.div`
   font-size: 9px;
   line-height: 14px;

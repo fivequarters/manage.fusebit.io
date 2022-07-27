@@ -1,5 +1,5 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { Box, Button, Container, useMediaQuery } from '@material-ui/core';
 import { ValidationMode } from '@jsonforms/core';
@@ -18,6 +18,7 @@ import BaseJsonForm from '@components/common/BaseJsonForm';
 import * as CSC from '@components/globalStyle';
 import { useError } from '@hooks/useError';
 import { useSuccess } from '@hooks/useSuccess';
+import { FROM_INTEGRATIONS_PAGE, FROM_INTEGRATION_DETAIL_PAGE } from '@utils/constants';
 import { useQueryClient } from 'react-query';
 import { data as dummyData } from './dummyData/data';
 import { schema as dummySchema } from './dummyData/schema';
@@ -134,7 +135,17 @@ const StyledContainer = styled(Container)`
   width: 100%;
 `;
 
+const StyledBackButton = styled(Button)`
+  margin-right: 16px;
+
+  @media only screen and (max-width: 880px) {
+    margin-right: 0;
+    margin-bottom: 16px;
+  }
+`;
+
 const ConfigureForm: React.FC = () => {
+  const history = useHistory();
   const { id } = useParams<{ id: string }>();
   const { userData } = useAuthContext();
   const { createError } = useError();
@@ -159,8 +170,21 @@ const ConfigureForm: React.FC = () => {
     id: connectorData?.data.tags['fusebit.feedId'],
     type: connectorData?.data.tags['fusebit.feedType'],
   });
+  const [backButtonState, setBackButtonState] = useState<{ enabled: boolean; url: string }>({
+    enabled: false,
+    url: '',
+  });
   const isMobile = useMediaQuery('max-width: 880px');
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (history.location.state) {
+      const { from, url } = history.location.state as { from: string; url: string };
+      if (from === FROM_INTEGRATION_DETAIL_PAGE || from === FROM_INTEGRATIONS_PAGE) {
+        setBackButtonState({ enabled: true, url });
+      }
+    }
+  }, [history]);
 
   const handleSubmit = async () => {
     if (errors.length > 0) {
@@ -280,9 +304,24 @@ const ConfigureForm: React.FC = () => {
             {data && data?.mode?.useProduction && (
               <StyledButtonsWrapper>
                 <StyledContainer maxWidth="lg">
+                  {backButtonState.enabled && (
+                    <StyledBackButton
+                      onClick={() => history.push(backButtonState.url)}
+                      style={{
+                        width: '200px',
+                        marginLeft: 'auto',
+                      }}
+                      fullWidth={false}
+                      size="large"
+                      color="primary"
+                      variant="outlined"
+                    >
+                      Back
+                    </StyledBackButton>
+                  )}
                   <Button
                     onClick={handleSubmit}
-                    style={{ width: '200px', marginLeft: 'auto' }}
+                    style={{ width: '200px' }}
                     fullWidth={false}
                     size="large"
                     color="primary"
