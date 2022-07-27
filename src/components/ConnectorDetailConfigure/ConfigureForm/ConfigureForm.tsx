@@ -219,7 +219,7 @@ const ConfigureForm: React.FC = () => {
           ACCOUNT_CONNECTORS_GET_ONE_CONFIG,
           { accountId: userData.accountId, id, subscriptionId: userData.subscriptionId },
         ]);
-        createSuccess('Configuration successfully saved.');
+        createSuccess('Connector Configuration Saved Successfully');
       } catch (e) {
         createError(e);
       }
