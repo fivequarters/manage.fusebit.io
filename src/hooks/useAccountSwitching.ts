@@ -1,20 +1,23 @@
 import { AccountSubscriptions } from '@interfaces/account';
-import { FusebitProfile, FusebitProfileEx } from '@interfaces/auth0Token';
-import { LAST_USED_ACCOUNT_KEY } from '@utils/constants';
+import { Auth0Token, FusebitProfile, FusebitProfileEx } from '@interfaces/auth0Token';
 import { AxiosInstance } from 'axios';
 import { useHistory, useLocation } from 'react-router-dom';
+import jwt_decode from 'jwt-decode';
+import { User } from '@interfaces/user';
+import { Dispatch, SetStateAction } from 'react';
 
 const { REACT_APP_FUSEBIT_DEPLOYMENT } = process.env;
 
-const useAccountSwitching = ({ userData, setUserData }: any) => {
+interface Props {
+  userData: User;
+  setUserData: Dispatch<SetStateAction<User>>;
+}
+
+const useAccountSwitching = ({ userData, setUserData }: Props) => {
   const location = useLocation();
   const history = useHistory();
   const urlSearchParams = new URLSearchParams(window.location.search);
   const requestedPath = (urlSearchParams.get('requestedPath') || '/').replace(/ /g, '+');
-
-  const setLastUsedAccount = (accountId: string, subscriptionId: string, userId: string) => {
-    localStorage.setItem(LAST_USED_ACCOUNT_KEY, `${accountId}:${subscriptionId}:${userId}`);
-  };
 
   const getUrlAccount = () => {
     const [, , accountId, , subscriptionId] = requestedPath.split('/');
@@ -25,14 +28,33 @@ const useAccountSwitching = ({ userData, setUserData }: any) => {
     };
   };
 
-  const getLastUsedAccount = () => {
-    const [accountId, subscriptionId, userId] = localStorage.getItem(LAST_USED_ACCOUNT_KEY)?.split(':') || [];
+  const getLastUsedAccountKey = (fusebitProfile: FusebitProfileEx) => {
+    return `${fusebitProfile?.accountId}:${fusebitProfile?.subscriptionId}:${fusebitProfile?.userId}`;
+  };
+
+  const getLastUsedAccount = (fusebitProfile: FusebitProfileEx) => {
+    const LAST_USED_ACCOUNT_KEY = getLastUsedAccountKey(fusebitProfile);
+    const profile = localStorage.getItem(LAST_USED_ACCOUNT_KEY);
+    if (profile) {
+      const { accountId, subscriptionId, userId } = JSON.parse(profile || '');
+
+      return {
+        accountId,
+        subscriptionId,
+        userId,
+      };
+    }
 
     return {
-      accountId,
-      subscriptionId,
-      userId,
+      accountId: undefined,
+      subscriptionId: undefined,
+      userId: undefined,
     };
+  };
+
+  const setLastUsedAccount = (fusebitProfile: FusebitProfileEx, lastUsedAccount: FusebitProfile) => {
+    const LAST_USED_ACCOUNT_KEY = getLastUsedAccountKey(fusebitProfile);
+    localStorage.setItem(LAST_USED_ACCOUNT_KEY, JSON.stringify(lastUsedAccount));
   };
 
   const getSubscriptions = async (accountId: string, fusebitAxiosClient: AxiosInstance) => {
@@ -67,18 +89,13 @@ const useAccountSwitching = ({ userData, setUserData }: any) => {
   ) => {
     try {
       // validate accountId
-      await fusebitAxiosClient.get(`${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${newFusebitProfile.accountId}/me`);
+      await fusebitAxiosClient.get(`${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${newFusebitProfile?.accountId}/me`);
+      setLastUsedAccount(fusebitProfile, newFusebitProfile);
 
       fusebitProfile = {
         ...fusebitProfile,
         ...newFusebitProfile,
       };
-      setLastUsedAccount(
-        fusebitProfile.accountId || '',
-        fusebitProfile.subscriptionId || '',
-        fusebitProfile.userId || ''
-      );
-
       return fusebitProfile;
     } catch (e) {
       fusebitProfile = await getFusebitProfileWithDefaultSubscription(fusebitProfile, fusebitAxiosClient);
@@ -97,9 +114,9 @@ const useAccountSwitching = ({ userData, setUserData }: any) => {
     }
 
     const urlAccount = getUrlAccount();
-    const lastUsedAccount = getLastUsedAccount();
+    const lastUsedAccount = getLastUsedAccount(defaultProfile);
     const hasUrlAccount = urlAccount.accountId && urlAccount.subscriptionId;
-    const hasLastUsedAccount = lastUsedAccount.accountId && lastUsedAccount.subscriptionId && lastUsedAccount.userId;
+    const hasLastUsedAccount = lastUsedAccount?.accountId && lastUsedAccount?.subscriptionId && lastUsedAccount?.userId;
 
     if (hasUrlAccount) {
       const userId = getUserIdFromAccount(urlAccount.accountId);
@@ -131,12 +148,14 @@ const useAccountSwitching = ({ userData, setUserData }: any) => {
   };
 
   const switchAccount = (newAccount: any) => {
+    const decoded = jwt_decode<Auth0Token>(userData?.token || '');
+    const fusebitProfile = decoded['https://fusebit.io/profile'];
     setUserData({
       ...userData,
       ...newAccount,
     });
+    setLastUsedAccount(fusebitProfile, newAccount);
 
-    setLastUsedAccount(newAccount.accountId, newAccount.subscriptionId, newAccount.userId);
     history.push(getNewLocationAccount(newAccount));
   };
 

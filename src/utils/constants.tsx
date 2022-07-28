@@ -17,8 +17,6 @@ export const INTEGRATION_PROCESSING_SUFFIX = '-pending-processing';
 
 export const INVITED_TO_FUSEBIT_KEY = 'invitedToFusebitAccount';
 
-export const LAST_USED_ACCOUNT_KEY = 'lastUsedAccount';
-
 export const IS_EDITOR_SAVING_KEY = 'isEditorSaving';
 
 const StyledBeta = styled.div`
