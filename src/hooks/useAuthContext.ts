@@ -55,7 +55,7 @@ const setSignInLocalStorageItems = (requestedPath: string, requestedSearch: stri
   }
 };
 
-const getRequestedAccount = () => {
+const getUrlAccount = () => {
   const [accountId, subscriptionId] = localStorage.getItem(URL_ACCOUNT_KEY)?.split(':') || [];
 
   return {
@@ -64,7 +64,7 @@ const getRequestedAccount = () => {
   };
 };
 
-const setRequestedAccount = (accountId?: string, subscriptionId?: string) => {
+const setUrlAccount = (accountId?: string, subscriptionId?: string) => {
   localStorage.setItem(URL_ACCOUNT_KEY, `${accountId}:${subscriptionId}`);
 };
 
@@ -82,7 +82,7 @@ const setActiveAccount = (accountId: string, subscriptionId: string, userId: str
   localStorage.setItem(LAST_USED_ACCOUNT_KEY, `${accountId}:${subscriptionId}:${userId}`);
 };
 
-const removeRequestedAccount = () => {
+const removeUrlAccount = () => {
   localStorage.removeItem(URL_ACCOUNT_KEY);
 };
 
@@ -96,7 +96,7 @@ const signIn = (silent?: boolean): void => {
   const subscriptionId = window.location.pathname.split('/')?.[4];
 
   if (accountId && subscriptionId) {
-    setRequestedAccount(accountId, subscriptionId);
+    setUrlAccount(accountId, subscriptionId);
   }
 
   // If this is an invitation URL, store the init token in local storage and redirect to authenticate
@@ -258,25 +258,22 @@ const _useAuthContext = () => {
   const populateProfile = async (defaultProfile: FusebitProfileEx, isSupportingTool: boolean, axios: AxiosInstance) => {
     let fusebitProfile = defaultProfile;
 
+    const getUserIdFromAccount = (accountId: string) =>
+      fusebitProfile.accounts?.find((acc) => acc.accountId === accountId)?.userId;
+
     if (isSupportingTool) {
       return fusebitProfile;
     }
 
-    const requestedAccount = getRequestedAccount();
+    const urlAccount = getUrlAccount();
     const activeAccount = getActiveAccount();
-    const hasRequestedAccount = requestedAccount.accountId && requestedAccount.subscriptionId;
+    const hasUrlAccount = urlAccount.accountId && urlAccount.subscriptionId;
     const hasActiveAccount = activeAccount.accountId && activeAccount.subscriptionId && activeAccount.userId;
 
-    if (hasRequestedAccount) {
-      const requestedAccountUserID = fusebitProfile.accounts?.find(
-        (acc) => acc.accountId === requestedAccount.accountId
-      )?.userId;
-      fusebitProfile = await getFusebitProfile(
-        fusebitProfile,
-        { ...requestedAccount, userId: requestedAccountUserID },
-        axios
-      );
-      removeRequestedAccount();
+    if (hasUrlAccount) {
+      const userId = getUserIdFromAccount(urlAccount.accountId);
+      fusebitProfile = await getFusebitProfile(fusebitProfile, { ...urlAccount, userId }, axios);
+      removeUrlAccount();
 
       return fusebitProfile;
     }

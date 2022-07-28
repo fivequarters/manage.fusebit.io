@@ -10,6 +10,7 @@ const NotFoundPage: FC<{}> = (): ReactElement => {
   const { getRedirectLink } = useGetRedirectLink();
   const [showLoader, setShowLoader] = useState(false);
   const location = useLocation();
+  console.log('location', location);
 
   useEffect(() => {
     if (location.pathname === '/') {
