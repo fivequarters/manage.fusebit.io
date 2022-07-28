@@ -2,7 +2,7 @@ import { User } from '@interfaces/user';
 import { getAnalyticsClient, trackAuthEvent } from '@utils/analytics';
 import constate from 'constate';
 import { useState } from 'react';
-import { ACTIVE_ACCOUNT_KEY, REQUESTED_ACCOUNT_KEY, INVITED_TO_FUSEBIT_KEY, STATIC_TENANT_ID } from '@utils/constants';
+import { LAST_USED_ACCOUNT_KEY, URL_ACCOUNT_KEY, INVITED_TO_FUSEBIT_KEY, STATIC_TENANT_ID } from '@utils/constants';
 import { Auth0Profile } from '@interfaces/auth0Profile';
 import { Company } from '@interfaces/company';
 import { createAxiosClient } from '@utils/utils';
@@ -56,7 +56,7 @@ const setSignInLocalStorageItems = (requestedPath: string, requestedSearch: stri
 };
 
 const getRequestedAccount = () => {
-  const [accountId, subscriptionId] = localStorage.getItem(REQUESTED_ACCOUNT_KEY)?.split(':') || [];
+  const [accountId, subscriptionId] = localStorage.getItem(URL_ACCOUNT_KEY)?.split(':') || [];
 
   return {
     accountId,
@@ -65,11 +65,11 @@ const getRequestedAccount = () => {
 };
 
 const setRequestedAccount = (accountId?: string, subscriptionId?: string) => {
-  localStorage.setItem(REQUESTED_ACCOUNT_KEY, `${accountId}:${subscriptionId}`);
+  localStorage.setItem(URL_ACCOUNT_KEY, `${accountId}:${subscriptionId}`);
 };
 
 const getActiveAccount = () => {
-  const [accountId, subscriptionId, userId] = localStorage.getItem(ACTIVE_ACCOUNT_KEY)?.split(':') || [];
+  const [accountId, subscriptionId, userId] = localStorage.getItem(LAST_USED_ACCOUNT_KEY)?.split(':') || [];
 
   return {
     accountId,
@@ -79,11 +79,11 @@ const getActiveAccount = () => {
 };
 
 const setActiveAccount = (accountId: string, subscriptionId: string, userId: string) => {
-  localStorage.setItem(ACTIVE_ACCOUNT_KEY, `${accountId}:${subscriptionId}:${userId}`);
+  localStorage.setItem(LAST_USED_ACCOUNT_KEY, `${accountId}:${subscriptionId}:${userId}`);
 };
 
 const removeRequestedAccount = () => {
-  localStorage.removeItem(REQUESTED_ACCOUNT_KEY);
+  localStorage.removeItem(URL_ACCOUNT_KEY);
 };
 
 const signIn = (silent?: boolean): void => {
