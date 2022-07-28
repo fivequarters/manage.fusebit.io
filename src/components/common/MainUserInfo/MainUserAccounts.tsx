@@ -7,11 +7,13 @@ import CompanyTitle from '@components/common/CompanyTitle';
 import * as CSC from '@components/globalStyle';
 
 const StyledSubscriptionWrapper = styled.div<{ active?: boolean }>`
+  position: relative;
   display: flex;
   align-items: center;
   margin: 8px 0;
   border-radius: 4px;
   padding: 10px;
+  padding-right: 32px;
   transition: all 0.25s linear;
 
   span {
@@ -51,7 +53,10 @@ const StyledAccountSeparator = styled.div`
 `;
 
 const StyledCheck = styled.img`
-  margin-left: 12px;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
 `;
 
 interface Props {
