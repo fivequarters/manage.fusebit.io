@@ -1,5 +1,5 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Box, Button, useMediaQuery } from '@material-ui/core';
 
@@ -18,6 +18,7 @@ import InformationalBanner from '@components/common/InformationalBanner';
 import BaseJsonForm from '@components/common/BaseJsonForm';
 import * as CSC from '@components/globalStyle';
 import { useQueryClient } from 'react-query';
+import { FROM_INTEGRATIONS_PAGE, FROM_INTEGRATION_DETAIL_PAGE } from '@utils/constants';
 
 const StyledFormWrapper = styled.form`
   display: flex;
@@ -31,6 +32,8 @@ const StyledFormWrapper = styled.form`
 `;
 
 const StyledFormInputWrapper = styled.div`
+  display: flex;
+  align-items: center;
   margin-top: 24px;
   margin-bottom: 49px;
 
@@ -42,7 +45,17 @@ const StyledFormInputWrapper = styled.div`
   }
 `;
 
+const StyledBackButton = styled(Button)`
+  margin-right: 16px;
+
+  @media only screen and (max-width: 880px) {
+    margin-right: 0;
+    margin-bottom: 16px;
+  }
+`;
+
 const ConfigureForm: React.FC = () => {
+  const history = useHistory();
   const { id } = useParams<{ id: string }>();
   const { userData } = useAuthContext();
   const { isLoading: isConnectorDataLoading, data: connectorData } = useAccountConnectorsGetOne<Connector>({
@@ -65,8 +78,21 @@ const ConfigureForm: React.FC = () => {
     id: connectorData?.data.tags['fusebit.feedId'],
     type: connectorData?.data.tags['fusebit.feedType'],
   });
+  const [backButtonState, setBackButtonState] = useState<{ enabled: boolean; url: string }>({
+    enabled: false,
+    url: '',
+  });
   const isMobile = useMediaQuery('max-width: 880px');
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (history.location.state) {
+      const { from, url } = history.location.state as { from: string; url: string };
+      if (from === FROM_INTEGRATION_DETAIL_PAGE || from === FROM_INTEGRATIONS_PAGE) {
+        setBackButtonState({ enabled: true, url });
+      }
+    }
+  }, [history]);
 
   const handleSubmit = async () => {
     if (errors.length > 0) {
@@ -169,6 +195,20 @@ const ConfigureForm: React.FC = () => {
               validationMode={validationMode}
             />
             <StyledFormInputWrapper>
+              {backButtonState.enabled && (
+                <StyledBackButton
+                  onClick={() => history.push(backButtonState.url)}
+                  style={{
+                    width: '200px',
+                  }}
+                  fullWidth={false}
+                  size="large"
+                  color="primary"
+                  variant="outlined"
+                >
+                  Back
+                </StyledBackButton>
+              )}
               <Button
                 onClick={handleSubmit}
                 style={{ width: '200px' }}
