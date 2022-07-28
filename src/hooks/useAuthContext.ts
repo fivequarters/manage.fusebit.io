@@ -255,14 +255,6 @@ const _useAuthContext = () => {
     history.push(getNewLocationAccount(newAccount));
   };
 
-  const getAccountInProfileAccounts = (fusebitProfile: FusebitProfileEx, account: FusebitProfile) => {
-    const requestedAccountFound = fusebitProfile.accounts?.find(
-      (acc) => acc.accountId === account.accountId && acc.subscriptionId === account.subscriptionId
-    );
-
-    return requestedAccountFound;
-  };
-
   const populateProfile = async (defaultProfile: FusebitProfileEx, isSupportingTool: boolean, axios: AxiosInstance) => {
     let fusebitProfile = defaultProfile;
 
@@ -276,28 +268,29 @@ const _useAuthContext = () => {
     const hasActiveAccount = activeAccount.accountId && activeAccount.subscriptionId && activeAccount.userId;
 
     if (hasRequestedAccount) {
-      const requestedAccountFound = getAccountInProfileAccounts(fusebitProfile, requestedAccount);
-      if (requestedAccountFound) {
-        fusebitProfile = await getFusebitProfile(fusebitProfile, requestedAccountFound, axios);
-        removeRequestedAccount();
+      const requestedAccountUserID = fusebitProfile.accounts?.find(
+        (acc) => acc.accountId === requestedAccount.accountId
+      )?.userId;
+      fusebitProfile = await getFusebitProfile(
+        fusebitProfile,
+        { ...requestedAccount, userId: requestedAccountUserID },
+        axios
+      );
+      removeRequestedAccount();
 
-        return fusebitProfile;
-      }
+      return fusebitProfile;
     }
 
     if (hasActiveAccount) {
-      const activeAccountFound = getAccountInProfileAccounts(fusebitProfile, activeAccount);
-      if (activeAccountFound) {
-        fusebitProfile = await getFusebitProfile(fusebitProfile, activeAccount, axios);
-        const subscriptions = await getSubscriptions(fusebitProfile.accountId || '', axios);
-        const activeSubscriptionData = subscriptions.find((sub) => sub.id === fusebitProfile.subscriptionId);
-        fusebitProfile = {
-          ...fusebitProfile,
-          subscriptionName: activeSubscriptionData?.displayName,
-        };
+      fusebitProfile = await getFusebitProfile(fusebitProfile, activeAccount, axios);
+      const subscriptions = await getSubscriptions(fusebitProfile.accountId || '', axios);
+      const activeSubscriptionData = subscriptions.find((sub) => sub.id === fusebitProfile.subscriptionId);
+      fusebitProfile = {
+        ...fusebitProfile,
+        subscriptionName: activeSubscriptionData?.displayName,
+      };
 
-        return fusebitProfile;
-      }
+      return fusebitProfile;
     }
 
     return await getFusebitProfileWithDefaultSubscription(fusebitProfile, axios);
