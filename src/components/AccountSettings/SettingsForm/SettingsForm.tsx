@@ -6,9 +6,9 @@ import { ValidationMode } from '@jsonforms/core';
 import * as CSC from '@components/globalStyle';
 import { useAccountUpdateOne } from '@hooks/api/v1/account/account/useUpdateOne';
 import { useAuthContext } from '@hooks/useAuthContext';
-import { AccountListItem } from '@interfaces/account';
 import { useError } from '@hooks/useError';
-import { ACTIVE_ACCOUNT_KEY } from '@utils/constants';
+import { useQueryClient } from 'react-query';
+import { ACCOUNT_GET_ALL_ACCOUNTS } from '@hooks/api/v1/account/account/useGetAllAccounts';
 
 const schema = {
   type: 'object',
@@ -43,6 +43,7 @@ const SettingsForm: React.FC = () => {
   const [formValues, setFormValues] = useState({ displayName: userData.company });
   const { mutateAsync: updateAccount, isLoading } = useAccountUpdateOne();
   const { createError } = useError();
+  const queryClient = useQueryClient();
 
   const handleSubmit = async () => {
     if (errors.length > 0) {
@@ -55,13 +56,7 @@ const SettingsForm: React.FC = () => {
         accountId: userData.accountId,
         ...formValues,
       });
-      let activeAccount: AccountListItem = JSON.parse(localStorage.getItem(ACTIVE_ACCOUNT_KEY) || '');
-      activeAccount = {
-        ...activeAccount,
-        displayName: formValues.displayName,
-        company: formValues.displayName,
-      };
-      localStorage.setItem(ACTIVE_ACCOUNT_KEY, JSON.stringify(activeAccount));
+      queryClient.removeQueries(ACCOUNT_GET_ALL_ACCOUNTS);
     } catch (e) {
       createError({ message: `There was an error: ${e}` });
     } finally {

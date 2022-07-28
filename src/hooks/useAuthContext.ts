@@ -2,7 +2,7 @@ import { User } from '@interfaces/user';
 import { getAnalyticsClient, trackAuthEvent } from '@utils/analytics';
 import constate from 'constate';
 import { useState } from 'react';
-import { ACTIVE_ACCOUNT_KEY, INVITED_TO_FUSEBIT_KEY, STATIC_TENANT_ID } from '@utils/constants';
+import { INVITED_TO_FUSEBIT_KEY, STATIC_TENANT_ID } from '@utils/constants';
 import { Auth0Profile } from '@interfaces/auth0Profile';
 import { Company } from '@interfaces/company';
 import { createAxiosClient } from '@utils/utils';
@@ -10,8 +10,7 @@ import { Auth0Token, FusebitProfileEx } from '@interfaces/auth0Token';
 import jwt_decode from 'jwt-decode';
 import { useHistory } from 'react-router-dom';
 import useFirstTimeVisitor from '@hooks/useFirstTimeVisitor';
-import { AccountListItem, AccountSubscriptions } from '@interfaces/account';
-import { AxiosInstance } from 'axios';
+import useAccountSwitching from './useAccountSwitching';
 
 const {
   REACT_APP_AUTH0_DOMAIN,
@@ -57,9 +56,9 @@ const setSignInLocalStorageItems = (requestedPath: string, requestedSearch: stri
 
 const signIn = (silent?: boolean): void => {
   const requestedSearch = window.location.search;
-  setSignInLocalStorageItems(window.location.pathname, requestedSearch);
-  const urlSearchParams = new URLSearchParams(window.location.search);
+  const urlSearchParams = new URLSearchParams(requestedSearch);
   const requestedPath = (urlSearchParams.get('requestedPath') || window.location.pathname).replace(/ /g, '+');
+  setSignInLocalStorageItems(requestedPath, requestedSearch);
   const connection = urlSearchParams.get('fusebitConnection');
 
   // If this is an invitation URL, store the init token in local storage and redirect to authenticate
@@ -92,6 +91,7 @@ const _useAuthContext = () => {
   const [userData, setUserData] = useState<User>({});
   const { setFirstTimeVisitor } = useFirstTimeVisitor();
   const history = useHistory();
+  const { populateProfile, switchAccount } = useAccountSwitching({ userData, setUserData });
 
   const checkAuthStatus = async () => {
     const isUserDataDefined = userData && Object.entries(userData).length > 0;
@@ -146,14 +146,6 @@ const _useAuthContext = () => {
     return data;
   };
 
-  const getDefaultSubscriptionData = async (accountId: string, fusebitAxiosClient: AxiosInstance) => {
-    const subscriptions = await fusebitAxiosClient.get<AccountSubscriptions>(
-      `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${accountId}/subscription`
-    );
-    const defaultSubscription = subscriptions.data.items?.[0];
-    return { subscriptionId: defaultSubscription.id, subscriptionName: defaultSubscription.displayName };
-  };
-
   const getDecodedToken = (token: string) => {
     const decoded = jwt_decode<Auth0Token>(token);
     const fusebitProfile = decoded['https://fusebit.io/profile'];
@@ -170,8 +162,6 @@ const _useAuthContext = () => {
   const authUser = async (token: string) => {
     try {
       const { fusebitProfile: profile, isSignUpEvent, issuedByAuth0, isSupportingTool } = getDecodedToken(token);
-      let fusebitProfile = profile;
-      const activeAccountStringified = localStorage.getItem(ACTIVE_ACCOUNT_KEY);
       const initToken = window.localStorage.getItem('fusebitInitToken');
       const fusebitAxiosClient = createAxiosClient(token);
 
@@ -180,7 +170,7 @@ const _useAuthContext = () => {
         // redeem the init token, then redirect back to the home page to re-authenticate and
         // get a new access token with an updated Fusebit profile.
         window.localStorage.removeItem('fusebitInitToken');
-        redeemInitToken(token, fusebitProfile, initToken)
+        redeemInitToken(token, profile, initToken)
           .then(() => {
             localStorage.setItem(INVITED_TO_FUSEBIT_KEY, 'true');
             history.push('/');
@@ -191,39 +181,7 @@ const _useAuthContext = () => {
         return;
       }
 
-      if (activeAccountStringified && !isSupportingTool) {
-        try {
-          const activeAccountParsed: AccountListItem = JSON.parse(activeAccountStringified);
-          const isValid = await fusebitAxiosClient.get(
-            `${REACT_APP_FUSEBIT_DEPLOYMENT}/v1/account/${activeAccountParsed.accountId}/me`
-          );
-          if (isValid.status === 200) {
-            // checks if the user still has acces to the account in case he was recently deleted
-            fusebitProfile = {
-              ...fusebitProfile,
-              ...activeAccountParsed,
-            };
-          }
-        } catch (e) {
-          const defaultSubscription = await getDefaultSubscriptionData(
-            fusebitProfile.accountId || '',
-            fusebitAxiosClient
-          );
-          fusebitProfile = {
-            ...fusebitProfile,
-            ...defaultSubscription,
-          };
-        }
-      } else if (!isSupportingTool) {
-        const defaultSubscription = await getDefaultSubscriptionData(
-          fusebitProfile.accountId || '',
-          fusebitAxiosClient
-        );
-        fusebitProfile = {
-          ...fusebitProfile,
-          ...defaultSubscription,
-        };
-      }
+      const fusebitProfile = await populateProfile(profile, isSupportingTool, fusebitAxiosClient);
 
       getAuth0ProfileAndCompany(token, fusebitProfile?.accountId || '')
         .then(({ auth0Profile, company }) => {
@@ -244,14 +202,15 @@ const _useAuthContext = () => {
           setAuthStatus(AuthStatus.AUTHENTICATED);
 
           const navigatePostAuth = () => {
-            const urlSearchParams = new URLSearchParams(window.location.search);
-            const requestedPath = (urlSearchParams.get('requestedPath') || '/').replace(/ /g, '+');
             const requestedSearch = localStorage.getItem('requestedSearch') || '';
             const requestedHash = localStorage.getItem('requestedHash') || '';
 
             setFirstTimeVisitor(true);
+            const urlSearchParams = new URLSearchParams(window.location.search);
+            const requestedPath = (urlSearchParams.get('requestedPath') || '/').replace(/ /g, '+');
             localStorage.removeItem('requestedSearch');
             localStorage.removeItem('requestedHash');
+
             history.push(requestedPath + requestedSearch + requestedHash);
           };
 
@@ -279,6 +238,7 @@ const _useAuthContext = () => {
     redeemInitToken,
     handleAuthError,
     authUser,
+    switchAccount,
   };
 };
 

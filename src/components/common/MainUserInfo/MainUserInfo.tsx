@@ -12,7 +12,6 @@ import CompanyTitle from '@components/common/CompanyTitle';
 import MainUserAccounts from '@components/common/MainUserInfo/MainUserAccounts';
 import * as CSC from '@components/globalStyle';
 import { useAccountGetAllAccounts } from '@hooks/api/v1/account/account/useGetAllAccounts';
-import { ACTIVE_ACCOUNT_KEY } from '@utils/constants';
 
 const StyledUserDropdownInfo = styled.div`
   display: flex;
@@ -123,7 +122,7 @@ interface Props {
 
 const MainUserInfo = ({ onAccountSwitch }: Props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const { userData, setUserData } = useAuthContext();
+  const { userData, switchAccount } = useAuthContext();
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
   const { data: currentUser } = useAccountUserGetOne<Account>({
@@ -136,7 +135,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
   const [transformMenuHorizontalOrigin, setTransformMenuHorizontalOrigin] = useState(100);
 
   const allowSubscriptionSelection = useMemo(() => {
-    if (accounts) {
+    if (accounts && !isLoading) {
       return userData.accounts && (userData?.accounts?.length > 1 || accounts?.[0]?.subscriptions?.length > 1);
     }
 
@@ -171,11 +170,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
   };
 
   const handleAccountSwitch = (acc: AccountListItem) => {
-    setUserData({
-      ...userData,
-      ...acc,
-    });
-    localStorage.setItem(ACTIVE_ACCOUNT_KEY, JSON.stringify(acc));
+    switchAccount(acc);
     setAnchorEl(null);
     onAccountSwitch();
   };
