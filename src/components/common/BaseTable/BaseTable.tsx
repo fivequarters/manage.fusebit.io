@@ -275,7 +275,6 @@ const BaseTable: React.FC<BaseTableProps> = ({
                 <StyledSearchBar
                   onChange={searchInputHandler}
                   placeholder={searchBarLabel}
-                  variant="outlined"
                   value={textVal}
                   InputProps={{
                     endAdornment: (
@@ -284,6 +283,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
                       </InputAdornment>
                     ),
                   }}
+                  size="small"
                 />
               ) : (
                 <></>

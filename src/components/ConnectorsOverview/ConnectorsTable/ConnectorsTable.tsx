@@ -34,7 +34,8 @@ const ConnectorsTable = () => {
 
   const [searchField, setSearchField] = React.useState('');
   const searchInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchField(e.target.value.toLowerCase());
+    setSearchField(e.target.value);
+    setPage(0);
   };
 
   useQueryParam({
@@ -44,20 +45,26 @@ const ConnectorsTable = () => {
     param: 'key',
   });
 
+  const [credentials, setCredentials] = React.useState<{ id: string; credentialType: 'Production' | 'Demo' }[]>([]);
+
   const rows = (connectors?.data?.items || [])
-    .map((row) => ({
-      id: row.id,
-      name: row.id,
-      icon: <GetConnectorIcon handler={row.data.handler} name={row.id} />,
-      type: row.tags['fusebit.service'],
-      identities: <GetIdentities id={row.id} />,
-      createdAt: format(new Date(row.dateAdded), 'MM/dd/yyyy'),
-      sortableCreatedAt: new Date(row.dateAdded),
-      lastModified: format(new Date(row.dateModified), 'MM/dd/yyyy'),
-      sortableLastModified: new Date(row.dateModified),
-      credentialType: <GetCredentialType id={row.id} />,
-      inUseBy: <GetRelatedIntegrations name={row.id} />,
-    }))
+    .map((row) => {
+      return {
+        id: row.id,
+        name: row.id,
+        icon: <GetConnectorIcon handler={row.data.handler} name={row.id} />,
+        type: row.tags['fusebit.service'],
+        identities: <GetIdentities id={row.id} />,
+        createdAt: format(new Date(row.dateAdded), 'MM/dd/yyyy'),
+        sortableCreatedAt: new Date(row.dateAdded),
+        lastModified: format(new Date(row.dateModified), 'MM/dd/yyyy'),
+        sortableLastModified: new Date(row.dateModified),
+        credentialType: <GetCredentialType id={row.id} credentials={credentials} setCredentials={setCredentials} />,
+        sortableCredentialType:
+          credentials.find((credential) => credential.id === row.id)?.credentialType === 'Production',
+        inUseBy: <GetRelatedIntegrations name={row.id} />,
+      };
+    })
     .filter((item) => item.id.toLowerCase().includes(searchField));
 
   const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
@@ -96,7 +103,7 @@ const ConnectorsTable = () => {
           { id: 'name', value: 'Name', sort: { sortVal: 'name' } },
           { id: 'createdAt', value: 'Created At', sort: { sortVal: 'sortableCreatedAt' } },
           { id: 'lastModified', value: 'Last Modified', sort: { sortVal: 'sortableLastModified' } },
-          { id: 'credentialType', value: 'Configuration' },
+          { id: 'credentialType', value: 'Configuration', sort: { sortVal: 'sortableCredentialType' } },
           { id: 'identities', value: 'Identities', sort: { sortVal: 'sortableIdentities' } },
           { id: 'inUseBy', value: 'Associated Integrations' },
         ]}

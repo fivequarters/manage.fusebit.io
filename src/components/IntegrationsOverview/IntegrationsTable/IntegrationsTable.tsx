@@ -37,7 +37,8 @@ const IntegrationsTable = () => {
 
   const [searchField, setSearchField] = React.useState('');
   const searchInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchField(e.target.value.toLowerCase());
+    setSearchField(e.target.value);
+    setPage(0);
   };
 
   const { setFirstTimeVisitor } = useFirstTimeVisitor({
@@ -67,11 +68,11 @@ const IntegrationsTable = () => {
         .map((component) => component.provider),
     }))
     .filter((item) => {
-      if (item.id.toLowerCase().includes(searchField)) {
+      if (item.id.toLowerCase().includes(searchField.toLowerCase())) {
         return true;
       }
 
-      return item.connectorNames.some((connName: string) => connName.toLowerCase().includes(searchField));
+      return item.connectorNames.some((connName: string) => connName.toLowerCase().includes(searchField.toLowerCase()));
     });
 
   const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
