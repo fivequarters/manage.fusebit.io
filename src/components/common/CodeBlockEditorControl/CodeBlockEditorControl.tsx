@@ -3,7 +3,7 @@ import { rankWith, ControlProps, JsonSchema, and, uiTypeIs } from '@jsonforms/co
 import CodeBlockEditor from '../CodeBlockEditor/CodeBlockEditor';
 
 type CustomProps = {
-  defaultValue: string;
+  isExpandable: boolean;
 };
 
 type JsonSchemaWithCustomProps = JsonSchema & CustomProps;
@@ -12,7 +12,12 @@ const CodeBlockEditorControl = ({ data, handleChange, path, ...props }: ControlP
   const schema = props.schema as JsonSchemaWithCustomProps;
 
   return (
-    <CodeBlockEditor defaultValue={data} onChange={(value: string) => handleChange(path, value)} label={schema.title} />
+    <CodeBlockEditor
+      defaultValue={data}
+      onChange={(value: string) => handleChange(path, value)}
+      label={schema.title}
+      isExpandable={schema.isExpandable}
+    />
   );
 };
 

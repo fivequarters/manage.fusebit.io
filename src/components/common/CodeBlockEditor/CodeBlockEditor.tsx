@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import Editor from '@monaco-editor/react';
 import styled from 'styled-components';
 import { Box } from '@material-ui/core';
@@ -6,11 +6,11 @@ import { Box } from '@material-ui/core';
 const StyledEditor = styled(Editor)`
   background-color: white;
   box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
-  padding: 32px 0;
   border-radius: 8px;
-  height: 300px;
 
   .monaco-editor {
+    padding: 32px 0;
+
     .scroll-decoration {
       box-shadow: none;
     }
@@ -34,22 +34,32 @@ interface Props {
   defaultValue: string;
   onChange: (val: string) => void;
   label?: string;
+  isExpandable?: boolean;
 }
 
-const CodeBlockEditor = ({ defaultValue, onChange, label }: Props) => {
-  const editorRef = useRef(null);
+const LINE_HEIGHT = 20;
+const DEFAULT_EDITOR_HEIGHT = 300;
+
+const CodeBlockEditor = ({ defaultValue, onChange, label, isExpandable }: Props) => {
+  const editorRef = useRef<any>(null);
+  const [editorHeight, setEditorHeight] = useState(DEFAULT_EDITOR_HEIGHT);
 
   const handleOnMount = (editor: any) => {
     editorRef.current = editor;
   };
 
   return (
-    <Box>
+    <Box mb="24px">
       {label && <StyledLabel>{label}</StyledLabel>}
       <StyledEditor
+        height={editorHeight}
         options={{
           minimap: {
             enabled: false,
+          },
+          scrollBeyondLastLine: false,
+          scrollbar: {
+            vertical: isExpandable ? 'hidden' : 'auto',
           },
         }}
         defaultLanguage="javascript"
@@ -58,6 +68,16 @@ const CodeBlockEditor = ({ defaultValue, onChange, label }: Props) => {
         onMount={handleOnMount}
         onChange={(val) => {
           onChange(val || '');
+
+          if (!isExpandable) {
+            return;
+          }
+
+          const linesOfCode = editorRef.current.getModel().getLineCount();
+          const height = linesOfCode * LINE_HEIGHT;
+          if (height > DEFAULT_EDITOR_HEIGHT) {
+            setEditorHeight(height);
+          }
         }}
       />
     </Box>
