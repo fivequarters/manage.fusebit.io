@@ -25,8 +25,8 @@ const StyledEditor = styled(Editor)`
 const StyledLabel = styled.div`
   font-size: 12px;
   line-height: 16px;
-  font-weight: 300;
-  color: var(--grey);
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.54);
   margin-bottom: 8px;
 `;
 
