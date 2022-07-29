@@ -3,14 +3,14 @@ import Editor from '@monaco-editor/react';
 import styled from 'styled-components';
 import { Box } from '@material-ui/core';
 
-const StyledEditor = styled(Editor)`
+const StyledEditor = styled(Editor)<{ isExpandable: boolean }>`
   background-color: white;
   box-shadow: 0px 20px 48px rgba(52, 72, 123, 0.1);
   border-radius: 8px;
+  padding: ${(props) => !props.isExpandable && '32px 0'};
 
   .monaco-editor {
-    padding: 32px 0;
-
+    padding: ${(props) => props.isExpandable && '32px 0'};
     .scroll-decoration {
       box-shadow: none;
     }
@@ -38,7 +38,7 @@ interface Props {
 }
 
 const LINE_HEIGHT = 20;
-const DEFAULT_EDITOR_HEIGHT = 300;
+const DEFAULT_EDITOR_HEIGHT = 290;
 
 const CodeBlockEditor = ({ defaultValue, onChange, label, isExpandable }: Props) => {
   const editorRef = useRef<any>(null);
@@ -49,7 +49,7 @@ const CodeBlockEditor = ({ defaultValue, onChange, label, isExpandable }: Props)
   };
 
   return (
-    <Box mb="24px">
+    <Box mb={isExpandable ? '24px' : 0}>
       {label && <StyledLabel>{label}</StyledLabel>}
       <StyledEditor
         height={editorHeight}
@@ -79,6 +79,7 @@ const CodeBlockEditor = ({ defaultValue, onChange, label, isExpandable }: Props)
             setEditorHeight(height);
           }
         }}
+        isExpandable={!!isExpandable}
       />
     </Box>
   );

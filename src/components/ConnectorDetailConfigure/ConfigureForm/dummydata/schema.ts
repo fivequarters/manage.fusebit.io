@@ -47,7 +47,7 @@ export const schema = {
     codeBlock: {
       title: 'Custom Javascript Code',
       type: 'string',
-      isExpandable: true,
+      isExpandable: false,
     },
     clientId: {
       title: 'The Client ID from your Slack App',
