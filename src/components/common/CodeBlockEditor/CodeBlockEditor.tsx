@@ -47,6 +47,11 @@ const CodeBlockEditor = ({ defaultValue, onChange, label }: Props) => {
     <Box>
       {label && <StyledLabel>{label}</StyledLabel>}
       <StyledEditor
+        options={{
+          minimap: {
+            enabled: false,
+          },
+        }}
         defaultLanguage="javascript"
         theme="fusebit"
         defaultValue={defaultValue}

@@ -1,0 +1,164 @@
+export const uischema = {
+  type: 'VerticalLayout',
+  elements: [
+    {
+      type: 'Control',
+      scope: '#/properties/mode/properties/useProduction',
+      label: 'Enable Production Credentials',
+      options: {
+        toggle: true,
+      },
+    },
+    {
+      type: 'Group',
+      label: 'Fusebit Connector Configuration',
+      rule: {
+        effect: 'SHOW',
+        condition: {
+          scope: '#/properties/mode/properties/useProduction',
+          schema: {
+            const: true,
+          },
+        },
+      },
+      elements: [
+        {
+          type: 'HorizontalLayout',
+          elements: [
+            {
+              type: 'VerticalLayout',
+              elements: [
+                {
+                  type: 'Control',
+                  scope: '#/properties/clientId',
+                },
+                {
+                  type: 'Control',
+                  scope: '#/properties/scope',
+                },
+                {
+                  type: 'Control',
+                  scope: '#/properties/defaultEventHandler',
+                },
+              ],
+            },
+            {
+              type: 'VerticalLayout',
+              elements: [
+                {
+                  type: 'Control',
+                  scope: '#/properties/clientSecret',
+                  options: {
+                    format: 'password',
+                  },
+                },
+                {
+                  type: 'Control',
+                  scope: '#/properties/signingSecret',
+                  options: {
+                    format: 'password',
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'Group',
+      label: 'Slack Configuration',
+      rule: {
+        effect: 'SHOW',
+        condition: {
+          scope: '#/properties/mode/properties/useProduction',
+          schema: {
+            const: true,
+          },
+        },
+      },
+      elements: [
+        {
+          type: 'HorizontalLayout',
+          elements: [
+            {
+              type: 'Control',
+              scope: '#/properties/constants/properties/urls/properties/callbackUrl',
+            },
+            {
+              type: 'Control',
+              scope: '#/properties/constants/properties/urls/properties/webhookUrl',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'Group',
+      label: 'Advanced Fusebit Options',
+      rule: {
+        effect: 'SHOW',
+        condition: {
+          scope: '#/properties/mode/properties/useProduction',
+          schema: {
+            const: true,
+          },
+        },
+      },
+      elements: [
+        {
+          type: 'HorizontalLayout',
+          elements: [
+            {
+              type: 'VerticalLayout',
+              elements: [
+                {
+                  type: 'Control',
+                  scope: '#/properties/authorizationUrl',
+                },
+                {
+                  type: 'Control',
+                  scope: '#/properties/refreshErrorLimit',
+                },
+                {
+                  type: 'Control',
+                  scope: '#/properties/refreshInitialBackoff',
+                },
+                {
+                  type: 'Control',
+                  scope: '#/properties/refreshWaitCountLimit',
+                },
+              ],
+            },
+            {
+              type: 'VerticalLayout',
+              elements: [
+                {
+                  type: 'Control',
+                  scope: '#/properties/tokenUrl',
+                },
+                {
+                  type: 'Control',
+                  scope: '#/properties/refreshBackoffIncrement',
+                },
+                {
+                  type: 'Control',
+                  scope: '#/properties/accessTokenExpirationBuffer',
+                },
+              ],
+            },
+          ],
+        },
+        {
+          type: 'HorizontalLayout',
+          elements: [
+            {
+              type: 'CodeBlock',
+              scope: '#/properties/codeBlock',
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
