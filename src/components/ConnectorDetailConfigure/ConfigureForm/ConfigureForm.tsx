@@ -18,9 +18,6 @@ import BaseJsonForm from '@components/common/BaseJsonForm';
 import * as CSC from '@components/globalStyle';
 import { useQueryClient } from 'react-query';
 import { FROM_INTEGRATIONS_PAGE, FROM_INTEGRATION_DETAIL_PAGE } from '@utils/constants';
-import { data as dummyData } from './dummydata/data';
-import { schema as dummySchema } from './dummydata/schema';
-import { uischema as dummyUischema } from './dummydata/uischema';
 
 const StyledFormWrapper = styled.form`
   display: flex;
@@ -145,9 +142,9 @@ const ConfigureForm: React.FC = () => {
               </InformationalBanner>
             )}
             <BaseJsonForm
-              schema={dummySchema || config?.data.schema}
-              uischema={dummyUischema || config?.data.uischema}
-              data={dummyData || config?.data.data}
+              schema={config?.data.schema}
+              uischema={config?.data.uischema}
+              data={config?.data.data}
               onChange={({ errors: _errors, data: newData }) => {
                 // Clear the clientId and clientSecret when going from non-prod to production.
                 if (
