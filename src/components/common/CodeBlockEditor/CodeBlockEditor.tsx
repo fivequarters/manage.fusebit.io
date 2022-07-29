@@ -29,16 +29,16 @@ interface Props {
 const CodeBlockEditor = ({ defaultValue, onChange }: Props) => {
   const editorRef = useRef(null);
 
-  function handleEditorDidMount(editor: any) {
+  const handleOnMount = (editor: any) => {
     editorRef.current = editor;
-  }
+  };
 
   return (
     <StyledEditor
       defaultLanguage="javascript"
       theme="fusebit"
       defaultValue={defaultValue}
-      onMount={handleEditorDidMount}
+      onMount={handleOnMount}
       onChange={(val) => {
         onChange(val || '');
       }}
