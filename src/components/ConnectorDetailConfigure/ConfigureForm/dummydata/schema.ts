@@ -45,7 +45,7 @@ export const schema = {
       type: 'string',
     },
     codeBlock: {
-      title: 'Code block',
+      title: 'Custom Javascript Code',
       type: 'string',
     },
     clientId: {

@@ -11,7 +11,9 @@ type JsonSchemaWithCustomProps = JsonSchema & CustomProps;
 const CodeBlockEditorControl = ({ data, handleChange, path, ...props }: ControlProps) => {
   const schema = props.schema as JsonSchemaWithCustomProps;
 
-  return <CodeBlockEditor defaultValue={schema.defaultValue} onChange={(value: string) => handleChange(path, value)} />;
+  return (
+    <CodeBlockEditor defaultValue={data} onChange={(value: string) => handleChange(path, value)} label={schema.title} />
+  );
 };
 
 export const CodeBlockEditorControlTester = rankWith(3, and(uiTypeIs('CodeBlock')));

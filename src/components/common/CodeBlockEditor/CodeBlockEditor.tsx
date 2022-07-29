@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import Editor from '@monaco-editor/react';
 import styled from 'styled-components';
+import { Box } from '@material-ui/core';
 
 const StyledEditor = styled(Editor)`
   background-color: white;
@@ -21,12 +22,21 @@ const StyledEditor = styled(Editor)`
   }
 `;
 
+const StyledLabel = styled.div`
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 300;
+  color: var(--grey);
+  margin-bottom: 8px;
+`;
+
 interface Props {
   defaultValue: string;
   onChange: (val: string) => void;
+  label?: string;
 }
 
-const CodeBlockEditor = ({ defaultValue, onChange }: Props) => {
+const CodeBlockEditor = ({ defaultValue, onChange, label }: Props) => {
   const editorRef = useRef(null);
 
   const handleOnMount = (editor: any) => {
@@ -34,15 +44,18 @@ const CodeBlockEditor = ({ defaultValue, onChange }: Props) => {
   };
 
   return (
-    <StyledEditor
-      defaultLanguage="javascript"
-      theme="fusebit"
-      defaultValue={defaultValue}
-      onMount={handleOnMount}
-      onChange={(val) => {
-        onChange(val || '');
-      }}
-    />
+    <Box>
+      {label && <StyledLabel>{label}</StyledLabel>}
+      <StyledEditor
+        defaultLanguage="javascript"
+        theme="fusebit"
+        defaultValue={defaultValue}
+        onMount={handleOnMount}
+        onChange={(val) => {
+          onChange(val || '');
+        }}
+      />
+    </Box>
   );
 };
 
