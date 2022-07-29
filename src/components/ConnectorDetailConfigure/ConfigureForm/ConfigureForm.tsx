@@ -19,6 +19,7 @@ import BaseJsonForm from '@components/common/BaseJsonForm';
 import * as CSC from '@components/globalStyle';
 import { useQueryClient } from 'react-query';
 import { FROM_INTEGRATIONS_PAGE, FROM_INTEGRATION_DETAIL_PAGE } from '@utils/constants';
+import CodeBlockEditor from '@components/common/CodeBlockEditor';
 
 const StyledFormWrapper = styled.form`
   display: flex;
