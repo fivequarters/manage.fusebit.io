@@ -29,6 +29,9 @@ const IntegrationsTable = () => {
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
   const { userData } = useAuthContext();
+  const [emptyTableText, setEmptyTableText] = React.useState(
+    'Your integration list is empty, please create an integration'
+  );
   const { data: integrations, isLoading } = useAccountIntegrationsGetAll<{ items: Integration[] }>({
     enabled: userData.token,
     accountId: userData.accountId,
@@ -38,6 +41,11 @@ const IntegrationsTable = () => {
   const [searchField, setSearchField] = React.useState('');
   const searchInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchField(e.target.value);
+    if (e.target.value === '') {
+      setEmptyTableText('Your integration list is empty, please create an integration');
+    } else {
+      setEmptyTableText(`Integration with name ${e.target.value} not found`);
+    }
     setPage(0);
   };
 
@@ -53,21 +61,26 @@ const IntegrationsTable = () => {
     },
     param: 'key',
   });
+
+  const [installs, setInstalls] = React.useState<{ id: string; installs: number }[]>([]);
+
   const rows = (integrations?.data?.items || [])
     .map((row) => ({
       id: row.id,
       name: row.id,
-      installs: <GetInstalls id={row.id} />,
+      installs: <GetInstalls id={row.id} setInstalls={setInstalls} installs={installs} />,
+      sortableInstalls: installs.find((item) => item.id === row.id)?.installs,
       sortableLastModified: new Date(row.dateModified),
-      lastModified: format(new Date(row.dateAdded), 'MM/dd/yyyy'),
+      lastModified: format(new Date(row.dateModified), 'MM/dd/yyyy'),
       sortableCreatedAt: new Date(row.dateAdded),
-      createdAt: format(new Date(row.dateModified), 'MM/dd/yyyy'),
+      createdAt: format(new Date(row.dateAdded), 'MM/dd/yyyy'),
       connectors: <GetIntegrationIcons components={row.data.components} />,
       connectorNames: row.data.components
         .filter((component) => component.entityType === 'connector')
         .map((component) => component.provider),
     }))
     .filter((item) => {
+      console.log(item.sortableInstalls);
       if (item.id.toLowerCase().includes(searchField.toLowerCase())) {
         return true;
       }
@@ -104,7 +117,7 @@ const IntegrationsTable = () => {
         selected={selected}
       />
       <BaseTable
-        emptyTableText="Your integration list is empty, please create an integration"
+        emptyTableText={emptyTableText}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
         page={page}
@@ -127,7 +140,7 @@ const IntegrationsTable = () => {
             },
           },
           { id: 'lastModified', value: 'Last Modified', sort: { sortVal: 'sortableLastModified' } },
-          { id: 'installs', value: 'Installs' },
+          { id: 'installs', value: 'Installs', sort: { sortVal: 'sortableInstalls' } },
           { id: 'connectors', value: 'Associated Connectors' },
         ]}
         loading={isLoading}
