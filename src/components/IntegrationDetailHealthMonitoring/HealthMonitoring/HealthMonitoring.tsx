@@ -9,6 +9,8 @@ import { useQuery } from '@hooks/useQuery';
 import { useEffect, useState } from 'react';
 import * as CSC from '@components/globalStyle';
 
+const ENABLE_HEALTH_DASHBOARD = 'enableHealthDashboard';
+
 const HealthMonitoring = () => {
   const { id } = useParams<{ id: string }>();
   const query = useQuery();
@@ -17,15 +19,15 @@ const HealthMonitoring = () => {
 
   useEffect(() => {
     const isHealthDashboardEnabled =
-      (query.get('enableHealthDashboard') === 'true' || localStorage.getItem('enableHealthDashboard') === 'true') &&
-      query.get('enableHealthDashboard') !== 'false';
+      (query.get(ENABLE_HEALTH_DASHBOARD) === 'true' || localStorage.getItem(ENABLE_HEALTH_DASHBOARD) === 'true') &&
+      query.get(ENABLE_HEALTH_DASHBOARD) !== 'false';
 
     if (isHealthDashboardEnabled) {
       setEnableHealthDashboard(true);
-      localStorage.setItem('enableHealthDashboard', 'true');
+      localStorage.setItem(ENABLE_HEALTH_DASHBOARD, 'true');
     } else {
       setEnableHealthDashboard(false);
-      localStorage.removeItem('enableHealthDashboard');
+      localStorage.removeItem(ENABLE_HEALTH_DASHBOARD);
     }
   }, [query]);
 
