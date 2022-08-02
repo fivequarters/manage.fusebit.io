@@ -1,12 +1,6 @@
 import useGrafanaLogs from '@hooks/useGrafanaLogs';
 import { useParams } from 'react-router-dom';
-import styled from 'styled-components';
-
-const StyledLogs = styled.iframe`
-  position: relative;
-  border-radius: 8px;
-  box-shadow: 0px 1px 30px -1px rgb(52 72 123 / 10%);
-`;
+import * as CSC from '@components/globalStyle';
 
 const DEFAULT_IFRAME_ID = 'logging';
 const DEFAULT_HEIGHT = 350;
@@ -28,7 +22,7 @@ const GrafanaLogs = ({ from, height, iframeId, integrationId }: Props) => {
     from,
   });
 
-  return <StyledLogs id={ID} title={ID} src={url} height="100%" width="100%" frameBorder="0" />;
+  return <CSC.StyledLogs id={ID} title={ID} src={url} height="100%" width="100%" frameBorder="0" />;
 };
 
 export default GrafanaLogs;
