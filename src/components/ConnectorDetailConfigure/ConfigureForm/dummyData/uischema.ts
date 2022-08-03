@@ -26,40 +26,30 @@ export const uischema = {
           type: 'VerticalLayout',
           elements: [
             {
-              type: 'VerticalLayout',
-              elements: [
-                {
-                  type: 'Control',
-                  scope: '#/properties/clientId',
-                },
-                {
-                  type: 'MultiControl',
-                  scope: '#/properties/scope',
-                },
-                {
-                  type: 'Control',
-                  scope: '#/properties/defaultEventHandler',
-                },
-              ],
+              type: 'Control',
+              scope: '#/properties/clientId',
             },
             {
-              type: 'VerticalLayout',
-              elements: [
-                {
-                  type: 'Control',
-                  scope: '#/properties/clientSecret',
-                  options: {
-                    format: 'password',
-                  },
-                },
-                {
-                  type: 'Control',
-                  scope: '#/properties/signingSecret',
-                  options: {
-                    format: 'password',
-                  },
-                },
-              ],
+              type: 'Control',
+              scope: '#/properties/clientSecret',
+              options: {
+                format: 'password',
+              },
+            },
+            {
+              type: 'MultiControl',
+              scope: '#/properties/scope',
+            },
+            {
+              type: 'Control',
+              scope: '#/properties/defaultEventHandler',
+            },
+            {
+              type: 'Control',
+              scope: '#/properties/signingSecret',
+              options: {
+                format: 'password',
+              },
             },
           ],
         },
@@ -126,42 +116,32 @@ export const uischema = {
           },
           elements: [
             {
-              type: 'VerticalLayout',
-              elements: [
-                {
-                  type: 'Control',
-                  scope: '#/properties/authorizationUrl',
-                },
-                {
-                  type: 'Control',
-                  scope: '#/properties/refreshErrorLimit',
-                },
-                {
-                  type: 'Control',
-                  scope: '#/properties/refreshInitialBackoff',
-                },
-                {
-                  type: 'Control',
-                  scope: '#/properties/refreshWaitCountLimit',
-                },
-              ],
+              type: 'Control',
+              scope: '#/properties/authorizationUrl',
             },
             {
-              type: 'VerticalLayout',
-              elements: [
-                {
-                  type: 'Control',
-                  scope: '#/properties/tokenUrl',
-                },
-                {
-                  type: 'Control',
-                  scope: '#/properties/refreshBackoffIncrement',
-                },
-                {
-                  type: 'Control',
-                  scope: '#/properties/accessTokenExpirationBuffer',
-                },
-              ],
+              type: 'Control',
+              scope: '#/properties/refreshErrorLimit',
+            },
+            {
+              type: 'Control',
+              scope: '#/properties/refreshInitialBackoff',
+            },
+            {
+              type: 'Control',
+              scope: '#/properties/refreshWaitCountLimit',
+            },
+            {
+              type: 'Control',
+              scope: '#/properties/tokenUrl',
+            },
+            {
+              type: 'Control',
+              scope: '#/properties/refreshBackoffIncrement',
+            },
+            {
+              type: 'Control',
+              scope: '#/properties/accessTokenExpirationBuffer',
             },
           ],
         },

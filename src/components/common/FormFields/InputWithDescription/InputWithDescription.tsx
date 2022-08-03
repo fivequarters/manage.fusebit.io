@@ -12,7 +12,7 @@ type JsonSchemaWithCustomProps = JsonSchema & CustomProps;
 
 const InputWithDescriptionControl = ({ data, handleChange, path, ...props }: ControlProps) => {
   const schema = props.schema as JsonSchemaWithCustomProps;
-  const label = `${schema.title ? schema.title : ''}${props.required ? '*' : ''}`;
+  const label = `${schema.title ? schema.title : props.label}${props.required ? '*' : ''}`;
 
   return (
     <Box display="flex">
