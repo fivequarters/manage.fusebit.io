@@ -30,6 +30,7 @@ const MultiSelect = ({ defaultOptions, onChange, placeholder, allowArbitraryCrea
       <CreatableSelect
         value={value}
         isMulti
+        noOptionsMessage={() => 'Type to create a Scope'}
         isValidNewOption={(val: string) => {
           return val !== '';
         }}
