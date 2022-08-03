@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import React from 'react';
+import { useParams } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { Box, Button, Container, useMediaQuery } from '@material-ui/core';
 import { ValidationMode } from '@jsonforms/core';
@@ -18,11 +18,10 @@ import BaseJsonForm from '@components/common/BaseJsonForm';
 import * as CSC from '@components/globalStyle';
 import { useError } from '@hooks/useError';
 import { useSuccess } from '@hooks/useSuccess';
-import { FROM_INTEGRATIONS_PAGE, FROM_INTEGRATION_DETAIL_PAGE } from '@utils/constants';
 import { useQueryClient } from 'react-query';
-import { data as dummyData } from './dummyData/data';
-import { schema as dummySchema } from './dummyData/schema';
-import { uischema as dummyUiSchema } from './dummyData/uischema';
+import { data as dummyData } from './dummydata/data';
+import { schema as dummySchema } from './dummydata/schema';
+import { uischema as dummyUiSchema } from './dummydata/uischema';
 import SidebarOptions from './SidebarOptions';
 
 const TitleStyles = css`
@@ -145,8 +144,9 @@ const StyledContainer = styled(Container)`
   }
 `;
 
-const ButtonStyles = css`
+const StyledSaveButton = styled(Button)`
   width: 200px;
+  margin-left: auto;
 
   @media only screen and (max-width: 880px) {
     margin-left: 0;
@@ -155,19 +155,7 @@ const ButtonStyles = css`
   }
 `;
 
-const StyledBackButton = styled(Button)`
-  ${ButtonStyles};
-  margin-right: 16px;
-  margin-left: auto;
-`;
-
-const StyledSaveButton = styled(Button)<{ backButtonEnabled?: boolean }>`
-  ${ButtonStyles};
-  margin-left: ${(props) => !props.backButtonEnabled && 'auto'};
-`;
-
 const ConfigureForm: React.FC = () => {
-  const history = useHistory();
   const { id } = useParams<{ id: string }>();
   const { userData } = useAuthContext();
   const { createError } = useError();
@@ -192,21 +180,8 @@ const ConfigureForm: React.FC = () => {
     id: connectorData?.data.tags['fusebit.feedId'],
     type: connectorData?.data.tags['fusebit.feedType'],
   });
-  const [backButtonState, setBackButtonState] = useState<{ enabled: boolean; url: string }>({
-    enabled: false,
-    url: '',
-  });
   const isMobile = useMediaQuery('(max-width: 880px)');
   const queryClient = useQueryClient();
-
-  useEffect(() => {
-    if (history.location.state) {
-      const { from, url } = history.location.state as { from: string; url: string };
-      if (from === FROM_INTEGRATION_DETAIL_PAGE || from === FROM_INTEGRATIONS_PAGE) {
-        setBackButtonState({ enabled: true, url });
-      }
-    }
-  }, [history]);
 
   const handleSubmit = async () => {
     if (errors.length > 0) {
@@ -326,20 +301,8 @@ const ConfigureForm: React.FC = () => {
             {data && data?.mode?.useProduction && (
               <StyledButtonsWrapper>
                 <StyledContainer maxWidth="lg">
-                  {backButtonState.enabled && (
-                    <StyledBackButton
-                      onClick={() => history.push(backButtonState.url)}
-                      fullWidth={false}
-                      size="large"
-                      color="primary"
-                      variant="outlined"
-                    >
-                      Back
-                    </StyledBackButton>
-                  )}
                   <StyledSaveButton
                     onClick={handleSubmit}
-                    backButtonEnabled={backButtonState.enabled}
                     fullWidth={false}
                     size="large"
                     color="primary"
