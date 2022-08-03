@@ -43,10 +43,12 @@ export const schema = {
     authorizationUrl: {
       title: 'Override the OAuth2 Authorization URL',
       type: 'string',
+      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',
     },
     tokenUrl: {
       title: 'Override the OAuth2 Token Request URL',
       type: 'string',
+      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',
     },
     scope: {
       title: 'Bot Token Scopes',
@@ -58,39 +60,47 @@ export const schema = {
         { value: 'chat:write.public', label: 'chat:write.public', immutable: false },
       ],
       allowArbitraryScopes: true,
+      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',
     },
     clientId: {
       title: 'The Client ID from your Slack App',
       type: 'string',
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor asda asdasdasd asda sdas dasd asd asdasdasdas dasd asd asdas da asda ad ads.',
+      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',
     },
     clientSecret: {
       title: 'The Client Secret from your Slack App',
       type: 'string',
+      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',
     },
     refreshErrorLimit: {
       type: 'integer',
+      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',
     },
     refreshInitialBackoff: {
       type: 'integer',
+      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',
     },
     refreshWaitCountLimit: {
       type: 'integer',
+      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',
     },
     refreshBackoffIncrement: {
       type: 'integer',
+      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',
     },
     accessTokenExpirationBuffer: {
       type: 'integer',
+      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',
     },
     defaultEventHandler: {
       title: 'The Integration ID that will act as the default event handler',
       type: 'string',
+      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',
     },
     signingSecret: {
       title: 'Signing Secret from your Slack App',
       type: 'string',
+      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',
     },
   },
   required: ['scope', 'clientId', 'clientSecret'],

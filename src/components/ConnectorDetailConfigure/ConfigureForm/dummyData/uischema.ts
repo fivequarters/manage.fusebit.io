@@ -114,7 +114,7 @@ export const uischema = {
           },
         },
         {
-          type: 'HorizontalLayout',
+          type: 'VerticalLayout',
           rule: {
             effect: 'SHOW',
             condition: {

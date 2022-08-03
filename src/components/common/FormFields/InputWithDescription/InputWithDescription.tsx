@@ -12,13 +12,14 @@ type JsonSchemaWithCustomProps = JsonSchema & CustomProps;
 
 const InputWithDescriptionControl = ({ data, handleChange, path, ...props }: ControlProps) => {
   const schema = props.schema as JsonSchemaWithCustomProps;
+  const label = `${schema.title ? schema.title : ''}${props.required ? '*' : ''}`;
 
   return (
     <Box display="flex">
       <CSC.StyledJSONFormsDescription>{schema.description}</CSC.StyledJSONFormsDescription>
       <TextField
         defaultValue={data}
-        label={`${schema.title}${props.required && '*'}`}
+        label={label}
         fullWidth
         onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(path, e.target.value)}
       />

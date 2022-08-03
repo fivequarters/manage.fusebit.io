@@ -261,5 +261,7 @@ export const StyledJSONFormsDescription = styled.div`
   line-height: 20px;
   color: var(--black);
   width: 100%;
+  height: max-content;
+  max-width: 384px;
   margin-right: 48px;
 `;
