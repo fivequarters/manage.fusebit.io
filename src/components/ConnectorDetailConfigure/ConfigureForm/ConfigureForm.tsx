@@ -19,9 +19,9 @@ import * as CSC from '@components/globalStyle';
 import { useError } from '@hooks/useError';
 import { useSuccess } from '@hooks/useSuccess';
 import { useQueryClient } from 'react-query';
-import { data as dummyData } from './dummydata/data';
-import { schema as dummySchema } from './dummydata/schema';
-import { uischema as dummyUiSchema } from './dummydata/uischema';
+import { data as dummyData } from './dummyData/data';
+import { schema as dummySchema } from './dummyData/schema';
+import { uischema as dummyUiSchema } from './dummyData/uischema';
 import SidebarOptions from './SidebarOptions';
 
 const TitleStyles = css`
@@ -122,7 +122,7 @@ const StyledButtonsWrapper = styled.div`
   bottom: 0;
   left: 0;
   width: 100vw;
-  padding: 24px 0;
+  padding-bottom: 24px;
   height: max-content;
   background: linear-gradient(360deg, #ffffff 20%, rgba(255, 255, 255, 0) 100%);
 

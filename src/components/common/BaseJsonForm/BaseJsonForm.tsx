@@ -1,6 +1,9 @@
 import { JsonForms, JsonFormsInitStateProps, JsonFormsReactProps } from '@jsonforms/react';
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
 import InputWithCopy, { inputWithCopyTester } from '@components/common/FormFields/InputWithCopy/InputWithCopy';
+import InputWithDescription, {
+  InputWithDescriptionControlTester,
+} from '@components/common/FormFields/InputWithDescription/InputWithDescription';
 import MultiSelectControl, { MultiSelectControlTester } from '../MultiSelectControl/MultiSelectControl';
 
 type Props = JsonFormsInitStateProps & JsonFormsReactProps;
@@ -19,6 +22,10 @@ const BaseJsonForm = (props: Omit<Props, 'renderers' | 'cells'>) => {
         {
           tester: MultiSelectControlTester,
           renderer: MultiSelectControl,
+        },
+        {
+          tester: InputWithDescriptionControlTester,
+          renderer: InputWithDescription,
         },
       ]}
     />
