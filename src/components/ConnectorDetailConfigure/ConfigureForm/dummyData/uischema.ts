@@ -23,7 +23,7 @@ export const uischema = {
       },
       elements: [
         {
-          type: 'HorizontalLayout',
+          type: 'VerticalLayout',
           elements: [
             {
               type: 'VerticalLayout',

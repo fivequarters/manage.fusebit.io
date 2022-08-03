@@ -2,6 +2,7 @@ import { withJsonFormsControlProps } from '@jsonforms/react';
 import { rankWith, ControlProps, JsonSchema, and, schemaMatches, uiTypeIs } from '@jsonforms/core';
 import { Box, TextField } from '@material-ui/core';
 import { ChangeEvent } from 'react';
+import * as CSC from '@components/globalStyle';
 
 type CustomProps = {
   description: string;
@@ -14,9 +15,10 @@ const InputWithDescriptionControl = ({ data, handleChange, path, ...props }: Con
 
   return (
     <Box display="flex">
-      {schema.description}
+      <CSC.StyledJSONFormsDescription>{schema.description}</CSC.StyledJSONFormsDescription>
       <TextField
-        label={schema.title}
+        defaultValue={data}
+        label={`${schema.title}${props.required && '*'}`}
         fullWidth
         onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(path, e.target.value)}
       />

@@ -61,8 +61,9 @@ export const schema = {
     },
     clientId: {
       title: 'The Client ID from your Slack App',
-      description: 'Hey!!',
       type: 'string',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor asda asdasdasd asda sdas dasd asd asdasdasdas dasd asd asdas da asda ad ads.',
     },
     clientSecret: {
       title: 'The Client Secret from your Slack App',

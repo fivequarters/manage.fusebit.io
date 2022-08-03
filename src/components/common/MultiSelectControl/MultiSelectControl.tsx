@@ -15,7 +15,7 @@ const MultiSelectControl = ({ data, handleChange, path, ...props }: ControlProps
 
   return (
     <MultiSelect
-      placeholder="Bot Token Scopes*"
+      placeholder={`${schema.title}${props.required && '*'}`}
       defaultOptions={schema.defaultValues}
       allowArbitraryCreation={schema.allowArbitraryScopes}
       onChange={(values: string[]) => handleChange(path, values)}

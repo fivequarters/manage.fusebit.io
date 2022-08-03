@@ -255,3 +255,11 @@ export const StyledMenu = styled(Menu)`
     box-shadow: var(--shadow);
   }
 `;
+
+export const StyledJSONFormsDescription = styled.div`
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--black);
+  width: 100%;
+  margin-right: 48px;
+`;
