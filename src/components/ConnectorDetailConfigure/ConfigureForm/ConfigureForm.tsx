@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { Box, Button, Container, useMediaQuery } from '@material-ui/core';
@@ -19,9 +19,6 @@ import * as CSC from '@components/globalStyle';
 import { useError } from '@hooks/useError';
 import { useSuccess } from '@hooks/useSuccess';
 import { useQueryClient } from 'react-query';
-import { data as dummyData } from './dummyData/data';
-import { schema as dummySchema } from './dummyData/schema';
-import { uischema as dummyUiSchema } from './dummyData/uischema';
 import SidebarOptions from './SidebarOptions';
 
 const TitleStyles = css`
@@ -173,6 +170,7 @@ const ConfigureForm: React.FC = () => {
     subscriptionId: userData.subscriptionId,
   });
   const [data, setData] = React.useState<any>();
+  const [isDiry, setIsDirty] = React.useState(false);
   const [errors, setErrors] = React.useState<object[]>([]);
   const [validationMode, setValidationMode] = React.useState<ValidationMode>('ValidateAndHide');
   const { updateEntity } = useEntityApi();
@@ -182,6 +180,27 @@ const ConfigureForm: React.FC = () => {
   });
   const isMobile = useMediaQuery('(max-width: 880px)');
   const queryClient = useQueryClient();
+
+  const handleBeforeUnload = useCallback(
+    (e: BeforeUnloadEvent) => {
+      if (isDiry) {
+        // Cancel the event
+        e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
+        // Chrome requires returnValue to be set
+
+        e.returnValue = '';
+      }
+    },
+    [isDiry]
+  );
+
+  useEffect(() => {
+    if (isDiry) {
+      window.addEventListener('beforeunload', handleBeforeUnload);
+    }
+
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [isDiry, handleBeforeUnload]);
 
   const handleSubmit = async () => {
     if (errors.length > 0) {
@@ -195,8 +214,10 @@ const ConfigureForm: React.FC = () => {
           { accountId: userData.accountId, id, subscriptionId: userData.subscriptionId },
         ]);
         createSuccess('Connector Configuration Saved Successfully');
+        setIsDirty(false);
       } catch (e) {
         createError(e);
+        setIsDirty(false);
       }
     }
   };
@@ -246,9 +267,9 @@ const ConfigureForm: React.FC = () => {
             <Box id="form-wrapper" display="flex" alignItems="center" position="relative">
               {!isMobile && data && data?.mode?.useProduction && <SidebarOptions config={config.data} />}
               <BaseJsonForm
-                schema={dummySchema}
-                uischema={dummyUiSchema}
-                data={dummyData}
+                schema={config?.data.schema}
+                uischema={config?.data.uischema}
+                data={config?.data.data}
                 onChange={({ errors: _errors, data: newData }) => {
                   // Clear the clientId and clientSecret when going from non-prod to production.
                   if (
@@ -294,6 +315,7 @@ const ConfigureForm: React.FC = () => {
                   }
 
                   setData(newData);
+                  setIsDirty(true);
                 }}
                 validationMode={validationMode}
               />
