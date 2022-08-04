@@ -9,7 +9,7 @@ interface Props extends GrafanaProps {
 
 const useGrafanaLogs = ({ customIframeId, defaultIframeId, defaultHeight, integrationId, from, onBlur }: Props) => {
   const { url, exploreUrl, iframeId } = useGrafana({
-    path: '/v2/grafana/bootstrap/d-solo/logging/basic?panelId=2&',
+    path: '/v2/grafana/bootstrap/d-solo/logging/basic?panelId=2&kiosk=tv&disablePanelTitle=true&refresh=1s&',
     defaultIframeId,
     customIframeId,
     integrationId,

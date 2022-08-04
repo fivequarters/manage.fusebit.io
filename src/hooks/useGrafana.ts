@@ -11,9 +11,7 @@ const useGrafana = ({ path, integrationId, from, defaultIframeId, customIframeId
   integrationId = integrationId || DEFAULT_INTEGRATION_ID;
 
   return {
-    url: `${
-      process.env.REACT_APP_FUSEBIT_DEPLOYMENT
-    }${path}theme=fusebit&kiosk=tv&disablePanelTitle=true&refresh=1s&fusebitAuthorization=${
+    url: `${process.env.REACT_APP_FUSEBIT_DEPLOYMENT}${path}theme=fusebit&fusebitAuthorization=${
       userData.token
     }&fusebitAccountId=${userData.accountId}&var-accountId=${userData.accountId}&var-subscriptionId=${
       userData.subscriptionId
