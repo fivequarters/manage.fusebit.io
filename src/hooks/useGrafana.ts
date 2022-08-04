@@ -2,8 +2,7 @@ import { GrafanaProps } from '@interfaces/grafana';
 import { useParams } from 'react-router-dom';
 import { useAuthContext } from './useAuthContext';
 
-const WEEK_IN_MS = 7 * 24 * 60 * 60 * 1000;
-const DEFAULT_FROM = Date.now() - WEEK_IN_MS;
+const DEFAULT_FROM = 'now-7d';
 
 const useGrafana = ({ path, integrationId, from, defaultIframeId, customIframeId }: GrafanaProps) => {
   const { userData } = useAuthContext();
