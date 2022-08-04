@@ -1,5 +1,4 @@
 import useGrafanaLogs from '@hooks/useGrafanaLogs';
-import { useParams } from 'react-router-dom';
 import * as CSC from '@components/globalStyle';
 
 const DEFAULT_IFRAME_ID = 'logging';
@@ -13,11 +12,11 @@ interface Props {
 }
 
 const GrafanaLogs = ({ from, height, iframeId, integrationId }: Props) => {
-  const { id: DEFAULT_INTEGRATION_ID } = useParams<{ id: string }>();
-  const ID = iframeId || DEFAULT_IFRAME_ID;
-  const { url } = useGrafanaLogs({
-    iframeId: ID,
-    integrationId: integrationId || DEFAULT_INTEGRATION_ID,
+  const { url, iframeId: ID } = useGrafanaLogs({
+    path: '/v2/grafana/d/HealthMonitor/health-monitoring',
+    customIframeId: iframeId,
+    defaultIframeId: DEFAULT_IFRAME_ID,
+    integrationId,
     defaultHeight: height || DEFAULT_HEIGHT,
     from,
   });

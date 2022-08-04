@@ -7,7 +7,7 @@ import health from '@assets/health.png';
 import BackgroundImage from '@components/common/BackgroundImage/BackgroundImage';
 import { useQuery } from '@hooks/useQuery';
 import { useEffect, useState } from 'react';
-import * as CSC from '@components/globalStyle';
+import GrafanaHealth from '@components/common/GrafanaHealth';
 
 const ENABLE_HEALTH_DASHBOARD = 'enableHealthDashboard';
 
@@ -57,14 +57,7 @@ const HealthMonitoring = () => {
           </Card>
         </>
       ) : (
-        <CSC.StyledLogs
-          id="health-monitoring"
-          title="health-monitoring"
-          src="https://stage.us-west-2.fusebit.io/v2/grafana/d/WmVWQ-R4z/health-monitoring?orgId=36&kiosk&theme=fusebit"
-          height="100%"
-          width="100%"
-          frameBorder="0"
-        />
+        <GrafanaHealth />
       )}
     </Box>
   );

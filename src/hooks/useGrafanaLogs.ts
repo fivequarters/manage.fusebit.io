@@ -1,19 +1,20 @@
+import { GrafanaProps } from '@interfaces/grafana';
 import { useEffect } from 'react';
-import { useAuthContext } from './useAuthContext';
+import useGrafana from './useGrafana';
 
-interface Props {
-  iframeId?: string;
+interface Props extends GrafanaProps {
   defaultHeight?: number;
-  from?: number;
-  integrationId?: string;
   onBlur?: () => void;
 }
 
-const WEEK_IN_MS = 7 * 24 * 60 * 60 * 1000;
-const DEFAULT_FROM = Date.now() - WEEK_IN_MS;
-
-const useGrafanaLogs = ({ iframeId, defaultHeight, integrationId, from, onBlur }: Props) => {
-  const { userData } = useAuthContext();
+const useGrafanaLogs = ({ customIframeId, defaultIframeId, defaultHeight, integrationId, from, onBlur }: Props) => {
+  const { url, exploreUrl, iframeId } = useGrafana({
+    path: '/v2/grafana/bootstrap/d-solo/logging/basic?panelId=2&',
+    defaultIframeId,
+    customIframeId,
+    integrationId,
+    from,
+  });
 
   useEffect(() => {
     if (iframeId && defaultHeight) {
@@ -47,20 +48,9 @@ const useGrafanaLogs = ({ iframeId, defaultHeight, integrationId, from, onBlur }
   }, [iframeId, onBlur, defaultHeight]);
 
   return {
-    url: `${
-      process.env.REACT_APP_FUSEBIT_DEPLOYMENT
-    }/v2/grafana/bootstrap/d-solo/logging/basic?panelId=2?kiosk&theme=fusebit&disablePanelTitle=true&refresh=1s&fusebitAuthorization=${
-      userData.token
-    }&fusebitAccountId=${userData.accountId}&var-accountId=${userData.accountId}&var-subscriptionId=${
-      userData.subscriptionId
-    }&var-boundaryId=integration&var-functionId=${integrationId}&from=${from || DEFAULT_FROM}`,
-    exploreUrl: `${
-      process.env.REACT_APP_FUSEBIT_DEPLOYMENT
-    }/v2/grafana/d/logging/basic?theme=fusebit&fusebitAuthorization=${userData.token}&fusebitAccountId=${
-      userData.accountId
-    }&var-accountId=${userData.accountId}&var-subscriptionId=${
-      userData.subscriptionId
-    }&var-boundaryId=integration&var-functionId=${integrationId}&from=${from || DEFAULT_FROM}`,
+    url,
+    exploreUrl,
+    iframeId,
   };
 };
 
