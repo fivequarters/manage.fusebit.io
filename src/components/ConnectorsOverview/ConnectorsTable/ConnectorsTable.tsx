@@ -66,6 +66,7 @@ const ConnectorsTable = () => {
       inUseBy: <GetRelatedIntegrations name={row.id} />,
     }))
     .filter((item) => item.id.toLowerCase().includes(searchField));
+
   const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
     page,
     setPage,
