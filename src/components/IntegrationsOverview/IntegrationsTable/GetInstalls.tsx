@@ -16,7 +16,6 @@ const GetInstalls: React.FC<Props> = ({ id }) => {
     accountId: userData.accountId,
     subscriptionId: userData.subscriptionId,
   });
-
   return <>{installsData?.data.total !== undefined ? installsData?.data.total : <CSC.Spinner />}</>;
 };
 
