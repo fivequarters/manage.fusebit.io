@@ -37,7 +37,14 @@ const HealthMonitoring = () => {
   };
 
   return (
-    <Box display="flex" alignItems="center" justifyContent="center" height="170vh" pb="140px" position="relative">
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      height={!enableHealthDashboard ? '100%' : '170vh'}
+      pb="140px"
+      position="relative"
+    >
       {!enableHealthDashboard ? (
         <>
           {!isMobile && <BackgroundImage image={health} />}
