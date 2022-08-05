@@ -48,6 +48,9 @@ const GetIntegrationIcons: React.FC<Props> = ({ components }) => {
                 e.stopPropagation();
                 onClick(applicableComponents[idx].entityId);
               }}
+              style={{
+                backgroundColor: '#21212114',
+              }}
             />
           );
         })}
