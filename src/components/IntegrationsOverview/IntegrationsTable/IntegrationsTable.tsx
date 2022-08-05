@@ -62,14 +62,11 @@ const IntegrationsTable = () => {
     param: 'key',
   });
 
-  const [installs, setInstalls] = React.useState<{ id: string; installs: number }[]>([]);
-
   const rows = (integrations?.data?.items || [])
     .map((row) => ({
       id: row.id,
       name: row.id,
-      installs: <GetInstalls id={row.id} setInstalls={setInstalls} installs={installs} />,
-      sortableInstalls: installs.find((item) => item.id === row.id)?.installs,
+      installs: <GetInstalls id={row.id} />,
       sortableLastModified: new Date(row.dateModified),
       lastModified: format(new Date(row.dateModified), 'MM/dd/yyyy'),
       sortableCreatedAt: new Date(row.dateAdded),
@@ -80,11 +77,9 @@ const IntegrationsTable = () => {
         .map((component) => component.provider),
     }))
     .filter((item) => {
-      console.log(item.sortableInstalls);
       if (item.id.toLowerCase().includes(searchField.toLowerCase())) {
         return true;
       }
-
       return item.connectorNames.some((connName: string) => connName.toLowerCase().includes(searchField.toLowerCase()));
     });
 
@@ -140,7 +135,7 @@ const IntegrationsTable = () => {
             },
           },
           { id: 'lastModified', value: 'Last Modified', sort: { sortVal: 'sortableLastModified' } },
-          { id: 'installs', value: 'Installs', sort: { sortVal: 'sortableInstalls' } },
+          { id: 'installs', value: 'Installs' },
           { id: 'connectors', value: 'Associated Connectors' },
         ]}
         loading={isLoading}

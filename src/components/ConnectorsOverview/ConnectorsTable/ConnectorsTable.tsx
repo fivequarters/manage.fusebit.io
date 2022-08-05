@@ -51,8 +51,6 @@ const ConnectorsTable = () => {
     param: 'key',
   });
 
-  const [credentials, setCredentials] = React.useState<{ id: string; credentialType: 'Production' | 'Demo' }[]>([]);
-
   const rows = (connectors?.data?.items || [])
     .map((row) => {
       return {
@@ -65,14 +63,12 @@ const ConnectorsTable = () => {
         sortableCreatedAt: new Date(row.dateAdded),
         lastModified: format(new Date(row.dateModified), 'MM/dd/yyyy'),
         sortableLastModified: new Date(row.dateModified),
-        credentialType: <GetCredentialType id={row.id} credentials={credentials} setCredentials={setCredentials} />,
-        sortableCredentialType:
-          credentials.find((credential) => credential.id === row.id)?.credentialType === 'Production',
+        credentialType: <GetCredentialType id={row.id} />,
+
         inUseBy: <GetRelatedIntegrations name={row.id} />,
       };
     })
     .filter((item) => item.id.toLowerCase().includes(searchField));
-
   const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
     page,
     setPage,
@@ -109,8 +105,8 @@ const ConnectorsTable = () => {
           { id: 'name', value: 'Name', sort: { sortVal: 'name' } },
           { id: 'createdAt', value: 'Created At', sort: { sortVal: 'sortableCreatedAt' } },
           { id: 'lastModified', value: 'Last Modified', sort: { sortVal: 'sortableLastModified' } },
-          { id: 'credentialType', value: 'Configuration', sort: { sortVal: 'sortableCredentialType' } },
-          { id: 'identities', value: 'Identities', sort: { sortVal: 'sortableIdentities' } },
+          { id: 'credentialType', value: 'Configuration' },
+          { id: 'identities', value: 'Identities' },
           { id: 'inUseBy', value: 'Associated Integrations' },
         ]}
         loading={isLoading}
