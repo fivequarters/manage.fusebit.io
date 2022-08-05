@@ -52,22 +52,19 @@ const ConnectorsTable = () => {
   });
 
   const rows = (connectors?.data?.items || [])
-    .map((row) => {
-      return {
-        id: row.id,
-        name: row.id,
-        icon: <GetConnectorIcon handler={row.data.handler} name={row.id} />,
-        type: row.tags['fusebit.service'],
-        identities: <GetIdentities id={row.id} />,
-        createdAt: format(new Date(row.dateAdded), 'MM/dd/yyyy'),
-        sortableCreatedAt: new Date(row.dateAdded),
-        lastModified: format(new Date(row.dateModified), 'MM/dd/yyyy'),
-        sortableLastModified: new Date(row.dateModified),
-        credentialType: <GetCredentialType id={row.id} />,
-
-        inUseBy: <GetRelatedIntegrations name={row.id} />,
-      };
-    })
+    .map((row) => ({
+      id: row.id,
+      name: row.id,
+      icon: <GetConnectorIcon handler={row.data.handler} name={row.id} />,
+      type: row.tags['fusebit.service'],
+      identities: <GetIdentities id={row.id} />,
+      createdAt: format(new Date(row.dateAdded), 'MM/dd/yyyy'),
+      sortableCreatedAt: new Date(row.dateAdded),
+      lastModified: format(new Date(row.dateModified), 'MM/dd/yyyy'),
+      sortableLastModified: new Date(row.dateModified),
+      credentialType: <GetCredentialType id={row.id} />,
+      inUseBy: <GetRelatedIntegrations name={row.id} />,
+    }))
     .filter((item) => item.id.toLowerCase().includes(searchField));
   const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
     page,
