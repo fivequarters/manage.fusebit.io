@@ -19,6 +19,8 @@ import GetCredentialType from './GetCredentialType';
 import GetConnectorIcon from './GetConnectorIcon';
 import GetRelatedIntegrations from './GetRelatedIntegrations';
 
+const DEFAULT_TABLE_EMPTY_TEXT = 'Your connector list is empty, please create a connector';
+
 const ConnectorsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
   const [newModalOpen, setNewModal, toggleNewModal] = useModal();
@@ -26,7 +28,7 @@ const ConnectorsTable = () => {
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
   const { userData } = useAuthContext();
-  const [emptyTableText, setEmptyTableText] = React.useState('Your connector list is empty, please create a connector');
+  const [emptyTableText, setEmptyTableText] = React.useState(DEFAULT_TABLE_EMPTY_TEXT);
   const { data: connectors, isLoading } = useAccountConnectorsGetAll<{ items: Connector[] }>({
     enabled: userData.token,
     accountId: userData.accountId,
@@ -36,11 +38,10 @@ const ConnectorsTable = () => {
   const [searchField, setSearchField] = React.useState('');
   const searchInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchField(e.target.value);
-    if (e.target.value === '') {
-      setEmptyTableText('Your connector list is empty, please create a connector');
-    } else {
-      setEmptyTableText(`Connector with name ${e.target.value} not found`);
-    }
+    setEmptyTableText(
+      e.target.value === '' ? DEFAULT_TABLE_EMPTY_TEXT : `Connector with name ${e.target.value} not found`
+    );
+
     setPage(0);
   };
 

@@ -20,6 +20,8 @@ import { useFeedQuery } from '@hooks/useFeedQuery';
 import GetInstalls from './GetInstalls';
 import GetIntegrationIcons from './GetIntegrationIcons';
 
+const DEFAULT_TABLE_EMPTY_TEXT = 'Your integration list is empty, please create an integration';
+
 const IntegrationsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
   const [newModalOpen, setNewModal, toggleNewModal] = useModal();
@@ -29,9 +31,7 @@ const IntegrationsTable = () => {
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
   const { userData } = useAuthContext();
-  const [emptyTableText, setEmptyTableText] = React.useState(
-    'Your integration list is empty, please create an integration'
-  );
+  const [emptyTableText, setEmptyTableText] = React.useState(DEFAULT_TABLE_EMPTY_TEXT);
   const { data: integrations, isLoading } = useAccountIntegrationsGetAll<{ items: Integration[] }>({
     enabled: userData.token,
     accountId: userData.accountId,
@@ -41,11 +41,10 @@ const IntegrationsTable = () => {
   const [searchField, setSearchField] = React.useState('');
   const searchInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchField(e.target.value);
-    if (e.target.value === '') {
-      setEmptyTableText('Your integration list is empty, please create an integration');
-    } else {
-      setEmptyTableText(`Integration with name ${e.target.value} not found`);
-    }
+    setEmptyTableText(
+      e.target.value === '' ? DEFAULT_TABLE_EMPTY_TEXT : `Integration with name ${e.target.value} not found`
+    );
+
     setPage(0);
   };
 
