@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Box, Button, useMediaQuery } from '@material-ui/core';
+
 import { ValidationMode } from '@jsonforms/core';
 import { useAccountConnectorsGetOne } from '@hooks/api/v2/account/connector/useGetOne';
 import {
@@ -146,6 +147,15 @@ const ConfigureForm: React.FC = () => {
               uischema={config?.data.uischema}
               data={config?.data.data}
               onChange={({ errors: _errors, data: newData }) => {
+                if (config?.data.data.type === 'AWS') {
+                  if (_errors) {
+                    setErrors(_errors);
+                  }
+                  setData(data);
+                  return;
+                }
+
+                // Defaults to type being OAuth for backward compatibility
                 // Clear the clientId and clientSecret when going from non-prod to production.
                 if (
                   newData.mode?.useProduction !== config?.data.data?.mode?.useProduction &&
