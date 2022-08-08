@@ -150,8 +150,7 @@ const ConfigureForm: React.FC = () => {
                   if (_errors) {
                     setErrors(_errors);
                   }
-                  setData(data);
-                  return;
+                  return setData(data);
                 }
 
                 // Defaults to type being OAuth for backward compatibility
