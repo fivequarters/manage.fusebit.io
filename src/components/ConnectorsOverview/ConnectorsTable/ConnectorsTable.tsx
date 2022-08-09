@@ -28,7 +28,6 @@ const ConnectorsTable = () => {
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
   const { userData } = useAuthContext();
-  const [emptyTableText, setEmptyTableText] = React.useState(DEFAULT_TABLE_EMPTY_TEXT);
   const { data: connectors, isLoading } = useAccountConnectorsGetAll<{ items: Connector[] }>({
     enabled: userData.token,
     accountId: userData.accountId,
@@ -36,11 +35,9 @@ const ConnectorsTable = () => {
   });
 
   const [searchField, setSearchField] = React.useState('');
+  const emptyTableText = searchField === '' ? DEFAULT_TABLE_EMPTY_TEXT : `Connector with name ${searchField} not found`;
   const searchInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchField(e.target.value);
-    setEmptyTableText(
-      e.target.value === '' ? DEFAULT_TABLE_EMPTY_TEXT : `Connector with name ${e.target.value} not found`
-    );
 
     setPage(0);
   };

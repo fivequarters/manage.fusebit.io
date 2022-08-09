@@ -31,7 +31,6 @@ const IntegrationsTable = () => {
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
   const { userData } = useAuthContext();
-  const [emptyTableText, setEmptyTableText] = React.useState(DEFAULT_TABLE_EMPTY_TEXT);
   const { data: integrations, isLoading } = useAccountIntegrationsGetAll<{ items: Integration[] }>({
     enabled: userData.token,
     accountId: userData.accountId,
@@ -39,11 +38,10 @@ const IntegrationsTable = () => {
   });
 
   const [searchField, setSearchField] = React.useState('');
+  const emptyTableText =
+    searchField === '' ? DEFAULT_TABLE_EMPTY_TEXT : `Integration with name ${searchField} not found`;
   const searchInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchField(e.target.value);
-    setEmptyTableText(
-      e.target.value === '' ? DEFAULT_TABLE_EMPTY_TEXT : `Integration with name ${e.target.value} not found`
-    );
 
     setPage(0);
   };
