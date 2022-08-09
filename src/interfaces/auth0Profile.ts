@@ -9,3 +9,9 @@ export interface Auth0Profile {
   email_verified?: boolean;
   email?: string;
 }
+
+export interface Auth0InviteProfile {
+  id: string;
+  subscription: string;
+  account: string;
+}

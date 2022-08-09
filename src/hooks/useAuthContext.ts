@@ -3,10 +3,10 @@ import { getAnalyticsClient, trackAuthEvent } from '@utils/analytics';
 import constate from 'constate';
 import { useState } from 'react';
 import { INVITED_TO_FUSEBIT_KEY, STATIC_TENANT_ID } from '@utils/constants';
-import { Auth0Profile } from '@interfaces/auth0Profile';
+import { Auth0InviteProfile, Auth0Profile } from '@interfaces/auth0Profile';
 import { Company } from '@interfaces/company';
 import { createAxiosClient } from '@utils/utils';
-import { Auth0Token, FusebitProfileEx } from '@interfaces/auth0Token';
+import { Auth0InviteToken, Auth0Token, FusebitProfileEx } from '@interfaces/auth0Token';
 import jwt_decode from 'jwt-decode';
 import { useHistory } from 'react-router-dom';
 import useFirstTimeVisitor from '@hooks/useFirstTimeVisitor';
@@ -66,7 +66,7 @@ const signIn = (silent?: boolean): void => {
   const init = (window.location.hash || '').match(/^#init=(.+)$/);
   const initToken = (init && init[1]) || undefined;
   if (initToken) {
-    window.localStorage.setItem('fusebitInitToken', initToken);
+    localStorage.setItem('fusebitInitToken', initToken);
   }
 
   const authLink = [
@@ -162,18 +162,20 @@ const _useAuthContext = () => {
   const authUser = async (token: string) => {
     try {
       const { fusebitProfile: profile, isSignUpEvent, issuedByAuth0, isSupportingTool } = getDecodedToken(token);
-      const initToken = window.localStorage.getItem('fusebitInitToken');
+      const initToken = localStorage.getItem('fusebitInitToken');
       const fusebitAxiosClient = createAxiosClient(token);
 
       if (initToken) {
         // This is completion of the invitation transaction. Call the provisioning function to
         // redeem the init token, then redirect back to the home page to re-authenticate and
         // get a new access token with an updated Fusebit profile.
-        window.localStorage.removeItem('fusebitInitToken');
+        localStorage.removeItem('fusebitInitToken');
         redeemInitToken(token, profile, initToken)
           .then(() => {
-            localStorage.setItem(INVITED_TO_FUSEBIT_KEY, 'true');
-            history.push('/');
+            const decoded = jwt_decode<Auth0InviteToken>(initToken);
+            const fusebitInitProfile = decoded.profile as Auth0InviteProfile;
+            localStorage.setItem(INVITED_TO_FUSEBIT_KEY, JSON.stringify(fusebitInitProfile));
+            history.push(`/`);
           })
           .catch((err) => {
             handleAuthError(err, true);

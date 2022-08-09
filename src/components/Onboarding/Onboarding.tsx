@@ -8,6 +8,9 @@ import Video from '@components/common/Video';
 import { trackEventMemoized } from '@utils/analytics';
 import { useAuthContext } from '@hooks/useAuthContext';
 import useIsInvitedToFusebit from '@hooks/useIsInvitedToFusebit';
+import { useAccountGetOne } from '@hooks/api/v1/account/useGetOne';
+import { Account } from '@interfaces/account';
+import * as CSC from '@components/globalStyle';
 
 const StyledWrapper = styled.div`
   @media only screen and (max-width: 550px) {
@@ -92,7 +95,11 @@ const Onboarding: React.FC = () => {
   const query = useQuery();
   const objectLocation = 'Onboarding Video';
   const isMobile = useMediaQuery('(max-width: 550px)');
-  const { isInvitedToFusebit, removeIsInvitedToFusebitKey } = useIsInvitedToFusebit();
+  const { profile, isInvitedToFusebit, removeIsInvitedToFusebitKey } = useIsInvitedToFusebit();
+  const { data: accountData, isLoading } = useAccountGetOne<Account>({
+    enabled: userData.token && isInvitedToFusebit,
+    accountId: profile.account,
+  });
 
   useEffect(() => {
     const utmContent = query.get('utm_content');
@@ -145,7 +152,16 @@ const Onboarding: React.FC = () => {
         <StyledDescription>
           {isInvitedToFusebit ? (
             <>
-              You've been added to {userData.company}.
+              <Box display="flex" alignItems="center">
+                You've been added to{' '}
+                {isLoading ? (
+                  <Box ml="6px">
+                    <CSC.Spinner />
+                  </Box>
+                ) : (
+                  accountData?.data.displayName
+                )}
+              </Box>
               <p>
                 Now that you are signed up, let's get you ready to{' '}
                 <strong>start building a code-first integration in minutes.</strong> Watch the video below to learn key
