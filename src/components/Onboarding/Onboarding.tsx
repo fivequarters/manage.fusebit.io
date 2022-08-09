@@ -98,7 +98,7 @@ const Onboarding: React.FC = () => {
   const { profile, isInvitedToFusebit, removeIsInvitedToFusebitKey } = useIsInvitedToFusebit();
   const { data: accountData, isLoading } = useAccountGetOne<Account>({
     enabled: userData.token && isInvitedToFusebit,
-    accountId: profile.account,
+    accountId: profile?.account,
   });
 
   useEffect(() => {

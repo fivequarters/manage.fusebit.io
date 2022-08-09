@@ -175,7 +175,7 @@ const _useAuthContext = () => {
             const decoded = jwt_decode<Auth0InviteToken>(initToken);
             const fusebitInitProfile = decoded.profile as Auth0InviteProfile;
             localStorage.setItem(INVITED_TO_FUSEBIT_KEY, JSON.stringify(fusebitInitProfile));
-            history.push(`/`);
+            history.push('/');
           })
           .catch((err) => {
             handleAuthError(err, true);

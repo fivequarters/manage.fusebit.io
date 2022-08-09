@@ -26,7 +26,7 @@ const InvitedToFusebitModal = () => {
   const { profile, isInvitedToFusebit, removeIsInvitedToFusebitKey } = useIsInvitedToFusebit();
   const { data: accountData, isLoading } = useAccountGetOne<Account>({
     enabled: userData.token && isInvitedToFusebit,
-    accountId: profile.account,
+    accountId: profile?.account,
   });
   const query = useQuery();
   const isNewVidOnboarding = query.get('utm_content') === UTM_CONTENT.NEW_VID;
