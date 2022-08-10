@@ -19,6 +19,8 @@ import GetCredentialType from './GetCredentialType';
 import GetConnectorIcon from './GetConnectorIcon';
 import GetRelatedIntegrations from './GetRelatedIntegrations';
 
+const DEFAULT_TABLE_EMPTY_TEXT = 'Your connector list is empty, please create a connector';
+
 const ConnectorsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
   const [newModalOpen, setNewModal, toggleNewModal] = useModal();
@@ -33,8 +35,11 @@ const ConnectorsTable = () => {
   });
 
   const [searchField, setSearchField] = React.useState('');
+  const emptyTableText = searchField === '' ? DEFAULT_TABLE_EMPTY_TEXT : `Connector with name ${searchField} not found`;
   const searchInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchField(e.target.value.toLowerCase());
+    setSearchField(e.target.value);
+
+    setPage(0);
   };
 
   useQueryParam({
@@ -84,7 +89,7 @@ const ConnectorsTable = () => {
         selected={selected}
       />
       <BaseTable
-        emptyTableText="Your connector list is empty, please create a connector"
+        emptyTableText={emptyTableText}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
         page={page}
@@ -97,7 +102,7 @@ const ConnectorsTable = () => {
           { id: 'createdAt', value: 'Created At', sort: { sortVal: 'sortableCreatedAt' } },
           { id: 'lastModified', value: 'Last Modified', sort: { sortVal: 'sortableLastModified' } },
           { id: 'credentialType', value: 'Configuration' },
-          { id: 'identities', value: 'Identities', sort: { sortVal: 'sortableIdentities' } },
+          { id: 'identities', value: 'Identities' },
           { id: 'inUseBy', value: 'Associated Integrations' },
         ]}
         loading={isLoading}
