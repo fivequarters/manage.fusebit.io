@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Prompt } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { Box, Button, Container, useMediaQuery } from '@material-ui/core';
 import { ValidationMode } from '@jsonforms/core';
@@ -177,7 +177,7 @@ const ConfigureForm: React.FC = () => {
     subscriptionId: userData.subscriptionId,
   });
   const [data, setData] = React.useState<any>();
-  const [isDiry, setIsDirty] = React.useState(false);
+  const [isDirty, setIsDirty] = React.useState(false);
   const [errors, setErrors] = React.useState<object[]>([]);
   const [validationMode, setValidationMode] = React.useState<ValidationMode>('ValidateAndHide');
   const { updateEntity } = useEntityApi();
@@ -190,7 +190,7 @@ const ConfigureForm: React.FC = () => {
 
   const handleBeforeUnload = useCallback(
     (e: BeforeUnloadEvent) => {
-      if (isDiry) {
+      if (isDirty) {
         // Cancel the event
         e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
         // Chrome requires returnValue to be set
@@ -198,16 +198,16 @@ const ConfigureForm: React.FC = () => {
         e.returnValue = '';
       }
     },
-    [isDiry]
+    [isDirty]
   );
 
   useEffect(() => {
-    if (isDiry) {
+    if (isDirty) {
       window.addEventListener('beforeunload', handleBeforeUnload);
     }
 
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, [isDiry, handleBeforeUnload]);
+  }, [isDirty, handleBeforeUnload]);
 
   const handleSubmit = async () => {
     if (errors.length > 0) {
@@ -244,6 +244,7 @@ const ConfigureForm: React.FC = () => {
       mb="100px"
       minHeight="calc(100vh - 350px)"
     >
+      <Prompt when={isDirty} message="There are unsaved changes, are you sure you want to leave?" />
       <Box display="flex" flexDirection="column" position="relative" width="100%">
         {config?.data && !isConnectorDataLoading && !isConnectorConfigLoading ? (
           <StyledFormWrapper useProduction={data?.mode?.useProduction}>
