@@ -170,15 +170,24 @@ const _useAuthContext = () => {
         // redeem the init token, then redirect back to the home page to re-authenticate and
         // get a new access token with an updated Fusebit profile.
         localStorage.removeItem('fusebitInitToken');
+        const decoded = jwt_decode<Auth0InviteToken>(initToken);
+        const fusebitInitProfile = decoded.profile as Auth0InviteProfile;
         redeemInitToken(token, profile, initToken)
           .then(() => {
-            const decoded = jwt_decode<Auth0InviteToken>(initToken);
-            const fusebitInitProfile = decoded.profile as Auth0InviteProfile;
             localStorage.setItem(INVITED_TO_FUSEBIT_KEY, JSON.stringify(fusebitInitProfile));
             history.push('/');
           })
           .catch((err) => {
-            handleAuthError(err, true);
+            const isUserAlreadyInvited = !!profile.accounts?.find(
+              (acc) => acc.accountId === fusebitInitProfile.account
+            );
+            if (isUserAlreadyInvited) {
+              history.push(
+                `/account/${fusebitInitProfile.account}/subscription/${fusebitInitProfile.subscription}/integrations/overview`
+              );
+            } else {
+              handleAuthError(err, true);
+            }
           });
         return;
       }
