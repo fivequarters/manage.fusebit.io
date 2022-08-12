@@ -29,12 +29,12 @@ const StyledTag = styled.div`
 
 interface Props {
   children: ReactNode;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
 
 const Tag: React.FC<Props> = ({ children, onClick }) => {
   return (
-    <StyledWrapper cursorPointer={!!onClick} onClick={() => onClick?.()}>
+    <StyledWrapper cursorPointer={!!onClick} onClick={(e) => onClick?.(e)}>
       <StyledTag>{children}</StyledTag>
     </StyledWrapper>
   );

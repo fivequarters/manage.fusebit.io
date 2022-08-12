@@ -265,3 +265,9 @@ export const StyledJSONFormsDescription = styled.div`
   max-width: 384px;
   margin-right: 48px;
 `;
+
+export const StyledLogs = styled.iframe`
+  position: relative;
+  border-radius: 8px;
+  box-shadow: 0px 1px 30px -1px rgb(52 72 123 / 10%);
+`;

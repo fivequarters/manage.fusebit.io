@@ -1,5 +1,5 @@
 import { Box, useMediaQuery } from '@material-ui/core';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import accountImg from '@assets/account.svg';
@@ -12,7 +12,6 @@ import CompanyTitle from '@components/common/CompanyTitle';
 import MainUserAccounts from '@components/common/MainUserInfo/MainUserAccounts';
 import * as CSC from '@components/globalStyle';
 import { useAccountGetAllAccounts } from '@hooks/api/v1/account/account/useGetAllAccounts';
-import { ACTIVE_ACCOUNT_KEY } from '@utils/constants';
 
 const StyledUserDropdownInfo = styled.div`
   display: flex;
@@ -114,13 +113,16 @@ const StyledAccountsWrapper = styled.div`
   padding: 10px 15px;
 `;
 
+const ACCOUNTS_MENU_ID = 'accounts';
+const BASE_MENU_WIDTH = 50;
+
 interface Props {
   onAccountSwitch: () => void;
 }
 
 const MainUserInfo = ({ onAccountSwitch }: Props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const { userData, setUserData } = useAuthContext();
+  const { userData, switchAccount } = useAuthContext();
   const { getRedirectLink } = useGetRedirectLink();
   const history = useHistory();
   const { data: currentUser } = useAccountUserGetOne<Account>({
@@ -130,14 +132,30 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
   });
   const { data: accounts, isLoading } = useAccountGetAllAccounts();
   const isMobile = useMediaQuery('(max-width: 880px)');
+  const [transformMenuHorizontalOrigin, setTransformMenuHorizontalOrigin] = useState(100);
 
   const allowSubscriptionSelection = useMemo(() => {
-    if (accounts) {
+    if (accounts && !isLoading) {
       return userData.accounts && (userData?.accounts?.length > 1 || accounts?.[0]?.subscriptions?.length > 1);
     }
 
     return isLoading;
   }, [accounts, userData, isLoading]);
+
+  const isMenuOpen = Boolean(anchorEl) && Boolean(allowSubscriptionSelection);
+
+  useEffect(() => {
+    if (isMenuOpen) {
+      const accs = document.getElementById(ACCOUNTS_MENU_ID);
+      const menu = accs?.querySelector('.MuiList-root');
+      const interval = setInterval(() => {
+        if (typeof menu?.clientWidth === 'number' && menu?.clientWidth > BASE_MENU_WIDTH) {
+          setTransformMenuHorizontalOrigin(menu?.clientWidth + BASE_MENU_WIDTH);
+          clearInterval(interval);
+        }
+      }, 0);
+    }
+  }, [isMenuOpen]);
 
   const handleOnClickEmail = () => {
     history.push(getRedirectLink(`/authentication/${userData.userId}/overview`));
@@ -152,11 +170,7 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
   };
 
   const handleAccountSwitch = (acc: AccountListItem) => {
-    setUserData({
-      ...userData,
-      ...acc,
-    });
-    localStorage.setItem(ACTIVE_ACCOUNT_KEY, JSON.stringify(acc));
+    switchAccount(acc);
     setAnchorEl(null);
     onAccountSwitch();
   };
@@ -191,15 +205,15 @@ const MainUserInfo = ({ onAccountSwitch }: Props) => {
             )}
           </StyledUserDropdownStatus>
           <CSC.StyledMenu
-            id="accounts"
+            id={ACCOUNTS_MENU_ID}
             aria-labelledby="accounts-dropdown"
             anchorEl={anchorEl}
             keepMounted
-            open={Boolean(anchorEl) && Boolean(allowSubscriptionSelection)}
+            open={isMenuOpen}
             onClose={handleClose}
             getContentAnchorEl={null}
             anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-            transformOrigin={{ vertical: 122, horizontal: isLoading ? 100 : 395 }}
+            transformOrigin={{ vertical: 122, horizontal: transformMenuHorizontalOrigin }}
           >
             <StyledAccountsWrapper>
               <MainUserAccounts accounts={accounts} isLoading={isLoading} onAccountSwitch={handleAccountSwitch} />

@@ -4,6 +4,7 @@ import InputWithCopy, { inputWithCopyTester } from '@components/common/FormField
 import InputWithDescription, {
   InputWithDescriptionControlTester,
 } from '@components/common/FormFields/InputWithDescription/InputWithDescription';
+import { MonacoEditorControl } from '@fusebit/monaco-jsonforms';
 import MultiSelectControl, { MultiSelectControlTester } from '../MultiSelectControl/MultiSelectControl';
 
 type Props = JsonFormsInitStateProps & JsonFormsReactProps;
@@ -27,6 +28,7 @@ const BaseJsonForm = (props: Omit<Props, 'renderers' | 'cells'>) => {
           tester: InputWithDescriptionControlTester,
           renderer: InputWithDescription,
         },
+        MonacoEditorControl,
       ]}
     />
   );
