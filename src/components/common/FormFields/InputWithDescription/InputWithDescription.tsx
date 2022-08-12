@@ -15,7 +15,7 @@ const InputWithDescriptionControl = ({ data, handleChange, path, ...props }: Con
   const label = `${schema.title ? schema.title : props.label}${props.required ? '*' : ''}`;
 
   return (
-    <Box display="flex">
+    <Box display="flex" width="100%">
       <CSC.StyledJSONFormsDescription>{schema.description}</CSC.StyledJSONFormsDescription>
       <TextField
         defaultValue={data}

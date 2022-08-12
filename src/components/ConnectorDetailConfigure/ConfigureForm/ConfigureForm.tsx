@@ -71,6 +71,10 @@ const StyledFormWrapper = styled.form<{ useProduction?: boolean }>`
     }
   }
 
+  .MuiBox-root {
+    width: 100%;
+  }
+
   .MuiCard-root {
     padding: 0;
     box-shadow: none;

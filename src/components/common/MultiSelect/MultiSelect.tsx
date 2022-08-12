@@ -16,7 +16,7 @@ interface Props {
 const StyledPlaceholder = styled.div<{ isFocused: boolean }>`
   font-size: 12px;
   color: ${(props) => (props.isFocused ? ' var(--primary-color)' : 'var(--black)')};
-  transform: translateY(-5.5px);
+  transform: translateY(-3.5px);
   transition: all 0.15s ease-in-out;
 `;
 
@@ -30,7 +30,7 @@ const MultiSelect = ({ defaultOptions, onChange, placeholder, allowArbitraryCrea
       <CreatableSelect
         value={value}
         isMulti
-        noOptionsMessage={() => 'Type to create a Scope'}
+        noOptionsMessage={() => 'type to add a scope'}
         isValidNewOption={(val: string) => {
           return val !== '';
         }}
@@ -56,6 +56,7 @@ const MultiSelect = ({ defaultOptions, onChange, placeholder, allowArbitraryCrea
         styles={{
           container: (base: any) => ({
             ...base,
+            width: '100%',
             marginBottom: '48px',
           }),
           control: (base: any, state) => ({
