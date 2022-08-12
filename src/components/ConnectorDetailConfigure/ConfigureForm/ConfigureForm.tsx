@@ -20,9 +20,6 @@ import { useError } from '@hooks/useError';
 import { useSuccess } from '@hooks/useSuccess';
 import { useQueryClient } from 'react-query';
 import SidebarOptions from './SidebarOptions';
-import { data as dummyData } from './dummyData/data';
-import { schema as dummySchema } from './dummyData/schema';
-import { uischema as dummyUischema } from './dummyData/uischema';
 
 const TitleStyles = css`
   font-size: 20px;
@@ -275,10 +272,12 @@ const ConfigureForm: React.FC = () => {
             <Box id="form-wrapper" display="flex" alignItems="center" position="relative">
               {!isMobile && data && data?.mode?.useProduction && <SidebarOptions config={config.data} />}
               <BaseJsonForm
-                schema={dummySchema || config?.data.schema}
-                uischema={dummyUischema || config?.data.uischema}
-                data={dummyData || config?.data.data}
+                schema={config?.data.schema}
+                uischema={config?.data.uischema}
+                data={config?.data.data}
                 onChange={({ errors: _errors, data: newData }) => {
+                  setIsDirty(JSON.stringify(newData) !== JSON.stringify(config?.data.data));
+
                   // Clear the clientId and clientSecret when going from non-prod to production.
                   if (
                     newData.mode?.useProduction !== config?.data.data?.mode?.useProduction &&
@@ -323,7 +322,6 @@ const ConfigureForm: React.FC = () => {
                   }
 
                   setData(newData);
-                  setIsDirty(true);
                 }}
                 validationMode={validationMode}
               />
