@@ -5,7 +5,7 @@ import { ChangeEvent } from 'react';
 import * as CSC from '@components/globalStyle';
 
 type CustomProps = {
-  description: string;
+  heading: string;
 };
 
 type JsonSchemaWithCustomProps = JsonSchema & CustomProps;
@@ -16,7 +16,7 @@ const InputWithDescriptionControl = ({ data, handleChange, path, ...props }: Con
 
   return (
     <Box display="flex" width="100%">
-      <CSC.StyledJSONFormsDescription>{schema.description}</CSC.StyledJSONFormsDescription>
+      <CSC.StyledJSONFormsDescription>{schema.heading}</CSC.StyledJSONFormsDescription>
       <TextField
         defaultValue={data}
         label={label}
@@ -32,8 +32,7 @@ export const InputWithDescriptionControlTester = rankWith(
   and(
     uiTypeIs('Control'),
     schemaMatches(
-      (schema) =>
-        !!(schema as { description?: string })?.description && (schema.type === 'string' || schema.type === 'integer')
+      (schema) => !!(schema as { heading?: string })?.heading && (schema.type === 'string' || schema.type === 'integer')
     )
   )
 );
