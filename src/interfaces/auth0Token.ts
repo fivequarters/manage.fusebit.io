@@ -18,3 +18,18 @@ export interface Auth0Token {
   'https://fusebit.io/new-user'?: boolean;
   'https://fusebit.io/permissions'?: { action: string; resource: string }[];
 }
+
+export interface Auth0InviteToken {
+  protocol: string;
+  agentId: string;
+  profile: {
+    id: string;
+    subscription: string;
+    baseUrl: string;
+    account: string;
+  };
+  iss: string;
+  aud: string;
+  iat: number;
+  exp: number;
+}

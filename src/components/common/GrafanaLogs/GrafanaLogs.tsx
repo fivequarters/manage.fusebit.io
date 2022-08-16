@@ -21,7 +21,7 @@ const GrafanaLogs = ({ from, height, iframeId, integrationId }: Props) => {
     from,
   });
 
-  return <CSC.StyledLogs id={ID} title={ID} src={url} height="100%" width="100%" frameBorder="0" />;
+  return <CSC.StyledLogs id={ID} title={ID} src={url} height="350px" width="100%" frameBorder="0" />;
 };
 
 export default GrafanaLogs;

@@ -20,6 +20,8 @@ import { useFeedQuery } from '@hooks/useFeedQuery';
 import GetInstalls from './GetInstalls';
 import GetIntegrationIcons from './GetIntegrationIcons';
 
+const DEFAULT_TABLE_EMPTY_TEXT = 'Your integration list is empty, please create an integration';
+
 const IntegrationsTable = () => {
   const { page, setPage, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePagination();
   const [newModalOpen, setNewModal, toggleNewModal] = useModal();
@@ -36,8 +38,12 @@ const IntegrationsTable = () => {
   });
 
   const [searchField, setSearchField] = React.useState('');
+  const emptyTableText =
+    searchField === '' ? DEFAULT_TABLE_EMPTY_TEXT : `Integration with name ${searchField} not found`;
   const searchInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchField(e.target.value.toLowerCase());
+    setSearchField(e.target.value);
+
+    setPage(0);
   };
 
   const { setFirstTimeVisitor } = useFirstTimeVisitor({
@@ -52,26 +58,26 @@ const IntegrationsTable = () => {
     },
     param: 'key',
   });
+
   const rows = (integrations?.data?.items || [])
     .map((row) => ({
       id: row.id,
       name: row.id,
       installs: <GetInstalls id={row.id} />,
       sortableLastModified: new Date(row.dateModified),
-      lastModified: format(new Date(row.dateAdded), 'MM/dd/yyyy'),
+      lastModified: format(new Date(row.dateModified), 'MM/dd/yyyy'),
       sortableCreatedAt: new Date(row.dateAdded),
-      createdAt: format(new Date(row.dateModified), 'MM/dd/yyyy'),
+      createdAt: format(new Date(row.dateAdded), 'MM/dd/yyyy'),
       connectors: <GetIntegrationIcons components={row.data.components} />,
       connectorNames: row.data.components
         .filter((component) => component.entityType === 'connector')
         .map((component) => component.provider),
     }))
     .filter((item) => {
-      if (item.id.toLowerCase().includes(searchField)) {
+      if (item.id.toLowerCase().includes(searchField.toLowerCase())) {
         return true;
       }
-
-      return item.connectorNames.some((connName: string) => connName.toLowerCase().includes(searchField));
+      return item.connectorNames.some((connName: string) => connName.toLowerCase().includes(searchField.toLowerCase()));
     });
 
   const { selected, handleCheck, isSelected, handleSelectAllCheck, handleRowDelete } = useEntityTable({
@@ -103,7 +109,7 @@ const IntegrationsTable = () => {
         selected={selected}
       />
       <BaseTable
-        emptyTableText="Your integration list is empty, please create an integration"
+        emptyTableText={emptyTableText}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
         page={page}

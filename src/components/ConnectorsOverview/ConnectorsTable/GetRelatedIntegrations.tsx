@@ -2,9 +2,9 @@ import React from 'react';
 import { useAccountIntegrationsGetAll } from '@hooks/api/v2/account/integration/useGetAll';
 import { Integration } from '@interfaces/integration';
 import { useAuthContext } from '@hooks/useAuthContext';
-import { Chip } from '@material-ui/core';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 import { useHistory } from 'react-router-dom';
+import Tag from '@components/common/Tag';
 
 interface Props {
   name: string;
@@ -33,14 +33,15 @@ const GetRelatedIntegrations: React.FC<Props> = ({ name }) => {
     <>
       {matchedIntegrations?.map((integration) => {
         return (
-          <Chip
+          <Tag
             key={integration.id}
             onClick={(e) => {
               e.stopPropagation();
               onClick(integration.id);
             }}
-            label={integration.id}
-          />
+          >
+            {integration.id}
+          </Tag>
         );
       })}
     </>

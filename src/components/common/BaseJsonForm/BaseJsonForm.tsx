@@ -2,7 +2,7 @@ import { JsonForms, JsonFormsInitStateProps, JsonFormsReactProps } from '@jsonfo
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
 import InputWithCopy, { inputWithCopyTester } from '@components/common/FormFields/InputWithCopy/InputWithCopy';
 import { createAjv } from '@jsonforms/core';
-import CodeBlockEditorControl, { CodeBlockEditorControlTester } from '../CodeBlockEditorControl/CodeBlockEditorControl';
+import { MonacoEditorControl } from '@fusebit/monaco-jsonforms';
 
 type Props = JsonFormsInitStateProps & JsonFormsReactProps;
 const ajv = createAjv({ allErrors: true, jsonPointers: false });
@@ -21,10 +21,7 @@ const BaseJsonForm = (props: Omit<Props, 'renderers' | 'cells'>) => {
           tester: inputWithCopyTester,
           renderer: InputWithCopy,
         },
-        {
-          tester: CodeBlockEditorControlTester,
-          renderer: CodeBlockEditorControl,
-        },
+        MonacoEditorControl,
       ]}
     />
   );
