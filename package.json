@@ -26,6 +26,7 @@
     "@material-ui/pickers": "^3.3.10",
     "@monaco-editor/react": "^4.4.5",
     "@types/intercom-web": "^2.8.13",
+    "ajv-errors": "^1.0.1",
     "axios": "^0.21.4",
     "constate": "^3.2.0",
     "date-fns": "^2.23.0",
