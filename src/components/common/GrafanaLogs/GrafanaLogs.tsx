@@ -13,7 +13,6 @@ interface Props {
 
 const GrafanaLogs = ({ from, height, iframeId, integrationId }: Props) => {
   const { url, iframeId: ID } = useGrafanaLogs({
-    path: '/v2/grafana/d/HealthMonitor/health-monitoring',
     customIframeId: iframeId,
     defaultIframeId: DEFAULT_IFRAME_ID,
     integrationId,
