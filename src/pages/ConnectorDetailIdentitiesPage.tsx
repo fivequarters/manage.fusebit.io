@@ -12,7 +12,7 @@ const ConnectorDetailIdentitiesPage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
   const { getRedirectLink } = useGetRedirectLink();
 
-  useTrackPage('Connector Identities', 'Connector');
+  useTrackPage('Connector Identities', 'Connector', { connector: id });
   useTitle(id);
 
   return (

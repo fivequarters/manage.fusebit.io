@@ -12,7 +12,7 @@ const ConnectorDetailConfigurePage: FC<{}> = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
   const { getRedirectLink } = useGetRedirectLink();
 
-  useTrackPage('Connector Configure', 'Connector');
+  useTrackPage('Connector Configure', 'Connector', { connector: id });
   useTitle(id);
 
   return (

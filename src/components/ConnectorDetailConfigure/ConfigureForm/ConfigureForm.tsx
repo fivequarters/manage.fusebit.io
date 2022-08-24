@@ -210,7 +210,7 @@ const ConfigureForm: React.FC = () => {
     if (errors.length > 0) {
       setValidationMode('ValidateAndShow');
     } else {
-      trackEventMemoized('Configure Save Button Clicked', 'Connector');
+      trackEventMemoized('Configure Save Button Clicked', 'Connector', { connector: id });
       try {
         await updateEntity(connectorData, data);
         queryClient.invalidateQueries([
