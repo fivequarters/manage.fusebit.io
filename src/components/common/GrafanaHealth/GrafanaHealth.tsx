@@ -11,7 +11,7 @@ interface Props {
 
 const GrafanaHealth = ({ from, iframeId, integrationId }: Props) => {
   const { url, iframeId: ID } = useGrafana({
-    path: '/v2/grafana/bootstrap/d/HealthMonitor/health-monitoring?kiosk=tv&hideUi=panelTitle,breadcrumbs,tvButton',
+    path: '/v2/grafana/bootstrap/d/HealthMonitor/health-monitoring?kiosk=tv&hideUi=panelTitle,breadcrumbs,tvButton&',
     defaultIframeId: DEFAULT_IFRAME_ID,
     customIframeId: iframeId,
     integrationId,
