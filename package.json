@@ -17,7 +17,7 @@
   "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
     "@craco/craco": "^6.4.0",
-    "@fusebit/monaco-jsonforms": "^1.1.0",
+    "@fusebit/monaco-jsonforms": "1.0.8",
     "@jsonforms/core": "3.0.0-alpha.1",
     "@jsonforms/material-renderers": "3.0.0-alpha.1",
     "@jsonforms/react": "3.0.0-alpha.1",
