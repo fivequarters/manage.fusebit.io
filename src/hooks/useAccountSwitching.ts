@@ -113,6 +113,17 @@ const useAccountSwitching = ({ userData, setUserData }: Props) => {
       return fusebitProfile;
     }
 
+    const getProfileWithSubscriptionName = async (profile: FusebitProfileEx) => {
+      const subscriptions = await getSubscriptions(profile.accountId || '', axios);
+      const activeSubscriptionData = subscriptions.find((sub) => sub.id === profile.subscriptionId);
+      profile = {
+        ...profile,
+        subscriptionName: activeSubscriptionData?.displayName,
+      };
+
+      return profile;
+    };
+
     const urlAccount = getUrlAccount();
     const lastUsedAccount = getLastUsedAccount(defaultProfile);
     const hasUrlAccount = urlAccount.accountId && urlAccount.subscriptionId;
@@ -121,18 +132,14 @@ const useAccountSwitching = ({ userData, setUserData }: Props) => {
     if (hasUrlAccount) {
       const userId = getUserIdFromAccount(urlAccount.accountId);
       fusebitProfile = await getFusebitProfile(fusebitProfile, { ...urlAccount, userId }, axios);
+      fusebitProfile = await getProfileWithSubscriptionName(fusebitProfile);
 
       return fusebitProfile;
     }
 
     if (hasLastUsedAccount) {
       fusebitProfile = await getFusebitProfile(fusebitProfile, lastUsedAccount, axios);
-      const subscriptions = await getSubscriptions(fusebitProfile.accountId || '', axios);
-      const activeSubscriptionData = subscriptions.find((sub) => sub.id === fusebitProfile.subscriptionId);
-      fusebitProfile = {
-        ...fusebitProfile,
-        subscriptionName: activeSubscriptionData?.displayName,
-      };
+      fusebitProfile = await getProfileWithSubscriptionName(fusebitProfile);
 
       return fusebitProfile;
     }
