@@ -116,7 +116,11 @@ const ConfigureForm: React.FC = () => {
   return (
     <Box display="flex" flexDirection={isMobile && 'column'} alignItems={isMobile && 'center'} mb="100px">
       <Box display="flex" flexDirection="column" position="relative" width="100%">
-        {config?.data && !isConnectorDataLoading && !isConnectorConfigLoading ? (
+        {config?.data &&
+        config?.data.schema &&
+        config?.data.uischema &&
+        !isConnectorDataLoading &&
+        !isConnectorConfigLoading ? (
           <StyledFormWrapper>
             {configureAppDocUrl ? (
               <InformationalBanner>
@@ -142,9 +146,9 @@ const ConfigureForm: React.FC = () => {
               </InformationalBanner>
             )}
             <BaseJsonForm
-              schema={config?.data.schema}
-              uischema={config?.data.uischema}
-              data={config?.data.data}
+              data={config.data.data}
+              schema={config.data.schema}
+              uischema={config.data.uischema}
               onChange={({ errors: _errors, data: newData }) => {
                 // Clear the clientId and clientSecret when going from non-prod to production.
                 if (
