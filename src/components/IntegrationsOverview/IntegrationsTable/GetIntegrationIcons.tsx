@@ -40,7 +40,20 @@ const GetIntegrationIcons: React.FC<Props> = ({ components }) => {
           return (
             <Chip
               avatar={
-                <Avatar style={{ backgroundColor: 'white', border: '3px solid white' }} src={urlOrSvgToImage(item)} />
+                <Avatar
+                  style={{
+                    backgroundColor: 'white',
+                    border: '3px solid white',
+                    display: 'flex',
+                    alignItems: 'center',
+                    fontFamily: 'Nunito Sans',
+                    fontSize: '14px',
+                    lineHeight: '19px',
+                    color: 'var(--black)',
+                    letterSpacing: '0.0025em',
+                  }}
+                  src={urlOrSvgToImage(item)}
+                />
               }
               label={applicableComponents[idx].entityId}
               key={applicableComponents[idx].entityId}

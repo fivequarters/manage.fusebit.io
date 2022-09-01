@@ -79,7 +79,6 @@ const StyledButtonsContainer = styled(Box)<{ deleting?: boolean }>`
 
 const StyledSearchBar = styled(TextField)`
   width: 500px;
-  padding-left: 64px;
   height: 50px;
   @media only screen and (max-width: 600px) {
     width: 100%;
