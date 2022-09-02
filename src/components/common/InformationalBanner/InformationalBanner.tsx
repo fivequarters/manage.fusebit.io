@@ -5,7 +5,7 @@ const StyledBanner = styled.div`
   display: flex;
   align-items: center;
   border-radius: 8px;
-  margin-bottom: 48px;
+  margin-bottom: 32px;
 `;
 
 const StyledDescription = styled.p`
@@ -24,6 +24,7 @@ const StyledDescription = styled.p`
   a:visited,
   a:link {
     color: inherit;
+    font-weight: 500;
     text-decoration: underline;
     text-underline-offset: 1px;
   }

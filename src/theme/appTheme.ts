@@ -59,6 +59,9 @@ export const lightTheme: Theme = createMuiTheme({
     MuiCheckbox: {
       color: 'primary',
     },
+    MuiSwitch: {
+      color: 'primary',
+    },
   },
   typography: {
     button: {
