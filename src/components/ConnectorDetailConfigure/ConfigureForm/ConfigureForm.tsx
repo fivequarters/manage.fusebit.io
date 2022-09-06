@@ -243,11 +243,7 @@ const ConfigureForm: React.FC = () => {
     >
       <Prompt when={isDirty} message="There are unsaved changes, are you sure you want to leave?" />
       <Box display="flex" flexDirection="column" position="relative" width="100%">
-        {config?.data &&
-        config?.data.schema &&
-        config?.data.uischema &&
-        !isConnectorDataLoading &&
-        !isConnectorConfigLoading ? (
+        {config?.data?.schema && config?.data?.uischema && !isConnectorDataLoading && !isConnectorConfigLoading ? (
           <StyledFormWrapper useProduction={data?.mode?.useProduction}>
             {configureAppDocUrl ? (
               <InformationalBanner>
@@ -275,9 +271,9 @@ const ConfigureForm: React.FC = () => {
             <Box id="form-wrapper" display="flex" alignItems="center" position="relative">
               {!isMobile && data && data?.mode?.useProduction && <SidebarOptions config={config.data} />}
               <BaseJsonForm
-                schema={config?.data.schema}
-                uischema={config?.data.uischema}
-                data={config?.data.data}
+                schema={config?.data?.schema}
+                uischema={config?.data?.uischema}
+                data={config?.data?.data}
                 onChange={({ errors: _errors, data: newData }) => {
                   setIsDirty(JSON.stringify(newData) !== JSON.stringify(config?.data.data));
 
