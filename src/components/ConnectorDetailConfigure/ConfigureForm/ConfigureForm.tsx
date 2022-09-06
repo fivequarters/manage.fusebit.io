@@ -243,7 +243,11 @@ const ConfigureForm: React.FC = () => {
     >
       <Prompt when={isDirty} message="There are unsaved changes, are you sure you want to leave?" />
       <Box display="flex" flexDirection="column" position="relative" width="100%">
-        {config?.data && !isConnectorDataLoading && !isConnectorConfigLoading ? (
+        {config?.data &&
+        config?.data.schema &&
+        config?.data.uischema &&
+        !isConnectorDataLoading &&
+        !isConnectorConfigLoading ? (
           <StyledFormWrapper useProduction={data?.mode?.useProduction}>
             {configureAppDocUrl ? (
               <InformationalBanner>
@@ -268,7 +272,6 @@ const ConfigureForm: React.FC = () => {
                 By default, Connectors use Fusebit demonstration credentials, which are intended for testing only.
               </InformationalBanner>
             )}
-
             <Box id="form-wrapper" display="flex" alignItems="center" position="relative">
               {!isMobile && data && data?.mode?.useProduction && <SidebarOptions config={config.data} />}
               <BaseJsonForm
