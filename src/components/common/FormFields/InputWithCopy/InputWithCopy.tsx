@@ -33,7 +33,7 @@ const CustomInputCell = (props: ControlProps) => {
           integer: <MaterialIntegerCell {...props} />,
         }[type as 'string' | 'integer']
       }
-      <Box ml="5px">
+      <Box ml="5px" width="auto !important">
         <IconButton onClick={() => handleCopy(props.data)} size="small">
           <img src={copyIcon} alt="Copy Button" />
         </IconButton>

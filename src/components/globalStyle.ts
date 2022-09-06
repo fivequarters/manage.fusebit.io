@@ -39,9 +39,22 @@ export default createGlobalStyle`
       z-index: 0 !important;
     }
 
-    // TODO: Review if this can be moved to the notistack provider
-    .SnackbarItem-variantError {
-      background-color: #D32F2F !important;
+    .snackbar {
+      padding: 12px 32px;
+      box-shadow: 0px 1px 24px -1px rgba(2, 44, 27, 0.24);
+      min-width: 694px;
+
+      @media only screen and (max-width: 880px) {
+        min-width: 80%;
+      }
+    }
+
+    [class*='SnackbarItem-variantError'] {
+      background-color: #D32F2F;
+    }
+
+    [class*='SnackbarItem-variantSuccess'] {
+      background-color: #1DCA77;
     }
 
     button {
@@ -241,6 +254,16 @@ export const StyledMenu = styled(Menu)`
   .MuiPaper-root {
     box-shadow: var(--shadow);
   }
+`;
+
+export const StyledJSONFormsDescription = styled.div`
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--black);
+  width: 100%;
+  height: max-content;
+  max-width: 384px;
+  margin-right: 48px;
 `;
 
 export const StyledLogs = styled.iframe`

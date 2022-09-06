@@ -20,6 +20,11 @@ const StyledText = styled.span<{ active?: boolean }>`
   width: max-content;
 
   ${(props) => props.active && `font-weight: 600;`}
+
+  @media only screen and (max-width: 880px) {
+    width: 160px;
+    line-height: 20px;
+  }
 `;
 
 const StyledArrowContainer = styled(Box)<{ $active?: boolean }>`

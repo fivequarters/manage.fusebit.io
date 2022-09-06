@@ -19,9 +19,10 @@ export interface Connector {
   missing?: boolean;
 }
 
-interface Element {
+export interface Element {
   type: string;
   scope: string;
+  label?: string;
 }
 
 export interface ConnectorConfig {

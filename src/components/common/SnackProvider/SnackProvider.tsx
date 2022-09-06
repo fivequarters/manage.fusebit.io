@@ -27,6 +27,7 @@ const SnackProvider: React.FC<Props> = ({ children }) => {
 
   return (
     <SnackbarProvider
+      className="snackbar"
       ref={notistackRef}
       anchorOrigin={{
         vertical: 'bottom',
