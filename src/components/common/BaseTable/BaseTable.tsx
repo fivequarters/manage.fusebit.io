@@ -84,6 +84,8 @@ const StyledSearchBar = styled(TextField)`
     width: 100%;
   }
 
+  padding-left: 16px;
+
   .MuiInputBase-root {
     height: 50px;
   }
