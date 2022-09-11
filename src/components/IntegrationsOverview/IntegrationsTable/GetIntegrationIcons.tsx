@@ -45,12 +45,6 @@ const GetIntegrationIcons: React.FC<Props> = ({ components }) => {
                     backgroundColor: 'white',
                     border: '3px solid white',
                     display: 'flex',
-                    alignItems: 'center',
-                    fontFamily: 'Nunito Sans',
-                    fontSize: '14px',
-                    lineHeight: '19px',
-                    color: 'var(--black)',
-                    letterSpacing: '0.0025em',
                   }}
                   src={urlOrSvgToImage(item)}
                 />
@@ -63,6 +57,7 @@ const GetIntegrationIcons: React.FC<Props> = ({ components }) => {
               }}
               style={{
                 backgroundColor: '#21212114',
+                margin: '5px 0px 0px 5px',
               }}
             />
           );
