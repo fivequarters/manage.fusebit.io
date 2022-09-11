@@ -44,7 +44,6 @@ const GetIntegrationIcons: React.FC<Props> = ({ components }) => {
                   style={{
                     backgroundColor: 'white',
                     border: '3px solid white',
-                    display: 'flex',
                   }}
                   src={urlOrSvgToImage(item)}
                 />
