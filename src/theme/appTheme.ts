@@ -54,6 +54,11 @@ export const lightTheme: Theme = createMuiTheme({
         backgroundColor: '#ECECEC',
       },
     },
+    MuiAvatar: {
+      img: {
+        objectFit: 'contain',
+      },
+    },
   },
   props: {
     MuiCheckbox: {
