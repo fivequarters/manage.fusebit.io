@@ -71,12 +71,23 @@ interface Props {
   onClose: () => void;
   items?: {
     id: string;
+    dateAdded: string;
     to: string;
   }[];
 }
 
 const EntityMenuSection = ({ title, items = [], linkTitleTo, onClose }: Props) => {
   const { id } = useParams<{ id: string }>();
+
+  const compare = (left: any, right: any) => {
+    if (left < right) {
+      return 1;
+    }
+    if (left > right) {
+      return -1;
+    }
+    return 0;
+  };
 
   return (
     <>
@@ -91,14 +102,19 @@ const EntityMenuSection = ({ title, items = [], linkTitleTo, onClose }: Props) =
           </StyledSectionDropdownSeeMore>
         </Link>
       </StyledContainer>
-      {items.map((item) => (
-        <Link key={item.id} to={item.to} onClick={onClose}>
-          <StyledSectionDropdownIntegration active={id === item.id}>
-            {item.id}
-            <img src={check} alt="check" height="16" width="16" />
-          </StyledSectionDropdownIntegration>
-        </Link>
-      ))}
+      {items
+        .sort((a, b) => {
+          return compare(a.dateAdded, b.dateAdded);
+        })
+        .slice(0, 5)
+        .map((item) => (
+          <Link key={item.id} to={item.to} onClick={onClose}>
+            <StyledSectionDropdownIntegration active={id === item.id}>
+              {item.id}
+              <img src={check} alt="check" height="16" width="16" />
+            </StyledSectionDropdownIntegration>
+          </Link>
+        ))}
     </>
   );
 };
