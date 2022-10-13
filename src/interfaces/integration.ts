@@ -1,3 +1,4 @@
+import { Connector } from './connector';
 import { Tags } from './tags';
 
 export interface IntegrationData {
@@ -20,6 +21,8 @@ export interface InnerConnector {
   provider: string;
   skip?: boolean;
 }
+
+export type InstalledConnectorType = (Connector & InnerConnector) | (InnerConnector & { missing?: true; id?: string });
 
 export interface Integration {
   id: string;

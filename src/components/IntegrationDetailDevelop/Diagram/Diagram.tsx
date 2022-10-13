@@ -9,6 +9,8 @@ import IntegrationCard from '@components/IntegrationDetailDevelop/IntegrationCar
 import LinksTitle from '@components/IntegrationDetailDevelop/LinksTitle';
 import YourAplication from '@components/IntegrationDetailDevelop/YourAplicationCard';
 import { Integration } from '@interfaces/integration';
+import useGetInstalledConnectors from '@hooks/useGetInstalledConnectors';
+import { Connector } from '@interfaces/connector';
 import useProcessing from '../hooks/useProcessing';
 
 const centerMixin = (props: { $matchesCardOverlapping: boolean }) =>
@@ -43,6 +45,7 @@ interface Props {
 const Diagram: React.FC<Props> = ({ isLoading, integration }) => {
   const matchesCardOverlapping = useMediaQuery(CARD_OVERLAPPING_MEDIA_QUERY);
   const { processing } = useProcessing({});
+  const { connectors, installedConnectors, isLoading: isConnectorsLoading } = useGetInstalledConnectors();
 
   return (
     <Xwrapper>
@@ -58,15 +61,31 @@ const Diagram: React.FC<Props> = ({ isLoading, integration }) => {
               <StyledIntegrationCard $matchesCardOverlapping={matchesCardOverlapping} />
             </Grid>
             <Grid item xs={matchesCardOverlapping ? 12 : 4}>
-              <StyledConnectorsCard processing={processing} $matchesCardOverlapping={matchesCardOverlapping} />
+              <StyledConnectorsCard
+                connectors={connectors}
+                installedConnectors={installedConnectors}
+                isLoading={isConnectorsLoading}
+                processing={processing}
+                $matchesCardOverlapping={matchesCardOverlapping}
+              />
             </Grid>
           </Grid>
           {matchesCardOverlapping ? (
             <Box display="flex" flexDirection="column" maxWidth="389px" m="0 auto">
               <LinksTitle />
               <FooterLinks
-                links={['connectingFusebit', 'gettingStarted', 'programmingModel']}
+                links={[
+                  'connectingFusebit',
+                  'systemArchitecture',
+                  'marketplaceComponent',
+                  'gettingStarted',
+                  'programmingModel',
+                  'developingLocally',
+                  'configureConnector',
+                  'implementingCustomConnectors',
+                ]}
                 integration={integration}
+                connectors={installedConnectors as Connector[]}
               />
             </Box>
           ) : (
@@ -74,13 +93,29 @@ const Diagram: React.FC<Props> = ({ isLoading, integration }) => {
               <Grid item xs={4}>
                 <Box display="flex" flexDirection="column">
                   <LinksTitle />
-                  <FooterLinks links={['connectingFusebit']} integration={integration} />
+                  <FooterLinks
+                    links={['connectingFusebit', 'systemArchitecture', 'marketplaceComponent']}
+                    integration={integration}
+                  />
                 </Box>
               </Grid>
               <Grid item xs={4}>
                 <Box display="flex" flexDirection="column" width="285px" m="0 auto">
                   <LinksTitle />
-                  <FooterLinks links={['gettingStarted', 'programmingModel']} integration={integration} />
+                  <FooterLinks
+                    links={['gettingStarted', 'programmingModel', 'developingLocally']}
+                    integration={integration}
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={4}>
+                <Box display="flex" flexDirection="column" width="360px" m="0 auto">
+                  <LinksTitle />
+                  <FooterLinks
+                    links={['configureConnector', 'implementingCustomConnectors']}
+                    integration={integration}
+                    connectors={installedConnectors as Connector[]}
+                  />
                 </Box>
               </Grid>
             </Grid>

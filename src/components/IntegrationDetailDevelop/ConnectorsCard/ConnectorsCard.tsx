@@ -3,8 +3,6 @@ import { useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import differenceWith from 'lodash.differencewith';
-import { useAccountConnectorsGetAll } from '@hooks/api/v2/account/connector/useGetAll';
-import { useAuthContext } from '@hooks/useAuthContext';
 import { useGetIntegrationFromCache } from '@hooks/useGetIntegrationFromCache';
 import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 import { useModal } from '@hooks/useModal';
@@ -20,11 +18,9 @@ import { INTEGRATION_CARD_ID } from '@components/IntegrationDetailDevelop/Integr
 import arrowIcon from '@assets/arrow-right-black.svg';
 import useUpdateLineConnectors from '@hooks/useUpdateLineConnectors';
 import { trackEventMemoized } from '@utils/analytics';
-
-interface Props {
-  processing: boolean;
-  className?: string;
-}
+import { InstalledConnectorType } from '@interfaces/integration';
+import { ApiResponse } from '@hooks/useAxios';
+import { Connector } from '@interfaces/connector';
 
 const StyledSeeMoreLink = styled.a`
   display: flex;
@@ -47,8 +43,19 @@ const StyledSeeMoreLink = styled.a`
   }
 `;
 
-const ConnectorsCard: React.FC<Props> = ({ className, processing }) => {
-  const { userData } = useAuthContext();
+interface Props {
+  processing: boolean;
+  className?: string;
+  connectors:
+    | ApiResponse<{
+        items: Connector[];
+      }>
+    | undefined;
+  installedConnectors: InstalledConnectorType[];
+  isLoading: boolean;
+}
+
+const ConnectorsCard: React.FC<Props> = ({ className, processing, connectors, installedConnectors, isLoading }) => {
   const [connectorModalOpen, setConnectorModalOpen] = useModal();
   const [linkExistingModalOpen, setLinkExistingModalOpen] = useModal();
   const matchesMobile = useMediaQuery('(max-width: 450px)');
@@ -56,33 +63,7 @@ const ConnectorsCard: React.FC<Props> = ({ className, processing }) => {
   const { getRedirectLink } = useGetRedirectLink();
   const updateLines = useUpdateLineConnectors();
 
-  const { data: connectors, isLoading } = useAccountConnectorsGetAll({
-    enabled: userData.token,
-    accountId: userData.accountId,
-    subscriptionId: userData.subscriptionId,
-  });
-
   const integrationData = useGetIntegrationFromCache();
-
-  const installedConnectors = useMemo(() => {
-    return (integrationData?.data.data.components || [])
-      .map((component) => {
-        const matchingConnector = connectors?.data.items.find((c) => c.id === component.entityId);
-        const connectorWithComponentData = {
-          ...component,
-          ...matchingConnector,
-        };
-
-        return (
-          connectorWithComponentData || {
-            ...component,
-            missing: true,
-            id: component.entityId,
-          }
-        );
-      })
-      .filter((c) => c.entityType === 'connector');
-  }, [connectors, integrationData]);
 
   const isLinkExistingDisabled = useMemo(
     () =>
