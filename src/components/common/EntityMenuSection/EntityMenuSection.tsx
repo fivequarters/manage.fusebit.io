@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { useSortingPreferences } from '@hooks/useSortingPreferences';
 import check from '../../../assets/check.svg';
 import rightArrow from '../../../assets/arrow-right-black.svg';
 
@@ -72,22 +73,15 @@ interface Props {
   items?: {
     id: string;
     dateAdded: string;
+    sortableCreatedAt: Date;
+    sortableLastModified: Date;
     to: string;
   }[];
 }
 
 const EntityMenuSection = ({ title, items = [], linkTitleTo, onClose }: Props) => {
   const { id } = useParams<{ id: string }>();
-
-  const compare = (left: any, right: any) => {
-    if (left < right) {
-      return 1;
-    }
-    if (left > right) {
-      return -1;
-    }
-    return 0;
-  };
+  const { order, orderBy, handleSorting } = useSortingPreferences();
 
   return (
     <>
@@ -104,7 +98,9 @@ const EntityMenuSection = ({ title, items = [], linkTitleTo, onClose }: Props) =
       </StyledContainer>
       {items
         .sort((a, b) => {
-          return compare(a.dateAdded, b.dateAdded);
+          return order === 'asc'
+            ? handleSorting(a[orderBy as keyof typeof a], b[orderBy as keyof typeof b])
+            : handleSorting(b[orderBy as keyof typeof b], a[orderBy as keyof typeof a]);
         })
         .slice(0, 5)
         .map((item) => (
