@@ -1,8 +1,8 @@
 import { SetStateAction, useEffect, useState } from 'react';
 import constate from 'constate';
 
-const ORDER_DEFAULT_PREFERENCE = 'asc';
-const ORDER_BY_DEFAULT_PREFERENCE = 'sortableCreatedAt';
+const ORDER_DEFAULT = 'asc';
+const ORDER_BY_DEFAULT = 'sortableCreatedAt';
 
 export enum OrderType {
   ORDER = 'order',
@@ -10,8 +10,8 @@ export enum OrderType {
 }
 
 const _useSortingPreferences = () => {
-  const [order, setOrder] = useState(ORDER_DEFAULT_PREFERENCE);
-  const [orderBy, setOrderBy] = useState(ORDER_BY_DEFAULT_PREFERENCE);
+  const [order, setOrder] = useState(ORDER_DEFAULT);
+  const [orderBy, setOrderBy] = useState(ORDER_BY_DEFAULT);
 
   const handleSorting = (left: any, right: any) => {
     if (left < right) {
@@ -33,8 +33,8 @@ const _useSortingPreferences = () => {
   };
 
   useEffect(() => {
-    initSortingPreference(OrderType.ORDER, ORDER_DEFAULT_PREFERENCE, setOrder);
-    initSortingPreference(OrderType.ORDER_BY, ORDER_BY_DEFAULT_PREFERENCE, setOrderBy);
+    initSortingPreference(OrderType.ORDER, ORDER_DEFAULT, setOrder);
+    initSortingPreference(OrderType.ORDER_BY, ORDER_BY_DEFAULT, setOrderBy);
   }, []);
 
   const handleSortingPreferenceChange = (type: OrderType.ORDER | OrderType.ORDER_BY, newOrder: string) => {
