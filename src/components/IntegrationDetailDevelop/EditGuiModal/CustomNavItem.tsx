@@ -1,28 +1,26 @@
 import { Box } from '@material-ui/core';
 import { urlOrSvgToImage } from '@utils/utils';
 import React from 'react';
-import * as SC from '@components/globalStyle';
+import * as CSC from '@components/globalStyle';
 import styled from 'styled-components';
 
-const StyledEditorNavIcon = styled.img`
-  height: 15px;
-  width: 15px;
-  object-fit: contain;
-  margin-right: 10px;
-`;
-
 const StyledEditorNavText = styled.div`
-  ${SC.editorNavTextStyles}
+  ${CSC.editorNavTextStyles}
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
   transition: all 0.1s linear;
 `;
 
-const StyledWrapper = styled(Box)`
+const StyledWrapper = styled(Box)<{ active?: boolean }>`
   padding: 8px;
   border-radius: 4px;
   transition: all 0.25s linear;
+
+  background-color: ${(props) => props.active && 'var(--secondary-color)'};
+  & > div {
+    font-weight: ${(props) => props.active && 600};
+  }
 
   &:hover {
     background-color: var(--secondary-color);
@@ -38,14 +36,15 @@ interface Props {
   id?: string;
   icon: string;
   name: string;
+  active?: boolean;
   onClick?: () => void;
 }
 
-const CustomNavItem: React.FC<Props> = ({ id, icon, name, onClick }) => {
+const CustomNavItem: React.FC<Props> = ({ id, icon, name, onClick, active }) => {
   return (
-    <StyledWrapper id={id} display="flex" alignItems="center" mb="6px" onClick={onClick}>
-      <StyledEditorNavIcon src={urlOrSvgToImage(icon)} />
-      <StyledEditorNavText>{name}</StyledEditorNavText>
+    <StyledWrapper id={id} display="flex" alignItems="center" mb="6px" onClick={onClick} active={active}>
+      <CSC.StyledEditorNavIcon data-parent-id={id} src={urlOrSvgToImage(icon)} />
+      <StyledEditorNavText data-parent-id={id}>{name}</StyledEditorNavText>
     </StyledWrapper>
   );
 };

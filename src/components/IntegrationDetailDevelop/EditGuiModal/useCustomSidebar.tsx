@@ -81,6 +81,7 @@ const useCustomSidebar = ({ isEditorRunning, sampleAppUrl, onSnippetsModalOpen }
         nav?.appendChild(div);
         ReactDOM.render(
           <SidebarOptions
+            isEditorRunning={isEditorRunning}
             integrationData={integrationData?.data}
             sampleAppUrl={sampleAppUrl}
             integrationsFeed={integrationsFeed.data}
