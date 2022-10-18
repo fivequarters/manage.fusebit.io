@@ -25,6 +25,11 @@ const Code = ({ isEditorRunning }: Props) => {
     setActiveFile(file);
   };
 
+  const handleDelete = (deletedFile: string) => {
+    const filteredFiles = files.filter((file) => file !== deletedFile);
+    setFiles(filteredFiles);
+  };
+
   const handleOnSubmit = (newFile: string) => {
     if (newFile !== '') {
       window.editor?.addFile(newFile);
@@ -49,7 +54,9 @@ const Code = ({ isEditorRunning }: Props) => {
             icon={fileIcon}
             name={file}
             onClick={() => handleClick(file)}
+            onDelete={(deletedFile) => handleDelete(deletedFile)}
             active={file === activeFile}
+            enableDelete
           />
         );
       })}
