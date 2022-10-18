@@ -1,9 +1,10 @@
 import { Box } from '@material-ui/core';
 import { urlOrSvgToImage } from '@utils/utils';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import deleteIcon from '@assets/delete.svg';
 import * as CSC from '@components/globalStyle';
 import styled from 'styled-components';
+import useOnClickOutside from '@hooks/useOnClickOutside';
 
 const StyledEditorNavText = styled.div`
   ${CSC.editorNavTextStyles}
@@ -63,7 +64,7 @@ const StyledDeleteBackground = styled.div<{ active: boolean }>`
   transition: all 0.25s ease-in-out;
 `;
 
-const StyledDeleteModal = styled(Box)`
+const StyledDeleteModal = styled.div`
   position: fixed;
   left: 50%;
   top: 50%;
@@ -118,6 +119,9 @@ const CustomNavItem: React.FC<Props> = ({ id, icon, name, onClick, active, enabl
   const [isHovering, setIsHovering] = useState(false);
   const [deleteModalActive, setDeleteModalActive] = useState(false);
 
+  const ref = useRef(null);
+  useOnClickOutside({ ref, callback: () => setDeleteModalActive(false) });
+
   return (
     <StyledWrapper
       onMouseEnter={() => setIsHovering(true)}
@@ -143,7 +147,7 @@ const CustomNavItem: React.FC<Props> = ({ id, icon, name, onClick, active, enabl
             }}
           />
           <StyledDeleteBackground active={deleteModalActive}>
-            <StyledDeleteModal>
+            <StyledDeleteModal ref={ref}>
               <StyledModalTitle>Are you sure you want to delete {id}?</StyledModalTitle>
               <Box display="flex" alignItems="center" mt="16px">
                 <StyledButton
