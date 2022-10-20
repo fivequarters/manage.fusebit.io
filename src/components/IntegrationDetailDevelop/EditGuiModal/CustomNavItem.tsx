@@ -31,7 +31,6 @@ export const StyledDeleteIcon = styled.img<{ active?: boolean }>`
 const StyledWrapper = styled(Box)<{ active?: boolean }>`
   display: flex;
   align-items: center;
-  position: relative;
   padding: 8px;
   border-radius: 4px;
 
