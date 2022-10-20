@@ -22,6 +22,7 @@ const Frame = styled.div`
   white-space: nowrap;
   overflow-x: hidden;
   vertical-align: middle;
+  margin-left: 8px;
   color: #24292e;
   fill: #24292e;
 `;
