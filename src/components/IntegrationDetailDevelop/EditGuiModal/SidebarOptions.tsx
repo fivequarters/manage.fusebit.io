@@ -27,8 +27,8 @@ const SidebarOptions: React.FC<Props> = ({
 
   const selectDefaultActiveFile = () => {
     const selectedFileContent = window.editor.getSelectedFileContent();
-    const files = window.editor.getFiles();
-    const selectedFileName = Object.keys(files).find((fileKey) => files[fileKey] === selectedFileContent);
+    const editorFiles = window.editor.getFiles();
+    const selectedFileName = Object.keys(editorFiles).find((fileKey) => editorFiles[fileKey] === selectedFileContent);
 
     if (selectedFileName) {
       setActiveFile(selectedFileName);
