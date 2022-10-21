@@ -43,7 +43,7 @@ const Code = ({ isEditorRunning }: Props) => {
       return acc;
     }
 
-    acc[file] = { ...acc[file] };
+    acc[file] = acc[file] || {};
     acc[file] = createStructure(acc[file], splittedFile.slice(1).join('/'), fullName);
 
     return acc;
@@ -54,7 +54,7 @@ const Code = ({ isEditorRunning }: Props) => {
       const filesKeys = Object.keys(window.editor?.getFiles() || {}).reverse();
       setCodeFiles(filesKeys);
     }
-  }, [isEditorRunning, createStructure]);
+  }, [isEditorRunning]);
 
   useEffect(() => {
     const newFileStructure = codeFiles.reduce((acc: any, file) => {
@@ -62,6 +62,8 @@ const Code = ({ isEditorRunning }: Props) => {
 
       return acc;
     }, {});
+
+    console.log(newFileStructure);
 
     setFiles(newFileStructure);
   }, [codeFiles, createStructure]);
@@ -72,6 +74,7 @@ const Code = ({ isEditorRunning }: Props) => {
   };
 
   const handleDelete = (deletedFile: string) => {
+    window.editor.deleteFile(deletedFile);
     const filteredCodeFiles = codeFiles.filter((file) => file !== deletedFile);
     setCodeFiles(filteredCodeFiles);
   };

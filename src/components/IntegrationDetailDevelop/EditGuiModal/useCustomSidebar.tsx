@@ -2,10 +2,12 @@ import { useGetConnectorsFeed } from '@hooks/useGetConnectorsFeed';
 import { useGetIntegrationFromCache } from '@hooks/useGetIntegrationFromCache';
 import { useGetIntegrationsFeed } from '@hooks/useGetIntegrationsFeed';
 import { ParsedSnippet } from '@interfaces/feed';
+import { createMuiTheme, responsiveFontSizes, ThemeProvider } from '@material-ui/core';
 import { ReactElement, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import NavCategoryTooltip from './NavCategoryTooltip';
 import SidebarOptions from './SidebarOptions';
+import { lightTheme } from '~/theme/appTheme';
 
 const appendCategoryTooltip = (
   category: Element | null,
@@ -80,14 +82,16 @@ const useCustomSidebar = ({ isEditorRunning, sampleAppUrl, onSnippetsModalOpen }
         div.setAttribute('id', 'sidebar-options');
         nav?.appendChild(div);
         ReactDOM.render(
-          <SidebarOptions
-            isEditorRunning={isEditorRunning}
-            integrationData={integrationData?.data}
-            sampleAppUrl={sampleAppUrl}
-            integrationsFeed={integrationsFeed.data}
-            connectorsFeed={connectorsFeed.data}
-            onSnippetsModalOpen={onSnippetsModalOpen}
-          />,
+          <ThemeProvider theme={responsiveFontSizes(createMuiTheme(lightTheme))}>
+            <SidebarOptions
+              isEditorRunning={isEditorRunning}
+              integrationData={integrationData?.data}
+              sampleAppUrl={sampleAppUrl}
+              integrationsFeed={integrationsFeed.data}
+              connectorsFeed={connectorsFeed.data}
+              onSnippetsModalOpen={onSnippetsModalOpen}
+            />
+          </ThemeProvider>,
           document.getElementById('sidebar-options')
         );
       }

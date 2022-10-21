@@ -10,6 +10,7 @@ interface Props {
   description: string | React.ReactElement;
   confirmationButtonText?: string;
   hideCancelButton?: boolean;
+  disableClose?: boolean;
 }
 
 const ConfirmationPrompt: React.FC<Props> = ({
@@ -20,6 +21,7 @@ const ConfirmationPrompt: React.FC<Props> = ({
   description,
   confirmationButtonText,
   hideCancelButton,
+  disableClose,
 }) => {
   const onConfirm = () => {
     setOpen(false);
@@ -32,6 +34,7 @@ const ConfirmationPrompt: React.FC<Props> = ({
       open={open}
       hasCancel={!hideCancelButton}
       onAccept={onConfirm}
+      disableClose={disableClose}
       acceptButtonText={confirmationButtonText || 'Delete'}
       onClose={() => setOpen(false)}
     >

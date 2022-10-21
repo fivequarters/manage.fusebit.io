@@ -12,7 +12,7 @@ const StyledDialog = styled(Dialog)`
 `;
 
 const StyledTitle = styled(DialogTitle)`
-  padding-top: 64px;
+  padding-top: 64px !important;
 
   > h2 {
     font-size: 24px;

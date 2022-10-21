@@ -582,7 +582,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
                 >
                   Save
                 </Button>
-                <ButtonGroup variant={assumeHasConnectors ? 'contained' : 'outlined'} style={{ marginRight: '16px' }}>
+                <ButtonGroup variant={assumeHasConnectors ? 'contained' : 'outlined'} style={{ marginRight: 'auto' }}>
                   <Button
                     id="run"
                     startIcon={<PlayArrowOutlined />}
@@ -596,6 +596,7 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
                   </Button>
                   <Button
                     onClick={openConfigureModal}
+                    style={{ minWidth: '16px' }}
                     size="small"
                     variant={assumeHasConnectors ? 'contained' : 'outlined'}
                     color="primary"
