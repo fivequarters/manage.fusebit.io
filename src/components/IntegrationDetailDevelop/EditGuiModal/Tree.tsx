@@ -56,6 +56,8 @@ const DropdownIcon = styled.img<{ active: boolean }>`
   transition: all 0.25s linear;
 `;
 
+const margin = 6;
+
 const Tree = React.memo<
   React.HTMLAttributes<HTMLDivElement> & {
     defaultOpen?: boolean;
@@ -71,7 +73,7 @@ const Tree = React.memo<
   const { height, opacity, y } = useSpring({
     from: { height: 0, opacity: 0, y: 0 },
     to: {
-      height: isOpen ? viewHeight : 0,
+      height: isOpen ? viewHeight + margin : 0,
       opacity: isOpen ? 1 : 0,
       y: isOpen ? 0 : 20,
     },

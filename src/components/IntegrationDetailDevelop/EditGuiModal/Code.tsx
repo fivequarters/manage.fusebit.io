@@ -12,78 +12,67 @@ interface Props {
 }
 
 const Code = ({ isEditorRunning }: Props) => {
-  const [codeFiles, setCodeFiles] = useState<string[]>([]);
+  const [codeFiles, setCodeFiles] = useState<{ [key: string]: string }>({});
   const [activeFile, setActiveFile] = useState('integration.js');
   const [files, setFiles] = useState<string[]>([]);
   const [showInput, setShowInput] = useState(false);
 
-  // const structure = {
-  //   folder: {
-  //     folder1: {
-  //       'folder/folder1/anotherFile.js': 'module.exports = () => {};',
-  //     },
-  //     folder2: {
-  //       'b.js': 'module.exports = () => {};',
-  //     },
-  //     folder3: {
-  //       folder4: {
-  //         'c.js': 'module.exports = () => {};',
-  //       },
-  //     },
-  //   },
-  //   archivo: 'module.exports = () => {};',
-  // };
+  const loadEditorCodeFiles = () => {
+    const editorFiles = window.editor.getFiles();
+    setCodeFiles({ ...editorFiles });
+  };
 
-  const createStructure = useCallback((acc: any, fileName: string, fullName: string) => {
+  useEffect(() => {
+    if (isEditorRunning) {
+      loadEditorCodeFiles();
+    }
+  }, [isEditorRunning]);
+
+  const createStructure = useCallback((acc: any, fileName: string, fullName: string, fileContent: string) => {
     const splittedFile = fileName.split('/');
-    const file = splittedFile[0];
+    const element = splittedFile[0];
 
     if (splittedFile.length === 1) {
-      acc[`${fullName}`] = `${fullName}`;
+      acc[fullName] = fileContent;
       return acc;
     }
 
-    acc[file] = acc[file] || {};
-    acc[file] = createStructure(acc[file], splittedFile.slice(1).join('/'), fullName);
+    acc[element] = acc[element] || {};
+    acc[element] = createStructure(acc[element], splittedFile.slice(1).join('/'), fullName, fileContent);
 
     return acc;
   }, []);
 
   useEffect(() => {
-    if (isEditorRunning) {
-      const filesKeys = Object.keys(window.editor?.getFiles() || {}).reverse();
-      setCodeFiles(filesKeys);
-    }
-  }, [isEditorRunning]);
-
-  useEffect(() => {
-    const newFileStructure = codeFiles.reduce((acc: any, file) => {
-      acc = createStructure(acc, file, file);
+    const newFileStructure = Object.keys(codeFiles).reduce((acc: any, key) => {
+      const fileContent = codeFiles[key];
+      acc = createStructure(acc, key, key, fileContent);
 
       return acc;
     }, {});
-
-    console.log(newFileStructure);
 
     setFiles(newFileStructure);
   }, [codeFiles, createStructure]);
 
   const handleClick = (file: string) => {
-    window.editor.selectFile(file);
-    setActiveFile(file);
+    const fileExists = window.editor.fileExistsInSpecification(file);
+
+    if (fileExists) {
+      window.editor?.selectFile(file);
+      setActiveFile(file);
+    }
   };
 
   const handleDelete = (deletedFile: string) => {
     window.editor.deleteFile(deletedFile);
-    const filteredCodeFiles = codeFiles.filter((file) => file !== deletedFile);
-    setCodeFiles(filteredCodeFiles);
+    loadEditorCodeFiles();
   };
 
   const handleOnSubmit = (newFile: string) => {
     if (newFile !== '') {
       window.editor?.addFile(newFile);
+      loadEditorCodeFiles();
       setActiveFile(newFile);
-      setCodeFiles([...codeFiles, newFile]);
     }
 
     setShowInput(false);
@@ -124,6 +113,7 @@ const Code = ({ isEditorRunning }: Props) => {
       title="Code"
       tooltipDescription="All the files needed to run your Fusebit Integration as a microservice on our platform."
     >
+      {mapFolders(files)}
       {showInput && (
         <CustomInputItem
           icon={fileIcon}
@@ -132,7 +122,6 @@ const Code = ({ isEditorRunning }: Props) => {
           }}
         />
       )}
-      {mapFolders(files)}
       <CustomNavItem id="addNewFile" icon={addIcon} name="New File" onClick={() => setShowInput(true)} />
     </CustomNavBase>
   );
