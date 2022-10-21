@@ -44,12 +44,14 @@ const Code = ({ isEditorRunning }: Props) => {
   }, []);
 
   useEffect(() => {
-    const newFileStructure = Object.keys(codeFiles).reduce((acc: any, key) => {
-      const fileContent = codeFiles[key];
-      acc = createStructure(acc, key, key, fileContent);
+    const newFileStructure = Object.keys(codeFiles)
+      .sort()
+      .reduce((acc: any, key) => {
+        const fileContent = codeFiles[key];
+        acc = createStructure(acc, key, key, fileContent);
 
-      return acc;
-    }, {});
+        return acc;
+      }, {});
     setFiles(newFileStructure);
   }, [codeFiles, createStructure]);
 
