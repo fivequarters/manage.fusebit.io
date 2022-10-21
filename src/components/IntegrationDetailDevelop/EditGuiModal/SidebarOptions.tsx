@@ -25,7 +25,7 @@ const SidebarOptions: React.FC<Props> = ({
 }) => {
   const [activeFile, setActiveFile] = useState('');
 
-  const selectDefaultActiveFile = () => {
+  const setDefaultActiveFile = () => {
     const selectedFileContent = window.editor.getSelectedFileContent();
     const editorFiles = window.editor.getFiles();
     const selectedFileName = Object.keys(editorFiles).find((fileKey) => editorFiles[fileKey] === selectedFileContent);
@@ -39,7 +39,7 @@ const SidebarOptions: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    selectDefaultActiveFile();
+    setDefaultActiveFile();
   }, []);
 
   return (
@@ -48,7 +48,7 @@ const SidebarOptions: React.FC<Props> = ({
         isEditorRunning={isEditorRunning}
         setActiveFile={setActiveFile}
         activeFile={activeFile}
-        selectDefaultActiveFile={selectDefaultActiveFile}
+        setDefaultActiveFile={setDefaultActiveFile}
       />
       <Settings setActiveFile={setActiveFile} activeFile={activeFile} />
       <Tools sampleAppUrl={sampleAppUrl} />

@@ -11,10 +11,10 @@ interface Props {
   isEditorRunning: boolean;
   activeFile: string;
   setActiveFile: (file: string) => void;
-  selectDefaultActiveFile: () => void;
+  setDefaultActiveFile: () => void;
 }
 
-const Code = ({ isEditorRunning, setActiveFile, activeFile, selectDefaultActiveFile }: Props) => {
+const Code = ({ isEditorRunning, setActiveFile, activeFile, setDefaultActiveFile }: Props) => {
   const [codeFiles, setCodeFiles] = useState<{ [key: string]: string }>({});
   const [files, setFiles] = useState<string[]>([]);
   const [showInput, setShowInput] = useState(false);
@@ -54,6 +54,7 @@ const Code = ({ isEditorRunning, setActiveFile, activeFile, selectDefaultActiveF
 
         return acc;
       }, {});
+
     setFiles(newFileStructure);
   }, [codeFiles, createStructure]);
 
@@ -68,12 +69,12 @@ const Code = ({ isEditorRunning, setActiveFile, activeFile, selectDefaultActiveF
 
   const handleDelete = (deletedFile: string) => {
     window.editor.deleteFile(deletedFile);
-    selectDefaultActiveFile();
+    setDefaultActiveFile();
     loadEditorCodeFiles();
   };
 
   const handleOnSubmit = (newFile: string) => {
-    if (newFile !== '') {
+    if (newFile) {
       window.editor?.addFile(newFile);
       loadEditorCodeFiles();
       setActiveFile(newFile);
