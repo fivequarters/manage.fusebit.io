@@ -40,7 +40,6 @@ import useProcessing from '../hooks/useProcessing';
 import useSnippetsModal from './useSnippetsModal';
 import { HEADER_HEIGHT } from './constants';
 import useEditorLoader from './useEditorLoader';
-import useCreateNewFile from './useCreateNewFile';
 import useEditorAnalytics from './useEditorAnalytics';
 import useCustomSidebar from './useCustomSidebar';
 import useBeforeUnload from './useBeforeUnload';
@@ -152,6 +151,7 @@ const StyledEditorContainer = styled.div<{ isGrafanaEnabled?: boolean; isResizin
       &-file,
       &-new-file,
       &-item {
+        display: none;
         font-family: 'Poppins';
         font-size: 14px;
         line-height: 20px;
@@ -410,7 +410,6 @@ const EditGui = React.forwardRef<HTMLDivElement, Props>(({ onClose, integrationI
   const isEditorRunning = useMemo(() => isMounted && !isLoading, [isLoading, isMounted]);
 
   useEditorLoader({ isEditorRunning });
-  useCreateNewFile({ isEditorRunning });
   useEditorAnalytics({ isEditorRunning });
   useCustomSidebar({ isEditorRunning, onSnippetsModalOpen, sampleAppUrl });
   useBeforeUnload({ isEditorRunning, isSaving });

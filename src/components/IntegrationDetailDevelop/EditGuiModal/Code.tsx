@@ -9,11 +9,13 @@ import Tree from './Tree';
 
 interface Props {
   isEditorRunning: boolean;
+  activeFile: string;
+  setActiveFile: (file: string) => void;
+  selectDefaultActiveFile: () => void;
 }
 
-const Code = ({ isEditorRunning }: Props) => {
+const Code = ({ isEditorRunning, setActiveFile, activeFile, selectDefaultActiveFile }: Props) => {
   const [codeFiles, setCodeFiles] = useState<{ [key: string]: string }>({});
-  const [activeFile, setActiveFile] = useState('integration.js');
   const [files, setFiles] = useState<string[]>([]);
   const [showInput, setShowInput] = useState(false);
 
@@ -66,6 +68,7 @@ const Code = ({ isEditorRunning }: Props) => {
 
   const handleDelete = (deletedFile: string) => {
     window.editor.deleteFile(deletedFile);
+    selectDefaultActiveFile();
     loadEditorCodeFiles();
   };
 
@@ -110,7 +113,7 @@ const Code = ({ isEditorRunning }: Props) => {
 
   return (
     <CustomNavBase
-      id="code-custom"
+      id="code"
       title="Code"
       tooltipDescription="All the files needed to run your Fusebit Integration as a microservice on our platform."
     >
