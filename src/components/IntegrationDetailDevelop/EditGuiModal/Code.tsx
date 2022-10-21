@@ -28,17 +28,17 @@ const Code = ({ isEditorRunning }: Props) => {
     }
   }, [isEditorRunning]);
 
-  const createStructure = useCallback((acc: any, fileName: string, fullName: string, fileContent: string) => {
-    const splittedFile = fileName.split('/');
-    const element = splittedFile[0];
+  const createStructure = useCallback((acc: any, fileName: string, fileKey: string, fileContent: string) => {
+    const splittedFileName = fileName.split('/');
+    const element = splittedFileName[0];
 
-    if (splittedFile.length === 1) {
-      acc[fullName] = fileContent;
+    if (splittedFileName.length === 1) {
+      acc[fileKey] = fileContent;
       return acc;
     }
 
     acc[element] = acc[element] || {};
-    acc[element] = createStructure(acc[element], splittedFile.slice(1).join('/'), fullName, fileContent);
+    acc[element] = createStructure(acc[element], splittedFileName.slice(1).join('/'), fileKey, fileContent);
 
     return acc;
   }, []);
@@ -50,7 +50,6 @@ const Code = ({ isEditorRunning }: Props) => {
 
       return acc;
     }, {});
-
     setFiles(newFileStructure);
   }, [codeFiles, createStructure]);
 

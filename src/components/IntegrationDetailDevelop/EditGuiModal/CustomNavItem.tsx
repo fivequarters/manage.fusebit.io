@@ -15,12 +15,14 @@ const StyledEditorNavText = styled.div`
 `;
 
 export const StyledDeleteIcon = styled.img<{ active?: boolean }>`
+  position: relative;
   height: 15px;
   width: 15px;
   object-fit: contain;
   margin-left: auto;
   margin-right: 3px;
   opacity: ${(props) => (props.active ? 0.8 : 0)};
+  z-index: 10;
   transition: all 0.1s linear;
 
   &:hover {
@@ -71,7 +73,12 @@ const CustomNavItem: React.FC<Props> = ({ id, icon, name, onClick, active, enabl
       display="flex"
       alignItems="center"
       mb="6px"
-      onClick={onClick}
+      onClick={(e) => {
+        const target = e.target as HTMLElement;
+        if (target.getAttribute('id') === id || target.getAttribute('data-parent-id') === id) {
+          onClick?.();
+        }
+      }}
       active={active}
     >
       <CSC.StyledEditorNavIcon data-parent-id={id} src={urlOrSvgToImage(icon)} />
@@ -79,11 +86,13 @@ const CustomNavItem: React.FC<Props> = ({ id, icon, name, onClick, active, enabl
       {enableDelete && (
         <>
           <StyledDeleteIcon
+            id="deleteIcon"
             data-parent-id={id}
             src={urlOrSvgToImage(deleteIcon)}
             active={isHovering}
             onClick={(e) => {
               e.stopPropagation();
+              setIsHovering(false);
               setDeleteModalActive(true);
             }}
           />
