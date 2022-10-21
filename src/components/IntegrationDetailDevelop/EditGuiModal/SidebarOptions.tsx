@@ -23,18 +23,15 @@ const SidebarOptions: React.FC<Props> = ({
   sampleAppUrl,
   isEditorRunning,
 }) => {
-  const [activeFile, setActiveFile] = useState('integration.js');
+  const [activeFile, setActiveFile] = useState('');
 
   const selectDefaultActiveFile = () => {
-    const fileExists = window.editor.fileExistsInSpecification('integration.js');
-    const firstFileKey = Object.keys(window.editor.getFiles())[0];
+    const selectedFileContent = window.editor.getSelectedFileContent();
+    const files = window.editor.getFiles();
+    const selectedFileName = Object.keys(files).find((fileKey) => files[fileKey] === selectedFileContent);
 
-    if (fileExists) {
-      window.editor?.selectFile('integration.js');
-      setActiveFile('integration.js');
-    } else if (firstFileKey) {
-      window.editor.selectFile(firstFileKey);
-      setActiveFile(firstFileKey);
+    if (selectedFileName) {
+      setActiveFile(selectedFileName);
     } else {
       window.editor.selectSettingsConfiguration();
       setActiveFile(CONFIGURATION_FILE_ID);
