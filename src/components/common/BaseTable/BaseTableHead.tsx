@@ -1,3 +1,4 @@
+import { OrderType } from '@hooks/useSortingPreferences';
 import { TableCell, TableHead, TableRow, Checkbox, TableSortLabel } from '@material-ui/core';
 import { BaseTableProps } from './types';
 
@@ -9,9 +10,8 @@ const BaseTableHead = ({
   isAllChecked,
   hideCheckAll,
   order,
-  setOrder,
   orderBy,
-  setOrderBy,
+  onSortingPreferenceChange,
 }: Pick<
   BaseTableProps,
   | 'rows'
@@ -22,14 +22,14 @@ const BaseTableHead = ({
   | 'hideCheckAll'
   | 'order'
   | 'orderBy'
-  | 'setOrder'
-  | 'setOrderBy'
+  | 'onSortingPreferenceChange'
 >) => {
   const handleSortRequest = (cellId: string) => {
     const isAsc = orderBy === cellId && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(cellId);
+    onSortingPreferenceChange?.(OrderType.ORDER, isAsc ? 'desc' : 'asc');
+    onSortingPreferenceChange?.(OrderType.ORDER_BY, cellId);
   };
+
   return (
     <TableHead>
       <TableRow>

@@ -16,6 +16,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { ROWS_PER_PAGE_OPTIONS } from '@hooks/usePagination';
 import * as CSC from '@components/globalStyle';
+import { useSortingPreferences } from '@hooks/useSortingPreferences';
 import styled from 'styled-components';
 import Row from './Row';
 import { BaseTableProps } from './types';
@@ -121,22 +122,11 @@ const BaseTable: React.FC<BaseTableProps> = ({
   searchInputHandler,
   textVal,
 }) => {
-  const [orderBy, setOrderBy] = React.useState('sortableCreatedAt');
-  const [order, setOrder] = React.useState('asc');
-
-  const compare = (left: any, right: any) => {
-    if (left < right) {
-      return 1;
-    }
-    if (left > right) {
-      return -1;
-    }
-    return 0;
-  };
+  const { order, orderBy, handleSortingPreferenceChange, handleSorting } = useSortingPreferences();
 
   const computedRowsPerPage = rows
     .sort((a, b) => {
-      return order === 'asc' ? compare(a[orderBy], b[orderBy]) : compare(b[orderBy], a[orderBy]);
+      return order === 'asc' ? handleSorting(a[orderBy], b[orderBy]) : handleSorting(b[orderBy], a[orderBy]);
     })
     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   const isMobile = useMediaQuery('(max-width: 880px)');
@@ -196,8 +186,7 @@ const BaseTable: React.FC<BaseTableProps> = ({
               hideCheckAll={hideCheckAll}
               order={order}
               orderBy={orderBy}
-              setOrder={setOrder}
-              setOrderBy={setOrderBy}
+              onSortingPreferenceChange={handleSortingPreferenceChange}
             />
           )}
           <TableBody>

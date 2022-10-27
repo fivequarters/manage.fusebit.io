@@ -1,5 +1,6 @@
 import React from 'react';
 import { BoxProps, ButtonProps } from '@material-ui/core';
+import { OrderType } from '@hooks/useSortingPreferences';
 
 export interface BaseTableRow {
   id: string;
@@ -47,8 +48,7 @@ export interface BaseTableProps {
   actionsContainerProps?: BoxProps;
   order?: string;
   orderBy?: string;
-  setOrder?: any;
-  setOrderBy?: any;
+  onSortingPreferenceChange?: (type: OrderType.ORDER | OrderType.ORDER_BY, newOrder: string) => void;
   searchBarLabel?: string;
   searchInputHandler?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   textVal?: string;

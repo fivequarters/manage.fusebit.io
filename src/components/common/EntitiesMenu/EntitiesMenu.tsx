@@ -52,6 +52,9 @@ const EntitiesMenu = ({ desktop, mobile }: Props) => {
           onClose={onClose}
           items={integrations?.data?.items?.map((i) => ({
             id: i.id,
+            dateAdded: i.dateAdded,
+            sortableCreatedAt: new Date(i.dateAdded),
+            sortableLastModified: new Date(i.dateModified),
             to: getRedirectLink(`/integration/${i.id}/develop`),
           }))}
           linkTitleTo={getRedirectLink('/integrations/overview')}
@@ -61,6 +64,9 @@ const EntitiesMenu = ({ desktop, mobile }: Props) => {
           onClose={onClose}
           items={connectors?.data?.items?.map((c) => ({
             id: c.id,
+            dateAdded: c.dateAdded,
+            sortableCreatedAt: new Date(c.dateAdded),
+            sortableLastModified: new Date(c.dateModified),
             to: getRedirectLink(`/connector/${c.id}/configure`),
           }))}
           linkTitleTo={getRedirectLink('/connectors/overview')}
