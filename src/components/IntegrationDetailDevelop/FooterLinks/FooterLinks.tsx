@@ -1,96 +1,78 @@
+import { Connector } from '@interfaces/connector';
 import { Integration } from '@interfaces/integration';
-import { trackEventMemoized } from '@utils/analytics';
-import styled from 'styled-components';
-
-export const StyledLink = styled.a`
-  display: flex;
-  align-items: center;
-  font-size: 14px;
-  line-height: 16px;
-  color: var(--black);
-  text-decoration: underline;
-  margin-bottom: 16px;
-  margin-left: 5px;
-  transition: all 0.25s linear;
-
-  &:hover {
-    color: var(--primary-color);
-
-    > div {
-      background-color: var(--primary-color);
-    }
-  }
-
-  &:visited {
-    color: #959595;
-
-    > div {
-      background-color: #959595;
-    }
-  }
-`;
-
-export const StyledBullet = styled.div`
-  height: 4px;
-  width: 4px;
-  border-radius: 50%;
-  background-color: var(--black);
-  margin-right: 10px;
-  transition: all 0.25s linear;
-`;
+import ConnectorLink from './ConnectorLink';
+import Link from './Link';
 
 interface Props {
-  links: ('connectingFusebit' | 'gettingStarted' | 'programmingModel')[];
+  links: (
+    | 'connectingFusebit'
+    | 'gettingStarted'
+    | 'programmingModel'
+    | 'systemArchitecture'
+    | 'marketplaceComponent'
+    | 'developingLocally'
+    | 'configureConnector'
+    | 'implementingCustomConnectors'
+  )[];
   integration?: Integration;
+  connectors?: Connector[];
 }
 
-const FooterLinks = ({ links, integration }: Props) => {
+const FooterLinks = ({ links, integration, connectors }: Props) => {
   return (
     <>
       {links.includes('connectingFusebit') && (
-        <StyledLink
-          target="_blank"
-          rel="noopener_noreferrer"
+        <Link
+          integration={integration}
+          text="Connecting Fusebit with Your Application"
           href="https://developer.fusebit.io/docs/connecting-fusebit-with-your-application"
-          onClick={() =>
-            trackEventMemoized('Docs Connect Fusebit Link Clicked', 'Integration', {
-              Integration: integration?.tags['fusebit.feedId'],
-            })
-          }
-        >
-          <StyledBullet />
-          Connecting Fusebit with Your Application
-        </StyledLink>
+        />
       )}
       {links.includes('gettingStarted') && (
-        <StyledLink
-          target="_blank"
-          onClick={() =>
-            trackEventMemoized('Docs Getting Started Link Clicked', 'Integration', {
-              Integration: integration?.tags['fusebit.feedId'],
-            })
-          }
-          rel="noopener_noreferrer"
+        <Link
+          integration={integration}
+          text="Getting Started"
           href="https://developer.fusebit.io/docs/getting-started"
-        >
-          <StyledBullet />
-          Getting Started
-        </StyledLink>
+        />
       )}
       {links.includes('programmingModel') && (
-        <StyledLink
-          target="_blank"
-          rel="noopener_noreferrer"
-          onClick={() =>
-            trackEventMemoized('Docs Programming Model Link Clicked', 'Integration', {
-              Integration: integration?.tags['fusebit.feedId'],
-            })
-          }
+        <Link
+          integration={integration}
+          text="Integration Programming Model"
           href="https://developer.fusebit.io/docs/integration-programming-model"
-        >
-          <StyledBullet />
-          Integration Programming Model
-        </StyledLink>
+        />
+      )}
+      {links.includes('systemArchitecture') && (
+        <Link
+          integration={integration}
+          text="System Architecture"
+          href="https://developer.fusebit.io/docs/fusebit-system-architecture"
+        />
+      )}
+      {links.includes('marketplaceComponent') && (
+        <Link
+          integration={integration}
+          text="Marketplace Component"
+          href="https://developer.fusebit.io/docs/marketplace-component"
+        />
+      )}
+      {links.includes('developingLocally') && (
+        <Link
+          integration={integration}
+          text="Developing Locally"
+          href="https://developer.fusebit.io/docs/developing-locally"
+        />
+      )}
+      {links.includes('configureConnector') &&
+        connectors?.map((connector) => (
+          <ConnectorLink key={connector.id} integration={integration} connector={connector} />
+        ))}
+      {links.includes('implementingCustomConnectors') && (
+        <Link
+          integration={integration}
+          text="Implementing Custom Connectors"
+          href="https://developer.fusebit.io/docs/connector-implementation-guide"
+        />
       )}
     </>
   );
