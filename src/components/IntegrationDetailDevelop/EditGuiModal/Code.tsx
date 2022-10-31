@@ -100,6 +100,7 @@ const Code = ({ isEditorRunning, setActiveFile, activeFile, setDefaultActiveFile
             onDelete={(deletedItem) => handleDelete(deletedItem)}
             active={key === activeFile}
             enableDelete
+            enableRename
           />
         );
       }
