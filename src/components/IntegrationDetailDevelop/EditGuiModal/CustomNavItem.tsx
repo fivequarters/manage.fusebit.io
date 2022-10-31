@@ -80,22 +80,36 @@ interface Props {
   enableRename?: boolean;
   onDelete?: (id: string) => void;
   onClick?: () => void;
+  onRename?: (newFileName: string) => void;
 }
 
-const CustomNavItem: React.FC<Props> = ({ id, icon, name, onClick, active, enableDelete, enableRename, onDelete }) => {
+const CustomNavItem: React.FC<Props> = ({
+  id,
+  icon,
+  name,
+  onClick,
+  onRename,
+  active,
+  enableDelete,
+  enableRename,
+  onDelete,
+}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [deleteModalActive, setDeleteModalActive] = useState(false);
 
-  const handleRename = (newName: string) => {
-    setIsHovering(false);
-    setIsEditing(false);
-  };
-
   return (
     <>
       {isEditing ? (
-        <CustomInputItem icon={fileIcon} initialValue={id} onSubmit={handleRename} />
+        <CustomInputItem
+          icon={fileIcon}
+          initialValue={id}
+          onSubmit={(newFileName) => {
+            setIsHovering(false);
+            setIsEditing(false);
+            onRename?.(newFileName);
+          }}
+        />
       ) : (
         <StyledWrapper
           onMouseEnter={() => setIsHovering(true)}

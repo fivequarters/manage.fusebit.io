@@ -67,6 +67,17 @@ const Code = ({ isEditorRunning, setActiveFile, activeFile, setDefaultActiveFile
     }
   };
 
+  const handleRename = (file: string, newFileName: string) => {
+    if (file !== newFileName) {
+      const content = window.editor?.getFileFromSpecification(file);
+      window.editor?.addFileToSpecification(newFileName, content, false);
+      window.editor?.deleteFile(file);
+      window.editor?.selectFile(newFileName);
+      loadEditorCodeFiles();
+      setActiveFile(newFileName);
+    }
+  };
+
   const handleDelete = (deletedFile: string) => {
     window.editor.deleteFile(deletedFile);
     setDefaultActiveFile();
@@ -97,6 +108,7 @@ const Code = ({ isEditorRunning, setActiveFile, activeFile, setDefaultActiveFile
             icon={fileIcon}
             name={fileName}
             onClick={() => handleClick(key)}
+            onRename={(newFileName) => handleRename(key, newFileName)}
             onDelete={(deletedItem) => handleDelete(deletedItem)}
             active={key === activeFile}
             enableDelete
