@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import fileIcon from '@assets/file.svg';
 import addIcon from '@assets/add.svg';
-import codeIcon from '@assets/code.svg';
+import folderIcon from '@assets/folder.svg';
 import CustomNavBase from './CustomNavBase';
 import CustomNavItem from './CustomNavItem';
 import CustomInputItem from './CustomInputItem';
@@ -105,7 +105,7 @@ const Code = ({ isEditorRunning, setActiveFile, activeFile, setDefaultActiveFile
       }
 
       return (
-        <Tree key={key} name={key} icon={codeIcon} enableDropdownArrow>
+        <Tree key={key} name={key} icon={folderIcon} enableDropdownArrow>
           {mapFolders(file)}
         </Tree>
       );

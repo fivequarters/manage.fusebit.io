@@ -52,7 +52,7 @@ const StyledWrapper = styled(Box)<{ active?: boolean }>`
 `;
 
 interface Props {
-  id?: string;
+  id: string;
   icon: string;
   name: string;
   active?: boolean;
