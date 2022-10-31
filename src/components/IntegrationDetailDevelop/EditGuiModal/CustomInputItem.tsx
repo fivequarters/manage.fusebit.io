@@ -17,18 +17,20 @@ const StyledEditorNavText = styled.input`
 
 const StyledWrapper = styled(Box)<{ active?: boolean }>`
   position: relative;
+  height: 36px;
   padding: 8px;
   transition: all 0.25s linear;
 `;
 
 interface Props {
   id?: string;
+  initialValue?: string;
   onSubmit: (value: string) => void;
   icon: string;
 }
 
-const CustomInputItem: React.FC<Props> = ({ id, onSubmit, icon }) => {
-  const [value, setValue] = useState('');
+const CustomInputItem: React.FC<Props> = ({ id, initialValue, onSubmit, icon }) => {
+  const [value, setValue] = useState(initialValue || '');
   const ref = useRef(null);
 
   useOnClickOutside({

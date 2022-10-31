@@ -1,11 +1,13 @@
 import { Box } from '@material-ui/core';
 import { urlOrSvgToImage } from '@utils/utils';
 import React, { useState } from 'react';
+import fileIcon from '@assets/file.svg';
 import deleteIcon from '@assets/delete.svg';
 import pencilIcon from '@assets/pencil.svg';
 import * as CSC from '@components/globalStyle';
 import styled, { css } from 'styled-components';
 import ConfirmationPrompt from '@components/common/ConfirmationPrompt';
+import CustomInputItem from './CustomInputItem';
 
 const StyledEditorNavText = styled.div`
   ${CSC.editorNavTextStyles}
@@ -50,6 +52,7 @@ const StyledRenameIcon = styled.img<{ active?: boolean }>`
 const StyledWrapper = styled(Box)<{ active?: boolean }>`
   display: flex;
   align-items: center;
+  height: 36px;
   padding: 8px;
   border-radius: 4px;
 
@@ -80,68 +83,81 @@ interface Props {
 }
 
 const CustomNavItem: React.FC<Props> = ({ id, icon, name, onClick, active, enableDelete, enableRename, onDelete }) => {
+  const [isEditing, setIsEditing] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [deleteModalActive, setDeleteModalActive] = useState(false);
 
-  return (
-    <StyledWrapper
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
-      id={id}
-      display="flex"
-      alignItems="center"
-      mb="6px"
-      onClick={(e) => {
-        const target = e.target as HTMLElement;
-        if (target.getAttribute('id') === id || target.getAttribute('data-parent-id') === id) {
-          onClick?.();
-        }
-      }}
-      active={active}
-    >
-      <CSC.StyledEditorNavIcon data-parent-id={id} src={urlOrSvgToImage(icon)} />
-      <StyledEditorNavText data-parent-id={id}>{name}</StyledEditorNavText>
-      <StyledIconsWrapper>
-        {enableRename && (
-          <StyledRenameIcon
-            id="pencilIcon"
-            data-parent-id={id}
-            src={urlOrSvgToImage(pencilIcon)}
-            active={isHovering}
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsHovering(false);
-            }}
-          />
-        )}
+  const handleRename = (newName: string) => {
+    setIsHovering(false);
+    setIsEditing(false);
+  };
 
-        {enableDelete && (
-          <>
-            <StyledDeleteIcon
-              id="deleteIcon"
-              data-parent-id={id}
-              src={urlOrSvgToImage(deleteIcon)}
-              active={isHovering}
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsHovering(false);
-                setDeleteModalActive(true);
-              }}
-            />
-            <ConfirmationPrompt
-              open={deleteModalActive}
-              setOpen={setDeleteModalActive}
-              handleConfirmation={() => {
-                onDelete?.(id || '');
-              }}
-              title={`Are you sure you want to delete ${name}?`}
-              description="You cannot undo this action."
-              disableClose
-            />
-          </>
-        )}
-      </StyledIconsWrapper>
-    </StyledWrapper>
+  return (
+    <>
+      {isEditing ? (
+        <CustomInputItem icon={fileIcon} initialValue={id} onSubmit={handleRename} />
+      ) : (
+        <StyledWrapper
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
+          id={id}
+          display="flex"
+          alignItems="center"
+          mb="6px"
+          onClick={(e) => {
+            const target = e.target as HTMLElement;
+            if (target.getAttribute('id') === id || target.getAttribute('data-parent-id') === id) {
+              onClick?.();
+            }
+          }}
+          active={active}
+        >
+          <CSC.StyledEditorNavIcon data-parent-id={id} src={urlOrSvgToImage(icon)} />
+          <StyledEditorNavText data-parent-id={id}>{name}</StyledEditorNavText>
+          <StyledIconsWrapper>
+            {enableRename && (
+              <StyledRenameIcon
+                id="pencilIcon"
+                data-parent-id={id}
+                src={urlOrSvgToImage(pencilIcon)}
+                active={isHovering}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsHovering(false);
+                  setIsEditing(true);
+                }}
+              />
+            )}
+
+            {enableDelete && (
+              <>
+                <StyledDeleteIcon
+                  id="deleteIcon"
+                  data-parent-id={id}
+                  src={urlOrSvgToImage(deleteIcon)}
+                  active={isHovering}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsHovering(false);
+                    setDeleteModalActive(true);
+                  }}
+                />
+                <ConfirmationPrompt
+                  open={deleteModalActive}
+                  setOpen={setDeleteModalActive}
+                  handleConfirmation={() => {
+                    onDelete?.(id || '');
+                  }}
+                  title={`Are you sure you want to delete ${name}?`}
+                  description="You cannot undo this action."
+                  disableClose
+                />
+              </>
+            )}
+          </StyledIconsWrapper>
+        </StyledWrapper>
+      )}
+    </>
   );
 };
 
