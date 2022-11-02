@@ -42,7 +42,7 @@ const IdentitiesTable = () => {
       id: identity.id,
       identityId: identity.id,
       tenantId: <Tag>{identity.tags['fusebit.tenantId']}</Tag>,
-      dateCreated: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
+      createdAt: format(new Date(identity.dateAdded), 'MM/dd/yyyy'),
       associatedInstalls: <AssociatedInstalls tenantId={identity.tags['fusebit.tenantId']} connectorId={connectorId} />,
       associatedIntegrations: (
         <AssociatedIntegrations tenantId={identity.tags['fusebit.tenantId']} connectorId={connectorId} />
@@ -103,7 +103,13 @@ const IdentitiesTable = () => {
         rowsPerPage={rowsPerPage}
         headers={[
           { id: 'identityId', value: 'Identity ID' },
-          { id: 'dateCreated', value: 'Date Created' },
+          {
+            id: 'createdAt',
+            value: 'Created At',
+            sort: {
+              sortVal: 'sortableCreatedAt',
+            },
+          },
           { id: 'tenantId', value: 'Tenant ID' },
           { id: 'associatedIntegrations', value: 'Associated Integrations' },
           { id: 'associatedInstalls', value: 'Associated Installs' },

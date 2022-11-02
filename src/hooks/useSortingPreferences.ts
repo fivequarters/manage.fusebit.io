@@ -1,18 +1,25 @@
 import { useEffect, useState } from 'react';
 import constate from 'constate';
 
+const SORTING_PREFERENCES_KEY = 'entities';
+
+const DEFAULT_TABLE = {
+  order: 'asc',
+  orderBy: 'sortableCreatedAt',
+};
+
 const DEFAULT_PREFERENCES = {
   integrations: {
-    table: {
-      order: 'asc',
-      orderBy: 'sortableCreatedAt',
-    },
+    table: DEFAULT_TABLE,
   },
   connectors: {
-    table: {
-      order: 'asc',
-      orderBy: 'sortableCreatedAt',
-    },
+    table: DEFAULT_TABLE,
+  },
+  installs: {
+    table: DEFAULT_TABLE,
+  },
+  identities: {
+    table: DEFAULT_TABLE,
   },
 };
 
@@ -30,7 +37,7 @@ const _useSortingPreferences = () => {
   };
 
   useEffect(() => {
-    const savedEntities = localStorage.getItem('entities');
+    const savedEntities = localStorage.getItem(SORTING_PREFERENCES_KEY);
     if (savedEntities) {
       const entities = JSON.parse(savedEntities);
       setPreferences(entities);
@@ -38,12 +45,12 @@ const _useSortingPreferences = () => {
   }, []);
 
   const handleSortingPreferenceChange = (key: string, value: { orderBy: string; order: string }) => {
-    const entities = JSON.parse(localStorage.getItem('entities') || '{}');
+    const entities = JSON.parse(localStorage.getItem(SORTING_PREFERENCES_KEY) || '{}');
     entities[key] = {
       table: value,
     };
 
-    localStorage.setItem('entities', JSON.stringify(entities));
+    localStorage.setItem(SORTING_PREFERENCES_KEY, JSON.stringify(entities));
     setPreferences({ ...DEFAULT_PREFERENCES, ...entities });
   };
 

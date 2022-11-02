@@ -127,9 +127,9 @@ const BaseTable: React.FC<BaseTableProps> = ({
 
   const computedRowsPerPage = rows
     .sort((a, b) => {
-      return sortingPreference.order === 'asc'
-        ? handleSorting(a[sortingPreference.orderBy], b[sortingPreference.orderBy])
-        : handleSorting(b[sortingPreference.orderBy], a[sortingPreference.orderBy]);
+      return sortingPreference?.order === 'asc'
+        ? handleSorting(a[sortingPreference?.orderBy], b[sortingPreference?.orderBy])
+        : handleSorting(b[sortingPreference?.orderBy], a[sortingPreference?.orderBy]);
     })
     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   const isMobile = useMediaQuery('(max-width: 880px)');
@@ -187,8 +187,8 @@ const BaseTable: React.FC<BaseTableProps> = ({
               selected={selected}
               isAllChecked={isAllChecked}
               hideCheckAll={hideCheckAll}
-              order={sortingPreference.order}
-              orderBy={sortingPreference.orderBy}
+              order={sortingPreference?.order}
+              orderBy={sortingPreference?.orderBy}
               onSortingPreferenceChange={handleSortingPreferenceChange}
               entityNamePlural={entityNamePlural}
             />

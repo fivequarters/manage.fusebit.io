@@ -63,21 +63,22 @@ const EntitiesMenu = ({ desktop, mobile }: Props) => {
 
     const getSortedEntities = (
       entitiesItems: Integration[] | Connector[] | undefined,
-      sortingPreference: { order: string; orderBy: string }
+      sortingPreference: { order: string; orderBy: string },
+      isIntegration: boolean
     ) => {
       const unsortedEntities = entitiesItems?.map((i) => ({
         id: i.id,
         dateAdded: i.dateAdded,
         sortableCreatedAt: new Date(i.dateAdded),
         sortableLastModified: new Date(i.dateModified),
-        to: getRedirectLink(`/integration/${i.id}/develop`),
+        to: getRedirectLink(isIntegration ? `/integration/${i.id}/develop` : `/connector/${i.id}/configure`),
       }));
 
       const sortedEntities = unsortedEntities
         ?.sort((a, b) => {
-          const orderBy = sortingPreference.orderBy as keyof Items;
+          const orderBy = sortingPreference?.orderBy as keyof Items;
 
-          return sortingPreference.order === 'asc'
+          return sortingPreference?.order === 'asc'
             ? handleSorting(a[orderBy], b[orderBy])
             : handleSorting(b[orderBy], a[orderBy]);
         })
@@ -86,8 +87,8 @@ const EntitiesMenu = ({ desktop, mobile }: Props) => {
       return sortedEntities;
     };
 
-    const sortedIntegrations = getSortedEntities(integrations?.data.items, integrationsSortingPreference);
-    const sortedConnectors = getSortedEntities(connectors?.data.items, connectorsSortingPreference);
+    const sortedIntegrations = getSortedEntities(integrations?.data.items, integrationsSortingPreference, true);
+    const sortedConnectors = getSortedEntities(connectors?.data.items, connectorsSortingPreference, false);
 
     return { sortedIntegrations, sortedConnectors };
   }, [integrations, connectors, getRedirectLink, handleSorting, preferences]);
