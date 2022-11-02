@@ -1,4 +1,3 @@
-import { OrderType } from '@hooks/useSortingPreferences';
 import { TableCell, TableHead, TableRow, Checkbox, TableSortLabel } from '@material-ui/core';
 import { BaseTableProps } from './types';
 
@@ -12,6 +11,7 @@ const BaseTableHead = ({
   order,
   orderBy,
   onSortingPreferenceChange,
+  entityNamePlural,
 }: Pick<
   BaseTableProps,
   | 'rows'
@@ -23,11 +23,11 @@ const BaseTableHead = ({
   | 'order'
   | 'orderBy'
   | 'onSortingPreferenceChange'
+  | 'entityNamePlural'
 >) => {
   const handleSortRequest = (cellId: string) => {
     const isAsc = orderBy === cellId && order === 'asc';
-    onSortingPreferenceChange?.(OrderType.ORDER, isAsc ? 'desc' : 'asc');
-    onSortingPreferenceChange?.(OrderType.ORDER_BY, cellId);
+    onSortingPreferenceChange?.(entityNamePlural, { order: isAsc ? 'desc' : 'asc', orderBy: cellId });
   };
 
   return (
