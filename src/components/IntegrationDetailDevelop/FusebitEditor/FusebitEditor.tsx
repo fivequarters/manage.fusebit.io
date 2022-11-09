@@ -44,8 +44,10 @@ export default class FusebitEditor extends React.Component<any> {
   }
 
   componentWillUnmount() {
-    this.editorContext.dispose();
-    this.editorContext = undefined;
+    if (this.editorContext) {
+      this.editorContext.dispose();
+      this.editorContext = undefined;
+    }
   }
 
   render() {
