@@ -29,7 +29,7 @@ const orderByName = (a: SDKDoc, b: SDKDoc) => ((a?.name || '') > (b?.name || '')
 
 const Resources: React.FC<Props> = ({ integrationsFeed, connectorsFeed, integrationData, onSnippetsModalOpen }) => {
   const integrationFeed = getFeedByIntegration(integrationsFeed, integrationData);
-  const integrationGuideUrl = integrationFeed?.resources?.configureAppDocUrl || '';
+  const integrationGuideUrl = integrationFeed?.resources?.configureAppDocUrl;
 
   const { docs, snippets } = useMemo(() => {
     return (integrationData?.data?.components || []).reduce(
