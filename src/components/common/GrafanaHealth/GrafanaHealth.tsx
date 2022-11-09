@@ -1,5 +1,6 @@
 import * as CSC from '@components/globalStyle';
 import useGrafana from '@hooks/useGrafana';
+import { Boundary } from '@interfaces/grafana';
 
 const DEFAULT_IFRAME_ID = 'health-monitoring';
 
@@ -7,7 +8,7 @@ interface Props {
   iframeId?: string;
   functionId?: string;
   from?: number;
-  boundaryId: 'integration' | 'connector';
+  boundaryId: Boundary;
 }
 
 const GrafanaHealth = ({ from, iframeId, functionId, boundaryId }: Props) => {

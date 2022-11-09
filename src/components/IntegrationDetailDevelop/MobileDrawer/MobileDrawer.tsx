@@ -7,6 +7,7 @@ import info from '@assets/info.svg';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
 import GrafanaLogs from '@components/common/GrafanaLogs';
+import { Boundary } from '@interfaces/grafana';
 
 const StyledDrawer = styled(Drawer)`
   .MuiDrawer-paperAnchorBottom {
@@ -149,7 +150,7 @@ const MobileDrawer = ({
             )}
           </Box>
           {isGrafanaEnabled ? (
-            <GrafanaLogs boundaryId="integration" />
+            <GrafanaLogs boundaryId={Boundary.INTEGRATION} />
           ) : (
             <StyledLog
               id="mobile-log"

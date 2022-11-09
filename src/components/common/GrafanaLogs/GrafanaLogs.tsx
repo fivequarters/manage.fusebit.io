@@ -1,5 +1,6 @@
 import useGrafanaLogs from '@hooks/useGrafanaLogs';
 import * as CSC from '@components/globalStyle';
+import { Boundary } from '@interfaces/grafana';
 
 const DEFAULT_IFRAME_ID = 'logging';
 const DEFAULT_HEIGHT = 350;
@@ -9,7 +10,7 @@ interface Props {
   functionId?: string;
   height?: number;
   from?: number;
-  boundaryId: 'integration' | 'connector';
+  boundaryId: Boundary;
 }
 
 const GrafanaLogs = ({ from, height, iframeId, functionId, boundaryId }: Props) => {
