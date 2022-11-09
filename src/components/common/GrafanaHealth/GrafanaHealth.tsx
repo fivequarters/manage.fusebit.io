@@ -5,16 +5,18 @@ const DEFAULT_IFRAME_ID = 'health-monitoring';
 
 interface Props {
   iframeId?: string;
-  integrationId?: string;
+  functionId?: string;
   from?: number;
+  boundaryId: 'integration' | 'connector';
 }
 
-const GrafanaHealth = ({ from, iframeId, integrationId }: Props) => {
+const GrafanaHealth = ({ from, iframeId, functionId, boundaryId }: Props) => {
   const { url, iframeId: ID } = useGrafana({
     path: '/v2/grafana/bootstrap/d/HealthMonitor/health-monitoring?kiosk=tv&hideUi=breadcrumbs,tvButton&',
     defaultIframeId: DEFAULT_IFRAME_ID,
     customIframeId: iframeId,
-    integrationId,
+    functionId,
+    boundaryId,
     from: from || 'now-3d',
   });
 

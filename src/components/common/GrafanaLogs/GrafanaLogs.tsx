@@ -6,16 +6,18 @@ const DEFAULT_HEIGHT = 350;
 
 interface Props {
   iframeId?: string;
-  integrationId?: string;
+  functionId?: string;
   height?: number;
   from?: number;
+  boundaryId: 'integration' | 'connector';
 }
 
-const GrafanaLogs = ({ from, height, iframeId, integrationId }: Props) => {
+const GrafanaLogs = ({ from, height, iframeId, functionId, boundaryId }: Props) => {
   const { url, iframeId: ID } = useGrafanaLogs({
     customIframeId: iframeId,
     defaultIframeId: DEFAULT_IFRAME_ID,
-    integrationId,
+    functionId,
+    boundaryId,
     defaultHeight: height || DEFAULT_HEIGHT,
     from,
   });

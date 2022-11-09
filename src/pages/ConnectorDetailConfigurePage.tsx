@@ -19,8 +19,12 @@ const ConnectorDetailConfigurePage: FC<{}> = (): ReactElement => {
     <Layout>
       <ConnectorsNavbar />
       <TabComponent
-        tabNames={['Configure', 'Identities']}
-        tabObjects={[<Configure key="configure" />, getRedirectLink(`/connector/${id}/identities`)]}
+        tabNames={['Configure', 'Identities', 'Logging']}
+        tabObjects={[
+          <Configure key="configure" />,
+          getRedirectLink(`/connector/${id}/identities`),
+          getRedirectLink(`/connector/${id}/logging`),
+        ]}
       />
     </Layout>
   );

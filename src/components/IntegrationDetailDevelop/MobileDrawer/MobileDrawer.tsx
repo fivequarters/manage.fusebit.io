@@ -149,7 +149,7 @@ const MobileDrawer = ({
             )}
           </Box>
           {isGrafanaEnabled ? (
-            <GrafanaLogs />
+            <GrafanaLogs boundaryId="integration" />
           ) : (
             <StyledLog
               id="mobile-log"

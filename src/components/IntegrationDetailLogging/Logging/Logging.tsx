@@ -7,7 +7,8 @@ import { useParams } from 'react-router-dom';
 const Logging = () => {
   const { id } = useParams<{ id: string }>();
   const { exploreUrl } = useGrafanaLogs({
-    integrationId: id,
+    functionId: id,
+    boundaryId: 'integration',
     onBlur: () => {
       trackEventMemoized('Grafana Iframe Clicked', 'Logging');
     },
@@ -29,7 +30,7 @@ const Logging = () => {
       >
         Explore
       </Button>
-      <GrafanaLogs />
+      <GrafanaLogs boundaryId="integration" />
     </Box>
   );
 };

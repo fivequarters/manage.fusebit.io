@@ -7,13 +7,22 @@ interface Props extends GrafanaProps {
   onBlur?: () => void;
 }
 
-const useGrafanaLogs = ({ customIframeId, defaultIframeId, defaultHeight, integrationId, from, onBlur }: Props) => {
+const useGrafanaLogs = ({
+  customIframeId,
+  defaultIframeId,
+  defaultHeight,
+  functionId,
+  boundaryId,
+  from,
+  onBlur,
+}: Props) => {
   const { url, exploreUrl, iframeId } = useGrafana({
     path: '/v2/grafana/bootstrap/d-solo/logging/basic?panelId=2&kiosk=tv&hideUi=panelTitle&refresh=1s&',
     defaultIframeId,
     customIframeId,
-    integrationId,
+    functionId,
     from,
+    boundaryId,
   });
 
   useEffect(() => {

@@ -2,6 +2,7 @@ export interface GrafanaProps {
   path?: string;
   defaultIframeId?: string;
   from?: number | string;
-  integrationId?: string;
+  functionId?: string;
   customIframeId?: string;
+  boundaryId: 'integration' | 'connector';
 }

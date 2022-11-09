@@ -4,7 +4,7 @@ import GrafanaHealth from '@components/common/GrafanaHealth';
 const HealthMonitoring = () => {
   return (
     <Box display="flex" alignItems="center" justifyContent="center" height="170vh" pb="140px" position="relative">
-      <GrafanaHealth />
+      <GrafanaHealth boundaryId="integration" />
     </Box>
   );
 };
