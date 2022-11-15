@@ -17,19 +17,22 @@ function usePrevious<T>(value: T) {
 
 const Frame = styled.div`
   position: relative;
-  padding: 4px 0px 0px 0px;
   text-overflow: ellipsis;
   white-space: nowrap;
-  overflow-x: hidden;
   vertical-align: middle;
   margin-left: 8px;
   color: #24292e;
   fill: #24292e;
+  margin-bottom: 16px;
+
+  .nested > .frame {
+    margin-bottom: 0;
+  }
 `;
 
-const TitleWrapper = styled(Box)<{ enableCursorPointer: boolean }>`
+const TitleWrapper = animated(styled(Box)<{ enableCursorPointer: boolean }>`
   cursor: ${(props) => props.enableCursorPointer && 'pointer'};
-`;
+`);
 
 const Title = styled.div`
   font-family: 'Poppins';
@@ -40,23 +43,28 @@ const Title = styled.div`
   cursor: pointer;
 `;
 
+const StyledBorder = styled.div`
+  position: absolute;
+  left: 7px;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  background: #dddddd;
+`;
+
 const Content = animated(styled.div`
+  position: relative;
   will-change: transform, opacity, height;
   overflow: hidden;
-  margin-top: 16px;
+  padding-left: 16px;
+  margin-bottom: 6px;
 `);
-
-const StyledIcon = styled.img`
-  margin-right: 10px;
-`;
 
 const DropdownIcon = styled.img<{ active: boolean }>`
   transform: ${(props) => (props.active ? 'rotate(0)' : 'rotate(180deg)')};
-  margin-left: auto;
+  margin-right: 10px;
   transition: all 0.25s linear;
 `;
-
-const margin = 6;
 
 const Tree = React.memo<
   React.HTMLAttributes<HTMLDivElement> & {
@@ -66,30 +74,32 @@ const Tree = React.memo<
     enableDropdownArrow?: boolean;
     onClick?: (isOpen: boolean) => void;
   }
->(({ children, name, icon, enableDropdownArrow, onClick, style, defaultOpen = false }) => {
+>(({ children, name, enableDropdownArrow, onClick, style, defaultOpen = false }) => {
   const [isOpen, setOpen] = useState(defaultOpen);
   const previous = usePrevious(isOpen);
   const [ref, { height: viewHeight }] = useMeasure();
-  const { height, opacity, y } = useSpring({
-    from: { height: 0, opacity: 0, y: 0 },
+  const { height, opacity, y, marginBottom } = useSpring({
+    from: { height: 0, opacity: 0, y: 0, marginBottom: '0px' },
     to: {
-      height: isOpen ? viewHeight + margin : 0,
+      height: isOpen ? viewHeight : 0,
       opacity: isOpen ? 1 : 0,
+      marginBottom: isOpen ? '12px' : '0px',
       y: isOpen ? 0 : 20,
     },
   });
 
   return (
-    <Frame onClick={() => onClick?.(isOpen)}>
+    <Frame onClick={() => onClick?.(isOpen)} className="frame">
       <TitleWrapper
         display="flex"
         alignItems="center"
+        mb="12px"
         enableCursorPointer={!!enableDropdownArrow}
         onClick={() => setOpen(!isOpen)}
+        style={{ marginBottom }}
       >
-        {icon && <StyledIcon src={icon} alt="icon" />}
+        <DropdownIcon src={arrow} alt="dropdown arrow" active={isOpen} />
         <Title style={style}>{name}</Title>
-        {enableDropdownArrow && <DropdownIcon src={arrow} alt="dropdown arrow" active={isOpen} />}
       </TitleWrapper>
       <Content
         style={{
@@ -97,7 +107,8 @@ const Tree = React.memo<
           height: isOpen && previous === isOpen ? 'auto' : height,
         }}
       >
-        <animated.div ref={ref} style={{ y }}>
+        <StyledBorder />
+        <animated.div ref={ref} style={{ y }} className="nested">
           {children}
         </animated.div>
       </Content>

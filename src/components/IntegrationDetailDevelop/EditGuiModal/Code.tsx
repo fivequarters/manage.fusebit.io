@@ -97,8 +97,9 @@ const Code = ({ isEditorRunning, setActiveFile, activeFile, setDefaultActiveFile
   const mapFolders = (fileStructure: { [key: string]: any }) => {
     return Object.keys(fileStructure).map((key) => {
       const file = fileStructure[key];
+      const splittedKey = key.split('/');
+
       if (typeof file === 'string') {
-        const splittedKey = key.split('/');
         const fileName = splittedKey[splittedKey.length - 1];
 
         return (
