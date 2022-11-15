@@ -1,19 +1,9 @@
 import { Box } from '@material-ui/core';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { animated, useSpring } from 'react-spring';
 import useMeasure from 'react-use-measure';
 import styled from 'styled-components';
 import arrow from '@assets/arrow-up-editor.svg';
-
-function usePrevious<T>(value: T) {
-  const ref = useRef<T>();
-
-  useEffect(() => {
-    ref.current = value;
-  }, [value]);
-
-  return ref.current;
-}
 
 const Frame = styled.div`
   position: relative;
@@ -76,7 +66,6 @@ const Tree = React.memo<
   }
 >(({ children, name, enableDropdownArrow, onClick, style, defaultOpen = false }) => {
   const [isOpen, setOpen] = useState(defaultOpen);
-  const previous = usePrevious(isOpen);
   const [ref, { height: viewHeight }] = useMeasure();
   const { height, opacity, y, marginBottom } = useSpring({
     from: { height: 0, opacity: 0, y: 0, marginBottom: '0px' },
@@ -104,7 +93,7 @@ const Tree = React.memo<
       <Content
         style={{
           opacity,
-          height: isOpen && previous === isOpen ? 'auto' : height,
+          height,
         }}
       >
         <StyledBorder />
