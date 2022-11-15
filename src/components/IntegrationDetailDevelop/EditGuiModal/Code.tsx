@@ -84,7 +84,7 @@ const Code = ({ isEditorRunning, setActiveFile, activeFile, setDefaultActiveFile
     loadEditorCodeFiles();
   };
 
-  const getBaseFileContent = (fileName: string) => {
+  const getNewFileContent = (fileName: string) => {
     let content = '#';
     if (fileName.match(/\.js$/)) {
       content = `module.exports = () => {};`;
@@ -97,7 +97,7 @@ const Code = ({ isEditorRunning, setActiveFile, activeFile, setDefaultActiveFile
 
   const handleOnSubmit = (newFile: string) => {
     if (newFile) {
-      const content = getBaseFileContent(newFile);
+      const content = getNewFileContent(newFile);
       window.editor?.addFileToSpecification(newFile, content, false);
       window.editor?.selectFile(newFile);
       loadEditorCodeFiles();
