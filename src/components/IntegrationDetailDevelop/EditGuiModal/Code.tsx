@@ -84,11 +84,25 @@ const Code = ({ isEditorRunning, setActiveFile, activeFile, setDefaultActiveFile
     loadEditorCodeFiles();
   };
 
+  const getBaseFileContent = (fileName: string) => {
+    let content = '#';
+    if (fileName.match(/\.js$/)) {
+      content = `module.exports = () => {};`;
+    } else if (fileName.match(/\.json$/)) {
+      content = `{}`;
+    }
+
+    return content;
+  };
+
   const handleOnSubmit = (newFile: string) => {
     if (newFile) {
-      window.editor?.addFile(newFile);
+      const content = getBaseFileContent(newFile);
+      window.editor?.addFileToSpecification(newFile, content, false);
+      window.editor?.selectFile(newFile);
       loadEditorCodeFiles();
       setActiveFile(newFile);
+      window.editor?.setDirtyState(true);
     }
 
     setShowInput(false);
