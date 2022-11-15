@@ -95,35 +95,51 @@ const Code = ({ isEditorRunning, setActiveFile, activeFile, setDefaultActiveFile
   };
 
   const mapFolders = (fileStructure: { [key: string]: any }) => {
-    return Object.keys(fileStructure).map((key) => {
-      const file = fileStructure[key];
-      const splittedKey = key.split('/');
+    return Object.keys(fileStructure)
+      .sort((a, b) => {
+        const fileA = fileStructure[a];
+        const fileB = fileStructure[b];
+        const isAFolder = typeof fileA !== 'string';
+        const isBFolder = typeof fileB !== 'string';
 
-      if (typeof file === 'string') {
-        const fileName = splittedKey[splittedKey.length - 1];
+        if (isAFolder && !isBFolder) {
+          return -1;
+        }
+
+        if (!isAFolder && isBFolder) {
+          return 1;
+        }
+
+        return 0;
+      })
+      .map((key) => {
+        const file = fileStructure[key];
+        const splittedKey = key.split('/');
+        if (typeof file === 'string') {
+          const fileName = splittedKey[splittedKey.length - 1];
+
+          return (
+            <CustomNavItem
+              key={key}
+              id={key}
+              icon={fileIcon}
+              name={fileName}
+              onClick={() => handleClick(key)}
+              onRename={(newFileName) => handleRename(key, newFileName)}
+              onDelete={(deletedItem) => handleDelete(deletedItem)}
+              active={key === activeFile}
+              enableDelete
+              enableRename
+            />
+          );
+        }
 
         return (
-          <CustomNavItem
-            key={key}
-            id={key}
-            icon={fileIcon}
-            name={fileName}
-            onClick={() => handleClick(key)}
-            onRename={(newFileName) => handleRename(key, newFileName)}
-            onDelete={(deletedItem) => handleDelete(deletedItem)}
-            active={key === activeFile}
-            enableDelete
-            enableRename
-          />
+          <Tree key={key} name={key} icon={folderIcon} enableDropdownArrow>
+            {mapFolders(file)}
+          </Tree>
         );
-      }
-
-      return (
-        <Tree key={key} name={key} icon={folderIcon} enableDropdownArrow>
-          {mapFolders(file)}
-        </Tree>
-      );
-    });
+      });
   };
 
   return (
