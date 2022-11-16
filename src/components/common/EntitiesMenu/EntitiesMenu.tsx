@@ -1,9 +1,13 @@
+import { useMemo } from 'react';
 import styled from 'styled-components';
 import { Menu, Drawer, useMediaQuery } from '@material-ui/core';
-import { useAccountConnectorsGetAll } from '../../../hooks/api/v2/account/connector/useGetAll';
-import { useAccountIntegrationsGetAll } from '../../../hooks/api/v2/account/integration/useGetAll';
-import { useAuthContext } from '../../../hooks/useAuthContext';
-import { useGetRedirectLink } from '../../../hooks/useGetRedirectLink';
+import { useSortingPreferences } from '@hooks/useSortingPreferences';
+import { Integration } from '@interfaces/integration';
+import { Connector } from '@interfaces/connector';
+import { useAccountConnectorsGetAll } from '@hooks/api/v2/account/connector/useGetAll';
+import { useAccountIntegrationsGetAll } from '@hooks/api/v2/account/integration/useGetAll';
+import { useAuthContext } from '@hooks/useAuthContext';
+import { useGetRedirectLink } from '@hooks/useGetRedirectLink';
 import EntityMenuSection from '../EntityMenuSection/EntityMenuSection';
 
 const StyledSectionDropdownMenu = styled.div`
@@ -27,6 +31,14 @@ interface Props {
   };
 }
 
+interface Items {
+  id: string;
+  to: string;
+  dateAdded: string;
+  sortableCreatedAt: Date;
+  sortableLastModified: Date;
+}
+
 const EntitiesMenu = ({ desktop, mobile }: Props) => {
   const { getRedirectLink } = useGetRedirectLink();
   const { userData } = useAuthContext();
@@ -43,6 +55,44 @@ const EntitiesMenu = ({ desktop, mobile }: Props) => {
     subscriptionId: userData.subscriptionId,
   });
 
+  const { preferences, handleSorting } = useSortingPreferences();
+
+  const entities = useMemo(() => {
+    const integrationsSortingPreference = preferences?.integrations?.table;
+    const connectorsSortingPreference = preferences?.connectors?.table;
+
+    const getSortedEntities = (
+      entitiesItems: Integration[] | Connector[] | undefined,
+      sortingPreference: { order: string; orderBy: string },
+      isIntegration: boolean
+    ) => {
+      const unsortedEntities = entitiesItems?.map((i) => ({
+        id: i.id,
+        dateAdded: i.dateAdded,
+        sortableCreatedAt: new Date(i.dateAdded),
+        sortableLastModified: new Date(i.dateModified),
+        to: getRedirectLink(isIntegration ? `/integration/${i.id}/develop` : `/connector/${i.id}/configure`),
+      }));
+
+      const sortedEntities = unsortedEntities
+        ?.sort((a, b) => {
+          const orderBy = sortingPreference?.orderBy as keyof Items;
+
+          return sortingPreference?.order === 'asc'
+            ? handleSorting(a[orderBy], b[orderBy])
+            : handleSorting(b[orderBy], a[orderBy]);
+        })
+        .slice(0, 5);
+
+      return sortedEntities;
+    };
+
+    const sortedIntegrations = getSortedEntities(integrations?.data.items, integrationsSortingPreference, true);
+    const sortedConnectors = getSortedEntities(connectors?.data.items, connectorsSortingPreference, false);
+
+    return { sortedIntegrations, sortedConnectors };
+  }, [integrations, connectors, getRedirectLink, handleSorting, preferences]);
+
   const renderContent = () => {
     const onClose = isMobile ? mobile.onClose : desktop.onClose;
 
@@ -50,25 +100,13 @@ const EntitiesMenu = ({ desktop, mobile }: Props) => {
       <StyledSectionDropdownMenu>
         <EntityMenuSection
           onClose={onClose}
-          items={integrations?.data?.items?.map((i) => ({
-            id: i.id,
-            dateAdded: i.dateAdded,
-            sortableCreatedAt: new Date(i.dateAdded),
-            sortableLastModified: new Date(i.dateModified),
-            to: getRedirectLink(`/integration/${i.id}/develop`),
-          }))}
+          items={entities.sortedIntegrations}
           linkTitleTo={getRedirectLink('/integrations/overview')}
           title="Integrations"
         />
         <EntityMenuSection
           onClose={onClose}
-          items={connectors?.data?.items?.map((c) => ({
-            id: c.id,
-            dateAdded: c.dateAdded,
-            sortableCreatedAt: new Date(c.dateAdded),
-            sortableLastModified: new Date(c.dateModified),
-            to: getRedirectLink(`/connector/${c.id}/configure`),
-          }))}
+          items={entities.sortedConnectors}
           linkTitleTo={getRedirectLink('/connectors/overview')}
           title="Connectors"
         />

@@ -1,6 +1,5 @@
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { useSortingPreferences } from '@hooks/useSortingPreferences';
 import check from '../../../assets/check.svg';
 import rightArrow from '../../../assets/arrow-right-black.svg';
 
@@ -72,16 +71,12 @@ interface Props {
   onClose: () => void;
   items?: {
     id: string;
-    dateAdded: string;
-    sortableCreatedAt: Date;
-    sortableLastModified: Date;
     to: string;
   }[];
 }
 
 const EntityMenuSection = ({ title, items = [], linkTitleTo, onClose }: Props) => {
   const { id } = useParams<{ id: string }>();
-  const { order, orderBy, handleSorting } = useSortingPreferences();
 
   return (
     <>
@@ -96,21 +91,14 @@ const EntityMenuSection = ({ title, items = [], linkTitleTo, onClose }: Props) =
           </StyledSectionDropdownSeeMore>
         </Link>
       </StyledContainer>
-      {items
-        .sort((a, b) => {
-          return order === 'asc'
-            ? handleSorting(a[orderBy as keyof typeof a], b[orderBy as keyof typeof b])
-            : handleSorting(b[orderBy as keyof typeof b], a[orderBy as keyof typeof a]);
-        })
-        .slice(0, 5)
-        .map((item) => (
-          <Link key={item.id} to={item.to} onClick={onClose}>
-            <StyledSectionDropdownIntegration active={id === item.id}>
-              {item.id}
-              <img src={check} alt="check" height="16" width="16" />
-            </StyledSectionDropdownIntegration>
-          </Link>
-        ))}
+      {items.map((item) => (
+        <Link key={item.id} to={item.to} onClick={onClose}>
+          <StyledSectionDropdownIntegration active={id === item.id}>
+            {item.id}
+            <img src={check} alt="check" height="16" width="16" />
+          </StyledSectionDropdownIntegration>
+        </Link>
+      ))}
     </>
   );
 };

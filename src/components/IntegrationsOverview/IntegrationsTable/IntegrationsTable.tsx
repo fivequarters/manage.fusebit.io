@@ -126,7 +126,7 @@ const IntegrationsTable = () => {
           },
           {
             id: 'createdAt',
-            value: 'Created Date',
+            value: 'Created At',
             sort: {
               sortVal: 'sortableCreatedAt',
             },
