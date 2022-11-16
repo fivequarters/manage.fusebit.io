@@ -35,16 +35,7 @@ export default class FusebitEditor extends React.Component<any> {
       /\./g,
       '/'
     )}/fusebit-editor.min.js`;
-    let hasFusebitLib;
-    for (let i = 0; i < document.scripts.length; i++) {
-      if (document.scripts[i].src === fusebitLibUrl) {
-        hasFusebitLib = true;
-        break;
-      }
-    }
-    if (hasFusebitLib) {
-      return initializeEditor();
-    }
+
     const script = document.createElement('script');
     script.src = fusebitLibUrl;
     script.async = true;
