@@ -131,7 +131,6 @@ const EntitiesMenu = ({ desktop, mobile }: Props) => {
           transformOrigin={{ horizontal: 'left', vertical: 'top' }}
           getContentAnchorEl={null}
           anchorEl={desktop.anchorEl}
-          keepMounted
           open={!!desktop.anchorEl}
           onClose={desktop.onClose}
         >
