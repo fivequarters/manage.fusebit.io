@@ -16,11 +16,11 @@ const ConnectorLink = ({ integration, connector }: Props) => {
   });
 
   return (
-    <Link
-      integration={integration}
-      text={`Configure ${connector.id}`}
-      href={feed?.resources?.configureAppDocUrl || ''}
-    />
+    <>
+      {feed?.resources?.configureAppDocUrl && (
+        <Link integration={integration} text={`Configure ${connector.id}`} href={feed?.resources?.configureAppDocUrl} />
+      )}
+    </>
   );
 };
 
