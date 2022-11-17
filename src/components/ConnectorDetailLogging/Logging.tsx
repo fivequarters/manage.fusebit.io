@@ -11,12 +11,12 @@ const Logging = () => {
     functionId: id,
     boundaryId: Boundary.CONNECTOR,
     onBlur: () => {
-      trackEventMemoized('Grafana Iframe Clicked', 'Logging');
+      trackEventMemoized('Grafana Iframe Clicked', 'Connector Logging');
     },
   });
 
   const handleExplore = () => {
-    trackEventMemoized('Explore Button Clicked', 'Logging');
+    trackEventMemoized('Explore Button Clicked', 'Connector Logging');
     window.open(exploreUrl, '_blank');
   };
 
