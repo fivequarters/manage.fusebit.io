@@ -122,11 +122,14 @@ const BaseTable: React.FC<BaseTableProps> = ({
   searchInputHandler,
   textVal,
 }) => {
-  const { order, orderBy, handleSortingPreferenceChange, handleSorting } = useSortingPreferences();
+  const { preferences, handleSortingPreferenceChange, handleSorting } = useSortingPreferences();
+  const sortingPreference = preferences?.[entityNamePlural as keyof typeof preferences]?.table;
 
   const computedRowsPerPage = rows
     .sort((a, b) => {
-      return order === 'asc' ? handleSorting(a[orderBy], b[orderBy]) : handleSorting(b[orderBy], a[orderBy]);
+      return sortingPreference?.order === 'asc'
+        ? handleSorting(a[sortingPreference?.orderBy], b[sortingPreference?.orderBy])
+        : handleSorting(b[sortingPreference?.orderBy], a[sortingPreference?.orderBy]);
     })
     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   const isMobile = useMediaQuery('(max-width: 880px)');
@@ -184,9 +187,10 @@ const BaseTable: React.FC<BaseTableProps> = ({
               selected={selected}
               isAllChecked={isAllChecked}
               hideCheckAll={hideCheckAll}
-              order={order}
-              orderBy={orderBy}
+              order={sortingPreference?.order}
+              orderBy={sortingPreference?.orderBy}
               onSortingPreferenceChange={handleSortingPreferenceChange}
+              entityNamePlural={entityNamePlural}
             />
           )}
           <TableBody>

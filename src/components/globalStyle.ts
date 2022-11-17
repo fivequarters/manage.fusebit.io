@@ -270,3 +270,10 @@ export const StyledLogs = styled.iframe`
   position: relative;
   border-radius: 8px;
 `;
+
+export const StyledEditorNavIcon = styled.img`
+  height: 15px;
+  width: 15px;
+  object-fit: contain;
+  margin-right: 10px;
+`;

@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import console from '@assets/console.svg';
 import { trackEventUnmemoized } from '@utils/analytics';
 import play from '@assets/play-black.svg';
-import NoSampleAppModal from '../NoSampleAppModal';
 import CustomNavBase from './CustomNavBase';
 import CustomNavItem from './CustomNavItem';
 
@@ -11,8 +10,6 @@ interface Props {
 }
 
 const Tools: React.FC<Props> = ({ sampleAppUrl }) => {
-  const [noSampleAppOpen, setNoSampleAppOpen] = useState(false);
-
   const handleEditLocallyClick = () => {
     trackEventUnmemoized('Tools Menu Item Clicked', 'Web Editor', {
       clickedOn: 'Run Locally',
@@ -26,11 +23,7 @@ const Tools: React.FC<Props> = ({ sampleAppUrl }) => {
       clickedOn: 'Sample App',
     });
 
-    if (sampleAppUrl) {
-      window.open(sampleAppUrl, '_blank', 'noreferrer');
-    } else {
-      setNoSampleAppOpen(true);
-    }
+    window.open(sampleAppUrl, '_blank', 'noreferrer');
   };
 
   return (
@@ -40,8 +33,7 @@ const Tools: React.FC<Props> = ({ sampleAppUrl }) => {
       tooltipDescription="Tools to help you deploy your Fusebit Integration into your own app, much faster."
     >
       <CustomNavItem id="editLocally" icon={console} name="Edit Locally (CLI)" onClick={handleEditLocallyClick} />
-      <CustomNavItem id="sampleApp" icon={play} name="Sample App" onClick={handleSampleAppClick} />
-      <NoSampleAppModal open={noSampleAppOpen} onClose={() => setNoSampleAppOpen(false)} />
+      {sampleAppUrl && <CustomNavItem id="sampleApp" icon={play} name="Sample App" onClick={handleSampleAppClick} />}
     </CustomNavBase>
   );
 };

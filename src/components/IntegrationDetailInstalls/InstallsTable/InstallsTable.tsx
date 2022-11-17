@@ -39,7 +39,7 @@ const InstallsTable = () => {
       id: install.id,
       installID: install.id,
       tenantID: <Tag>{install.tags['fusebit.tenantId']}</Tag>,
-      dateCreated: format(new Date(install.dateAdded), 'MM/dd/yyyy'),
+      createdAt: format(new Date(install.dateAdded), 'MM/dd/yyyy'),
       associatedIdentities: (
         <AssociatedIdentities tenantId={install.tags['fusebit.tenantId']} connectorIds={connectorIds} />
       ),
@@ -59,8 +59,14 @@ const InstallsTable = () => {
 
   const headers = [
     { id: 'installID', value: 'Install ID' },
+    {
+      id: 'createdAt',
+      value: 'Created At',
+      sort: {
+        sortVal: 'sortableCreatedAt',
+      },
+    },
     { id: 'tenantID', value: 'Tenant ID' },
-    { id: 'dateCreated', value: 'Date Created' },
     { id: 'associatedIdentities', value: 'Associated Identities' },
   ];
 
