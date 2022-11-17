@@ -9,8 +9,7 @@ interface Props {
 
 const CustomNavBase: React.FC<Props> = ({ title, tooltipDescription, id, children }) => {
   return (
-    <div>
-      <div>&nbsp;</div>
+    <div style={{ marginBottom: '24px' }}>
       <div id={id} className="fusebit-nav-category">
         {title}
         <NavCategoryTooltip title={title} description={tooltipDescription} />
