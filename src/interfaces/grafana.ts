@@ -1,7 +1,13 @@
+export enum Boundary {
+  INTEGRATION = 'integration',
+  CONNECTOR = 'connector',
+}
+
 export interface GrafanaProps {
   path?: string;
   defaultIframeId?: string;
   from?: number | string;
-  integrationId?: string;
+  functionId?: string;
   customIframeId?: string;
+  boundaryId: Boundary;
 }

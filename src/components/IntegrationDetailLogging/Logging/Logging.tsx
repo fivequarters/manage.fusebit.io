@@ -3,18 +3,20 @@ import { trackEventMemoized } from '@utils/analytics';
 import GrafanaLogs from '@components/common/GrafanaLogs';
 import useGrafanaLogs from '@hooks/useGrafanaLogs';
 import { useParams } from 'react-router-dom';
+import { Boundary } from '@interfaces/grafana';
 
 const Logging = () => {
   const { id } = useParams<{ id: string }>();
   const { exploreUrl } = useGrafanaLogs({
-    integrationId: id,
+    functionId: id,
+    boundaryId: Boundary.INTEGRATION,
     onBlur: () => {
-      trackEventMemoized('Grafana Iframe Clicked', 'Logging');
+      trackEventMemoized('Grafana Iframe Clicked', 'Integration Logging');
     },
   });
 
   const handleExplore = () => {
-    trackEventMemoized('Explore Button Clicked', 'Logging');
+    trackEventMemoized('Explore Button Clicked', 'Integration Logging');
     window.open(exploreUrl, '_blank');
   };
 
@@ -29,7 +31,7 @@ const Logging = () => {
       >
         Explore
       </Button>
-      <GrafanaLogs />
+      <GrafanaLogs boundaryId={Boundary.INTEGRATION} />
     </Box>
   );
 };

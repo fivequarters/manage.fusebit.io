@@ -17,6 +17,7 @@ import AccountTeamPage from '../pages/AccountTeamPage';
 import IntegrationDetailHealthMonitoringPage from '~/pages/IntegrationDetailHealthMonitoringPage';
 import IntegrationDetailReliabilityPage from '~/pages/IntegrationDetailReliabilityPage';
 import IntegrationDetailLoggingPage from '~/pages/integrationDetailLoggingPage';
+import ConnectorDetailLoggingPage from '~/pages/ConnectorDetailLoggingPage';
 
 // define app routes
 export const routes: Array<RouteItem> = [
@@ -69,6 +70,11 @@ export const routes: Array<RouteItem> = [
     key: 'router-connector-detail-identities',
     path: '/account/:accountId/subscription/:subscriptionId/connector/:id/identities',
     component: ConnectorDetailIdentitiesPage,
+  },
+  {
+    key: 'router-connector-detail-logging',
+    path: '/account/:accountId/subscription/:subscriptionId/connector/:id/logging',
+    component: ConnectorDetailLoggingPage,
   },
   {
     key: 'router-make',

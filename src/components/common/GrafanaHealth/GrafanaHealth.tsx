@@ -1,20 +1,23 @@
 import * as CSC from '@components/globalStyle';
 import useGrafana from '@hooks/useGrafana';
+import { Boundary } from '@interfaces/grafana';
 
 const DEFAULT_IFRAME_ID = 'health-monitoring';
 
 interface Props {
   iframeId?: string;
-  integrationId?: string;
+  functionId?: string;
   from?: number;
+  boundaryId: Boundary;
 }
 
-const GrafanaHealth = ({ from, iframeId, integrationId }: Props) => {
+const GrafanaHealth = ({ from, iframeId, functionId, boundaryId }: Props) => {
   const { url, iframeId: ID } = useGrafana({
     path: '/v2/grafana/bootstrap/d/HealthMonitor/health-monitoring?kiosk=tv&hideUi=breadcrumbs,tvButton&',
     defaultIframeId: DEFAULT_IFRAME_ID,
     customIframeId: iframeId,
-    integrationId,
+    functionId,
+    boundaryId,
     from: from || 'now-3d',
   });
 
