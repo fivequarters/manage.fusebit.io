@@ -184,6 +184,7 @@ const ConfigureForm: React.FC = () => {
   });
   const isMobile = useMediaQuery('(max-width: 880px)');
   const queryClient = useQueryClient();
+  const isProductionModeChanged = config?.data.data.mode.useProduction !== data?.mode?.useProduction;
 
   const handleBeforeUnload = useCallback(
     (e: BeforeUnloadEvent) => {
@@ -325,7 +326,7 @@ const ConfigureForm: React.FC = () => {
                 validationMode={validationMode}
               />
             </Box>
-            {data && data?.mode?.useProduction && (
+            {data && (data?.mode?.useProduction || isProductionModeChanged) && (
               <StyledButtonsWrapper>
                 <StyledContainer maxWidth="lg">
                   <StyledSaveButton
