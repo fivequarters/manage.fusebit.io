@@ -16,7 +16,9 @@ const useGetInstalledConnectors = () => {
   const installedConnectors = useMemo(() => {
     return (integrationData?.data.data.components || [])
       .map((component) => {
-        const matchingConnector = connectors?.data.items.find((c) => c.id === component.entityId);
+        const matchingConnector = connectors?.data.items.find(
+          (c) => c.id === component.entityId && component.entityType === 'connector'
+        );
         const connectorWithComponentData = {
           ...component,
           ...matchingConnector,
